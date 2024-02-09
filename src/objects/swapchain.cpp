@@ -180,27 +180,30 @@ Swapchain::~Swapchain()
 
 uint32_t Swapchain::getImageCount() const
 {
-    uint32_t imageCount;
-    const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, nullptr);
+    uint32_t swapchainImageCount = 0;
+    const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &swapchainImageCount, nullptr);
     MAGMA_HANDLE_RESULT(result, "failed to get swapchain image count");
-    return imageCount;
+    return swapchainImageCount;
 }
 
-const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages()
+const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
 {
     if (bindedImages.empty())
     {
-        uint32_t imageCount = getImageCount();
-        MAGMA_ASSERT(imageCount > 0);
-        MAGMA_STACK_ARRAY(VkImage, swapchainImages, imageCount);
-        const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &imageCount, swapchainImages);
-        MAGMA_HANDLE_RESULT(result, "failed to get swapchain images");
-        uint32_t imageIndex = 0;
-        for (const VkImage handle: swapchainImages)
-        {   // Image has been created by swapchain internally, so we just assign image handle
-            auto image = std::shared_ptr<SwapchainImage>(new SwapchainImage(device, handle, surfaceFormat.format, extent, imageIndex));
-            bindedImages.push_back(std::move(image));
-            ++imageIndex;
+        uint32_t swapchainImageCount = 0;
+        vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &swapchainImageCount, nullptr);
+        if (swapchainImageCount)
+        {
+            MAGMA_STACK_ARRAY(VkImage, swapchainImages, swapchainImageCount);
+            const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &swapchainImageCount, swapchainImages);
+            MAGMA_HANDLE_RESULT(result, "failed to get swapchain images");
+            uint32_t imageIndex = 0;
+            for (VkImage handle: swapchainImages)
+            {   // Image has been created by swapchain internally, so we just assign image handle
+                auto image = std::shared_ptr<SwapchainImage>(new SwapchainImage(device, handle, surfaceFormat.format, extent, imageIndex));
+                bindedImages.push_back(std::move(image));
+                ++imageIndex;
+            }
         }
     }
     return bindedImages;

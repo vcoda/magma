@@ -81,7 +81,7 @@ namespace magma
         bool hadRetired() const noexcept { return retired; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }
         uint32_t getImageCount() const;
-        const std::vector<std::shared_ptr<SwapchainImage>>& getImages();
+        const std::vector<std::shared_ptr<SwapchainImage>>& getImages() const;
         uint32_t acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
             std::shared_ptr<const Fence> fence,
             uint64_t timeout = std::numeric_limits<uint64_t>::max());
@@ -127,7 +127,7 @@ namespace magma
         const VkSwapchainCreateFlagsKHR flags;
         const Sharing sharing;
         bool retired;
-        std::vector<std::shared_ptr<SwapchainImage>> bindedImages;
+        mutable std::vector<std::shared_ptr<SwapchainImage>> bindedImages;
         uint32_t imageIndex;
         friend class FullScreenExclusiveSwapchain;
     };
