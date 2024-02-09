@@ -273,6 +273,19 @@ void RenderPass::end(const FramebufferAttachments& attachments) const noexcept
         {   // finalLayout is the layout the attachment image subresource
             // will be transitioned to when a render pass instance ends.
             const std::shared_ptr<Image>& image = (*attachment)->getImage();
+            switch (attachmentDesc->finalLayout)
+            {
+            case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+                MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+                break;
+            case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+                MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+                break;
+            case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
+            case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+                MAGMA_ASSERT(image->getUsage() & (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT));
+                break;
+            }
             image->setLayout(attachmentDesc->finalLayout);
         });
 }
