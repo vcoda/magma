@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
+#define MAGMA_NEW new(std::nothrow)
+
 #define MAGMA_UNUSED(variable) variable
 
 #define MAGMA_BOOLEAN(condition) (condition)\
@@ -26,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_COUNT(container) static_cast<uint32_t>((container).size())
 
 #define MAGMA_ASSERT(expression) assert(expression)
+
 #define MAGMA_FAILURE(message) MAGMA_ASSERT(!message)
 
 #ifdef MAGMA_DEBUG
