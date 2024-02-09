@@ -440,8 +440,14 @@ VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t 
         MAGMA_ASSERT(usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
         dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
         break;
+#ifdef VK_KHR_maintenance2
+    case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR:
+    case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR:
+        MAGMA_ASSERT(usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+#endif // VK_KHR_maintenance2
     case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
         MAGMA_ASSERT(usage & (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT));
+        // Taken from UE4.2x, file VulkanBarriers.cpp
         dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
                        VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
                        VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
@@ -458,18 +464,6 @@ VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t 
         MAGMA_ASSERT(usage & VK_IMAGE_USAGE_TRANSFER_DST_BIT);
         dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
         break;
-#ifdef VK_KHR_maintenance2
-    case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR:
-    case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR:
-        // Two image layouts for depth stencil images to allow either the depth
-        // or stencil aspect to be read-only while the other aspect is writable.
-        MAGMA_ASSERT(usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-        MAGMA_ASSERT(usage & VK_IMAGE_USAGE_SAMPLED_BIT);
-        dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
-                       VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-                       VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-        break;
-#endif // VK_KHR_maintenance2
 #ifdef VK_KHR_swapchain
     case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
     #ifdef VK_KHR_shared_presentable_image
