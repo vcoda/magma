@@ -47,6 +47,7 @@ namespace magma
         bool hasLocalHostVisibleMemory() const noexcept;
 
     private:
+        MAGMA_MAKE_SHARED(DeviceFeatures)
         DeviceFeatures(std::shared_ptr<const Device> device) noexcept;
         friend Device;
 

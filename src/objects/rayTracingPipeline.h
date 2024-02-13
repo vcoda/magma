@@ -47,6 +47,7 @@ namespace magma
         void compileDeferred(uint32_t shaderIndex);
 
     private:
+        MAGMA_MAKE_SHARED(RayTracingPipeline)
         RayTracingPipeline(VkPipeline pipeline,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,

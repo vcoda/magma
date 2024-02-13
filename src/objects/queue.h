@@ -85,6 +85,7 @@ namespace magma
     #endif // VK_KHR_display_swapchain
 
     private:
+        MAGMA_MAKE_SHARED(Queue)
         Queue(VkQueue handle, std::shared_ptr<Device> device,
             VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index);
 

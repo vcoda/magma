@@ -52,6 +52,7 @@ namespace magma
     #endif // VK_KHR_device_group
 
     private:
+        MAGMA_MAKE_SHARED(SwapchainImage)
         SwapchainImage(std::shared_ptr<Device> device,
             VkImage handle,
             VkFormat format,

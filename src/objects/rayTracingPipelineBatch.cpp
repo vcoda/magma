@@ -113,7 +113,7 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<Device> device_,
         auto hash = hashes.cbegin();
         while (handle != handles.cend())
         {
-            pipelines.emplace_back(MAGMA_NEW RayTracingPipeline(
+            pipelines.emplace_back(RayTracingPipeline::makeShared(
                 *handle++, device, *layout++, *basePipeline++, allocator,
                 info->groupCount, info->maxRecursionDepth,
                 MAGMA_COUNT(*shaderStages++),

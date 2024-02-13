@@ -75,14 +75,12 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &cmdBufferAllocateInfo, commandBuffers);
     MAGMA_HANDLE_RESULT(result, "failed to allocate command buffers");
     std::vector<std::shared_ptr<CommandBuffer>> cmdBuffers;
-    for (VkCommandBuffer handle: commandBuffers)
+    for (auto handle: commandBuffers)
     {
-        CommandBuffer *cmdBuffer;
         if (primaryLevel)
-            cmdBuffer = MAGMA_NEW PrimaryCommandBuffer(handle, shared_from_this());
+            cmdBuffers.emplace_back(PrimaryCommandBuffer::makeShared(handle, shared_from_this()));
         else
-            cmdBuffer = MAGMA_NEW SecondaryCommandBuffer(handle, shared_from_this());
-        cmdBuffers.emplace_back(cmdBuffer);
+            cmdBuffers.emplace_back(SecondaryCommandBuffer::makeShared(handle, shared_from_this()));
     }
     return cmdBuffers;
 }

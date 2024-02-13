@@ -86,6 +86,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     catch (...) {\
     }
 
+#define MAGMA_MAKE_SHARED(Type)\
+    template<typename ...Args>\
+    static std::shared_ptr<Type> makeShared(Args&& ...args)\
+    {\
+        struct Type##_ : Type\
+        {\
+            Type##_(Args&& ...args):\
+                Type(std::forward<Args>(args)...) {}\
+        };\
+        return std::make_shared<Type##_>(std::forward<Args>(args)...);\
+    }
+
 #define MAGMA_TYPEDEF_SHARED_PTR(Type) typedef std::shared_ptr<class Type> Type##Ptr
 #define MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Type) typedef std::shared_ptr<class I##Type> Type##Ptr
 

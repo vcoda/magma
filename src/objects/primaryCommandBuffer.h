@@ -31,6 +31,7 @@ namespace magma
         void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
 
     private:
+        MAGMA_MAKE_SHARED(PrimaryCommandBuffer)
         PrimaryCommandBuffer(VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool);
         friend CommandPool;
     };

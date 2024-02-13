@@ -34,7 +34,7 @@ namespace magma
        performance analysis. */
 
 #ifdef VK_KHR_pipeline_executable_properties
-    class PipelineExecutable final : NonCopyable
+    class PipelineExecutable : NonCopyable
     {
     public:
         const VkPipelineExecutablePropertiesKHR& getProperties() const noexcept { return properties; }
@@ -43,6 +43,7 @@ namespace magma
         std::vector<VkPipelineExecutableInternalRepresentationKHR> getInternalRepresentations() const;
 
     private:
+        MAGMA_MAKE_SHARED(PipelineExecutable)
         PipelineExecutable(std::shared_ptr<const Pipeline> pipeline,
             const VkPipelineExecutablePropertiesKHR& properties,
             uint32_t executableIndex) noexcept;

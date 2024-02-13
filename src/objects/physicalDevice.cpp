@@ -45,11 +45,10 @@ std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQue
     const StructureChain& enabledExtendedFeatures /* default */,
     const StructureChain& extendedInfo /* default */) const
 {
-    return std::shared_ptr<Device>(MAGMA_NEW Device(
-        std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
+    return Device::makeShared(std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
         queueDescriptors, enabledLayers, enabledExtensions,
         enabledFeatures, enabledExtendedFeatures, extendedInfo,
-        hostAllocator));
+        hostAllocator);
 }
 
 VkPhysicalDeviceFeatures PhysicalDevice::getFeatures() const noexcept
@@ -385,8 +384,8 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
         result = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, displays);
         if (VK_SUCCESS == result)
         {
-            for (const VkDisplayKHR handle : displays)
-                supportedDisplays.emplace_back(MAGMA_NEW Display(shared_from_this(), handle, planeIndex));
+            for (auto handle: displays)
+                supportedDisplays.emplace_back(Display::makeShared(shared_from_this(), handle, planeIndex));
         }
     }
     MAGMA_HANDLE_RESULT(result, "failed to get supported displays of physical device");

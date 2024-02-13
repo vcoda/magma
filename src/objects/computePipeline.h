@@ -41,6 +41,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
 
     private:
+        MAGMA_MAKE_SHARED(ComputePipeline)
         ComputePipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,

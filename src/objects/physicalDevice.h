@@ -557,6 +557,7 @@ namespace magma
         bool checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept;
 
     private:
+        MAGMA_MAKE_SHARED(PhysicalDevice)
         PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle,
             std::shared_ptr<IAllocator> allocator) noexcept;
         void getFeatures2(void *physicalDeviceFeatures) const;
