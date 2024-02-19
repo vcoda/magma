@@ -41,6 +41,7 @@ namespace magma
         {
         public:
             explicit TextShader(std::shared_ptr<RenderPass> renderPass,
+                uint32_t maxChars = 1024,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr);
             void draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
@@ -55,6 +56,8 @@ namespace magma
             struct String;
             struct Glyph;
             struct DescriptorSetTable;
+            const uint32_t maxChars;
+            uint32_t numChars = 0;
             std::shared_ptr<Allocator> allocator;
             std::shared_ptr<Buffer> uniforms;
             std::shared_ptr<Buffer> stringBuffer;
@@ -67,7 +70,7 @@ namespace magma
             uint32_t width = 0;
             uint32_t height = 0;
             std::list<String> strings;
-            std::vector<Glyph> chars;
+            Glyph *chars = nullptr;
             uint32_t offset = 0;
         };
     } // namespace aux

@@ -40,6 +40,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
 #include "../helpers/mapScoped.h"
+#include "../helpers/mapTyped.h"
 #include "../core/copyMemory.h"
 
 namespace magma
@@ -74,8 +75,10 @@ struct TextShader::DescriptorSetTable : magma::DescriptorSetTable
 };
 
 TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
+    const uint32_t maxChars /* 1024 */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
+    maxChars(maxChars),
     allocator(std::move(allocator))
 {
     std::shared_ptr<Device> device = renderPass->getDevice();
@@ -83,7 +86,7 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     // Create uniform and storage buffers
     uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, true, this->allocator);
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, 8 * sizeof(String), false, this->allocator);
-    glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, 256 * sizeof(Glyph), false, this->allocator); // 4Kb
+    glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, this->allocator);
     // Define descriptor set layout
     setTable = std::make_unique<DescriptorSetTable>();
     setTable->uniforms = uniforms;
@@ -135,8 +138,8 @@ void TextShader::draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
 void TextShader::begin()
 {
     strings.clear();
-    chars.clear();
-    chars.reserve(1024);
+    chars = helpers::map<Glyph>(glyphBuffer);
+    numChars = 0;
     offset = 0;
 }
 
@@ -162,20 +165,8 @@ void TextShader::end()
                     *data++ = str;
             });
     }
-    if (!chars.empty())
-    {
-        const VkDeviceSize maxChars = glyphBuffer->getSize()/sizeof(Glyph);
-        if (maxChars < chars.size())
-        {   // Reallocate if not enough memory
-            glyphBuffer->realloc(chars.size() * sizeof(Glyph));
-            setTable->glyphBuffer = glyphBuffer;
-        }
-        helpers::mapScoped<Glyph>(glyphBuffer,
-            [this](auto *data)
-            {   // Copy glyph data
-                core::copyMemory(data, chars.data(), chars.size() * sizeof(Glyph));
-            });
-    }
+    helpers::unmap(glyphBuffer);
+    chars = nullptr;
     if (descriptorSet->dirty())
         descriptorSet->update();
 }
@@ -206,8 +197,8 @@ void TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *forma
     str.b = ((color >> 8) & 0xFF) / 255.f; // B
     str.a = (color & 0xFF) / 255.f; // A
     strings.push_back(str);
-    for (uint32_t i = 0; i < length; ++i)
-        chars.push_back(glyphs[sz[i]]);
+    for (uint32_t i = 0; (i < length) && (numChars < maxChars); ++i, ++numChars)
+        *chars++ = glyphs[sz[i]];
     offset += length;
 }
 } // namespace aux
