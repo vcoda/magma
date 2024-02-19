@@ -70,8 +70,8 @@ struct TextShader::DescriptorSetTable : magma::DescriptorSetTable
 {
     descriptor::UniformBuffer uniforms = 0;
     descriptor::StorageBuffer stringBuffer = 1;
-    descriptor::StorageBuffer glyphBuffer = 2;
-    MAGMA_REFLECT(uniforms, stringBuffer, glyphBuffer)
+    descriptor::StorageBuffer charBuffer = 2;
+    MAGMA_REFLECT(uniforms, stringBuffer, charBuffer)
 };
 
 TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
@@ -86,12 +86,12 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     // Create uniform and storage buffers
     uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, true, this->allocator);
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, 8 * sizeof(String), false, this->allocator);
-    glyphBuffer = std::make_shared<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, this->allocator);
+    charBuffer = std::make_shared<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, this->allocator);
     // Define descriptor set layout
     setTable = std::make_unique<DescriptorSetTable>();
     setTable->uniforms = uniforms;
     setTable->stringBuffer = stringBuffer;
-    setTable->glyphBuffer = glyphBuffer;
+    setTable->charBuffer = charBuffer;
     // Create descriptor set
     descriptorPool = std::make_shared<DescriptorPool>(device, 1,
         std::vector<descriptor::DescriptorPool>{
@@ -138,7 +138,7 @@ void TextShader::draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
 void TextShader::begin()
 {
     strings.clear();
-    chars = helpers::map<Glyph>(glyphBuffer);
+    chars = helpers::map<Glyph>(charBuffer);
     numChars = 0;
     offset = 0;
 }
@@ -165,7 +165,7 @@ void TextShader::end()
                     *data++ = str;
             });
     }
-    helpers::unmap(glyphBuffer);
+    helpers::unmap(charBuffer);
     chars = nullptr;
     if (descriptorSet->dirty())
         descriptorSet->update();

@@ -20,8 +20,8 @@ layout(set = 0, binding = 1) readonly buffer stringBuffer {
   String strings[];
 };
 
-layout(set = 0, binding = 2) readonly buffer glyphBuffer {
-  uvec4 glyphs[];
+layout(set = 0, binding = 2) readonly buffer charBuffer {
+  uvec4 chars[];
 };
 
 layout(location = 0) out vec4 oColor;
@@ -59,7 +59,7 @@ void main()
     String s = strings[i];
     for (uint j = s.first; j <= s.last; ++j, s.pos.x += GLYPH_SIZE.x)
     {
-      bool mask = sprite(glyphs[j], GLYPH_SIZE, fragCoord - s.pos);
+      bool mask = sprite(chars[j], GLYPH_SIZE, fragCoord - s.pos);
       oColor += s.color * (mask ? 1. : 0.);
     }
   }

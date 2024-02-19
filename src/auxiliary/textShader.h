@@ -61,7 +61,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator;
             std::shared_ptr<Buffer> uniforms;
             std::shared_ptr<Buffer> stringBuffer;
-            std::shared_ptr<Buffer> glyphBuffer;
+            std::shared_ptr<Buffer> charBuffer;
             std::shared_ptr<DescriptorPool> descriptorPool;
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<DescriptorSet> descriptorSet;
