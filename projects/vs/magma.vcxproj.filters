@@ -813,6 +813,9 @@
     <ClInclude Include="..\..\src\misc\imageResolve.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\helpers\mapTyped.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">

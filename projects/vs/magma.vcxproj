@@ -223,6 +223,7 @@
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
     <ClInclude Include="..\..\src\helpers\executeDeferredOperation.h" />
     <ClInclude Include="..\..\src\helpers\mapScoped.h" />
+    <ClInclude Include="..\..\src\helpers\mapTyped.h" />
     <ClInclude Include="..\..\src\helpers\spirvReflectionTypeCast.h" />
     <ClInclude Include="..\..\src\helpers\stackArray.h" />
     <ClInclude Include="..\..\src\helpers\stringize.h" />
