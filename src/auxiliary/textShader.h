@@ -72,7 +72,7 @@ namespace magma
             String *strings = nullptr;
             uint32_t stringCount = 0;
             Glyph *chars = nullptr;
-            uint32_t numChars = 0;
+            uint32_t charCount = 0;
             uint32_t offset = 0;
         };
     } // namespace aux

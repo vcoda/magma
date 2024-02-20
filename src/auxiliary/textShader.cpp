@@ -141,7 +141,7 @@ void TextShader::begin()
     strings = helpers::map<String>(stringBuffer);
     chars = helpers::map<Glyph>(charBuffer);
     stringCount = 0;
-    numChars = 0;
+    charCount = 0;
     offset = 0;
 }
 
@@ -187,7 +187,7 @@ bool TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *forma
     str->g = ((color >> 16) & 0xFF) / 255.f; // G
     str->b = ((color >> 8) & 0xFF) / 255.f; // B
     str->a = (color & 0xFF) / 255.f; // A
-    for (uint32_t i = 0; (i < length) && (numChars < maxChars); ++i, ++numChars)
+    for (uint32_t i = 0; (i < length) && (charCount < maxChars); ++i, ++charCount)
         *chars++ = glyphs[sz[i]];
     offset += length;
     ++stringCount;
