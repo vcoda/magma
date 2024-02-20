@@ -47,7 +47,7 @@ namespace magma
             void draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
             void begin();
             void end();
-            void print(uint32_t x, uint32_t y,
+            bool print(uint32_t x, uint32_t y,
                 uint32_t color,
                 const char *format, ...);
 
@@ -56,8 +56,8 @@ namespace magma
             struct String;
             struct Glyph;
             struct DescriptorSetTable;
+            const uint32_t maxStrings;
             const uint32_t maxChars;
-            uint32_t numChars = 0;
             std::shared_ptr<Allocator> allocator;
             std::shared_ptr<Buffer> uniforms;
             std::shared_ptr<Buffer> stringBuffer;
@@ -69,8 +69,10 @@ namespace magma
             std::unique_ptr<DescriptorSetTable> setTable;
             uint32_t width = 0;
             uint32_t height = 0;
-            std::list<String> strings;
+            String *strings = nullptr;
+            uint32_t stringCount = 0;
             Glyph *chars = nullptr;
+            uint32_t numChars = 0;
             uint32_t offset = 0;
         };
     } // namespace aux

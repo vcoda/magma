@@ -78,6 +78,7 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     const uint32_t maxChars /* 1024 */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
+    maxStrings(16),
     maxChars(maxChars),
     allocator(std::move(allocator))
 {
@@ -85,7 +86,7 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(this->allocator);
     // Create uniform and storage buffers
     uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, true, this->allocator);
-    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, 8 * sizeof(String), false, this->allocator);
+    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, maxStrings * sizeof(String), false, this->allocator);
     charBuffer = std::make_shared<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, this->allocator);
     // Define descriptor set layout
     setTable = std::make_unique<DescriptorSetTable>();
@@ -137,8 +138,9 @@ void TextShader::draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
 
 void TextShader::begin()
 {
-    strings.clear();
+    strings = helpers::map<String>(stringBuffer);
     chars = helpers::map<Glyph>(charBuffer);
+    stringCount = 0;
     numChars = 0;
     offset = 0;
 }
@@ -147,35 +149,24 @@ void TextShader::end()
 {
     helpers::mapScoped<Uniforms>(uniforms,
         [this](auto *constants)
-        {   // Globals
-            constants->stringCount = MAGMA_COUNT(strings);
+        {
+            constants->stringCount = stringCount;
         });
-    if (!strings.empty())
-    {
-        const VkDeviceSize maxStrings = stringBuffer->getSize()/sizeof(String);
-        if (maxStrings < strings.size())
-        {   // Reallocate if not enough memory
-            stringBuffer->realloc(strings.size() * sizeof(String));
-            setTable->stringBuffer = stringBuffer;
-        }
-        helpers::mapScoped<String>(stringBuffer,
-            [this](auto *data)
-            {   // Copy string descriptions
-                for (auto& str : strings)
-                    *data++ = str;
-            });
-    }
     helpers::unmap(charBuffer);
+    helpers::unmap(stringBuffer);
     chars = nullptr;
-    if (descriptorSet->dirty())
-        descriptorSet->update();
+    strings = nullptr;
 }
 
-void TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *format, ...)
+bool TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *format, ...)
 {
-    constexpr Glyph glyphs[] = {
+    static const Glyph glyphs[] = {
         #include "data/glyphs"
     };
+    MAGMA_ASSERT(strings);
+    MAGMA_ASSERT(chars);
+    if (stringCount >= maxStrings)
+        return false;
     char sz[MAGMA_MAX_STRING];
     va_list args;
     va_start(args, format);
@@ -187,19 +178,20 @@ void TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *forma
 #endif
     MAGMA_ASSERT(written != -1);
     const uint32_t length = static_cast<uint32_t>(strlen(sz));
-    String str;
-    str.x = (float)x;
-    str.y = (float)y;
-    str.first = offset;
-    str.last = offset + length - 1;
-    str.r = ((color >> 24) & 0xFF) / 255.f; // R
-    str.g = ((color >> 16) & 0xFF) / 255.f; // G
-    str.b = ((color >> 8) & 0xFF) / 255.f; // B
-    str.a = (color & 0xFF) / 255.f; // A
-    strings.push_back(str);
+    String *str = strings++;
+    str->x = (float)x;
+    str->y = (float)y;
+    str->first = offset;
+    str->last = offset + length - 1;
+    str->r = ((color >> 24) & 0xFF) / 255.f; // R
+    str->g = ((color >> 16) & 0xFF) / 255.f; // G
+    str->b = ((color >> 8) & 0xFF) / 255.f; // B
+    str->a = (color & 0xFF) / 255.f; // A
     for (uint32_t i = 0; (i < length) && (numChars < maxChars); ++i, ++numChars)
         *chars++ = glyphs[sz[i]];
     offset += length;
+    ++stringCount;
+    return true;
 }
 } // namespace aux
 } // namespace magma
