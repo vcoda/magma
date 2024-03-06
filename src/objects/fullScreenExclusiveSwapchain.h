@@ -76,3 +76,10 @@ namespace magma
     };
 #endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
 } // namespace magma
+
+#ifdef VK_EXT_full_screen_exclusive
+std::ostream& operator<<(std::ostream&, const VkSurfaceFullScreenExclusiveInfoEXT&);
+#ifdef VK_KHR_win32_surface
+std::ostream& operator<<(std::ostream&, const VkSurfaceFullScreenExclusiveWin32InfoEXT&);
+#endif
+#endif // VK_EXT_full_screen_exclusive

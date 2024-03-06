@@ -101,7 +101,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
     swapchainInfo.oldSwapchain = MAGMA_OPTIONAL_HANDLE(oldSwapchain);
 #ifdef VK_KHR_device_group
     VkDeviceGroupSwapchainCreateInfoKHR swapchainDeviceGroupInfo;
-    if (deviceGroupPresentModes && device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
     {
         swapchainDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR;
         swapchainDeviceGroupInfo.pNext = swapchainInfo.pNext;
@@ -131,41 +131,17 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
     if (result != VK_SUCCESS)
     {
         std::ostringstream out;
-        out << "initialization of swapchain failed!" << std::endl
-            << "VkSwapchainCreateInfoKHR [" << std::endl
-            << "\tflags: " << helpers::stringifySwapchainFlags(swapchainInfo.flags) << std::endl
-            << "\tsurface: 0x" << swapchainInfo.surface << std::endl
-            << "\tminImageCount: " << swapchainInfo.minImageCount << std::endl
-            << "\timageFormat: " << swapchainInfo.imageFormat << std::endl
-            << "\timageColorSpace: " << swapchainInfo.imageColorSpace << std::endl
-            << "\timageExtent: [" << swapchainInfo.imageExtent.width << ", "
-                << swapchainInfo.imageExtent.height << "]" << std::endl
-            << "\timageArrayLayers: " << swapchainInfo.imageArrayLayers << std::endl
-            << "\timageUsage: " << helpers::stringifyImageUsage(swapchainInfo.imageUsage) << std::endl
-            << "\timageSharingMode: " << swapchainInfo.imageSharingMode << std::endl
-            << "\tqueueFamilyIndexCount: " << swapchainInfo.queueFamilyIndexCount << std::endl
-            << "\tpQueueFamilyIndices: [";
-            for (uint32_t i = 0; i < swapchainInfo.queueFamilyIndexCount; ++i)
-            {
-                MAGMA_ASSERT(swapchainInfo.pQueueFamilyIndices);
-                out << swapchainInfo.pQueueFamilyIndices[i];
-                if (i < swapchainInfo.queueFamilyIndexCount - 1)
-                    out << ", ";
-            }
-        out << "]" << std::endl
-            << "\tpreTransform: " << swapchainInfo.preTransform << std::endl
-            << "\tcompositeAlpha: " << swapchainInfo.compositeAlpha << std::endl
-            << "\tpresentMode: " << swapchainInfo.presentMode << std::endl
-            << "\tclipped: " << Bool(swapchainInfo.clipped) << std::endl
-            << "\toldSwapchain: 0x" << swapchainInfo.oldSwapchain << std::endl
-            << "]" << std::endl;
+        out << swapchainInfo << std::endl;
+    #ifdef VK_KHR_device_group
+        if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+            out << swapchainDeviceGroupInfo << std::endl;
+    #endif
     #ifdef VK_EXT_debug_report
         if (debugReportCallback)
         {
             debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT,
-                getObjectType(),
-                0/*VK_NULL_HANDLE*/,
-                0, 0, "magma", out.str().c_str());
+                getObjectType(), (uint64_t)VK_NULL_HANDLE, 0, 0,
+                "magma", out.str().c_str());
         }
     #endif // VK_EXT_debug_report
     #ifdef VK_EXT_debug_utils
@@ -351,3 +327,47 @@ void Swapchain::handleError(VkResult result, const char *message) const
 }
 #endif // VK_KHR_swapchain
 } // namespace magma
+
+#ifdef VK_KHR_swapchain
+std::ostream& operator<<(std::ostream& out, const VkSwapchainCreateInfoKHR& info)
+{
+    out << "VkSwapchainCreateInfoKHR [" << std::endl
+        << "\tflags: " << magma::helpers::stringifySwapchainFlags(info.flags) << std::endl
+        << "\tsurface: " << info.surface << std::endl
+        << "\tminImageCount: " << info.minImageCount << std::endl
+        << "\timageFormat: " << info.imageFormat << std::endl
+        << "\timageColorSpace: " << info.imageColorSpace << std::endl
+        << "\timageExtent: [" << info.imageExtent.width << ", "
+            << info.imageExtent.height << "]" << std::endl
+        << "\timageArrayLayers: " << info.imageArrayLayers << std::endl
+        << "\timageUsage: " << magma::helpers::stringifyImageUsage(info.imageUsage) << std::endl
+        << "\timageSharingMode: " << info.imageSharingMode << std::endl
+        << "\tqueueFamilyIndexCount: " << info.queueFamilyIndexCount << std::endl
+        << "\tpQueueFamilyIndices: [";
+    for (uint32_t i = 0; i < info.queueFamilyIndexCount; ++i)
+    {
+        MAGMA_ASSERT(info.pQueueFamilyIndices);
+        out << info.pQueueFamilyIndices[i];
+        if (i < info.queueFamilyIndexCount - 1)
+            out << ", ";
+    }
+    out << "]" << std::endl
+        << "\tpreTransform: " << info.preTransform << std::endl
+        << "\tcompositeAlpha: " << info.compositeAlpha << std::endl
+        << "\tpresentMode: " << info.presentMode << std::endl
+        << "\tclipped: " << magma::Bool(info.clipped) << std::endl
+        << "\toldSwapchain: " << info.oldSwapchain << std::endl
+        << "]";
+    return out;
+}
+
+#ifdef VK_KHR_device_group
+std::ostream& operator<<(std::ostream& out, const VkDeviceGroupSwapchainCreateInfoKHR& info)
+{
+    out << "VkDeviceGroupSwapchainCreateInfoKHR [" << std::endl
+        << "\tmodes: " << magma::helpers::stringifyDeviceGroupPresentMode(info.modes) << std::endl
+        << "]";
+    return out;
+}
+#endif // VK_KHR_device_group
+#endif // VK_KHR_swapchain

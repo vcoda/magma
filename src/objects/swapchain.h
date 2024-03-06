@@ -133,3 +133,10 @@ namespace magma
     };
 #endif // VK_KHR_swapchain
 } // namespace magma
+
+#ifdef VK_KHR_swapchain
+std::ostream& operator<<(std::ostream&, const VkSwapchainCreateInfoKHR&);
+#ifdef VK_KHR_device_group
+std::ostream& operator<<(std::ostream&, const VkDeviceGroupSwapchainCreateInfoKHR&);
+#endif
+#endif // VK_KHR_swapchain

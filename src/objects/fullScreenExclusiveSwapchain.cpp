@@ -103,50 +103,25 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         result = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     }
     if (oldSwapchain)
-        oldSwapchain->retired = true; // oldSwapchain is retired even if creation of the new swapchain fails
+    {   // oldSwapchain is retired even if creation of the new swapchain fails
+        oldSwapchain->retired = true;
+    }
 #if defined(VK_EXT_debug_report) || defined(VK_EXT_debug_utils)
     if (result != VK_SUCCESS)
     {
         std::ostringstream out;
-        out << "initialization of swapchain failed!" << std::endl
-            << "VkSwapchainCreateInfoKHR [" << std::endl
-            << "\tflags: " << helpers::stringifySwapchainFlags(swapchainInfo.flags) << std::endl
-            << "\tsurface: 0x" << swapchainInfo.surface << std::endl
-            << "\tminImageCount: " << swapchainInfo.minImageCount << std::endl
-            << "\timageFormat: " << swapchainInfo.imageFormat << std::endl
-            << "\timageColorSpace: " << swapchainInfo.imageColorSpace << std::endl
-            << "\timageExtent: [" << swapchainInfo.imageExtent.width << ", "
-                << swapchainInfo.imageExtent.height << "]" << std::endl
-            << "\timageArrayLayers: " << swapchainInfo.imageArrayLayers << std::endl
-            << "\timageUsage: " << helpers::stringifyImageUsage(swapchainInfo.imageUsage) << std::endl
-            << "\timageSharingMode: " << swapchainInfo.imageSharingMode << std::endl
-            << "\tqueueFamilyIndexCount: " << swapchainInfo.queueFamilyIndexCount << std::endl
-            << "\tpQueueFamilyIndices: [";
-            for (uint32_t i = 0; i < swapchainInfo.queueFamilyIndexCount; ++i)
-            {
-                MAGMA_ASSERT(swapchainInfo.pQueueFamilyIndices);
-                out << swapchainInfo.pQueueFamilyIndices[i];
-                if (i < swapchainInfo.queueFamilyIndexCount - 1)
-                    out << ", ";
-            }
-        out << "]" << std::endl
-            << "\tpreTransform: " << swapchainInfo.preTransform << std::endl
-            << "\tcompositeAlpha: " << swapchainInfo.compositeAlpha << std::endl
-            << "\tpresentMode: " << swapchainInfo.presentMode << std::endl
-            << "\tclipped: " << Bool(swapchainInfo.clipped) << std::endl
-            << "\toldSwapchain: 0x" << swapchainInfo.oldSwapchain << std::endl
-            << "\tfullScreenExclusive: " << Bool(fullScreenExclusiveInfo.fullScreenExclusive) << std::endl
-        #ifdef VK_KHR_win32_surface
-            << "\thmonitor:" << hMonitor << std::endl
-        #endif
-            << "]" << std::endl;
+        out << swapchainInfo << std::endl
+            << fullScreenExclusiveInfo << std::endl;
+    #ifdef VK_KHR_win32_surface
+        if (hMonitor)
+            out << fullScreenExclusiveWin32Info << std::endl;
+    #endif
     #ifdef VK_EXT_debug_report
         if (debugReportCallback)
         {
             debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT,
-                getObjectType(),
-                0/*VK_NULL_HANDLE*/,
-                0, 0, "magma", out.str().c_str());
+                getObjectType(), (uint64_t)VK_NULL_HANDLE, 0, 0,
+                "magma", out.str().c_str());
         }
     #endif // VK_EXT_debug_report
     #ifdef VK_EXT_debug_utils
@@ -183,3 +158,23 @@ void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
 }
 #endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
 } // namespace magma
+
+#ifdef VK_EXT_full_screen_exclusive
+std::ostream& operator<<(std::ostream& out, const VkSurfaceFullScreenExclusiveInfoEXT& info)
+{
+    out << "VkSwapchainCreateInfoKHR [" << std::endl
+        << "\tfullScreenExclusive: " << info.fullScreenExclusive << std::endl
+        << "]";
+    return out;
+}
+
+#ifdef VK_KHR_win32_surface
+std::ostream& operator<<(std::ostream& out, const VkSurfaceFullScreenExclusiveWin32InfoEXT& info)
+{
+    out << "VkSurfaceFullScreenExclusiveWin32InfoEXT [" << std::endl
+        << "\thmonitor: " << info.hmonitor << std::endl
+        << "]";
+    return out;
+}
+#endif // VK_KHR_win32_surface
+#endif // VK_EXT_full_screen_exclusive
