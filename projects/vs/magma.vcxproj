@@ -226,6 +226,7 @@
     <ClInclude Include="..\..\src\helpers\mapTyped.h" />
     <ClInclude Include="..\..\src\helpers\spirvReflectionTypeCast.h" />
     <ClInclude Include="..\..\src\helpers\stackArray.h" />
+    <ClInclude Include="..\..\src\helpers\stringifyFlags.h" />
     <ClInclude Include="..\..\src\helpers\stringize.h" />
     <ClInclude Include="..\..\src\helpers\uniformArray.h" />
     <ClInclude Include="..\..\src\misc\application.h" />
@@ -430,6 +431,7 @@
     <ClCompile Include="..\..\src\extensions\physicalDeviceExtensions.cpp" />
     <ClCompile Include="..\..\src\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\src\helpers\executeDeferredOperation.cpp" />
+    <ClCompile Include="..\..\src\helpers\stringifyFlags.cpp" />
     <ClCompile Include="..\..\src\helpers\stringize.cpp" />
     <ClCompile Include="..\..\src\magma.cpp" />
     <ClCompile Include="..\..\src\misc\application.cpp" />

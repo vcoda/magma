@@ -123,10 +123,5 @@ namespace magma
         const char *stringize(SpvReflectDescriptorType) noexcept;
         const char *stringize(SpvReflectShaderStageFlagBits) noexcept;
         const char *stringize(SpvReflectGenerator) noexcept;
-
-        std::string stringifyImageCreateFlags(VkImageCreateFlags flags);
-        std::string stringifyImageUsageFlags(VkImageUsageFlags);
-        std::string stringifyBufferCreateFlags(VkBufferCreateFlags flags);
-        std::string stringifyBufferUsageFlags(VkBufferUsageFlags);
     } // namespace helpers
 } // namespace magma

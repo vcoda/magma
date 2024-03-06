@@ -99,6 +99,7 @@ src\extensions\layers.cpp ^
 src\extensions\physicalDeviceExtensions.cpp ^
 src\helpers\executeCommandBuffer.cpp ^
 src\helpers\executeDeferredOperation.cpp ^
+src\helpers\stringifyFlags.cpp ^
 src\helpers\stringize.cpp ^
 src\misc\application.cpp ^
 src\misc\deviceFaultInfo.cpp ^
@@ -268,6 +269,7 @@ layers.obj ^
 physicalDeviceExtensions.obj ^
 executeCommandBuffer.obj ^
 executeDeferredOperation.obj ^
+stringifyFlags.obj ^
 stringize.obj ^
 application.obj ^
 deviceFaultInfo.obj ^

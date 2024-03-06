@@ -26,6 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/deviceFeatures.h"
 #include "../misc/extension.h"
 #include "../helpers/stringize.h"
+#include "../helpers/stringifyFlags.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -125,7 +126,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
             swapchainInfo.imageExtent.width,
             swapchainInfo.imageExtent.height,
             swapchainInfo.imageArrayLayers,
-            helpers::stringifyImageUsageFlags(imageUsage).c_str(),
+            helpers::stringifyImageUsage(imageUsage).c_str(),
             helpers::stringize(swapchainInfo.imageSharingMode),
             helpers::stringize(swapchainInfo.preTransform),
             helpers::stringize(swapchainInfo.compositeAlpha),

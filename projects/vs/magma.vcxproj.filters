@@ -816,6 +816,9 @@
     <ClInclude Include="..\..\src\helpers\mapTyped.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\helpers\stringifyFlags.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1267,6 +1270,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\auxiliary\textShader.cpp">
       <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\helpers\stringifyFlags.cpp">
+      <Filter>Source Files\helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
