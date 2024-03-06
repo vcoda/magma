@@ -1461,7 +1461,7 @@ std::ostream& operator<<(std::ostream& out, VkDeviceGroupPresentModeFlagBitsKHR 
 #ifdef VK_EXT_fullscreen_exclusive
 std::ostream& operator<<(std::ostream& out, VkFullScreenExclusiveEXT fullScreenExclusive)
 {
-    switch fullScreenExclusive)
+    switch (fullScreenExclusive)
     {
     MAGMA_OUTPUT_ENUMERATION(VK_FULL_SCREEN_EXCLUSIVE_DEFAULT_EXT)
     MAGMA_OUTPUT_ENUMERATION(VK_FULL_SCREEN_EXCLUSIVE_ALLOWED_EXT)

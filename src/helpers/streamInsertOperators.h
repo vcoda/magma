@@ -132,7 +132,7 @@ MAGMA_STREAM_INSERT_OPERATOR(SpvReflectGenerator);
 
 namespace magma
 {
-    /* Helper class that wraps VkBool32 and
+    /* Helper type that wraps VkBool32 and
        outputs VK_TRUE/VK_FALSE instead of 0/1. */
 
     struct Bool
@@ -146,4 +146,4 @@ namespace magma
                 (out << MAGMA_STRINGIZE(VK_FALSE));
         }
     };
-} // namespace
+} // namespace magma
