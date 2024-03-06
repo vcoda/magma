@@ -155,5 +155,21 @@ std::string stringifySwapchainFlags(VkSwapchainCreateFlagsKHR flags)
     return out.str();
 }
 #endif // VK_KHR_swapchain
+
+#ifdef VK_KHR_device_group
+std::string stringifyDeviceGroupPresentMode(VkDeviceGroupPresentModeFlagsKHR flags)
+{
+    if (!flags)
+        return "0";
+    std::ostringstream out;
+    for (VkDeviceGroupPresentModeFlagBitsKHR bit: {
+        VK_DEVICE_GROUP_PRESENT_MODE_LOCAL_BIT_KHR,
+        VK_DEVICE_GROUP_PRESENT_MODE_REMOTE_BIT_KHR,
+        VK_DEVICE_GROUP_PRESENT_MODE_SUM_BIT_KHR,
+        VK_DEVICE_GROUP_PRESENT_MODE_LOCAL_MULTI_DEVICE_BIT_KHR
+    }) stringifyOredBit(flags, bit, out);
+    return out.str();
+}
+#endif // VK_KHR_device_group
 } // namespace helpers
 } // namespace magma

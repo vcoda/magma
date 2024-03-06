@@ -28,5 +28,8 @@ namespace magma
     #ifdef VK_KHR_swapchain
         std::string stringifySwapchainFlags(VkSwapchainCreateFlagsKHR flags);
     #endif
+    #ifdef VK_KHR_device_group
+        std::string stringifyDeviceGroupPresentMode(VkDeviceGroupPresentModeFlagsKHR flags);
+    #endif
     } // namespace helpers
 } // namespace magma
