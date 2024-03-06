@@ -99,8 +99,8 @@ src\extensions\layers.cpp ^
 src\extensions\physicalDeviceExtensions.cpp ^
 src\helpers\executeCommandBuffer.cpp ^
 src\helpers\executeDeferredOperation.cpp ^
+src\helpers\streamInsertOperators.cpp ^
 src\helpers\stringifyFlags.cpp ^
-src\helpers\stringize.cpp ^
 src\misc\application.cpp ^
 src\misc\deviceFaultInfo.cpp ^
 src\misc\deviceFeatures.cpp ^
@@ -269,8 +269,8 @@ layers.obj ^
 physicalDeviceExtensions.obj ^
 executeCommandBuffer.obj ^
 executeDeferredOperation.obj ^
+streamInsertOperators.obj ^
 stringifyFlags.obj ^
-stringize.obj ^
 application.obj ^
 deviceFaultInfo.obj ^
 deviceFeatures.obj ^

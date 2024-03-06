@@ -62,8 +62,8 @@ SRC_OBJS= \
 	\
 	src/helpers/executeCommandBuffer.o \
 	src/helpers/executeDeferredOperation.o \
+	src/helpers/streamInsertOperators.o \
 	src/helpers/stringifyFlags.o \
-	src/helpers/stringize.o \
 	\
 	src/misc/application.o \
 	src/misc/deviceFaultInfo.o \

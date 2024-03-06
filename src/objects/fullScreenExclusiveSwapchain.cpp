@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/deviceFeatures.h"
 #include "../misc/extension.h"
-#include "../helpers/stringize.h"
+#include "../helpers/streamInsertOperators.h"
 #include "../helpers/stringifyFlags.h"
 #include "../exceptions/errorResult.h"
 
@@ -107,43 +107,46 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 #if defined(VK_EXT_debug_report) || defined(VK_EXT_debug_utils)
     if (result != VK_SUCCESS)
     {
-        char errorStr[MAGMA_MAX_STRING];
-        sprintf_s(errorStr, MAGMA_MAX_STRING, "initialization of fullscreen exclusive swapchain failed with the following parameters:\n"
-            "minImageCount: %u\nimageFormat: %s\nimageColorSpace: %s\nimageExtent: {%u, %u}\nimageArrayLayers: %u\n"
-            "imageUsage: %s\nimageSharingMode: %s\npreTransform: %s\ncompositeAlpha: %s\npresentMode: %s\nclipped: %s\n"
-        #ifdef MAGMA_X64
-            "oldSwapchain: %p\n"
-        #else
-            "oldSwapchain: %llu\n"
-        #endif
+        std::ostringstream out;
+        out << "initialization of swapchain failed!" << std::endl
+            << "VkSwapchainCreateInfoKHR [" << std::endl
+            << "\tflags: " << helpers::stringifySwapchainFlags(swapchainInfo.flags) << std::endl
+            << "\tsurface: 0x" << swapchainInfo.surface << std::endl
+            << "\tminImageCount: " << swapchainInfo.minImageCount << std::endl
+            << "\timageFormat: " << swapchainInfo.imageFormat << std::endl
+            << "\timageColorSpace: " << swapchainInfo.imageColorSpace << std::endl
+            << "\timageExtent: [" << swapchainInfo.imageExtent.width << ", "
+                << swapchainInfo.imageExtent.height << "]" << std::endl
+            << "\timageArrayLayers: " << swapchainInfo.imageArrayLayers << std::endl
+            << "\timageUsage: " << helpers::stringifyImageUsage(swapchainInfo.imageUsage) << std::endl
+            << "\timageSharingMode: " << swapchainInfo.imageSharingMode << std::endl
+            << "\tqueueFamilyIndexCount: " << swapchainInfo.queueFamilyIndexCount << std::endl
+            << "\tpQueueFamilyIndices: [";
+            for (uint32_t i = 0; i < swapchainInfo.queueFamilyIndexCount; ++i)
+            {
+                MAGMA_ASSERT(swapchainInfo.pQueueFamilyIndices);
+                out << swapchainInfo.pQueueFamilyIndices[i];
+                if (i < swapchainInfo.queueFamilyIndexCount - 1)
+                    out << ", ";
+            }
+        out << "]" << std::endl
+            << "\tpreTransform: " << swapchainInfo.preTransform << std::endl
+            << "\tcompositeAlpha: " << swapchainInfo.compositeAlpha << std::endl
+            << "\tpresentMode: " << swapchainInfo.presentMode << std::endl
+            << "\tclipped: " << Bool(swapchainInfo.clipped) << std::endl
+            << "\toldSwapchain: 0x" << swapchainInfo.oldSwapchain << std::endl
+            << "\tfullScreenExclusive: " << Bool(fullScreenExclusiveInfo.fullScreenExclusive) << std::endl
         #ifdef VK_KHR_win32_surface
-            "hMonitor: %p\n"
+            << "\thmonitor:" << hMonitor << std::endl
         #endif
-            "fullScreenExclusive: %s\n",
-            swapchainInfo.minImageCount,
-            helpers::stringize(swapchainInfo.imageFormat),
-            helpers::stringize(swapchainInfo.imageColorSpace),
-            swapchainInfo.imageExtent.width,
-            swapchainInfo.imageExtent.height,
-            swapchainInfo.imageArrayLayers,
-            helpers::stringifyImageUsage(imageUsage).c_str(),
-            helpers::stringize(swapchainInfo.imageSharingMode),
-            helpers::stringize(swapchainInfo.preTransform),
-            helpers::stringize(swapchainInfo.compositeAlpha),
-            helpers::stringize(swapchainInfo.presentMode),
-            helpers::stringize(swapchainInfo.clipped),
-            swapchainInfo.oldSwapchain,
-        #ifdef VK_KHR_win32_surface
-            hMonitor,
-        #endif
-            helpers::stringize(fullScreenExclusiveInfo.fullScreenExclusive));
+            << "]" << std::endl;
     #ifdef VK_EXT_debug_report
         if (debugReportCallback)
         {
             debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT,
                 getObjectType(),
                 0/*VK_NULL_HANDLE*/,
-                0, 0, "magma", errorStr);
+                0, 0, "magma", out.str().c_str());
         }
     #endif // VK_EXT_debug_report
     #ifdef VK_EXT_debug_utils
@@ -151,7 +154,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         {
             debugUtilsMessenger->message(VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
                 VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT,
-                "magma", 0, errorStr);
+                "magma", 0, out.str().c_str());
         }
     #endif // VK_EXT_debug_utils
     }

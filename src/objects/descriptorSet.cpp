@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflection.h"
 #include "../shaders/shaderReflectionFactory.h"
 #include "../helpers/spirvReflectionTypeCast.h"
-#include "../helpers/stringize.h"
+#include "../helpers/streamInsertOperators.h"
 #include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 
@@ -139,8 +139,8 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
             {   // Descriptor type is different
                 oss << "descriptor type mismatch:" << std::endl
                     << "binding #" << binding.binding << std::endl
-                    << "expected: " << helpers::stringize(reflectedDescriptorType) << std::endl
-                    << "defined: " << helpers::stringize(binding.descriptorType);
+                    << "expected: " << reflectedDescriptorType << std::endl
+                    << "defined: " << binding.descriptorType;
             }
         }
         if (binding.descriptorCount != reflectedBinding->count)
@@ -163,8 +163,8 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
                 {   // Type of assigned image is different
                     oss << "descriptor image type mismatch:" << std::endl
                         << "binding #" << binding.binding << std::endl
-                        << "expected: " << helpers::stringize(imageType) << std::endl
-                        << "assigned: " << helpers::stringize(descriptor.getImageType());
+                        << "expected: " << imageType << std::endl
+                        << "assigned: " << descriptor.getImageType();
                 }
             }
         }
