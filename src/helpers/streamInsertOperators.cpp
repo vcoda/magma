@@ -1427,6 +1427,35 @@ std::ostream& operator<<(std::ostream& out, VkCompositeAlphaFlagBitsKHR bit)
     MAGMA_OUTPUT_UNKNOWN
     }
 }
+#endif // VK_KHR_surface
+
+#ifdef VK_KHR_swapchain
+std::ostream& operator<<(std::ostream& out, VkSwapchainCreateFlagBitsKHR bit)
+{
+    switch (bit)
+    {
+    MAGMA_OUTPUT_ENUMERATION(VK_SWAPCHAIN_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_SWAPCHAIN_CREATE_PROTECTED_BIT_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_SWAPCHAIN_CREATE_MUTABLE_FORMAT_BIT_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR)
+    MAGMA_OUTPUT_UNKNOWN
+    }
+}
+
+#ifdef VK_KHR_device_group
+std::ostream& operator<<(std::ostream& out, VkDeviceGroupPresentModeFlagBitsKHR bit)
+{
+    switch (bit)
+    {
+    MAGMA_OUTPUT_ENUMERATION(VK_DEVICE_GROUP_PRESENT_MODE_LOCAL_BIT_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_DEVICE_GROUP_PRESENT_MODE_REMOTE_BIT_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_DEVICE_GROUP_PRESENT_MODE_SUM_BIT_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_DEVICE_GROUP_PRESENT_MODE_LOCAL_MULTI_DEVICE_BIT_KHR)
+    MAGMA_OUTPUT_UNKNOWN
+    }
+}
+#endif // VK_KHR_device_group
+#endif // VK_KHR_swapchain
 
 #ifdef VK_EXT_fullscreen_exclusive
 std::ostream& operator<<(std::ostream& out, VkFullScreenExclusiveEXT fullScreenExclusive)

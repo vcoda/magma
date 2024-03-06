@@ -93,6 +93,12 @@ MAGMA_STREAM_INSERT_OPERATOR(VkColorSpaceKHR);
 MAGMA_STREAM_INSERT_OPERATOR(VkPresentModeKHR);
 MAGMA_STREAM_INSERT_OPERATOR(VkSurfaceTransformFlagBitsKHR);
 MAGMA_STREAM_INSERT_OPERATOR(VkCompositeAlphaFlagBitsKHR);
+#ifdef VK_KHR_swapchain
+MAGMA_STREAM_INSERT_OPERATOR(VkSwapchainCreateFlagBitsKHR);
+#ifdef VK_KHR_device_group
+MAGMA_STREAM_INSERT_OPERATOR(VkDeviceGroupPresentModeFlagBitsKHR);
+#endif
+#endif // VK_KHR_swapchain
 #ifdef VK_EXT_fullscreen_exclusive
 MAGMA_STREAM_INSERT_OPERATOR(VkFullScreenExclusiveEXT);
 #endif
