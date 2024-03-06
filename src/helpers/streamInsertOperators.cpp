@@ -1357,6 +1357,23 @@ std::ostream& operator<<(std::ostream& out, VkStencilFaceFlagBits bit)
     }
 }
 
+#ifdef VK_KHR_surface
+std::ostream& operator<<(std::ostream& out, VkPresentModeKHR presentMode)
+{
+    switch (presentMode)
+    {
+    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_IMMEDIATE_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_MAILBOX_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_FIFO_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_FIFO_RELAXED_KHR)
+#ifdef VK_KHR_shared_presentable_image
+    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
+    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR)
+#endif
+    MAGMA_OUTPUT_UNKNOWN
+    }
+}
+
 std::ostream& operator<<(std::ostream& out, VkColorSpaceKHR colorSpace)
 {
     switch (colorSpace)
@@ -1378,22 +1395,6 @@ std::ostream& operator<<(std::ostream& out, VkColorSpaceKHR colorSpace)
     MAGMA_OUTPUT_ENUMERATION(VK_COLOR_SPACE_PASS_THROUGH_EXT)
     MAGMA_OUTPUT_ENUMERATION(VK_COLOR_SPACE_EXTENDED_SRGB_NONLINEAR_EXT)
 #endif // VK_EXT_swapchain_colorspace
-    MAGMA_OUTPUT_UNKNOWN
-    }
-}
-
-std::ostream& operator<<(std::ostream& out, VkPresentModeKHR presentMode)
-{
-    switch (presentMode)
-    {
-    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_IMMEDIATE_KHR)
-    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_MAILBOX_KHR)
-    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_FIFO_KHR)
-    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_FIFO_RELAXED_KHR)
-#ifdef VK_KHR_shared_presentable_image
-    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
-    MAGMA_OUTPUT_ENUMERATION(VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR)
-#endif
     MAGMA_OUTPUT_UNKNOWN
     }
 }
