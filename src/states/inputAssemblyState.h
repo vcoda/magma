@@ -31,6 +31,7 @@ namespace magma
             bool primitiveRestartEnable = false) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const InputAssemblyState&) const noexcept;
+        friend std::ostream& operator<<(std::ostream&, const InputAssemblyState&);
     };
 } // namespace magma
 

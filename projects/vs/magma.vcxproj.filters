@@ -1274,6 +1274,9 @@
     <ClCompile Include="..\..\src\helpers\stringifyFlags.cpp">
       <Filter>Source Files\helpers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\states\formattedOutput.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\objects\baseDeviceMemory.inl">

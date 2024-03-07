@@ -37,6 +37,7 @@ namespace magma
         constexpr ColorBlendState(const ColorBlendState&) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const ColorBlendState&) const noexcept;
+        friend std::ostream& operator<<(std::ostream&, const ColorBlendState&);
     };
 
     /* Multiple attachment color blend state takes care

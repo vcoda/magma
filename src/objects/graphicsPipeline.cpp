@@ -35,6 +35,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
 
+std::ostream& operator<<(std::ostream&, const VkPipelineDynamicStateCreateInfo&);
+
 namespace magma
 {
 GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
@@ -131,7 +133,21 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
 #endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_HANDLE_RESULT(result, "failed to create graphics pipeline");
+    if (result != VK_SUCCESS)
+    {
+    #ifdef MAGMA_DEBUG
+        std::cout << vertexInputState << std::endl
+            << inputAssemblyState << std::endl
+            << tesselationState << std::endl
+            << viewportState << std::endl
+            << rasterizationState << std::endl
+            << multisampleState << std::endl
+            << depthStencilState << std::endl
+            << colorBlendState << std::endl
+            << pipelineDynamicStateInfo << std::endl;
+    #endif // MAGMA_DEBUG
+        MAGMA_HANDLE_RESULT(result, "failed to create graphics pipeline");
+    }
     std::pair<hash_t, hash_t> hashes = psoHash(
         flags,
         shaderStages,
@@ -224,3 +240,16 @@ std::pair<hash_t, hash_t> psoHash(VkPipelineCreateFlags flags,
     return {hash, rsHash};
 }
 } // namespace magma
+
+std::ostream& operator<<(std::ostream& out, const VkPipelineDynamicStateCreateInfo& state)
+{
+    out << "VkPipelineDynamicStateCreateInfo [" << std::endl
+        << "\tdynamicStateCount: " << state.dynamicStateCount << std::endl
+        << "\tpDynamicStates:" << std::endl
+        << "\t[" << std::endl;
+    for (uint32_t i = 0; i < state.dynamicStateCount ; ++i)
+        out << "\t\t" << state.pDynamicStates[i] << std::endl;
+    out << "\t[" << std::endl
+        << "]";
+    return out;
+}

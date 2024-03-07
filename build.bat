@@ -203,6 +203,7 @@ src\shaders\shaderReflection.cpp ^
 src\shaders\specialization.cpp ^
 src\states\colorBlendState.cpp ^
 src\states\colorBlendStateAdvanced.cpp ^
+src\states\formattedOutput ^
 src\states\multisampleState.cpp ^
 src\states\multiViewportState.cpp ^
 src\states\rasterizationState.cpp ^
@@ -373,6 +374,7 @@ shaderReflection.obj ^
 specialization.obj ^
 colorBlendState.obj ^
 colorBlendStateAdvanced.obj ^
+formattedOutput.obj ^
 multisampleState.obj ^
 multiViewportState.obj ^
 rasterizationState.obj ^

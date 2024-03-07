@@ -172,6 +172,7 @@ SRC_OBJS= \
 	\
 	src/states/colorBlendState.o \
 	src/states/colorBlendStateAdvanced.o \
+	src/states/formattedOutput.o \
 	src/states/multisampleState.o \
 	src/states/multiViewportState.o \
 	src/states/rasterizationState.o \

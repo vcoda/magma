@@ -30,6 +30,7 @@ namespace magma
         constexpr MultisampleState(const MultisampleState&) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const MultisampleState&) const noexcept;
+        friend std::ostream& operator<<(std::ostream&, const MultisampleState&);
     };
 
     /* Sample shading can be used to specify a minimum number of
