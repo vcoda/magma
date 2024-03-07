@@ -21,6 +21,7 @@ namespace magma
 {
     namespace helpers
     {
+        std::string stringifyMask(uint32_t mask);
         std::string stringifyImageFlags(VkImageCreateFlags flags);
         std::string stringifyImageUsage(VkImageUsageFlags flags);
         std::string stringifyBufferFlags(VkBufferCreateFlags flags);

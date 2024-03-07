@@ -24,6 +24,14 @@ namespace magma
 {
 namespace helpers
 {
+std::string stringifyMask(uint32_t mask)
+{
+    std::string str;
+    for (int i = 32 - 1; i >= 0; --i)
+        str += (mask & (1 << i) ? "1" : "0");
+    return str;
+}
+
 template<class Bit>
 static void stringifyOredBit(VkFlags flags, Bit bit, std::ostringstream& out)
 {
