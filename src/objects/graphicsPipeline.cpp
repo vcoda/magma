@@ -250,7 +250,7 @@ std::ostream& operator<<(std::ostream& out, const VkPipelineDynamicStateCreateIn
         << "\t[" << std::endl;
     for (uint32_t i = 0; i < state.dynamicStateCount ; ++i)
         out << "\t\t" << state.pDynamicStates[i] << std::endl;
-    out << "\t[" << std::endl
+    out << "\t]" << std::endl
         << "]";
     return out;
 }
