@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 // C lib
 #include <cassert>
 #include <cstring>
-#include <cstdarg>
 #ifdef _MSC_VER
     #include <malloc.h>
 #else
@@ -56,7 +55,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 // Input/output
 #include <iostream>
-#include <sstream>
 
 // Lean & mean windows.h
 #ifdef _WIN32
