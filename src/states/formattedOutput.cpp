@@ -28,7 +28,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../helpers/streamInsertOperators.h"
 #include "../helpers/stringifyFlags.h"
 
-using namespace magma;
+namespace magma
+{
 using namespace helpers;
 
 std::ostream& operator<<(std::ostream& out, const VertexInputState& state)
@@ -223,6 +224,4 @@ std::ostream& operator<<(std::ostream& out, const ColorBlendState& state)
         << "]";
     return out;
 }
-
-
-
+} // namespace magma
