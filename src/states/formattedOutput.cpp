@@ -212,7 +212,7 @@ std::ostream& operator<<(std::ostream& out, const ColorBlendState& state)
             << "\t\tsrcAlphaBlendFactor: " << attachment.srcAlphaBlendFactor << std::endl
             << "\t\tdstAlphaBlendFactor: " << attachment.dstAlphaBlendFactor << std::endl
             << "\t\talphaBlendOp: " << attachment.alphaBlendOp << std::endl
-            << "\t\tcolorWriteMask: " << stringifyMask(attachment.colorWriteMask) << std::endl
+            << "\t\tcolorWriteMask: " << stringifyColorMask(attachment.colorWriteMask) << std::endl
             << "\t]" << std::endl;
     }
     out << "\tblendConstants: ["

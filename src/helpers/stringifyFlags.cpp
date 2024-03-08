@@ -150,6 +150,20 @@ std::string stringifyBufferUsage(VkBufferUsageFlags flags)
     return out.str();
 }
 
+std::string stringifyColorMask(VkColorComponentFlags flags)
+{
+    if (!flags)
+        return "0";
+    std::ostringstream out;
+    for (VkColorComponentFlagBits bit: {
+        VK_COLOR_COMPONENT_R_BIT,
+        VK_COLOR_COMPONENT_G_BIT,
+        VK_COLOR_COMPONENT_B_BIT,
+        VK_COLOR_COMPONENT_A_BIT
+    }) stringifyOredBit(flags, bit, out);
+    return out.str();
+}
+
 #ifdef VK_KHR_swapchain
 std::string stringifySwapchainFlags(VkSwapchainCreateFlagsKHR flags)
 {
