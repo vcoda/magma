@@ -139,6 +139,12 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     if (result != VK_SUCCESS)
     {
     #ifdef MAGMA_DEBUG
+        for (auto const& stage: shaderStages)
+        {
+            auto reflection = stage.getShaderModule()->getReflection();
+            if (reflection)
+                std::cout << *reflection << std::endl;
+        }
         std::cout << vertexInputState << std::endl
             << inputAssemblyState << std::endl
             << tesselationState << std::endl
@@ -148,13 +154,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
             << depthStencilState << std::endl
             << colorBlendState << std::endl
             << pipelineDynamicStateInfo << std::endl;
-        for (auto const& stage: shaderStages)
-        {
-            const std::shared_ptr<ShaderModule>& shaderModule = stage.getShaderModule();
-            const std::shared_ptr<ShaderReflection>& reflection = shaderModule->getReflection();
-            if (reflection)
-                std::cout << *reflection << std::endl;
-        }
+        // TODO: layout, renderPass
     #endif // MAGMA_DEBUG
         MAGMA_HANDLE_RESULT(result, "failed to create graphics pipeline");
     }
