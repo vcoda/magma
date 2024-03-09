@@ -81,8 +81,13 @@ namespace magma
 
     struct MemoryBudget
     {
-        VkDeviceSize blockBytes;
-        VkDeviceSize allocationBytes;
+        struct Statistics
+        {
+            uint32_t blockCount;
+            uint32_t allocationCount;
+            VkDeviceSize blockBytes;
+            VkDeviceSize allocationBytes;
+        } statistics;
         VkDeviceSize usage;
         VkDeviceSize budget;
     };
@@ -142,14 +147,10 @@ namespace magma
         virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept = 0;
         virtual std::vector<MemoryBudget> getBudget() const noexcept = 0;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept = 0;
-        virtual VkResult beginCpuDefragmentation(const std::list<std::shared_ptr<Resource>>& resources,
-            bool incremental,
-            DefragmentationStats* stats = nullptr) = 0;
-        virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const std::list<std::shared_ptr<Resource>>& resources,
-            bool incremental,
-            DefragmentationStats* stats = nullptr) = 0;
-        virtual VkResult endDefragmentation() = 0;
+        virtual VkResult beginDefragmentation(VkFlags flags) noexcept = 0;
+        virtual VkResult beginDefragmentationPass() = 0;
+        virtual VkResult endDefragmentationPass() noexcept = 0;
+        virtual void endDefragmentation(DefragmentationStats* stats = nullptr) noexcept = 0;
 
     private:
         virtual VkResult map(DeviceMemoryBlock memory,

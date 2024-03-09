@@ -17,10 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "allocator.h"
-
-VK_DEFINE_HANDLE(VmaAllocator)
-VK_DEFINE_HANDLE(VmaAllocation)
-VK_DEFINE_HANDLE(VmaDefragmentationContext)
+#include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"
 
 namespace magma
 {
@@ -57,14 +54,10 @@ namespace magma
         virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept override;
         virtual std::vector<MemoryBudget> getBudget() const noexcept override;
         virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
-        virtual VkResult beginCpuDefragmentation(const std::list<std::shared_ptr<Resource>>& resources,
-            bool incremental,
-            DefragmentationStats* stats = nullptr) override;
-        virtual VkResult beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const std::list<std::shared_ptr<Resource>>& resources,
-            bool incremental,
-            DefragmentationStats* stats = nullptr) override;
-        virtual VkResult endDefragmentation() override;
+        virtual VkResult beginDefragmentation(VkFlags flags) noexcept override;
+        virtual VkResult beginDefragmentationPass() override;
+        virtual VkResult endDefragmentationPass() noexcept override;
+        virtual void endDefragmentation(DefragmentationStats* stats = nullptr) noexcept override;
 
     private:
         virtual VkResult map(DeviceMemoryBlock memory,
@@ -85,6 +78,7 @@ namespace magma
         std::shared_ptr<IAllocator> hostAllocator;
         VmaAllocator allocator;
         VmaDefragmentationContext defragmentationContext;
+        VmaDefragmentationPassMoveInfo passInfo;// = {};
         std::vector<std::shared_ptr<Resource>> defragmentationResources;
         std::vector<VkBool32> allocationsChanged;
     };

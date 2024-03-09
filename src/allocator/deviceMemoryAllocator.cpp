@@ -25,7 +25,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandBuffer.h"
 #include "../exceptions/errorResult.h"
 #include "../core/foreach.h"
-#include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"
 
 static_assert(sizeof(magma::MemoryBudget) == sizeof(VmaBudget),
     "VmaBudget structure size mismatch");
@@ -60,10 +59,8 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device_,
     allocatorInfo.preferredLargeHeapBlockSize = 0;
     allocatorInfo.pAllocationCallbacks = hostAllocator.get();
     allocatorInfo.pDeviceMemoryCallbacks = nullptr;
-    allocatorInfo.frameInUseCount = 0;
     allocatorInfo.pHeapSizeLimit = nullptr;
     allocatorInfo.pVulkanFunctions = nullptr;
-    allocatorInfo.pRecordSettings = nullptr;
     allocatorInfo.instance = *physicalDevice->getInstance();
     allocatorInfo.vulkanApiVersion = physicalDevice->getInstance()->getApiVersion();
     allocatorInfo.pTypeExternalMemoryHandleTypes = nullptr;
@@ -215,7 +212,7 @@ MemoryBlockInfo DeviceMemoryAllocator::getMemoryBlockInfo(DeviceMemoryBlock allo
 std::vector<MemoryBudget> DeviceMemoryAllocator::getBudget() const noexcept
 {
     VmaBudget budgets[VK_MAX_MEMORY_HEAPS];
-    vmaGetBudget(allocator, budgets);
+    vmaGetHeapBudgets(allocator, budgets);
     const VkPhysicalDeviceMemoryProperties& memoryProperties = device->getPhysicalDevice()->getMemoryProperties();
     std::vector<MemoryBudget> heapBudgets(memoryProperties.memoryHeapCount);
     memcpy(heapBudgets.data(), budgets, sizeof(VmaBudget) * memoryProperties.memoryHeapCount);
@@ -227,62 +224,42 @@ VkResult DeviceMemoryAllocator::checkCorruption(uint32_t memoryTypeBits) noexcep
     return vmaCheckCorruption(allocator, memoryTypeBits);
 }
 
-VkResult DeviceMemoryAllocator::beginCpuDefragmentation(const std::list<std::shared_ptr<Resource>>& resources, bool incremental,
-    DefragmentationStats* stats /* nullptr */)
+VkResult DeviceMemoryAllocator::beginDefragmentation(VkFlags flags) noexcept
 {
-    std::vector<VmaAllocation> allocations = gatherSuballocations(resources);
-    VmaDefragmentationInfo2 cpuDefragInfo;
-    cpuDefragInfo.flags = incremental ? VMA_DEFRAGMENTATION_FLAG_INCREMENTAL : 0;
-    cpuDefragInfo.allocationCount = MAGMA_COUNT(allocations);
-    cpuDefragInfo.pAllocations = allocations.data();
-    cpuDefragInfo.pAllocationsChanged = allocationsChanged.data();
-    cpuDefragInfo.poolCount = 0;
-    cpuDefragInfo.pPools = nullptr;
-    cpuDefragInfo.maxCpuBytesToMove = VK_WHOLE_SIZE;
-    cpuDefragInfo.maxCpuAllocationsToMove = std::numeric_limits<uint32_t>::max();
-    cpuDefragInfo.maxGpuBytesToMove = 0;
-    cpuDefragInfo.maxGpuAllocationsToMove = 0;
-    cpuDefragInfo.commandBuffer = VK_NULL_HANDLE;
-    return vmaDefragmentationBegin(allocator, &cpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
+    VmaDefragmentationInfo defragInfo = {};
+    defragInfo.flags = flags;
+    defragInfo.pool = VK_NULL_HANDLE;
+    defragInfo.maxBytesPerPass = 0;
+    defragInfo.maxAllocationsPerPass = 0;
+    defragInfo.pfnBreakCallback = nullptr;
+    defragInfo.pBreakCallbackUserData = nullptr;
+    return vmaBeginDefragmentation(allocator, &defragInfo, &defragmentationContext);
 }
 
-VkResult DeviceMemoryAllocator::beginGpuDefragmentation(std::shared_ptr<CommandBuffer> cmdBuffer,
-    const std::list<std::shared_ptr<Resource>>& resources, bool incremental,
-    DefragmentationStats* stats /* nullptr */)
+VkResult DeviceMemoryAllocator::beginDefragmentationPass()
 {
-    std::vector<VmaAllocation> allocations = gatherSuballocations(resources);
-    VmaDefragmentationInfo2 gpuDefragInfo;
-    gpuDefragInfo.flags = incremental ? VMA_DEFRAGMENTATION_FLAG_INCREMENTAL : 0;
-    gpuDefragInfo.allocationCount = MAGMA_COUNT(allocations);
-    gpuDefragInfo.pAllocations = allocations.data();
-    gpuDefragInfo.pAllocationsChanged = allocationsChanged.data();
-    gpuDefragInfo.poolCount = 0;
-    gpuDefragInfo.pPools = nullptr;
-    gpuDefragInfo.maxCpuBytesToMove = 0;
-    gpuDefragInfo.maxCpuAllocationsToMove = 0;
-    gpuDefragInfo.maxGpuBytesToMove = VK_WHOLE_SIZE;
-    gpuDefragInfo.maxGpuAllocationsToMove = std::numeric_limits<uint32_t>::max();
-    gpuDefragInfo.commandBuffer = *cmdBuffer;
-    return vmaDefragmentationBegin(allocator, &gpuDefragInfo, reinterpret_cast<VmaDefragmentationStats*>(stats), &defragmentationContext);
-}
-
-VkResult DeviceMemoryAllocator::endDefragmentation()
-{   // https://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/defragmentation.html
-    const VkResult result = vmaDefragmentationEnd(allocator, defragmentationContext);
-    core::forEach(allocationsChanged, defragmentationResources,
-        [](auto& changed, auto& defragmentedResource)
+    const VkResult result = vmaBeginDefragmentationPass(allocator, defragmentationContext, &passInfo);
+    if (VK_SUCCESS == result)
+    {
+        for (uint32_t i = 0; i < passInfo.moveCount; ++i)
         {
-            if (*changed)
-            {
-                (*defragmentedResource)->getMemory()->onDefragment();
-                (*defragmentedResource)->onDefragment();
-            }
-        });
-    allocationsChanged.clear();
-    allocationsChanged.shrink_to_fit();
-    defragmentationResources.clear();
-    defragmentationResources.shrink_to_fit();
+            const VmaDefragmentationMove& move = passInfo.pMoves[i];
+            VmaAllocationInfo allocInfo;
+            vmaGetAllocationInfo(allocator, move.srcAllocation, &allocInfo);
+            // TODO: https://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/defragmentation.html
+        }
+    }
     return result;
+}
+
+VkResult DeviceMemoryAllocator::endDefragmentationPass() noexcept
+{
+    return vmaEndDefragmentationPass(allocator, defragmentationContext, &passInfo);
+}
+
+void DeviceMemoryAllocator::endDefragmentation(DefragmentationStats* stats /* nullptr */) noexcept
+{
+    vmaEndDefragmentation(allocator, defragmentationContext, reinterpret_cast<VmaDefragmentationStats *>(stats));
 }
 
 VkResult DeviceMemoryAllocator::map(DeviceMemoryBlock allocation, VkDeviceSize offset, void **data) noexcept
