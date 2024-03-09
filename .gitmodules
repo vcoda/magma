@@ -1,6 +1,7 @@
 [submodule "src/third-party/VulkanMemoryAllocator"]
 	path = src/third-party/VulkanMemoryAllocator
 	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git
+	branch = master
 [submodule "src/third-party/SPIRV-Reflect"]
 	path = src/third-party/SPIRV-Reflect
 	url = https://github.com/KhronosGroup/SPIRV-Reflect.git
