@@ -56,6 +56,7 @@ namespace magma
         const SpvReflectInterfaceVariable *getOutputVariable(const char *entrypoint, const char *semantic) const;
         const SpvReflectBlockVariable *getPushConstantBlock(const uint32_t index) const;
         const SpvReflectBlockVariable *getPushConstantBlock(const char *entrypoint) const;
+        friend std::ostream& operator<<(std::ostream&, const ShaderReflection&);
 
     private:
         SpvReflectShaderModule module;

@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #include "shaderReflection.h"
 #include "../exceptions/reflectionErrorResult.h"
+#include "../helpers/streamInsertOperators.h"
 
 #ifndef MAGMA_NO_EXCEPTIONS
 #define MAGMA_THROW_REFLECTION_FAILURE(result, message)\
@@ -237,5 +238,46 @@ const SpvReflectBlockVariable *ShaderReflection::getPushConstantBlock(const char
     const SpvReflectBlockVariable *pushConstantBlock = spvReflectGetEntryPointPushConstantBlock(&module, entrypoint, &result);
     MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get push constant block for entry point")
     return pushConstantBlock;
+}
+
+std::ostream& operator<<(std::ostream& out, const ShaderReflection& reflection)
+{
+    const SpvReflectShaderModule& module = reflection.module;
+    out << "SpvReflectShaderModule [" << std::endl
+        << "\tshader_stage: " << module.shader_stage << std::endl
+        << "\tsource_language: " << spvReflectSourceLanguage(module.source_language)
+        << " " << module.source_language_version << std::endl;
+    for (uint32_t i = 0; i < module.entry_point_count; ++i)
+        out << "\tentry_point: " << module.entry_points[i].name << std::endl;
+    out << "\tdescriptor_set_count: " << module.descriptor_set_count << std::endl;
+    for (uint32_t i = 0; i < module.descriptor_set_count; ++i)
+    {
+        const SpvReflectDescriptorSet& set = module.descriptor_sets[i];
+        out << "\tSpvReflectDescriptorSet [" << std::endl
+            << "\t\tset: " << set.set << std::endl
+            << "\t\tbinding_count: " << set.binding_count << std::endl
+            << "\t\tbindings: " << std::endl;
+        for (uint32_t j = 0; j < set.binding_count; ++j)
+        {
+            const SpvReflectDescriptorBinding *binding = set.bindings[j];
+            out << "\t\t[" << std::endl
+                << "\t\t\tname: ";
+            if (strlen(binding->name))
+                out << binding->name << std::endl;
+            else if (binding->type_description->type_name && strlen(binding->type_description->type_name))
+                out << binding->type_description->type_name << std::endl;
+            else
+                out << "<none>" << std::endl;
+            out << "\t\t\tdescriptor_type: " << binding->descriptor_type << std::endl;
+            if (binding->count > 1)
+                out << "\t\t\tcount: " << binding->count << std::endl;
+            out << "\t\t\tbinding: " << binding->binding << std::endl
+                << "\t\t]" << std::endl;
+            // TODO: uav_counter_binding
+        }
+        out << "\t]" << std::endl;
+    }
+    out << "]";
+    return out;
 }
 } // namespace magma

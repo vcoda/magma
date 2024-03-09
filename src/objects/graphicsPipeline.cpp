@@ -21,8 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
 #include "device.h"
+#include "shaderModule.h"
 #include "renderPass.h"
 #include "../shaders/pipelineShaderStage.h"
+#include "../shaders/shaderReflection.h"
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/tesselationState.h"
@@ -146,6 +148,13 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
             << depthStencilState << std::endl
             << colorBlendState << std::endl
             << pipelineDynamicStateInfo << std::endl;
+        for (auto const& stage: shaderStages)
+        {
+            const std::shared_ptr<ShaderModule>& shaderModule = stage.getShaderModule();
+            const std::shared_ptr<ShaderReflection>& reflection = shaderModule->getReflection();
+            if (reflection)
+                std::cout << *reflection << std::endl;
+        }
     #endif // MAGMA_DEBUG
         MAGMA_HANDLE_RESULT(result, "failed to create graphics pipeline");
     }
