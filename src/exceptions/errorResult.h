@@ -181,7 +181,9 @@ namespace magma
         void setErrorHandler(ErrorHandler errorHandler) noexcept;
     #endif // MAGMA_NO_EXCEPTIONS
 
-        void handleResult(VkResult result, const char *message, const source_location& location);
+        void handleResult(VkResult result,
+            const char *message,
+            const source_location& location);
     } // namespace exception
 } // namespace magma
 

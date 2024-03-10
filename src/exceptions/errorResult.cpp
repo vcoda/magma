@@ -26,7 +26,7 @@ namespace exception
 #ifdef MAGMA_NO_EXCEPTIONS
 static ErrorHandler errorHandler =
     [](VkResult, const char *, const source_location&)
-    {   // If no error handler is provided, simply call abort()
+    {   // If no error handler is provided, abort program
         abort();
     };
 
