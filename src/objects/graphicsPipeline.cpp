@@ -145,7 +145,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
             if (reflection)
                 std::cout << *reflection << std::endl;
         }
-        std::cout << vertexInputState << std::endl
+        std::cerr << vertexInputState << std::endl
             << inputAssemblyState << std::endl
             << tesselationState << std::endl
             << viewportState << std::endl
