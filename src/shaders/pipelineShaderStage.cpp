@@ -102,7 +102,8 @@ hash_t PipelineShaderStage::getHash() const noexcept
         stage,
         module);
     hash = core::hashCombine(hash, shaderModule->getHash());
-    hash = core::hashCombine(hash, core::hashString(std::string(pName)));
+    if (pName)
+        hash = core::hashCombine(hash, core::hashString(pName));
     if (specialization)
         hash = core::hashCombine(hash, specialization->getHash());
     return hash;
