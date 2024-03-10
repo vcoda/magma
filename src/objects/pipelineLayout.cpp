@@ -144,19 +144,19 @@ hash_t PipelineLayout::getHash() const noexcept
     return hash;
 }
 
-std::ostream& operator<<(std::ostream& out, const PipelineLayout& pipelineLayout)
+std::ostream& operator<<(std::ostream& out, const PipelineLayout& layout)
 {
     out << "VkPipelineLayoutCreateInfo [" << std::endl
-        << "\tsetLayoutCount: " << pipelineLayout.setLayouts.size() << std::endl
+        << "\tsetLayoutCount: " << layout.setLayouts.size() << std::endl
         << "\tpSetLayouts: ";
-    if (pipelineLayout.setLayouts.empty())
+    if (layout.setLayouts.empty())
         out << "NULL" << std::endl;
     else
     {
         out << std::endl;
-        for (auto const& layout: pipelineLayout.setLayouts)
+        for (auto const& it: layout.setLayouts)
         {
-            auto setLayout = layout.lock();
+            auto setLayout = it.lock();
             if (setLayout)
             {
                 for (auto const& binding: setLayout->getBindings())
@@ -171,14 +171,14 @@ std::ostream& operator<<(std::ostream& out, const PipelineLayout& pipelineLayout
             }
         }
     }
-    out << "\tpushConstantRangeCount: " << pipelineLayout.pushConstantRanges.size() << std::endl
+    out << "\tpushConstantRangeCount: " << layout.pushConstantRanges.size() << std::endl
         << "\tpPushConstantRanges: ";
-    if (pipelineLayout.pushConstantRanges.empty())
+    if (layout.pushConstantRanges.empty())
         out << "NULL" << std::endl;
     else
     {
         out << std::endl;
-        for (auto const& range: pipelineLayout.pushConstantRanges)
+        for (auto const& range: layout.pushConstantRanges)
         {
             out << "\t[" << std::endl
                 << "\t\tstageFlags: " << helpers::stringifyShaderStageFlags(range.stageFlags) << std::endl
