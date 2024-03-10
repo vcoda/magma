@@ -143,7 +143,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
         {
             auto reflection = stage.getShaderModule()->getReflection();
             if (reflection)
-                std::cout << *reflection << std::endl;
+                std::cerr << *reflection << std::endl;
         }
         std::cerr << vertexInputState << std::endl
             << inputAssemblyState << std::endl
