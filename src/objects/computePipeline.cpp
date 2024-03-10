@@ -21,7 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
 #include "device.h"
+#include "shaderModule.h"
 #include "../shaders/pipelineShaderStage.h"
+#include "../shaders/shaderReflection.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 
@@ -29,13 +31,13 @@ namespace magma
 {
 ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     const PipelineShaderStage& shaderStage,
-    std::shared_ptr<PipelineLayout> layout,
+    std::shared_ptr<PipelineLayout> layout_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<ComputePipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device_), std::move(layout), std::move(basePipeline_), std::move(allocator), 1)
+    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), 1)
 {
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
@@ -44,7 +46,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stage = shaderStage;
-    pipelineInfo.layout = MAGMA_HANDLE(layout);
+    pipelineInfo.layout = *layout;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
     pipelineInfo.basePipelineIndex = -1;
 #ifdef VK_EXT_pipeline_creation_feedback
@@ -62,7 +64,16 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
 #endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_HANDLE_RESULT(result, "failed to create compute pipeline");
+    if (result != VK_SUCCESS)
+    {
+    #ifdef MAGMA_DEBUG
+        auto const& reflection = shaderStage.getShaderModule()->getReflection();
+        if (reflection)
+            std::cerr << *reflection << std::endl;
+        std::cerr << *layout << std::endl;
+    #endif // MAGMA_DEBUG
+        MAGMA_HANDLE_RESULT(result, "failed to create compute pipeline");
+    }
     hash = core::hashArgs(
         pipelineInfo.sType,
         pipelineInfo.flags);
