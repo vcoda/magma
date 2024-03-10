@@ -68,9 +68,11 @@ namespace magma
         ~PipelineLayout();
         bool hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout) const noexcept;
         hash_t getHash() const noexcept;
+        friend std::ostream& operator<<(std::ostream&, const PipelineLayout&);
 
     private:
-        std::unordered_map<VkDescriptorSetLayout, hash_t> descriptorSetLayouts;
+        std::vector<std::weak_ptr<const DescriptorSetLayout>> setLayouts;
+        std::vector<PushConstantRange> pushConstantRanges;
         hash_t hash;
     };
 } // namespace magma

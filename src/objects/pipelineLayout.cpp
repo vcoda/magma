@@ -23,6 +23,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
+#include "../helpers/streamInsertOperators.h"
+#include "../helpers/stringifyFlags.h"
 
 namespace magma
 {
@@ -30,7 +32,8 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     const std::initializer_list<PushConstantRange>& pushConstantRanges,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
-    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator)),
+    pushConstantRanges(pushConstantRanges)
 {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -47,7 +50,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
         pipelineLayoutInfo.flags,
         pipelineLayoutInfo.setLayoutCount,
         pipelineLayoutInfo.pushConstantRangeCount);
-    for (const PushConstantRange& pushConstantRange: pushConstantRanges)
+    for (auto const& pushConstantRange: pushConstantRanges)
         hash = core::hashCombine(hash, pushConstantRange.hash());
 }
 
@@ -55,7 +58,8 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
     const std::initializer_list<PushConstantRange>& pushConstantRanges,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
-    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, setLayout->getDevice(), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, setLayout->getDevice(), std::move(allocator)),
+    pushConstantRanges(pushConstantRanges)
 {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -73,23 +77,21 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
         pipelineLayoutInfo.setLayoutCount,
         pipelineLayoutInfo.pushConstantRangeCount);
     hash = core::hashCombine(hash, setLayout->getHash());
-    for (const PushConstantRange& pushConstantRange: pushConstantRanges)
+    for (auto const& pushConstantRange: pushConstantRanges)
         hash = core::hashCombine(hash, pushConstantRange.hash());
-    descriptorSetLayouts.emplace(*setLayout, setLayout->getHash());
+    setLayouts.push_back(std::move(setLayout));
 }
 
-PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
+PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const DescriptorSetLayout>>& setLayouts_,
     const std::initializer_list<PushConstantRange>& pushConstantRanges,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
-    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, (*setLayouts.begin())->getDevice(), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, (*setLayouts_.begin())->getDevice(), std::move(allocator)),
+    pushConstantRanges(pushConstantRanges)
 {
     MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts.size());
-    for (const auto& setLayout: setLayouts)
-    {
-        dereferencedSetLayouts.put(*setLayout);
-        descriptorSetLayouts.emplace(*setLayout, setLayout->getHash());
-    }
+    for (auto const& layout: setLayouts_)
+        dereferencedSetLayouts.put(*layout);
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.pNext = nullptr;
@@ -105,10 +107,12 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
         pipelineLayoutInfo.flags,
         pipelineLayoutInfo.setLayoutCount,
         pipelineLayoutInfo.pushConstantRangeCount);
-    for (const auto& layout: descriptorSetLayouts)
-        hash = core::hashCombine(hash, layout.second);
-    for (const PushConstantRange& pushConstantRange: pushConstantRanges)
+    for (const auto& layout: setLayouts_)
+        hash = core::hashCombine(hash, layout->getHash());
+    for (auto const& pushConstantRange: pushConstantRanges)
         hash = core::hashCombine(hash, pushConstantRange.hash());
+    for (const auto& layout: setLayouts_)
+        setLayouts.push_back(layout);
 }
 
 PipelineLayout::~PipelineLayout()
@@ -116,21 +120,74 @@ PipelineLayout::~PipelineLayout()
     vkDestroyPipelineLayout(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-bool PipelineLayout::hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout) const noexcept
+bool PipelineLayout::hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout_) const noexcept
 {
-    for (const auto it: descriptorSetLayouts)
-    {
-        if ((it.first == *setLayout) || (it.second == setLayout->getHash()))
-            return true;
-    }
-    return false;
+    auto it = std::find_if(setLayouts.begin(), setLayouts.end(),
+        [&setLayout_](auto const& layout)
+        {
+            if (auto setLayout = layout.lock())
+                return setLayout->getHash() == setLayout_->getHash();
+            return false;
+        });
+    return it != setLayouts.end();
 }
 
 hash_t PipelineLayout::getHash() const noexcept
 {
     hash_t hash = this->hash;
-    for (auto& layout: descriptorSetLayouts)
-        hash = core::hashCombine(hash, layout.second);
+    for (auto const& layout: setLayouts)
+    {
+        auto setLayout = layout.lock();
+        if (setLayout)
+            hash = core::hashCombine(hash, setLayout->getHash());
+    }
     return hash;
+}
+
+std::ostream& operator<<(std::ostream& out, const PipelineLayout& pipelineLayout)
+{
+    out << "VkPipelineLayoutCreateInfo [" << std::endl
+        << "\tsetLayoutCount: " << pipelineLayout.setLayouts.size() << std::endl
+        << "\tpSetLayouts: ";
+    if (pipelineLayout.setLayouts.empty())
+        out << "NULL" << std::endl;
+    else
+    {
+        out << std::endl;
+        for (auto const& layout: pipelineLayout.setLayouts)
+        {
+            auto setLayout = layout.lock();
+            if (setLayout)
+            {
+                for (auto const& binding: setLayout->getBindings())
+                {
+                    out << "\t[" << std::endl
+                        << "\t\tbinding: " << binding.binding << std::endl
+                        << "\t\tdescriptorType: " << binding.descriptorType << std::endl
+                        << "\t\tdescriptorCount: " << binding.descriptorCount << std::endl
+                        << "\t\tstageFlags: " << helpers::stringifyShaderStageFlags(binding.stageFlags) << std::endl
+                        << "\t]" << std::endl;
+                }
+            }
+        }
+    }
+    out << "\tpushConstantRangeCount: " << pipelineLayout.pushConstantRanges.size() << std::endl
+        << "\tpPushConstantRanges: ";
+    if (pipelineLayout.pushConstantRanges.empty())
+        out << "NULL" << std::endl;
+    else
+    {
+        out << std::endl;
+        for (auto const& range: pipelineLayout.pushConstantRanges)
+        {
+            out << "\t[" << std::endl
+                << "\t\tstageFlags: " << helpers::stringifyShaderStageFlags(range.stageFlags) << std::endl
+                << "\t\toffset: " << range.offset << std::endl
+                << "\t\tsize: " << range.size << std::endl
+                << "\t]" << std::endl;
+        }
+    }
+    out << "]";
+    return out;
 }
 } // namespace magma
