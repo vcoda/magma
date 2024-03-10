@@ -151,6 +151,34 @@ std::string stringifyBufferUsage(VkBufferUsageFlags flags)
     return out.str();
 }
 
+std::string stringifyShaderStageFlags(VkShaderStageFlags flags)
+{
+    if (!flags)
+        return "0";
+    std::ostringstream out;
+    for (VkShaderStageFlagBits bit: {
+        VK_SHADER_STAGE_VERTEX_BIT,
+        VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT,
+        VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT,
+        VK_SHADER_STAGE_GEOMETRY_BIT,
+        VK_SHADER_STAGE_FRAGMENT_BIT,
+        VK_SHADER_STAGE_COMPUTE_BIT,
+    #ifdef VK_KHR_ray_tracing_pipeline
+        VK_SHADER_STAGE_RAYGEN_BIT_KHR,
+        VK_SHADER_STAGE_ANY_HIT_BIT_KHR,
+        VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR,
+        VK_SHADER_STAGE_MISS_BIT_KHR,
+        VK_SHADER_STAGE_INTERSECTION_BIT_KHR,
+        VK_SHADER_STAGE_CALLABLE_BIT_KHR,
+    #endif // VK_KHR_ray_tracing_pipeline
+    #ifdef VK_NV_mesh_shader
+        VK_SHADER_STAGE_TASK_BIT_NV,
+        VK_SHADER_STAGE_MESH_BIT_NV,
+    #endif // VK_NV_mesh_shader
+    }) stringifyOredBit(flags, bit, out);
+    return out.str();
+}
+
 std::string stringifyColorMask(VkColorComponentFlags flags)
 {
     if (!flags)
