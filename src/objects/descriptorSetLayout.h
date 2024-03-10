@@ -37,9 +37,11 @@ namespace magma
             VkDescriptorSetLayoutCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~DescriptorSetLayout();
+        const std::vector<VkDescriptorSetLayoutBinding>& getBindings() const noexcept { return bindings; }
         hash_t getHash() const noexcept { return hash; }
 
     private:
+        const std::vector<VkDescriptorSetLayoutBinding> bindings;
         hash_t hash;
     };
 } // namespace magma
