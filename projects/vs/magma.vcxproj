@@ -424,6 +424,7 @@
     <ClCompile Include="..\..\src\descriptors\imageDescriptor.cpp" />
     <ClCompile Include="..\..\src\exceptions\errorResult.cpp" />
     <ClCompile Include="..\..\src\exceptions\exception.cpp" />
+    <ClCompile Include="..\..\src\exceptions\reflectionErrorResult.cpp" />
     <ClCompile Include="..\..\src\extensions\extensions.cpp" />
     <ClCompile Include="..\..\src\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\src\extensions\instanceLayers.cpp" />

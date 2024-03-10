@@ -92,6 +92,7 @@ src\descriptors\bufferDescriptor.cpp ^
 src\descriptors\imageDescriptor.cpp ^
 src\exceptions\errorResult.cpp ^
 src\exceptions\exception.cpp ^
+src\exceptions\reflectionErrorResult.cpp ^
 src\extensions\extensions.cpp ^
 src\extensions\instanceExtensions.cpp ^
 src\extensions\instanceLayers.cpp ^
@@ -263,6 +264,7 @@ bufferDescriptor.obj ^
 imageDescriptor.obj ^
 errorResult.obj ^
 exception.obj ^
+reflectionErrorResult.obj ^
 extensions.obj ^
 instanceExtensions.obj ^
 instanceLayers.obj ^

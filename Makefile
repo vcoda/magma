@@ -53,6 +53,7 @@ SRC_OBJS= \
 	\
 	src/exceptions/errorResult.o \
 	src/exceptions/exception.o \
+	src/exceptions/reflectionErrorResult.o \
 	\
 	src/extensions/extensions.o \
 	src/extensions/instanceExtensions.o \

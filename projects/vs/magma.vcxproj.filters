@@ -1277,6 +1277,9 @@
     <ClCompile Include="..\..\src\states\formattedOutput.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\exceptions\reflectionErrorResult.cpp">
+      <Filter>Source Files\exceptions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\objects\baseDeviceMemory.inl">

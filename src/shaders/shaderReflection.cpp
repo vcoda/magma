@@ -20,27 +20,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../exceptions/reflectionErrorResult.h"
 #include "../helpers/streamInsertOperators.h"
 
-#ifndef MAGMA_NO_EXCEPTIONS
-#define MAGMA_THROW_REFLECTION_FAILURE(result, message)\
-    switch (result)\
-    {\
-    case SPV_REFLECT_RESULT_SUCCESS:\
-    case SPV_REFLECT_RESULT_NOT_READY:\
-        break;\
-    default:\
-        throw magma::exception::ReflectionErrorResult(result, message, MAGMA_SOURCE_LOCATION);\
-    }
-#else
-#define MAGMA_THROW_REFLECTION_FAILURE(result, message)
-#endif // !MAGMA_NO_EXCEPTIONS
-
 namespace magma
 {
 ShaderReflection::ShaderReflection(const SpirvWord *bytecode, const std::size_t bytecodeSize)
 {
     MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord)); // A module is defined as a stream of words, not a stream of bytes
     const SpvReflectResult result = spvReflectCreateShaderModule(bytecodeSize, bytecode, &module);
-    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to create shader reflection")
+    MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to create shader reflection");
 }
 
 ShaderReflection::~ShaderReflection() noexcept
@@ -84,7 +70,7 @@ std::vector<const SpvReflectDescriptorBinding *> ShaderReflection::enumerateDesc
         const SpvReflectResult result = entrypoint ?
             spvReflectEnumerateEntryPointDescriptorBindings(&module, entrypoint, &count, data) :
             spvReflectEnumerateDescriptorBindings(&module, &count, data);
-        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate descriptor bindings")
+        MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to enumerate descriptor bindings");
     }
     return descriptorBindings;
 }
@@ -102,7 +88,7 @@ std::vector<const SpvReflectDescriptorSet *> ShaderReflection::enumerateDescript
         const SpvReflectResult result = entrypoint ?
             spvReflectEnumerateEntryPointDescriptorSets(&module, entrypoint, &count, data) :
             spvReflectEnumerateDescriptorSets(&module, &count, data);
-        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate descriptor sets")
+        MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to enumerate descriptor sets");
     }
     return descriptorSets;
 }
@@ -120,7 +106,7 @@ std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateInpu
         const SpvReflectResult result = entrypoint ?
             spvReflectEnumerateEntryPointInputVariables(&module, entrypoint, &count, data) :
             spvReflectEnumerateInputVariables(&module, &count, data);
-        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate input variables")
+        MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to enumerate input variables");
     }
     return inputVariables;
 }
@@ -139,7 +125,7 @@ std::vector<const SpvReflectInterfaceVariable *> ShaderReflection::enumerateOutp
         const SpvReflectResult result = entrypoint ?
             spvReflectEnumerateEntryPointOutputVariables(&module, entrypoint, &count, data) :
             spvReflectEnumerateOutputVariables(&module, &count, data);
-        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate output variables")
+        MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to enumerate output variables");
     }
     return outputVariables;
 }
@@ -158,7 +144,7 @@ std::vector<const SpvReflectBlockVariable *> ShaderReflection::enumeratePushCons
         const SpvReflectResult result = entrypoint ?
             spvReflectEnumerateEntryPointPushConstantBlocks(&module, entrypoint, &count, data) :
             spvReflectEnumeratePushConstantBlocks(&module, &count, data);
-        MAGMA_THROW_REFLECTION_FAILURE(result, "failed to enumerate push constant blocks")
+        MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to enumerate push constant blocks");
     }
     return pushConstantBlocks;
 }
@@ -169,7 +155,7 @@ const SpvReflectDescriptorBinding* ShaderReflection::getDescriptorBinding(const 
     const SpvReflectDescriptorBinding *descriptorBinding = entrypoint ?
         spvReflectGetEntryPointDescriptorBinding(&module, entrypoint, binding, set, &result) :
         spvReflectGetDescriptorBinding(&module, binding, set, &result);
-    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get descriptor binding")
+    MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to get descriptor binding");
     return descriptorBinding;
 }
 
@@ -179,7 +165,7 @@ const SpvReflectDescriptorSet *ShaderReflection::getDescriptorSet(const char *en
     const SpvReflectDescriptorSet *descriptorSet = entrypoint ?
         spvReflectGetEntryPointDescriptorSet(&module, entrypoint, set, &result) :
         spvReflectGetDescriptorSet(&module, set, &result);
-    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get descriptor set")
+    MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to get descriptor set");
     return descriptorSet;
 }
 
@@ -189,7 +175,7 @@ const SpvReflectInterfaceVariable* ShaderReflection::getInputVariable(const char
     const SpvReflectInterfaceVariable* inputVariable = entrypoint ?
         spvReflectGetEntryPointInputVariableByLocation(&module, entrypoint, location, &result) :
         spvReflectGetInputVariableByLocation(&module, location, &result);
-    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get input variable by location")
+    MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to get input variable by location");
     return inputVariable;
 }
 
@@ -199,7 +185,7 @@ const SpvReflectInterfaceVariable *ShaderReflection::getInputVariable(const char
     const SpvReflectInterfaceVariable* inputVariable = entrypoint ?
         spvReflectGetEntryPointInputVariableBySemantic(&module, entrypoint, semantic, &result) :
         spvReflectGetInputVariableBySemantic(&module, semantic, &result);
-    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get input variable by semantic")
+    MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to get input variable by semantic");
     return inputVariable;
 }
 
@@ -209,7 +195,7 @@ const SpvReflectInterfaceVariable *ShaderReflection::getOutputVariable(const cha
     const SpvReflectInterfaceVariable* outputVariable = entrypoint ?
         spvReflectGetEntryPointOutputVariableByLocation(&module, entrypoint, location, &result) :
         spvReflectGetOutputVariableByLocation(&module, location, &result);
-    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get output variable by location")
+    MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to get output variable by location");
     return outputVariable;
 }
 
@@ -219,7 +205,7 @@ const SpvReflectInterfaceVariable *ShaderReflection::getOutputVariable(const cha
     const SpvReflectInterfaceVariable* outputVariable = entrypoint ?
         spvReflectGetEntryPointOutputVariableBySemantic(&module, entrypoint, semantic, &result) :
         spvReflectGetOutputVariableBySemantic(&module, semantic, &result);
-    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get output variable by semantic")
+    MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to get output variable by semantic");
     return outputVariable;
 }
 
@@ -227,7 +213,7 @@ const SpvReflectBlockVariable *ShaderReflection::getPushConstantBlock(const uint
 {
     SpvReflectResult result;
     const SpvReflectBlockVariable *pushConstantBlock = spvReflectGetPushConstantBlock(&module, index, &result);
-    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get push constant block by index")
+    MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to get push constant block by index");
     return pushConstantBlock;
 }
 
@@ -236,7 +222,7 @@ const SpvReflectBlockVariable *ShaderReflection::getPushConstantBlock(const char
     MAGMA_ASSERT(entrypoint);
     SpvReflectResult result;
     const SpvReflectBlockVariable *pushConstantBlock = spvReflectGetEntryPointPushConstantBlock(&module, entrypoint, &result);
-    MAGMA_THROW_REFLECTION_FAILURE(result, "failed to get push constant block for entry point")
+    MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to get push constant block for entry point");
     return pushConstantBlock;
 }
 
