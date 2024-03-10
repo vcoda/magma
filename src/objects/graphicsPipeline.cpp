@@ -153,8 +153,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
             << multisampleState << std::endl
             << depthStencilState << std::endl
             << colorBlendState << std::endl
-            << pipelineDynamicStateInfo << std::endl;
-        // TODO: layout, renderPass
+            << pipelineDynamicStateInfo << std::endl
+            << *pipelineLayout << std::endl;
     #endif // MAGMA_DEBUG
         MAGMA_HANDLE_RESULT(result, "failed to create graphics pipeline");
     }
