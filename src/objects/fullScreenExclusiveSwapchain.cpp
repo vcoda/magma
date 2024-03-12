@@ -173,7 +173,7 @@ std::ostream& operator<<(std::ostream& out, const VkSurfaceFullScreenExclusiveIn
 std::ostream& operator<<(std::ostream& out, const VkSurfaceFullScreenExclusiveWin32InfoEXT& info)
 {
     out << "VkSurfaceFullScreenExclusiveWin32InfoEXT [" << std::endl
-        << "\thmonitor: " << info.hmonitor << std::endl
+        << "\thmonitor: 0x" << std::hex << info.hmonitor << std::dec << std::endl
         << "]";
     return out;
 }

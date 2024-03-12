@@ -334,7 +334,7 @@ std::ostream& operator<<(std::ostream& out, const VkSwapchainCreateInfoKHR& info
 {
     out << "VkSwapchainCreateInfoKHR [" << std::endl
         << "\tflags: " << magma::helpers::stringifySwapchainFlags(info.flags) << std::endl
-        << "\tsurface: " << info.surface << std::endl
+        << "\tsurface: 0x" << std::hex << info.surface << std::dec << std::endl
         << "\tminImageCount: " << info.minImageCount << std::endl
         << "\timageFormat: " << info.imageFormat << std::endl
         << "\timageColorSpace: " << info.imageColorSpace << std::endl
@@ -357,7 +357,7 @@ std::ostream& operator<<(std::ostream& out, const VkSwapchainCreateInfoKHR& info
         << "\tcompositeAlpha: " << info.compositeAlpha << std::endl
         << "\tpresentMode: " << info.presentMode << std::endl
         << "\tclipped: " << magma::Bool(info.clipped) << std::endl
-        << "\toldSwapchain: " << info.oldSwapchain << std::endl
+        << "\toldSwapchain: 0x" << std::hex << info.oldSwapchain << std::dec << std::endl
         << "]";
     return out;
 }
