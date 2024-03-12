@@ -134,7 +134,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
 #endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    if (result == VK_SUCCESS)
+    if (result != VK_SUCCESS)
     {
     #ifdef MAGMA_DEBUG
         for (auto const& stage: shaderStages)
