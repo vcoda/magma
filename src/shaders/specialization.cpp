@@ -82,9 +82,9 @@ hash_t Specialization::getHash() const noexcept
 
 std::ostream& operator<<(std::ostream& out, const Specialization& specialization)
 {
-    out << "VkSpecializationInfo [" << std::endl
-        << "\tmapEntryCount: " << specialization.mapEntryCount << std::endl
-        << "\tpMapEntries: ";
+    out << "\tVkSpecializationInfo [" << std::endl
+        << "\t\tmapEntryCount: " << specialization.mapEntryCount << std::endl
+        << "\t\tpMapEntries: ";
     if (!specialization.pMapEntries)
         out << "NULL" << std::endl;
     else
@@ -93,20 +93,20 @@ std::ostream& operator<<(std::ostream& out, const Specialization& specialization
         for (uint32_t i = 0; i < specialization.mapEntryCount; ++i)
         {
             const VkSpecializationMapEntry& entry = specialization.pMapEntries[i];
-            out << "\t[" << std::endl
-                << "\t\tconstantID: " << entry.constantID << std::endl
-                << "\t\toffset: " << entry.offset << std::endl
-                << "\t\tsize: " << entry.size << std::endl
-                << "\t]" << std::endl;
+            out << "\t\t[" << std::endl
+                << "\t\t\tconstantID: " << entry.constantID << std::endl
+                << "\t\t\toffset: " << entry.offset << std::endl
+                << "\t\t\tsize: " << entry.size << std::endl
+                << "\t\t]" << std::endl;
         }
     }
-    out << "\tdataSize: " << specialization.dataSize << std::endl
-        << "\tpData: ";
+    out << "\t\tdataSize: " << specialization.dataSize << std::endl
+        << "\t\tpData: ";
     if (!specialization.pData)
         out << "NULL" << std::endl;
     else
         out << "0x" << specialization.pData << std::endl;
-    out << "]";
+    out << "\t]";
     return out;
 }
 } // namespace magma
