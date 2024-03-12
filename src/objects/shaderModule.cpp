@@ -38,8 +38,8 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator)),
     hash(0),
     bytecodeHash(bytecodeHash)
-{
-    MAGMA_ASSERT(bytecodeSize % sizeof(SpirvWord) == 0); // A module is defined as a stream of words, not a stream of bytes
+{   // A module is defined as a stream of words, not a stream of bytes
+    MAGMA_ASSERT(bytecodeSize % sizeof(SpirvWord) == 0);
     VkShaderModuleCreateInfo shaderModuleInfo;
     shaderModuleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     shaderModuleInfo.pNext = extendedInfo.chainNodes();
@@ -73,11 +73,10 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
             shaderModuleValidationCacheInfo.validationCache));
     }
 #endif // VK_EXT_validation_cache
-    if (0 == bytecodeHash && !reflect)
-    {   // Store bytecode for future hash computation
-        const std::size_t wordCount = shaderModuleInfo.codeSize / sizeof(SpirvWord);
-        this->bytecode.resize(wordCount);
-        memcpy(this->bytecode.data(), shaderModuleInfo.pCode, shaderModuleInfo.codeSize);
+    if (!bytecodeHash && !reflect)
+    {   // Store bytecode for on-demand hash computation
+        this->bytecode.resize(bytecodeSize / sizeof(SpirvWord));
+        memcpy(this->bytecode.data(), bytecode, bytecodeSize);
     }
 }
 
