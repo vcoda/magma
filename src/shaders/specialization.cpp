@@ -69,11 +69,11 @@ hash_t Specialization::getHash() const noexcept
     hash_t hash = 0;
     for (uint32_t i = 0; i < mapEntryCount; ++i)
     {
-        const VkSpecializationMapEntry& mapEntry = pMapEntries[i];
+        const VkSpecializationMapEntry& entry = pMapEntries[i];
         hash = core::hashCombine(hash, core::hashArgs(
-            mapEntry.constantID,
-            mapEntry.offset,
-            mapEntry.size));
+            entry.constantID,
+            entry.offset,
+            entry.size));
     }
     const uint8_t *byteData = reinterpret_cast<const uint8_t *>(pData);
     return core::hashCombine(hash, core::hashArray(
