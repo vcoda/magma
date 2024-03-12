@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "pipelineShaderStage.h"
+#include "shaderReflection.h"
 #include "../objects/shaderModule.h"
 
 namespace magma
@@ -107,5 +108,19 @@ hash_t PipelineShaderStage::getHash() const noexcept
     if (specialization)
         hash = core::hashCombine(hash, specialization->getHash());
     return hash;
+}
+
+std::ostream& operator<<(std::ostream& out, const PipelineShaderStage& shaderStage)
+{
+    auto const& reflection = shaderStage.shaderModule->getReflection();
+    if (reflection)
+        out << *reflection;
+    if (shaderStage.specialized())
+    {
+        if (reflection)
+            out << std::endl;
+        out << *shaderStage.specialization;
+    }
+    return out;
 }
 } // namespace magma

@@ -43,6 +43,7 @@ namespace magma
         const std::shared_ptr<ShaderModule>& getShaderModule() const noexcept { return shaderModule; }
         bool specialized() const noexcept { return specialization != nullptr; }
         hash_t getHash() const noexcept;
+        friend std::ostream& operator<<(std::ostream&, const PipelineShaderStage&);
 
     private:
         std::shared_ptr<ShaderModule> shaderModule;
