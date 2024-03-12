@@ -34,22 +34,14 @@ ShaderReflection::~ShaderReflection() noexcept
     spvReflectDestroyShaderModule(&module);
 }
 
-const SpirvWord *ShaderReflection::getBytecode() const noexcept
+const SpirvWord *ShaderReflection::getCode() const noexcept
 {
     return spvReflectGetCode(&module);
 }
 
-std::size_t ShaderReflection::getBytecodeSize() const noexcept
+std::size_t ShaderReflection::getCodeSize() const noexcept
 {
-    const std::size_t bytecodeSize = spvReflectGetCodeSize(&module);
-    MAGMA_ASSERT(0 == bytecodeSize % sizeof(SpirvWord));
-    return bytecodeSize;
-}
-
-hash_t ShaderReflection::computeBytecodeHash() const noexcept
-{
-    const std::size_t wordCount = getBytecodeSize() / sizeof(SpirvWord);
-    return core::hashArray(getBytecode(), wordCount);
+    return spvReflectGetCodeSize(&module);
 }
 
 const SpvReflectEntryPoint& ShaderReflection::getEntryPoint(const char *name) const noexcept

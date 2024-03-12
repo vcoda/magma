@@ -104,15 +104,24 @@ ShaderModule::~ShaderModule()
 
 hash_t ShaderModule::getHash() const noexcept
 {
-    if (0 == bytecodeHash)
-    {   // Compute hash on demand, may take time for large shaders
-        if (reflection)
-            bytecodeHash = reflection->computeBytecodeHash();
-        else
-            bytecodeHash = core::hashArray(bytecode.data(), bytecode.size());
+    return core::hashCombine(hash, getBytecodeHash());
+}
+
+hash_t ShaderModule::getBytecodeHash() const noexcept
+{
+    if (!bytecodeHash)
+    {   // Compute on demand
         if (!bytecode.empty())
+        {
+            bytecodeHash = core::hashArray(bytecode.data(), bytecode.size());
             std::vector<SpirvWord>().swap(bytecode);
+        }
+        else if (reflection)
+        {
+            auto wordCount = reflection->getCodeSize() / sizeof(SpirvWord);
+            bytecodeHash = core::hashArray(reflection->getCode(), wordCount);
+        }
     }
-    return core::hashCombine(hash, bytecodeHash);
+    return bytecodeHash;
 }
 } // namespace magma
