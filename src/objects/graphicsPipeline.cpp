@@ -21,10 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
 #include "device.h"
-#include "shaderModule.h"
 #include "renderPass.h"
 #include "../shaders/pipelineShaderStage.h"
-#include "../shaders/shaderReflection.h"
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/tesselationState.h"
@@ -136,15 +134,11 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
 #endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    if (result != VK_SUCCESS)
+    if (result == VK_SUCCESS)
     {
     #ifdef MAGMA_DEBUG
         for (auto const& stage: shaderStages)
-        {
-            auto reflection = stage.getShaderModule()->getReflection();
-            if (reflection)
-                std::cerr << *reflection << std::endl;
-        }
+            std::cerr << stage << std::endl;
         std::cerr << vertexInputState << std::endl
             << inputAssemblyState << std::endl
             << tesselationState << std::endl

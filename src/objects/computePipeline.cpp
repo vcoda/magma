@@ -21,9 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
 #include "device.h"
-#include "shaderModule.h"
 #include "../shaders/pipelineShaderStage.h"
-#include "../shaders/shaderReflection.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 
@@ -67,11 +65,8 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     if (result != VK_SUCCESS)
     {
     #ifdef MAGMA_DEBUG
-        auto const& reflection = shaderStage.getShaderModule()->getReflection();
-        if (reflection)
-            std::cerr << *reflection << std::endl;
-        std::cerr << *layout << std::endl;
-    #endif // MAGMA_DEBUG
+        std::cerr << shaderStage << std::endl << *layout << std::endl;
+    #endif
         MAGMA_HANDLE_RESULT(result, "failed to create compute pipeline");
     }
     hash = core::hashArgs(
