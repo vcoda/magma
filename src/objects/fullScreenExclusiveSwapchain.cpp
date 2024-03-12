@@ -164,7 +164,7 @@ void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
 std::ostream& operator<<(std::ostream& out, const VkSurfaceFullScreenExclusiveInfoEXT& info)
 {
     out << "VkSwapchainCreateInfoKHR [" << std::endl
-        << "\tfullScreenExclusive: " << info.fullScreenExclusive << std::endl
+        << "\tfullScreenExclusive: " << magma::Bool(info.fullScreenExclusive) << std::endl
         << "]";
     return out;
 }
