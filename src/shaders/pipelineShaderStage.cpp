@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineShaderStage.h"
 #include "shaderReflection.h"
 #include "../objects/shaderModule.h"
+#include "../helpers/stringifyFlags.h"
 
 namespace magma
 {
@@ -112,15 +113,19 @@ hash_t PipelineShaderStage::getHash() const noexcept
 
 std::ostream& operator<<(std::ostream& out, const PipelineShaderStage& shaderStage)
 {
+    out << "VkPipelineShaderStageCreateInfo [" << std::endl
+        << "\tflags: " << helpers::stringifyPipelineShaderStageFlags(shaderStage.flags) << std::endl
+        << "\tstage: " << helpers::stringifyShaderStageFlags(shaderStage.stage) << std::endl
+        << "\tmodule: 0x" << std::hex << shaderStage.module << std::dec << std::endl
+        << "\tpName: " << shaderStage.pName << std::endl;
+    if (!shaderStage.pSpecializationInfo)
+        out << "\tpSpecializationInfo: NULL" << std::endl;
+    else
+        out << *shaderStage.specialization << std::endl;
+    out << "]";
     auto const& reflection = shaderStage.shaderModule->getReflection();
     if (reflection)
-        out << *reflection;
-    if (shaderStage.specialized())
-    {
-        if (reflection)
-            out << std::endl;
-        out << *shaderStage.specialization;
-    }
+        out << std::endl << *reflection;
     return out;
 }
 } // namespace magma
