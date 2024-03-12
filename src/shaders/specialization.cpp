@@ -79,4 +79,34 @@ hash_t Specialization::getHash() const noexcept
     return core::hashCombine(hash, core::hashArray(
         byteData, dataSize));
 }
+
+std::ostream& operator<<(std::ostream& out, const Specialization& specialization)
+{
+    out << "VkSpecializationInfo [" << std::endl
+        << "\tmapEntryCount: " << specialization.mapEntryCount << std::endl
+        << "\tpMapEntries: ";
+    if (!specialization.pMapEntries)
+        out << "NULL" << std::endl;
+    else
+    {
+        out << std::endl;
+        for (uint32_t i = 0; i < specialization.mapEntryCount; ++i)
+        {
+            const VkSpecializationMapEntry& entry = specialization.pMapEntries[i];
+            out << "\t[" << std::endl
+                << "\t\tconstantID: " << entry.constantID << std::endl
+                << "\t\toffset: " << entry.offset << std::endl
+                << "\t\tsize: " << entry.size << std::endl
+                << "\t]" << std::endl;
+        }
+    }
+    out << "\tdataSize: " << specialization.dataSize << std::endl
+        << "\tpData: ";
+    if (!specialization.pData)
+        out << "NULL" << std::endl;
+    else
+        out << "0x" << specialization.pData << std::endl;
+    out << "]";
+    return out;
+}
 } // namespace magma
