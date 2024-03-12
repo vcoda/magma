@@ -1181,6 +1181,18 @@ std::ostream& operator<<(std::ostream& out, VkPipelineCreateFlagBits bit)
     }
 }
 
+std::ostream& operator<<(std::ostream& out, VkPipelineShaderStageCreateFlagBits bit)
+{
+    switch (bit)
+    {
+#ifdef VK_EXT_subgroup_size_control
+    MAGMA_OUTPUT_ENUMERATION(VK_PIPELINE_SHADER_STAGE_CREATE_ALLOW_VARYING_SUBGROUP_SIZE_BIT_EXT)
+    MAGMA_OUTPUT_ENUMERATION(VK_PIPELINE_SHADER_STAGE_CREATE_REQUIRE_FULL_SUBGROUPS_BIT_EXT)
+#endif // VK_EXT_subgroup_size_control
+    MAGMA_OUTPUT_UNKNOWN
+    }
+}
+
 std::ostream& operator<<(std::ostream& out, VkShaderStageFlagBits bit)
 {
     switch (bit)

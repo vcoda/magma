@@ -26,6 +26,7 @@ namespace magma
         std::string stringifyImageUsage(VkImageUsageFlags flags);
         std::string stringifyBufferFlags(VkBufferCreateFlags flags);
         std::string stringifyBufferUsage(VkBufferUsageFlags flags);
+        std::string stringifyPipelineShaderStageFlags(VkPipelineShaderStageCreateFlags flags);
         std::string stringifyShaderStageFlags(VkShaderStageFlags flags);
         std::string stringifyColorMask(VkColorComponentFlags flags);
     #ifdef VK_KHR_swapchain

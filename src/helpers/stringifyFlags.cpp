@@ -151,6 +151,21 @@ std::string stringifyBufferUsage(VkBufferUsageFlags flags)
     return out.str();
 }
 
+std::string stringifyPipelineShaderStageFlags(VkPipelineShaderStageCreateFlags flags)
+{
+    if (!flags)
+        return "0";
+    std::ostringstream out;
+    for (VkPipelineShaderStageCreateFlagBits bit: {
+    #ifdef VK_EXT_subgroup_size_control
+        VK_PIPELINE_SHADER_STAGE_CREATE_ALLOW_VARYING_SUBGROUP_SIZE_BIT_EXT,
+        VK_PIPELINE_SHADER_STAGE_CREATE_REQUIRE_FULL_SUBGROUPS_BIT_EXT,
+    #endif // VK_EXT_subgroup_size_control
+        VK_PIPELINE_SHADER_STAGE_CREATE_FLAG_BITS_MAX_ENUM
+    }) stringifyOredBit(flags, bit, out);
+    return out.str();
+}
+
 std::string stringifyShaderStageFlags(VkShaderStageFlags flags)
 {
     if (!flags)
