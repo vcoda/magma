@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../descriptors/descriptorSetTable.h"
 #include "../shaders/shaderReflection.h"
 #include "../shaders/shaderReflectionFactory.h"
-#include "../helpers/spirvReflectionTypeCast.h"
+#include "../helpers/enumerationCast.h"
 #include "../helpers/streamInsertOperators.h"
 #include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"

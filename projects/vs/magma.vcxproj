@@ -219,12 +219,11 @@
     <ClInclude Include="..\..\src\extensions\layers.h" />
     <ClInclude Include="..\..\src\extensions\physicalDeviceExtensions.h" />
     <ClInclude Include="..\..\src\helpers\alignedUniformArray.h" />
-    <ClInclude Include="..\..\src\helpers\castToDebugReport.h" />
+    <ClInclude Include="..\..\src\helpers\enumerationCast.h" />
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
     <ClInclude Include="..\..\src\helpers\executeDeferredOperation.h" />
     <ClInclude Include="..\..\src\helpers\mapScoped.h" />
     <ClInclude Include="..\..\src\helpers\mapTyped.h" />
-    <ClInclude Include="..\..\src\helpers\spirvReflectionTypeCast.h" />
     <ClInclude Include="..\..\src\helpers\stackArray.h" />
     <ClInclude Include="..\..\src\helpers\streamInsertOperators.h" />
     <ClInclude Include="..\..\src\helpers\stringifyFlags.h" />

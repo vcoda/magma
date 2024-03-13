@@ -1,5 +1,23 @@
+/*
+Magma - Abstraction layer over Khronos Vulkan API.
+Copyright (C) 2018-2024 Victor Coda.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
 #pragma once
 #include "../misc/compatibility.h"
+#include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 
 namespace magma
 {
@@ -62,52 +80,112 @@ constexpr VkDebugReportObjectTypeEXT objectToDebugReportType(const VkObjectType 
     case VK_OBJECT_TYPE_COMMAND_POOL:
         return VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT;
 #ifdef VK_KHR_sampler_ycbcr_conversion
-    case VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION:
+    case VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR:
         return VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR_EXT;
-#endif // VK_KHR_sampler_ycbcr_conversion
+#endif
 #ifdef VK_KHR_descriptor_update_template
-    case VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE:
-        return VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_EXT;
-#endif // VK_KHR_descriptor_update_template
+    case VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR_EXT;
+#endif
 #ifdef VK_KHR_surface
     case VK_OBJECT_TYPE_SURFACE_KHR:
         return VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT;
-#endif // VK_KHR_surface
+#endif
 #ifdef VK_KHR_swapchain
     case VK_OBJECT_TYPE_SWAPCHAIN_KHR:
         return VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT;
-#endif // VK_KHR_swapchain
+#endif
 #ifdef VK_KHR_display
     case VK_OBJECT_TYPE_DISPLAY_KHR:
         return VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT;
     case VK_OBJECT_TYPE_DISPLAY_MODE_KHR:
         return VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT;
-#endif // VK_KHR_display
+#endif
 #ifdef VK_EXT_debug_report
     case VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT:
-#   if VK_HEADER_VERSION <= 37 // TODO: exact version
+    #if VK_HEADER_VERSION <= 37 // TODO: exact version
         return VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT;
-#   else
+    #else
         return VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT_EXT;
-#   endif
-#endif // VK_EXT_debug_report
-#ifdef VK_NVX_device_generated_commands
-    case VK_OBJECT_TYPE_OBJECT_TABLE_NVX:
-        return VK_DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT;
-    case VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX:
-        return VK_DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT;
-#endif // VK_NVX_device_generated_commands
+    #endif
+#endif
+#ifdef VK_NVX_binary_import
+    case VK_OBJECT_TYPE_CU_MODULE_NVX:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_CU_MODULE_NVX_EXT;
+    case VK_OBJECT_TYPE_CU_FUNCTION_NVX:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_CU_FUNCTION_NVX_EXT;
+#endif // VK_NVX_binary_import
 #ifdef VK_EXT_validation_cache
     case VK_OBJECT_TYPE_VALIDATION_CACHE_EXT:
         return VK_DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT_EXT;
-#endif // VK_EXT_validation_cache
+#endif
+#ifdef VK_KHR_acceleration_structure
+    case VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR_EXT;
+#endif
 #ifdef VK_NV_ray_tracing
     case VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV:
         return VK_DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV_EXT;
-#endif // VK_NV_ray_tracing
+#endif
+#ifdef VK_FUCHSIA_buffer_collection
+    case VK_OBJECT_TYPE_BUFFER_COLLECTION_FUCHSIA:
+        return VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_COLLECTION_FUCHSIA_EXT;
+#endif // VK_FUCHSIA_buffer_collection
     default:
         return VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT;
     }
+}
+
+constexpr VkDescriptorType spirvToDescriptorType(const SpvReflectDescriptorType descriptorType) noexcept
+{
+    switch (descriptorType)
+    {
+    case SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLER:
+        return VK_DESCRIPTOR_TYPE_SAMPLER;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+        return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
+        return VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+        return VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER:
+        return VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER:
+        return VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER:
+        return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_BUFFER:
+        return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
+        return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC:
+        return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+        return VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
+    case SPV_REFLECT_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR:
+    #if defined(VK_KHR_acceleration_structure)
+        return VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
+    #elif defined(VK_NV_ray_tracing)
+        return VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV;
+    #endif
+    default:
+        return VK_DESCRIPTOR_TYPE_MAX_ENUM;
+    }
+}
+
+constexpr VkImageType spirvDimToImageType(const SpvDim dim) noexcept
+{
+    switch (dim)
+    {
+    case SpvDim1D:
+        return VK_IMAGE_TYPE_1D;
+    case SpvDim2D:
+    case SpvDimCube:
+        return VK_IMAGE_TYPE_2D;
+    case SpvDim3D:
+        return VK_IMAGE_TYPE_3D;
+    }
+    return VK_IMAGE_TYPE_MAX_ENUM;
 }
 } // namespace helpers
 } // namespace magma

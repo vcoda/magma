@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "instance.h"
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
-#include "../helpers/castToDebugReport.h"
+#include "../helpers/enumerationCast.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "privateDataSlot.h"
 #include "../misc/extension.h"
-#include "../helpers/castToDebugReport.h"
+#include "../helpers/enumerationCast.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -45,7 +45,7 @@ void Object::setPrivateData(uint64_t data)
     std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
     privateData[handle] = data;
 }
-        
+
 uint64_t Object::getPrivateData() const
 {
     const uint64_t handle = getHandle();
