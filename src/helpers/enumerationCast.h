@@ -108,7 +108,7 @@ constexpr VkDebugReportObjectTypeEXT objectToDebugReportType(const VkObjectType 
     #else
         return VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT_EXT;
     #endif
-#endif
+#endif // VK_EXT_debug_report
 #ifdef VK_NVX_binary_import
     case VK_OBJECT_TYPE_CU_MODULE_NVX:
         return VK_DEBUG_REPORT_OBJECT_TYPE_CU_MODULE_NVX_EXT;
@@ -130,7 +130,7 @@ constexpr VkDebugReportObjectTypeEXT objectToDebugReportType(const VkObjectType 
 #ifdef VK_FUCHSIA_buffer_collection
     case VK_OBJECT_TYPE_BUFFER_COLLECTION_FUCHSIA:
         return VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_COLLECTION_FUCHSIA_EXT;
-#endif // VK_FUCHSIA_buffer_collection
+#endif
     default:
         return VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT;
     }

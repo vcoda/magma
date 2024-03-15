@@ -45,7 +45,7 @@ namespace magma
            called when the SpvReflect error is encountered. */
 
     #ifdef MAGMA_NO_EXCEPTIONS
-        typedef std::function<void(SpvReflectResult result, const char *, const source_location&)> ReflectionErrorHandler;
+        typedef std::function<void(SpvReflectResult, const char *, const source_location&)> ReflectionErrorHandler;
         void setReflectionErrorHandler(ReflectionErrorHandler errorHandler) noexcept;
     #endif // MAGMA_NO_EXCEPTIONS
 

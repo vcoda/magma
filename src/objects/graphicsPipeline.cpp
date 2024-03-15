@@ -89,7 +89,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     rsHash(0ull)
 {
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
-    for (auto& stage : shaderStages)
+    for (auto const& stage: shaderStages)
         dereferencedStages.put(stage);
     VkGraphicsPipelineCreateInfo pipelineInfo;
     VkPipelineDynamicStateCreateInfo pipelineDynamicStateInfo;

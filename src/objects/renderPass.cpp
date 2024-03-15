@@ -55,7 +55,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
     bool hasDepthStencilAttachment = false;
     uint32_t attachmentIndex = 0, colorIndex = 0, resolveIndex = 0;
-    for (const auto& attachmentDesc : attachments)
+    for (auto const& attachmentDesc: attachments)
     {
         const Format format(attachmentDesc.format);
         if (format.depth() || format.stencil() || format.depthStencil())
@@ -76,7 +76,6 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
         }
         ++attachmentIndex;
     }
-    // Describe render pass
     SubpassDescription subpassDescription;
     subpassDescription.flags = 0;
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -94,7 +93,6 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
         // Dependency at the end of the render pass
         subpassEndDependency(colorAttachmentCount > 0, hasDepthStencilAttachment)
     };
-    // Create render pass
     VkRenderPassCreateInfo renderPassInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.pNext = extendedInfo.chainNodes();
@@ -114,15 +112,13 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
         renderPassInfo.subpassCount,
         renderPassInfo.dependencyCount,
         extendedInfo.getHash());
-    for (const auto& attachment : attachments)
+    for (auto const& attachment: attachments)
         hash = core::hashCombine(hash, attachment.hash());
     hash = core::hashCombine(hash, subpassDescription.getHash());
     core::zeroMemory(subpassDescription); // Aware destructor
-    for (const auto& dependency : dependencies)
+    for (auto const& dependency: dependencies)
         hash = core::hashCombine(hash, dependency.hash());
 }
-
-
 
 RenderPass::RenderPass(std::shared_ptr<Device> device,
     const std::vector<AttachmentDescription>& attachments,
@@ -152,11 +148,11 @@ RenderPass::RenderPass(std::shared_ptr<Device> device,
         renderPassInfo.subpassCount,
         renderPassInfo.dependencyCount,
         extendedInfo.getHash());
-    for (const auto& attachment : attachments)
+    for (auto const& attachment : attachments)
         hash = core::hashCombine(hash, attachment.hash());
-    for (const auto& subpass : subpasses)
+    for (auto const& subpass : subpasses)
         hash = core::hashCombine(hash, subpass.getHash());
-    for (const auto& dependency : dependencies)
+    for (auto const& dependency : dependencies)
         hash = core::hashCombine(hash, dependency.hash());
 }
 
