@@ -239,6 +239,7 @@ std::ostream& operator<<(std::ostream& out, const ShaderReflection& reflection)
         {
             const SpvReflectDescriptorBinding *binding = set.bindings[j];
             out << "\t\t[" << std::endl
+                << "\t\t\tbinding: " << binding->binding << std::endl
                 << "\t\t\tname: ";
             if (strlen(binding->name))
                 out << binding->name << std::endl;
@@ -249,8 +250,7 @@ std::ostream& operator<<(std::ostream& out, const ShaderReflection& reflection)
             out << "\t\t\tdescriptor_type: " << binding->descriptor_type << std::endl;
             if (binding->count > 1)
                 out << "\t\t\tcount: " << binding->count << std::endl;
-            out << "\t\t\tbinding: " << binding->binding << std::endl
-                << "\t\t]" << std::endl;
+            out << "\t\t]" << std::endl;
             // TODO: uav_counter_binding
         }
         out << "\t]" << std::endl;
