@@ -681,6 +681,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\objects\pipelineBatch.inl" />
     <None Include="..\..\src\objects\pipelineLayout.inl" />
     <None Include="..\..\src\objects\queryPool.inl" />
+    <None Include="..\..\src\objects\renderPass.inl" />
     <None Include="..\..\src\objects\resourcePool.inl" />
     <None Include="..\..\src\objects\shaderModule.inl" />
     <None Include="..\..\src\packed\b4g4r4a4unorm.inl" />

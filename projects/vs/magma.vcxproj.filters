@@ -1513,6 +1513,9 @@
     <None Include="..\..\src\misc\imageResolve.inl">
       <Filter>Header Files\misc</Filter>
     </None>
+    <None Include="..\..\src\objects\renderPass.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">

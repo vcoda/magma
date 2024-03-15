@@ -57,8 +57,8 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         ~RenderPass();
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
-        bool hasClearOp() const noexcept;
         hash_t getHash() const noexcept { return hash; }
+        bool hasClearOp() const noexcept;
 
     protected:
         RenderPass(std::shared_ptr<Device> device,
@@ -82,3 +82,5 @@ namespace magma
         friend class CommandBuffer;
     };
 } // namespace magma
+
+#include "renderPass.inl"
