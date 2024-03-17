@@ -42,12 +42,12 @@ namespace magma
             VkImageUsageFlags imageUsage,
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
-            VkPresentModeKHR presentMode,
-            VkSwapchainCreateFlagsKHR flags,
             VkFullScreenExclusiveEXT fullScreenExclusive,
-            // Allows to specify full-screen exclusive mode for physical display
-            // that is represented by a monitor handle of type HMONITOR. See:
-            // https://docs.microsoft.com/en-us/windows/win32/gdi/hmonitor-and-the-device-context
+            VkPresentModeKHR presentMode,
+        #ifdef VK_KHR_device_group
+            VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes = 0,
+        #endif
+            VkSwapchainCreateFlagsKHR flags = 0,
         #ifdef VK_KHR_win32_surface
             HMONITOR hMonitor = NULL,
         #endif

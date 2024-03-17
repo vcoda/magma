@@ -36,10 +36,17 @@ namespace magma
 FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent, uint32_t arrayLayers,
     VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
-    VkPresentModeKHR presentMode, VkSwapchainCreateFlagsKHR flags, VkFullScreenExclusiveEXT fullScreenExclusive,
-#ifdef VK_KHR_win32_surface
-    HMONITOR hMonitor /* NULL */,
+    VkFullScreenExclusiveEXT fullScreenExclusive, VkPresentModeKHR presentMode,
+#ifdef VK_KHR_device_group
+    VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes /* 0 */,
 #endif
+    VkSwapchainCreateFlagsKHR flags /* 0 */,
+#ifdef VK_KHR_win32_surface
+    // Allows to specify full-screen exclusive mode for physical display
+    // that is represented by a monitor handle of type HMONITOR. See:
+    // https://docs.microsoft.com/en-us/windows/win32/gdi/hmonitor-and-the-device-context
+    HMONITOR hMonitor /* NULL */,
+#endif // VK_KHR_win32_surface
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<Swapchain> oldSwapchain /* nullptr */,
 #ifdef VK_EXT_debug_report
@@ -87,9 +94,19 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         fullScreenExclusiveWin32Info.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT,
         fullScreenExclusiveWin32Info.pNext = nullptr;
         fullScreenExclusiveWin32Info.hmonitor = hMonitor;
-        linkNode(fullScreenExclusiveInfo, fullScreenExclusiveWin32Info);
+        linkNode(swapchainInfo, fullScreenExclusiveWin32Info);
     }
 #endif // VK_KHR_win32_surface
+#ifdef VK_KHR_device_group
+    VkDeviceGroupSwapchainCreateInfoKHR swapchainDeviceGroupInfo;
+    if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    {
+        swapchainDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR;
+        swapchainDeviceGroupInfo.pNext = nullptr;
+        swapchainDeviceGroupInfo.modes = deviceGroupPresentModes;
+        linkNode(swapchainInfo, swapchainDeviceGroupInfo);
+    }
+#endif // VK_KHR_device_group
     if (!device->getDeviceFeatures()->checkImageUsageSupport(surface, swapchainInfo.imageUsage))
         MAGMA_ERROR("swapchain usage not supported by surface");
     VkResult result;
@@ -117,6 +134,10 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     #ifdef VK_KHR_win32_surface
         if (hMonitor)
             out << fullScreenExclusiveWin32Info << std::endl;
+    #endif
+    #ifdef VK_KHR_device_group
+        if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+            out << swapchainDeviceGroupInfo << std::endl;
     #endif
     #ifdef VK_EXT_debug_report
         if (debugReportCallback)
