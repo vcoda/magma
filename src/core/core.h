@@ -101,6 +101,13 @@ protected:
     ~NonCopyable() = default;
 };
 
+template<class Parent, class Child>
+inline void linkNode(Parent& parent, Child& child) noexcept
+{
+    child.pNext = const_cast<void *>(parent.pNext);
+    parent.pNext = &child;
+}
+
 namespace core
 {
 template<class Type>

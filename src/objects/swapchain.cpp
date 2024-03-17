@@ -105,9 +105,9 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
     if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
     {
         swapchainDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR;
-        swapchainDeviceGroupInfo.pNext = swapchainInfo.pNext;
+        swapchainDeviceGroupInfo.pNext = nullptr;
         swapchainDeviceGroupInfo.modes = deviceGroupPresentModes;
-        swapchainInfo.pNext = &swapchainDeviceGroupInfo;
+        linkNode(swapchainInfo, swapchainDeviceGroupInfo);
     }
 #endif // VK_KHR_device_group
     if (!device->getDeviceFeatures()->checkImageUsageSupport(surface, swapchainInfo.imageUsage))

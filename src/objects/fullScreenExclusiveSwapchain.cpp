@@ -57,9 +57,8 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 #endif
 {
     VkSwapchainCreateInfoKHR swapchainInfo;
-    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapchainInfo.pNext = &fullScreenExclusiveInfo;
+    swapchainInfo.pNext = extendedInfo.chainNodes();
     swapchainInfo.flags = flags;
     swapchainInfo.surface = *surface;
     swapchainInfo.minImageCount = minImageCount;
@@ -76,17 +75,19 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     swapchainInfo.presentMode = presentMode;
     swapchainInfo.clipped = (imageUsage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT); // Is pixels readback required?
     swapchainInfo.oldSwapchain = MAGMA_OPTIONAL_HANDLE(oldSwapchain);
+    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveInfo;
     fullScreenExclusiveInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT,
-    fullScreenExclusiveInfo.pNext = (void *)extendedInfo.chainNodes();
+    fullScreenExclusiveInfo.pNext = nullptr;
     fullScreenExclusiveInfo.fullScreenExclusive = fullScreenExclusive;
+    linkNode(swapchainInfo, fullScreenExclusiveInfo);
 #ifdef VK_KHR_win32_surface
     VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32Info;
     if (hMonitor)
     {
-        fullScreenExclusiveInfo.pNext = &fullScreenExclusiveWin32Info;
         fullScreenExclusiveWin32Info.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT,
-        fullScreenExclusiveWin32Info.pNext = (void *)extendedInfo.chainNodes();
+        fullScreenExclusiveWin32Info.pNext = nullptr;
         fullScreenExclusiveWin32Info.hmonitor = hMonitor;
+        linkNode(fullScreenExclusiveInfo, fullScreenExclusiveWin32Info);
     }
 #endif // VK_KHR_win32_surface
     if (!device->getDeviceFeatures()->checkImageUsageSupport(surface, swapchainInfo.imageUsage))
