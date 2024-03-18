@@ -48,7 +48,7 @@ bool Surface::hasFullScreenExclusiveSupport() const
         std::shared_ptr<PhysicalDevice> physicalDevice = instance->getPhysicalDevice(0);
         if (physicalDevice->extensionSupported(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME))
         {
-            fullScreenExclusiveSupported = physicalDevice->getSurfaceFullScreenExclusiveSupport(shared_from_this());
+            fullScreenExclusiveSupported = physicalDevice->getFullScreenExclusiveSurfaceSupport(shared_from_this());
         }
     }
 #endif // VK_EXT_full_screen_exclusive

@@ -175,48 +175,48 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
     MAGMA_HANDLE_RESULT(result, "failed to get surface present modes of physical device");
     return presentModes;
 }
-#endif // VK_KHR_surface
-
-#ifdef VK_AMD_display_native_hdr
-bool PhysicalDevice::getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const
-{
-    VkDisplayNativeHdrSurfaceCapabilitiesAMD nativeHdrSurfaceCaps = {};
-    nativeHdrSurfaceCaps.sType = VK_STRUCTURE_TYPE_DISPLAY_NATIVE_HDR_SURFACE_CAPABILITIES_AMD;
-#ifdef VK_KHR_get_surface_capabilities2
-    getSurfaceCapabilities2(std::move(surface), &nativeHdrSurfaceCaps);
-#endif
-    return (VK_TRUE == nativeHdrSurfaceCaps.localDimmingSupport);
-}
-#endif //  VK_AMD_display_native_hdr
 
 #ifdef VK_EXT_full_screen_exclusive
-std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
-    VkFullScreenExclusiveEXT fullScreenExclusive, void *hMonitor /* nullptr */) const
+bool PhysicalDevice::getFullScreenExclusiveSurfaceSupport(std::shared_ptr<const Surface> surface) const
 {
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32SurfaceInfo;
-    fullScreenExclusiveWin32SurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
-    fullScreenExclusiveWin32SurfaceInfo.pNext = nullptr;
-    fullScreenExclusiveWin32SurfaceInfo.hmonitor = reinterpret_cast<HMONITOR>(hMonitor);
-#endif // VK_USE_PLATFORM_WIN32_KHR
-    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveSurfaceInfo;
-    fullScreenExclusiveSurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-    fullScreenExclusiveSurfaceInfo.pNext = hMonitor ? &fullScreenExclusiveWin32SurfaceInfo : nullptr;
-#else
-    fullScreenExclusiveSurfaceInfo.pNext = nullptr;
-    MAGMA_UNUSED(hMonitor);
+    VkSurfaceCapabilitiesFullScreenExclusiveEXT surfaceFullScreenCaps = {};
+    surfaceFullScreenCaps.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT;
+#ifdef VK_KHR_get_surface_capabilities2
+    getSurfaceCapabilities2(std::move(surface), &surfaceFullScreenCaps);
 #endif
-    fullScreenExclusiveSurfaceInfo.fullScreenExclusive = fullScreenExclusive;
+    return (VK_TRUE == surfaceFullScreenCaps.fullScreenExclusiveSupported);
+}
+
+std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePresentModes(std::shared_ptr<const Surface> surface,
+    VkFullScreenExclusiveEXT fullScreenExclusive
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+   ,HMONITOR hMonitor /* NULL */
+#endif
+    ) const
+{
+    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveInfo;
+    fullScreenExclusiveInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
+    fullScreenExclusiveInfo.pNext = nullptr;
+    fullScreenExclusiveInfo.fullScreenExclusive = fullScreenExclusive;
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32Info;
+    if (hMonitor)
+    {
+        fullScreenExclusiveInfo.pNext = &fullScreenExclusiveWin32Info;
+        fullScreenExclusiveWin32Info.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
+        fullScreenExclusiveWin32Info.pNext = nullptr;
+        fullScreenExclusiveWin32Info.hmonitor = hMonitor;
+    }
+#endif // VK_USE_PLATFORM_WIN32_KHR
+    std::vector<VkPresentModeKHR> presentModes;
 #ifdef VK_KHR_get_surface_capabilities2
     VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
-    surfaceInfo.pNext = &fullScreenExclusiveSurfaceInfo;
+    surfaceInfo.pNext = &fullScreenExclusiveInfo;
     surfaceInfo.surface = *surface;
     uint32_t presentModeCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     VkResult result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, nullptr);
-    std::vector<VkPresentModeKHR> presentModes;
     if (presentModeCount)
     {
         presentModes.resize(presentModeCount);
@@ -225,16 +225,6 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfaceFullScreenExclusivePrese
     MAGMA_HANDLE_RESULT(result, "failed to get full-screen exclusive surface present modes of physical device");
 #endif // VK_KHR_get_surface_capabilities2
     return presentModes;
-}
-
-bool PhysicalDevice::getSurfaceFullScreenExclusiveSupport(std::shared_ptr<const Surface> surface) const
-{
-    VkSurfaceCapabilitiesFullScreenExclusiveEXT surfaceFullScreenCaps = {};
-    surfaceFullScreenCaps.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT;
-#ifdef VK_KHR_get_surface_capabilities2
-    getSurfaceCapabilities2(std::move(surface), &surfaceFullScreenCaps);
-#endif
-    return (VK_TRUE == surfaceFullScreenCaps.fullScreenExclusiveSupported);
 }
 #endif // VK_EXT_full_screen_exclusive
 
@@ -266,6 +256,18 @@ std::vector<VkRect2D> PhysicalDevice::getPresentRectangles(std::shared_ptr<const
     return presentRects;
 }
 #endif // VK_KHR_device_group
+#ifdef VK_AMD_display_native_hdr
+bool PhysicalDevice::getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const
+{
+    VkDisplayNativeHdrSurfaceCapabilitiesAMD nativeHdrSurfaceCaps = {};
+    nativeHdrSurfaceCaps.sType = VK_STRUCTURE_TYPE_DISPLAY_NATIVE_HDR_SURFACE_CAPABILITIES_AMD;
+#ifdef VK_KHR_get_surface_capabilities2
+    getSurfaceCapabilities2(std::move(surface), &nativeHdrSurfaceCaps);
+#endif
+    return (VK_TRUE == nativeHdrSurfaceCaps.localDimmingSupport);
+}
+#endif //  VK_AMD_display_native_hdr
+#endif // VK_KHR_surface
 
 bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     void *display /* nullptr */,

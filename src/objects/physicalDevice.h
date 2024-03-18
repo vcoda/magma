@@ -56,15 +56,14 @@ namespace magma
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
         std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
         std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
-    #endif // VK_KHR_surface
-    #ifdef VK_AMD_display_native_hdr
-        bool getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const;
-    #endif
     #ifdef VK_EXT_full_screen_exclusive
-        std::vector<VkPresentModeKHR> getSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
-            VkFullScreenExclusiveEXT fullScreenExclusive,
-            void *hMonitor = nullptr) const;
-        bool getSurfaceFullScreenExclusiveSupport(std::shared_ptr<const Surface> surface) const;
+        bool getFullScreenExclusiveSurfaceSupport(std::shared_ptr<const Surface> surface) const;
+        std::vector<VkPresentModeKHR> getFullScreenExclusiveSurfacePresentModes(std::shared_ptr<const Surface> surface,
+            VkFullScreenExclusiveEXT fullScreenExclusive
+        #ifdef VK_USE_PLATFORM_WIN32_KHR
+           ,HMONITOR hMonitor = NULL
+        #endif
+            ) const;
     #endif // VK_EXT_full_screen_exclusive
     #ifdef VK_KHR_shared_presentable_image
         VkImageUsageFlags getSurfaceSharedPresentFlags(std::shared_ptr<const Surface> surface) const;
@@ -72,6 +71,10 @@ namespace magma
     #ifdef VK_KHR_device_group
         std::vector<VkRect2D> getPresentRectangles(std::shared_ptr<const Surface> surface) const;
     #endif
+    #ifdef VK_AMD_display_native_hdr
+        bool getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const;
+    #endif
+    #endif // VK_KHR_surface
         // VK_KHR_xxx_surface
         bool getPresentationSupport(uint32_t queueFamilyIndex,
             void *display = nullptr,
