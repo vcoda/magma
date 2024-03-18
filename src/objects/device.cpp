@@ -184,7 +184,7 @@ void Device::updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descr
 bool Device::waitIdle() const
 {
     const VkResult result = vkDeviceWaitIdle(handle);
-    MAGMA_HANDLE_RESULT(result, "failed to wait for device become idle");
+    MAGMA_HANDLE_RESULT(result, "failed to wait for device to become idle");
     return true;
 }
 
@@ -204,7 +204,7 @@ bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bo
     for (const auto& fence : fences)
         dereferencedFences.put(*fence);
     const VkResult result = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences, MAGMA_BOOLEAN(waitAll), timeout);
-    MAGMA_HANDLE_RESULT(result, "failed to wait for fences");
+    MAGMA_HANDLE_RESULT(result, "failed to wait for fence(s)");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
 }
@@ -226,7 +226,7 @@ bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>
     waitInfo.pValues = values.data();
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkWaitSemaphoresKHR(handle, &waitInfo, timeout);
-    MAGMA_HANDLE_RESULT(result, "failed to wait timeline semaphores");
+    MAGMA_HANDLE_RESULT(result, "failed to wait for timeline semaphore(s)");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
 }
@@ -284,7 +284,7 @@ VkDeviceGroupPresentCapabilitiesKHR Device::getDeviceGroupPresentCapabilitiesKHR
     VkDeviceGroupPresentCapabilitiesKHR presentCapabitilies = {};
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupPresentCapabilitiesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
     const VkResult result = vkGetDeviceGroupPresentCapabilitiesKHR(handle, &presentCapabitilies);
-    MAGMA_HANDLE_RESULT(result, "failed to get device present capabilities for a device group");
+    MAGMA_HANDLE_RESULT(result, "failed to get present capabilities of device group");
     return presentCapabitilies;
 }
 
@@ -293,7 +293,7 @@ VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(std::
     VkDeviceGroupPresentModeFlagsKHR presentModes = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
     const VkResult result = vkGetDeviceGroupSurfacePresentModesKHR(handle, *surface, &presentModes);
-    MAGMA_HANDLE_RESULT(result, "failed to get surface present modes for a device group");
+    MAGMA_HANDLE_RESULT(result, "failed to get surface present modes of device group");
     return presentModes;
 }
 
@@ -327,7 +327,7 @@ VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupFullScreenExclusiveSurfac
     surfaceInfo.surface = *surface;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkGetDeviceGroupSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModes);
-    MAGMA_HANDLE_RESULT(result, "failed to get full-screen exclusive surface present modes for a device group");
+    MAGMA_HANDLE_RESULT(result, "failed to get full-screen exclusive surface present modes of device group");
 #endif // VK_KHR_get_surface_capabilities2
     return presentModes;
 }
