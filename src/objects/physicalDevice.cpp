@@ -142,10 +142,10 @@ bool PhysicalDevice::getSurfaceSupport(std::shared_ptr<const Surface> surface, u
 
 VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const
 {
-    VkSurfaceCapabilitiesKHR surfaceCaps;
-    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(handle, *surface, &surfaceCaps);
+    VkSurfaceCapabilitiesKHR surfaceCapabilities;
+    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(handle, *surface, &surfaceCapabilities);
     MAGMA_HANDLE_RESULT(result, "failed to get surface capabilities of physical device");
-    return surfaceCaps;
+    return surfaceCapabilities;
 }
 
 std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(std::shared_ptr<const Surface> surface) const
@@ -179,12 +179,12 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(std::shared
 #ifdef VK_EXT_full_screen_exclusive
 bool PhysicalDevice::getFullScreenExclusiveSurfaceSupport(std::shared_ptr<const Surface> surface) const
 {
-    VkSurfaceCapabilitiesFullScreenExclusiveEXT surfaceFullScreenCaps = {};
-    surfaceFullScreenCaps.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT;
+    VkSurfaceCapabilitiesFullScreenExclusiveEXT fullScreenExclusiveCapabilities = {};
+    fullScreenExclusiveCapabilities.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT;
 #ifdef VK_KHR_get_surface_capabilities2
-    getSurfaceCapabilities2(std::move(surface), &surfaceFullScreenCaps);
+    getSurfaceCapabilities2(std::move(surface), &fullScreenExclusiveCapabilities);
 #endif
-    return (VK_TRUE == surfaceFullScreenCaps.fullScreenExclusiveSupported);
+    return (VK_TRUE == fullScreenExclusiveCapabilities.fullScreenExclusiveSupported);
 }
 
 std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePresentModes(std::shared_ptr<const Surface> surface,
@@ -231,12 +231,12 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePrese
 #ifdef VK_KHR_shared_presentable_image
 VkImageUsageFlags PhysicalDevice::getSurfaceSharedPresentFlags(std::shared_ptr<const Surface> surface) const
 {
-    VkSharedPresentSurfaceCapabilitiesKHR sharedPresentSurfaceCaps = {};
-    sharedPresentSurfaceCaps.sType = VK_STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR;
+    VkSharedPresentSurfaceCapabilitiesKHR sharedPresentSurfaceCapabilities = {};
+    sharedPresentSurfaceCapabilities.sType = VK_STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR;
 #ifdef VK_KHR_get_surface_capabilities2
-    getSurfaceCapabilities2(std::move(surface), &sharedPresentSurfaceCaps);
+    getSurfaceCapabilities2(std::move(surface), &sharedPresentSurfaceCapabilities);
 #endif
-    return sharedPresentSurfaceCaps.sharedPresentSupportedUsageFlags;
+    return sharedPresentSurfaceCapabilities.sharedPresentSupportedUsageFlags;
 }
 #endif // VK_KHR_shared_presentable_image
 
@@ -259,12 +259,12 @@ std::vector<VkRect2D> PhysicalDevice::getPresentRectangles(std::shared_ptr<const
 #ifdef VK_AMD_display_native_hdr
 bool PhysicalDevice::getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const
 {
-    VkDisplayNativeHdrSurfaceCapabilitiesAMD nativeHdrSurfaceCaps = {};
-    nativeHdrSurfaceCaps.sType = VK_STRUCTURE_TYPE_DISPLAY_NATIVE_HDR_SURFACE_CAPABILITIES_AMD;
+    VkDisplayNativeHdrSurfaceCapabilitiesAMD nativeHdrSurfaceCapabilities = {};
+    nativeHdrSurfaceCapabilities.sType = VK_STRUCTURE_TYPE_DISPLAY_NATIVE_HDR_SURFACE_CAPABILITIES_AMD;
 #ifdef VK_KHR_get_surface_capabilities2
-    getSurfaceCapabilities2(std::move(surface), &nativeHdrSurfaceCaps);
+    getSurfaceCapabilities2(std::move(surface), &nativeHdrSurfaceCapabilities);
 #endif
-    return (VK_TRUE == nativeHdrSurfaceCaps.localDimmingSupport);
+    return (VK_TRUE == nativeHdrSurfaceCapabilities.localDimmingSupport);
 }
 #endif //  VK_AMD_display_native_hdr
 #endif // VK_KHR_surface
@@ -484,20 +484,20 @@ void PhysicalDevice::getProperties2(void *physicalDeviceProperties) const
 #endif // VK_KHR_get_physical_device_properties2
 }
 
-void PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surface, void *surfaceCaps) const
+void PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surface, void *surfaceCapabilities) const
 {
     MAGMA_UNUSED(surface);
-    MAGMA_UNUSED(surfaceCaps);
+    MAGMA_UNUSED(surfaceCapabilities);
 #ifdef VK_KHR_get_surface_capabilities2
     VkPhysicalDeviceSurfaceInfo2KHR physicalDeviceSurfaceInfo2;
     physicalDeviceSurfaceInfo2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
     physicalDeviceSurfaceInfo2.pNext = nullptr;
     physicalDeviceSurfaceInfo2.surface = *surface;
-    VkSurfaceCapabilities2KHR surfaceCaps2;
-    surfaceCaps2.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
-    surfaceCaps2.pNext = surfaceCaps;
+    VkSurfaceCapabilities2KHR surfaceCapabilities2;
+    surfaceCapabilities2.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
+    surfaceCapabilities2.pNext = surfaceCapabilities;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfaceCapabilities2KHR, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
-    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &physicalDeviceSurfaceInfo2, &surfaceCaps2);
+    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &physicalDeviceSurfaceInfo2, &surfaceCapabilities2);
     MAGMA_HANDLE_RESULT(result, "failed to get surface capabilities");
 #endif // VK_KHR_get_surface_capabilities2
 }

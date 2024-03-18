@@ -566,7 +566,7 @@ namespace magma
         void getFeatures2(void *physicalDeviceFeatures) const;
         void getProperties2(void *physicalDeviceProperties) const;
         void getSurfaceCapabilities2(std::shared_ptr<const Surface> surface,
-            void *surfaceCaps) const;
+            void *surfaceCapabilities) const;
 
         std::shared_ptr<Instance> instance;
         std::set<std::string> extensions;

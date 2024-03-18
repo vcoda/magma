@@ -50,7 +50,7 @@ bool DeviceFeatures::checkImageUsageSupport(std::shared_ptr<const Surface> surfa
     if (auto device = parent.lock())
     {
         std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-        const VkSurfaceCapabilitiesKHR surfaceCaps = physicalDevice->getSurfaceCapabilities(std::move(surface));
+        const VkSurfaceCapabilitiesKHR surfaceCapabilities = physicalDevice->getSurfaceCapabilities(std::move(surface));
         for (VkImageUsageFlagBits bit: {
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
             VK_IMAGE_USAGE_TRANSFER_DST_BIT,
@@ -70,7 +70,7 @@ bool DeviceFeatures::checkImageUsageSupport(std::shared_ptr<const Surface> surfa
         {
             if (flags & bit)
             {
-                if (!(surfaceCaps.supportedUsageFlags & bit))
+                if (!(surfaceCapabilities.supportedUsageFlags & bit))
                     return false;
             }
         }
