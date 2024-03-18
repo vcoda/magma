@@ -298,29 +298,32 @@ VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(std::
 }
 
 #ifdef VK_EXT_full_screen_exclusive
-VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
-    VkFullScreenExclusiveEXT fullScreenExclusive, void *hMonitor /* nullptr */) const
-{
-    VkDeviceGroupPresentModeFlagsKHR presentModes = 0;
+VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupFullScreenExclusiveSurfacePresentModes(std::shared_ptr<const Surface> surface,
+    VkFullScreenExclusiveEXT fullScreenExclusive
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32SurfaceInfo;
-    fullScreenExclusiveWin32SurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
-    fullScreenExclusiveWin32SurfaceInfo.pNext = nullptr;
-    fullScreenExclusiveWin32SurfaceInfo.hmonitor = reinterpret_cast<HMONITOR>(hMonitor);
-#endif // VK_USE_PLATFORM_WIN32_KHR
-    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveSurfaceInfo;
-    fullScreenExclusiveSurfaceInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-    fullScreenExclusiveSurfaceInfo.pNext = hMonitor ? &fullScreenExclusiveWin32SurfaceInfo : nullptr;
-#else
-    fullScreenExclusiveSurfaceInfo.pNext = nullptr;
-    MAGMA_UNUSED(hMonitor);
+   ,HMONITOR hMonitor /* NULL */
 #endif
-    fullScreenExclusiveSurfaceInfo.fullScreenExclusive = fullScreenExclusive;
+    ) const
+{
+    VkSurfaceFullScreenExclusiveInfoEXT fullScreenExclusiveInfo;
+    fullScreenExclusiveInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
+    fullScreenExclusiveInfo.pNext = nullptr;
+    fullScreenExclusiveInfo.fullScreenExclusive = fullScreenExclusive;
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32Info;
+    if (hMonitor)
+    {
+        fullScreenExclusiveInfo.pNext = &fullScreenExclusiveWin32Info;
+        fullScreenExclusiveWin32Info.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
+        fullScreenExclusiveWin32Info.pNext = nullptr;
+        fullScreenExclusiveWin32Info.hmonitor = hMonitor;
+    }
+#endif // VK_USE_PLATFORM_WIN32_KHR
+    VkDeviceGroupPresentModeFlagsKHR presentModes = 0;
 #ifdef VK_KHR_get_surface_capabilities2
     VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
-    surfaceInfo.pNext = &fullScreenExclusiveSurfaceInfo;
+    surfaceInfo.pNext = &fullScreenExclusiveInfo;
     surfaceInfo.surface = *surface;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
     const VkResult result = vkGetDeviceGroupSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModes);

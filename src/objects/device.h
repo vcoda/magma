@@ -86,9 +86,12 @@ namespace magma
         VkDeviceGroupPresentCapabilitiesKHR getDeviceGroupPresentCapabilitiesKHR() const;
         VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
     #ifdef VK_EXT_full_screen_exclusive
-        VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfaceFullScreenExclusivePresentModes(std::shared_ptr<const Surface> surface,
-            VkFullScreenExclusiveEXT fullScreenExclusive,
-            void *hMonitor /* nullptr */) const;
+        VkDeviceGroupPresentModeFlagsKHR getDeviceGroupFullScreenExclusiveSurfacePresentModes(std::shared_ptr<const Surface> surface,
+            VkFullScreenExclusiveEXT fullScreenExclusive
+        #ifdef VK_USE_PLATFORM_WIN32_KHR
+           ,HMONITOR hMonitor = NULL
+        #endif
+            ) const;
     #endif // VK_EXT_full_screen_exclusive
         VkPeerMemoryFeatureFlags getDeviceGroupPeerMemoryFeatures(uint32_t heapIndex,
             uint32_t localDeviceIndex,
