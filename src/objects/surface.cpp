@@ -39,20 +39,22 @@ Surface::~Surface()
     vkDestroySurfaceKHR(MAGMA_HANDLE(instance), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-bool Surface::hasFullScreenExclusiveSupport() const
+bool Surface::supportsFullScreenExclusive() const
 {
-    bool fullScreenExclusiveSupported = false;
 #ifdef VK_EXT_full_screen_exclusive
-    if (instance->extensionSupported(VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME))
+    std::shared_ptr<const Surface> self = shared_from_this();
+    uint32_t physicalDeviceCount = instance->enumeratePhysicalDevices();
+    for (uint32_t deviceId = 0; deviceId < physicalDeviceCount; ++deviceId)
     {
-        std::shared_ptr<PhysicalDevice> physicalDevice = instance->getPhysicalDevice(0);
+        std::shared_ptr<PhysicalDevice> physicalDevice = instance->getPhysicalDevice(deviceId);
         if (physicalDevice->extensionSupported(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME))
         {
-            fullScreenExclusiveSupported = physicalDevice->getFullScreenExclusiveSurfaceSupport(shared_from_this());
+            if (physicalDevice->getFullScreenExclusiveSurfaceSupport(self))
+                return true;
         }
     }
 #endif // VK_EXT_full_screen_exclusive
-    return fullScreenExclusiveSupported;
+    return false;
 }
 #endif // VK_KHR_surface
 

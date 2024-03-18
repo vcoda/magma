@@ -34,7 +34,7 @@ namespace magma
     public:
         ~Surface();
         const std::shared_ptr<const Instance>& getInstance() const noexcept { return instance; }
-        bool hasFullScreenExclusiveSupport() const;
+        bool supportsFullScreenExclusive() const;
 
     protected:
         explicit Surface(std::shared_ptr<const Instance> instance,
