@@ -53,10 +53,10 @@ namespace magma
     };
 
     /* To enable applications to detect when previously retrieved
-       data  is incompatible with the device, the pipeline cache 
-       data must begin with a valid pipeline cache header. Version 1 
+       data  is incompatible with the device, the pipeline cache
+       data must begin with a valid pipeline cache header. Version 1
        of the pipeline cache header is defined as: */
-       
+
     struct PipelineCache::Header
     {
         uint32_t size = 0;
@@ -67,5 +67,6 @@ namespace magma
         uint8_t pipelineCacheUUID[VK_UUID_SIZE] = {};
     };
 
-    static_assert(sizeof(PipelineCache::Header) == 32, "intended size of the pipeline cache header structure is 32 bytes");
+    static_assert(sizeof(PipelineCache::Header) == sizeof(VkPipelineCacheHeaderVersionOne),
+        "pipeline cache header structure size mismatch");
 } // namespace magma
