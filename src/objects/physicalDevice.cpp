@@ -189,7 +189,7 @@ bool PhysicalDevice::getFullScreenExclusiveSurfaceSupport(std::shared_ptr<const 
 
 std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePresentModes(std::shared_ptr<const Surface> surface,
     VkFullScreenExclusiveEXT fullScreenExclusive
-#ifdef VK_USE_PLATFORM_WIN32_KHR
+#ifdef VK_KHR_win32_surface
    ,HMONITOR hMonitor /* NULL */
 #endif
     ) const
@@ -198,7 +198,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePrese
     fullScreenExclusiveInfo.sType = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
     fullScreenExclusiveInfo.pNext = nullptr;
     fullScreenExclusiveInfo.fullScreenExclusive = fullScreenExclusive;
-#ifdef VK_USE_PLATFORM_WIN32_KHR
+#ifdef VK_KHR_win32_surface
     VkSurfaceFullScreenExclusiveWin32InfoEXT fullScreenExclusiveWin32Info;
     if (hMonitor)
     {
@@ -207,7 +207,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePrese
         fullScreenExclusiveWin32Info.pNext = nullptr;
         fullScreenExclusiveWin32Info.hmonitor = hMonitor;
     }
-#endif // VK_USE_PLATFORM_WIN32_KHR
+#endif // VK_KHR_win32_surface
     std::vector<VkPresentModeKHR> presentModes;
 #ifdef VK_KHR_get_surface_capabilities2
     VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;

@@ -60,7 +60,7 @@ namespace magma
         bool getFullScreenExclusiveSurfaceSupport(std::shared_ptr<const Surface> surface) const;
         std::vector<VkPresentModeKHR> getFullScreenExclusiveSurfacePresentModes(std::shared_ptr<const Surface> surface,
             VkFullScreenExclusiveEXT fullScreenExclusive
-        #ifdef VK_USE_PLATFORM_WIN32_KHR
+        #ifdef VK_KHR_win32_surface
            ,HMONITOR hMonitor = NULL
         #endif
             ) const;
