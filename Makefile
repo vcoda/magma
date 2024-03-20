@@ -187,7 +187,7 @@ CC=g++
 PLATFORM=VK_USE_PLATFORM_XCB_KHR
 INCLUDE_DIR=-I$(VULKAN_SDK)/include -Isrc/core
 CONSTEXPR_DEPTH_FLAGS=-ftemplate-depth=2048 -fconstexpr-depth=2048
-BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread $(CONSTEXPR_DEPTH_FLAGS) -Wno-enum-compare -Werror -D$(PLATFORM) $(INCLUDE_DIR)
+BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread $(CONSTEXPR_DEPTH_FLAGS) -Wno-enum-compare -D$(PLATFORM) $(INCLUDE_DIR)
 
 DEBUG ?= 1
 ifeq ($(DEBUG), 1)
