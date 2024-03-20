@@ -507,6 +507,8 @@ VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr
     const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &physicalDeviceSurfaceInfo, &surfaceCapabilities2);
     MAGMA_HANDLE_RESULT(result, "failed to get surface capabilities");
     return surfaceCapabilities2.surfaceCapabilities;
+#else
+    return {};
 #endif // VK_KHR_get_surface_capabilities2
 }
 #endif // VK_KHR_surface
