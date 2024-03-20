@@ -29,7 +29,7 @@ namespace magma
             explicit ScopedProfile(const char *name, std::shared_ptr<CommandBuffer> cmdBuffer_,
                 uint32_t color = 0xFFFFFFFF):
                 cmdBuffer(std::move(cmdBuffer_)),
-                profiler(Profiler::get(Profiler::Graphics))
+                profiler(Profiler::get(Profiler::Queue::Graphics))
             {
                 if (profiler)
                     profiler->beginSection(cmdBuffer, name, color);
