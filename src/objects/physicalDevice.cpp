@@ -460,7 +460,7 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     return core::compare(cacheHeader, &requiredHeader);
 }
 
-void PhysicalDevice::getFeatures2(void *physicalDeviceFeatures) const
+VkPhysicalDeviceFeatures PhysicalDevice::getFeatures2(void *physicalDeviceFeatures) const
 {
     MAGMA_UNUSED(physicalDeviceFeatures);
 #ifdef VK_KHR_get_physical_device_properties2
@@ -469,10 +469,13 @@ void PhysicalDevice::getFeatures2(void *physicalDeviceFeatures) const
     physicalDeviceFeatures2.pNext = physicalDeviceFeatures;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceFeatures2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
     vkGetPhysicalDeviceFeatures2KHR(handle, &physicalDeviceFeatures2);
-#endif
+    return physicalDeviceFeatures2.features;
+#else
+    return {};
+#endif // VK_KHR_get_physical_device_properties2
 }
 
-void PhysicalDevice::getProperties2(void *physicalDeviceProperties) const
+VkPhysicalDeviceProperties PhysicalDevice::getProperties2(void *physicalDeviceProperties) const
 {
     MAGMA_UNUSED(physicalDeviceProperties);
 #ifdef VK_KHR_get_physical_device_properties2
@@ -481,6 +484,9 @@ void PhysicalDevice::getProperties2(void *physicalDeviceProperties) const
     physicalDeviceProperties2.pNext = physicalDeviceProperties;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
     vkGetPhysicalDeviceProperties2KHR(handle, &physicalDeviceProperties2);
+    return physicalDeviceProperties2.properties;
+#else
+    return {};
 #endif // VK_KHR_get_physical_device_properties2
 }
 
