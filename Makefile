@@ -1,5 +1,5 @@
 # Magma - Abstraction layer over Khronos Vulkan API.
-# Copyright (C) 2018-2023 Victor Coda.
+# Copyright (C) 2018-2024 Victor Coda.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,6 +13,8 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+.DEFAULT_GOAL := magma
 
 PCH_HEADER=src/core/pch.h
 SRC_OBJS= \
@@ -184,8 +186,14 @@ SRC_OBJS= \
 	src/third-party/SPIRV-Reflect/spirv_reflect.o
 
 CC=g++
+GLSLC=$(VULKAN_SDK)/bin/glslangValidator
+
 PLATFORM=VK_USE_PLATFORM_XCB_KHR
+
 INCLUDE_DIR=-I$(VULKAN_SDK)/include -Isrc/core
+GLSL_DIR=src/auxiliary/spirv
+SPIRV_DIR=$(GLSL_DIR)/output
+
 CONSTEXPR_DEPTH_FLAGS=-ftemplate-depth=2048 -fconstexpr-depth=2048
 BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread $(CONSTEXPR_DEPTH_FLAGS) -Wno-enum-compare -D$(PLATFORM) $(INCLUDE_DIR)
 
@@ -206,14 +214,30 @@ DEPS := $(SRC_OBJS:.o=.d)
 %.o: %.cpp
 	$(CC) $(CFLAGS) -include $(PCH_HEADER) -c $< -o $@
 
-magma: $(PCH) $(SRC_OBJS)
+$(PCH): $(PCH_HEADER)
+	$(CC) $(CFLAGS) -o $@ $<
+
+shaders:
+	@echo "Compiling shaders"
+	@rm -rf $(SPIRV_DIR)
+	@mkdir $(SPIRV_DIR)
+	$(GLSLC) -V --vn fsBlit $(GLSL_DIR)/blit.frag -o $(SPIRV_DIR)/blitf
+	$(GLSLC) -V --vn vsBlit $(GLSL_DIR)/blit.vert -o $(SPIRV_DIR)/blitv
+	$(GLSLC) -V -DNV --vn vsBlitNV $(GLSL_DIR)/blit.vert -o $(SPIRV_DIR)/blitv_nv
+	$(GLSLC) -V --vn fsFont $(GLSL_DIR)/font.frag -o $(SPIRV_DIR)/fontf
+	$(GLSLC) -V --vn vsImm $(GLSL_DIR)/imm.vert -o $(SPIRV_DIR)/immv
+	$(GLSLC) -V --vn fsImm $(GLSL_DIR)/imm.frag -o $(SPIRV_DIR)/immf
+
+build: $(PCH) $(SRC_OBJS)
 	@echo "Make" $(BUILD_TARGET)
 	@ar rcs $(BUILD_TARGET) $(SRC_OBJS)
 
-$(PCH): $(PCH_HEADER)
-	$(CC) $(CFLAGS) -o $@ $<
+magma:
+	$(MAKE) shaders
+	$(MAKE) build
 
 clean:
 	@find . -iregex '.*\.\(o\|a\)' -delete
 	@rm -rf $(PCH)
 	@rm -rf $(DEPS)
+	@rm -rf $(SPIRV_DIR)
