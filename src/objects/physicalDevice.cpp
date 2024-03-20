@@ -484,7 +484,8 @@ void PhysicalDevice::getProperties2(void *physicalDeviceProperties) const
 #endif // VK_KHR_get_physical_device_properties2
 }
 
-void PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surface, void *surfaceCapabilities) const
+#ifdef VK_KHR_surface
+VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surface, void *surfaceCapabilities) const
 {
     MAGMA_UNUSED(surface);
     MAGMA_UNUSED(surfaceCapabilities);
@@ -499,6 +500,8 @@ void PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surf
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfaceCapabilities2KHR, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
     const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &physicalDeviceSurfaceInfo2, &surfaceCapabilities2);
     MAGMA_HANDLE_RESULT(result, "failed to get surface capabilities");
+    return surfaceCapabilities2.surfaceCapabilities;
 #endif // VK_KHR_get_surface_capabilities2
 }
+#endif // VK_KHR_surface
 } // namespace magma

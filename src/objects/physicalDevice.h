@@ -565,8 +565,10 @@ namespace magma
             std::shared_ptr<IAllocator> allocator) noexcept;
         void getFeatures2(void *physicalDeviceFeatures) const;
         void getProperties2(void *physicalDeviceProperties) const;
-        void getSurfaceCapabilities2(std::shared_ptr<const Surface> surface,
+    #ifdef VK_KHR_surface
+        VkSurfaceCapabilitiesKHR getSurfaceCapabilities2(std::shared_ptr<const Surface> surface,
             void *surfaceCapabilities) const;
+    #endif // VK_KHR_surface
 
         std::shared_ptr<Instance> instance;
         std::set<std::string> extensions;
