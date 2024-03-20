@@ -210,17 +210,17 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePrese
 #endif // VK_KHR_win32_surface
     std::vector<VkPresentModeKHR> presentModes;
 #ifdef VK_KHR_get_surface_capabilities2
-    VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
-    surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
-    surfaceInfo.pNext = &fullScreenExclusiveInfo;
-    surfaceInfo.surface = *surface;
+    VkPhysicalDeviceSurfaceInfo2KHR physicalDeviceSurfaceInfo;
+    physicalDeviceSurfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    physicalDeviceSurfaceInfo.pNext = &fullScreenExclusiveInfo;
+    physicalDeviceSurfaceInfo.surface = *surface;
     uint32_t presentModeCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
-    VkResult result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, nullptr);
+    VkResult result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &physicalDeviceSurfaceInfo, &presentModeCount, nullptr);
     if (presentModeCount)
     {
         presentModes.resize(presentModeCount);
-        result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, presentModes.data());
+        result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &physicalDeviceSurfaceInfo, &presentModeCount, presentModes.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to get full-screen exclusive surface present modes of physical device");
 #endif // VK_KHR_get_surface_capabilities2
@@ -496,15 +496,15 @@ VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr
     MAGMA_UNUSED(surface);
     MAGMA_UNUSED(surfaceCapabilities);
 #ifdef VK_KHR_get_surface_capabilities2
-    VkPhysicalDeviceSurfaceInfo2KHR physicalDeviceSurfaceInfo2;
-    physicalDeviceSurfaceInfo2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
-    physicalDeviceSurfaceInfo2.pNext = nullptr;
-    physicalDeviceSurfaceInfo2.surface = *surface;
+    VkPhysicalDeviceSurfaceInfo2KHR physicalDeviceSurfaceInfo;
+    physicalDeviceSurfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    physicalDeviceSurfaceInfo.pNext = nullptr;
+    physicalDeviceSurfaceInfo.surface = *surface;
     VkSurfaceCapabilities2KHR surfaceCapabilities2;
     surfaceCapabilities2.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
     surfaceCapabilities2.pNext = surfaceCapabilities;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfaceCapabilities2KHR, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
-    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &physicalDeviceSurfaceInfo2, &surfaceCapabilities2);
+    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &physicalDeviceSurfaceInfo, &surfaceCapabilities2);
     MAGMA_HANDLE_RESULT(result, "failed to get surface capabilities");
     return surfaceCapabilities2.surfaceCapabilities;
 #endif // VK_KHR_get_surface_capabilities2

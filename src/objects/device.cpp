@@ -281,11 +281,11 @@ uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDes
 #ifdef VK_KHR_device_group
 VkDeviceGroupPresentCapabilitiesKHR Device::getDeviceGroupPresentCapabilitiesKHR() const
 {
-    VkDeviceGroupPresentCapabilitiesKHR presentCapabitilies = {};
+    VkDeviceGroupPresentCapabilitiesKHR deviceGroupPresentCapabitilies = {};
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupPresentCapabilitiesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
-    const VkResult result = vkGetDeviceGroupPresentCapabilitiesKHR(handle, &presentCapabitilies);
+    const VkResult result = vkGetDeviceGroupPresentCapabilitiesKHR(handle, &deviceGroupPresentCapabitilies);
     MAGMA_HANDLE_RESULT(result, "failed to get present capabilities of device group");
-    return presentCapabitilies;
+    return deviceGroupPresentCapabitilies;
 }
 
 VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const
@@ -321,12 +321,12 @@ VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupFullScreenExclusiveSurfac
 #endif // VK_KHR_win32_surface
     VkDeviceGroupPresentModeFlagsKHR presentModes = 0;
 #ifdef VK_KHR_get_surface_capabilities2
-    VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
-    surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
-    surfaceInfo.pNext = &fullScreenExclusiveInfo;
-    surfaceInfo.surface = *surface;
+    VkPhysicalDeviceSurfaceInfo2KHR physicalDeviceSurfaceInfo;
+    physicalDeviceSurfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    physicalDeviceSurfaceInfo.pNext = &fullScreenExclusiveInfo;
+    physicalDeviceSurfaceInfo.surface = *surface;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
-    const VkResult result = vkGetDeviceGroupSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModes);
+    const VkResult result = vkGetDeviceGroupSurfacePresentModes2EXT(handle, &physicalDeviceSurfaceInfo, &presentModes);
     MAGMA_HANDLE_RESULT(result, "failed to get full-screen exclusive surface present modes of device group");
 #endif // VK_KHR_get_surface_capabilities2
     return presentModes;
