@@ -29,11 +29,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator)),
-    pushConstantRanges(pushConstantRanges)
+    pushConstantRanges(pushConstantRanges_)
 {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -42,7 +42,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     pipelineLayoutInfo.setLayoutCount = 0;
     pipelineLayoutInfo.pSetLayouts = nullptr;
     pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
-    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
+    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
     const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
     hash = core::hashArgs(
@@ -55,11 +55,11 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
 }
 
 PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLayout,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, setLayout->getDevice(), std::move(allocator)),
-    pushConstantRanges(pushConstantRanges)
+    pushConstantRanges(pushConstantRanges_)
 {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -68,7 +68,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
     pipelineLayoutInfo.setLayoutCount = 1;
     pipelineLayoutInfo.pSetLayouts = setLayout->getHandleAddress();
     pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
-    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
+    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
     const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
     hash = core::hashArgs(
