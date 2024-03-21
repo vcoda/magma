@@ -89,7 +89,7 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, (*setLayouts_.begin())->getDevice(), std::move(allocator)),
     pushConstantRanges(pushConstantRanges)
 {
-    MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts.size());
+    MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts_.size());
     for (auto const& layout: setLayouts_)
         dereferencedSetLayouts.put(*layout);
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
