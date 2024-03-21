@@ -83,11 +83,11 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
 }
 
 PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const DescriptorSetLayout>>& setLayouts_,
-    const std::initializer_list<PushConstantRange>& pushConstantRanges,
+    const std::initializer_list<PushConstantRange>& pushConstantRanges_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, (*setLayouts_.begin())->getDevice(), std::move(allocator)),
-    pushConstantRanges(pushConstantRanges)
+    pushConstantRanges(pushConstantRanges_)
 {
     MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts_.size());
     for (auto const& layout: setLayouts_)
@@ -99,7 +99,7 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
     pipelineLayoutInfo.setLayoutCount = MAGMA_COUNT(dereferencedSetLayouts);
     pipelineLayoutInfo.pSetLayouts = dereferencedSetLayouts;
     pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
-    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.begin();
+    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
     const VkResult result = vkCreatePipelineLayout(MAGMA_HANDLE(device), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
     hash = core::hashArgs(
