@@ -12,15 +12,15 @@ struct String
   vec4 color;
 };
 
-layout(set = 0, binding = 0) uniform perFrame {
+layout(push_constant) uniform pushConstants {
   uint stringCount;
 };
 
-layout(set = 0, binding = 1) readonly buffer stringBuffer {
+layout(set = 0, binding = 0) readonly buffer stringBuffer {
   String strings[];
 };
 
-layout(set = 0, binding = 2) readonly buffer charBuffer {
+layout(set = 0, binding = 1) readonly buffer charBuffer {
   uvec4 chars[];
 };
 

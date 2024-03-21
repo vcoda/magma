@@ -48,12 +48,6 @@ namespace magma
 {
 namespace aux
 {
-struct alignas(16) TextShader::Uniforms
-{
-    uint32_t stringCount;
-    uint32_t padding[3];
-};
-
 struct alignas(16) TextShader::String
 {
     float x, y;
@@ -69,10 +63,14 @@ struct alignas(16) TextShader::Glyph
 
 struct TextShader::DescriptorSetTable : magma::DescriptorSetTable
 {
-    descriptor::UniformBuffer uniforms = 0;
-    descriptor::StorageBuffer stringBuffer = 1;
-    descriptor::StorageBuffer charBuffer = 2;
-    MAGMA_REFLECT(uniforms, stringBuffer, charBuffer)
+    descriptor::StorageBuffer stringBuffer = 0;
+    descriptor::StorageBuffer charBuffer = 1;
+    MAGMA_REFLECT(stringBuffer, charBuffer)
+};
+
+struct TextShader::PushConstants
+{
+    uint32_t stringCount;
 };
 
 TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
@@ -85,22 +83,15 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
 {
     std::shared_ptr<Device> device = renderPass->getDevice();
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(this->allocator);
-    // Create uniform and storage buffers
-    uniforms = std::make_shared<UniformBuffer<Uniforms>>(device, true, this->allocator);
+    // Create storage buffers
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, maxStrings * sizeof(String), false, this->allocator);
     charBuffer = std::make_shared<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, this->allocator);
     // Define descriptor set layout
     setTable = std::make_unique<DescriptorSetTable>();
-    setTable->uniforms = uniforms;
     setTable->stringBuffer = stringBuffer;
     setTable->charBuffer = charBuffer;
     // Create descriptor set
-    descriptorPool = std::make_shared<DescriptorPool>(device, 1,
-        std::vector<descriptor::DescriptorPool>{
-            descriptor::UniformBufferPool(1),
-            descriptor::StorageBufferPool(2)
-        },
-        hostAllocator);
+    descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageBufferPool(2), hostAllocator);
     descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *setTable, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
     // Load fullscreen vertex shader
     auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
@@ -113,7 +104,8 @@ constexpr
         FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main")
     };
     // Create font pipeline
-    std::shared_ptr<PipelineLayout> pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout());
+    constexpr pushconstant::FragmentConstantRange<PushConstants> pushConstantRange;
+    pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout(), pushConstantRange);
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstate::nullVertexInput,
@@ -123,15 +115,15 @@ constexpr
         renderstate::depthAlwaysDontWrite,
         renderstate::blendNormalRgb,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
-        std::move(pipelineLayout),
+        pipelineLayout,
         std::move(renderPass), 0,
         std::move(hostAllocator),
-        std::move(pipelineCache),
-        nullptr); // basePipeline
+        std::move(pipelineCache));
 }
 
 void TextShader::draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
 {
+    cmdBuffer->pushConstant(pipelineLayout, VK_SHADER_STAGE_FRAGMENT_BIT, stringCount);
     cmdBuffer->bindDescriptorSet(pipeline, 0, descriptorSet);
     cmdBuffer->bindPipeline(pipeline);
     cmdBuffer->draw(3);
@@ -148,11 +140,6 @@ void TextShader::begin()
 
 void TextShader::end()
 {
-    helpers::mapScoped<Uniforms>(uniforms,
-        [this](auto *constants)
-        {
-            constants->stringCount = stringCount;
-        });
     helpers::unmap(charBuffer);
     helpers::unmap(stringBuffer);
     chars = nullptr;

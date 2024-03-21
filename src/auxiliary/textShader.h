@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "base.h"
-#include "../objects/descriptorSetLayout.h"
 
 namespace magma
 {
@@ -26,7 +25,9 @@ namespace magma
     class RenderPass;
     class DescriptorPool;
     class DescriptorSet;
+    class DescriptorSetLayout;
     class PipelineCache;
+    class PipelineLayout;
     class GraphicsPipeline;
     class Allocator;
 
@@ -52,19 +53,19 @@ namespace magma
                 const char *format, ...);
 
         private:
-            struct Uniforms;
             struct String;
             struct Glyph;
             struct DescriptorSetTable;
+            struct PushConstants;
             const uint32_t maxStrings;
             const uint32_t maxChars;
             std::shared_ptr<Allocator> allocator;
-            std::shared_ptr<Buffer> uniforms;
             std::shared_ptr<Buffer> stringBuffer;
             std::shared_ptr<Buffer> charBuffer;
             std::shared_ptr<DescriptorPool> descriptorPool;
             std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
             std::shared_ptr<DescriptorSet> descriptorSet;
+            std::shared_ptr<PipelineLayout> pipelineLayout;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::unique_ptr<DescriptorSetTable> setTable;
             String *strings = nullptr;
