@@ -59,6 +59,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, setLayout->getDevice(), std::move(allocator)),
+    setLayouts({setLayout}),
     pushConstantRanges(pushConstantRanges_)
 {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
@@ -79,7 +80,6 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
     hash = core::hashCombine(hash, setLayout->getHash());
     for (auto const& pushConstantRange: pushConstantRanges)
         hash = core::hashCombine(hash, pushConstantRange.hash());
-    setLayouts.push_back(std::move(setLayout));
 }
 
 PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const DescriptorSetLayout>>& setLayouts_,
