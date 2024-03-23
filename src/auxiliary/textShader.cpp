@@ -104,7 +104,7 @@ constexpr
         FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main")
     };
     // Create font pipeline
-    constexpr pushconstant::FragmentConstantRange<PushConstants> pushConstantRange;
+    constexpr push::FragmentConstantRange<PushConstants> pushConstantRange;
     pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout(), pushConstantRange);
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,

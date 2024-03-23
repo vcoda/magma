@@ -87,7 +87,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     };
     // Create blending pipeline
     const uint8_t componentCount = Format(format).componentCount();
-    constexpr pushconstant::FragmentConstantRange<float> pushConstantRange;
+    constexpr push::FragmentConstantRange<float> pushConstantRange;
     auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout(), pushConstantRange, hostAllocator);
     blendPipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,

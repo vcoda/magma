@@ -34,7 +34,7 @@ namespace magma
 
 namespace magma
 {
-    namespace pushconstant
+    namespace push
     {
         /* Defines stage flags describing the shader stages that
            will access a range of push constants. If a particular
@@ -148,5 +148,5 @@ namespace magma
                 PushConstantRange<Type>(VK_SHADER_STAGE_TASK_BIT_EXT | VK_SHADER_STAGE_MESH_BIT_EXT | VK_SHADER_STAGE_FRAGMENT_BIT, offset) {}
         };
     #endif // VK_EXT_mesh_shader
-    } // namespace pushconstant
+    } // namespace push
 } // namespace magma

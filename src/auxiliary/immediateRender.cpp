@@ -62,7 +62,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
         {
             float m[4][4];
         };
-        constexpr pushconstant::VertexConstantRange<Transform> pushConstantRange;
+        constexpr push::VertexConstantRange<Transform> pushConstantRange;
         this->layout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
     }
 constexpr
