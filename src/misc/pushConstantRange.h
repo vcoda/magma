@@ -19,7 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Push constant range that is used by pipeline layout. */
+    /* Push constants represent a high speed path to modify
+       constant data in pipelines that is expected to outperform
+       memory-backed resource updates. */
 
     struct PushConstantRange : VkPushConstantRange
     {

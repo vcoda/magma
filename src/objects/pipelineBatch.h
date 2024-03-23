@@ -27,10 +27,10 @@ namespace magma
     class PipelineCache;
     class IAllocator;
 
-    /* Base class for batching pipeline construction. The preferred
-       way is to build pipelines asynchronously in a separate thread
-       (which might be a part of a thread pool) and wait for completion
-       using std::future. */
+    /* Base class to batch creation of pipeline state objects.
+       The preferred way is to build pipelines asynchronously
+       in a separate thread (which might be a part of a thread pool)
+       and wait for completion using future. */
 
     template<class PipelineType>
     class PipelineBatch : public IDestructible,
