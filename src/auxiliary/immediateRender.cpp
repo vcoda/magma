@@ -53,7 +53,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     colorBlendState(renderstate::dontBlendRgba)
 {
     const VkDeviceSize vertexBufferSize = sizeof(Vertex) * maxVertexCount;
-    const bool barStagedMemory = device->getDeviceFeatures()->hasLocalHostVisibleMemory();
+    const bool barStagedMemory = device->getDeviceFeatures()->supportsDeviceLocalHostVisibleMemory();
     vertexBuffer = std::make_shared<DynamicVertexBuffer>(device, vertexBufferSize, barStagedMemory, allocator);
     setIdentity();
     if (!this->layout)

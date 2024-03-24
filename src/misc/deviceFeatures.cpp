@@ -168,7 +168,7 @@ bool DeviceFeatures::stippledLinesEnabled() const noexcept
     return false;
 }
 
-bool DeviceFeatures::hasLocalHostVisibleMemory() const noexcept
+bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 {
     if (auto device = parent.lock())
     {

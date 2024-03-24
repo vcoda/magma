@@ -44,7 +44,7 @@ namespace magma
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool extendedLinesEnabled() const noexcept;
         bool stippledLinesEnabled() const noexcept;
-        bool hasLocalHostVisibleMemory() const noexcept;
+        bool supportsDeviceLocalHostVisibleMemory() const noexcept;
 
     private:
         MAGMA_MAKE_SHARED(DeviceFeatures)
