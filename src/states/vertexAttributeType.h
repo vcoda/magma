@@ -76,7 +76,9 @@ namespace magma
     typedef VertexAttributeType<int64_t, 1> LargeInt;
     typedef VertexAttributeType<double, 1> Double;
 
-    /* Vectorized vertex input types. */
+    /* Vectorized vertex input types.
+       (Keep in mind that vertex attributes should be 4-byte aligned,
+       so (U)Short3 and Half3 types may not be supported). */
 
     typedef VertexAttributeType<uint8_t, 2, true> UByteNorm2;
     typedef VertexAttributeType<int8_t, 2, true> ByteNorm2;
