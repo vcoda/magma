@@ -28,12 +28,7 @@ namespace magma
     class DeviceFeatures : NonCopyable
     {
     public:
-        struct FormatFeatures
-        {
-            VkBool32 linear: 1;
-            VkBool32 optimal: 1;
-            VkBool32 buffer: 1;
-        };
+        struct FormatFeatures;
 
         FormatFeatures supportsFormatFeatures(VkFormat format,
             VkFormatFeatureFlags flags) const noexcept;
@@ -52,5 +47,12 @@ namespace magma
         friend Device;
 
         std::weak_ptr<const Device> parent;
+    };
+
+    struct DeviceFeatures::FormatFeatures
+    {
+        VkBool32 linear: 1;
+        VkBool32 optimal: 1;
+        VkBool32 buffer: 1;
     };
 } // namespace magma
