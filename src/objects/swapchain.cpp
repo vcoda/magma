@@ -110,7 +110,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
         linkNode(swapchainInfo, swapchainDeviceGroupInfo);
     }
 #endif // VK_KHR_device_group
-    if (!device->getDeviceFeatures()->checkImageUsageSupport(surface, swapchainInfo.imageUsage))
+    if (!device->getDeviceFeatures()->supportsImageUsage(surface, swapchainInfo.imageUsage))
         MAGMA_ERROR("swapchain usage not supported by surface");
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)

@@ -96,7 +96,7 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.pNext = nullptr;
     pipelineLayoutInfo.flags = flags;
-    pipelineLayoutInfo.setLayoutCount = MAGMA_COUNT(dereferencedSetLayouts);
+    pipelineLayoutInfo.setLayoutCount = dereferencedSetLayouts.size();
     pipelineLayoutInfo.pSetLayouts = dereferencedSetLayouts;
     pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();

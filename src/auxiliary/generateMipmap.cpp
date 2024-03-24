@@ -37,7 +37,7 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter f
     if (!image || !cmdBuffer)
         return false;
     std::shared_ptr<DeviceFeatures> deviceFeatures = image->getDevice()->getDeviceFeatures();
-    if (!deviceFeatures->checkFormatFeaturesSupport(image->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT).optimal)
+    if (!deviceFeatures->supportsFormatFeatures(image->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT).optimal)
         return false;
     VkExtent3D prevMipExtent = image->calculateMipExtent(baseLevel);
     for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)

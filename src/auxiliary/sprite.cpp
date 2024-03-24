@@ -50,7 +50,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height), 1}
 {
     std::shared_ptr<DeviceFeatures> deviceFeatures = device->getDeviceFeatures();
-    if (!deviceFeatures->checkFormatFeaturesSupport(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
+    if (!deviceFeatures->supportsFormatFeatures(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
         MAGMA_ERROR("image format doesn't support source blit operations");
     const Format imageFormat(format);
     if (imageFormat.blockCompressed())
@@ -87,7 +87,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height)}
 {
     std::shared_ptr<DeviceFeatures> deviceFeatures = device->getDeviceFeatures();
-    if (!deviceFeatures->checkFormatFeaturesSupport(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
+    if (!deviceFeatures->supportsFormatFeatures(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
         MAGMA_ERROR("image format doesn't support source blit operations");
     const Format imageFormat(format);
     if (imageFormat.blockCompressed())

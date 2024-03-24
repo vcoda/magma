@@ -28,9 +28,9 @@ DeviceFeatures::DeviceFeatures(std::shared_ptr<const Device> device) noexcept:
     parent(std::move(device))
 {}
 
-DeviceFeatures::FormatFeaturesSupport DeviceFeatures::checkFormatFeaturesSupport(VkFormat format, const VkFormatFeatureFlags flags) const noexcept
+DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat format, VkFormatFeatureFlags flags) const noexcept
 {
-    FormatFeaturesSupport result = {};
+    FormatFeatures support = {};
     if (auto device = parent.lock())
     {
         std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
@@ -38,14 +38,14 @@ DeviceFeatures::FormatFeaturesSupport DeviceFeatures::checkFormatFeaturesSupport
         const VkFormatFeatureFlags linearTilingFlags = (properties.linearTilingFeatures & flags);
         const VkFormatFeatureFlags optimalTilingFlags = (properties.optimalTilingFeatures & flags);
         const VkFormatFeatureFlags bufferFlags = (properties.bufferFeatures & flags);
-        result.linear = (linearTilingFlags == flags);
-        result.optimal = (optimalTilingFlags == flags);
-        result.buffer = (bufferFlags == flags);
+        support.linear = (linearTilingFlags == flags);
+        support.optimal = (optimalTilingFlags == flags);
+        support.buffer = (bufferFlags == flags);
     }
-    return result;
+    return support;
 }
 
-bool DeviceFeatures::checkImageUsageSupport(std::shared_ptr<const Surface> surface, VkImageUsageFlags flags)
+bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, VkImageUsageFlags flags) const
 {
     if (auto device = parent.lock())
     {
@@ -60,11 +60,21 @@ bool DeviceFeatures::checkImageUsageSupport(std::shared_ptr<const Surface> surfa
             VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
             VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT,
             VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT,
-        #ifdef VK_NV_shading_rate_image
-            VK_IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV,
-        #endif
         #ifdef VK_EXT_fragment_density_map
-            VK_IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT
+            VK_IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT,
+        #endif
+        #ifdef VK_KHR_fragment_shading_rate
+            VK_IMAGE_USAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR,
+        #endif
+        #ifdef VK_EXT_attachment_feedback_loop_layout
+            VK_IMAGE_USAGE_ATTACHMENT_FEEDBACK_LOOP_BIT_EXT,
+        #endif
+        #ifdef VK_HUAWEI_invocation_mask
+            VK_IMAGE_USAGE_INVOCATION_MASK_BIT_HUAWEI,
+        #endif
+        #ifdef VK_QCOM_image_processing
+            VK_IMAGE_USAGE_SAMPLE_WEIGHT_BIT_QCOM,
+            VK_IMAGE_USAGE_SAMPLE_BLOCK_MATCH_BIT_QCOM,
         #endif
             })
         {
@@ -76,6 +86,26 @@ bool DeviceFeatures::checkImageUsageSupport(std::shared_ptr<const Surface> surfa
         }
     }
     return true;
+}
+
+bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
+{
+    if (auto device = parent.lock())
+    {
+        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
+        for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
+        {
+            constexpr VkMemoryPropertyFlags deviceLocalHostVisibleFlags =
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+            const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
+            if ((memoryType.propertyFlags & deviceLocalHostVisibleFlags) == deviceLocalHostVisibleFlags)
+                return true;
+        }
+    }
+    return false;
 }
 
 bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept
@@ -165,26 +195,6 @@ bool DeviceFeatures::stippledLinesEnabled() const noexcept
         }
     }
 #endif // VK_EXT_line_rasterization
-    return false;
-}
-
-bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
-{
-    if (auto device = parent.lock())
-    {
-        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-        const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
-        for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
-        {
-            const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
-            const VkMemoryPropertyFlags deviceLocalHostVisible =
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-            if ((memoryType.propertyFlags & deviceLocalHostVisible) == deviceLocalHostVisible)
-                return true;
-        }
-    }
     return false;
 }
 } // namespace magma

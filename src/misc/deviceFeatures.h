@@ -28,23 +28,23 @@ namespace magma
     class DeviceFeatures : NonCopyable
     {
     public:
-        struct FormatFeaturesSupport
+        struct FormatFeatures
         {
             VkBool32 linear: 1;
             VkBool32 optimal: 1;
             VkBool32 buffer: 1;
         };
 
-        FormatFeaturesSupport checkFormatFeaturesSupport(VkFormat format,
+        FormatFeatures supportsFormatFeatures(VkFormat format,
             VkFormatFeatureFlags flags) const noexcept;
-        bool checkImageUsageSupport(std::shared_ptr<const Surface> surface,
-            VkImageUsageFlags flags);
+        bool supportsImageUsage(std::shared_ptr<const Surface> surface,
+            VkImageUsageFlags flags) const;
+        bool supportsDeviceLocalHostVisibleMemory() const noexcept;
         bool maintenanceEnabled(uint8_t index) const noexcept;
         bool negativeViewportHeightEnabled() const noexcept;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool extendedLinesEnabled() const noexcept;
         bool stippledLinesEnabled() const noexcept;
-        bool supportsDeviceLocalHostVisibleMemory() const noexcept;
 
     private:
         MAGMA_MAKE_SHARED(DeviceFeatures)

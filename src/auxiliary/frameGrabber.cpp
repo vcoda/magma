@@ -44,8 +44,8 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::s
     dstImage = std::make_shared<LinearTiledImage2D>(device, VK_FORMAT_R8G8B8A8_UNORM,
         srcImage->getExtent(), allocator);
     std::shared_ptr<DeviceFeatures> deviceFeatures = device->getDeviceFeatures();
-    const bool srcBlit = deviceFeatures->checkFormatFeaturesSupport(srcImage->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal;
-    const bool dstBlit = deviceFeatures->checkFormatFeaturesSupport(dstImage->getFormat(), VK_FORMAT_FEATURE_BLIT_DST_BIT).linear;
+    const bool srcBlit = deviceFeatures->supportsFormatFeatures(srcImage->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal;
+    const bool dstBlit = deviceFeatures->supportsFormatFeatures(dstImage->getFormat(), VK_FORMAT_FEATURE_BLIT_DST_BIT).linear;
     cmdBuffer->begin();
     {
         const VkImageLayout oldLayout = srcImage->getLayout();
