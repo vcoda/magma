@@ -36,7 +36,7 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter f
     MAGMA_ASSERT(cmdBuffer);
     if (!image || !cmdBuffer)
         return false;
-    std::shared_ptr<DeviceFeatures> deviceFeatures = image->getDevice()->getDeviceFeatures();
+    std::shared_ptr<DeviceFeatures> deviceFeatures = image->getDevice()->getFeatures();
     if (!deviceFeatures->supportsFormatFeatures(image->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT).optimal)
         return false;
     VkExtent3D prevMipExtent = image->calculateMipExtent(baseLevel);

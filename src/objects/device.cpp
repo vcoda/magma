@@ -110,7 +110,7 @@ Device::~Device()
     vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-const std::shared_ptr<DeviceFeatures>& Device::getDeviceFeatures() const
+const std::shared_ptr<DeviceFeatures>& Device::getFeatures() const
 {
     if (!features)
         features = DeviceFeatures::makeShared((shared_from_this()));

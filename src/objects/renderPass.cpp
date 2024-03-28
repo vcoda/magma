@@ -174,7 +174,7 @@ bool RenderPass::hasClearOp() const noexcept
 VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (device->getDeviceFeatures()->separateDepthStencilLayoutsEnabled())
+    if (device->getFeatures()->separateDepthStencilLayoutsEnabled())
     {
         if (format.depth())
             return VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR;

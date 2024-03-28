@@ -107,7 +107,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         linkNode(swapchainInfo, swapchainDeviceGroupInfo);
     }
 #endif // VK_KHR_device_group
-    if (!device->getDeviceFeatures()->supportsImageUsage(surface, swapchainInfo.imageUsage))
+    if (!device->getFeatures()->supportsImageUsage(surface, swapchainInfo.imageUsage))
         MAGMA_ERROR("swapchain usage not supported by surface");
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)

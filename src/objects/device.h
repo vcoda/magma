@@ -52,7 +52,7 @@ namespace magma
         const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
         const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
-        const std::shared_ptr<DeviceFeatures>& getDeviceFeatures() const;
+        const std::shared_ptr<DeviceFeatures>& getFeatures() const;
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         std::shared_ptr<Queue> getQueueForFamily(uint32_t queueFamilyIndex) const;
         void updateDescriptorSets(uint32_t descriptorWriteCount,

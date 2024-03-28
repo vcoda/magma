@@ -42,7 +42,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     wideLinesEnabled(renderPass->getDevice()->getEnabledFeatures().wideLines),
-    stippledLinesEnabled(renderPass->getDevice()->getDeviceFeatures()->stippledLinesEnabled()),
+    stippledLinesEnabled(renderPass->getDevice()->getFeatures()->stippledLinesEnabled()),
     device(renderPass->getDevice()),
     renderPass(std::move(renderPass)),
     layout(std::move(layout)),
@@ -53,7 +53,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     colorBlendState(renderstate::dontBlendRgba)
 {
     const VkDeviceSize vertexBufferSize = sizeof(Vertex) * maxVertexCount;
-    const bool barStagedMemory = device->getDeviceFeatures()->supportsDeviceLocalHostVisibleMemory();
+    const bool barStagedMemory = device->getFeatures()->supportsDeviceLocalHostVisibleMemory();
     vertexBuffer = std::make_shared<DynamicVertexBuffer>(device, vertexBufferSize, barStagedMemory, allocator);
     setIdentity();
     if (!this->layout)

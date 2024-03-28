@@ -40,7 +40,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
     state(State::Initial),
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
-    negativeViewportHeightEnabled(device->getDeviceFeatures()->negativeViewportHeightEnabled()),
+    negativeViewportHeightEnabled(device->getFeatures()->negativeViewportHeightEnabled()),
     withinRenderPass(VK_FALSE),
     withinConditionalRendering(VK_FALSE),
     withinTransformFeedback(VK_FALSE),
@@ -57,7 +57,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     state(State::Initial),
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
-    negativeViewportHeightEnabled(device->getDeviceFeatures()->negativeViewportHeightEnabled()),
+    negativeViewportHeightEnabled(device->getFeatures()->negativeViewportHeightEnabled()),
     withinRenderPass(VK_FALSE),
     withinConditionalRendering(VK_FALSE),
     withinTransformFeedback(VK_FALSE),
@@ -200,7 +200,7 @@ void CommandBuffer::setViewport(float x, float y, float width, float height,
     viewport.y = y;
     if (height < 0)
     {
-        if (device->getDeviceFeatures()->maintenanceEnabled(1))
+        if (device->getFeatures()->maintenanceEnabled(1))
             viewport.y = -height - y; // Move origin to bottom left
     }
     viewport.width = width;
