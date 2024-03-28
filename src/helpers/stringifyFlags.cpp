@@ -194,6 +194,31 @@ std::string stringifyShaderStageFlags(VkShaderStageFlags flags)
     return out.str();
 }
 
+std::string strinfigyRenderPassFlags(VkRenderPassCreateFlags flags)
+{
+    if (!flags)
+        return "0";
+    std::ostringstream out;
+    for (VkAttachmentDescriptionFlags bit: {
+    #ifdef VK_QCOM_render_pass_transform
+        VK_RENDER_PASS_CREATE_TRANSFORM_BIT_QCOM,
+    #endif
+        VK_RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM
+    }) stringifyOredBit(flags, bit, out);
+    return out.str();
+}
+
+std::string strinfigyAttachmentDescriptionFlags(VkAttachmentDescriptionFlags flags)
+{
+    if (!flags)
+        return "0";
+    std::ostringstream out;
+    for (VkAttachmentDescriptionFlags bit: {
+        VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT
+    }) stringifyOredBit(flags, bit, out);
+    return out.str();
+}
+
 std::string stringifyColorMask(VkColorComponentFlags flags)
 {
     if (!flags)
