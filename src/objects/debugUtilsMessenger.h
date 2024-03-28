@@ -53,6 +53,11 @@ namespace magma
             VkDebugUtilsMessageTypeFlagsEXT messageTypes,
             const char *messageIdName,
             int32_t messageIdNumber,
+            const char *message) const noexcept;
+        void messageFormat(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+            VkDebugUtilsMessageTypeFlagsEXT messageTypes,
+            const char *messageIdName,
+            int32_t messageIdNumber,
             const char *format, ...) const noexcept;
 
     private:

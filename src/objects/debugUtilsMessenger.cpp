@@ -62,22 +62,11 @@ DebugUtilsMessenger::~DebugUtilsMessenger()
 }
 
 void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes,
-    const char *messageIdName, int32_t messageIdNumber, const char *format, ...) const noexcept
+    const char *messageIdName, int32_t messageIdNumber, const char *message) const noexcept
 {
-    MAGMA_ASSERT(format);
     MAGMA_INSTANCE_EXTENSION(vkSubmitDebugUtilsMessageEXT);
     if (vkSubmitDebugUtilsMessageEXT)
     {
-        MAGMA_ASSERT(strlen(format) < MAGMA_MAX_STRING);
-        char message[MAGMA_MAX_STRING];
-        va_list args;
-        va_start(args, format);
-#ifdef _MSC_VER
-        vsprintf_s(message, format, args);
-#else
-        vsprintf(message, format, args);
-#endif
-        va_end(args);
         VkDebugUtilsMessengerCallbackDataEXT data;
         data.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CALLBACK_DATA_EXT;
         data.pNext = nullptr;
@@ -93,6 +82,22 @@ void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT message
         data.pObjects = nullptr;
         vkSubmitDebugUtilsMessageEXT(MAGMA_HANDLE(instance), messageSeverity, messageTypes, &data);
     }
+}
+
+void DebugUtilsMessenger::messageFormat(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes,
+    const char *messageIdName, int32_t messageIdNumber, const char *format, ...) const noexcept
+{
+    MAGMA_ASSERT(strlen(format) < MAGMA_MAX_STRING);
+    char buffer[MAGMA_MAX_STRING];
+    va_list args;
+    va_start(args, format);
+#ifdef _MSC_VER
+    vsprintf_s(buffer, format, args);
+#else
+    vsprintf(buffer, format, args);
+#endif
+    va_end(args);
+    message(messageSeverity, messageTypes, messageIdName, messageIdNumber, buffer);
 }
 #endif // VK_EXT_debug_utils
 } // namespace magma

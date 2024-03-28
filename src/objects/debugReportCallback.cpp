@@ -64,26 +64,30 @@ DebugReportCallback::~DebugReportCallback()
 }
 
 void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType objectType,
-    uint64_t object, std::size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const noexcept
+    uint64_t object, std::size_t location, int32_t messageCode, const char *layerPrefix, const char *message) const noexcept
 {
-    MAGMA_ASSERT(layerPrefix);
-    MAGMA_ASSERT(format);
     MAGMA_INSTANCE_EXTENSION(vkDebugReportMessageEXT);
     if (vkDebugReportMessageEXT)
     {
-        MAGMA_ASSERT(strlen(format) < MAGMA_MAX_STRING);
-        char message[MAGMA_MAX_STRING];
-        va_list args;
-        va_start(args, format);
-#ifdef _MSC_VER
-        vsprintf_s(message, format, args);
-#else
-        vsprintf(message, format, args);
-#endif
-        va_end(args);
-        const VkDebugReportObjectTypeEXT debugObjectType = helpers::objectToDebugReportType(objectType);
+        VkDebugReportObjectTypeEXT debugObjectType = helpers::objectToDebugReportType(objectType);
         vkDebugReportMessageEXT(MAGMA_HANDLE(instance), flags, debugObjectType, object, location, messageCode, layerPrefix, message);
     }
+}
+
+void DebugReportCallback::messageFormat(VkDebugReportFlagsEXT flags, VkObjectType objectType,
+    uint64_t object, std::size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const noexcept
+{
+    MAGMA_ASSERT(strlen(format) < MAGMA_MAX_STRING);
+    char buffer[MAGMA_MAX_STRING];
+    va_list args;
+    va_start(args, format);
+#ifdef _MSC_VER
+    vsprintf_s(buffer, format, args);
+#else
+    vsprintf(buffer, format, args);
+#endif
+    va_end(args);
+    message(flags, objectType, object, location, messageCode, layerPrefix, buffer);
 }
 #endif // VK_EXT_debug_report
 } // namespace magma
