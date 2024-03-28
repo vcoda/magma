@@ -41,12 +41,12 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
 {
     uint32_t multisampleAttachmentCount = 0;
     uint32_t colorAttachmentCount = 0;
-    for (auto const& attachmentDesc: attachments)
+    for (auto const& attachment: attachments)
     {
-        const Format format(attachmentDesc.format);
+        const Format format(attachment.format);
         if (!format.depth() && !format.stencil() && !format.depthStencil())
         {
-            if (attachmentDesc.samples > 1)
+            if (attachment.samples > 1)
                 ++multisampleAttachmentCount;
             else
                 ++colorAttachmentCount;
@@ -59,21 +59,21 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
     bool hasDepthStencilAttachment = false;
     uint32_t attachmentIndex = 0, colorIndex = 0, resolveIndex = 0;
-    for (auto const& attachmentDesc: attachments)
+    for (auto const& attachment: attachments)
     {
-        const Format format(attachmentDesc.format);
+        const Format format(attachment.format);
         if (format.depth() || format.stencil() || format.depthStencil())
         {
             if (VK_IMAGE_LAYOUT_UNDEFINED == depthStencilAttachment.layout)
             {
-                const VkImageLayout depthStencilLayout = optimalDepthStencilLayout(format);
+                VkImageLayout depthStencilLayout = optimalDepthStencilLayout(format);
                 depthStencilAttachment = {attachmentIndex, depthStencilLayout};
                 hasDepthStencilAttachment = true;
             }
         }
         else
         {
-            if (attachmentDesc.samples > 1 || resolveAttachmentCount < 1)
+            if ((attachment.samples > 1) || (resolveAttachmentCount < 1))
                 colorAttachments[colorIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
             else
                 resolveAttachments[resolveIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
