@@ -39,23 +39,24 @@ namespace magma
         explicit RenderPass(std::shared_ptr<Device> device,
             const AttachmentDescription& attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            VkRenderPassCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
+
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            VkRenderPassCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        explicit RenderPass(std::shared_ptr<Device> device,
-            const std::vector<AttachmentDescription>& attachments,
-            const std::vector<SubpassDescription>& subpasses,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            const StructureChain& extendedInfo = StructureChain());
+
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<SubpassDescription>& subpasses,
             const std::vector<SubpassDependency>& dependencies,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            VkRenderPassCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~RenderPass();
+        VkRenderPassCreateFlags getFlags() const noexcept { return flags; }
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
         hash_t getHash() const noexcept { return hash; }
         bool usesClear() const noexcept;
@@ -64,7 +65,8 @@ namespace magma
     protected:
         RenderPass(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator,
-            const std::vector<AttachmentDescription>& attachments);
+            const std::vector<AttachmentDescription>& attachments,
+            VkRenderPassCreateFlags flags);
 
     protected:
         VkImageLayout optimalDepthStencilLayout(const Format& format) const;
@@ -78,6 +80,7 @@ namespace magma
         void end(const FramebufferAttachments& attachments) const noexcept;
 
     protected:
+        const VkRenderPassCreateFlags flags;
         std::vector<AttachmentDescription> attachments;
         hash_t hash;
         friend class CommandBuffer;

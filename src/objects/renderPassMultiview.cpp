@@ -38,7 +38,7 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     const std::vector<uint32_t>& viewMasks, const std::vector<int32_t> viewOffsets, const std::vector<uint32_t>& correlationMasks,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    RenderPass(std::move(device), std::move(allocator), attachments),
+    RenderPass(std::move(device), std::move(allocator), attachments, 0),
     viewMasks(viewMasks),
     viewOffsets(viewOffsets),
     correlationMasks(correlationMasks)

@@ -32,8 +32,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<AttachmentDescription>& attachments,
-    std::shared_ptr<IAllocator> allocator /* nullptr */, const StructureChain& extendedInfo /* default */):
-    RenderPass(std::move(device), std::move(allocator), attachments)
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkRenderPassCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
+    RenderPass(std::move(device), std::move(allocator), attachments, flags)
 {
     uint32_t multisampleAttachmentCount = 0;
     uint32_t colorAttachmentCount = 0;
@@ -120,14 +122,12 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
         hash = core::hashCombine(hash, dependency.hash());
 }
 
-RenderPass::RenderPass(std::shared_ptr<Device> device,
-    const std::vector<AttachmentDescription>& attachments,
-    const std::vector<SubpassDescription>& subpasses,
-    const std::vector<SubpassDependency>& dependencies,
+RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<AttachmentDescription>& attachments,
+    const std::vector<SubpassDescription>& subpasses, const std::vector<SubpassDependency>& dependencies,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkRenderPassCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_RENDER_PASS, std::move(device), std::move(allocator)),
-    hash(0)
+    RenderPass(std::move(device), std::move(allocator), attachments, flags)
 {
     VkRenderPassCreateInfo renderPassInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
