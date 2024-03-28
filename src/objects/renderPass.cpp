@@ -171,6 +171,16 @@ bool RenderPass::hasClearOp() const noexcept
     return it != attachments.end();
 }
 
+bool RenderPass::usesMultisampling() const noexcept
+{
+    auto it = std::find_if(attachments.begin(), attachments.end(),
+        [](auto const& attachment)
+        {
+            return (attachment.samples > 1);
+        });
+    return it != attachments.end();
+}
+
 VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
