@@ -27,6 +27,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/deviceFeatures.h"
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"
+#include "../helpers/streamInsertOperators.h"
+#include "../helpers/stringifyFlags.h"
 #include "../core/foreach.h"
 
 namespace magma
@@ -281,5 +283,33 @@ void RenderPass::end(const FramebufferAttachments& attachments) const noexcept
             }
             image->setLayout(attachmentDesc->finalLayout);
         });
+}
+
+std::ostream& operator<<(std::ostream& out, const RenderPass& renderPass)
+{
+    out << "VkRenderPassCreateInfo [" << std::endl
+        << "\tflags: " << helpers::strinfigyRenderPassFlags(renderPass.flags) << std::endl
+        << "\tattachmentCount: " << renderPass.attachments.size() << std::endl
+        << "\tpAttachments: " << std::endl;
+    for (auto const& attachment: renderPass.attachments)
+    {
+        out << "\t[" << std::endl
+            << "\t\tflags: " << helpers::strinfigyAttachmentDescriptionFlags(attachment.flags) << std::endl
+            << "\t\tformat: " << attachment.format << std::endl
+            << "\t\tsamples: " << attachment.samples << std::endl
+            << "\t\tloadOp: " << attachment.loadOp << std::endl
+            << "\t\tstoreOp: " << attachment.storeOp << std::endl
+            << "\t\tstencilLoadOp: " << attachment.stencilLoadOp << std::endl
+            << "\t\tstencilStoreOp: " << attachment.stencilStoreOp << std::endl
+            << "\t\tinitialLayout: " << attachment.initialLayout << std::endl
+            << "\t\tfinalLayout: " << attachment.finalLayout << std::endl
+            << "\t]" << std::endl;
+    }
+    // subpassCount
+    // pSubpasses
+    // dependencyCount
+    // pDependencies
+    out << "]";
+    return out;
 }
 } // namespace magma

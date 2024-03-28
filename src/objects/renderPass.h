@@ -61,6 +61,7 @@ namespace magma
         hash_t getHash() const noexcept { return hash; }
         bool usesClear() const noexcept;
         bool usesMultisampling() const noexcept;
+        friend std::ostream& operator<<(std::ostream&, const RenderPass&);
 
     protected:
         RenderPass(std::shared_ptr<Device> device,
