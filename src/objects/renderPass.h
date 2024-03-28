@@ -58,7 +58,7 @@ namespace magma
         ~RenderPass();
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
         hash_t getHash() const noexcept { return hash; }
-        bool hasClearOp() const noexcept;
+        bool usesClear() const noexcept;
         bool usesMultisampling() const noexcept;
 
     protected:

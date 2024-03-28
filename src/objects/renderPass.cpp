@@ -161,12 +161,12 @@ RenderPass::~RenderPass()
     vkDestroyRenderPass(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-bool RenderPass::hasClearOp() const noexcept
+bool RenderPass::usesClear() const noexcept
 {
     auto it = std::find_if(attachments.begin(), attachments.end(),
         [](auto const& attachment)
         {
-            return VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp;
+            return (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp);
         });
     return it != attachments.end();
 }

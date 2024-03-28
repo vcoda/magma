@@ -409,7 +409,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     if (clearValues.empty()) {
-        MAGMA_ASSERT(!renderPass->hasClearOp());
+        MAGMA_ASSERT(!renderPass->usesClear());
     }
     VkRenderPassBeginInfo renderPassBeginInfo;
     renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -436,7 +436,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     if (clearValues.empty()) {
-        MAGMA_ASSERT(!renderPass->hasClearOp());
+        MAGMA_ASSERT(!renderPass->usesClear());
     }
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
     for (const auto& attachment : attachments)
@@ -515,7 +515,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     if (clearValues.empty()) {
-        MAGMA_ASSERT(!renderPass->hasClearOp());
+        MAGMA_ASSERT(!renderPass->usesClear());
     }
     VkRenderPassBeginInfo renderPassBeginInfo;
     VkDeviceGroupRenderPassBeginInfo renderPassBeginDeviceGroupInfo;
@@ -549,7 +549,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     if (clearValues.empty()) {
-        MAGMA_ASSERT(!renderPass->hasClearOp());
+        MAGMA_ASSERT(!renderPass->usesClear());
     }
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
     for (const auto& attachment : attachments)
