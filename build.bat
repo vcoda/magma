@@ -205,7 +205,7 @@ src\shaders\shaderReflection.cpp ^
 src\shaders\specialization.cpp ^
 src\states\colorBlendState.cpp ^
 src\states\colorBlendStateAdvanced.cpp ^
-src\states\formattedOutput ^
+src\states\formattedOutput.cpp ^
 src\states\multisampleState.cpp ^
 src\states\multiViewportState.cpp ^
 src\states\rasterizationState.cpp ^
