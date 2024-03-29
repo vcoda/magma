@@ -1,20 +1,8 @@
 namespace magma
 {
 template<class PipelineType>
-inline std::future<void> PipelineBatch<PipelineType>::buildPipelinesAsync(std::shared_ptr<Device> device,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-    std::shared_ptr<IAllocator> allocator /* nullptr */)
-{
-    return std::async(std::launch::async,
-        [this, device, pipelineCache, allocator]()
-        {
-            buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
-        });
-}
-
-template<class PipelineType>
 template<class PipelineInfoType>
-inline void PipelineBatch<PipelineType>::fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept
+inline void TPipelineBatch<PipelineType>::fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept
 {
     collectShaderStageInfos();
     uint32_t offset = 0;
@@ -27,16 +15,19 @@ inline void PipelineBatch<PipelineType>::fixup(std::vector<PipelineInfoType>& pi
 }
 
 template<class PipelineType>
-inline void PipelineBatch<PipelineType>::postCreate()
+inline void TPipelineBatch<PipelineType>::postCreate()
 {   // Free storage that had to be preserved until vkCreate*Pipelines() call
     pipelines.clear();
+#ifdef VK_AMD_pipeline_compiler_control
+    pipelineCompilerControlInfos.clear();
+#endif
 #ifdef VK_EXT_pipeline_creation_feedback
     creationFeedbackInfos.clear();
 #endif
 }
 
 template<class PipelineType>
-inline void PipelineBatch<PipelineType>::postBuild()
+inline void TPipelineBatch<PipelineType>::postBuild()
 {   // Free storage that had to be preserved until objects are constructed
     stages.clear();
     layouts.clear();
@@ -45,20 +36,5 @@ inline void PipelineBatch<PipelineType>::postBuild()
     creationFeedbacks.clear();
 #endif
     hashes.clear();
-}
-
-template<class PipelineType>
-inline void PipelineBatch<PipelineType>::collectShaderStageInfos() const
-{
-    std::size_t stageCount = 0;
-    for (const auto& shaderStages: stages)
-        stageCount += shaderStages.size();
-    shaderStageInfos.clear();
-    shaderStageInfos.reserve(stageCount);
-    for (const auto& shaderStages: stages)
-    {   // Copy to array of Vulkan structures due to alignment
-        for (const auto& stage: shaderStages)
-            shaderStageInfos.push_back(stage);
-    }
 }
 } // namespace magma

@@ -27,14 +27,12 @@ namespace magma
     class PipelineCache;
     class IAllocator;
 
-    /* Base class to batch creation of pipeline state objects.
+    /* Base class to batch compilation of pipeline state objects.
        The preferred way is to build pipelines asynchronously
        in a separate thread (which might be a part of a thread pool)
        and wait for completion using future. */
 
-    template<class PipelineType>
-    class PipelineBatch : public IDestructible,
-        /* private */ NonCopyable
+    class PipelineBatch : public IDestructible
     {
     public:
         virtual void buildPipelines(std::shared_ptr<Device> device,
@@ -43,6 +41,34 @@ namespace magma
         std::future<void> buildPipelinesAsync(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr);
+    #ifdef VK_AMD_pipeline_compiler_control
+        static void setCompilerControlFlags(VkPipelineCompilerControlFlagsAMD flags) noexcept { compilerControlFlags = flags; }
+        static VkPipelineCompilerControlFlagsAMD getCompilerControlFlags() noexcept { return compilerControlFlags; }
+    #endif // VK_AMD_pipeline_compiler_control
+
+    protected:
+        void collectShaderStageInfos() const;
+
+        std::list<std::vector<PipelineShaderStage>> stages;
+        std::list<std::shared_ptr<PipelineLayout>> layouts;
+        std::list<std::shared_ptr<Pipeline>> basePipelines;
+    #ifdef VK_AMD_pipeline_compiler_control
+        std::list<VkPipelineCompilerControlCreateInfoAMD> pipelineCompilerControlInfos;
+        static VkPipelineCompilerControlFlagsAMD compilerControlFlags;
+    #endif
+    #ifdef VK_EXT_pipeline_creation_feedback
+        std::list<VkPipelineCreationFeedbackEXT> creationFeedbacks;
+        std::list<std::vector<VkPipelineCreationFeedbackEXT>> stageCreationFeedbacks;
+        std::list<VkPipelineCreationFeedbackCreateInfoEXT> creationFeedbackInfos;
+    #endif // VK_EXT_pipeline_creation_feedback
+        std::vector<hash_t> hashes;
+        mutable std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
+    };
+
+    template<class PipelineType>
+    class TPipelineBatch : public PipelineBatch
+    {
+    public:
         uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(pipelines); }
         const std::shared_ptr<PipelineType>& getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 
@@ -53,20 +79,6 @@ namespace magma
         void postBuild();
 
         std::vector<std::shared_ptr<PipelineType>> pipelines;
-        std::list<std::vector<PipelineShaderStage>> stages;
-        std::list<std::shared_ptr<PipelineLayout>> layouts;
-        std::list<std::shared_ptr<Pipeline>> basePipelines;
-    #ifdef VK_EXT_pipeline_creation_feedback
-        std::list<VkPipelineCreationFeedbackEXT> creationFeedbacks;
-        std::list<std::vector<VkPipelineCreationFeedbackEXT>> stageCreationFeedbacks;
-        std::list<VkPipelineCreationFeedbackCreateInfoEXT> creationFeedbackInfos;
-    #endif // VK_EXT_pipeline_creation_feedback
-        std::vector<hash_t> hashes;
-
-    private:
-        void collectShaderStageInfos() const;
-
-        mutable std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
     };
 } // namespace magma
 

@@ -101,8 +101,19 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
     pipelineInfo.basePipelineIndex = -1;
+#ifdef VK_AMD_pipeline_compiler_control
+    if (renderPass->getDevice()->extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))
+    {
+        VkPipelineCompilerControlCreateInfoAMD pipelineCompilerControlInfo;
+        pipelineCompilerControlInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD;
+        pipelineCompilerControlInfo.pNext = nullptr;
+        pipelineCompilerControlInfo.compilerControlFlags = compilerControlFlags;
+        pipelineCompilerControlInfos.push_back(pipelineCompilerControlInfo);
+        linkNode(pipelineInfo, pipelineCompilerControlInfos.back());
+    }
+#endif // VK_AMD_pipeline_compiler_control
 #ifdef VK_EXT_pipeline_creation_feedback
-    if (layout->getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    if (renderPass->getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
         creationFeedbacks.push_back(VkPipelineCreationFeedbackEXT());
         stageCreationFeedbacks.emplace_back(pipelineInfo.stageCount);
@@ -113,7 +124,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
         creationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
         creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.back().data();
         creationFeedbackInfos.push_back(creationFeedbackInfo);
-        pipelineInfo.pNext = &creationFeedbackInfos.back();
+        linkNode(pipelineInfo, creationFeedbackInfos.back());
     }
 #endif // VK_EXT_pipeline_creation_feedback
     pipelineInfos.push_back(pipelineInfo);

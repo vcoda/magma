@@ -1277,6 +1277,9 @@
     <ClCompile Include="..\..\src\exceptions\reflectionErrorResult.cpp">
       <Filter>Source Files\exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\objects\pipelineBatch.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\objects\baseDeviceMemory.inl">

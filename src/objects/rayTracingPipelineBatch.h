@@ -31,7 +31,7 @@ namespace magma
        program, it may be more efficient for graphics driver
        to create all of them at once. */
 
-    class RayTracingPipelineBatch : public PipelineBatch<RayTracingPipeline>
+    class RayTracingPipelineBatch : public TPipelineBatch<RayTracingPipeline>
     {
     public:
         explicit RayTracingPipelineBatch(uint32_t capacity = 32);

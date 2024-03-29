@@ -167,6 +167,7 @@ src\objects\physicalDevice.cpp ^
 src\objects\physicalDeviceFeatures.cpp ^
 src\objects\physicalDeviceGroup.cpp ^
 src\objects\pipeline.cpp ^
+src\objects\pipelineBatch.cpp ^
 src\objects\pipelineCache.cpp ^
 src\objects\pipelineLayout.cpp ^
 src\objects\primaryCommandBuffer.cpp ^
@@ -339,6 +340,7 @@ physicalDevice.obj ^
 physicalDeviceFeatures.obj ^
 physicalDeviceGroup.obj ^
 pipeline.obj ^
+pipelineBatch.obj ^
 pipelineCache.obj ^
 pipelineLayout.obj ^
 primaryCommandBuffer.obj ^

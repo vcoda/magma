@@ -29,7 +29,7 @@ namespace magma
        program, it may be more efficient for graphics driver
        to create all of them at once. */
 
-    class ComputePipelineBatch : public PipelineBatch<ComputePipeline>
+    class ComputePipelineBatch : public TPipelineBatch<ComputePipeline>
     {
     public:
         explicit ComputePipelineBatch(uint32_t capacity = 32);

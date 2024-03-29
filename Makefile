@@ -134,6 +134,7 @@ SRC_OBJS= \
 	src/objects/physicalDeviceFeatures.o \
 	src/objects/physicalDeviceGroup.o \
 	src/objects/pipeline.o \
+	src/objects/pipelineBatch.o \
 	src/objects/pipelineCache.o \
 	src/objects/pipelineLayout.o \
 	src/objects/primaryCommandBuffer.o \
