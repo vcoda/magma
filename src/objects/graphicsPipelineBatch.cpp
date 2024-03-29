@@ -69,6 +69,8 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     depthStencilStates.push_back(depthStencilState);
     colorBlendStates.push_back(colorBlendState);
     dynamicStates.push_back(dynamicStates_);
+    if (!layout)
+        layout = std::make_shared<PipelineLayout>(renderPass->getDevice());
     layouts.push_back(layout);
     renderPasses.push_back(renderPass);
     basePipelines.push_back(basePipeline);
@@ -96,8 +98,8 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     pipelineInfo.pDepthStencilState = &depthStencilStates.back();
     pipelineInfo.pColorBlendState = &colorBlendStates.back();
     pipelineInfo.pDynamicState = &dynamicStateInfos.back();
-    pipelineInfo.layout = MAGMA_OPTIONAL_HANDLE(layouts.back());
-    pipelineInfo.renderPass = MAGMA_OPTIONAL_HANDLE(renderPasses.back());
+    pipelineInfo.layout = *layout;
+    pipelineInfo.renderPass = *renderPass;
     pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
     pipelineInfo.basePipelineIndex = -1;
