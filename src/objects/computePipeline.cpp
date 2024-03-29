@@ -79,11 +79,9 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     #endif
         MAGMA_HANDLE_RESULT(result, "failed to create compute pipeline");
     }
-    hash = core::hashArgs(
-        pipelineInfo.sType,
-        pipelineInfo.flags);
+    hash = core::hash(flags);
     hash = core::hashCombine(hash, shaderStage.getHash());
-    hash = core::hashCombine(hash, this->layout->getHash());
+    hash = core::hashCombine(hash, layout->getHash());
 }
 
 ComputePipeline::ComputePipeline(VkPipeline handle_,

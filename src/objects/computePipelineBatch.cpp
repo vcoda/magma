@@ -66,9 +66,7 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     }
 #endif // VK_EXT_pipeline_creation_feedback
     pipelineInfos.push_back(pipelineInfo);
-    hash_t hash = core::hashArgs(
-        pipelineInfo.sType,
-        pipelineInfo.flags);
+    hash_t hash = core::hash(flags);
     hash = core::hashCombine(hash, shaderStage.getHash());
     hash = core::hashCombine(hash, layout->getHash());
     hashes.push_back(hash);
