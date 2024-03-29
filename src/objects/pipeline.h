@@ -57,6 +57,10 @@ namespace magma
         uint64_t getCreationDuration() const noexcept;
         uint64_t getStageCreationDuration(uint32_t stageIndex) const noexcept;
     #endif // VK_EXT_pipeline_creation_feedback
+    #ifdef VK_AMD_pipeline_compiler_control
+        static void setCompilerControlFlags(VkPipelineCompilerControlFlagsAMD flags) noexcept { compilerControlFlags = flags; }
+        static VkPipelineCompilerControlFlagsAMD getCompilerControlFlags() noexcept { return compilerControlFlags; }
+    #endif // VK_AMD_pipeline_compiler_control
 
     protected:
         Pipeline(VkPipelineBindPoint bindPoint,
@@ -80,6 +84,9 @@ namespace magma
         std::vector<VkPipelineCreationFeedbackEXT> stageCreationFeedbacks;
     #endif // VK_EXT_pipeline_creation_feedback
         hash_t hash;
+    #ifdef VK_AMD_pipeline_compiler_control
+        static VkPipelineCompilerControlFlagsAMD compilerControlFlags;
+    #endif
     };
 } // namespace magma
 

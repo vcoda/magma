@@ -47,17 +47,27 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     pipelineInfo.layout = *layout;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
     pipelineInfo.basePipelineIndex = -1;
+#ifdef VK_AMD_pipeline_compiler_control
+    VkPipelineCompilerControlCreateInfoAMD pipelineCompilerControlInfo;
+    if (device->extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))
+    {
+        pipelineCompilerControlInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD;
+        pipelineCompilerControlInfo.pNext = nullptr;
+        pipelineCompilerControlInfo.compilerControlFlags = compilerControlFlags;
+        linkNode(pipelineInfo, pipelineCompilerControlInfo);
+    }
+#endif // VK_AMD_pipeline_compiler_control
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackCreateInfoEXT pipelineCreationFeedbackInfo;
     if (device->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
         stageCreationFeedbacks.resize(1);
         pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
-        pipelineCreationFeedbackInfo.pNext = pipelineInfo.pNext;
+        pipelineCreationFeedbackInfo.pNext = nullptr;
         pipelineCreationFeedbackInfo.pPipelineCreationFeedback = &creationFeedback;
         pipelineCreationFeedbackInfo.pipelineStageCreationFeedbackCount = 1;
         pipelineCreationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.data();
-        pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
+        linkNode(pipelineInfo, pipelineCreationFeedbackInfo);
     }
 #endif // VK_EXT_pipeline_creation_feedback
     const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),

@@ -28,6 +28,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_AMD_pipeline_compiler_control
+VkPipelineCompilerControlFlagsAMD Pipeline::compilerControlFlags = 0;
+#endif
+
 Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, uint32_t stageCount,
 #ifdef VK_EXT_pipeline_creation_feedback
