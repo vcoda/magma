@@ -32,17 +32,17 @@ namespace magma
 VkPipelineCompilerControlFlagsAMD Pipeline::compilerControlFlags = 0;
 #endif
 
-Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
+Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device_, std::shared_ptr<PipelineLayout> layout_,
     std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, uint32_t stageCount,
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackEXT creationFeedback /* {} */,
     const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks /* {} */,
 #endif // VK_EXT_pipeline_creation_feedback
     hash_t hash /* 0 */):
-    NonDispatchable<VkPipeline>(VK_OBJECT_TYPE_PIPELINE, std::move(device), std::move(allocator)),
+    NonDispatchable<VkPipeline>(VK_OBJECT_TYPE_PIPELINE, std::move(device_), std::move(allocator)),
     bindPoint(bindPoint),
     stageCount(stageCount),
-    layout(std::move(layout)),
+    layout(std::move(layout_)),
     basePipeline(std::move(basePipeline)),
 #ifdef VK_EXT_pipeline_creation_feedback
     creationFeedback(creationFeedback),
@@ -50,9 +50,9 @@ Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device
 #endif // VK_EXT_pipeline_creation_feedback
     hash(hash)
 {
-    if (!this->layout)
+    if (!layout)
     {   // Layout must be a valid VkPipelineLayout handle
-        this->layout = std::make_shared<PipelineLayout>(this->device);
+        layout = std::make_shared<PipelineLayout>(device);
     }
 }
 
