@@ -1,6 +1,12 @@
 namespace magma
 {
 template<class PipelineType>
+inline TPipelineBatch<PipelineType>::TPipelineBatch(uint32_t capacity)
+{
+    pipelines.reserve(capacity);
+}
+
+template<class PipelineType>
 template<class PipelineInfoType>
 inline void TPipelineBatch<PipelineType>::fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept
 {

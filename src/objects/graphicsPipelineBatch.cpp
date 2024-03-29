@@ -36,9 +36,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-GraphicsPipelineBatch::GraphicsPipelineBatch(uint32_t capacity /* 256 */)
+GraphicsPipelineBatch::GraphicsPipelineBatch(uint32_t capacity /* 256 */):
+    TPipelineBatch<GraphicsPipeline>(capacity)
 {
-    pipelines.reserve(capacity);
     pipelineInfos.reserve(capacity);
 }
 

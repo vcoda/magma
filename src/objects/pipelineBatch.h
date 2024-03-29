@@ -73,6 +73,7 @@ namespace magma
         const std::shared_ptr<PipelineType>& getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 
     protected:
+        TPipelineBatch(uint32_t capacity);
         template<class PipelineInfoType>
         void fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept;
         void postCreate();
