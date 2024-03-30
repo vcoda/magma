@@ -34,6 +34,7 @@ namespace magma
     public:
         explicit Semaphore(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~Semaphore();
     };

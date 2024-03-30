@@ -26,13 +26,14 @@ namespace magma
 {
 Semaphore::Semaphore(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkSemaphoreCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_SEMAPHORE, std::move(device), std::move(allocator))
 {
     VkSemaphoreCreateInfo semaphoreInfo;
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     semaphoreInfo.pNext = extendedInfo.chainNodes();
-    semaphoreInfo.flags = 0;
+    semaphoreInfo.flags = flags;
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create semaphore");
 }
