@@ -30,12 +30,12 @@ namespace aux
 FillRectangleVertexShader::FillRectangleVertexShader(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
 #ifdef VK_NV_fill_rectangle
-    hasFillRectangle(device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME))
+    supportsFillRectangle(device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME))
 #else
-    hasFillRectangle(false)
+    supportsFillRectangle(false)
 #endif
 {
-    if (hasFillRectangle)
+    if (supportsFillRectangle)
     {
         constexpr
         #include "spirv/output/blitv_nv"
@@ -61,7 +61,7 @@ const char *FillRectangleVertexShader::getEntryPointName() const noexcept
 const RasterizationState& FillRectangleVertexShader::getRasterizationState() const noexcept
 {
 #ifdef VK_NV_fill_rectangle
-    if (hasFillRectangle)
+    if (supportsFillRectangle)
         return renderstate::fillRectangleCullNoneCcw;
 #endif
     return renderstate::fillCullNoneCcw;

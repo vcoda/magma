@@ -41,13 +41,11 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkRenderPassCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkRenderPassCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-
         explicit RenderPass(std::shared_ptr<Device> device,
             const std::vector<AttachmentDescription>& attachments,
             const std::vector<SubpassDescription>& subpasses,

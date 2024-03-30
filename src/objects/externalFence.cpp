@@ -32,7 +32,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     const StructureChain& extendedInfo /* default */):
     Fence(std::move(device), std::move(allocator)),
 #if defined(VK_KHR_external_fence_win32)
-    hHandle(NULL)
+    hFence(NULL)
 #elif defined(VK_KHR_external_fence_fd)
     fd(0)
 #endif
@@ -61,7 +61,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
 ExternalFence::~ExternalFence()
 {
 #if defined(VK_KHR_external_fence_win32)
-    CloseHandle(hHandle);
+    CloseHandle(hFence);
 #elif defined(VK_KHR_external_fence_fd)
     close(fd);
 #endif
@@ -76,9 +76,9 @@ HANDLE ExternalFence::getNtHandle() const
     win32HandleInfo.fence = handle;
     win32HandleInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetFenceWin32HandleKHR, VK_KHR_EXTERNAL_FENCE_WIN32_EXTENSION_NAME);
-    const VkResult result = vkGetFenceWin32HandleKHR(MAGMA_HANDLE(device), &win32HandleInfo, &hHandle);
+    const VkResult result = vkGetFenceWin32HandleKHR(MAGMA_HANDLE(device), &win32HandleInfo, &hFence);
     MAGMA_HANDLE_RESULT(result, "failed to get Win32 handle");
-    return hHandle;
+    return hFence;
 }
 
 #elif defined(VK_KHR_external_fence_fd)

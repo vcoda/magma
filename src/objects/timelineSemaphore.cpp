@@ -40,7 +40,8 @@ BinarySemaphore::BinarySemaphore(std::shared_ptr<Device> device,
     semaphoreTypeInfo.pNext = extendedInfo.chainNodes();
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_BINARY_KHR;
     semaphoreTypeInfo.initialValue = VK_FALSE; // When created, the semaphore is in the unsignaled state
-    const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
+        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create binary semaphore");
 }
 
@@ -75,7 +76,8 @@ TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t in
     semaphoreTypeInfo.pNext = extendedInfo.chainNodes();
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE_KHR;
     semaphoreTypeInfo.initialValue = initialValue;
-    const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
+        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create timeline semaphore");
 }
 

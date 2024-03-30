@@ -44,7 +44,7 @@ namespace magma
 
     private:
     #if defined(VK_KHR_external_semaphore_win32)
-        mutable HANDLE hHandle;
+        mutable HANDLE hSemaphore;
     #elif defined(VK_FUCHSIA_external_semaphore)
         mutable zx_handle_t zxEvent;
     #elif defined(VK_KHR_external_semaphore_fd)

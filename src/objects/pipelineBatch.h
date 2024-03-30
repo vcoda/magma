@@ -28,8 +28,8 @@ namespace magma
     class IAllocator;
 
     /* Base class to batch compilation of pipeline state objects.
-       The preferred way is to build pipelines asynchronously
-       in a separate thread (which might be a part of a thread pool)
+       The preferred way is to build pipelines asynchronously in
+       a separate thread (which might be a part of a thread pool)
        and wait for completion using future. */
 
     class PipelineBatch : public IDestructible

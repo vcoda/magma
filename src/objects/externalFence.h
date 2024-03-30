@@ -38,14 +38,14 @@ namespace magma
         HANDLE getNtHandle() const;
     #elif defined(VK_KHR_external_fence_fd)
         int getFd() const;
-    #endif // VK_KHR_external_fence_win32
+    #endif
 
     private:
     #if defined(VK_KHR_external_fence_win32)
-        mutable HANDLE hHandle;
+        mutable HANDLE hFence;
     #elif defined(VK_KHR_external_fence_fd)
         mutable int fd;
-    #endif // VK_KHR_external_fence_win32
+    #endif
     };
 #endif // VK_KHR_external_fence
 } // namespace magma

@@ -32,7 +32,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     const StructureChain& extendedInfo /* default */):
     Semaphore(std::move(allocator), std::move(device)),
 #if defined(VK_KHR_external_semaphore_win32)
-    hHandle(NULL)
+    hSemaphore(NULL)
 #elif defined(VK_FUCHSIA_external_semaphore)
     zxEvent(0)
 #elif defined(VK_KHR_external_semaphore_fd)
@@ -63,7 +63,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
 ExternalSemaphore::~ExternalSemaphore()
 {
 #if defined(VK_KHR_external_semaphore_win32)
-    CloseHandle(hHandle);
+    CloseHandle(hSemaphore);
 #elif defined(VK_FUCHSIA_external_semaphore)
     zx_handle_close(zxEvent);
 #elif defined(VK_KHR_external_semaphore_fd)
@@ -80,9 +80,9 @@ HANDLE ExternalSemaphore::getNtHandle() const
     win32HandleInfo.semaphore = handle;
     win32HandleInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreWin32HandleKHR, VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME);
-    const VkResult result = vkGetSemaphoreWin32HandleKHR(MAGMA_HANDLE(device), &win32HandleInfo, &hHandle);
+    const VkResult result = vkGetSemaphoreWin32HandleKHR(MAGMA_HANDLE(device), &win32HandleInfo, &hSemaphore);
     MAGMA_HANDLE_RESULT(result, "failed to get Win32 handle");
-    return hHandle;
+    return hSemaphore;
 }
 
 #elif defined(VK_FUCHSIA_external_semaphore)

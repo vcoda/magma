@@ -42,7 +42,7 @@ namespace magma
             const RasterizationState& getRasterizationState() const noexcept;
 
         private:
-            const bool hasFillRectangle;
+            const bool supportsFillRectangle;
             std::shared_ptr<ShaderModule> shader;
         };
     } // namespace aux
