@@ -24,6 +24,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+Fence::Fence(std::shared_ptr<IAllocator> allocator, std::shared_ptr<Device> device) noexcept:
+    NonDispatchable(VK_OBJECT_TYPE_FENCE, std::move(device), std::move(allocator))
+{}
+
 Fence::Fence(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     bool signaled /* false */,

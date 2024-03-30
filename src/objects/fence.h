@@ -37,5 +37,9 @@ namespace magma
         bool reset() noexcept;
         VkResult getStatus() const noexcept;
         bool wait(uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
+
+    protected:
+        Fence(std::shared_ptr<IAllocator> allocator,
+            std::shared_ptr<Device> device) noexcept;
     };
 } // namespace magma
