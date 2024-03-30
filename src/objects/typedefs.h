@@ -42,6 +42,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(DynamicStorageTexelBuffer);
     MAGMA_TYPEDEF_SHARED_PTR(DynamicVertexBuffer);
     MAGMA_TYPEDEF_SHARED_PTR(Event);
+    MAGMA_TYPEDEF_SHARED_PTR(ExternalImage2D);
     MAGMA_TYPEDEF_SHARED_PTR(Fence);
     MAGMA_TYPEDEF_SHARED_PTR(Framebuffer);
     MAGMA_TYPEDEF_SHARED_PTR(GraphicsPipeline);
