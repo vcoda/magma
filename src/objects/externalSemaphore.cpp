@@ -35,7 +35,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     hHandle(NULL)
 #elif defined(VK_FUCHSIA_external_semaphore)
     zxEvent(0)
-#else
+#elif defined(VK_KHR_external_semaphore_fd)
     fd(0)
 #endif
 {
@@ -50,8 +50,10 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     exportSemaphoreInfo.handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
 #elif defined(VK_FUCHSIA_external_semaphore)
     exportSemaphoreInfo.handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
-#else
+#elif defined(VK_KHR_external_semaphore_fd)
     exportSemaphoreInfo.handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+#else
+    exportSemaphoreInfo.handleTypes = 0;
 #endif
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -64,20 +66,14 @@ ExternalSemaphore::~ExternalSemaphore()
     CloseHandle(hHandle);
 #elif defined(VK_FUCHSIA_external_semaphore)
     zx_handle_close(zxEvent);
-#else
+#elif defined(VK_KHR_external_semaphore_fd)
     close(fd);
 #endif
 }
 
 #if defined(VK_KHR_external_semaphore_win32)
 HANDLE ExternalSemaphore::getNtHandle() const
-#elif defined(VK_FUCHSIA_external_semaphore)
-zx_handle_t ExternalSemaphore::getEvent() const
-#else
-int ExternalSemaphore::getFd() const
-#endif
 {
-#if defined(VK_KHR_external_semaphore_win32)
     VkSemaphoreGetWin32HandleInfoKHR win32HandleInfo;
     win32HandleInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_GET_WIN32_HANDLE_INFO_KHR;
     win32HandleInfo.pNext = nullptr;
@@ -87,25 +83,35 @@ int ExternalSemaphore::getFd() const
     const VkResult result = vkGetSemaphoreWin32HandleKHR(MAGMA_HANDLE(device), &win32HandleInfo, &hHandle);
     MAGMA_HANDLE_RESULT(result, "failed to get Win32 handle");
     return hHandle;
+}
+
 #elif defined(VK_FUCHSIA_external_semaphore)
+zx_handle_t ExternalSemaphore::getEvent() const
+{
     VkSemaphoreGetZirconHandleInfoFUCHSIA zirconHandleInfo;
     zirconHandleInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_GET_ZIRCON_HANDLE_INFO_FUCHSIA;
     zirconHandleInfo.pNext = nullptr;
     zirconHandleInfo.semaphore = handle;
     zirconHandleInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreWin32HandleKHR, VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkGetSemaphoreZirconHandleFUCHSIA(MAGMA_HANDLE(device), &zirconHandleInfo, &zxEvent);
     MAGMA_HANDLE_RESULT(result, "failed to get Zircon event object");
     return zxEvent;
-#else
+}
+
+#elif defined(VK_KHR_external_semaphore_fd)
+int ExternalSemaphore::getFd() const
+{
     VkSemaphoreGetFdInfoKHR fdInfo;
     fdInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_GET_FD_INFO_KHR;
     fdInfo.pNext = nullptr;
     fdInfo.semaphore = handle;
     fdInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreFdKHR, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
     const VkResult result = vkGetSemaphoreFdKHR(MAGMA_HANDLE(device), &fdInfo, &fd);
     MAGMA_HANDLE_RESULT(result, "failed to get POSIX file descriptor");
     return fd;
-#endif
 }
+#endif // VK_KHR_external_semaphore_fd
 #endif // VK_KHR_external_semaphore
 } // namespace magma

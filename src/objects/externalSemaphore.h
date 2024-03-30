@@ -38,7 +38,7 @@ namespace magma
         HANDLE getNtHandle() const;
     #elif defined(VK_FUCHSIA_external_semaphore)
         zx_handle_t getEvent() const;
-    #else
+    #elif defined(VK_KHR_external_semaphore_fd)
         int getFd() const;
     #endif
 
@@ -47,7 +47,7 @@ namespace magma
         mutable HANDLE hHandle;
     #elif defined(VK_FUCHSIA_external_semaphore)
         mutable zx_handle_t zxEvent;
-    #else
+    #elif defined(VK_KHR_external_semaphore_fd)
         mutable int fd;
     #endif
     };
