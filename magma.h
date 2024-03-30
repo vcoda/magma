@@ -45,6 +45,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/dstTransferBuffer.h"
 #include "src/objects/event.h"
 #include "src/objects/externalImage.h"
+#include "src/objects/externalSemaphore.h"
 #include "src/objects/fence.h"
 #include "src/objects/fragmentDensityMap.h"
 #include "src/objects/fragmentShadingRateAttachment.h"

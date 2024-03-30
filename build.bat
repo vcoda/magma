@@ -138,6 +138,7 @@ src\objects\displayMode.cpp ^
 src\objects\dstTransferBuffer.cpp ^
 src\objects\event.cpp ^
 src\objects\externalImage.cpp ^
+src\objects\externalSemaphore.cpp ^
 src\objects\fence.cpp ^
 src\objects\fragmentDensityMap.cpp ^
 src\objects\fragmentDensityMapView.cpp ^
@@ -311,6 +312,7 @@ displayMode.obj ^
 dstTransferBuffer.obj ^
 event.obj ^
 externalImage.obj ^
+externalSemaphore.obj ^
 fence.obj ^
 fragmentDensityMap.obj ^
 fragmentDensityMapView.obj ^

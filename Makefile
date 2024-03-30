@@ -105,6 +105,7 @@ SRC_OBJS= \
 	src/objects/dstTransferBuffer.o \
 	src/objects/event.o \
 	src/objects/externalImage.o \
+	src/objects/externalSemaphore.o \
 	src/objects/fence.o \
 	src/objects/fragmentDensityMap.o \
 	src/objects/fragmentDensityMapView.o \

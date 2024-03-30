@@ -274,6 +274,7 @@
     <ClInclude Include="..\..\src\objects\dstTransferBuffer.h" />
     <ClInclude Include="..\..\src\objects\event.h" />
     <ClInclude Include="..\..\src\objects\externalImage.h" />
+    <ClInclude Include="..\..\src\objects\externalSemaphore.h" />
     <ClInclude Include="..\..\src\objects\fence.h" />
     <ClInclude Include="..\..\src\objects\fragmentDensityMap.h" />
     <ClInclude Include="..\..\src\objects\fragmentDensityMapView.h" />
@@ -470,6 +471,7 @@
     <ClCompile Include="..\..\src\objects\dstTransferBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\event.cpp" />
     <ClCompile Include="..\..\src\objects\externalImage.cpp" />
+    <ClCompile Include="..\..\src\objects\externalSemaphore.cpp" />
     <ClCompile Include="..\..\src\objects\fence.cpp" />
     <ClCompile Include="..\..\src\objects\fragmentDensityMap.cpp" />
     <ClCompile Include="..\..\src\objects\fragmentDensityMapView.cpp" />
