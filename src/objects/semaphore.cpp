@@ -24,6 +24,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+Semaphore::Semaphore(std::shared_ptr<IAllocator> allocator, std::shared_ptr<Device> device) noexcept:
+    NonDispatchable(VK_OBJECT_TYPE_SEMAPHORE, std::move(device), std::move(allocator))
+{}
+
 Semaphore::Semaphore(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkSemaphoreCreateFlags flags /* 0 */,

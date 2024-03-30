@@ -37,5 +37,9 @@ namespace magma
             VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~Semaphore();
+
+    protected:
+        Semaphore(std::shared_ptr<IAllocator> allocator,
+            std::shared_ptr<Device> device) noexcept;
     };
 } // namespace magma
