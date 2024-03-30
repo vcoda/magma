@@ -48,7 +48,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     exportSemaphoreInfo.pNext = extendedInfo.chainNodes();
 #if defined(VK_KHR_external_semaphore_win32)
     exportSemaphoreInfo.handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
-#elif defined(VkSemaphoreGetZirconHandleInfoFUCHSIA)
+#elif defined(VK_FUCHSIA_external_semaphore)
     exportSemaphoreInfo.handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
 #else
     exportSemaphoreInfo.handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
@@ -87,7 +87,7 @@ int ExternalSemaphore::getFd() const
     const VkResult result = vkGetSemaphoreWin32HandleKHR(MAGMA_HANDLE(device), &win32HandleInfo, &hHandle);
     MAGMA_HANDLE_RESULT(result, "failed to get Win32 handle");
     return hHandle;
-#elif defined(VkSemaphoreGetZirconHandleInfoFUCHSIA)
+#elif defined(VK_FUCHSIA_external_semaphore)
     VkSemaphoreGetZirconHandleInfoFUCHSIA zirconHandleInfo;
     zirconHandleInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_GET_ZIRCON_HANDLE_INFO_FUCHSIA;
     zirconHandleInfo.pNext = nullptr;
