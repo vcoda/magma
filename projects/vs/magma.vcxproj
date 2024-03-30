@@ -273,6 +273,7 @@
     <ClInclude Include="..\..\src\objects\displayMode.h" />
     <ClInclude Include="..\..\src\objects\dstTransferBuffer.h" />
     <ClInclude Include="..\..\src\objects\event.h" />
+    <ClInclude Include="..\..\src\objects\externalFence.h" />
     <ClInclude Include="..\..\src\objects\externalImage.h" />
     <ClInclude Include="..\..\src\objects\externalSemaphore.h" />
     <ClInclude Include="..\..\src\objects\fence.h" />
@@ -470,6 +471,7 @@
     <ClCompile Include="..\..\src\objects\displayMode.cpp" />
     <ClCompile Include="..\..\src\objects\dstTransferBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\event.cpp" />
+    <ClCompile Include="..\..\src\objects\externalFence.cpp" />
     <ClCompile Include="..\..\src\objects\externalImage.cpp" />
     <ClCompile Include="..\..\src\objects\externalSemaphore.cpp" />
     <ClCompile Include="..\..\src\objects\fence.cpp" />

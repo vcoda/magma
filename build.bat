@@ -137,6 +137,7 @@ src\objects\display.cpp ^
 src\objects\displayMode.cpp ^
 src\objects\dstTransferBuffer.cpp ^
 src\objects\event.cpp ^
+src\objects\externalFence.cpp ^
 src\objects\externalImage.cpp ^
 src\objects\externalSemaphore.cpp ^
 src\objects\fence.cpp ^
@@ -311,6 +312,7 @@ display.obj ^
 displayMode.obj ^
 dstTransferBuffer.obj ^
 event.obj ^
+externalFence.obj ^
 externalImage.obj ^
 externalSemaphore.obj ^
 fence.obj ^

@@ -131,6 +131,9 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(DisplayMode);
     MAGMA_TYPEDEF_SHARED_PTR(DisplaySurface);
 #endif
+#ifdef VK_KHR_external_fence
+    MAGMA_TYPEDEF_SHARED_PTR(ExternalFence);
+#endif
 #ifdef VK_KHR_external_semaphore
     MAGMA_TYPEDEF_SHARED_PTR(ExternalSemaphore);
 #endif

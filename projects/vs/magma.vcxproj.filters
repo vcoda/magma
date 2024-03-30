@@ -819,6 +819,9 @@
     <ClInclude Include="..\..\src\objects\externalSemaphore.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\externalFence.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1284,6 +1287,9 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\externalSemaphore.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\externalFence.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

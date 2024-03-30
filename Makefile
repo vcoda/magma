@@ -104,6 +104,7 @@ SRC_OBJS= \
 	src/objects/displayMode.o \
 	src/objects/dstTransferBuffer.o \
 	src/objects/event.o \
+	src/objects/externalFence.o \
 	src/objects/externalImage.o \
 	src/objects/externalSemaphore.o \
 	src/objects/fence.o \
