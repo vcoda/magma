@@ -30,6 +30,9 @@ namespace magma
     template<class Type>
     class Dispatchable : public TObject<Type>
     {
+        static_assert(sizeof(Type) == sizeof(intptr_t),
+            "invalid size of dispatchable handle type");
+
     protected:
         explicit Dispatchable(VkObjectType objectType,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:

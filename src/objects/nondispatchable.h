@@ -31,6 +31,14 @@ namespace magma
     class NonDispatchable : public TObject<Type>,
         /* private */ DeviceResourcePool
     {
+        static_assert(
+        #if (VK_USE_64_BIT_PTR_DEFINES==1)
+            sizeof(Type) == sizeof(intptr_t),
+        #else
+            sizeof(Type) == sizeof(uint64_t),
+        #endif
+            "invalid size of non-dispatchable handle type");
+
     public:
         uint64_t getHandle() const noexcept override
         {
