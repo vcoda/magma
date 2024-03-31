@@ -33,6 +33,17 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             bool signaled = false,
             const StructureChain& extendedInfo = StructureChain());
+        explicit ExternalFence(std::shared_ptr<Device> device,
+        #if defined(VK_KHR_external_fence_win32)
+            HANDLE hFence,
+            LPCWSTR name = nullptr,
+        #elif defined(VK_KHR_external_fence_fd)
+            int fd,
+        #endif
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkFenceCreateFlags flags = 0,
+            VkFenceImportFlags importFlags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         ~ExternalFence();
     #if defined(VK_KHR_external_fence_win32)
         HANDLE getNtHandle() const;

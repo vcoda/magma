@@ -58,6 +58,57 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     MAGMA_HANDLE_RESULT(result, "failed to create external fence");
 }
 
+ExternalFence::ExternalFence(std::shared_ptr<Device> device,
+#if defined(VK_KHR_external_fence_win32)
+    HANDLE hFence,
+    LPCWSTR name /* nullptr */,
+#elif defined(VK_KHR_external_fence_fd)
+    int fd,
+#endif
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkFenceCreateFlags flags /* 0 */,
+    VkFenceImportFlags importFlags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
+    Fence(std::move(allocator), std::move(device)),
+#if defined(VK_KHR_external_fence_win32)
+    hFence(NULL)
+#elif defined(VK_KHR_external_fence_fd)
+    fd(0)
+#endif
+{
+    VkFenceCreateInfo fenceInfo;
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceInfo.pNext = extendedInfo.chainNodes();
+    fenceInfo.flags = flags;
+    VkResult result = vkCreateFence(MAGMA_HANDLE(device), &fenceInfo,
+        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_HANDLE_RESULT(result, "failed to create fence");
+#if defined(VK_KHR_external_fence_win32)
+    VkImportFenceWin32HandleInfoKHR importWin32HandleInfo;
+    importWin32HandleInfo.sType = VK_STRUCTURE_TYPE_IMPORT_FENCE_WIN32_HANDLE_INFO_KHR;
+    importWin32HandleInfo.pNext = nullptr;
+    importWin32HandleInfo.fence = handle;
+    importWin32HandleInfo.flags = importFlags;
+    importWin32HandleInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
+    importWin32HandleInfo.handle = hFence;
+    importWin32HandleInfo.name = name;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportFenceWin32HandleKHR, VK_KHR_EXTERNAL_FENCE_WIN32_EXTENSION_NAME);
+    result = vkImportFenceWin32HandleKHR(MAGMA_HANDLE(device), &importWin32HandleInfo);
+    MAGMA_HANDLE_RESULT(result, "failed to import Win32 handle");
+#elif defined(VK_KHR_external_fence_fd)
+    VkImportFenceFdInfoKHR importFdInfo;
+    importFdInfo.sType = VK_STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR;
+    importFdInfo.pNext = nullptr;
+    importFdInfo.fence = handle;
+    importFdInfo.flags = importFlags;
+    importFdInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    importFdInfo.fd = fd;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportFenceFdKHR, VK_KHR_EXTERNAL_FENCE_WIN32_EXTENSION_NAME);
+    result = vkImportFenceFdKHR(MAGMA_HANDLE(device), &importFdInfo);
+    MAGMA_HANDLE_RESULT(result, "failed to import POSIX file descriptor");
+#endif // defined(VK_KHR_external_fence_fd)
+}
+
 ExternalFence::~ExternalFence()
 {
 #if defined(VK_KHR_external_fence_win32)
