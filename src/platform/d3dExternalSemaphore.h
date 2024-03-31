@@ -34,6 +34,13 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
+        explicit D3d12ExternalSemaphore(std::shared_ptr<Device> device,
+            HANDLE hFenceHandle,
+            LPCWSTR name = nullptr,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkSemaphoreCreateFlags flags = 0,
+            VkSemaphoreImportFlags importFlags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         ~D3d12ExternalSemaphore();
         HANDLE getNtHandle() const;
 
@@ -49,6 +56,14 @@ namespace magma
             uint64_t initialValue,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkSemaphoreCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
+        explicit D3d12ExternalTimelineSemaphore(std::shared_ptr<Device> device,
+            uint64_t initialValue,
+            HANDLE hFenceHandle,
+            LPCWSTR name = nullptr,
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkSemaphoreCreateFlags flags = 0,
+            VkSemaphoreImportFlags importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~D3d12ExternalTimelineSemaphore();
         HANDLE getNtHandle() const;
