@@ -48,6 +48,16 @@ namespace magma
         mutable HANDLE hSemaphore;
     };
 
+    /* As the introduction of the external semaphore handle type
+       VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT predates
+       that of timeline semaphores, support for importing semaphore
+       payloads from external handles of that type into semaphores
+       created (implicitly or explicitly) with a VkSemaphoreType of
+       VK_SEMAPHORE_TYPE_BINARY is preserved for backwards compatibility.
+       However, applications should prefer importing such handle types
+       into semaphores created with a VkSemaphoreType of
+       VK_SEMAPHORE_TYPE_TIMELINE. */
+
 #ifdef VK_KHR_timeline_semaphore
     class D3d12ExternalTimelineSemaphore : public TimelineSemaphore
     {
