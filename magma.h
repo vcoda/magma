@@ -177,8 +177,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/misc/structureChain.h"
 #include "src/misc/viewport.h"
 
-#include "src/platform/d3dExternalSemaphore.h"
 #include "src/platform/androidHardwareBuffer.h"
+#include "src/platform/d3dExternalSemaphore.h"
 #include "src/platform/externalFence.h"
 #include "src/platform/externalSemaphore.h"
 
