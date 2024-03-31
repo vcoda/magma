@@ -70,8 +70,8 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     if (!enabledExtendedFeatures.empty())
     {
         deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
+        deviceFeatures2.pNext = const_cast<VkBaseInStructure *>(enabledExtendedFeatures.chainNodes());
         deviceFeatures2.features = enabledFeatures;
-        deviceFeatures2.pNext = (void *)enabledExtendedFeatures.chainNodes();
         if (!deviceInfo.pNext)
             deviceInfo.pNext = &deviceFeatures2;
         else
