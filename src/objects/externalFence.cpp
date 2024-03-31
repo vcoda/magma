@@ -47,7 +47,13 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
 #if defined(VK_KHR_external_fence_win32)
     exportFenceInfo.handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
 #elif defined(VK_KHR_external_fence_fd)
-    exportFenceInfo.handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    exportFenceInfo.handleTypes =
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+        // https://registry.khronos.org/EGL/extensions/ANDROID/EGL_ANDROID_native_fence_sync.txt
+        VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+    #else
+        VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    #endif
 #else
     exportFenceInfo.handleTypes = 0;
 #endif
@@ -99,11 +105,20 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     importFdInfo.pNext = nullptr;
     importFdInfo.fence = handle;
     importFdInfo.flags = importFlags;
-    importFdInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    importFdInfo.handleType =
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+        VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+    #else
+        VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    #endif
     importFdInfo.fd = fd;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportFenceFdKHR, VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME);
     result = vkImportFenceFdKHR(MAGMA_HANDLE(device), &importFdInfo);
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+    MAGMA_HANDLE_RESULT(result, "failed to import Android fence descriptor");
+    #else
     MAGMA_HANDLE_RESULT(result, "failed to import POSIX file descriptor");
+    #endif
 #endif // VK_KHR_external_fence_fd
 }
 
@@ -137,10 +152,19 @@ int ExternalFence::getFd() const
     fdInfo.sType = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
     fdInfo.pNext = nullptr;
     fdInfo.fence = handle;
-    fdInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    fdInfo.handleType =
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+        VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+    #else
+        VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    #endif
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetFenceFdKHR, VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME);
     const VkResult result = vkGetFenceFdKHR(MAGMA_HANDLE(device), &fdInfo, &fd);
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+    MAGMA_HANDLE_RESULT(result, "failed to get Android fence descriptor");
+    #else
     MAGMA_HANDLE_RESULT(result, "failed to get POSIX file descriptor");
+    #endif
     return fd;
 }
 #endif // VK_KHR_external_fence_fd
