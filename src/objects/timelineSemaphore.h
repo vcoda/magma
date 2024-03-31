@@ -40,6 +40,7 @@ namespace magma
     public:
         explicit BinarySemaphore(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~BinarySemaphore();
         void signal(bool value);
@@ -51,6 +52,7 @@ namespace magma
         explicit TimelineSemaphore(std::shared_ptr<Device> device,
             uint64_t initialValue,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         uint64_t getCounterValue() const;
         void signal(uint64_t counter);

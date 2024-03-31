@@ -28,6 +28,7 @@ namespace magma
 #ifdef VK_KHR_timeline_semaphore
 BinarySemaphore::BinarySemaphore(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkSemaphoreCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_SEMAPHORE, std::move(device), std::move(allocator))
 {
@@ -35,7 +36,7 @@ BinarySemaphore::BinarySemaphore(std::shared_ptr<Device> device,
     VkSemaphoreTypeCreateInfoKHR semaphoreTypeInfo;
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     semaphoreInfo.pNext = &semaphoreTypeInfo;
-    semaphoreInfo.flags = 0;
+    semaphoreInfo.flags = flags;
     semaphoreTypeInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR;
     semaphoreTypeInfo.pNext = extendedInfo.chainNodes();
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_BINARY_KHR;
@@ -68,6 +69,7 @@ TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, std::shared
 
 TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t initialValue,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkSemaphoreCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     Semaphore(std::move(allocator), std::move(device))
 {
@@ -75,7 +77,7 @@ TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t in
     VkSemaphoreTypeCreateInfoKHR semaphoreTypeInfo;
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     semaphoreInfo.pNext = &semaphoreTypeInfo;
-    semaphoreInfo.flags = 0;
+    semaphoreInfo.flags = flags;
     semaphoreTypeInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR;
     semaphoreTypeInfo.pNext = extendedInfo.chainNodes();
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE_KHR;
