@@ -21,9 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* An application using external memory may wish to
-       synchronizeaccess to that memory using semaphores.
-       External semaphore allows to export non-Vulkan handle
-       that reference the underlying synchronization primitive. */
+       synchronize access to that memory using semaphores.
+       External semaphore allows to import and export
+       non-Vulkan handle that reference the underlying
+       synchronization primitive. */
 
 #ifdef VK_KHR_external_semaphore
     class ExternalSemaphore : public Semaphore

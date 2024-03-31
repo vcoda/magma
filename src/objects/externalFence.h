@@ -22,8 +22,9 @@ namespace magma
 {
     /* An application using external memory may wish to
        synchronize access to that memory using fences.
-       External fences allows to export non-Vulkan handle
-       that reference the underlying synchronization primitive. */
+       External fence allows to import and export
+       non-Vulkan handle that reference the underlying
+       synchronization primitive. */
 
 #ifdef VK_KHR_external_fence
     class ExternalFence : public Fence
