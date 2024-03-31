@@ -28,9 +28,9 @@ namespace magma
 #ifdef VK_KHR_external_fence
 ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    bool signaled /* false */,
+    VkFenceCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Fence(std::move(device), std::move(allocator)),
+    Fence(std::move(allocator), std::move(device)),
 #if defined(VK_KHR_external_fence_win32)
     hFence(NULL)
 #elif defined(VK_KHR_external_fence_fd)
@@ -41,9 +41,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     VkExportFenceCreateInfoKHR exportFenceInfo;
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.pNext = &exportFenceInfo;
-    fenceInfo.flags = 0;
-    if (signaled)
-        fenceInfo.flags |= VK_FENCE_CREATE_SIGNALED_BIT;
+    fenceInfo.flags = flags;
     exportFenceInfo.sType = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO_KHR;
     exportFenceInfo.pNext = extendedInfo.chainNodes();
 #if defined(VK_KHR_external_fence_win32)

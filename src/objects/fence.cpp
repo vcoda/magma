@@ -30,16 +30,14 @@ Fence::Fence(std::shared_ptr<IAllocator> allocator, std::shared_ptr<Device> devi
 
 Fence::Fence(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    bool signaled /* false */,
+    VkFenceCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_FENCE, std::move(device), std::move(allocator))
 {
     VkFenceCreateInfo fenceInfo;
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.pNext = extendedInfo.chainNodes();
-    fenceInfo.flags = 0;
-    if (signaled)
-        fenceInfo.flags |= VK_FENCE_CREATE_SIGNALED_BIT;
+    fenceInfo.flags = flags;
     const VkResult result = vkCreateFence(MAGMA_HANDLE(device), &fenceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create fence");
 }

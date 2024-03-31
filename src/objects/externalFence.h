@@ -31,7 +31,7 @@ namespace magma
     public:
         explicit ExternalFence(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            bool signaled = false,
+            VkFenceCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit ExternalFence(std::shared_ptr<Device> device,
         #if defined(VK_KHR_external_fence_win32)
