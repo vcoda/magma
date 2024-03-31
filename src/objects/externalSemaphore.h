@@ -37,6 +37,8 @@ namespace magma
         #if defined(VK_KHR_external_semaphore_win32)
             HANDLE hSemaphore,
             LPCWSTR name = nullptr,
+        #elif defined(VK_FUCHSIA_external_semaphore)
+            zx_handle_t zirconHandle,
         #elif defined(VK_KHR_external_semaphore_fd)
             int fd,
         #endif

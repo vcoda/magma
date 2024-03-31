@@ -64,6 +64,8 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
 #if defined(VK_KHR_external_semaphore_win32)
     HANDLE hSemaphore,
     LPCWSTR name /* nullptr */,
+#elif defined(VK_FUCHSIA_external_semaphore)
+    zx_handle_t zirconHandle,
 #elif defined(VK_KHR_external_semaphore_fd)
     int fd,
 #endif
@@ -99,6 +101,17 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreWin32HandleKHR, VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME);
     result = vkImportSemaphoreWin32HandleKHR(MAGMA_HANDLE(device), &importWin32HandleInfo);
     MAGMA_HANDLE_RESULT(result, "failed to import Win32 handle");
+#elif defined(VK_FUCHSIA_external_semaphore)
+    VkImportSemaphoreZirconHandleInfoFUCHSIA importZirconHandleInfo;
+    importZirconHandleInfo.sType = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_ZIRCON_HANDLE_INFO_FUCHSIA;
+    importZirconHandleInfo.pNext = nullptr;
+    importZirconHandleInfo.semaphore = handle;
+    importZirconHandleInfo.flags = importFlags;
+    importZirconHandleInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
+    importZirconHandleInfo.zirconHandle = zirconHandle;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreZirconHandleFUCHSIA, VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
+    result = vkImportSemaphoreZirconHandleFUCHSIA(MAGMA_HANDLE(device), &importZirconHandleInfo);
+    MAGMA_HANDLE_RESULT(result, "failed to import Zircon handle");
 #elif defined(VK_KHR_external_semaphore_fd)
     VkImportSemaphoreFdInfoKHR importFdInfo;
     importFdInfo.sType = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FD_INFO_KHR;
