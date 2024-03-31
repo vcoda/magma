@@ -44,19 +44,19 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     fenceInfo.flags = flags;
     exportFenceInfo.sType = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO_KHR;
     exportFenceInfo.pNext = extendedInfo.chainNodes();
-#if defined(VK_KHR_external_fence_win32)
-    exportFenceInfo.handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
-#elif defined(VK_KHR_external_fence_fd)
     exportFenceInfo.handleTypes =
-    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+    #if defined(VK_KHR_external_fence_win32)
+        VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
+    #elif defined(VK_KHR_external_fence_fd)
+        #ifdef VK_USE_PLATFORM_ANDROID_KHR
         // https://registry.khronos.org/EGL/extensions/ANDROID/EGL_ANDROID_native_fence_sync.txt
         VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
-    #else
+        #else
         VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
-    #endif
-#else
-    exportFenceInfo.handleTypes = 0;
-#endif
+        #endif
+    #else
+        0;
+    #endif // VK_KHR_external_fence_fd
     const VkResult result = vkCreateFence(MAGMA_HANDLE(device), &fenceInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create external fence");
