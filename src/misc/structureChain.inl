@@ -1,14 +1,14 @@
 namespace magma
 {
 template<class StructureType>
-inline StructureChain::Node::Node(const StructureType& node) noexcept:
-    size(sizeof(StructureType))
+inline StructureChain::Node::Node(const StructureType& blob) noexcept:
+    size(sizeof(StructureType)),
+    data(core::copyBinaryData(blob))
 {
     static_assert(sizeof(StructureType) > sizeof(VkBaseInStructure),
         "chain structure size is too little");
     static_assert(std::is_trivially_copyable<StructureType>::value,
         "chain structure required to be trivially copyable");
-    data = core::copyBinaryData(node);
 }
 
 inline StructureChain::Node::Node(const Node& node) noexcept:

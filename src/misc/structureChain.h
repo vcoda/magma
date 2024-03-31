@@ -51,7 +51,7 @@ namespace magma
     {
     public:
         template<class StructureType>
-        Node(const StructureType& node) noexcept;
+        Node(const StructureType& blob) noexcept;
         Node(const Node& node) noexcept;
         Node(Node&& node) noexcept;
         ~Node();
