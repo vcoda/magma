@@ -273,9 +273,7 @@
     <ClInclude Include="..\..\src\objects\displayMode.h" />
     <ClInclude Include="..\..\src\objects\dstTransferBuffer.h" />
     <ClInclude Include="..\..\src\objects\event.h" />
-    <ClInclude Include="..\..\src\objects\externalFence.h" />
     <ClInclude Include="..\..\src\objects\externalImage.h" />
-    <ClInclude Include="..\..\src\objects\externalSemaphore.h" />
     <ClInclude Include="..\..\src\objects\fence.h" />
     <ClInclude Include="..\..\src\objects\fragmentDensityMap.h" />
     <ClInclude Include="..\..\src\objects\fragmentDensityMapView.h" />
@@ -346,6 +344,8 @@
     <ClInclude Include="..\..\src\packed\rcpExpPow2.h" />
     <ClInclude Include="..\..\src\packed\vector.h" />
     <ClInclude Include="..\..\src\platform\androidHardwareBuffer.h" />
+    <ClInclude Include="..\..\src\platform\externalFence.h" />
+    <ClInclude Include="..\..\src\platform\externalSemaphore.h" />
     <ClInclude Include="..\..\src\renderpass\attachment.h" />
     <ClInclude Include="..\..\src\renderpass\loadStoreOp.h" />
     <ClInclude Include="..\..\src\renderpass\subpass.h" />
@@ -471,9 +471,7 @@
     <ClCompile Include="..\..\src\objects\displayMode.cpp" />
     <ClCompile Include="..\..\src\objects\dstTransferBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\event.cpp" />
-    <ClCompile Include="..\..\src\objects\externalFence.cpp" />
     <ClCompile Include="..\..\src\objects\externalImage.cpp" />
-    <ClCompile Include="..\..\src\objects\externalSemaphore.cpp" />
     <ClCompile Include="..\..\src\objects\fence.cpp" />
     <ClCompile Include="..\..\src\objects\fragmentDensityMap.cpp" />
     <ClCompile Include="..\..\src\objects\fragmentDensityMapView.cpp" />
@@ -533,6 +531,8 @@
     <ClCompile Include="..\..\src\objects\validationCache.cpp" />
     <ClCompile Include="..\..\src\objects\vertexBuffer.cpp" />
     <ClCompile Include="..\..\src\platform\androidHardwareBuffer.cpp" />
+    <ClCompile Include="..\..\src\platform\externalFence.cpp" />
+    <ClCompile Include="..\..\src\platform\externalSemaphore.cpp" />
     <ClCompile Include="..\..\src\renderpass\subpass.cpp" />
     <ClCompile Include="..\..\src\shaders\pipelineShaderStage.cpp" />
     <ClCompile Include="..\..\src\shaders\rayTracingShaderGroup.cpp" />

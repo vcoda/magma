@@ -16,48 +16,54 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "fence.h"
+#include "../objects/semaphore.h"
 
 namespace magma
 {
     /* An application using external memory may wish to
-       synchronize access to that memory using fences.
-       External fence allows to import and export
+       synchronize access to that memory using semaphores.
+       External semaphore allows to import and export
        non-Vulkan handle that reference the underlying
        synchronization primitive. */
 
-#ifdef VK_KHR_external_fence
-    class ExternalFence : public Fence
+#ifdef VK_KHR_external_semaphore
+    class ExternalSemaphore : public Semaphore
     {
     public:
-        explicit ExternalFence(std::shared_ptr<Device> device,
+        explicit ExternalSemaphore(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkFenceCreateFlags flags = 0,
+            VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        explicit ExternalFence(std::shared_ptr<Device> device,
-        #if defined(VK_KHR_external_fence_win32)
-            HANDLE hFence,
+        explicit ExternalSemaphore(std::shared_ptr<Device> device,
+        #if defined(VK_KHR_external_semaphore_win32)
+            HANDLE hSemaphore,
             LPCWSTR name = nullptr,
-        #elif defined(VK_KHR_external_fence_fd)
+        #elif defined(VK_FUCHSIA_external_semaphore)
+            zx_handle_t zirconHandle,
+        #elif defined(VK_KHR_external_semaphore_fd)
             int fd,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr,
-            VkFenceCreateFlags flags = 0,
-            VkFenceImportFlags importFlags = 0,
+            VkSemaphoreCreateFlags flags = 0,
+            VkSemaphoreImportFlags importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        ~ExternalFence();
-    #if defined(VK_KHR_external_fence_win32)
+        ~ExternalSemaphore();
+    #if defined(VK_KHR_external_semaphore_win32)
         HANDLE getNtHandle() const;
-    #elif defined(VK_KHR_external_fence_fd)
+    #elif defined(VK_FUCHSIA_external_semaphore)
+        zx_handle_t getEvent() const;
+    #elif defined(VK_KHR_external_semaphore_fd)
         int getFd() const;
     #endif
 
     private:
-    #if defined(VK_KHR_external_fence_win32)
-        mutable HANDLE hFence;
-    #elif defined(VK_KHR_external_fence_fd)
+    #if defined(VK_KHR_external_semaphore_win32)
+        mutable HANDLE hSemaphore;
+    #elif defined(VK_FUCHSIA_external_semaphore)
+        mutable zx_handle_t zirconHandle;
+    #elif defined(VK_KHR_external_semaphore_fd)
         mutable int fd;
     #endif
     };
-#endif // VK_KHR_external_fence
+#endif // VK_KHR_external_semaphore
 } // namespace magma

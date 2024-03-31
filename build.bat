@@ -137,9 +137,7 @@ src\objects\display.cpp ^
 src\objects\displayMode.cpp ^
 src\objects\dstTransferBuffer.cpp ^
 src\objects\event.cpp ^
-src\objects\externalFence.cpp ^
 src\objects\externalImage.cpp ^
-src\objects\externalSemaphore.cpp ^
 src\objects\fence.cpp ^
 src\objects\fragmentDensityMap.cpp ^
 src\objects\fragmentDensityMapView.cpp ^
@@ -199,6 +197,8 @@ src\objects\uniformTexelBuffer.cpp ^
 src\objects\validationCache.cpp ^
 src\objects\vertexBuffer.cpp ^
 src\platform\androidHardwareBuffer.cpp ^
+src\platform\externalFence.cpp ^
+src\platform\externalSemaphore.cpp ^
 src\renderpass\subpass.cpp ^
 src\shaders\pipelineShaderStage.cpp ^
 src\shaders\rayTracingShaderGroup.cpp ^
@@ -312,9 +312,7 @@ display.obj ^
 displayMode.obj ^
 dstTransferBuffer.obj ^
 event.obj ^
-externalFence.obj ^
 externalImage.obj ^
-externalSemaphore.obj ^
 fence.obj ^
 fragmentDensityMap.obj ^
 fragmentDensityMapView.obj ^
@@ -374,6 +372,8 @@ uniformTexelBuffer.obj ^
 validationCache.obj ^
 vertexBuffer.obj ^
 androidHardwareBuffer.obj ^
+externalFence.obj ^
+externalSemaphore.obj ^
 subpass.obj ^
 pipelineShaderStage.obj ^
 rayTracingShaderGroup.obj ^

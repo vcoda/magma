@@ -816,11 +816,11 @@
     <ClInclude Include="..\..\src\helpers\enumerationCast.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\externalSemaphore.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\platform\externalFence.h">
+      <Filter>Header Files\platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\externalFence.h">
-      <Filter>Header Files\objects</Filter>
+    <ClInclude Include="..\..\src\platform\externalSemaphore.h">
+      <Filter>Header Files\platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1286,11 +1286,11 @@
     <ClCompile Include="..\..\src\objects\pipelineBatch.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objects\externalSemaphore.cpp">
-      <Filter>Source Files\objects</Filter>
+    <ClCompile Include="..\..\src\platform\externalFence.cpp">
+      <Filter>Source Files\platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objects\externalFence.cpp">
-      <Filter>Source Files\objects</Filter>
+    <ClCompile Include="..\..\src\platform\externalSemaphore.cpp">
+      <Filter>Source Files\platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -104,9 +104,7 @@ SRC_OBJS= \
 	src/objects/displayMode.o \
 	src/objects/dstTransferBuffer.o \
 	src/objects/event.o \
-	src/objects/externalFence.o \
 	src/objects/externalImage.o \
-	src/objects/externalSemaphore.o \
 	src/objects/fence.o \
 	src/objects/fragmentDensityMap.o \
 	src/objects/fragmentDensityMapView.o \
@@ -167,6 +165,8 @@ SRC_OBJS= \
 	src/objects/vertexBuffer.o \
 	\
 	src/platform/androidHardwareBuffer.o \
+	src/platform/externalFence.o \
+	src/platform/externalSemaphore.o \
 	\
 	src/renderpass/subpass.o \
 	\

@@ -44,9 +44,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/displayMode.h"
 #include "src/objects/dstTransferBuffer.h"
 #include "src/objects/event.h"
-#include "src/objects/externalFence.h"
 #include "src/objects/externalImage.h"
-#include "src/objects/externalSemaphore.h"
 #include "src/objects/fence.h"
 #include "src/objects/fragmentDensityMap.h"
 #include "src/objects/fragmentShadingRateAttachment.h"
@@ -180,6 +178,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/misc/viewport.h"
 
 #include "src/platform/androidHardwareBuffer.h"
+#include "src/platform/externalFence.h"
+#include "src/platform/externalSemaphore.h"
 
 #include "src/extensions/instanceExtensions.h"
 #include "src/extensions/instanceLayers.h"
