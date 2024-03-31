@@ -107,7 +107,8 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     importFdInfo.flags = importFlags;
     importFdInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
     importFdInfo.fd = fd;
-    result = vkImportSemaphoreWin32HandleKHR(MAGMA_HANDLE(device), &importFdInfo);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreFdKHR, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
+    result = vkImportSemaphoreFdKHR(MAGMA_HANDLE(device), &importFdInfo);
     MAGMA_HANDLE_RESULT(result, "failed to import POSIX file descriptor");
 #endif // VK_KHR_external_semaphore_fd
 }

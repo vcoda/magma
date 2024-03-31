@@ -101,10 +101,10 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     importFdInfo.flags = importFlags;
     importFdInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
     importFdInfo.fd = fd;
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportFenceFdKHR, VK_KHR_EXTERNAL_FENCE_WIN32_EXTENSION_NAME);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportFenceFdKHR, VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME);
     result = vkImportFenceFdKHR(MAGMA_HANDLE(device), &importFdInfo);
     MAGMA_HANDLE_RESULT(result, "failed to import POSIX file descriptor");
-#endif // defined(VK_KHR_external_fence_fd)
+#endif // VK_KHR_external_fence_fd
 }
 
 ExternalFence::~ExternalFence()
