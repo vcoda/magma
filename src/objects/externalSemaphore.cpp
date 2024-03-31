@@ -46,15 +46,21 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     semaphoreInfo.flags = flags;
     exportSemaphoreInfo.sType = VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO_KHR;
     exportSemaphoreInfo.pNext = extendedInfo.chainNodes();
-#if defined(VK_KHR_external_semaphore_win32)
-    exportSemaphoreInfo.handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
-#elif defined(VK_FUCHSIA_external_semaphore)
-    exportSemaphoreInfo.handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
-#elif defined(VK_KHR_external_semaphore_fd)
-    exportSemaphoreInfo.handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
-#else
-    exportSemaphoreInfo.handleTypes = 0;
-#endif
+    exportSemaphoreInfo.handleTypes =
+    #if defined(VK_KHR_external_semaphore_win32)
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
+    #elif defined(VK_FUCHSIA_external_semaphore)
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
+    #elif defined(VK_KHR_external_semaphore_fd)
+        #ifdef VK_USE_PLATFORM_ANDROID_KHR
+        // https://registry.khronos.org/EGL/extensions/ANDROID/EGL_ANDROID_native_fence_sync.txt
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+        #else
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+        #endif
+    #else
+        0;
+    #endif // VK_KHR_external_semaphore_fd
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create external semaphore");
@@ -118,11 +124,20 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     importFdInfo.pNext = nullptr;
     importFdInfo.semaphore = handle;
     importFdInfo.flags = importFlags;
-    importFdInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    importFdInfo.handleType =
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+    #else
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    #endif
     importFdInfo.fd = fd;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreFdKHR, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
     result = vkImportSemaphoreFdKHR(MAGMA_HANDLE(device), &importFdInfo);
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+    MAGMA_HANDLE_RESULT(result, "failed to import Android fence descriptor");
+    #else
     MAGMA_HANDLE_RESULT(result, "failed to import POSIX file descriptor");
+    #endif
 #endif // VK_KHR_external_semaphore_fd
 }
 
@@ -172,10 +187,19 @@ int ExternalSemaphore::getFd() const
     fdInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_GET_FD_INFO_KHR;
     fdInfo.pNext = nullptr;
     fdInfo.semaphore = handle;
-    fdInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    fdInfo.handleType =
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+    #else
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    #endif
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreFdKHR, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
     const VkResult result = vkGetSemaphoreFdKHR(MAGMA_HANDLE(device), &fdInfo, &fd);
+    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+    MAGMA_HANDLE_RESULT(result, "failed to get Android fence descriptor");
+    #else
     MAGMA_HANDLE_RESULT(result, "failed to get POSIX file descriptor");
+    #endif
     return fd;
 }
 #endif // VK_KHR_external_semaphore_fd
