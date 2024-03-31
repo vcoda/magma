@@ -34,7 +34,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
 #if defined(VK_KHR_external_semaphore_win32)
     hSemaphore(NULL)
 #elif defined(VK_FUCHSIA_external_semaphore)
-    zxEvent(0)
+    zirconHandle(0)
 #elif defined(VK_KHR_external_semaphore_fd)
     fd(0)
 #endif
@@ -77,7 +77,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
 #if defined(VK_KHR_external_semaphore_win32)
     hSemaphore(NULL)
 #elif defined(VK_FUCHSIA_external_semaphore)
-    zxEvent(0)
+    zirconHandle(0)
 #elif defined(VK_KHR_external_semaphore_fd)
     fd(0)
 #endif
@@ -131,7 +131,7 @@ ExternalSemaphore::~ExternalSemaphore()
 #if defined(VK_KHR_external_semaphore_win32)
     CloseHandle(hSemaphore);
 #elif defined(VK_FUCHSIA_external_semaphore)
-    zx_handle_close(zxEvent);
+    zx_handle_close(zirconHandle);
 #elif defined(VK_KHR_external_semaphore_fd)
     close(fd);
 #endif
@@ -160,9 +160,9 @@ zx_handle_t ExternalSemaphore::getEvent() const
     zirconHandleInfo.semaphore = handle;
     zirconHandleInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreWin32HandleKHR, VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
-    const VkResult result = vkGetSemaphoreZirconHandleFUCHSIA(MAGMA_HANDLE(device), &zirconHandleInfo, &zxEvent);
-    MAGMA_HANDLE_RESULT(result, "failed to get Zircon event object");
-    return zxEvent;
+    const VkResult result = vkGetSemaphoreZirconHandleFUCHSIA(MAGMA_HANDLE(device), &zirconHandleInfo, &zirconHandle);
+    MAGMA_HANDLE_RESULT(result, "failed to get Zircon handle");
+    return zirconHandle;
 }
 
 #elif defined(VK_KHR_external_semaphore_fd)
