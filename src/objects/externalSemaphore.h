@@ -33,6 +33,17 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
+        explicit ExternalSemaphore(std::shared_ptr<Device> device,
+        #if defined(VK_KHR_external_semaphore_win32)
+            HANDLE hSemaphore,
+            LPCWSTR name = nullptr,
+        #elif defined(VK_KHR_external_semaphore_fd)
+            int fd,
+        #endif
+            std::shared_ptr<IAllocator> allocator = nullptr,
+            VkSemaphoreCreateFlags flags = 0,
+            VkSemaphoreImportFlags importFlags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         ~ExternalSemaphore();
     #if defined(VK_KHR_external_semaphore_win32)
         HANDLE getNtHandle() const;

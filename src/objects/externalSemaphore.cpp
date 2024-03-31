@@ -60,6 +60,58 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     MAGMA_HANDLE_RESULT(result, "failed to create external semaphore");
 }
 
+ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
+#if defined(VK_KHR_external_semaphore_win32)
+    HANDLE hSemaphore,
+    LPCWSTR name /* nullptr */,
+#elif defined(VK_KHR_external_semaphore_fd)
+    int fd,
+#endif
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkSemaphoreCreateFlags flags /* 0 */,
+    VkSemaphoreImportFlags importFlags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
+    Semaphore(std::move(allocator), std::move(device)),
+#if defined(VK_KHR_external_semaphore_win32)
+    hSemaphore(NULL)
+#elif defined(VK_FUCHSIA_external_semaphore)
+    zxEvent(0)
+#elif defined(VK_KHR_external_semaphore_fd)
+    fd(0)
+#endif
+{
+    VkSemaphoreCreateInfo semaphoreInfo;
+    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    semaphoreInfo.pNext = extendedInfo.chainNodes();
+    semaphoreInfo.flags = flags;
+    VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
+        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_HANDLE_RESULT(result, "failed to create semaphore");
+#if defined(VK_KHR_external_semaphore_win32)
+    VkImportSemaphoreWin32HandleInfoKHR importWin32HandleInfo;
+    importWin32HandleInfo.sType = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR;
+    importWin32HandleInfo.pNext = nullptr;
+    importWin32HandleInfo.semaphore = handle;
+    importWin32HandleInfo.flags = importFlags;
+    importWin32HandleInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
+    importWin32HandleInfo.handle = hSemaphore;
+    importWin32HandleInfo.name = name;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreWin32HandleKHR, VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME);
+    result = vkImportSemaphoreWin32HandleKHR(MAGMA_HANDLE(device), &importWin32HandleInfo);
+    MAGMA_HANDLE_RESULT(result, "failed to import Win32 handle");
+#elif defined(VK_KHR_external_semaphore_fd)
+    VkImportSemaphoreFdInfoKHR importFdInfo;
+    importFdInfo.sType = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FD_INFO_KHR;
+    importFdInfo.pNext = nullptr;
+    importFdInfo.semaphore = handle;
+    importFdInfo.flags = importFlags;
+    importFdInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
+    importFdInfo.fd = fd;
+    result = vkImportSemaphoreWin32HandleKHR(MAGMA_HANDLE(device), &importFdInfo);
+    MAGMA_HANDLE_RESULT(result, "failed to import POSIX file descriptor");
+#endif // VK_KHR_external_semaphore_fd
+}
+
 ExternalSemaphore::~ExternalSemaphore()
 {
 #if defined(VK_KHR_external_semaphore_win32)
