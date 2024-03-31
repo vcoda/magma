@@ -62,10 +62,14 @@ void BinarySemaphore::signal(bool value)
     MAGMA_HANDLE_RESULT(result, "failed to signal binary semaphore from a host");
 }
 
+TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
+    Semaphore(std::move(allocator), std::move(device))
+{}
+
 TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t initialValue,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_SEMAPHORE, std::move(device), std::move(allocator))
+    Semaphore(std::move(allocator), std::move(device))
 {
     VkSemaphoreCreateInfo semaphoreInfo;
     VkSemaphoreTypeCreateInfoKHR semaphoreTypeInfo;
@@ -79,11 +83,6 @@ TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t in
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create timeline semaphore");
-}
-
-TimelineSemaphore::~TimelineSemaphore()
-{
-    vkDestroySemaphore(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 uint64_t TimelineSemaphore::getCounterValue() const

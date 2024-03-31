@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "nondispatchable.h"
+#include "semaphore.h"
 
 namespace magma
 {
@@ -45,18 +45,21 @@ namespace magma
         void signal(bool value);
     };
 
-    class TimelineSemaphore : public NonDispatchable<VkSemaphore>
+    class TimelineSemaphore : public Semaphore
     {
     public:
         explicit TimelineSemaphore(std::shared_ptr<Device> device,
             uint64_t initialValue,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-        ~TimelineSemaphore();
         uint64_t getCounterValue() const;
         void signal(uint64_t counter);
         bool wait(uint64_t counter,
             uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
+
+    protected:
+        TimelineSemaphore(std::shared_ptr<Device> device,
+            std::shared_ptr<IAllocator> allocator) noexcept;
     };
 #endif // VK_KHR_timeline_semaphore
 } // namespace magma
