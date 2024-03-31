@@ -12,9 +12,10 @@ inline StructureChain::Node::Node(const StructureType& node) noexcept:
 }
 
 inline StructureChain::Node::Node(const Node& node) noexcept:
-    size(node.size)
+    size(node.size),
+    data(MAGMA_NEW char[node.size])
 {
-    data = core::copyBinaryData(node);
+    memcpy(data, node.data, node.size);
 }
 
 inline StructureChain::Node::Node(Node&& node) noexcept:
