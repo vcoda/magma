@@ -236,7 +236,6 @@ namespace magma
         const VkBool32 KHR_external_memory_fd : 1;
         const VkBool32 KHR_external_memory_win32 : 1;
         const VkBool32 KHR_external_semaphore : 1;
-        const VkBool32 KHR_external_semaphore_capabilities : 1;
         const VkBool32 KHR_external_semaphore_fd : 1;
         const VkBool32 KHR_external_semaphore_win32 : 1;
         const VkBool32 KHR_format_feature_flags2 : 1;

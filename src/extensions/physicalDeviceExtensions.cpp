@@ -219,7 +219,6 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_external_memory_fd),
     MAGMA_CHECK_EXTENSION(KHR_external_memory_win32),
     MAGMA_CHECK_EXTENSION(KHR_external_semaphore),
-    MAGMA_CHECK_EXTENSION(KHR_external_semaphore_capabilities),
     MAGMA_CHECK_EXTENSION(KHR_external_semaphore_fd),
     MAGMA_CHECK_EXTENSION(KHR_external_semaphore_win32),
     MAGMA_CHECK_EXTENSION(KHR_format_feature_flags2),
