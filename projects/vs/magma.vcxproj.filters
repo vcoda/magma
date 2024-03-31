@@ -822,6 +822,9 @@
     <ClInclude Include="..\..\src\platform\externalSemaphore.h">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\platform\d3dExternalSemaphore.h">
+      <Filter>Header Files\platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1290,6 +1293,9 @@
       <Filter>Source Files\platform</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\platform\externalSemaphore.cpp">
+      <Filter>Source Files\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\d3dExternalSemaphore.cpp">
       <Filter>Source Files\platform</Filter>
     </ClCompile>
   </ItemGroup>

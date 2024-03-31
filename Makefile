@@ -165,6 +165,7 @@ SRC_OBJS= \
 	src/objects/vertexBuffer.o \
 	\
 	src/platform/androidHardwareBuffer.o \
+	src/platform/d3dExternalSemaphore.o \
 	src/platform/externalFence.o \
 	src/platform/externalSemaphore.o \
 	\

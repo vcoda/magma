@@ -137,6 +137,9 @@ namespace magma
 #endif
 #ifdef VK_KHR_external_semaphore
     MAGMA_TYPEDEF_SHARED_PTR(ExternalSemaphore);
+    #ifdef VK_KHR_external_semaphore_win32
+    MAGMA_TYPEDEF_SHARED_PTR(D3d12ExternalSemaphore);
+    #endif
 #endif
 #ifdef VK_KHR_fragment_shading_rate
     MAGMA_TYPEDEF_SHARED_PTR(FragmentShadingRateAttachment);
@@ -159,6 +162,9 @@ namespace magma
 #ifdef VK_KHR_timeline_semaphore
     MAGMA_TYPEDEF_SHARED_PTR(BinarySemaphore);
     MAGMA_TYPEDEF_SHARED_PTR(TimelineSemaphore);
+    #if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
+        MAGMA_TYPEDEF_SHARED_PTR(D3d12ExternalTimelineSemaphore);
+    #endif
 #endif
 
 #ifdef VK_KHR_surface

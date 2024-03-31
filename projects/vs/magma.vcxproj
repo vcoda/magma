@@ -344,6 +344,7 @@
     <ClInclude Include="..\..\src\packed\rcpExpPow2.h" />
     <ClInclude Include="..\..\src\packed\vector.h" />
     <ClInclude Include="..\..\src\platform\androidHardwareBuffer.h" />
+    <ClInclude Include="..\..\src\platform\d3dExternalSemaphore.h" />
     <ClInclude Include="..\..\src\platform\externalFence.h" />
     <ClInclude Include="..\..\src\platform\externalSemaphore.h" />
     <ClInclude Include="..\..\src\renderpass\attachment.h" />
@@ -531,6 +532,7 @@
     <ClCompile Include="..\..\src\objects\validationCache.cpp" />
     <ClCompile Include="..\..\src\objects\vertexBuffer.cpp" />
     <ClCompile Include="..\..\src\platform\androidHardwareBuffer.cpp" />
+    <ClCompile Include="..\..\src\platform\d3dExternalSemaphore.cpp" />
     <ClCompile Include="..\..\src\platform\externalFence.cpp" />
     <ClCompile Include="..\..\src\platform\externalSemaphore.cpp" />
     <ClCompile Include="..\..\src\renderpass\subpass.cpp" />

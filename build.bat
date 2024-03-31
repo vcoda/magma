@@ -197,6 +197,7 @@ src\objects\uniformTexelBuffer.cpp ^
 src\objects\validationCache.cpp ^
 src\objects\vertexBuffer.cpp ^
 src\platform\androidHardwareBuffer.cpp ^
+src\platform\d3dExternalSemaphore.cpp ^
 src\platform\externalFence.cpp ^
 src\platform\externalSemaphore.cpp ^
 src\renderpass\subpass.cpp ^
@@ -372,6 +373,7 @@ uniformTexelBuffer.obj ^
 validationCache.obj ^
 vertexBuffer.obj ^
 androidHardwareBuffer.obj ^
+d3dExternalSemaphore.obj ^
 externalFence.obj ^
 externalSemaphore.obj ^
 subpass.obj ^
