@@ -51,7 +51,7 @@ if %DEBUG%==1 (
   set CFLAGS=%BASE_CFLAGS% /O2 /Oi /GL /Zi /Gm- /Gy /MT /D NDEBUG
 )
 
-set BASE_LDFLAGS=/machine:X64 /libpath:%BUILD_DIR% /out:%BUILD_DIR%\%TARGET% /nologo
+set BASE_LDFLAGS=/machine:X64 /libpath:%BUILD_DIR% /out:%BUILD_DIR%\%TARGET% /nologo /ignore:4221
 
 if %DEBUG%==1 (
   set LDFLAGS=%BASE_LDFLAGS%
