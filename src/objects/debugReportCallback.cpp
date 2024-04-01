@@ -77,13 +77,13 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType obje
 void DebugReportCallback::messageFormat(VkDebugReportFlagsEXT flags, VkObjectType objectType,
     uint64_t object, std::size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const noexcept
 {
-    MAGMA_ASSERT(strlen(format) < MAGMA_MAX_STRING);
     char buffer[MAGMA_MAX_STRING];
     va_list args;
     va_start(args, format);
 #ifdef _MSC_VER
-    vsprintf_s(buffer, format, args);
+    vsnprintf_s(buffer, MAGMA_MAX_STRING, _TRUNCATE, format, args);
 #else
+    MAGMA_ASSERT(strlen(format) < MAGMA_MAX_STRING);
     vsprintf(buffer, format, args);
 #endif
     va_end(args);
