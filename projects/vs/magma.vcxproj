@@ -347,6 +347,7 @@
     <ClInclude Include="..\..\src\platform\d3dExternalSemaphore.h" />
     <ClInclude Include="..\..\src\platform\externalFence.h" />
     <ClInclude Include="..\..\src\platform\externalSemaphore.h" />
+    <ClInclude Include="..\..\src\platform\win32ExternalSemaphore.h" />
     <ClInclude Include="..\..\src\renderpass\attachment.h" />
     <ClInclude Include="..\..\src\renderpass\loadStoreOp.h" />
     <ClInclude Include="..\..\src\renderpass\subpass.h" />
@@ -535,6 +536,7 @@
     <ClCompile Include="..\..\src\platform\d3dExternalSemaphore.cpp" />
     <ClCompile Include="..\..\src\platform\externalFence.cpp" />
     <ClCompile Include="..\..\src\platform\externalSemaphore.cpp" />
+    <ClCompile Include="..\..\src\platform\win32ExternalSemaphore.cpp" />
     <ClCompile Include="..\..\src\renderpass\subpass.cpp" />
     <ClCompile Include="..\..\src\shaders\pipelineShaderStage.cpp" />
     <ClCompile Include="..\..\src\shaders\rayTracingShaderGroup.cpp" />

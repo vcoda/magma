@@ -168,6 +168,7 @@ SRC_OBJS= \
 	src/platform/d3dExternalSemaphore.o \
 	src/platform/externalFence.o \
 	src/platform/externalSemaphore.o \
+	src/platform/win32ExternalSemaphore.o \
 	\
 	src/renderpass/subpass.o \
 	\

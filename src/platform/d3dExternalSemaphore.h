@@ -17,7 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
+#include "../objects/semaphore.h"
+#ifdef VK_KHR_timeline_semaphore
 #include "../objects/timelineSemaphore.h"
+#endif
+#include "win32ExternalSemaphore.h"
 
 namespace magma
 {
@@ -27,7 +31,8 @@ namespace magma
        to the underlying synchronization primitive associated
        with the Direct3D fence. */
 
-    class D3d12ExternalSemaphore : public Semaphore
+    class D3d12ExternalSemaphore : public Semaphore,
+        public Win32ExternalSemaphore
     {
     public:
         explicit D3d12ExternalSemaphore(std::shared_ptr<Device> device,
@@ -35,17 +40,12 @@ namespace magma
             VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit D3d12ExternalSemaphore(std::shared_ptr<Device> device,
-            HANDLE hFenceHandle,
+            HANDLE hFence,
             LPCWSTR name = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkSemaphoreCreateFlags flags = 0,
             VkSemaphoreImportFlags importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        ~D3d12ExternalSemaphore();
-        HANDLE getNtHandle() const;
-
-    private:
-        mutable HANDLE hSemaphore;
     };
 
     /* As the introduction of the external semaphore handle type
@@ -59,7 +59,8 @@ namespace magma
        VK_SEMAPHORE_TYPE_TIMELINE. */
 
 #ifdef VK_KHR_timeline_semaphore
-    class D3d12ExternalTimelineSemaphore : public TimelineSemaphore
+    class D3d12ExternalTimelineSemaphore : public TimelineSemaphore,
+        public Win32ExternalSemaphore
     {
     public:
         explicit D3d12ExternalTimelineSemaphore(std::shared_ptr<Device> device,
@@ -69,17 +70,12 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         explicit D3d12ExternalTimelineSemaphore(std::shared_ptr<Device> device,
             uint64_t initialValue,
-            HANDLE hFenceHandle,
+            HANDLE hFence,
             LPCWSTR name = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkSemaphoreCreateFlags flags = 0,
             VkSemaphoreImportFlags importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        ~D3d12ExternalTimelineSemaphore();
-        HANDLE getNtHandle() const;
-
-    private:
-        mutable HANDLE hSemaphore;
     };
 
     typedef D3d12ExternalTimelineSemaphore D3d11ExternalTimelineSemaphore;

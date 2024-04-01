@@ -200,6 +200,7 @@ src\platform\androidHardwareBuffer.cpp ^
 src\platform\d3dExternalSemaphore.cpp ^
 src\platform\externalFence.cpp ^
 src\platform\externalSemaphore.cpp ^
+src\platform\win32ExternalSemaphore.cpp ^
 src\renderpass\subpass.cpp ^
 src\shaders\pipelineShaderStage.cpp ^
 src\shaders\rayTracingShaderGroup.cpp ^
@@ -376,6 +377,7 @@ androidHardwareBuffer.obj ^
 d3dExternalSemaphore.obj ^
 externalFence.obj ^
 externalSemaphore.obj ^
+win32ExternalSemaphore.obj ^
 subpass.obj ^
 pipelineShaderStage.obj ^
 rayTracingShaderGroup.obj ^

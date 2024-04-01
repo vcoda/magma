@@ -17,6 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../objects/semaphore.h"
+#ifdef VK_KHR_external_semaphore_win32
+#include "win32ExternalSemaphore.h"
+#endif
 
 namespace magma
 {
@@ -28,6 +31,9 @@ namespace magma
 
 #ifdef VK_KHR_external_semaphore
     class ExternalSemaphore : public Semaphore
+    #ifdef VK_KHR_external_semaphore_win32
+        ,public Win32ExternalSemaphore
+    #endif
     {
     public:
         explicit ExternalSemaphore(std::shared_ptr<Device> device,
@@ -35,7 +41,7 @@ namespace magma
             VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit ExternalSemaphore(std::shared_ptr<Device> device,
-        #if defined(VK_KHR_external_semaphore_win32)
+        #ifdef VK_KHR_external_semaphore_win32
             HANDLE hSemaphore,
             LPCWSTR name = nullptr,
         #elif defined(VK_FUCHSIA_external_semaphore)
@@ -48,8 +54,8 @@ namespace magma
             VkSemaphoreImportFlags importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~ExternalSemaphore();
-    #if defined(VK_KHR_external_semaphore_win32)
-        HANDLE getNtHandle() const;
+    #ifdef VK_KHR_external_semaphore_win32
+        // HANDLE Win32ExternalSemaphore::getNtHandle() const;
     #elif defined(VK_FUCHSIA_external_semaphore)
         zx_handle_t getEvent() const;
     #elif defined(VK_KHR_external_semaphore_fd)
@@ -57,8 +63,8 @@ namespace magma
     #endif
 
     private:
-    #if defined(VK_KHR_external_semaphore_win32)
-        mutable HANDLE hSemaphore;
+    #ifdef VK_KHR_external_semaphore_win32
+        // Win32ExternalSemaphore::hSemaphore;
     #elif defined(VK_FUCHSIA_external_semaphore)
         mutable zx_handle_t zirconHandle;
     #elif defined(VK_KHR_external_semaphore_fd)
