@@ -1,45 +1,61 @@
 namespace magma
 {
-template<class StructureType>
-inline StructureChain::Node::Node(const StructureType& blob) noexcept:
-    size(sizeof(StructureType)),
-    data(core::copyBinaryData(blob))
-{
-    static_assert(sizeof(StructureType) > sizeof(VkBaseInStructure),
-        "chain structure size is too little");
-    static_assert(std::is_trivially_copyable<StructureType>::value,
-        "chain structure required to be trivially copyable");
-}
+    /* Opaque blob of Vulkan structure that has at least
+       sType and pNext members. */
 
-inline StructureChain::Node::Node(const Node& node) noexcept:
-    size(node.size),
-    data(MAGMA_NEW char[node.size])
-{
-    memcpy(data, node.data, node.size);
-}
+    class StructureChain::Node
+    {
+    public:
+        template<class StructureType>
+        Node(const StructureType& blob) noexcept:
+            size(sizeof(StructureType)),
+            data(core::copyBinaryData(blob))
+        {
+            static_assert(sizeof(StructureType) > sizeof(VkBaseInStructure),
+                "chain structure size is too little");
+            static_assert(std::is_trivially_copyable<StructureType>::value,
+                "chain structure required to be trivially copyable");
+        }
 
-inline StructureChain::Node::Node(Node&& node) noexcept:
-    size(node.size),
-    data(node.data)
-{
-    node.size = 0;
-    node.data = nullptr;
-}
+        Node(const Node& node) noexcept:
+            size(node.size),
+            data(MAGMA_NEW uint8_t[node.size])
+        {
+            memcpy(data, node.data, node.size);
+        }
 
-inline StructureChain::Node::~Node()
-{
-    delete[] reinterpret_cast<char *>(data);
-}
+        Node(Node&& node) noexcept:
+            size(node.size),
+            data(node.data)
+        {
+            node.size = 0;
+            node.data = nullptr;
+        }
 
-inline VkBaseOutStructure *StructureChain::Node::getNode() noexcept
-{
-    return reinterpret_cast<VkBaseOutStructure *>(data);
-}
+        ~Node()
+        {
+            delete[] data;
+        }
 
-inline const VkBaseInStructure *StructureChain::Node::getNode() const noexcept
-{
-    return reinterpret_cast<const VkBaseInStructure *>(data);
-}
+        VkBaseOutStructure *getNode() noexcept
+        {
+            return reinterpret_cast<VkBaseOutStructure *>(data);
+        }
+
+        const VkBaseInStructure *getNode() const noexcept
+        {
+            return reinterpret_cast<const VkBaseInStructure *>(data);
+        }
+
+        std::size_t getSize() const noexcept
+        {
+            return size;
+        }
+
+    private:
+        std::size_t size;
+        uint8_t *data;
+    };
 
 template<class StructureType>
 inline void StructureChain::addNode(const StructureType& node)
