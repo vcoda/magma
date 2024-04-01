@@ -123,18 +123,17 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
 void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
     const StructureChain& extendedInfo /* default */)
 {   // https://www.khronos.org/blog/vulkan-timeline-semaphores
-    const VkSemaphore waitSignalSemaphore = *semaphore;
     VkSubmitInfo submitInfo;
     VkTimelineSemaphoreSubmitInfoKHR submitInfoTimelineSemaphore;
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.pNext = &submitInfoTimelineSemaphore;
     submitInfo.waitSemaphoreCount = 1;
-    submitInfo.pWaitSemaphores = &waitSignalSemaphore;
+    submitInfo.pWaitSemaphores = semaphore->getHandleAddress();
     submitInfo.pWaitDstStageMask = 0;
     submitInfo.commandBufferCount = 0;
     submitInfo.pCommandBuffers = nullptr;
     submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores = &waitSignalSemaphore;
+    submitInfo.pSignalSemaphores = semaphore->getHandleAddress();
     submitInfoTimelineSemaphore.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO_KHR;
     submitInfoTimelineSemaphore.pNext = extendedInfo.chainNodes();
     submitInfoTimelineSemaphore.waitSemaphoreValueCount = 1;
