@@ -29,7 +29,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_external_semaphore_win32
-Win32ExternalSemaphore::Win32ExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBits handleType, const Semaphore *self) noexcept:
+Win32ExternalSemaphore::Win32ExternalSemaphore(const Semaphore *self,
+    VkExternalSemaphoreHandleTypeFlagBits handleType) noexcept:
     handleType(handleType),
     self(self),
     hSemaphore(NULL)

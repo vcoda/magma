@@ -35,8 +35,8 @@ namespace magma
         HANDLE getNtHandle() const;
 
     protected:
-        Win32ExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBits handleType,
-            const Semaphore *self) noexcept;
+        Win32ExternalSemaphore(const Semaphore *self,
+            VkExternalSemaphoreHandleTypeFlagBits handleType) noexcept;
         void importNtHandle(HANDLE hSemaphore,
             LPCWSTR name,
             VkSemaphoreImportFlags flags);

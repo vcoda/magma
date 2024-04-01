@@ -31,7 +31,7 @@ D3d12ExternalSemaphore::D3d12ExternalSemaphore(std::shared_ptr<Device> device,
     VkSemaphoreCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     Semaphore(std::move(allocator), std::move(device)),
-    Win32ExternalSemaphore(VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR, this)
+    Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR)
 {
     VkSemaphoreCreateInfo semaphoreInfo;
     VkExportSemaphoreCreateInfoKHR exportSemaphoreInfo;
@@ -54,7 +54,7 @@ D3d12ExternalSemaphore::D3d12ExternalSemaphore(std::shared_ptr<Device> device,
     VkSemaphoreImportFlags importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     Semaphore(std::move(device), std::move(allocator), flags, extendedInfo),
-    Win32ExternalSemaphore(VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR, this)
+    Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR)
 {
     importNtHandle(hFence, name, importFlags);
 }
@@ -66,7 +66,7 @@ D3d12ExternalTimelineSemaphore::D3d12ExternalTimelineSemaphore(std::shared_ptr<D
     VkSemaphoreCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     TimelineSemaphore(std::move(device), std::move(allocator)),
-    Win32ExternalSemaphore(VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR, this)
+    Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR)
 {
     VkSemaphoreCreateInfo semaphoreInfo;
     VkSemaphoreTypeCreateInfoKHR semaphoreTypeInfo;
@@ -94,7 +94,7 @@ D3d12ExternalTimelineSemaphore::D3d12ExternalTimelineSemaphore(std::shared_ptr<D
     VkSemaphoreImportFlags importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     TimelineSemaphore(std::move(device), initialValue, std::move(allocator), flags, extendedInfo),
-    Win32ExternalSemaphore(VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR, this)
+    Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR)
 {
     importNtHandle(hFence, name, importFlags);
 }
