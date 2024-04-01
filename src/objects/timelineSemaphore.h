@@ -35,17 +35,6 @@ namespace magma
           the timeline semaphore to a specified value. */
 
 #ifdef VK_KHR_timeline_semaphore
-    class BinarySemaphore : public NonDispatchable<VkSemaphore>
-    {
-    public:
-        explicit BinarySemaphore(std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator = nullptr,
-            VkSemaphoreCreateFlags flags = 0,
-            const StructureChain& extendedInfo = StructureChain());
-        ~BinarySemaphore();
-        void signal(bool value);
-    };
-
     class TimelineSemaphore : public Semaphore
     {
     public:
