@@ -120,7 +120,7 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
 }
 
 #ifdef VK_KHR_timeline_semaphore
-void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
+void Queue::submit(std::shared_ptr<const TimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
     const StructureChain& extendedInfo /* default */)
 {   // https://www.khronos.org/blog/vulkan-timeline-semaphores
     VkSubmitInfo submitInfo;
@@ -146,7 +146,7 @@ void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitVa
 #endif // #ifdef VK_KHR_timeline_semaphore
 
 #if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
-void Queue::submit(std::shared_ptr<D3d12ExternalSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
+void Queue::submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
     const StructureChain& extendedInfo /* default */)
 {
     VkSubmitInfo submitInfo;
@@ -171,7 +171,7 @@ void Queue::submit(std::shared_ptr<D3d12ExternalSemaphore> semaphore, uint64_t w
 }
 
 #ifdef VK_KHR_timeline_semaphore
-void Queue::submit(std::shared_ptr<D3d12ExternalTimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
+void Queue::submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
     const StructureChain& extendedInfo /* default */)
 {
     VkSubmitInfo submitInfo;

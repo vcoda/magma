@@ -61,18 +61,18 @@ namespace magma
             std::shared_ptr<const Fence> fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_timeline_semaphore
-        void submit(std::shared_ptr<TimelineSemaphore> semaphore,
+        void submit(std::shared_ptr<const TimelineSemaphore> semaphore,
             uint64_t waitValue,
             uint64_t signalValue,
             const StructureChain& extendedInfo /* default */);
     #endif // VK_KHR_timeline_semaphore
     #if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
-        void submit(std::shared_ptr<D3d12ExternalSemaphore> semaphore,
+        void submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore,
             uint64_t waitValue,
             uint64_t signalValue,
             const StructureChain& extendedInfo /* default */);
     #ifdef VK_KHR_timeline_semaphore
-        void submit(std::shared_ptr<D3d12ExternalTimelineSemaphore> semaphore,
+        void submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semaphore,
             uint64_t waitValue,
             uint64_t signalValue,
             const StructureChain& extendedInfo /* default */);
