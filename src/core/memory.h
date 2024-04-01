@@ -138,12 +138,12 @@ inline char *copyString(const char *src) noexcept
     return dst;
 }
 
-inline void *copyBinaryData(const void *src, std::size_t size) noexcept
+inline uint8_t *copyBinaryData(const void *src, std::size_t size) noexcept
 {
-    void *dst = nullptr;
+    uint8_t *dst = nullptr;
     if (src && size)
     {
-        dst = MAGMA_NEW char[size];
+        dst = MAGMA_NEW uint8_t[size];
         if (dst)
             memcpy(dst, src, size);
     }
@@ -151,9 +151,9 @@ inline void *copyBinaryData(const void *src, std::size_t size) noexcept
 }
 
 template<class Type>
-inline void *copyBinaryData(const Type& src) noexcept
+inline uint8_t *copyBinaryData(const Type& src) noexcept
 {
-    void *dst = MAGMA_NEW char[sizeof(Type)];
+    uint8_t *dst = MAGMA_NEW uint8_t[sizeof(Type)];
     if (dst)
         memcpy(dst, &src, sizeof(Type));
     return dst;
