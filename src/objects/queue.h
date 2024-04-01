@@ -25,6 +25,12 @@ namespace magma
 #ifdef VK_KHR_timeline_semaphore
     class TimelineSemaphore;
 #endif
+#if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
+    class D3d12ExternalSemaphore;
+    #ifdef VK_KHR_timeline_semaphore
+    class D3d12ExternalTimelineSemaphore;
+    #endif
+#endif // VK_KHR_external_semaphore && VK_KHR_external_semaphore_win32
     class Fence;
     class Swapchain;
 
@@ -60,6 +66,18 @@ namespace magma
             uint64_t signalValue,
             const StructureChain& extendedInfo /* default */);
     #endif // VK_KHR_timeline_semaphore
+    #if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
+        void submit(std::shared_ptr<D3d12ExternalSemaphore> semaphore,
+            uint64_t waitValue,
+            uint64_t signalValue,
+            const StructureChain& extendedInfo /* default */);
+    #ifdef VK_KHR_timeline_semaphore
+        void submit(std::shared_ptr<D3d12ExternalTimelineSemaphore> semaphore,
+            uint64_t waitValue,
+            uint64_t signalValue,
+            const StructureChain& extendedInfo /* default */);
+    #endif // VK_KHR_timeline_semaphore
+    #endif // VK_KHR_external_semaphore && VK_KHR_external_semaphore_win32
     #ifdef VK_KHR_device_group
         void submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
             const std::vector<uint32_t>& cmdBufferDeviceMasks = {},

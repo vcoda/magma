@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "timelineSemaphore.h"
 #include "fence.h"
 #include "swapchain.h"
+#include "../platform/d3dExternalSemaphore.h"
 #include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 
@@ -144,6 +145,58 @@ void Queue::submit(std::shared_ptr<TimelineSemaphore> semaphore, uint64_t waitVa
     MAGMA_HANDLE_RESULT(result, "failed to submit queue");
 }
 #endif // #ifdef VK_KHR_timeline_semaphore
+
+#if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
+void Queue::submit(std::shared_ptr<D3d12ExternalSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
+    const StructureChain& extendedInfo /* default */)
+{
+    VkSubmitInfo submitInfo;
+    VkD3D12FenceSubmitInfoKHR submitInfoFenceD3D12;
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.pNext = &submitInfoFenceD3D12;
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = semaphore->getHandleAddress();
+    submitInfo.pWaitDstStageMask = 0;
+    submitInfo.commandBufferCount = 0;
+    submitInfo.pCommandBuffers = nullptr;
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = semaphore->getHandleAddress();
+    submitInfoFenceD3D12.sType = VK_STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR;
+    submitInfoFenceD3D12.pNext = extendedInfo.chainNodes();
+    submitInfoFenceD3D12.waitSemaphoreValuesCount = 1;
+    submitInfoFenceD3D12.pWaitSemaphoreValues = &waitValue;
+    submitInfoFenceD3D12.signalSemaphoreValuesCount = 1;
+    submitInfoFenceD3D12.pSignalSemaphoreValues = &signalValue;
+    const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
+    MAGMA_HANDLE_RESULT(result, "failed to submit queue with D3D fence");
+}
+
+#ifdef VK_KHR_timeline_semaphore
+void Queue::submit(std::shared_ptr<D3d12ExternalTimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
+    const StructureChain& extendedInfo /* default */)
+{
+    VkSubmitInfo submitInfo;
+    VkD3D12FenceSubmitInfoKHR submitInfoFenceD3D12;
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.pNext = &submitInfoFenceD3D12;
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = semaphore->getHandleAddress();
+    submitInfo.pWaitDstStageMask = 0;
+    submitInfo.commandBufferCount = 0;
+    submitInfo.pCommandBuffers = nullptr;
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = semaphore->getHandleAddress();
+    submitInfoFenceD3D12.sType = VK_STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR;
+    submitInfoFenceD3D12.pNext = extendedInfo.chainNodes();
+    submitInfoFenceD3D12.waitSemaphoreValuesCount = 1;
+    submitInfoFenceD3D12.pWaitSemaphoreValues = &waitValue;
+    submitInfoFenceD3D12.signalSemaphoreValuesCount = 1;
+    submitInfoFenceD3D12.pSignalSemaphoreValues = &signalValue;
+    const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
+    MAGMA_HANDLE_RESULT(result, "failed to submit queue with D3D fence");
+}
+#endif // VK_KHR_timeline_semaphore
+#endif // VK_KHR_external_semaphore && VK_KHR_external_semaphore_win32
 
 #ifdef VK_KHR_device_group
 void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
