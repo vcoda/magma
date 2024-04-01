@@ -45,6 +45,23 @@ DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat f
     return support;
 }
 
+#ifdef VK_KHR_external_semaphore_capabilities
+DeviceFeatures::ExternalSemaphoreFeatures DeviceFeatures::supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
+{
+    ExternalSemaphoreFeatures features = {};
+    if (auto device = parent.lock())
+    {
+        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        const VkExternalSemaphorePropertiesKHR properties = physicalDevice->getExternalSemaphoreProperties(handleType);
+        if (properties.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT_KHR)
+            features.exportable = VK_TRUE;
+        if (properties.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT_KHR)
+            features.importable = VK_TRUE;
+    }
+    return features;
+}
+#endif // VK_KHR_external_semaphore_capabilities
+
 bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, VkImageUsageFlags flags) const
 {
     if (auto device = parent.lock())

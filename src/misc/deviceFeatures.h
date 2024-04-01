@@ -29,9 +29,13 @@ namespace magma
     {
     public:
         struct FormatFeatures;
+        struct ExternalSemaphoreFeatures;
 
         FormatFeatures supportsFormatFeatures(VkFormat format,
             VkFormatFeatureFlags flags) const noexcept;
+    #ifdef VK_KHR_external_semaphore_capabilities
+        ExternalSemaphoreFeatures supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const;
+    #endif
         bool supportsImageUsage(std::shared_ptr<const Surface> surface,
             VkImageUsageFlags flags) const;
         bool supportsDeviceLocalHostVisibleMemory() const noexcept;
@@ -54,5 +58,11 @@ namespace magma
         VkBool32 linear: 1;
         VkBool32 optimal: 1;
         VkBool32 buffer: 1;
+    };
+
+    struct DeviceFeatures::ExternalSemaphoreFeatures
+    {
+        VkBool32 exportable: 1;
+        VkBool32 importable: 1;
     };
 } // namespace magma
