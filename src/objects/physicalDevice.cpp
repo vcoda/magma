@@ -395,6 +395,21 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
 }
 #endif // VK_KHR_display
 
+#ifdef VK_KHR_external_semaphore_capabilities
+VkExternalSemaphorePropertiesKHR PhysicalDevice::getExternalSemaphoreProperties(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
+{
+    VkPhysicalDeviceExternalSemaphoreInfoKHR physicalDeviceExternalSemaphoreInfo;
+    physicalDeviceExternalSemaphoreInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO_KHR;
+    physicalDeviceExternalSemaphoreInfo.pNext = nullptr;
+    physicalDeviceExternalSemaphoreInfo.handleType = handleType;
+    VkExternalSemaphorePropertiesKHR externalSemaphoreProperties = {};
+    externalSemaphoreProperties.sType = VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES_KHR;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceExternalSemaphorePropertiesKHR, VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME);
+    vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(handle, &physicalDeviceExternalSemaphoreInfo, &externalSemaphoreProperties);
+    return externalSemaphoreProperties;
+}
+#endif // VK_KHR_external_semaphore_capabilities
+
 #if defined(VK_ANDROID_external_memory_android_hardware_buffer) && defined(VK_KHR_get_physical_device_properties2)
 uint64_t PhysicalDevice::getAndroidHardwareBufferUsage(VkFormat format, VkImageUsageFlags usage,
     VkImageCreateFlags flags /* 0 */) const

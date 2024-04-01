@@ -90,6 +90,9 @@ namespace magma
         std::vector<VkDisplayPlanePropertiesKHR> getDisplayPlaneProperties() const;
         std::vector<std::shared_ptr<Display>> getSupportedDisplays(uint32_t planeIndex) const;
     #endif // VK_KHR_display
+    #ifdef VK_KHR_external_semaphore_capabilities
+        VkExternalSemaphorePropertiesKHR getExternalSemaphoreProperties(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const;
+    #endif
     #if defined(VK_ANDROID_external_memory_android_hardware_buffer) && defined(VK_KHR_get_physical_device_properties2)
         uint64_t getAndroidHardwareBufferUsage(VkFormat format,
             VkImageUsageFlags usage,
