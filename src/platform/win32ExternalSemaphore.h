@@ -41,7 +41,6 @@ namespace magma
             LPCWSTR name,
             VkSemaphoreImportFlags flags);
 
-    protected:
         const VkExternalSemaphoreHandleTypeFlagBits handleType;
 
     private:

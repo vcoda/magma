@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../exceptions/errorResult.h"
 
 #define MAGMA_EXTERNAL_SEMAPHORE_WIN32_EXTENSION(proc)\
-    static const magma::DeviceExtension<PFN_##proc> proc(device, MAGMA_STRINGIZE(proc), VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME)
+    static const magma::DeviceExtension<PFN_##proc> proc(*self->getDevice(), MAGMA_STRINGIZE(proc), VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME)
 
 namespace magma
 {
@@ -55,21 +55,19 @@ Win32ExternalSemaphore::~Win32ExternalSemaphore()
 
 HANDLE Win32ExternalSemaphore::getNtHandle() const
 {
-    VkDevice device = *self->getDevice();
     VkSemaphoreGetWin32HandleInfoKHR win32HandleInfo;
     win32HandleInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_GET_WIN32_HANDLE_INFO_KHR;
     win32HandleInfo.pNext = nullptr;
     win32HandleInfo.semaphore = *self;
     win32HandleInfo.handleType = handleType;
     MAGMA_EXTERNAL_SEMAPHORE_WIN32_EXTENSION(vkGetSemaphoreWin32HandleKHR);
-    const VkResult result = vkGetSemaphoreWin32HandleKHR(device, &win32HandleInfo, &hSemaphore);
+    const VkResult result = vkGetSemaphoreWin32HandleKHR(*self->getDevice(), &win32HandleInfo, &hSemaphore);
     MAGMA_HANDLE_RESULT(result, "failed to get Win32 handle");
     return hSemaphore;
 }
 
 void Win32ExternalSemaphore::importNtHandle(HANDLE hSemaphore, LPCWSTR name, VkSemaphoreImportFlags flags)
 {
-    VkDevice device = *self->getDevice();
     VkImportSemaphoreWin32HandleInfoKHR importWin32HandleInfo;
     importWin32HandleInfo.sType = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR;
     importWin32HandleInfo.pNext = nullptr;
@@ -79,7 +77,7 @@ void Win32ExternalSemaphore::importNtHandle(HANDLE hSemaphore, LPCWSTR name, VkS
     importWin32HandleInfo.handle = hSemaphore;
     importWin32HandleInfo.name = name;
     MAGMA_EXTERNAL_SEMAPHORE_WIN32_EXTENSION(vkImportSemaphoreWin32HandleKHR);
-    const VkResult result = vkImportSemaphoreWin32HandleKHR(device, &importWin32HandleInfo);
+    const VkResult result = vkImportSemaphoreWin32HandleKHR(*self->getDevice(), &importWin32HandleInfo);
     MAGMA_HANDLE_RESULT(result, "failed to import Win32 handle");
 }
 #endif // VK_KHR_external_semaphore_win32
