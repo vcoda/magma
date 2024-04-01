@@ -107,6 +107,9 @@ namespace magma
 #ifdef VK_EXT_full_screen_exclusive
     MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchain);
 #endif
+#ifdef VK_EXT_headless_surface
+    MAGMA_TYPEDEF_SHARED_PTR(HeadlessSurface);
+#endif
 #if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
     MAGMA_TYPEDEF_SHARED_PTR(DrawMeshTasksIndirectBuffer);
     MAGMA_TYPEDEF_SHARED_PTR(MeshPrimitivesQuery);
@@ -165,50 +168,9 @@ namespace magma
         MAGMA_TYPEDEF_SHARED_PTR(D3d12ExternalTimelineSemaphore);
     #endif
 #endif
-
 #ifdef VK_KHR_surface
     MAGMA_TYPEDEF_SHARED_PTR(Surface);
-#ifdef VK_KHR_win32_surface
-    MAGMA_TYPEDEF_SHARED_PTR(Win32Surface);
 #endif
-#ifdef VK_KHR_xlib_surface
-    MAGMA_TYPEDEF_SHARED_PTR(XlibSurface);
-#endif
-#ifdef VK_KHR_xcb_surface
-    MAGMA_TYPEDEF_SHARED_PTR(XcbSurface);
-#endif
-#ifdef VK_KHR_wayland_surface
-    MAGMA_TYPEDEF_SHARED_PTR(WaylandSurface);
-#endif
-#ifdef VK_QNX_screen_surface
-    MAGMA_TYPEDEF_SHARED_PTR(QnxSurface);
-#endif
-#ifdef VK_KHR_android_surface
-    MAGMA_TYPEDEF_SHARED_PTR(AndroidSurface);
-#endif
-#ifdef VK_FUCHSIA_imagepipe_surface
-    MAGMA_TYPEDEF_SHARED_PTR(FuchsiaImagePipeSurface);
-#endif
-#ifdef VK_MVK_ios_surface
-    MAGMA_TYPEDEF_SHARED_PTR(iOSSurface);
-#endif
-#ifdef VK_MVK_macos_surface
-    MAGMA_TYPEDEF_SHARED_PTR(MacOSSurface);
-#endif
-#ifdef VK_EXT_metal_surface
-    MAGMA_TYPEDEF_SHARED_PTR(MetalSurface);
-#endif
-#ifdef VK_NN_vi_surface
-    MAGMA_TYPEDEF_SHARED_PTR(ViSurface);
-#endif
-#ifdef VK_GGP_stream_descriptor_surface
-    MAGMA_TYPEDEF_SHARED_PTR(GgpStreamDescriptorSurface);
-#endif
-#ifdef VK_EXT_headless_surface
-    MAGMA_TYPEDEF_SHARED_PTR(HeadlessSurface);
-#endif
-#endif // VK_KHR_surface
-
 #ifdef VK_KHR_swapchain
     MAGMA_TYPEDEF_SHARED_PTR(Swapchain);
     MAGMA_TYPEDEF_SHARED_PTR(SwapchainImage);

@@ -165,10 +165,21 @@ SRC_OBJS= \
 	src/objects/vertexBuffer.o \
 	\
 	src/platform/androidHardwareBuffer.o \
+	src/platform/androidSurface.o \
 	src/platform/d3dExternalSemaphore.o \
 	src/platform/externalFence.o \
 	src/platform/externalSemaphore.o \
+	src/platform/fuchsiaSurface.o \
+	src/platform/iosSurface.o \
+	src/platform/macosSurface.o \
+	src/platform/metalSurface.o \
+	src/platform/qnxSurface.o \
+	src/platform/viSurface.o \
+	src/platform/waylandSurface.o \
 	src/platform/win32ExternalSemaphore.o \
+	src/platform/win32Surface.o \
+	src/platform/xcbSurface.o \
+	src/platform/xlibSurface.o \
 	\
 	src/renderpass/subpass.o \
 	\
