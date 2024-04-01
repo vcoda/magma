@@ -79,7 +79,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     VkSemaphoreCreateFlags flags /* 0 */,
     VkSemaphoreImportFlags importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Semaphore(std::move(allocator), std::move(device)),
+    Semaphore(std::move(device), std::move(allocator), flags, extendedInfo),
 #ifdef VK_KHR_external_semaphore_win32
     Win32ExternalSemaphore(VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT, this)
 #elif defined(VK_FUCHSIA_external_semaphore)
@@ -88,13 +88,6 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     fd(0)
 #endif
 {
-    VkSemaphoreCreateInfo semaphoreInfo;
-    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    semaphoreInfo.pNext = extendedInfo.chainNodes();
-    semaphoreInfo.flags = flags;
-    VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_HANDLE_RESULT(result, "failed to create semaphore");
 #ifdef VK_KHR_external_semaphore_win32
     Win32ExternalSemaphore::importNtHandle(hSemaphore, name, importFlags);
 #elif defined(VK_FUCHSIA_external_semaphore)

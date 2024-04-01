@@ -53,17 +53,10 @@ D3d12ExternalSemaphore::D3d12ExternalSemaphore(std::shared_ptr<Device> device,
     VkSemaphoreCreateFlags flags /* 0 */,
     VkSemaphoreImportFlags importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Semaphore(std::move(allocator), std::move(device)),
+    Semaphore(std::move(device), std::move(allocator), flags, extendedInfo),
     Win32ExternalSemaphore(VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR, this)
 {
-    VkSemaphoreCreateInfo semaphoreInfo;
-    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    semaphoreInfo.pNext = extendedInfo.chainNodes();
-    semaphoreInfo.flags = flags;
-    VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_HANDLE_RESULT(result, "failed to create semaphore");
-    Win32ExternalSemaphore::importNtHandle(hFence, name, importFlags);
+    importNtHandle(hFence, name, importFlags);
 }
 
 #ifdef VK_KHR_timeline_semaphore
@@ -100,22 +93,10 @@ D3d12ExternalTimelineSemaphore::D3d12ExternalTimelineSemaphore(std::shared_ptr<D
     VkSemaphoreCreateFlags flags /* 0 */,
     VkSemaphoreImportFlags importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    TimelineSemaphore(std::move(device), std::move(allocator)),
+    TimelineSemaphore(std::move(device), initialValue, std::move(allocator), flags, extendedInfo),
     Win32ExternalSemaphore(VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR, this)
 {
-    VkSemaphoreCreateInfo semaphoreInfo;
-    VkSemaphoreTypeCreateInfoKHR semaphoreTypeInfo;
-    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    semaphoreInfo.pNext = &semaphoreTypeInfo;
-    semaphoreInfo.flags = flags;
-    semaphoreTypeInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR;
-    semaphoreTypeInfo.pNext = extendedInfo.chainNodes();
-    semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE_KHR;
-    semaphoreTypeInfo.initialValue = initialValue;
-    VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_HANDLE_RESULT(result, "failed to create timeline semaphore");
-    Win32ExternalSemaphore::importNtHandle(hFence, name, importFlags);
+    importNtHandle(hFence, name, importFlags);
 }
 #endif // VK_KHR_timeline_semaphore
 } // namespace magma
