@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "deviceFeatures.h"
+#include "../objects/instance.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
 #include "../objects/surface.h"
@@ -51,9 +52,9 @@ DeviceFeatures::ExternalSemaphoreFeatures DeviceFeatures::supportsExternalSemaph
     ExternalSemaphoreFeatures features = {};
     if (auto device = parent.lock())
     {
-        if (device->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME))
+        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        if (physicalDevice->getInstance()->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME))
         {
-            std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
             const VkExternalSemaphorePropertiesKHR properties = physicalDevice->getExternalSemaphoreProperties(handleType);
             if (properties.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT_KHR)
                 features.exportable = VK_TRUE;
