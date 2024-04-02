@@ -51,12 +51,15 @@ DeviceFeatures::ExternalSemaphoreFeatures DeviceFeatures::supportsExternalSemaph
     ExternalSemaphoreFeatures features = {};
     if (auto device = parent.lock())
     {
-        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-        const VkExternalSemaphorePropertiesKHR properties = physicalDevice->getExternalSemaphoreProperties(handleType);
-        if (properties.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT_KHR)
-            features.exportable = VK_TRUE;
-        if (properties.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT_KHR)
-            features.importable = VK_TRUE;
+        if (device->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME))
+        {
+            std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+            const VkExternalSemaphorePropertiesKHR properties = physicalDevice->getExternalSemaphoreProperties(handleType);
+            if (properties.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT_KHR)
+                features.exportable = VK_TRUE;
+            if (properties.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT_KHR)
+                features.importable = VK_TRUE;
+        }
     }
     return features;
 }
