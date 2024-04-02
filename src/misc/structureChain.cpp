@@ -55,15 +55,9 @@ const VkBaseInStructure *StructureChain::chainNodes() const noexcept
 
 hash_t StructureChain::getHash() const noexcept
 {
-    if (chain.empty())
-        return 0ull;
-    auto node = chain.cbegin();
-    hash_t hash = core::hashArray((const uint8_t *)node->getNode(), node->getSize());
-    while (++node != chain.cend())
-    {
-        hash_t nodeHash = core::hashArray((const uint8_t *)node->getNode(), node->getSize());
-        hash = core::hashCombine(hash, nodeHash);
-    }
+    hash_t hash = 0ull;
+    for (auto const& node: chain)
+        hash = core::hashCombine(hash, node.getHash());
     return hash;
 }
 } // namespace magma

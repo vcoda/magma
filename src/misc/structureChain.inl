@@ -52,6 +52,11 @@ namespace magma
             return size;
         }
 
+        hash_t getHash() const noexcept
+        {
+            return core::hashArray(data, size);
+        }
+
     private:
         std::size_t size;
         uint8_t *data;
