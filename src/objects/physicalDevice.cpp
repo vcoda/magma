@@ -395,6 +395,21 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
 }
 #endif // VK_KHR_display
 
+#ifdef VK_KHR_external_fence_capabilities
+VkExternalFencePropertiesKHR PhysicalDevice::getExternalFenceProperties(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
+{
+    VkPhysicalDeviceExternalFenceInfoKHR externalFenceInfo;
+    externalFenceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO_KHR;
+    externalFenceInfo.pNext = nullptr;
+    externalFenceInfo.handleType = handleType;
+    VkExternalFencePropertiesKHR externalFenceProperties = {};
+    externalFenceProperties.sType = VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES_KHR;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceExternalFencePropertiesKHR, VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME);
+    vkGetPhysicalDeviceExternalFencePropertiesKHR(handle, &externalFenceInfo, &externalFenceProperties);
+    return externalFenceProperties;
+}
+#endif // VK_KHR_external_fence_capabilities
+
 #ifdef VK_KHR_external_semaphore_capabilities
 VkExternalSemaphorePropertiesKHR PhysicalDevice::getExternalSemaphoreProperties(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
 {
