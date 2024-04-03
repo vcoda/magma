@@ -395,6 +395,54 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
 }
 #endif // VK_KHR_display
 
+#ifdef VK_KHR_external_memory_capabilities
+VkExternalMemoryPropertiesKHR PhysicalDevice::getExternalBufferProperties(VkExternalMemoryHandleTypeFlagBits handleType,
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags /* 0 */) const
+{
+    VkPhysicalDeviceExternalBufferInfoKHR externalBufferInfo;
+    externalBufferInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_BUFFER_INFO_KHR;
+    externalBufferInfo.pNext = nullptr;
+    externalBufferInfo.flags = flags;
+    externalBufferInfo.usage = usage;
+    externalBufferInfo.handleType = handleType;
+    VkExternalBufferPropertiesKHR externalBufferProperties = {};
+    externalBufferProperties.sType = VK_STRUCTURE_TYPE_EXTERNAL_BUFFER_PROPERTIES_KHR;
+    externalBufferProperties.pNext = nullptr;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceExternalBufferPropertiesKHR, VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME);
+    vkGetPhysicalDeviceExternalBufferPropertiesKHR(handle, &externalBufferInfo, &externalBufferProperties);
+    return externalBufferProperties.externalMemoryProperties;
+}
+
+#ifdef VK_KHR_get_physical_device_properties2
+VkExternalMemoryPropertiesKHR PhysicalDevice::getExternalImageFormatProperties(VkExternalMemoryHandleTypeFlagBits handleType,
+    VkFormat format, VkImageType type, bool optimalTiling, VkImageUsageFlags usage, VkImageCreateFlags flags /* 0 */) const
+{
+    VkPhysicalDeviceImageFormatInfo2KHR imageFormatInfo;
+    VkPhysicalDeviceExternalImageFormatInfoKHR imageFormatInfoExternal;
+    VkImageFormatProperties2KHR imageFormatProperties;
+    VkExternalImageFormatPropertiesKHR imageFormatPropertiesExternal;
+    imageFormatInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR;
+    imageFormatInfo.pNext = &imageFormatInfoExternal;
+    imageFormatInfo.format = format;
+    imageFormatInfo.type = type;
+    imageFormatInfo.tiling = optimalTiling ? VK_IMAGE_TILING_OPTIMAL : VK_IMAGE_TILING_LINEAR;
+    imageFormatInfo.usage = usage;
+    imageFormatInfo.flags = flags;
+    imageFormatInfoExternal.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_IMAGE_FORMAT_INFO_KHR;
+    imageFormatInfoExternal.pNext = nullptr;
+    imageFormatInfoExternal.handleType = handleType;
+    imageFormatProperties.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2_KHR;
+    imageFormatProperties.pNext = &imageFormatPropertiesExternal;
+    imageFormatPropertiesExternal.sType = VK_STRUCTURE_TYPE_EXTERNAL_IMAGE_FORMAT_PROPERTIES_KHR;
+    imageFormatPropertiesExternal.pNext = nullptr;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceImageFormatProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+    const VkResult result = vkGetPhysicalDeviceImageFormatProperties2KHR(handle, &imageFormatInfo, &imageFormatProperties);
+    MAGMA_HANDLE_RESULT(result, "failed to get external image format properties");
+    return imageFormatPropertiesExternal.externalMemoryProperties;
+}
+#endif // VK_KHR_get_physical_device_properties2
+#endif // VK_KHR_external_memory_capabilities
+
 #ifdef VK_KHR_external_fence_capabilities
 VkExternalFencePropertiesKHR PhysicalDevice::getExternalFenceProperties(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
 {
