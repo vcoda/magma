@@ -53,8 +53,8 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(Vk
     ExternalMemoryFeatures features = {};
     if (auto device = owner.lock())
     {
-        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
-        const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
+        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME))
         {
             const VkExternalMemoryPropertiesKHR properties = physicalDevice->getExternalBufferProperties(handleType, usage, flags);
@@ -78,8 +78,8 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
     ExternalMemoryFeatures features = {};
     if (auto device = owner.lock())
     {
-        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
-        const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
+        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
             instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
         {
@@ -102,8 +102,8 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExterna
     ExternalFeatures features = {};
     if (auto device = owner.lock())
     {
-        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
-        const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
+        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME))
         {
             const VkExternalFencePropertiesKHR properties = physicalDevice->getExternalFenceProperties(handleType);
@@ -123,8 +123,8 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExt
     ExternalFeatures features = {};
     if (auto device = owner.lock())
     {
-        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
-        const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
+        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME))
         {
             const VkExternalSemaphorePropertiesKHR properties = physicalDevice->getExternalSemaphoreProperties(handleType);
@@ -142,7 +142,7 @@ bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, 
 {
     if (auto device = owner.lock())
     {
-        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkSurfaceCapabilitiesKHR surfaceCapabilities = physicalDevice->getSurfaceCapabilities(std::move(surface));
         for (VkImageUsageFlagBits bit: {
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
@@ -185,7 +185,7 @@ bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 {
     if (auto device = owner.lock())
     {
-        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
         for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
         {
