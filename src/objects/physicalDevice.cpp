@@ -210,17 +210,17 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePrese
 #endif // VK_KHR_win32_surface
     std::vector<VkPresentModeKHR> presentModes;
 #ifdef VK_KHR_get_surface_capabilities2
-    VkPhysicalDeviceSurfaceInfo2KHR physicalDeviceSurfaceInfo;
-    physicalDeviceSurfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
-    physicalDeviceSurfaceInfo.pNext = &fullScreenExclusiveInfo;
-    physicalDeviceSurfaceInfo.surface = *surface;
+    VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    surfaceInfo.pNext = &fullScreenExclusiveInfo;
+    surfaceInfo.surface = *surface;
     uint32_t presentModeCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfacePresentModes2EXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
-    VkResult result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &physicalDeviceSurfaceInfo, &presentModeCount, nullptr);
+    VkResult result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, nullptr);
     if (presentModeCount)
     {
         presentModes.resize(presentModeCount);
-        result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &physicalDeviceSurfaceInfo, &presentModeCount, presentModes.data());
+        result = vkGetPhysicalDeviceSurfacePresentModes2EXT(handle, &surfaceInfo, &presentModeCount, presentModes.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to get full-screen exclusive surface present modes of physical device");
 #endif // VK_KHR_get_surface_capabilities2
@@ -413,14 +413,14 @@ VkExternalFencePropertiesKHR PhysicalDevice::getExternalFenceProperties(VkExtern
 #ifdef VK_KHR_external_semaphore_capabilities
 VkExternalSemaphorePropertiesKHR PhysicalDevice::getExternalSemaphoreProperties(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
 {
-    VkPhysicalDeviceExternalSemaphoreInfoKHR physicalDeviceExternalSemaphoreInfo;
-    physicalDeviceExternalSemaphoreInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO_KHR;
-    physicalDeviceExternalSemaphoreInfo.pNext = nullptr;
-    physicalDeviceExternalSemaphoreInfo.handleType = handleType;
+    VkPhysicalDeviceExternalSemaphoreInfoKHR externalSemaphoreInfo;
+    externalSemaphoreInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO_KHR;
+    externalSemaphoreInfo.pNext = nullptr;
+    externalSemaphoreInfo.handleType = handleType;
     VkExternalSemaphorePropertiesKHR externalSemaphoreProperties = {};
     externalSemaphoreProperties.sType = VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES_KHR;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceExternalSemaphorePropertiesKHR, VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME);
-    vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(handle, &physicalDeviceExternalSemaphoreInfo, &externalSemaphoreProperties);
+    vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(handle, &externalSemaphoreInfo, &externalSemaphoreProperties);
     return externalSemaphoreProperties;
 }
 #endif // VK_KHR_external_semaphore_capabilities
@@ -478,44 +478,44 @@ bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcep
 bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept
 {
     MAGMA_ASSERT(cacheData);
-    VkPhysicalDeviceProperties physicalDeviceProperties;
-    vkGetPhysicalDeviceProperties(handle, &physicalDeviceProperties);
+    VkPhysicalDeviceProperties properties;
+    vkGetPhysicalDeviceProperties(handle, &properties);
     VkPipelineCacheHeaderVersionOne requiredHeader;
     requiredHeader.headerSize = sizeof(VkPipelineCacheHeaderVersionOne);
     requiredHeader.headerVersion = VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
-    requiredHeader.vendorID = physicalDeviceProperties.vendorID;
-    requiredHeader.deviceID = physicalDeviceProperties.deviceID;
-    memcpy(requiredHeader.pipelineCacheUUID, physicalDeviceProperties.pipelineCacheUUID, VK_UUID_SIZE);
+    requiredHeader.vendorID = properties.vendorID;
+    requiredHeader.deviceID = properties.deviceID;
+    memcpy(requiredHeader.pipelineCacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
     const VkPipelineCacheHeaderVersionOne *cacheHeader = reinterpret_cast<const VkPipelineCacheHeaderVersionOne *>(cacheData);
     return core::compare(cacheHeader, &requiredHeader);
 }
 
-VkPhysicalDeviceFeatures PhysicalDevice::getFeatures2(void *physicalDeviceFeatures) const
+VkPhysicalDeviceFeatures PhysicalDevice::getFeatures2(void *features) const
 {
-    MAGMA_UNUSED(physicalDeviceFeatures);
 #ifdef VK_KHR_get_physical_device_properties2
-    VkPhysicalDeviceFeatures2KHR physicalDeviceFeatures2;
-    physicalDeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
-    physicalDeviceFeatures2.pNext = physicalDeviceFeatures;
+    VkPhysicalDeviceFeatures2KHR features2;
+    features2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
+    features2.pNext = features;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceFeatures2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-    vkGetPhysicalDeviceFeatures2KHR(handle, &physicalDeviceFeatures2);
-    return physicalDeviceFeatures2.features;
+    vkGetPhysicalDeviceFeatures2KHR(handle, &features2);
+    return features2.features;
 #else
+    MAGMA_UNUSED(features);
     return {};
 #endif // VK_KHR_get_physical_device_properties2
 }
 
-VkPhysicalDeviceProperties PhysicalDevice::getProperties2(void *physicalDeviceProperties) const
+VkPhysicalDeviceProperties PhysicalDevice::getProperties2(void *properties) const
 {
-    MAGMA_UNUSED(physicalDeviceProperties);
 #ifdef VK_KHR_get_physical_device_properties2
-    VkPhysicalDeviceProperties2KHR physicalDeviceProperties2;
-    physicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
-    physicalDeviceProperties2.pNext = physicalDeviceProperties;
+    VkPhysicalDeviceProperties2KHR properties2;
+    properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+    properties2.pNext = properties;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceProperties2KHR, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-    vkGetPhysicalDeviceProperties2KHR(handle, &physicalDeviceProperties2);
-    return physicalDeviceProperties2.properties;
+    vkGetPhysicalDeviceProperties2KHR(handle, &properties2);
+    return properties2.properties;
 #else
+    MAGMA_UNUSED(properties);
     return {};
 #endif // VK_KHR_get_physical_device_properties2
 }
@@ -523,21 +523,21 @@ VkPhysicalDeviceProperties PhysicalDevice::getProperties2(void *physicalDevicePr
 #ifdef VK_KHR_surface
 VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities2(std::shared_ptr<const Surface> surface, void *surfaceCapabilities) const
 {
-    MAGMA_UNUSED(surface);
-    MAGMA_UNUSED(surfaceCapabilities);
 #ifdef VK_KHR_get_surface_capabilities2
-    VkPhysicalDeviceSurfaceInfo2KHR physicalDeviceSurfaceInfo;
-    physicalDeviceSurfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
-    physicalDeviceSurfaceInfo.pNext = nullptr;
-    physicalDeviceSurfaceInfo.surface = *surface;
+    VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;
+    surfaceInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    surfaceInfo.pNext = nullptr;
+    surfaceInfo.surface = *surface;
     VkSurfaceCapabilities2KHR surfaceCapabilities2;
     surfaceCapabilities2.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
     surfaceCapabilities2.pNext = surfaceCapabilities;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceSurfaceCapabilities2KHR, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
-    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &physicalDeviceSurfaceInfo, &surfaceCapabilities2);
+    const VkResult result = vkGetPhysicalDeviceSurfaceCapabilities2KHR(handle, &surfaceInfo, &surfaceCapabilities2);
     MAGMA_HANDLE_RESULT(result, "failed to get surface capabilities");
     return surfaceCapabilities2.surfaceCapabilities;
 #else
+    MAGMA_UNUSED(surface);
+    MAGMA_UNUSED(surfaceCapabilities);
     return {};
 #endif // VK_KHR_get_surface_capabilities2
 }

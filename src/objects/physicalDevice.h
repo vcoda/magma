@@ -569,8 +569,8 @@ namespace magma
         MAGMA_MAKE_SHARED(PhysicalDevice)
         PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle,
             std::shared_ptr<IAllocator> allocator) noexcept;
-        VkPhysicalDeviceFeatures getFeatures2(void *physicalDeviceFeatures) const;
-        VkPhysicalDeviceProperties getProperties2(void *physicalDeviceProperties) const;
+        VkPhysicalDeviceFeatures getFeatures2(void *features) const;
+        VkPhysicalDeviceProperties getProperties2(void *properties) const;
     #ifdef VK_KHR_surface
         VkSurfaceCapabilitiesKHR getSurfaceCapabilities2(std::shared_ptr<const Surface> surface,
             void *surfaceCapabilities) const;
