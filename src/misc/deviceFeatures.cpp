@@ -46,6 +46,56 @@ DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat f
     return support;
 }
 
+#ifdef VK_KHR_external_memory_capabilities
+DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(VkExternalMemoryHandleTypeFlagBits handleType,
+    VkBufferUsageFlags usage, VkBufferCreateFlags flags /* 0 */) const
+{
+    ExternalMemoryFeatures features = {};
+    if (auto device = parent.lock())
+    {
+        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
+        if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME))
+        {
+            const VkExternalMemoryPropertiesKHR properties = physicalDevice->getExternalBufferProperties(handleType, usage, flags);
+            if (properties.externalMemoryFeatures & VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_KHR)
+                features.dedicatedOnly = VK_TRUE;
+            if (properties.externalMemoryFeatures & VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT_KHR)
+                features.exportable = VK_TRUE;
+            if (properties.externalMemoryFeatures & VK_EXTERNAL_MEMORY_FEATURE_IMPORTABLE_BIT_KHR)
+                features.importable = VK_TRUE;
+        }
+    }
+    return features;
+}
+
+DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkExternalMemoryHandleTypeFlagBits handleType,
+    VkFormat format, VkImageUsageFlags usage,
+    VkImageType imageType /* VK_IMAGE_TYPE_2D */,
+    bool optimalTiling /* true */,
+    VkImageCreateFlags flags /* 0 */) const
+{
+    ExternalMemoryFeatures features = {};
+    if (auto device = parent.lock())
+    {
+        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        std::shared_ptr<const Instance> instance = physicalDevice->getInstance();
+        if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
+            instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
+        {
+            const VkExternalMemoryPropertiesKHR properties = physicalDevice->getExternalImageFormatProperties(handleType, format, imageType, optimalTiling, usage, flags);
+            if (properties.externalMemoryFeatures & VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_KHR)
+                features.dedicatedOnly = VK_TRUE;
+            if (properties.externalMemoryFeatures & VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT_KHR)
+                features.exportable = VK_TRUE;
+            if (properties.externalMemoryFeatures & VK_EXTERNAL_MEMORY_FEATURE_IMPORTABLE_BIT_KHR)
+                features.importable = VK_TRUE;
+        }
+    }
+    return features;
+}
+#endif // VK_KHR_external_memory_capabilities
+
 #ifdef VK_KHR_external_fence_capabilities
 DeviceFeatures::ExternalFenceFeatures DeviceFeatures::supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
 {
