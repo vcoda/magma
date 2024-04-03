@@ -29,10 +29,14 @@ namespace magma
     {
     public:
         struct FormatFeatures;
+        struct ExternalFenceFeatures;
         struct ExternalSemaphoreFeatures;
 
         FormatFeatures supportsFormatFeatures(VkFormat format,
             VkFormatFeatureFlags flags) const noexcept;
+    #ifdef VK_KHR_external_fence_capabilities
+        ExternalFenceFeatures supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const;
+    #endif
     #ifdef VK_KHR_external_semaphore_capabilities
         ExternalSemaphoreFeatures supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const;
     #endif
@@ -58,6 +62,12 @@ namespace magma
         VkBool32 linear: 1;
         VkBool32 optimal: 1;
         VkBool32 buffer: 1;
+    };
+
+    struct DeviceFeatures::ExternalFenceFeatures
+    {
+        VkBool32 exportable: 1;
+        VkBool32 importable: 1;
     };
 
     struct DeviceFeatures::ExternalSemaphoreFeatures

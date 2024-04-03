@@ -46,6 +46,27 @@ DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat f
     return support;
 }
 
+#ifdef VK_KHR_external_fence_capabilities
+DeviceFeatures::ExternalFenceFeatures DeviceFeatures::supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
+{
+    ExternalFenceFeatures features = {};
+    if (auto device = parent.lock())
+    {
+        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        std::shared_ptr<const Instance> instance = physicalDevice->getInstance();
+        if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME))
+        {
+            const VkExternalFencePropertiesKHR properties = physicalDevice->getExternalFenceProperties(handleType);
+            if (properties.externalFenceFeatures & VK_EXTERNAL_FENCE_FEATURE_EXPORTABLE_BIT_KHR)
+                features.exportable = VK_TRUE;
+            if (properties.externalFenceFeatures & VK_EXTERNAL_FENCE_FEATURE_IMPORTABLE_BIT_KHR)
+                features.importable = VK_TRUE;
+        }
+    }
+    return features;
+}
+#endif // VK_KHR_external_fence_capabilities
+
 #ifdef VK_KHR_external_semaphore_capabilities
 DeviceFeatures::ExternalSemaphoreFeatures DeviceFeatures::supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
 {
