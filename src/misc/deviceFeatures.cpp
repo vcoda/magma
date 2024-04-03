@@ -34,7 +34,7 @@ DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat f
     FormatFeatures support = {};
     if (auto device = parent.lock())
     {
-        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
         const VkFormatFeatureFlags linearTilingFlags = (properties.linearTilingFeatures & flags);
         const VkFormatFeatureFlags optimalTilingFlags = (properties.optimalTilingFeatures & flags);
@@ -78,8 +78,8 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
     ExternalMemoryFeatures features = {};
     if (auto device = parent.lock())
     {
-        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-        std::shared_ptr<const Instance> instance = physicalDevice->getInstance();
+        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
             instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
         {
@@ -102,8 +102,8 @@ DeviceFeatures::ExternalFenceFeatures DeviceFeatures::supportsExternalFence(VkEx
     ExternalFenceFeatures features = {};
     if (auto device = parent.lock())
     {
-        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-        std::shared_ptr<const Instance> instance = physicalDevice->getInstance();
+        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME))
         {
             const VkExternalFencePropertiesKHR properties = physicalDevice->getExternalFenceProperties(handleType);
@@ -123,8 +123,9 @@ DeviceFeatures::ExternalSemaphoreFeatures DeviceFeatures::supportsExternalSemaph
     ExternalSemaphoreFeatures features = {};
     if (auto device = parent.lock())
     {
-        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
-        if (physicalDevice->getInstance()->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME))
+        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
+        if (instance->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME))
         {
             const VkExternalSemaphorePropertiesKHR properties = physicalDevice->getExternalSemaphoreProperties(handleType);
             if (properties.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT_KHR)
@@ -141,7 +142,7 @@ bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, 
 {
     if (auto device = parent.lock())
     {
-        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkSurfaceCapabilitiesKHR surfaceCapabilities = physicalDevice->getSurfaceCapabilities(std::move(surface));
         for (VkImageUsageFlagBits bit: {
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
@@ -184,7 +185,7 @@ bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 {
     if (auto device = parent.lock())
     {
-        std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
         for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
         {
