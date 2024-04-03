@@ -26,13 +26,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DeviceFeatures::DeviceFeatures(std::shared_ptr<const Device> device) noexcept:
-    parent(std::move(device))
+    owner(std::move(device))
 {}
 
 DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat format, VkFormatFeatureFlags flags) const noexcept
 {
     FormatFeatures support = {};
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
@@ -51,7 +51,7 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(Vk
     VkBufferUsageFlags usage, VkBufferCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
@@ -76,7 +76,7 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
     VkImageCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
@@ -100,7 +100,7 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
@@ -121,7 +121,7 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExterna
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<const Instance>& instance = physicalDevice->getInstance();
@@ -140,7 +140,7 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExt
 
 bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, VkImageUsageFlags flags) const
 {
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkSurfaceCapabilitiesKHR surfaceCapabilities = physicalDevice->getSurfaceCapabilities(std::move(surface));
@@ -183,7 +183,7 @@ bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, 
 
 bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 {
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
@@ -204,20 +204,20 @@ bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept
 {
     MAGMA_ASSERT((index > 0) && (index < 10));
-    if ((index < 1) || (index > 9) || parent.expired())
+    if ((index < 1) || (index > 9) || owner.expired())
         return false;
     const char extensionName[] = {
         'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
         char('0' + index), '\0'
     };
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
         return device->extensionEnabled(extensionName);
     return false;
 }
 
 bool DeviceFeatures::negativeViewportHeightEnabled() const noexcept
 {
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
     #ifdef VK_KHR_maintenance1
         if (device->extensionEnabled(VK_KHR_MAINTENANCE1_EXTENSION_NAME))
@@ -235,7 +235,7 @@ bool DeviceFeatures::negativeViewportHeightEnabled() const noexcept
 bool DeviceFeatures::separateDepthStencilLayoutsEnabled() const noexcept
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         if (device->extensionEnabled(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME))
         {
@@ -252,7 +252,7 @@ bool DeviceFeatures::separateDepthStencilLayoutsEnabled() const noexcept
 bool DeviceFeatures::extendedLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
         {
@@ -273,7 +273,7 @@ bool DeviceFeatures::extendedLinesEnabled() const noexcept
 bool DeviceFeatures::stippledLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization
-    if (auto device = parent.lock())
+    if (auto device = owner.lock())
     {
         if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
         {

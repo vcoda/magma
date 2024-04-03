@@ -65,7 +65,7 @@ namespace magma
         DeviceFeatures(std::shared_ptr<const Device> device) noexcept;
         friend Device;
 
-        std::weak_ptr<const Device> parent;
+        std::weak_ptr<const Device> owner;
     };
 
     struct DeviceFeatures::FormatFeatures
