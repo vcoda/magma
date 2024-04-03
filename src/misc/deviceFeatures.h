@@ -29,9 +29,8 @@ namespace magma
     {
     public:
         struct FormatFeatures;
+        struct ExternalFeatures;
         struct ExternalMemoryFeatures;
-        struct ExternalFenceFeatures;
-        struct ExternalSemaphoreFeatures;
 
         FormatFeatures supportsFormatFeatures(VkFormat format,
             VkFormatFeatureFlags flags) const noexcept;
@@ -47,10 +46,10 @@ namespace magma
             VkImageCreateFlags flags = 0) const;
     #endif // VK_KHR_external_memory_capabilities
     #ifdef VK_KHR_external_fence_capabilities
-        ExternalFenceFeatures supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const;
+        ExternalFeatures supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const;
     #endif
     #ifdef VK_KHR_external_semaphore_capabilities
-        ExternalSemaphoreFeatures supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const;
+        ExternalFeatures supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const;
     #endif
         bool supportsImageUsage(std::shared_ptr<const Surface> surface,
             VkImageUsageFlags flags) const;
@@ -76,21 +75,15 @@ namespace magma
         VkBool32 buffer: 1;
     };
 
+    struct DeviceFeatures::ExternalFeatures
+    {
+        VkBool32 exportable: 1;
+        VkBool32 importable: 1;
+    };
+
     struct DeviceFeatures::ExternalMemoryFeatures
     {
         VkBool32 dedicatedOnly: 1;
-        VkBool32 exportable: 1;
-        VkBool32 importable: 1;
-    };
-
-    struct DeviceFeatures::ExternalFenceFeatures
-    {
-        VkBool32 exportable: 1;
-        VkBool32 importable: 1;
-    };
-
-    struct DeviceFeatures::ExternalSemaphoreFeatures
-    {
         VkBool32 exportable: 1;
         VkBool32 importable: 1;
     };

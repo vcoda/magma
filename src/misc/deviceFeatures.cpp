@@ -97,9 +97,9 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
 #endif // VK_KHR_external_memory_capabilities
 
 #ifdef VK_KHR_external_fence_capabilities
-DeviceFeatures::ExternalFenceFeatures DeviceFeatures::supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
+DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
 {
-    ExternalFenceFeatures features = {};
+    ExternalFeatures features = {};
     if (auto device = parent.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
@@ -118,9 +118,9 @@ DeviceFeatures::ExternalFenceFeatures DeviceFeatures::supportsExternalFence(VkEx
 #endif // VK_KHR_external_fence_capabilities
 
 #ifdef VK_KHR_external_semaphore_capabilities
-DeviceFeatures::ExternalSemaphoreFeatures DeviceFeatures::supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
+DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
 {
-    ExternalSemaphoreFeatures features = {};
+    ExternalFeatures features = {};
     if (auto device = parent.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
