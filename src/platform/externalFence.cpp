@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#ifdef VK_KHR_external_fence_fd
+#if defined(__linux__)
 #include <unistd.h>
 #endif
 #include "externalFence.h"

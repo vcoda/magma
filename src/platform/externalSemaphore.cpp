@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #ifdef VK_FUCHSIA_external_semaphore
 #include <zircon/syscalls.h>
-#elif defined(VK_KHR_external_semaphore_fd)
+#elif defined(__linux__)
 #include <unistd.h>
 #endif
 #include "externalSemaphore.h"
