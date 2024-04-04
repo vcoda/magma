@@ -17,6 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#ifdef VK_FUCHSIA_external_semaphore
+#include <zircon/syscalls.h>
+#elif defined(VK_KHR_external_semaphore_fd)
+#include <unistd.h>
+#endif
 #include "externalSemaphore.h"
 #include "../objects/device.h"
 #include "../allocator/allocator.h"
@@ -99,7 +104,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     importZirconHandleInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
     importZirconHandleInfo.zirconHandle = zirconHandle;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreZirconHandleFUCHSIA, VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
-    result = vkImportSemaphoreZirconHandleFUCHSIA(MAGMA_HANDLE(device), &importZirconHandleInfo);
+    const VkResult result = vkImportSemaphoreZirconHandleFUCHSIA(MAGMA_HANDLE(device), &importZirconHandleInfo);
     MAGMA_HANDLE_RESULT(result, "failed to import Zircon handle");
 #elif defined(VK_KHR_external_semaphore_fd)
     VkImportSemaphoreFdInfoKHR importFdInfo;
@@ -115,7 +120,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     #endif
     importFdInfo.fd = fd;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreFdKHR, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
-    result = vkImportSemaphoreFdKHR(MAGMA_HANDLE(device), &importFdInfo);
+    const VkResult result = vkImportSemaphoreFdKHR(MAGMA_HANDLE(device), &importFdInfo);
     #ifdef VK_USE_PLATFORM_ANDROID_KHR
     MAGMA_HANDLE_RESULT(result, "failed to import Android fence descriptor");
     #else
