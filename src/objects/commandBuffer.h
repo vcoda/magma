@@ -79,7 +79,7 @@ namespace magma
     class CommandBuffer : public Dispatchable<VkCommandBuffer>
     {
     public:
-        enum class State : uint32_t;
+        enum class State : uint8_t;
         ~CommandBuffer();
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
         bool beginInherited(const std::shared_ptr<RenderPass>& renderPass,
@@ -641,7 +641,7 @@ namespace magma
     /* See 6.1. Command Buffer Lifecycle
        Each command buffer is always in one of the following states: */
 
-    enum class CommandBuffer::State : uint32_t
+    enum class CommandBuffer::State : uint8_t
     {
         Initial, Recording, Executable, Pending, Invalid
     };

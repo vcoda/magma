@@ -26,7 +26,7 @@ namespace magma
     class IResource : public IDestructible
     {
     public:
-        enum class Class : uint32_t;
+        enum class Class : uint8_t;
         virtual Class getResourceClass() const noexcept = 0;
         virtual const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept = 0;
         virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
@@ -42,7 +42,7 @@ namespace magma
 
     /* Types of resources that occupy device memory. */
 
-    enum class IResource::Class : uint32_t
+    enum class IResource::Class : uint8_t
     {
         Buffer, Image, AccelerationStructure
     };

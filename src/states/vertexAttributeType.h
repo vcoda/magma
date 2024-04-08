@@ -30,7 +30,7 @@ namespace magma
     /* https://registry.khronos.org/vulkan/specs/1.1/html/vkspec.html#_identification_of_formats
        Table 34. Interpretation of Numeric Format */
 
-    enum class Numeric
+    enum class Numeric : uint8_t
     {
         UNorm, SNorm, UScaled, SScaled, UInt, SInt, UFloat, SFloat
     };

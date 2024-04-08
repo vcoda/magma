@@ -25,12 +25,12 @@ namespace magma
        Anisotropic filtering performs long and narrow projection of the pixel
        filter footprint into texture space. */
 
-    enum class MagFilter
+    enum class MagFilter : uint8_t
     {
         Nearest, Bilinear
     };
 
-    enum class MipFilter
+    enum class MipFilter : uint8_t
     {
         Nearest, Bilinear, Trilinear, Anisotropic, Partial
     };
