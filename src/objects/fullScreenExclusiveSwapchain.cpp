@@ -32,7 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#if defined(VK_KHR_swapchain) && defined(VK_EXT_full_screen_exclusive)
+#ifdef VK_EXT_full_screen_exclusive
 FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent, uint32_t arrayLayers,
     VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
@@ -179,7 +179,7 @@ void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
     handleError(result, "failed to release full-screen exclusive mode");
     fullScreenExclusive = false;
 }
-#endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
+#endif // VK_EXT_full_screen_exclusive
 } // namespace magma
 
 #ifdef VK_EXT_full_screen_exclusive

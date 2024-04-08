@@ -29,7 +29,7 @@ namespace magma
        in disruptive or expensive transitions in the underlying
        windowing system when a change occurs. */
 
-#if defined(VK_KHR_swapchain) && defined(VK_EXT_full_screen_exclusive)
+#ifdef VK_EXT_full_screen_exclusive
     class FullScreenExclusiveSwapchain : public Swapchain
     {
     public:
@@ -74,7 +74,7 @@ namespace magma
     #endif
         bool fullScreenExclusive;
     };
-#endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
+#endif // VK_EXT_full_screen_exclusive
 } // namespace magma
 
 #ifdef VK_EXT_full_screen_exclusive
