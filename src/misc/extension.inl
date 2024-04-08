@@ -13,7 +13,7 @@ inline void Extension<Fn>::requireProcAddress(const char *extensionName, bool de
     #ifndef MAGMA_NO_EXCEPTIONS
         throw exception::UnsupportedExtension(extensionName, device);
     #else
-        std::cout << "unsupported " << (device ? "device" : "instance") << " extension: "
+        std::cerr << "unsupported " << (device ? "device" : "instance") << " extension: "
             << extensionName << std::endl;
         MAGMA_ASSERT(procAddr);
         abort();
