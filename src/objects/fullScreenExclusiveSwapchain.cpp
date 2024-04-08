@@ -58,10 +58,10 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     Swapchain(std::move(device), surfaceFormat, extent, arrayLayers, imageUsage, flags, sharing, oldSwapchain, std::move(allocator)),
-    fullScreenExclusive(false)
 #ifdef VK_KHR_win32_surface
-   ,hMonitor(hMonitor)
+    hMonitor(hMonitor),
 #endif
+    fullScreenExclusive(false)
 {
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;

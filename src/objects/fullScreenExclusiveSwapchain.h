@@ -69,10 +69,10 @@ namespace magma
     #endif
 
     private:
-        bool fullScreenExclusive;
     #ifdef VK_KHR_win32_surface
         const HMONITOR hMonitor;
     #endif
+        bool fullScreenExclusive;
     };
 #endif // VK_KHR_swapchain && VK_EXT_full_screen_exclusive
 } // namespace magma
