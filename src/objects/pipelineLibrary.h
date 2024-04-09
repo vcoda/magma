@@ -28,7 +28,10 @@ namespace magma
     struct InputAssemblyState;
     struct TesselationState;
     struct RasterizationState;
+    struct MultisampleState;
+    struct DepthStencilState;
     class ViewportState;
+    class RenderPass;
 
     /* A pipeline library is a special pipeline that cannot be bound,
        instead it defines a set of shaders and shader groups which
@@ -50,6 +53,13 @@ namespace magma
             const RasterizationState& rasterizationState,
             const std::vector<VkDynamicState>& dynamicStates,
             std::shared_ptr<PipelineLayout> layout,
+            VkPipelineCreateFlags flags = 0);
+        void compileFragmentShader(const PipelineShaderStage& fragmentShader,
+            const MultisampleState& multisampleState,
+            const DepthStencilState& depthStencilState,
+            std::shared_ptr<PipelineLayout> layout,
+            std::shared_ptr<RenderPass> renderPass,
+            uint32_t subpass,
             VkPipelineCreateFlags flags = 0);
     #endif // VK_EXT_graphics_pipeline_library
         uint32_t getLibraryCount() const noexcept { return MAGMA_COUNT(libraries); }

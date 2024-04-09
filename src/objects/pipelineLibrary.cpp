@@ -20,12 +20,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLibrary.h"
 #include "pipelineLayout.h"
 #include "device.h"
+#include "renderPass.h"
 #include "../shaders/pipelineShaderStage.h"
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/tesselationState.h"
 #include "../states/viewportState.h"
 #include "../states/rasterizationState.h"
+#include "../states/multisampleState.h"
+#include "../states/depthStencilState.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
@@ -124,6 +127,35 @@ void PipelineLibrary::compilePreRasterizationShaders(const std::vector<PipelineS
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
         1, &graphicsPipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to compile pre-rasterization shaders subset");
+    libraries.push_back(handle);
+}
+
+void PipelineLibrary::compileFragmentShader(const PipelineShaderStage& fragmentShader,
+    const MultisampleState& multisampleState, const DepthStencilState& depthStencilState,
+    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<RenderPass> renderPass, uint32_t subpass,
+    VkPipelineCreateFlags flags /* 0 */)
+{   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#pipelines-graphics-subsets-fragment-shader
+    VkGraphicsPipelineCreateInfo graphicsPipelineInfo = {};
+    VkGraphicsPipelineLibraryCreateInfoEXT graphicsPipelineLibraryInfo;
+    graphicsPipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    graphicsPipelineInfo.pNext = &graphicsPipelineLibraryInfo;
+    graphicsPipelineInfo.flags = flags | VK_PIPELINE_CREATE_LIBRARY_BIT_KHR;
+    graphicsPipelineInfo.stageCount = 1;
+    graphicsPipelineInfo.pStages = &fragmentShader;
+    if (renderPass || multisampleState.sampleShadingEnable)
+        graphicsPipelineInfo.pMultisampleState = &multisampleState;
+    graphicsPipelineInfo.pDepthStencilState = &depthStencilState;
+    graphicsPipelineInfo.layout = *layout;
+    graphicsPipelineInfo.renderPass = MAGMA_OPTIONAL_HANDLE(renderPass);
+    graphicsPipelineInfo.subpass = subpass;
+    graphicsPipelineInfo.basePipelineIndex = -1;
+    graphicsPipelineLibraryInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_LIBRARY_CREATE_INFO_EXT;
+    graphicsPipelineLibraryInfo.pNext = nullptr;
+    graphicsPipelineLibraryInfo.flags = VK_GRAPHICS_PIPELINE_LIBRARY_FRAGMENT_SHADER_BIT_EXT;
+    VkPipeline handle = 0;
+    const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
+        1, &graphicsPipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_HANDLE_RESULT(result, "failed to compile fragment shader subset");
     libraries.push_back(handle);
 }
 #endif // VK_EXT_graphics_pipeline_library
