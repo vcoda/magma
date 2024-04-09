@@ -140,7 +140,7 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
         }
     }
     MAGMA_ERROR("failed to get device queue");
-    return 0;
+    return nullptr;
 }
 
 std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) const
