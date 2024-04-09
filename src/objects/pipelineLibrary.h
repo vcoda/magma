@@ -68,6 +68,9 @@ namespace magma
             uint32_t subpass,
             VkPipelineCreateFlags flags = 0);
     #endif // VK_EXT_graphics_pipeline_library
+        void compileComputeShader(const PipelineShaderStage& shaderStage,
+            std::shared_ptr<PipelineLayout> layout,
+            VkPipelineCreateFlags flags = 0);
         uint32_t getLibraryCount() const noexcept { return MAGMA_COUNT(libraries); }
         const VkPipeline *getLibraries() const noexcept { return libraries.data(); }
 

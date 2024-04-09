@@ -184,5 +184,23 @@ void PipelineLibrary::compileFragmentOutputInterface(const MultisampleState& mul
     libraries.push_back(handle);
 }
 #endif // VK_EXT_graphics_pipeline_library
+
+void PipelineLibrary::compileComputeShader(const PipelineShaderStage& shaderStage, std::shared_ptr<PipelineLayout> layout,
+    VkPipelineCreateFlags flags /* 0 */)
+{
+    VkComputePipelineCreateInfo computePipelineInfo;
+    computePipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+    computePipelineInfo.pNext = nullptr;
+    computePipelineInfo.flags = flags | VK_PIPELINE_CREATE_LIBRARY_BIT_KHR;
+    computePipelineInfo.stage = shaderStage;
+    computePipelineInfo.layout = *layout;
+    computePipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+    computePipelineInfo.basePipelineIndex = -1;
+    VkPipeline handle = 0;
+    const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
+        1, &computePipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_HANDLE_RESULT(result, "failed to create compute pipeline");
+    libraries.push_back(handle);
+}
 #endif // VK_KHR_pipeline_library
 } // namespace magma
