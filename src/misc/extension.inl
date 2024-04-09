@@ -1,19 +1,19 @@
 namespace magma
 {
-template<class Fn>
-inline Extension<Fn>::Extension(PFN_vkVoidFunction procAddr) noexcept:
+template<class Fn, bool instance>
+inline Extension<Fn, instance>::Extension(PFN_vkVoidFunction procAddr) noexcept:
     procAddr(reinterpret_cast<Fn>(procAddr))
 {}
 
-template<class Fn>
-inline void Extension<Fn>::requireProcAddress(const char *extensionName, bool device) const
+template<class Fn, bool instance>
+inline void Extension<Fn, instance>::requireProcAddress(const char *extensionName) const
 {
     if (!procAddr)
     {
     #ifndef MAGMA_NO_EXCEPTIONS
-        throw exception::UnsupportedExtension(extensionName, device);
+        throw exception::UnsupportedExtension(extensionName, instance);
     #else
-        std::cerr << "unsupported " << (device ? "device" : "instance") << " extension: "
+        std::cerr << "unsupported " << (instance ? "instance" : "device") << " extension: "
             << extensionName << std::endl;
         MAGMA_ASSERT(procAddr);
         abort();
@@ -23,25 +23,25 @@ inline void Extension<Fn>::requireProcAddress(const char *extensionName, bool de
 
 template<class Fn>
 inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *name) noexcept:
-    Extension<Fn>(vkGetInstanceProcAddr(instance, name))
+    Extension<Fn, true>(vkGetInstanceProcAddr(instance, name))
 {}
 
 template<class Fn>
 inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *name, const char *extensionName):
     InstanceExtension(instance, name)
 {
-    Extension<Fn>::requireProcAddress(extensionName, false);
+    Extension<Fn, true>::requireProcAddress(extensionName);
 }
 
 template<class Fn>
 inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *name) noexcept:
-    Extension<Fn>(vkGetDeviceProcAddr(device, name))
+    Extension<Fn, false>(vkGetDeviceProcAddr(device, name))
 {}
 
 template<class Fn>
 inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *name, const char *extensionName):
     DeviceExtension(device, name)
 {
-    Extension<Fn>::requireProcAddress(extensionName, true);
+    Extension<Fn, false>::requireProcAddress(extensionName);
 }
 } // namespace magma

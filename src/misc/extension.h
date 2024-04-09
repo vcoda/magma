@@ -24,17 +24,17 @@ namespace magma
 {
     /* Holds a pointer to the Vulkan ICD proc address. */
 
-    template<class Fn>
+    template<class Fn, bool instance>
     class Extension
     {
     public:
         operator Fn() const noexcept { return procAddr; }
         operator bool() const noexcept { return procAddr != nullptr; }
+        bool instanceExtension() const noexcept { return instance; }
 
     protected:
         Extension(PFN_vkVoidFunction procAddr) noexcept;
-        void requireProcAddress(const char *extensionName,
-            bool device) const;
+        void requireProcAddress(const char *extensionName) const;
 
     private:
         const Fn procAddr;
@@ -43,7 +43,7 @@ namespace magma
     /* Represents enabled instance extension dispatchable command. */
 
     template<class Fn>
-    class InstanceExtension final : public Extension<Fn>
+    class InstanceExtension final : public Extension<Fn, true>
     {
     public:
         explicit InstanceExtension(VkInstance instance,
@@ -64,7 +64,7 @@ namespace magma
        or device-child object as their dispatchable object. */
 
     template<class Fn>
-    class DeviceExtension final : public Extension<Fn>
+    class DeviceExtension final : public Extension<Fn, false>
     {
     public:
         explicit DeviceExtension(VkDevice device,

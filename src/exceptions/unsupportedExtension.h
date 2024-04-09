@@ -29,12 +29,12 @@ namespace magma
         {
         public:
             explicit UnsupportedExtension(const char *extension,
-                bool device) noexcept:
-                Exception(extension), device(device) {}
-            bool deviceExtension() const noexcept { return device; }
+                bool instance) noexcept:
+                Exception(extension), instance(instance) {}
+            bool instanceExtension() const noexcept { return instance; }
 
         private:
-            const bool device;
+            const bool instance;
         };
     } // namespace exception
 } // namespace magma
