@@ -30,6 +30,7 @@ namespace magma
     struct RasterizationState;
     struct MultisampleState;
     struct DepthStencilState;
+    struct ColorBlendState;
     class ViewportState;
     class RenderPass;
 
@@ -58,6 +59,11 @@ namespace magma
             const MultisampleState& multisampleState,
             const DepthStencilState& depthStencilState,
             std::shared_ptr<PipelineLayout> layout,
+            std::shared_ptr<RenderPass> renderPass,
+            uint32_t subpass,
+            VkPipelineCreateFlags flags = 0);
+        void compileFragmentOutputInterface(const MultisampleState& multisampleState,
+            const ColorBlendState& colorBlendState,
             std::shared_ptr<RenderPass> renderPass,
             uint32_t subpass,
             VkPipelineCreateFlags flags = 0);
