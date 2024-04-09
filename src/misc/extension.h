@@ -18,6 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #ifndef MAGMA_NO_EXCEPTIONS
 #include "../exceptions/unsupportedExtension.h"
+#else
+#include "../exceptions/errorResult.h"
 #endif
 
 namespace magma
