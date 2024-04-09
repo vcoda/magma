@@ -26,6 +26,9 @@ namespace magma
 
     class VertexInputState;
     struct InputAssemblyState;
+    struct TesselationState;
+    struct RasterizationState;
+    class ViewportState;
 
     /* A pipeline library is a special pipeline that cannot be bound,
        instead it defines a set of shaders and shader groups which
@@ -41,6 +44,13 @@ namespace magma
     #ifdef VK_EXT_graphics_pipeline_library
         void compileVertexInputInterface(const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState);
+        void compilePreRasterizationShaders(const std::vector<PipelineShaderStage>& preRasterizationShaderStages,
+            const TesselationState& tesselationState,
+            const ViewportState& viewportState,
+            const RasterizationState& rasterizationState,
+            const std::vector<VkDynamicState>& dynamicStates,
+            std::shared_ptr<PipelineLayout> layout,
+            VkPipelineCreateFlags flags = 0);
     #endif // VK_EXT_graphics_pipeline_library
         uint32_t getLibraryCount() const noexcept { return MAGMA_COUNT(libraries); }
         const VkPipeline *getLibraries() const noexcept { return libraries.data(); }
