@@ -24,8 +24,8 @@ namespace magma
 namespace exception
 {
 #ifdef MAGMA_NO_EXCEPTIONS
-static ReflectionErrorHandler reflectionErrorHandler =
-    [](SpvReflectResult result, const char *, const source_location&)
+static ReflectionErrorHandler errorHandler =
+    [](SpvReflectResult, const char *message, const source_location&)
     {   // If no error handler is provided, abort program
         abort();
     };
@@ -45,7 +45,7 @@ void handleReflectionResult(SpvReflectResult result, const char *message, const 
         break;
     default:
     #ifdef MAGMA_NO_EXCEPTIONS
-        reflectionErrorHandler(result, message, location);
+        errorHandler(result, message, location);
     #else
         throw ReflectionErrorResult(result, message, location);
     #endif // MAGMA_NO_EXCEPTIONS
