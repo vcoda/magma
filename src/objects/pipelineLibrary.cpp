@@ -51,7 +51,7 @@ PipelineLibrary::~PipelineLibrary()
 
 #ifdef VK_EXT_graphics_pipeline_library
 void PipelineLibrary::compileVertexInputInterface(const VertexInputState& vertexInputState, const InputAssemblyState& inputAssemblyState)
-{
+{   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#pipelines-graphics-subsets-vertex-input
     VkGraphicsPipelineCreateInfo graphicsPipelineInfo = {};
     VkGraphicsPipelineLibraryCreateInfoEXT graphicsPipelineLibraryInfo;
     graphicsPipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
