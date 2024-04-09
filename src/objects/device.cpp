@@ -164,8 +164,7 @@ std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) cons
                 return queue;
         } catch (...) {}
     }
-    MAGMA_ERROR("failed to get device queue");
-    return 0;
+    return nullptr;
 }
 
 void Device::updateDescriptorSets(uint32_t descriptorWriteCount, const VkWriteDescriptorSet *descriptorWrites,
