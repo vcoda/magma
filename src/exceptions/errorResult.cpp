@@ -25,8 +25,9 @@ namespace exception
 {
 #ifdef MAGMA_NO_EXCEPTIONS
 static ErrorHandler errorHandler =
-    [](VkResult, const char *, const source_location&)
+    [](VkResult, const char *message, const source_location&)
     {   // If no error handler is provided, abort program
+        std::cerr << message << std::endl;
         abort();
     };
 

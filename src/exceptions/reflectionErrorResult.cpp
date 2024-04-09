@@ -27,6 +27,7 @@ namespace exception
 static ReflectionErrorHandler errorHandler =
     [](SpvReflectResult, const char *message, const source_location&)
     {   // If no error handler is provided, abort program
+        std::cerr << message << std::endl;
         abort();
     };
 
