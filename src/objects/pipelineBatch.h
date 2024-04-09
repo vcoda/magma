@@ -36,6 +36,10 @@ namespace magma
     class PipelineBatch : public IDestructible
     {
     public:
+    #ifdef VK_AMD_pipeline_compiler_control
+        void setCompilerControlFlags(VkPipelineCompilerControlFlagsAMD flags) noexcept { compilerControlFlags = flags; }
+        VkPipelineCompilerControlFlagsAMD getCompilerControlFlags() noexcept { return compilerControlFlags; }
+    #endif // VK_AMD_pipeline_compiler_control
         virtual void buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
@@ -48,10 +52,6 @@ namespace magma
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr);
-    #ifdef VK_AMD_pipeline_compiler_control
-        static void setCompilerControlFlags(VkPipelineCompilerControlFlagsAMD flags) noexcept { compilerControlFlags = flags; }
-        static VkPipelineCompilerControlFlagsAMD getCompilerControlFlags() noexcept { return compilerControlFlags; }
-    #endif // VK_AMD_pipeline_compiler_control
 
     protected:
         void collectShaderStageInfos() const;
@@ -61,7 +61,7 @@ namespace magma
         std::list<std::shared_ptr<Pipeline>> basePipelines;
     #ifdef VK_AMD_pipeline_compiler_control
         std::list<VkPipelineCompilerControlCreateInfoAMD> pipelineCompilerControlInfos;
-        static VkPipelineCompilerControlFlagsAMD compilerControlFlags;
+        VkPipelineCompilerControlFlagsAMD compilerControlFlags;
     #endif
     #ifdef VK_EXT_pipeline_creation_feedback
         std::list<VkPipelineCreationFeedbackEXT> creationFeedbacks;
