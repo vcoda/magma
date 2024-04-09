@@ -139,7 +139,6 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
             return queue;
         }
     }
-    MAGMA_ERROR("failed to get device queue");
     return nullptr;
 }
 
