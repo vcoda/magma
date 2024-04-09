@@ -36,7 +36,7 @@ namespace magma
 
     protected:
         Extension(PFN_vkVoidFunction procAddr) noexcept;
-        void requireProcAddress(const char *extensionName) const;
+        void checkProcAddress(const char *extensionName) const;
 
     private:
         const Fn procAddr;

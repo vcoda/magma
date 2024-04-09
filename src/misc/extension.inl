@@ -6,7 +6,7 @@ inline Extension<Fn, instance>::Extension(PFN_vkVoidFunction procAddr) noexcept:
 {}
 
 template<class Fn, bool instance>
-inline void Extension<Fn, instance>::requireProcAddress(const char *extensionName) const
+inline void Extension<Fn, instance>::checkProcAddress(const char *extensionName) const
 {
     if (!procAddr)
     {
@@ -27,7 +27,7 @@ template<class Fn>
 inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *name, const char *extensionName):
     InstanceExtension(instance, name)
 {
-    Extension<Fn, true>::requireProcAddress(extensionName);
+    Extension<Fn, true>::checkProcAddress(extensionName);
 }
 
 template<class Fn>
@@ -39,6 +39,6 @@ template<class Fn>
 inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *name, const char *extensionName):
     DeviceExtension(device, name)
 {
-    Extension<Fn, false>::requireProcAddress(extensionName);
+    Extension<Fn, false>::checkProcAddress(extensionName);
 }
 } // namespace magma
