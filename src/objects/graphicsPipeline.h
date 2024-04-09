@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class RenderPass;
     class PipelineShaderStage;
     class PipelineCache;
 #ifdef VK_KHR_pipeline_library
@@ -35,6 +34,7 @@ namespace magma
     struct DepthStencilState;
     struct ColorBlendState;
     class ViewportState;
+    class RenderPass;
 
     /* Graphics pipelines consist of multiple shader stages,
        multiple fixed-function pipeline stages, and a pipeline

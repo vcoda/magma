@@ -17,10 +17,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "pipeline.h"
-#include "../shaders/pipelineShaderStage.h"
 
 namespace magma
 {
+    class PipelineShaderStage;
     class PipelineCache;
 #ifdef VK_KHR_pipeline_library
     class PipelineLibrary;

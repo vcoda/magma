@@ -23,7 +23,6 @@ namespace magma
 {
 #ifdef VK_NV_ray_tracing
     class RayTracingPipeline;
-    class PipelineCache;
 
     /* With Vulkan it is possible to create multiple ray-tracing
        pipelines in a single API call. As there are may be

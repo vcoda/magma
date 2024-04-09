@@ -22,7 +22,6 @@ namespace magma
 {
     class GraphicsPipeline;
     class RenderPass;
-    class PipelineCache;
 #ifdef VK_KHR_pipeline_library
     class PipelineLibrary;
 #endif

@@ -66,7 +66,7 @@ void PipelineLibrary::compileVertexInputInterface(const VertexInputState& vertex
     VkPipeline handle = 0;
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
         1, &graphicsPipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_HANDLE_RESULT(result, "failed to compile vertex input interface subset");
+    MAGMA_HANDLE_RESULT(result, "failed to compile vertex input interface");
     libraries.push_back(handle);
 }
 
@@ -127,7 +127,7 @@ void PipelineLibrary::compilePreRasterizationShaders(const std::vector<PipelineS
     VkPipeline handle = 0;
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
         1, &graphicsPipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_HANDLE_RESULT(result, "failed to compile pre-rasterization shaders subset");
+    MAGMA_HANDLE_RESULT(result, "failed to compile pre-rasterization shaders");
     libraries.push_back(handle);
 }
 
@@ -156,7 +156,7 @@ void PipelineLibrary::compileFragmentShader(const PipelineShaderStage& fragmentS
     VkPipeline handle = 0;
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
         1, &graphicsPipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
-    MAGMA_HANDLE_RESULT(result, "failed to compile fragment shader subset");
+    MAGMA_HANDLE_RESULT(result, "failed to compile fragment shader");
     libraries.push_back(handle);
 }
 

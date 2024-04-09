@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "../shaders/pipelineShaderStage.h"
+#include "../shaders/rayTracingShaderGroup.h"
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
