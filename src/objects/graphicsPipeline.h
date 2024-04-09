@@ -23,6 +23,9 @@ namespace magma
     class RenderPass;
     class PipelineShaderStage;
     class PipelineCache;
+#ifdef VK_KHR_pipeline_library
+    class PipelineLibrary;
+#endif
 
     class VertexInputState;
     struct InputAssemblyState;
@@ -57,6 +60,9 @@ namespace magma
             uint32_t subpass,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        #ifdef VK_KHR_pipeline_library
+            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+        #endif
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
@@ -76,6 +82,9 @@ namespace magma
             uint32_t subpass,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        #ifdef VK_KHR_pipeline_library
+            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+        #endif
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
@@ -100,7 +109,7 @@ namespace magma
         hash_t rsHash;
     };
 
-    /* Calculates hash of render states and full hash of graphics 
+    /* Calculates hash of render states and full hash of graphics
        pipeline state object. This function is shared between
        classes to make sure that hash computation is consitent
        across different parts of the library. */

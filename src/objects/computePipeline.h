@@ -22,6 +22,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class PipelineCache;
+#ifdef VK_KHR_pipeline_library
+    class PipelineLibrary;
+#endif
 
     /* The compute pipeline is a separate pipeline from the
        graphics pipeline, which operates on one-, two-, or
@@ -36,6 +39,9 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        #ifdef VK_KHR_pipeline_library
+            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+        #endif
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());

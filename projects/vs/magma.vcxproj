@@ -321,6 +321,7 @@
     <ClInclude Include="..\..\src\objects\pipelineBatch.h" />
     <ClInclude Include="..\..\src\objects\pipelineCache.h" />
     <ClInclude Include="..\..\src\objects\pipelineLayout.h" />
+    <ClInclude Include="..\..\src\objects\pipelineLibrary.h" />
     <ClInclude Include="..\..\src\objects\primaryCommandBuffer.h" />
     <ClInclude Include="..\..\src\objects\privateDataSlot.h" />
     <ClInclude Include="..\..\src\objects\queryPool.h" />
@@ -530,6 +531,7 @@
     <ClCompile Include="..\..\src\objects\pipelineBatch.cpp" />
     <ClCompile Include="..\..\src\objects\pipelineCache.cpp" />
     <ClCompile Include="..\..\src\objects\pipelineLayout.cpp" />
+    <ClCompile Include="..\..\src\objects\pipelineLibrary.cpp" />
     <ClCompile Include="..\..\src\objects\primaryCommandBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\privateDataSlot.cpp" />
     <ClCompile Include="..\..\src\objects\queryPool.cpp" />

@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "graphicsPipeline.h"
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
+#include "pipelineLibrary.h"
 #include "device.h"
 #include "renderPass.h"
 #include "../states/vertexInputState.h"
@@ -153,9 +154,16 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
 
 void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+#ifdef VK_KHR_pipeline_library
+    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+#endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     fixup(pipelineInfos);
+#ifdef VK_KHR_pipeline_library
+    if (device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
+        linkPipelineLibrary(pipelineInfos, std::move(pipelineLibrary));
+#endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());

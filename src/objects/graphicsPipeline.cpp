@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "graphicsPipeline.h"
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
+#include "pipelineLibrary.h"
 #include "device.h"
 #include "renderPass.h"
 #include "../shaders/pipelineShaderStage.h"
@@ -54,6 +55,9 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     uint32_t subpass,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+#ifdef VK_KHR_pipeline_library
+    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+#endif
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
@@ -62,7 +66,11 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
         std::move(layout), std::move(renderPass), subpass,
-        std::move(allocator), std::move(pipelineCache), std::move(basePipeline),
+        std::move(allocator), std::move(pipelineCache),
+    #ifdef VK_KHR_pipeline_library
+        std::move(pipelineLibrary),
+    #endif
+        std::move(basePipeline),
         flags, extendedInfo)
 {}
 
@@ -82,6 +90,9 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     uint32_t subpass,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+#ifdef VK_KHR_pipeline_library
+    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+#endif
     std::shared_ptr<GraphicsPipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
@@ -142,6 +153,17 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
         linkNode(pipelineInfo, pipelineCreationFeedbackInfo);
     }
 #endif // VK_EXT_pipeline_creation_feedback
+#ifdef VK_KHR_pipeline_library
+    VkPipelineLibraryCreateInfoKHR pipelineLibraryInfo;
+    if (pipelineLibrary && device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
+    {
+        pipelineLibraryInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR;
+        pipelineLibraryInfo.pNext = nullptr;
+        pipelineLibraryInfo.libraryCount = pipelineLibrary->getLibraryCount();
+        pipelineLibraryInfo.pLibraries = pipelineLibrary->getLibraries();
+        linkNode(pipelineInfo, pipelineLibraryInfo);
+    }
+#endif // VK_KHR_pipeline_library
     const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     if (result != VK_SUCCESS)

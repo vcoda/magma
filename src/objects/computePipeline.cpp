@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "computePipeline.h"
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
+#include "pipelineLibrary.h"
 #include "device.h"
 #include "../shaders/pipelineShaderStage.h"
 #include "../allocator/allocator.h"
@@ -32,6 +33,9 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     std::shared_ptr<PipelineLayout> layout_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+#ifdef VK_KHR_pipeline_library
+    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+#endif
     std::shared_ptr<ComputePipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
@@ -70,6 +74,17 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
         linkNode(pipelineInfo, pipelineCreationFeedbackInfo);
     }
 #endif // VK_EXT_pipeline_creation_feedback
+#ifdef VK_KHR_pipeline_library
+    VkPipelineLibraryCreateInfoKHR pipelineLibraryInfo;
+    if (pipelineLibrary && device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
+    {
+        pipelineLibraryInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR;
+        pipelineLibraryInfo.pNext = nullptr;
+        pipelineLibraryInfo.libraryCount = pipelineLibrary->getLibraryCount();
+        pipelineLibraryInfo.pLibraries = pipelineLibrary->getLibraries();
+        linkNode(pipelineInfo, pipelineLibraryInfo);
+    }
+#endif // VK_KHR_pipeline_library
     const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     if (result != VK_SUCCESS)

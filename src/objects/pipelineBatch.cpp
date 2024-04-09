@@ -21,18 +21,25 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef VK_AMD_pipeline_compiler_control
-VkPipelineCompilerControlFlagsAMD PipelineBatch::compilerControlFlags = 0;
-#endif
-
 std::future<void> PipelineBatch::buildPipelinesAsync(std::shared_ptr<Device> device,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+#ifdef VK_KHR_pipeline_library
+    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+#endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     return std::async(std::launch::async,
-        [this, device, pipelineCache, allocator]()
+        [this, device, pipelineCache,
+        #ifdef VK_KHR_pipeline_library
+            pipelineLibrary,
+        #endif
+            allocator]()
         {
-            buildPipelines(std::move(device), std::move(pipelineCache), std::move(allocator));
+            buildPipelines(std::move(device), std::move(pipelineCache),
+            #ifdef VK_KHR_pipeline_library
+                std::move(pipelineLibrary),
+            #endif
+                std::move(allocator));
         });
 }
 

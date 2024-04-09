@@ -20,6 +20,28 @@ inline void TPipelineBatch<PipelineType>::fixup(std::vector<PipelineInfoType>& p
     }
 }
 
+#ifdef VK_KHR_pipeline_library
+template<class PipelineType>
+template<class PipelineInfoType>
+inline void TPipelineBatch<PipelineType>::linkPipelineLibrary(std::vector<PipelineInfoType>& pipelineInfos,
+    std::shared_ptr<PipelineLibrary> pipelineLibrary)
+{
+    if (pipelineLibrary)
+    {
+        VkPipelineLibraryCreateInfoKHR pipelineLibraryInfo;
+        pipelineLibraryInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR;
+        pipelineLibraryInfo.pNext = nullptr;
+        pipelineLibraryInfo.libraryCount = pipelineLibrary->getLibraryCount();
+        pipelineLibraryInfo.pLibraries = pipelineLibrary->getLibraries();
+        for (auto& pipelineInfo: pipelineInfos)
+        {   // For each pipeline info we link a new instance of library info
+            pipelineLibraryInfos.push_back(pipelineLibraryInfo);
+            linkNode(pipelineInfo, pipelineLibraryInfos.back());
+        }
+    }
+}
+#endif // VK_KHR_pipeline_library
+
 template<class PipelineType>
 inline void TPipelineBatch<PipelineType>::postCreate()
 {   // Free storage that had to be preserved until vkCreate*Pipelines() call
@@ -29,6 +51,9 @@ inline void TPipelineBatch<PipelineType>::postCreate()
 #endif
 #ifdef VK_EXT_pipeline_creation_feedback
     creationFeedbackInfos.clear();
+#endif
+#ifdef VK_KHR_pipeline_library
+    pipelineLibraryInfos.clear();
 #endif
 }
 

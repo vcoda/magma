@@ -23,6 +23,9 @@ namespace magma
     class GraphicsPipeline;
     class RenderPass;
     class PipelineCache;
+#ifdef VK_KHR_pipeline_library
+    class PipelineLibrary;
+#endif
 
     class VertexInputState;
     struct InputAssemblyState;
@@ -61,6 +64,9 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         void buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        #ifdef VK_KHR_pipeline_library
+            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+        #endif
             std::shared_ptr<IAllocator> allocator = nullptr) override;
 
     private:

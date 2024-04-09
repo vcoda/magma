@@ -159,6 +159,9 @@ namespace magma
 #ifdef VK_KHR_pipeline_executable_properties
     MAGMA_TYPEDEF_SHARED_PTR(PipelineExecutable);
 #endif
+#ifdef VK_KHR_pipeline_library
+    MAGMA_TYPEDEF_SHARED_PTR(PipelineLibrary);
+#endif
 #ifdef VK_KHR_sampler_ycbcr_conversion
     MAGMA_TYPEDEF_SHARED_PTR(SamplerYcbcrConversion);
 #endif

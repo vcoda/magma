@@ -86,8 +86,15 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
 
 void ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+#ifdef VK_KHR_pipeline_library
+    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+#endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
+#ifdef VK_KHR_pipeline_library
+    if (device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
+        linkPipelineLibrary(pipelineInfos, std::move(pipelineLibrary));
+#endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());

@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "pipelineLibrary.h"
 #include "../shaders/pipelineShaderStage.h"
 #include "../misc/structureChain.h"
 
@@ -37,9 +38,15 @@ namespace magma
     public:
         virtual void buildPipelines(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        #ifdef VK_KHR_pipeline_library
+            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+        #endif
             std::shared_ptr<IAllocator> allocator = nullptr) = 0;
         std::future<void> buildPipelinesAsync(std::shared_ptr<Device> device,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        #ifdef VK_KHR_pipeline_library
+            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+        #endif
             std::shared_ptr<IAllocator> allocator = nullptr);
     #ifdef VK_AMD_pipeline_compiler_control
         static void setCompilerControlFlags(VkPipelineCompilerControlFlagsAMD flags) noexcept { compilerControlFlags = flags; }
@@ -61,6 +68,9 @@ namespace magma
         std::list<std::vector<VkPipelineCreationFeedbackEXT>> stageCreationFeedbacks;
         std::list<VkPipelineCreationFeedbackCreateInfoEXT> creationFeedbackInfos;
     #endif // VK_EXT_pipeline_creation_feedback
+    #ifdef VK_KHR_pipeline_library
+        std::list<VkPipelineLibraryCreateInfoKHR> pipelineLibraryInfos;
+    #endif
         std::vector<hash_t> hashes;
         mutable std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
     };
@@ -76,6 +86,11 @@ namespace magma
         TPipelineBatch(uint32_t capacity);
         template<class PipelineInfoType>
         void fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept;
+    #ifdef VK_KHR_pipeline_library
+        template<class PipelineInfoType>
+        void linkPipelineLibrary(std::vector<PipelineInfoType>& pipelineInfos,
+            std::shared_ptr<PipelineLibrary> pipelineLibrary);
+    #endif // VK_KHR_pipeline_library
         void postCreate();
         void postBuild();
 

@@ -23,6 +23,9 @@ namespace magma
 {
     class PipelineShaderStage;
     class PipelineCache;
+#ifdef VK_KHR_pipeline_library
+    class PipelineLibrary;
+#endif
 
     /* Raytracing pipelines consist of multiple shader stages,
        fixed-function traversal stages, and a pipeline layout. */
@@ -38,6 +41,9 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        #ifdef VK_KHR_pipeline_library
+            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+        #endif
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());

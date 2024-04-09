@@ -26,6 +26,9 @@ namespace magma
     class GraphicsPipeline;
     class PipelineLayout;
     class PipelineCache;
+#ifdef VK_KHR_pipeline_library
+    class PipelineLibrary;
+#endif
     class RenderPass;
     class IAllocator;
 
@@ -52,6 +55,9 @@ namespace magma
         public:
             explicit GraphicsPipelineCache(std::shared_ptr<Device> device,
                 std::shared_ptr<PipelineCache> pipelineCache,
+            #ifdef VK_KHR_pipeline_library
+                std::shared_ptr<PipelineLibrary> pipelineLibrary,
+            #endif
                 bool useDerivativePipelines,
                 bool disablePipelineOptimization,
                 std::shared_ptr<IAllocator> allocator = nullptr);
@@ -78,6 +84,9 @@ namespace magma
         private:
             std::shared_ptr<Device> device;
             std::shared_ptr<PipelineCache> pipelineCache;
+        #ifdef VK_KHR_pipeline_library
+            std::shared_ptr<PipelineLibrary> pipelineLibrary;
+        #endif
             std::shared_ptr<IAllocator> allocator;
             VkPipelineCreateFlags psoFlags;
             PsoCache pipelines;

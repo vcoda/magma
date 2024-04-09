@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "rayTracingPipeline.h"
 #include "pipelineLayout.h"
 #include "pipelineCache.h"
+#include "pipelineLibrary.h"
 #include "device.h"
 #include "physicalDevice.h"
 #include "../shaders/pipelineShaderStage.h"
@@ -38,6 +39,9 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+#ifdef VK_KHR_pipeline_library
+    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+#endif
     std::shared_ptr<RayTracingPipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
@@ -79,6 +83,17 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_,
         pipelineInfo.pNext = &pipelineCreationFeedbackInfo;
     }
 #endif // VK_EXT_pipeline_creation_feedback
+#ifdef VK_KHR_pipeline_library
+    VkPipelineLibraryCreateInfoKHR pipelineLibraryInfo;
+    if (pipelineLibrary && device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
+    {
+        pipelineLibraryInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR;
+        pipelineLibraryInfo.pNext = nullptr;
+        pipelineLibraryInfo.libraryCount = pipelineLibrary->getLibraryCount();
+        pipelineLibraryInfo.pLibraries = pipelineLibrary->getLibraries();
+        linkNode(pipelineInfo, pipelineLibraryInfo);
+    }
+#endif // VK_KHR_pipeline_library
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);

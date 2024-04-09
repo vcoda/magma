@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/graphicsPipeline.h"
 #include "../objects/pipelineLayout.h"
 #include "../objects/pipelineCache.h"
+#include "../objects/pipelineLibrary.h"
 #include "../objects/renderPass.h"
 #include "../states/vertexInputState.h"
 #include "../states/inputAssemblyState.h"
@@ -37,11 +38,17 @@ namespace aux
 {
 GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device_,
     std::shared_ptr<PipelineCache> pipelineCache_,
+#ifdef VK_KHR_pipeline_library
+    std::shared_ptr<PipelineLibrary> pipelineLibrary_,
+#endif
     bool useDerivativePipelines,
     bool disablePipelineOptimization,
     std::shared_ptr<IAllocator> allocator_ /* nullptr */):
     device(std::move(device_)),
     pipelineCache(std::move(pipelineCache_)),
+#ifdef VK_KHR_pipeline_library
+    pipelineLibrary(std::move(pipelineLibrary_)),
+#endif
     allocator(std::move(allocator_)),
     psoFlags(0)
 {
@@ -139,6 +146,9 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         subpass,
         allocator,
         pipelineCache,
+    #ifdef VK_KHR_pipeline_library
+        pipelineLibrary,
+    #endif
         std::move(basePipeline),
         flags | psoFlags);
     MAGMA_ASSERT(pipeline->getHash() == hashes.first);

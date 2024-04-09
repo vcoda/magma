@@ -89,10 +89,17 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
 
 void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<Device> device_,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+#ifdef VK_KHR_pipeline_library
+    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+#endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     device = std::move(device_);
     fixup(pipelineInfos);
+#ifdef VK_KHR_pipeline_library
+    if (device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
+        linkPipelineLibrary(pipelineInfos, std::move(pipelineLibrary));
+#endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
     const VkResult result = vkCreateRayTracingPipelinesNV(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
