@@ -51,7 +51,7 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
     binding(0)
 {
     const char *entrypoint = reflection->getEntryPointName(0);
-    for (const auto& binding : reflection->enumerateDescriptorBindings(entrypoint))
+    for (auto const& binding: reflection->enumerateDescriptorBindings(entrypoint))
     {
         if (SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding->descriptor_type)
         {

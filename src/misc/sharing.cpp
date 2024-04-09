@@ -30,7 +30,7 @@ Sharing::Sharing(std::shared_ptr<const PhysicalDevice> device,
     const std::initializer_list<VkQueueFlagBits>& queueTypes)
 {
     const auto queueFamilyProperties = device->getQueueFamilyProperties();
-    for (const VkQueueFlagBits queueType : queueTypes)
+    for (auto const queueType: queueTypes)
     {
         const uint32_t queueFamilyIndex = chooseFamilyIndex(queueType, queueFamilyProperties);
         queueFamilyIndices.push_back(queueFamilyIndex);
@@ -55,7 +55,7 @@ uint32_t Sharing::chooseFamilyIndex(VkQueueFlagBits queueType,
     uint32_t queueFamilyIndex = 0;
     if (VK_QUEUE_COMPUTE_BIT == queueType)
     {   // Try to find dedicated compute queue
-        for (const auto& property : queueFamilyProperties)
+        for (auto const& property: queueFamilyProperties)
         {
             if (property.queueFlags & queueType)
             {   // Compute queue would be better separated from graphics
@@ -67,7 +67,7 @@ uint32_t Sharing::chooseFamilyIndex(VkQueueFlagBits queueType,
         }
     } else if ((VK_QUEUE_TRANSFER_BIT == queueType) || (VK_QUEUE_SPARSE_BINDING_BIT == queueType))
     {   // Try to find dedicated transfer/sparse queue
-        for (const auto& property : queueFamilyProperties)
+        for (auto const& property: queueFamilyProperties)
         {
             if (property.queueFlags & queueType)
             {   // Transfer queue would be better separated from graphics or compute
@@ -80,7 +80,7 @@ uint32_t Sharing::chooseFamilyIndex(VkQueueFlagBits queueType,
     }
     // Some hardware is limited to have only single queue family with one queue in it
     queueFamilyIndex = 0;
-    for (const auto& property : queueFamilyProperties)
+    for (auto const& property: queueFamilyProperties)
     {   // Try to find any suitable family
         if (property.queueFlags & queueType)
             return queueFamilyIndex;

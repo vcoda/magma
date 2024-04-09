@@ -2,7 +2,7 @@ namespace magma
 {
 inline bool DescriptorSetTable::valid()
 {
-    const auto& list = getReflection();
+    auto const& list = getReflection();
     return std::all_of(list.begin(), list.end(),
         [](auto const& it)
         {
@@ -12,9 +12,9 @@ inline bool DescriptorSetTable::valid()
 
 inline bool DescriptorSetTable::dirty()
 {
-    const auto& list = getReflection();
+    auto const& list = getReflection();
     return std::any_of(list.begin(), list.end(),
-        [](const auto& it)
+        [](auto const& it)
         {
             return it.get().dirty();
         });

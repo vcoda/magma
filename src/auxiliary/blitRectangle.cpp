@@ -122,7 +122,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::move(allocator),
         std::move(pipelineCache),
         nullptr); // basePipeline
-    for (const auto& attachment : this->renderPass->getAttachments())
+    for (auto const& attachment: this->renderPass->getAttachments())
     {
         if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)
         {   // The Vulkan spec states: clearValueCount must be greater than the largest attachment index in renderPass that specifies a loadOp

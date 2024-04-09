@@ -204,7 +204,7 @@ std::vector<Profiler::Sample> Profiler::collectSamples(bool wait) const
     if (wait)
     {   // Block CPU until all query results will be ready
         const auto timestamps = queryPool->getResults<uint64_t>(0, count, wait);
-        for (const auto& section: sections)
+        for (auto const& section: sections)
         {   // Bits outside the valid range are guaranteed to be zeros, but we use timestamp mask anyway
             const uint64_t beginTs = timestamps[section.beginQuery];
             const uint64_t endTs = timestamps[section.beginQuery + 1];
@@ -217,10 +217,10 @@ std::vector<Profiler::Sample> Profiler::collectSamples(bool wait) const
     else
     {   // Do not stall, return only available results
         const auto timestamps = queryPool->getResultsWithAvailability<uint64_t>(0, count);
-        for (const auto& section: sections)
+        for (auto const& section: sections)
         {
-            const auto& beginTs = timestamps[section.beginQuery];
-            const auto& endTs = timestamps[section.beginQuery + 1];
+            auto const& beginTs = timestamps[section.beginQuery];
+            auto const& endTs = timestamps[section.beginQuery + 1];
             if (!beginTs.availability || !endTs.availability)
                 continue;
             const uint64_t start = beginTs.result & timestampMask;

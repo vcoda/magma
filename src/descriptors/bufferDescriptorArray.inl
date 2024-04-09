@@ -11,7 +11,7 @@ template<uint32_t Size>
 inline bool BufferDescriptorArray<Size>::associatedWithResource() const noexcept
 {
     return std::all_of(Super::descriptors.begin(), Super::descriptors.end(),
-        [](const auto& it)
+        [](auto const& it)
         {
             return (it.buffer != VK_NULL_HANDLE);
         });

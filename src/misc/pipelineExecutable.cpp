@@ -81,7 +81,7 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
         MAGMA_ASSERT(MAGMA_SUCCEEDED(result));
         if (data.empty())
         {   // Allocate memory for internal representation data to be written by Vulkan
-            for (const auto& ir : internalRepresentations)
+            for (auto const& ir: internalRepresentations)
                 data.emplace_back(ir.dataSize ? MAGMA_NEW char[ir.dataSize] : nullptr);
         }
         core::forEach(internalRepresentations, data,

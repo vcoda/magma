@@ -23,7 +23,7 @@ namespace magma
 {
 Layers::Layers(const std::vector<VkLayerProperties>& properties)
 {
-    for (const auto& property : properties)
+    for (auto const& property: properties)
     {
         layers.emplace(property.layerName, property);
         hashes.emplace(core::hashString(property.layerName));
@@ -39,7 +39,7 @@ bool Layers::hasLayer(const char *name) const noexcept
 
 void Layers::forEach(std::function<void(const VkLayerProperties&)> fn) const noexcept
 {
-    for (const auto& layer : layers)
+    for (auto const& layer: layers)
         fn(layer.second);
 }
 

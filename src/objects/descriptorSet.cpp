@@ -45,7 +45,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
 {   // Check that all descriptors have unique layout bindings
     const DescriptorList& descriptors = setTable.getReflection();
     std::vector<uint32_t> locations;
-    for (const auto& descriptor: descriptors)
+    for (auto const& descriptor: descriptors)
         locations.push_back(descriptor.get().getLayoutBinding().binding);
     if (std::unique(locations.begin(), locations.end()) != locations.end())
         MAGMA_ERROR("elements of descriptor set layout should have unique binding locations");

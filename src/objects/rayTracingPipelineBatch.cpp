@@ -78,9 +78,9 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
         pipelineInfo.stageCount,
         pipelineInfo.groupCount,
         pipelineInfo.maxRecursionDepth);
-    for (const auto& stage : shaderStages)
+    for (auto const& stage: shaderStages)
         hash = core::hashCombine(hash, stage.getHash());
-    for (const auto& group : shaderGroups)
+    for (auto const& group: shaderGroups)
         hash = core::hashCombine(hash, group.hash());
     hash = core::hashCombine(hash, layout->getHash());
     hashes.push_back(hash);

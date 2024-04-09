@@ -56,7 +56,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_,
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
-    for (auto& stage : shaderStages)
+    for (auto& stage: shaderStages)
         dereferencedStages.put(stage);
     pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
     pipelineInfo.pStages = dereferencedStages;
@@ -89,9 +89,9 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_,
         pipelineInfo.stageCount,
         pipelineInfo.groupCount,
         pipelineInfo.maxRecursionDepth);
-    for (const auto& stage : shaderStages)
+    for (auto const& stage: shaderStages)
         hash = core::hashCombine(hash, stage.getHash());
-    for (const auto& group : shaderGroups)
+    for (auto const& group: shaderGroups)
         hash = core::hashCombine(hash, group.hash());
     hash = core::hashCombine(hash, this->layout->getHash());
 }

@@ -126,7 +126,7 @@ inline void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::v
 {
     MAGMA_ASSERT(vertexBuffers.size() > 0);
     MAGMA_STACK_ARRAY(VkBuffer, dereferencedBuffers, vertexBuffers.size());
-    for (const auto& buffer : vertexBuffers)
+    for (auto const& buffer: vertexBuffers)
         dereferencedBuffers.put(*buffer);
     if (offsets.empty())
         offsets.resize(vertexBuffers.size(), 0);

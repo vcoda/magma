@@ -39,7 +39,7 @@ void PrimaryCommandBuffer::executeCommands(const std::vector<std::shared_ptr<Com
 {
     MAGMA_ASSERT_FOR_EACH(cmdBuffers, cmdBuffer, cmdBuffer->secondary());
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
-    for (const auto& cmdBuffer: cmdBuffers)
+    for (auto const& cmdBuffer: cmdBuffers)
         dereferencedCmdBuffers.put(*cmdBuffer);
     vkCmdExecuteCommands(handle, dereferencedCmdBuffers.size(), dereferencedCmdBuffers);
 }

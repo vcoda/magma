@@ -186,7 +186,7 @@ uint32_t VertexInputState::stride(uint32_t binding) const noexcept
     std::size_t stride = 0;
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
     {
-        const auto& vertexAttibDescription = pVertexAttributeDescriptions[i];
+        auto const& vertexAttibDescription = pVertexAttributeDescriptions[i];
         if (vertexAttibDescription.binding == binding)
         {   // TODO: alignment?
             const std::size_t vertexAttribSize = Format(vertexAttibDescription.format).size();
@@ -205,7 +205,7 @@ hash_t VertexInputState::hash() const noexcept
         vertexAttributeDescriptionCount);
     for (uint32_t i = 0; i < vertexBindingDescriptionCount; ++i)
     {
-        const auto& vertexBindingDescription = pVertexBindingDescriptions[i];
+        auto const& vertexBindingDescription = pVertexBindingDescriptions[i];
         hash = core::hashCombine(hash, core::hashArgs(
             vertexBindingDescription.binding,
             vertexBindingDescription.stride,
@@ -213,7 +213,7 @@ hash_t VertexInputState::hash() const noexcept
     }
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
     {
-        const auto& vertexAttribDescription = pVertexAttributeDescriptions[i];
+        auto const& vertexAttribDescription = pVertexAttributeDescriptions[i];
         hash = core::hashCombine(hash, core::hashArgs(
             vertexAttribDescription.location,
             vertexAttribDescription.binding,
@@ -226,7 +226,7 @@ hash_t VertexInputState::hash() const noexcept
         vertexInputDivisorInfo.vertexBindingDivisorCount));
     for (uint32_t i = 0; i < vertexInputDivisorInfo.vertexBindingDivisorCount; ++i)
     {
-        const auto& vertexBindingDivisor = vertexInputDivisorInfo.pVertexBindingDivisors[i];
+        auto const& vertexBindingDivisor = vertexInputDivisorInfo.pVertexBindingDivisors[i];
         hash = core::hashCombine(hash, core::hashArgs(
             vertexBindingDivisor.binding,
             vertexBindingDivisor.divisor));

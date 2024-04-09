@@ -116,12 +116,12 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create instance");
-    for (const auto& properties: enumerateExtensions())
+    for (auto const& properties: enumerateExtensions())
         extensions.emplace(properties.extensionName);
     // Store enabled layers and extensions
-    for (const auto& layer: enabledLayers)
+    for (auto const& layer: enabledLayers)
         this->enabledLayers.emplace(layer);
-    for (const auto& extension: enabledExtensions)
+    for (auto const& extension: enabledExtensions)
         this->enabledExtensions.emplace(extension);
 #ifdef MAGMA_DEBUG
     _refCountChecker.addRef();

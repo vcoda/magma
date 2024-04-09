@@ -231,7 +231,7 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
     MAGMA_ASSERT_FOR_EACH(descriptorSets, descriptorSet, pipeline->getLayout()->hasLayout(descriptorSet->getLayout()));
     MAGMA_ASSERT_FOR_EACH(descriptorSets, descriptorSet, !descriptorSet->dirty());
     MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
-    for (const auto& descriptorSet: descriptorSets)
+    for (auto const& descriptorSet: descriptorSets)
         dereferencedDescriptorSets.put(*descriptorSet);
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
 }
@@ -263,7 +263,7 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
     if (vkCmdBindTransformFeedbackBuffersEXT)
     {
         MAGMA_STACK_ARRAY(VkBuffer, dereferencedBuffers, transformFeedbackBuffers.size());
-        for (const auto& buffer : transformFeedbackBuffers)
+        for (auto const& buffer : transformFeedbackBuffers)
             dereferencedBuffers.put(*buffer);
         if (offsets.empty())
             offsets.resize(transformFeedbackBuffers.size(), 0);
@@ -356,10 +356,10 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
     MAGMA_ASSERT(srcStageMask);
     MAGMA_ASSERT(dstStageMask);
     MAGMA_STACK_ARRAY(VkEvent, dereferencedEvents, events.size());
-    for (const auto& event : events)
+    for (auto const& event : events)
         dereferencedEvents.put(*event);
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
-    for (const auto& barrier : imageMemoryBarriers)
+    for (auto const& barrier : imageMemoryBarriers)
         dereferencedImageMemoryBarriers.put(barrier);
     vkCmdWaitEvents(handle, dereferencedEvents.size(), dereferencedEvents, srcStageMask, dstStageMask,
         MAGMA_COUNT(memoryBarriers),
@@ -381,14 +381,14 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
-    for (const auto& barrier : imageMemoryBarriers)
+    for (auto const& barrier : imageMemoryBarriers)
         dereferencedImageMemoryBarriers.put(barrier);
     vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
         MAGMA_COUNT(memoryBarriers), memoryBarriers.data(),
         MAGMA_COUNT(bufferMemoryBarriers), bufferMemoryBarriers.data(),
         MAGMA_COUNT(imageMemoryBarriers), dereferencedImageMemoryBarriers);
     // TODO: Queue barriers and update image layout on submit?
-    for (const auto& barrier : imageMemoryBarriers)
+    for (auto const& barrier : imageMemoryBarriers)
         barrier.image->setLayout(barrier.newLayout);
 }
 
@@ -439,7 +439,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         MAGMA_ASSERT(!renderPass->usesClear());
     }
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
-    for (const auto& attachment : attachments)
+    for (auto const& attachment : attachments)
         dereferencedAttachments.put(*attachment);
     VkRenderPassBeginInfo renderPassBeginInfo;
     VkRenderPassAttachmentBeginInfoKHR renderPassBeginAttachmentInfo;
@@ -552,7 +552,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
         MAGMA_ASSERT(!renderPass->usesClear());
     }
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
-    for (const auto& attachment : attachments)
+    for (auto const& attachment : attachments)
         dereferencedAttachments.put(*attachment);
     VkRenderPassBeginInfo renderPassBeginInfo;
     VkDeviceGroupRenderPassBeginInfo renderPassBeginDeviceGroupInfo;
@@ -631,7 +631,7 @@ void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const st
     if (vkCmdBeginTransformFeedbackEXT)
     {
         MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBuffers.size());
-        for (const auto& buffer : counterBuffers)
+        for (auto const& buffer : counterBuffers)
             dereferencedCounterBuffers.put(*buffer);
         vkCmdBeginTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
         withinTransformFeedback = VK_TRUE;
@@ -649,7 +649,7 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
     if (vkCmdEndTransformFeedbackEXT)
     {
         MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBuffers.size());
-        for (const auto& buffer : counterBuffers)
+        for (auto const& buffer : counterBuffers)
             dereferencedCounterBuffers.put(*buffer);
         vkCmdEndTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
         withinTransformFeedback = VK_FALSE;

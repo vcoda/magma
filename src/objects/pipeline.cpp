@@ -82,7 +82,7 @@ std::vector<std::shared_ptr<PipelineExecutable>> Pipeline::getExecutables() cons
     MAGMA_HANDLE_RESULT(result, "failed to get properties of pipeline executables");
     std::vector<std::shared_ptr<PipelineExecutable>> executables;
     uint32_t index = 0;
-    for (const auto& properties : executableProperties)
+    for (auto const& properties: executableProperties)
         executables.emplace_back(PipelineExecutable::makeShared(shared_from_this(), properties, index++));
     return executables;
 }
@@ -120,8 +120,8 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
     std::size_t disassemblySize;
     VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, nullptr);
     if (VK_SUCCESS == result)
-    {
-        std::vector<char> disassembly(disassemblySize, '\0'); // May be large enough, so avoid stack allocation
+    {   // May be large enough, so allocate in the heap
+        std::vector<char> disassembly(disassemblySize, '\0');
         result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
         if (VK_SUCCESS == result)
             return std::string(&disassembly[0]);

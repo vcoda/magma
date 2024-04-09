@@ -107,11 +107,11 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
         pipelineLayoutInfo.flags,
         pipelineLayoutInfo.setLayoutCount,
         pipelineLayoutInfo.pushConstantRangeCount);
-    for (const auto& layout: setLayouts_)
+    for (auto const& layout: setLayouts_)
         hash = core::hashCombine(hash, layout->getHash());
     for (auto const& pushConstantRange: pushConstantRanges)
         hash = core::hashCombine(hash, pushConstantRange.hash());
-    for (const auto& layout: setLayouts_)
+    for (auto const& layout: setLayouts_)
         setLayouts.push_back(layout);
 }
 

@@ -74,7 +74,7 @@ std::vector<uint8_t> ValidationCache::getData() const
 void ValidationCache::mergeCaches(const std::vector<std::shared_ptr<const ValidationCache>>& caches)
 {
     MAGMA_STACK_ARRAY(VkValidationCacheEXT, dereferencedCaches, caches.size());
-    for (const auto& cache : caches)
+    for (auto const& cache: caches)
         dereferencedCaches.put(*cache);
     MAGMA_DEVICE_EXTENSION(vkMergeValidationCachesEXT);
     const VkResult result = vkMergeValidationCachesEXT(MAGMA_HANDLE(device), handle, MAGMA_COUNT(dereferencedCaches), dereferencedCaches);

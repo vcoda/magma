@@ -136,7 +136,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
         return false;
     cmdBuffer->bindVertexBuffer(0, vertexBuffer);
     std::shared_ptr<GraphicsPipeline> prevPipeline;
-    for (const auto& primitive : primitives)
+    for (auto const& primitive: primitives)
     {
 #ifdef MAGMA_DEBUG_LABEL
         if (primitive.labelName)

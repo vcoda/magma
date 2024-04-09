@@ -65,14 +65,14 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     }
     else
     {   // Dereference wait semaphores
-        for (const auto& semaphore : waitSemaphores)
+        for (auto const& semaphore: waitSemaphores)
             dereferencedWaitSemaphores.put(*semaphore);
         submitInfo.waitSemaphoreCount = MAGMA_COUNT(dereferencedWaitSemaphores);
         submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
         submitInfo.pWaitDstStageMask = waitStageMasks.data();
     }
     // Dereference command buffers
-    for (const auto& cmdBuffer : cmdBuffers)
+    for (auto const& cmdBuffer: cmdBuffers)
     {
         MAGMA_ASSERT(cmdBuffer->primary());
         dereferencedCmdBuffers.put(*cmdBuffer);
@@ -86,7 +86,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     }
     else
     {   // Dereference signal semaphores
-        for (const auto& semaphore : signalSemaphores)
+        for (auto const& semaphore: signalSemaphores)
             dereferencedSignalSemaphores.put(*semaphore);
         submitInfo.signalSemaphoreCount = MAGMA_COUNT(dereferencedSignalSemaphores);
         submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;

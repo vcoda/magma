@@ -49,7 +49,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     MAGMA_ASSERT(source.length() > 0);
     MAGMA_ASSERT(strlen(entrypoint) > 0);
     shaderc_compile_options_t options = shaderc_compile_options_initialize();
-    for (const auto& macro : macroDefinitions)
+    for (auto const& macro: macroDefinitions)
     {   // Add preprocessor definitions
         shaderc_compile_options_add_macro_definition(options,
             macro.first.c_str(), macro.first.length(),

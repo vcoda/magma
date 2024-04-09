@@ -14,7 +14,7 @@ inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
     {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
         return std::all_of(Super::descriptors.begin(), Super::descriptors.end(),
-            [](const auto& it)
+            [](auto const& it)
             {
                 return (it.sampler != VK_NULL_HANDLE);
             });
@@ -22,7 +22,7 @@ inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
         return std::all_of(Super::descriptors.begin(), Super::descriptors.end(),
-            [](const auto& it)
+            [](auto const& it)
             {
                 return (it.imageView != VK_NULL_HANDLE);
             });
@@ -70,7 +70,7 @@ template<uint32_t Size>
 inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() const noexcept
 {
     const bool associatedWithSamplers = std::all_of(Super::descriptors.begin(), Super::descriptors.end(),
-        [](const auto& it)
+        [](auto const& it)
         {
             return (it.sampler != VK_NULL_HANDLE);
         }) || std::all_of(immutableSamplers.begin(), immutableSamplers.end(),
@@ -79,7 +79,7 @@ inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() c
             return (it != VK_NULL_HANDLE);
         });
     return std::all_of(Super::descriptors.begin(), Super::descriptors.end(),
-        [](const auto& it)
+        [](auto const& it)
         {
             return (it.imageView != VK_NULL_HANDLE);
         }) && associatedWithSamplers;

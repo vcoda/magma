@@ -88,12 +88,12 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create logical device");
     queues.reserve(queueDescriptors.size());
-    for (const auto& desc : queueDescriptors)
+    for (auto const& desc: queueDescriptors)
         queues.emplace_back(desc, std::weak_ptr<Queue>());
     // Store enabled layers and extensions
-    for (const auto& layer: enabledLayers_)
+    for (auto const& layer: enabledLayers_)
         enabledLayers.emplace(layer);
-    for (const auto& extension: enabledExtensions_)
+    for (auto const& extension: enabledExtensions_)
         enabledExtensions.emplace(extension);
     // Store feature nodes for fast search in getEnabledExtendedFeatures()
     const VkBaseInStructure *featureNode = enabledExtendedFeatures.firstNode();
@@ -145,7 +145,7 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
 std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) const
 {
     auto it = std::find_if(queues.begin(), queues.end(),
-        [queueFamilyIndex](const auto& pair)
+        [queueFamilyIndex](auto const& pair)
         {
             return (pair.first.queueFamilyIndex == queueFamilyIndex) &&
                 !pair.second.expired();
@@ -189,7 +189,7 @@ bool Device::waitIdle() const
 bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept
 {
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
-    for (const auto& fence : fences)
+    for (auto const& fence: fences)
         dereferencedFences.put(*fence);
     const VkResult result = vkResetFences(handle, dereferencedFences.size(), dereferencedFences);
     return (VK_SUCCESS == result);
@@ -199,7 +199,7 @@ bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bo
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
-    for (const auto& fence : fences)
+    for (auto const& fence: fences)
         dereferencedFences.put(*fence);
     const VkResult result = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences, MAGMA_BOOLEAN(waitAll), timeout);
     MAGMA_HANDLE_RESULT(result, "failed to wait for fence(s)");
@@ -213,7 +213,7 @@ bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSemaphores, semaphores.size());
-    for (const auto& semaphore: semaphores)
+    for (auto const& semaphore: semaphores)
         dereferencedSemaphores.put(*semaphore);
     VkSemaphoreWaitInfo waitInfo;
     waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO_KHR;

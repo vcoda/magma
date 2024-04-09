@@ -35,7 +35,7 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDev
     instance(std::move(instance))
 {
     handle = handle_;
-    for (const auto& properties: enumerateExtensions())
+    for (auto const& properties: enumerateExtensions())
         extensions.emplace(properties.extensionName);
 }
 

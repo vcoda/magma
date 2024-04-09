@@ -51,7 +51,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device_, Vk
     {
         VkGeometryNV *pGeometries = MAGMA_NEW VkGeometryNV[accelerationStructureInfo.info.geometryCount];
         accelerationStructureInfo.info.pGeometries = pGeometries;
-        for (const auto& geometry : geometries)
+        for (auto const& geometry : geometries)
             *pGeometries++ = geometry;
     }
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);

@@ -45,7 +45,7 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
 {
     uint32_t multisampleAttachmentCount = 0;
     uint32_t resolveAttachmentCount = 0;
-    for (const auto& attachmentDesc : attachments)
+    for (auto const& attachmentDesc: attachments)
     {
         const Format format(attachmentDesc.format);
         if (!format.depth() && !format.stencil() && !format.depthStencil())
@@ -63,7 +63,7 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
     bool hasDepthStencilAttachment = false;
     uint32_t attachmentIndex = 0, colorIndex = 0, resolveIndex = 0;
-    for (const auto& attachmentDesc : attachments)
+    for (auto const& attachmentDesc: attachments)
     {
         const Format format(attachmentDesc.format);
         if (format.depth() || format.stencil() || format.depthStencil())
@@ -135,11 +135,11 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
         renderPassMultiviewInfo.dependencyCount,
         renderPassMultiviewInfo.correlationMaskCount,
         extendedInfo.getHash());
-    for (const auto& attachment : attachments)
+    for (auto const& attachment: attachments)
         hash = core::hashCombine(hash, attachment.hash());
     hash = core::hashCombine(hash, subpassDescription.getHash());
     core::zeroMemory(subpassDescription); // Aware destructor
-    for (const auto& dependency : dependencies)
+    for (auto const& dependency: dependencies)
         hash = core::hashCombine(hash, dependency.hash());
     for (uint32_t i = 0; i < renderPassMultiviewInfo.subpassCount; ++i)
         hash = core::hashCombine(hash, renderPassMultiviewInfo.pViewMasks[i]);

@@ -23,7 +23,7 @@ namespace magma
 {
 Extensions::Extensions(const std::vector<VkExtensionProperties>& properties)
 {
-    for (const auto& property : properties)
+    for (auto const& property: properties)
     {
         extensions.emplace(property.extensionName, property.specVersion);
         hashes.emplace(core::hashString(property.extensionName));
@@ -39,7 +39,7 @@ bool Extensions::hasExtension(const char *name) const noexcept
 
 void Extensions::forEach(std::function<void(const std::string&, uint32_t)> fn) const noexcept
 {
-    for (const auto& ext : extensions)
+    for (auto const& ext: extensions)
         fn(ext.first, ext.second);
 }
 

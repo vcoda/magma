@@ -39,13 +39,13 @@ std::future<void> PipelineBatch::buildPipelinesAsync(std::shared_ptr<Device> dev
 void PipelineBatch::collectShaderStageInfos() const
 {
     std::size_t stageCount = 0;
-    for (const auto& shaderStages: stages)
+    for (auto const& shaderStages: stages)
         stageCount += shaderStages.size();
     shaderStageInfos.clear();
     shaderStageInfos.reserve(stageCount);
-    for (const auto& shaderStages: stages)
+    for (auto const& shaderStages: stages)
     {   // Copy to array of Vulkan structures due to alignment
-        for (const auto& stage: shaderStages)
+        for (auto const& stage: shaderStages)
             shaderStageInfos.push_back(stage);
     }
 }
