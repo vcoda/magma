@@ -20,7 +20,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class PipelineLayout;
+    class PipelineShaderStage;
     class IAllocator;
+
+    class VertexInputState;
+    struct InputAssemblyState;
 
     /* A pipeline library is a special pipeline that cannot be bound,
        instead it defines a set of shaders and shader groups which
@@ -33,6 +38,10 @@ namespace magma
         explicit PipelineLibrary(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator = nullptr) noexcept;
         ~PipelineLibrary();
+    #ifdef VK_EXT_graphics_pipeline_library
+        void compileVertexInputInterface(const VertexInputState& vertexInputState,
+            const InputAssemblyState& inputAssemblyState);
+    #endif // VK_EXT_graphics_pipeline_library
         uint32_t getLibraryCount() const noexcept { return MAGMA_COUNT(libraries); }
         const VkPipeline *getLibraries() const noexcept { return libraries.data(); }
 
