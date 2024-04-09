@@ -170,6 +170,7 @@ src\objects\pipeline.cpp ^
 src\objects\pipelineBatch.cpp ^
 src\objects\pipelineCache.cpp ^
 src\objects\pipelineLayout.cpp ^
+src\objects\pipelineLibrary.cpp ^
 src\objects\primaryCommandBuffer.cpp ^
 src\objects\privateDataSlot.cpp ^
 src\objects\queryPool.cpp ^
@@ -358,6 +359,7 @@ pipeline.obj ^
 pipelineBatch.obj ^
 pipelineCache.obj ^
 pipelineLayout.obj ^
+pipelineLibrary.obj ^
 primaryCommandBuffer.obj ^
 privateDataSlot.obj ^
 queryPool.obj ^

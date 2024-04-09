@@ -137,6 +137,7 @@ SRC_OBJS= \
 	src/objects/pipelineBatch.o \
 	src/objects/pipelineCache.o \
 	src/objects/pipelineLayout.o \
+	src/objects/pipelineLibrary.o \
 	src/objects/primaryCommandBuffer.o \
 	src/objects/privateDataSlot.o \
 	src/objects/queryPool.o \
