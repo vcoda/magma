@@ -72,6 +72,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/pipelineBatch.h"
 #include "src/objects/pipelineCache.h"
 #include "src/objects/pipelineLayout.h"
+#include "src/objects/pipelineLibrary.h"
 #include "src/objects/primaryCommandBuffer.h"
 #include "src/objects/privateDataSlot.h"
 #include "src/objects/queryPool.h"
