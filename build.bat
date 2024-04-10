@@ -124,6 +124,7 @@ src\objects\commandBufferDebug.cpp ^
 src\objects\commandPool.cpp ^
 src\objects\computePipeline.cpp ^
 src\objects\computePipelineBatch.cpp ^
+src\objects\computePipelineLibrary.cpp ^
 src\objects\conditionalRenderingBuffer.cpp ^
 src\objects\debugReportCallback.cpp ^
 src\objects\debugUtilsMessenger.cpp ^
@@ -146,6 +147,7 @@ src\objects\framebuffer.cpp ^
 src\objects\fullScreenExclusiveSwapchain.cpp ^
 src\objects\graphicsPipeline.cpp ^
 src\objects\graphicsPipelineBatch.cpp ^
+src\objects\graphicsPipelineLibrary.cpp ^
 src\objects\image.cpp ^
 src\objects\image1D.cpp ^
 src\objects\image1DArray.cpp ^
@@ -313,6 +315,7 @@ commandBufferDebug.obj ^
 commandPool.obj ^
 computePipeline.obj ^
 computePipelineBatch.obj ^
+computePipelineLibrary.obj ^
 conditionalRenderingBuffer.obj ^
 debugReportCallback.obj ^
 debugUtilsMessenger.obj ^
@@ -335,6 +338,7 @@ framebuffer.obj ^
 fullScreenExclusiveSwapchain.obj ^
 graphicsPipeline.obj ^
 graphicsPipelineBatch.obj ^
+graphicsPipelineLibrary.obj ^
 image.obj ^
 image1D.obj ^
 image1DArray.obj ^

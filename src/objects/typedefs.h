@@ -107,6 +107,9 @@ namespace magma
 #ifdef VK_EXT_full_screen_exclusive
     MAGMA_TYPEDEF_SHARED_PTR(FullScreenExclusiveSwapchain);
 #endif
+#ifdef VK_EXT_graphics_pipeline_library
+    MAGMA_TYPEDEF_SHARED_PTR(GraphicsPipelineLibrary);
+#endif
 #ifdef VK_EXT_headless_surface
     MAGMA_TYPEDEF_SHARED_PTR(HeadlessSurface);
 #endif
@@ -161,6 +164,7 @@ namespace magma
 #endif
 #ifdef VK_KHR_pipeline_library
     MAGMA_TYPEDEF_SHARED_PTR(PipelineLibrary);
+    MAGMA_TYPEDEF_SHARED_PTR(ComputePipelineLibrary);
 #endif
 #ifdef VK_KHR_sampler_ycbcr_conversion
     MAGMA_TYPEDEF_SHARED_PTR(SamplerYcbcrConversion);

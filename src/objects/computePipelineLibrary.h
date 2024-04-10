@@ -15,24 +15,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#include "pch.h"
-#pragma hdrstop
+#pragma once
 #include "pipelineLibrary.h"
-#include "device.h"
-#include "../allocator/allocator.h"
 
 namespace magma
 {
-#ifdef VK_KHR_pipeline_library
-PipelineLibrary::PipelineLibrary(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator) noexcept:
-    device(std::move(device)),
-    allocator(std::move(allocator))
-{}
+    class PipelineLayout;
+    class PipelineShaderStage;
 
-PipelineLibrary::~PipelineLibrary()
-{
-    for (auto handle: libraries)
-        vkDestroyPipeline(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
-}
+#ifdef VK_KHR_pipeline_library
+    class ComputePipelineLibrary : public PipelineLibrary
+    {
+    public:
+        explicit ComputePipelineLibrary(std::shared_ptr<Device> device,
+            std::shared_ptr<IAllocator> allocator = nullptr) noexcept;
+        void compileComputeShader(const PipelineShaderStage& shaderStage,
+            std::shared_ptr<PipelineLayout> layout,
+            VkPipelineCreateFlags flags = 0);
+    };
 #endif // VK_KHR_pipeline_library
 } // namespace magma

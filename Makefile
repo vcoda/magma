@@ -91,6 +91,7 @@ SRC_OBJS= \
 	src/objects/commandPool.o \
 	src/objects/computePipeline.o \
 	src/objects/computePipelineBatch.o \
+	src/objects/computePipelineLibrary.o \
 	src/objects/conditionalRenderingBuffer.o \
 	src/objects/debugReportCallback.o \
 	src/objects/debugUtilsMessenger.o \
@@ -113,6 +114,7 @@ SRC_OBJS= \
 	src/objects/fullScreenExclusiveSwapchain.o \
 	src/objects/graphicsPipeline.o \
 	src/objects/graphicsPipelineBatch.o \
+	src/objects/graphicsPipelineLibrary.o \
 	src/objects/image.o \
 	src/objects/image1D.o \
 	src/objects/image1DArray.o \

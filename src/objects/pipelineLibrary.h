@@ -20,19 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
-    class PipelineLayout;
-    class PipelineShaderStage;
     class IAllocator;
-
-    class VertexInputState;
-    struct InputAssemblyState;
-    struct TesselationState;
-    struct RasterizationState;
-    struct MultisampleState;
-    struct DepthStencilState;
-    struct ColorBlendState;
-    class ViewportState;
-    class RenderPass;
 
     /* A pipeline library is a special pipeline that cannot be bound,
        instead it defines a set of shaders and shader groups which
@@ -42,41 +30,16 @@ namespace magma
     class PipelineLibrary : public IDestructible
     {
     public:
-        explicit PipelineLibrary(std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> hostAllocator = nullptr) noexcept;
         ~PipelineLibrary();
-    #ifdef VK_EXT_graphics_pipeline_library
-        void compileVertexInputInterface(const VertexInputState& vertexInputState,
-            const InputAssemblyState& inputAssemblyState);
-        void compilePreRasterizationShaders(const std::vector<PipelineShaderStage>& preRasterizationShaderStages,
-            const TesselationState& tesselationState,
-            const ViewportState& viewportState,
-            const RasterizationState& rasterizationState,
-            const std::vector<VkDynamicState>& dynamicStates,
-            std::shared_ptr<PipelineLayout> layout,
-            VkPipelineCreateFlags flags = 0);
-        void compileFragmentShader(const PipelineShaderStage& fragmentShader,
-            const MultisampleState& multisampleState,
-            const DepthStencilState& depthStencilState,
-            std::shared_ptr<PipelineLayout> layout,
-            std::shared_ptr<RenderPass> renderPass,
-            uint32_t subpass,
-            VkPipelineCreateFlags flags = 0);
-        void compileFragmentOutputInterface(const MultisampleState& multisampleState,
-            const ColorBlendState& colorBlendState,
-            std::shared_ptr<RenderPass> renderPass,
-            uint32_t subpass,
-            VkPipelineCreateFlags flags = 0);
-    #endif // VK_EXT_graphics_pipeline_library
-        void compileComputeShader(const PipelineShaderStage& shaderStage,
-            std::shared_ptr<PipelineLayout> layout,
-            VkPipelineCreateFlags flags = 0);
         uint32_t getLibraryCount() const noexcept { return MAGMA_COUNT(libraries); }
         const VkPipeline *getLibraries() const noexcept { return libraries.data(); }
 
     protected:
+        PipelineLibrary(std::shared_ptr<Device> device,
+            std::shared_ptr<IAllocator> allocator) noexcept;
+
         std::shared_ptr<Device> device;
-        std::shared_ptr<IAllocator> hostAllocator;
+        std::shared_ptr<IAllocator> allocator;
         std::vector<VkPipeline> libraries;
     };
 #endif // VK_KHR_pipeline_library

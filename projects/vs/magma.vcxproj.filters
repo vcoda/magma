@@ -867,6 +867,12 @@
     <ClInclude Include="..\..\src\objects\pipelineLibrary.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\graphicsPipelineLibrary.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\computePipelineLibrary.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1377,6 +1383,12 @@
       <Filter>Source Files\platform</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\pipelineLibrary.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\graphicsPipelineLibrary.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\computePipelineLibrary.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

@@ -271,6 +271,7 @@
     <ClInclude Include="..\..\src\objects\commandPool.h" />
     <ClInclude Include="..\..\src\objects\computePipeline.h" />
     <ClInclude Include="..\..\src\objects\computePipelineBatch.h" />
+    <ClInclude Include="..\..\src\objects\computePipelineLibrary.h" />
     <ClInclude Include="..\..\src\objects\conditionalRenderingBuffer.h" />
     <ClInclude Include="..\..\src\objects\debugReportCallback.h" />
     <ClInclude Include="..\..\src\objects\debugUtilsMessenger.h" />
@@ -294,6 +295,7 @@
     <ClInclude Include="..\..\src\objects\fullScreenExclusiveSwapchain.h" />
     <ClInclude Include="..\..\src\objects\graphicsPipeline.h" />
     <ClInclude Include="..\..\src\objects\graphicsPipelineBatch.h" />
+    <ClInclude Include="..\..\src\objects\graphicsPipelineLibrary.h" />
     <ClInclude Include="..\..\src\objects\ideviceMemory.h" />
     <ClInclude Include="..\..\src\objects\image.h" />
     <ClInclude Include="..\..\src\objects\image1D.h" />
@@ -485,6 +487,7 @@
     <ClCompile Include="..\..\src\objects\commandPool.cpp" />
     <ClCompile Include="..\..\src\objects\computePipeline.cpp" />
     <ClCompile Include="..\..\src\objects\computePipelineBatch.cpp" />
+    <ClCompile Include="..\..\src\objects\computePipelineLibrary.cpp" />
     <ClCompile Include="..\..\src\objects\conditionalRenderingBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\debugReportCallback.cpp" />
     <ClCompile Include="..\..\src\objects\debugUtilsMessenger.cpp" />
@@ -507,6 +510,7 @@
     <ClCompile Include="..\..\src\objects\fullScreenExclusiveSwapchain.cpp" />
     <ClCompile Include="..\..\src\objects\graphicsPipeline.cpp" />
     <ClCompile Include="..\..\src\objects\graphicsPipelineBatch.cpp" />
+    <ClCompile Include="..\..\src\objects\graphicsPipelineLibrary.cpp" />
     <ClCompile Include="..\..\src\objects\image.cpp" />
     <ClCompile Include="..\..\src\objects\image1D.cpp" />
     <ClCompile Include="..\..\src\objects\image1DArray.cpp" />
