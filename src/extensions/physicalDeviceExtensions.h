@@ -62,11 +62,15 @@ namespace magma
         const VkBool32 AMDX_shader_enqueue : 1;
 
         // ANDROID (Google LLC)
+        const VkBool32 ANDROID_external_format_resolve : 1;
         const VkBool32 ANDROID_external_memory_android_hardware_buffer : 1;
 
         // ARM Limited
         const VkBool32 ARM_rasterization_order_attachment_access : 1;
+        const VkBool32 ARM_render_pass_striped : 1;
+        const VkBool32 ARM_scheduling_controls : 1;
         const VkBool32 ARM_shader_core_builtins : 1;
+        const VkBool32 ARM_shader_core_properties : 1;
 
         // Multivendor
         const VkBool32 EXT_4444_formats : 1;
@@ -199,12 +203,13 @@ namespace magma
 
         // Huawei Technologies Co. Ltd.
         const VkBool32 HUAWEI_cluster_culling_shader : 1;
-        const VkBool32 HUAWEI_subpass_shading : 1;
         const VkBool32 HUAWEI_invocation_mask : 1;
+        const VkBool32 HUAWEI_subpass_shading : 1;
 
         // Imagination Technologies
         const VkBool32 IMG_filter_cubic : 1;
         const VkBool32 IMG_format_pvrtc : 1;
+        const VkBool32 IMG_relaxed_line_rasterization : 1;
 
         // Intel Corporation
         const VkBool32 INTEL_performance_query : 1;
@@ -297,8 +302,8 @@ namespace magma
         const VkBool32 KHR_workgroup_memory_explicit_layout : 1;
         const VkBool32 KHR_zero_initialize_workgroup_memory : 1;
 
-        // Samsung Electronics Co., Ltd.
-        const VkBool32 SEC_amigo_profiling : 1;
+        // Microsoft Corporation
+        const VkBool32 MSFT_layered_driver : 1;
 
         // NVIDIA Corporation
         const VkBool32 NV_acquire_winrt_display : 1;
@@ -311,9 +316,13 @@ namespace magma
         const VkBool32 NV_cuda_kernel_launch : 1;
         const VkBool32 NV_dedicated_allocation : 1;
         const VkBool32 NV_dedicated_allocation_image_aliasing : 1;
+        const VkBool32 NV_descriptor_pool_overallocation : 1;
         const VkBool32 NV_device_diagnostic_checkpoints : 1;
         const VkBool32 NV_device_diagnostics_config : 1;
         const VkBool32 NV_device_generated_commands : 1;
+        const VkBool32 NV_device_generated_commands_compute : 1;
+        const VkBool32 NV_displacement_micromap : 1;
+        const VkBool32 NV_extended_sparse_address_space : 1;
         const VkBool32 NV_external_memory : 1;
         const VkBool32 NV_external_memory_capabilities : 1;
         const VkBool32 NV_external_memory_rdma : 1;
@@ -327,16 +336,22 @@ namespace magma
         const VkBool32 NV_glsl_shader : 1;
         const VkBool32 NV_inherited_viewport_scissor : 1;
         const VkBool32 NV_linear_color_attachment : 1;
+        const VkBool32 NV_low_latency : 1;
+        const VkBool32 NV_low_latency2 : 1;
         const VkBool32 NV_memory_decompression : 1;
         const VkBool32 NV_mesh_shader : 1;
         const VkBool32 NV_optical_flow : 1;
+        const VkBool32 NV_per_stage_descriptor_set : 1;
         const VkBool32 NV_present_barrier : 1;
+        const VkBool32 NV_raw_access_chains : 1;
         const VkBool32 NV_ray_tracing : 1;
         const VkBool32 NV_ray_tracing_invocation_reorder : 1;
         const VkBool32 NV_ray_tracing_motion_blur : 1;
+        const VkBool32 NV_ray_tracing_validation : 1;
         const VkBool32 NV_representative_fragment_test : 1;
         const VkBool32 NV_sample_mask_override_coverage : 1;
         const VkBool32 NV_scissor_exclusive : 1;
+        const VkBool32 NV_shader_atomic_float16_vector : 1;
         const VkBool32 NV_shader_image_footprint : 1;
         const VkBool32 NV_shader_sm_builtins : 1;
         const VkBool32 NV_shader_subgroup_partitioned : 1;
@@ -354,9 +369,15 @@ namespace magma
         const VkBool32 NVX_multiview_per_view_attributes : 1;
         const VkBool32 NVX_raytracing : 1;
 
+        // Samsung Electronics Co., Ltd.
+        const VkBool32 SEC_amigo_profiling : 1;
+
         // Qualcomm Technologies, Inc.
+        const VkBool32 QCOM_filter_cubic_clamp : 1;
+        const VkBool32 QCOM_filter_cubic_weights : 1;
         const VkBool32 QCOM_fragment_density_map_offset : 1;
         const VkBool32 QCOM_image_processing : 1;
+        const VkBool32 QCOM_image_processing2 : 1;
         const VkBool32 QCOM_multiview_per_view_render_areas : 1;
         const VkBool32 QCOM_multiview_per_view_viewports : 1;
         const VkBool32 QCOM_render_pass_shader_resolve : 1;
@@ -364,9 +385,11 @@ namespace magma
         const VkBool32 QCOM_render_pass_transform : 1;
         const VkBool32 QCOM_rotated_copy_commands : 1;
         const VkBool32 QCOM_tile_properties : 1;
+        const VkBool32 QCOM_ycbcr_degamma : 1;
 
         // BlackBerry Limited
         const VkBool32 QNX_external_memory_screen_buffer : 1;
+        const VkBool32 QNX_screen_surface : 1;
 
         // Valve Corporation
         const VkBool32 VALVE_descriptor_set_host_mapping : 1;

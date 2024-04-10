@@ -54,10 +54,14 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
 
     MAGMA_CHECK_EXTENSION(AMDX_shader_enqueue),
 
+    MAGMA_CHECK_EXTENSION(ANDROID_external_format_resolve),
     MAGMA_CHECK_EXTENSION(ANDROID_external_memory_android_hardware_buffer),
 
     MAGMA_CHECK_EXTENSION(ARM_rasterization_order_attachment_access),
+    MAGMA_CHECK_EXTENSION(ARM_render_pass_striped),
+    MAGMA_CHECK_EXTENSION(ARM_scheduling_controls),
     MAGMA_CHECK_EXTENSION(ARM_shader_core_builtins),
+    MAGMA_CHECK_EXTENSION(ARM_shader_core_properties),
 
     MAGMA_CHECK_EXTENSION(EXT_4444_formats),
     MAGMA_CHECK_EXTENSION(EXT_astc_decode_mode),
@@ -185,11 +189,12 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(GOOGLE_user_type),
 
     MAGMA_CHECK_EXTENSION(HUAWEI_cluster_culling_shader),
-    MAGMA_CHECK_EXTENSION(HUAWEI_subpass_shading),
     MAGMA_CHECK_EXTENSION(HUAWEI_invocation_mask),
+    MAGMA_CHECK_EXTENSION(HUAWEI_subpass_shading),
 
     MAGMA_CHECK_EXTENSION(IMG_filter_cubic),
     MAGMA_CHECK_EXTENSION(IMG_format_pvrtc),
+    MAGMA_CHECK_EXTENSION(IMG_relaxed_line_rasterization),
 
     MAGMA_CHECK_EXTENSION(INTEL_performance_query),
     MAGMA_CHECK_EXTENSION(INTEL_shader_integer_functions2),
@@ -280,7 +285,7 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(KHR_workgroup_memory_explicit_layout),
     MAGMA_CHECK_EXTENSION(KHR_zero_initialize_workgroup_memory),
 
-    MAGMA_CHECK_EXTENSION(SEC_amigo_profiling),
+    MAGMA_CHECK_EXTENSION(MSFT_layered_driver),
 
     MAGMA_CHECK_EXTENSION(NV_acquire_winrt_display),
     MAGMA_CHECK_EXTENSION(NV_clip_space_w_scaling),
@@ -292,9 +297,13 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(NV_cuda_kernel_launch),
     MAGMA_CHECK_EXTENSION(NV_dedicated_allocation),
     MAGMA_CHECK_EXTENSION(NV_dedicated_allocation_image_aliasing),
+    MAGMA_CHECK_EXTENSION(NV_descriptor_pool_overallocation),
     MAGMA_CHECK_EXTENSION(NV_device_diagnostic_checkpoints),
     MAGMA_CHECK_EXTENSION(NV_device_diagnostics_config),
     MAGMA_CHECK_EXTENSION(NV_device_generated_commands),
+    MAGMA_CHECK_EXTENSION(NV_device_generated_commands_compute),
+    MAGMA_CHECK_EXTENSION(NV_displacement_micromap),
+    MAGMA_CHECK_EXTENSION(NV_extended_sparse_address_space),
     MAGMA_CHECK_EXTENSION(NV_external_memory),
     MAGMA_CHECK_EXTENSION(NV_external_memory_capabilities),
     MAGMA_CHECK_EXTENSION(NV_external_memory_rdma),
@@ -308,16 +317,22 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(NV_glsl_shader),
     MAGMA_CHECK_EXTENSION(NV_inherited_viewport_scissor),
     MAGMA_CHECK_EXTENSION(NV_linear_color_attachment),
+    MAGMA_CHECK_EXTENSION(NV_low_latency),
+    MAGMA_CHECK_EXTENSION(NV_low_latency2),
     MAGMA_CHECK_EXTENSION(NV_memory_decompression),
     MAGMA_CHECK_EXTENSION(NV_mesh_shader),
     MAGMA_CHECK_EXTENSION(NV_optical_flow),
+    MAGMA_CHECK_EXTENSION(NV_per_stage_descriptor_set),
     MAGMA_CHECK_EXTENSION(NV_present_barrier),
+    MAGMA_CHECK_EXTENSION(NV_raw_access_chains),
     MAGMA_CHECK_EXTENSION(NV_ray_tracing),
     MAGMA_CHECK_EXTENSION(NV_ray_tracing_invocation_reorder),
     MAGMA_CHECK_EXTENSION(NV_ray_tracing_motion_blur),
+    MAGMA_CHECK_EXTENSION(NV_ray_tracing_validation),
     MAGMA_CHECK_EXTENSION(NV_representative_fragment_test),
     MAGMA_CHECK_EXTENSION(NV_sample_mask_override_coverage),
     MAGMA_CHECK_EXTENSION(NV_scissor_exclusive),
+    MAGMA_CHECK_EXTENSION(NV_shader_atomic_float16_vector),
     MAGMA_CHECK_EXTENSION(NV_shader_image_footprint),
     MAGMA_CHECK_EXTENSION(NV_shader_sm_builtins),
     MAGMA_CHECK_EXTENSION(NV_shader_subgroup_partitioned),
@@ -334,8 +349,13 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(NVX_multiview_per_view_attributes),
     MAGMA_CHECK_EXTENSION(NVX_raytracing),
 
+    MAGMA_CHECK_EXTENSION(SEC_amigo_profiling),
+
+    MAGMA_CHECK_EXTENSION(QCOM_filter_cubic_clamp),
+    MAGMA_CHECK_EXTENSION(QCOM_filter_cubic_weights),
     MAGMA_CHECK_EXTENSION(QCOM_fragment_density_map_offset),
     MAGMA_CHECK_EXTENSION(QCOM_image_processing),
+    MAGMA_CHECK_EXTENSION(QCOM_image_processing2),
     MAGMA_CHECK_EXTENSION(QCOM_multiview_per_view_render_areas),
     MAGMA_CHECK_EXTENSION(QCOM_multiview_per_view_viewports),
     MAGMA_CHECK_EXTENSION(QCOM_render_pass_shader_resolve),
@@ -343,8 +363,10 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(QCOM_render_pass_transform),
     MAGMA_CHECK_EXTENSION(QCOM_rotated_copy_commands),
     MAGMA_CHECK_EXTENSION(QCOM_tile_properties),
+    MAGMA_CHECK_EXTENSION(QCOM_ycbcr_degamma),
 
     MAGMA_CHECK_EXTENSION(QNX_external_memory_screen_buffer),
+    MAGMA_CHECK_EXTENSION(QNX_screen_surface),
 
     MAGMA_CHECK_EXTENSION(VALVE_descriptor_set_host_mapping),
     MAGMA_CHECK_EXTENSION(VALVE_mutable_descriptor_type)
