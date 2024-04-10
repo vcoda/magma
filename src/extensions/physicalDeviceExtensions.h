@@ -63,7 +63,6 @@ namespace magma
 
         // ANDROID (Google LLC)
         const VkBool32 ANDROID_external_memory_android_hardware_buffer : 1;
-        const VkBool32 ANDROID_native_buffer : 1;
 
         // ARM Limited
         const VkBool32 ARM_rasterization_order_attachment_access : 1;

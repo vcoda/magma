@@ -55,7 +55,6 @@ PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const Physica
     MAGMA_CHECK_EXTENSION(AMDX_shader_enqueue),
 
     MAGMA_CHECK_EXTENSION(ANDROID_external_memory_android_hardware_buffer),
-    MAGMA_CHECK_EXTENSION(ANDROID_native_buffer),
 
     MAGMA_CHECK_EXTENSION(ARM_rasterization_order_attachment_access),
     MAGMA_CHECK_EXTENSION(ARM_shader_core_builtins),
