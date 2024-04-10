@@ -34,6 +34,7 @@ InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
     MAGMA_CHECK_EXTENSION(EXT_direct_mode_display),
     MAGMA_CHECK_EXTENSION(EXT_directfb_surface),
     MAGMA_CHECK_EXTENSION(EXT_display_surface_counter),
+    MAGMA_CHECK_EXTENSION(EXT_layer_settings),
     MAGMA_CHECK_EXTENSION(EXT_metal_surface),
     MAGMA_CHECK_EXTENSION(EXT_surface_maintenance1),
     MAGMA_CHECK_EXTENSION(EXT_swapchain_colorspace),

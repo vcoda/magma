@@ -39,6 +39,7 @@ namespace magma
         const VkBool32 EXT_direct_mode_display : 1;
         const VkBool32 EXT_directfb_surface : 1;
         const VkBool32 EXT_display_surface_counter : 1;
+        const VkBool32 EXT_layer_settings : 1;
         const VkBool32 EXT_metal_surface : 1;
         const VkBool32 EXT_surface_maintenance1 : 1;
         const VkBool32 EXT_swapchain_colorspace : 1;
