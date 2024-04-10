@@ -57,11 +57,11 @@ SRC_OBJS= \
 	src/exceptions/exception.o \
 	src/exceptions/reflectionErrorResult.o \
 	\
+	src/extensions/deviceExtensions.o \
 	src/extensions/extensions.o \
 	src/extensions/instanceExtensions.o \
 	src/extensions/instanceLayers.o \
 	src/extensions/layers.o \
-	src/extensions/physicalDeviceExtensions.o \
 	\
 	src/helpers/executeCommandBuffer.o \
 	src/helpers/executeDeferredOperation.o \

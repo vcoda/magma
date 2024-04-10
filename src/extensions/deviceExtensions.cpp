@@ -17,12 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "physicalDeviceExtensions.h"
+#include "deviceExtensions.h"
 #include "../objects/physicalDevice.h"
 
 namespace magma
 {
-PhysicalDeviceExtensions::PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
+DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
     Extensions(device->enumerateExtensions()),
 
     MAGMA_CHECK_EXTENSION(AMD_buffer_marker),

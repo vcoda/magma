@@ -229,7 +229,7 @@
     <ClInclude Include="..\..\src\extensions\instanceExtensions.h" />
     <ClInclude Include="..\..\src\extensions\instanceLayers.h" />
     <ClInclude Include="..\..\src\extensions\layers.h" />
-    <ClInclude Include="..\..\src\extensions\physicalDeviceExtensions.h" />
+    <ClInclude Include="..\..\src\extensions\deviceExtensions.h" />
     <ClInclude Include="..\..\src\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\src\helpers\enumerationCast.h" />
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
@@ -460,7 +460,7 @@
     <ClCompile Include="..\..\src\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\src\extensions\instanceLayers.cpp" />
     <ClCompile Include="..\..\src\extensions\layers.cpp" />
-    <ClCompile Include="..\..\src\extensions\physicalDeviceExtensions.cpp" />
+    <ClCompile Include="..\..\src\extensions\deviceExtensions.cpp" />
     <ClCompile Include="..\..\src\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\src\helpers\executeDeferredOperation.cpp" />
     <ClCompile Include="..\..\src\helpers\streamInsertOperators.cpp" />

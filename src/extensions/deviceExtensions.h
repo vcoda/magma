@@ -27,7 +27,7 @@ namespace magma
        of extensions see: https://registry.khronos.org/vulkan/
        Keep list of extensions in alphabetical order! */
 
-    class PhysicalDeviceExtensions : public Extensions
+    class DeviceExtensions : public Extensions
     {
     public:
         // Advanced Micro Devices, Inc.
@@ -395,8 +395,8 @@ namespace magma
         const VkBool32 VALVE_descriptor_set_host_mapping : 1;
         const VkBool32 VALVE_mutable_descriptor_type : 1;
 
-        explicit PhysicalDeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
+        explicit DeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
     };
 
-    MAGMA_TYPEDEF_UNIQUE_PTR(PhysicalDeviceExtensions);
+    MAGMA_TYPEDEF_UNIQUE_PTR(DeviceExtensions);
 } // namespace magma
