@@ -183,6 +183,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/platform/androidHardwareBuffer.h"
 #include "src/platform/androidSurface.h"
 #include "src/platform/d3dExternalSemaphore.h"
+#include "src/platform/directFbSurface.h"
 #include "src/platform/externalFence.h"
 #include "src/platform/externalSemaphore.h"
 #include "src/platform/fuchsiaSurface.h"

@@ -202,6 +202,7 @@ src\objects\vertexBuffer.cpp ^
 src\platform\androidHardwareBuffer.cpp ^
 src\platform\androidSurface.cpp ^
 src\platform\d3dExternalSemaphore.cpp ^
+src\platform\directFbSurface.cpp ^
 src\platform\externalFence.cpp ^
 src\platform\externalSemaphore.cpp ^
 src\platform\fuchsiaSurface.cpp ^
@@ -393,6 +394,7 @@ vertexBuffer.obj ^
 androidHardwareBuffer.obj ^
 androidSurface.obj ^
 d3dExternalSemaphore.obj ^
+directFbSurface.obj ^
 externalFence.obj ^
 externalSemaphore.obj ^
 fuchsiaSurface.obj ^

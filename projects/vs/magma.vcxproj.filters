@@ -873,6 +873,9 @@
     <ClInclude Include="..\..\src\objects\computePipelineLibrary.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\platform\directFbSurface.h">
+      <Filter>Header Files\platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1390,6 +1393,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\objects\computePipelineLibrary.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\directFbSurface.cpp">
+      <Filter>Source Files\platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

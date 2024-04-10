@@ -361,6 +361,7 @@
     <ClInclude Include="..\..\src\platform\androidHardwareBuffer.h" />
     <ClInclude Include="..\..\src\platform\androidSurface.h" />
     <ClInclude Include="..\..\src\platform\d3dExternalSemaphore.h" />
+    <ClInclude Include="..\..\src\platform\directFbSurface.h" />
     <ClInclude Include="..\..\src\platform\externalFence.h" />
     <ClInclude Include="..\..\src\platform\externalSemaphore.h" />
     <ClInclude Include="..\..\src\platform\fuchsiaSurface.h" />
@@ -565,6 +566,7 @@
     <ClCompile Include="..\..\src\platform\androidHardwareBuffer.cpp" />
     <ClCompile Include="..\..\src\platform\androidSurface.cpp" />
     <ClCompile Include="..\..\src\platform\d3dExternalSemaphore.cpp" />
+    <ClCompile Include="..\..\src\platform\directFbSurface.cpp" />
     <ClCompile Include="..\..\src\platform\externalFence.cpp" />
     <ClCompile Include="..\..\src\platform\externalSemaphore.cpp" />
     <ClCompile Include="..\..\src\platform\fuchsiaSurface.cpp" />

@@ -170,6 +170,7 @@ SRC_OBJS= \
 	src/platform/androidHardwareBuffer.o \
 	src/platform/androidSurface.o \
 	src/platform/d3dExternalSemaphore.o \
+	src/platform/directFbSurface.o \
 	src/platform/externalFence.o \
 	src/platform/externalSemaphore.o \
 	src/platform/fuchsiaSurface.o \

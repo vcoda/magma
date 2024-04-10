@@ -22,6 +22,9 @@ namespace magma
 #ifdef VK_KHR_android_surface
     MAGMA_TYPEDEF_SHARED_PTR(AndroidSurface);
 #endif
+#ifdef VK_EXT_directfb_surface
+    MAGMA_TYPEDEF_SHARED_PTR(DirectFBSurface);
+#endif
 #ifdef VK_FUCHSIA_imagepipe_surface
     MAGMA_TYPEDEF_SHARED_PTR(FuchsiaImagePipeSurface);
 #endif
