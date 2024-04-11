@@ -22,29 +22,26 @@ namespace magma
 {
     namespace exception
     {
-        /* Base exception class. Provides (optional) information as
-           file name and line number where it was thrown. */
+        /* Base exception class. Provides (optional) information
+           as error message, file name and line number where
+           exception was thrown. */
 
     #ifndef MAGMA_NO_EXCEPTIONS
         class Exception : public std::exception
         {
         public:
-            explicit Exception() noexcept;
-            explicit Exception(const char *message) noexcept;
-            explicit Exception(std::string message) noexcept;
-            explicit Exception(const char *message,
-                const source_location& location) noexcept;
-            explicit Exception(std::string message,
-                const source_location& location) noexcept;
-            Exception(const Exception&) noexcept;
-            virtual ~Exception() = default;
-            Exception& operator=(const Exception&) noexcept;
-            const char* what() const noexcept override;
-            const source_location& location() const noexcept { return location_; }
+            explicit Exception(const char *error = "unknown exception") noexcept:
+                error(error), location{} {}
+            explicit Exception(const char *error, const source_location& location) noexcept:
+                error(error), location(location) {}
+            Exception(const Exception& other) noexcept:
+                error(other.error), location(other.location) {}
+            const char* what() const override { return error; }
+            const source_location& where() const noexcept { return location; }
 
         private:
-            std::string message;
-            source_location location_;
+            const char *error;
+            source_location location;
         };
     #endif // !MAGMA_NO_EXCEPTIONS
 

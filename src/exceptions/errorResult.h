@@ -32,14 +32,9 @@ namespace magma
         public:
             explicit ErrorResult(VkResult result, const char *message) noexcept:
                 Exception(message), result(result) {}
-            explicit ErrorResult(VkResult result, std::string message) noexcept:
-                Exception(std::move(message)), result(result) {}
             explicit ErrorResult(VkResult result, const char *message,
                 const source_location& location) noexcept:
                 Exception(message, location), result(result) {}
-            explicit ErrorResult(VkResult result, std::string message,
-                const source_location& location) noexcept:
-                Exception(std::move(message), location), result(result) {}
             VkResult error() const noexcept { return result; }
 
         private:
@@ -74,8 +69,6 @@ namespace magma
         public:
             explicit InitializationFailed(const char *message) noexcept:
                 ErrorResult(VK_ERROR_INITIALIZATION_FAILED, message) {}
-            explicit InitializationFailed(std::string message) noexcept:
-                ErrorResult(VK_ERROR_INITIALIZATION_FAILED, std::move(message)) {}
         };
 
         /* The logical or physical device has been lost. */
