@@ -44,6 +44,8 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
     withinRenderPass(VK_FALSE),
     withinConditionalRendering(VK_FALSE),
     withinTransformFeedback(VK_FALSE),
+    labeledRecording(VK_FALSE),
+    labeledRenderPass(VK_FALSE),
     queryFlags(0),
     pipelineStatistics(0)
 {}
@@ -154,7 +156,11 @@ void CommandBuffer::end()
             pipelineBarriers.clear();
         }
     #ifdef MAGMA_DEBUG_LABEL
-        endDebugLabel();
+        if (labeledRecording)
+        {
+            endDebugLabel();
+            labeledRecording = VK_FALSE;
+        }
     #endif // MAGMA_DEBUG_LABEL
         /* Performance - critical commands generally do not have return codes.
            If a run time error occurs in such commands, the implementation will defer
@@ -472,7 +478,11 @@ void CommandBuffer::endRenderPass() noexcept
     if (withinRenderPass)
     {
     #ifdef MAGMA_DEBUG_LABEL
-        endDebugLabel();
+        if (labeledRenderPass)
+        {
+            endDebugLabel();
+            labeledRenderPass = VK_FALSE;
+        }
     #endif // MAGMA_DEBUG_LABEL
         vkCmdEndRenderPass(handle);
         if (bindings.attachments.empty())

@@ -626,6 +626,8 @@ namespace magma
         VkBool32 withinRenderPass : 1;
         VkBool32 withinConditionalRendering : 1;
         VkBool32 withinTransformFeedback : 1;
+        VkBool32 labeledRecording : 1;
+        VkBool32 labeledRenderPass : 1;
         VkQueryControlFlags queryFlags;
         VkQueryPipelineStatisticFlags pipelineStatistics;
 
