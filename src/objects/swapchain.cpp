@@ -193,21 +193,21 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
     return bindedImages;
 }
 
-uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
+uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore /* nullptr */,
+    std::shared_ptr<const Fence> fence /* nullptr */,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
 {
     uint32_t imageIndex = 0;
     const VkResult result = vkAcquireNextImageKHR(MAGMA_HANDLE(device), handle, timeout,
-        MAGMA_OPTIONAL_HANDLE(semaphore),
-        MAGMA_OPTIONAL_HANDLE(fence),
-        &imageIndex);
+        MAGMA_OPTIONAL_HANDLE(semaphore), MAGMA_OPTIONAL_HANDLE(fence), &imageIndex);
     handleError(result, "failed to acquire next image");
     return imageIndex;
 }
 
 #ifdef VK_KHR_device_group
 uint32_t Swapchain::acquireNextImageForDeviceGroup(uint32_t deviceMask,
-    std::shared_ptr<const Semaphore> semaphore, std::shared_ptr<const Fence> fence,
+    std::shared_ptr<const Semaphore> semaphore /* nullptr */,
+    std::shared_ptr<const Fence> fence /* nullptr */,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
 {
     VkAcquireNextImageInfoKHR aquireNextImageInfo;

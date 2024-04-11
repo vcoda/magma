@@ -82,13 +82,13 @@ namespace magma
         uint32_t getImageIndex() const noexcept { return imageIndex; }
         uint32_t getImageCount() const;
         const std::vector<std::shared_ptr<SwapchainImage>>& getImages() const;
-        uint32_t acquireNextImage(std::shared_ptr<const Semaphore> semaphore,
-            std::shared_ptr<const Fence> fence,
+        uint32_t acquireNextImage(std::shared_ptr<const Semaphore> semaphore = nullptr,
+            std::shared_ptr<const Fence> fence = nullptr,
             uint64_t timeout = std::numeric_limits<uint64_t>::max());
     #ifdef VK_KHR_device_group
         uint32_t acquireNextImageForDeviceGroup(uint32_t deviceMask,
-            std::shared_ptr<const Semaphore> semaphore,
-            std::shared_ptr<const Fence> fence,
+            std::shared_ptr<const Semaphore> semaphore = nullptr,
+            std::shared_ptr<const Fence> fence = nullptr,
             uint64_t timeout = std::numeric_limits<uint64_t>::max());
     #endif // VK_KHR_device_group
     #ifdef VK_KHR_bind_memory2
