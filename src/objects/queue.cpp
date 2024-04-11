@@ -230,7 +230,8 @@ bool Queue::waitIdle() noexcept
 }
 
 void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
-    std::shared_ptr<const Semaphore> waitSemaphore, const StructureChain& extendedInfo)
+    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
+    const StructureChain& extendedInfo /* default */)
 {
     VkPresentInfoKHR presentInfo;
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
