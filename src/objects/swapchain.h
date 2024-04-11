@@ -86,7 +86,7 @@ namespace magma
             std::shared_ptr<const Fence> fence = nullptr,
             uint64_t timeout = std::numeric_limits<uint64_t>::max());
     #ifdef VK_KHR_device_group
-        uint32_t acquireNextImageForDeviceGroup(uint32_t deviceMask,
+        uint32_t acquireNextDeviceGroupImage(uint32_t deviceMask,
             std::shared_ptr<const Semaphore> semaphore = nullptr,
             std::shared_ptr<const Fence> fence = nullptr,
             uint64_t timeout = std::numeric_limits<uint64_t>::max());

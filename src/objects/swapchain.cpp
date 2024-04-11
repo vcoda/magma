@@ -205,7 +205,7 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore 
 }
 
 #ifdef VK_KHR_device_group
-uint32_t Swapchain::acquireNextImageForDeviceGroup(uint32_t deviceMask,
+uint32_t Swapchain::acquireNextDeviceGroupImage(uint32_t deviceMask,
     std::shared_ptr<const Semaphore> semaphore /* nullptr */,
     std::shared_ptr<const Fence> fence /* nullptr */,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
@@ -221,7 +221,7 @@ uint32_t Swapchain::acquireNextImageForDeviceGroup(uint32_t deviceMask,
     uint32_t imageIndex = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquireNextImage2KHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
     const VkResult result = vkAcquireNextImage2KHR(MAGMA_HANDLE(device), &aquireNextImageInfo, &imageIndex);
-    handleError(result, "failed to acquire next image for a device group");
+    handleError(result, "failed to acquire next image within device group");
     return imageIndex;
 }
 #endif // VK_KHR_device_group
