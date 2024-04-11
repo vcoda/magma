@@ -232,7 +232,7 @@ void CommandBuffer::setViewport(float x, float y, float width, float height,
 // inline void CommandBuffer::bindDescriptorSet
 
 void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
-    const std::initializer_list<uint32_t>& dynamicOffsets /* {} */) noexcept
+    const std::initializer_list<uint32_t>& dynamicOffsets /* empty */) noexcept
 {
     MAGMA_ASSERT_FOR_EACH(descriptorSets, descriptorSet, pipeline->getLayout()->hasLayout(descriptorSet->getLayout()));
     MAGMA_ASSERT_FOR_EACH(descriptorSets, descriptorSet, !descriptorSet->dirty());
@@ -256,7 +256,8 @@ void CommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, const std
 }
 
 void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
-    std::vector<VkDeviceSize> offsets /* empty */, const std::initializer_list<VkDeviceSize>& sizes /* empty */)
+    std::vector<VkDeviceSize> offsets /* empty */,
+    const std::initializer_list<VkDeviceSize>& sizes /* empty */)
 {
     MAGMA_ASSERT(transformFeedbackBuffers.size() > 0);
     if (offsets.size() > 0) {
@@ -355,9 +356,9 @@ void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, uint32_t v
 // inline void CommandBuffer::waitEvent
 
 void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<MemoryBarrier>& memoryBarriers /* {} */,
-    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* {} */,
-    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* {} */) const noexcept
+    const std::vector<MemoryBarrier>& memoryBarriers /* empty */,
+    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
+    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* empty */) const noexcept
 {
     MAGMA_ASSERT(srcStageMask);
     MAGMA_ASSERT(dstStageMask);
@@ -381,9 +382,9 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
 // inline void CommandBuffer::pipelineBarrier
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<MemoryBarrier>& memoryBarriers /* {} */,
-    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* {} */,
-    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* {} */,
+    const std::vector<MemoryBarrier>& memoryBarriers /* empty */,
+    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
+    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* empty */,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
@@ -410,7 +411,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
 // inline void CommandBuffer::pushConstantBlock()
 
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::vector<ClearValue>& clearValues /* {} */,
+    const std::vector<ClearValue>& clearValues /* empty */,
     const VkRect2D& renderArea /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -437,7 +438,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass,
     const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
     const std::vector<std::shared_ptr<ImageView>>& attachments,
-    const std::vector<ClearValue>& clearValues /* {} */,
+    const std::vector<ClearValue>& clearValues /* empty */,
     const VkRect2D& renderArea /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -521,7 +522,8 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
 
 void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::vector<VkRect2D>& deviceRenderAreas /* {} */, const std::vector<ClearValue>& clearValues /* {} */,
+    const std::vector<VkRect2D>& deviceRenderAreas /* empty */,
+    const std::vector<ClearValue>& clearValues /* empty */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     if (clearValues.empty()) {
@@ -554,8 +556,8 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     const std::shared_ptr<RenderPass>& renderPass,
     const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
     const std::vector<std::shared_ptr<ImageView>>& attachments,
-    const std::vector<VkRect2D>& deviceRenderAreas /* {} */,
-    const std::vector<ClearValue>& clearValues /* {} */,
+    const std::vector<VkRect2D>& deviceRenderAreas /* empty */,
+    const std::vector<ClearValue>& clearValues /* empty */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     if (clearValues.empty()) {
