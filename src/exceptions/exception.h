@@ -36,7 +36,7 @@ namespace magma
                 error(error), location(location) {}
             Exception(const Exception& other) noexcept:
                 error(other.error), location(other.location) {}
-            const char* what() const override { return error; }
+            const char* what() const noexcept override { return error; }
             const source_location& where() const noexcept { return location; }
 
         private:
