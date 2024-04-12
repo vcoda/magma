@@ -44,7 +44,8 @@ namespace magma
         #ifdef VK_EXT_debug_utils
             PFN_vkDebugUtilsMessengerCallbackEXT debugUtilsCallback = nullptr,
         #endif
-            void *userData = nullptr);
+            void *userData = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
         ~Instance();
         uint32_t getApiVersion() const noexcept { return apiVersion; }
         const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }

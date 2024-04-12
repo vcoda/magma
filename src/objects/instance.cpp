@@ -50,13 +50,14 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
 #ifdef VK_EXT_debug_utils
     PFN_vkDebugUtilsMessengerCallbackEXT debugUtilsCallback /* nullptr */,
 #endif
-    void *userData /* nullptr */):
+    void *userData /* nullptr */,
+    const StructureChain& extendedInfo /* default */):
     Dispatchable<VkInstance>(VK_OBJECT_TYPE_INSTANCE, std::move(allocator)),
     apiVersion(applicationInfo ? applicationInfo->apiVersion : VK_API_VERSION_1_0)
 {
     VkInstanceCreateInfo instanceInfo;
     instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    instanceInfo.pNext = nullptr;
+    instanceInfo.pNext = extendedInfo.chainNodes();
     instanceInfo.flags = flags;
     instanceInfo.pApplicationInfo = applicationInfo;
     instanceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers);
