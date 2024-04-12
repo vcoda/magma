@@ -48,6 +48,10 @@ namespace magma
         VkQueueFlagBits getFlags() const noexcept { return flags; }
         uint32_t getFamilyIndex() const noexcept { return familyIndex; }
         uint32_t getIndex() const noexcept { return index; }
+    #ifdef VK_EXT_swapchain_maintenance1
+        void setPresentMode(VkPresentModeKHR presentMode_) noexcept { presentMode = presentMode_; }
+        VkPresentModeKHR getPresentMode() const noexcept { return presentMode; }
+    #endif // VK_EXT_swapchain_maintenance1
         void submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
             const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},
@@ -92,6 +96,7 @@ namespace magma
         void present(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
+            std::shared_ptr<Fence> presentFence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_display_swapchain
         void presentDisplay(std::shared_ptr<const Swapchain> swapchain,
@@ -99,7 +104,8 @@ namespace magma
             const VkRect2D& srcRect,
             const VkRect2D& dstRect,
             bool persistent,
-            std::shared_ptr<const Semaphore> waitSemaphore = nullptr);
+            std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
+            std::shared_ptr<Fence> presentFence = nullptr);
     #endif // VK_KHR_display_swapchain
 
     private:
@@ -110,6 +116,9 @@ namespace magma
         const VkQueueFlagBits flags;
         const uint32_t familyIndex;
         const uint32_t index;
+    #ifdef VK_EXT_swapchain_maintenance1
+        VkPresentModeKHR presentMode;
+    #endif
         friend Device;
     };
 } // namespace magma

@@ -38,6 +38,9 @@ Queue::Queue(VkQueue handle_, std::shared_ptr<Device> device,
     index(index)
 {
     handle = handle_;
+#ifdef VK_EXT_swapchain_maintenance1
+    presentMode = VK_PRESENT_MODE_MAX_ENUM_KHR;
+#endif
 }
 
 void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
@@ -231,6 +234,7 @@ bool Queue::waitIdle() noexcept
 
 void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
+    std::shared_ptr<Fence> presentFence /* nullptr */,
     const StructureChain& extendedInfo /* default */)
 {
     VkPresentInfoKHR presentInfo;
@@ -250,6 +254,31 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
     presentInfo.pSwapchains = swapchain->getHandleAddress();
     presentInfo.pImageIndices = &imageIndex;
     presentInfo.pResults = nullptr;
+#ifdef VK_EXT_swapchain_maintenance1
+    VkSwapchainPresentFenceInfoEXT presentFenceInfo;
+    VkSwapchainPresentModeInfoEXT presentModeInfo;
+    if (device->extensionEnabled(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
+    {
+        if (presentFence)
+        {
+            presentFenceInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT;
+            presentFenceInfo.pNext = nullptr;
+            presentFenceInfo.swapchainCount = presentInfo.swapchainCount;
+            presentFenceInfo.pFences = presentFence->getHandleAddress();
+            linkNode(presentInfo, presentFenceInfo);
+        }
+        if (presentMode != VK_PRESENT_MODE_MAX_ENUM_KHR)
+        {
+            presentModeInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODE_INFO_EXT;
+            presentModeInfo.pNext = nullptr;
+            presentModeInfo.swapchainCount = presentInfo.swapchainCount;
+            presentModeInfo.pPresentModes = &presentMode;
+            linkNode(presentInfo, presentModeInfo);
+        }
+    }
+#else
+    MAGMA_UNUSED(presentFence);
+#endif // VK_EXT_swapchain_maintenance1
     const VkResult result = vkQueuePresentKHR(handle, &presentInfo);
 #ifndef MAGMA_NO_EXCEPTIONS
     switch (result)
@@ -274,7 +303,8 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
 #ifdef VK_KHR_display_swapchain
 void Queue::presentDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
     const VkRect2D& srcRect, const VkRect2D& dstRect, bool persistent,
-    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */)
+    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
+    std::shared_ptr<Fence> presentFence /* nullptr */)
 {
     VkDisplayPresentInfoKHR displayPresentInfo;
     displayPresentInfo.sType = VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR;
@@ -284,7 +314,7 @@ void Queue::presentDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t 
     displayPresentInfo.persistent = MAGMA_BOOLEAN(persistent);
     StructureChain extendedInfo;
     extendedInfo.addNode(displayPresentInfo);
-    present(std::move(swapchain), imageIndex, std::move(waitSemaphore), extendedInfo);
+    present(std::move(swapchain), imageIndex, std::move(waitSemaphore), std::move(presentFence), extendedInfo);
 }
 #endif // VK_KHR_display_swapchain
 } // namespace magma
