@@ -109,6 +109,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         swapchainPresentModesInfo.presentModeCount = MAGMA_COUNT(presentModes);
         swapchainPresentModesInfo.pPresentModes = presentModes.data();
         linkNode(swapchainInfo, swapchainPresentModesInfo);
+    }
 #endif // VK_EXT_swapchain_maintenance1
 #ifdef VK_KHR_device_group
     VkDeviceGroupSwapchainCreateInfoKHR swapchainDeviceGroupInfo;

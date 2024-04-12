@@ -113,6 +113,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
         swapchainPresentModesInfo.presentModeCount = MAGMA_COUNT(presentModes);
         swapchainPresentModesInfo.pPresentModes = presentModes.data();
         linkNode(swapchainInfo, swapchainPresentModesInfo);
+    }
 #endif // VK_EXT_swapchain_maintenance1
 #ifdef VK_KHR_device_group
     VkDeviceGroupSwapchainCreateInfoKHR swapchainDeviceGroupInfo;
