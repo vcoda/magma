@@ -37,6 +37,7 @@ namespace magma
             const NullTerminatedStringArray& enabledExtensions,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const Application *applicationInfo = nullptr,
+            VkInstanceCreateFlags flags = 0,
         #ifdef VK_EXT_debug_report
             PFN_vkDebugReportCallbackEXT debugReportCallback = nullptr,
         #endif

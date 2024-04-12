@@ -41,7 +41,9 @@ static magma::core::RefCountChecker _refCountChecker;
 namespace magma
 {
 Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTerminatedStringArray& enabledExtensions,
-    std::shared_ptr<IAllocator> allocator /* nullptr */, const Application *applicationInfo /* nullptr */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    const Application *applicationInfo /* nullptr */,
+    VkInstanceCreateFlags flags /* 0 */,
 #ifdef VK_EXT_debug_report
     PFN_vkDebugReportCallbackEXT debugReportCallback /* nullptr */,
 #endif
@@ -55,7 +57,7 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
     VkInstanceCreateInfo instanceInfo;
     instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     instanceInfo.pNext = nullptr;
-    instanceInfo.flags = 0;
+    instanceInfo.flags = flags;
     instanceInfo.pApplicationInfo = applicationInfo;
     instanceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers);
     instanceInfo.ppEnabledLayerNames = enabledLayers.data();
