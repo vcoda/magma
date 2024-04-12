@@ -77,6 +77,7 @@ namespace magma
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
         VkImageUsageFlags getImageUsage() const noexcept { return imageUsage; }
         VkSwapchainCreateFlagsKHR getFlags() const noexcept { return flags; }
+        VkPresentModeKHR getPresentMode() const noexcept { return presentMode; }
         const Sharing& getSharing() const noexcept { return sharing; }
         bool hadRetired() const noexcept { return retired; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }
@@ -111,6 +112,7 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t arrayLayers,
             VkImageUsageFlags imageUsage,
+            VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags,
             const Sharing& sharing,
             std::shared_ptr<Swapchain> oldSwapchain,
@@ -124,6 +126,7 @@ namespace magma
         const VkExtent2D extent;
         const uint32_t arrayLayers;
         const VkImageUsageFlags imageUsage;
+        const VkPresentModeKHR presentMode;
         const VkSwapchainCreateFlagsKHR flags;
         const Sharing sharing;
         bool retired;

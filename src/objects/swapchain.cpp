@@ -39,14 +39,15 @@ namespace magma
 {
 #ifdef VK_KHR_swapchain
 Swapchain::Swapchain(std::shared_ptr<Device> device, VkSurfaceFormatKHR surfaceFormat,
-    const VkExtent2D& extent, uint32_t arrayLayers,
-    VkImageUsageFlags imageUsage, VkSwapchainCreateFlagsKHR flags, const Sharing& sharing,
+    const VkExtent2D& extent, uint32_t arrayLayers, VkImageUsageFlags imageUsage,
+    VkPresentModeKHR presentMode, VkSwapchainCreateFlagsKHR flags, const Sharing& sharing,
     std::shared_ptr<Swapchain> oldSwapchain, std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_SWAPCHAIN_KHR, std::move(device), std::move(allocator)),
     surfaceFormat(surfaceFormat),
     extent(extent),
     arrayLayers(arrayLayers),
     imageUsage(imageUsage),
+    presentMode(presentMode),
     flags(flags),
     sharing(sharing),
     retired(false),
@@ -76,7 +77,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
 #endif
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    Swapchain(std::move(device_), surfaceFormat, extent, arrayLayers, imageUsage, flags, sharing, oldSwapchain, std::move(allocator))
+    Swapchain(std::move(device_), surfaceFormat, extent, arrayLayers, imageUsage, presentMode, flags, sharing, oldSwapchain, std::move(allocator))
 {
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
