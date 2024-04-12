@@ -37,6 +37,9 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent, uint32_t arrayLayers,
     VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkFullScreenExclusiveEXT fullScreenExclusive, VkPresentModeKHR presentMode,
+#ifdef VK_EXT_swapchain_maintenance1
+    const std::vector<VkPresentModeKHR>& presentModes /* empty */,
+#endif
 #ifdef VK_KHR_device_group
     VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes /* 0 */,
 #endif
@@ -97,6 +100,16 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         linkNode(swapchainInfo, fullScreenExclusiveWin32Info);
     }
 #endif // VK_KHR_win32_surface
+#ifdef VK_EXT_swapchain_maintenance1
+    VkSwapchainPresentModesCreateInfoEXT swapchainPresentModesInfo;
+    if (device->extensionEnabled(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME) && !presentModes.empty())
+    {
+        swapchainPresentModesInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODES_CREATE_INFO_EXT;
+        swapchainPresentModesInfo.pNext = nullptr;
+        swapchainPresentModesInfo.presentModeCount = MAGMA_COUNT(presentModes);
+        swapchainPresentModesInfo.pPresentModes = presentModes.data();
+        linkNode(swapchainInfo, swapchainPresentModesInfo);
+#endif // VK_EXT_swapchain_maintenance1
 #ifdef VK_KHR_device_group
     VkDeviceGroupSwapchainCreateInfoKHR swapchainDeviceGroupInfo;
     if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))

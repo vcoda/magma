@@ -63,6 +63,9 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent, uint32_t arrayLayers,
     VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode,
+#ifdef VK_EXT_swapchain_maintenance1
+    const std::vector<VkPresentModeKHR>& presentModes /* empty */,
+#endif
 #ifdef VK_KHR_device_group
     VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes /* 0 */,
 #endif
@@ -101,6 +104,16 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
     else
         swapchainInfo.clipped = VK_TRUE; // Fragment shaders may not execute for obscured pixels
     swapchainInfo.oldSwapchain = MAGMA_OPTIONAL_HANDLE(oldSwapchain);
+#ifdef VK_EXT_swapchain_maintenance1
+    VkSwapchainPresentModesCreateInfoEXT swapchainPresentModesInfo;
+    if (device->extensionEnabled(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME) && !presentModes.empty())
+    {
+        swapchainPresentModesInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODES_CREATE_INFO_EXT;
+        swapchainPresentModesInfo.pNext = nullptr;
+        swapchainPresentModesInfo.presentModeCount = MAGMA_COUNT(presentModes);
+        swapchainPresentModesInfo.pPresentModes = presentModes.data();
+        linkNode(swapchainInfo, swapchainPresentModesInfo);
+#endif // VK_EXT_swapchain_maintenance1
 #ifdef VK_KHR_device_group
     VkDeviceGroupSwapchainCreateInfoKHR swapchainDeviceGroupInfo;
     if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))

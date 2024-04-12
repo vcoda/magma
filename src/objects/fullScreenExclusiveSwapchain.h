@@ -44,6 +44,9 @@ namespace magma
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
             VkFullScreenExclusiveEXT fullScreenExclusive,
             VkPresentModeKHR presentMode,
+        #ifdef VK_EXT_swapchain_maintenance1
+            const std::vector<VkPresentModeKHR>& presentModes = {},
+        #endif
         #ifdef VK_KHR_device_group
             VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes = 0,
         #endif
