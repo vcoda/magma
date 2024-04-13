@@ -96,7 +96,7 @@ namespace magma
             uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<Fence> presentFence = nullptr,
-            const StructureChain& extendedInfo = StructureChain());
+            const void *extendedInfo = nullptr);
     #ifdef VK_KHR_display_swapchain
         void presentDisplay(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
