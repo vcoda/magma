@@ -16,11 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
 #include "../objects/semaphore.h"
-#ifdef VK_KHR_timeline_semaphore
 #include "../objects/timelineSemaphore.h"
-#endif
 #include "win32ExternalSemaphore.h"
 
 namespace magma
@@ -31,6 +28,7 @@ namespace magma
        to the underlying synchronization primitive associated
        with the Direct3D fence. */
 
+#ifdef VK_KHR_external_semaphore_win32
     class D3d12ExternalSemaphore : public Semaphore,
         public Win32ExternalSemaphore
     {
@@ -81,5 +79,5 @@ namespace magma
     typedef D3d12ExternalTimelineSemaphore D3d11ExternalTimelineSemaphore;
 #endif // VK_KHR_timeline_semaphore
     typedef D3d12ExternalSemaphore D3d11ExternalSemaphore;
+#endif //VK_KHR_external_semaphore_win32
 } // namespace magma
-#endif // VK_KHR_external_semaphore && VK_KHR_external_semaphore_win32

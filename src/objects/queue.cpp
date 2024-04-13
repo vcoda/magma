@@ -195,7 +195,7 @@ void Queue::submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semapho
     MAGMA_HANDLE_RESULT(result, "queue submission with Direct3D fence failed");
 }
 #endif // VK_KHR_timeline_semaphore
-#endif // VK_KHR_external_semaphore && VK_KHR_external_semaphore_win32
+#endif // VK_KHR_external_semaphore_win32
 
 #ifdef VK_KHR_device_group
 void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,

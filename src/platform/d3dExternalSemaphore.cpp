@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
 #include "d3dExternalSemaphore.h"
 #include "../objects/device.h"
 #include "../allocator/allocator.h"
@@ -26,6 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_KHR_external_semaphore_win32
 D3d12ExternalSemaphore::D3d12ExternalSemaphore(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkSemaphoreCreateFlags flags /* 0 */,
@@ -99,5 +99,5 @@ D3d12ExternalTimelineSemaphore::D3d12ExternalTimelineSemaphore(std::shared_ptr<D
     importNtHandle(hFence, name, importFlags);
 }
 #endif // VK_KHR_timeline_semaphore
+#endif // VK_KHR_external_semaphore_win32
 } // namespace magma
-#endif // VK_KHR_external_semaphore && VK_KHR_external_semaphore_win32
