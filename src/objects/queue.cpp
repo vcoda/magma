@@ -123,13 +123,12 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
 }
 
 #ifdef VK_KHR_timeline_semaphore
-void Queue::submit(std::shared_ptr<const TimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
-    const StructureChain& extendedInfo /* default */)
+void Queue::submit(std::shared_ptr<const TimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue)
 {   // https://www.khronos.org/blog/vulkan-timeline-semaphores
     VkSubmitInfo submitInfo;
-    VkTimelineSemaphoreSubmitInfoKHR submitInfoTimelineSemaphore;
+    VkTimelineSemaphoreSubmitInfoKHR submitTimelineInfo;
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext = &submitInfoTimelineSemaphore;
+    submitInfo.pNext = &submitTimelineInfo;
     submitInfo.waitSemaphoreCount = 1;
     submitInfo.pWaitSemaphores = semaphore->getHandleAddress();
     submitInfo.pWaitDstStageMask = 0;
@@ -137,12 +136,12 @@ void Queue::submit(std::shared_ptr<const TimelineSemaphore> semaphore, uint64_t 
     submitInfo.pCommandBuffers = nullptr;
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = semaphore->getHandleAddress();
-    submitInfoTimelineSemaphore.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO_KHR;
-    submitInfoTimelineSemaphore.pNext = extendedInfo.chainNodes();
-    submitInfoTimelineSemaphore.waitSemaphoreValueCount = 1;
-    submitInfoTimelineSemaphore.pWaitSemaphoreValues = &waitValue;
-    submitInfoTimelineSemaphore.signalSemaphoreValueCount = 1;
-    submitInfoTimelineSemaphore.pSignalSemaphoreValues = &signalValue;
+    submitTimelineInfo.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO_KHR;
+    submitTimelineInfo.pNext = nullptr;
+    submitTimelineInfo.waitSemaphoreValueCount = 1;
+    submitTimelineInfo.pWaitSemaphoreValues = &waitValue;
+    submitTimelineInfo.signalSemaphoreValueCount = 1;
+    submitTimelineInfo.pSignalSemaphoreValues = &signalValue;
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
     MAGMA_HANDLE_RESULT(result, "queue submission failed");
 }

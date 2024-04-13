@@ -67,8 +67,7 @@ namespace magma
     #ifdef VK_KHR_timeline_semaphore
         void submit(std::shared_ptr<const TimelineSemaphore> semaphore,
             uint64_t waitValue,
-            uint64_t signalValue,
-            const StructureChain& extendedInfo = StructureChain());
+            uint64_t signalValue);
     #endif // VK_KHR_timeline_semaphore
     #if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
         void submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore,
