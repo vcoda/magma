@@ -26,7 +26,7 @@ namespace magma
 #ifdef VK_EXT_conditional_rendering
 ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(cmdBuffer->getDevice()), size,
@@ -36,7 +36,7 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
         optional, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
     cmdBuffer->begin();
     copyTransfer(cmdBuffer, srcBuffer, size);
     cmdBuffer->end();
@@ -47,7 +47,7 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Buffer(cmdBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),

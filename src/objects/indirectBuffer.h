@@ -39,7 +39,7 @@ namespace magma
             uint32_t maxDrawCount,
             std::size_t stride,
             bool persistentlyMapped,
-            const Descriptor& optional,
+            const Initializer& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
@@ -58,7 +58,7 @@ namespace magma
             uint32_t maxDrawCommands,
             std::shared_ptr<Allocator> allocator = nullptr,
             bool persistentlyMapped = false,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         uint32_t writeDrawCommand(uint32_t vertexCount,
             uint32_t firstVertex = 0) noexcept;
@@ -81,7 +81,7 @@ namespace magma
             uint32_t maxDrawIndexedCommands,
             std::shared_ptr<Allocator> allocator = nullptr,
             bool persistentlyMapped = false,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         uint32_t writeDrawIndexedCommand(uint32_t indexCount,
             uint32_t firstIndex = 0,
@@ -106,7 +106,7 @@ namespace magma
             uint32_t maxDispatchCommands,
             std::shared_ptr<Allocator> allocator = nullptr,
             bool persistentlyMapped = false,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         uint32_t writeDispatchCommand(uint32_t x, uint32_t y, uint32_t z) noexcept;
 
@@ -124,7 +124,7 @@ namespace magma
             uint32_t maxDrawMeshTasksCommands,
             std::shared_ptr<Allocator> allocator = nullptr,
             bool persistentlyMapped = false,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         uint32_t writeDrawMeshTaskCommand(uint32_t groupCountX,
             uint32_t groupCountY = 1,

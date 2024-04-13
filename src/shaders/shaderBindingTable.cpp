@@ -28,7 +28,7 @@ namespace magma
 #ifdef VK_NV_ray_tracing
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const void *shaderGroupHandles, uint32_t groupCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Buffer(device,
         device->getPhysicalDevice()->getRayTracingProperties().shaderGroupBaseAlignment * groupCount,
@@ -55,7 +55,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const voi
 
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std::vector<uint8_t>& shaderGroupHandles, uint32_t groupCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     ShaderBindingTable(std::move(device), shaderGroupHandles.data(), groupCount,
         std::move(allocator), optional, sharing)
@@ -63,7 +63,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<Device> device, const std
 
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     ShaderBindingTable(pipeline->getDevice(), pipeline->getShaderGroupHandles(), pipeline->getShaderGroupCount(),
         std::move(allocator), optional, sharing)

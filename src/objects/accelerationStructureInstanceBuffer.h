@@ -82,7 +82,7 @@ namespace magma
             uint32_t instanceCount,
             std::shared_ptr<Allocator> allocator = nullptr,
             bool persistentlyMapped = false,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         ~AccelerationStructureInstanceBuffer();
         uint32_t getInstanceCount() const noexcept { return instanceCount; }

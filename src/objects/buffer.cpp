@@ -33,7 +33,7 @@ namespace magma
 {
 Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     VkBufferCreateFlags flags_, VkBufferUsageFlags usage_, VkMemoryPropertyFlags memoryFlags,
-    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, std::move(device_), sharing, allocator),
     flags(flags_ | optional.flags),
     usage(usage_)

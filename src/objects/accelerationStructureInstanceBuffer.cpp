@@ -50,7 +50,7 @@ void AccelerationStructureInstance::setAccelerationStructure(std::shared_ptr<con
 AccelerationStructureInstanceBuffer::AccelerationStructureInstanceBuffer(std::shared_ptr<Device> device, uint32_t instanceCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     RayTracingBuffer(device, sizeof(AccelerationStructureInstance) * instanceCount, allocator, optional, sharing),
     instanceCount(instanceCount),

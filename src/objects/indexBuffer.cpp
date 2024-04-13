@@ -25,7 +25,7 @@ namespace magma
 {
 BaseIndexBuffer::BaseIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
-    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Buffer(std::move(device), size,
         0, // flags
         usage,
@@ -61,7 +61,7 @@ uint32_t BaseIndexBuffer::getIndexCount() const noexcept
 
 IndexBuffer::IndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     BaseIndexBuffer(std::move(device), indexType, size,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
@@ -71,7 +71,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, 
 
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(cmdBuffer->getDevice(), indexType, size,
@@ -80,7 +80,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
         optional, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
     cmdBuffer->begin();
     copyTransfer(cmdBuffer, srcBuffer);
     cmdBuffer->end();
@@ -91,7 +91,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     BaseIndexBuffer(srcBuffer->getDevice(), indexType,
         size > 0 ? size : srcBuffer->getSize(),
@@ -105,7 +105,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
 DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size, bool barStagedMemory,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(std::move(device), indexType, size,
@@ -121,7 +121,7 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexTy
 AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, VkDeviceSize size,
     const void *data /* nullptr */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(cmdBuffer->getDevice(), indexType, size,
@@ -135,7 +135,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
         optional, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
     cmdBuffer->begin();
     copyTransfer(cmdBuffer, srcBuffer, size);
     cmdBuffer->end();
@@ -147,7 +147,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     BaseIndexBuffer(srcBuffer->getDevice(), indexType,
         size > 0 ? size : srcBuffer->getSize(),

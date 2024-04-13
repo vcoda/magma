@@ -34,7 +34,7 @@ namespace magma
             bool sampled,
             std::shared_ptr<Allocator> allocator = nullptr,
             bool explicitResolve = false,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 
@@ -52,7 +52,7 @@ namespace magma
             bool sampled,
             std::shared_ptr<Allocator> allocator = nullptr,
             bool explicitResolve = false,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 
@@ -70,7 +70,7 @@ namespace magma
             uint32_t mipLevels,
             uint32_t samples,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 
@@ -83,7 +83,7 @@ namespace magma
             uint32_t mipLevels,
             uint32_t samples,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 #endif // VK_EXT_attachment_feedback_loop_layout
@@ -100,7 +100,7 @@ namespace magma
             const VkExtent3D& extent,
             bool sampled,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 #endif // VK_KHR_maintenance1

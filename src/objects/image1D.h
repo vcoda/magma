@@ -30,7 +30,7 @@ namespace magma
             uint32_t width,
             uint32_t mipLevels,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         explicit Image1D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
@@ -38,13 +38,13 @@ namespace magma
             const std::vector<Mip>& mipMaps,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         explicit Image1D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };

@@ -26,7 +26,7 @@ namespace magma
 #ifdef VK_NV_ray_tracing
 RayTracingBuffer::RayTracingBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
         0, // flags
@@ -37,7 +37,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<Device> device, VkDeviceSize 
 
 RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(cmdBuffer->getDevice(), size,
@@ -47,7 +47,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkD
         optional, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Descriptor(), sharing, std::move(copyFn));
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
     cmdBuffer->begin();
     copyTransfer(cmdBuffer, srcBuffer);
     cmdBuffer->end();
@@ -58,7 +58,7 @@ RayTracingBuffer::RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Buffer(srcBuffer->getDevice(),
         size > 0 ? size : srcBuffer->getSize(),

@@ -36,8 +36,8 @@ namespace magma
     public:
         struct Mip;
         struct MipData;
-        struct Descriptor;
         struct CopyLayout;
+        struct Initializer;
 
     public:
         ~Image();
@@ -106,7 +106,7 @@ namespace magma
             VkImageCreateFlags flags,
             VkImageUsageFlags usage,
             VkImageTiling tiling,
-            const Descriptor& optional,
+            const Initializer& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         Image(std::shared_ptr<Device> device,
@@ -154,7 +154,14 @@ namespace magma
         void *texels = nullptr;
     };
 
-    struct Image::Descriptor
+    struct Image::CopyLayout
+    {
+        VkDeviceSize offset = 0;
+        uint32_t rowLength = 0;
+        uint32_t imageHeight = 0;
+    };
+
+    struct Image::Initializer
     {
         VkImageCreateFlags flags;
         bool lazy = false;
@@ -164,12 +171,5 @@ namespace magma
         uint32_t deviceMask = 0;
         // VK_EXT_memory_priority
         float memoryPriority = MAGMA_MEMORY_PRIORITY_DEFAULT;
-    };
-
-    struct Image::CopyLayout
-    {
-        VkDeviceSize offset = 0;
-        uint32_t rowLength = 0;
-        uint32_t imageHeight = 0;
     };
 } // namespace magma

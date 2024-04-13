@@ -42,7 +42,7 @@ namespace magma
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling,
-    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, device, sharing, allocator),
     flags(flags),
     imageType(imageType),

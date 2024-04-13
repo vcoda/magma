@@ -31,7 +31,7 @@ namespace magma
             const VkExtent3D& extent,
             uint32_t mipLevels,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         explicit Image2D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
@@ -39,13 +39,13 @@ namespace magma
             const std::vector<Mip>& mipMaps,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         explicit Image2D(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
 
@@ -59,7 +59,7 @@ namespace magma
             VkImageCreateFlags flags,
             VkImageUsageFlags usage,
             VkImageTiling tiling,
-            const Descriptor& optional,
+            const Initializer& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         Image2D(std::shared_ptr<Device> device,
@@ -77,7 +77,7 @@ namespace magma
             VkFormat format,
             const VkExtent2D& extent,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 
@@ -93,7 +93,7 @@ namespace magma
             uint32_t mipLevels,
             uint32_t samples,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 
@@ -109,7 +109,7 @@ namespace magma
             const VkExtent2D& extent,
             uint32_t mipLevels,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 } // namespace magma

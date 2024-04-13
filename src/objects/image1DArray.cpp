@@ -28,7 +28,7 @@ namespace magma
 {
 Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint32_t width, uint32_t mipLevels, uint32_t arrayLayers,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_1D, format, VkExtent3D{width, 1, 1},
         mipLevels,
@@ -44,7 +44,7 @@ Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMaps,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Image1DArray(cmdBuffer->getDevice(), format, mipMaps.front().extent.width,
         MAGMA_COUNT(mipMaps) / arrayLayers, arrayLayers,
@@ -57,7 +57,7 @@ Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
 Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t arrayLayers,
     const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image1DArray(cmdBuffer->getDevice(), format, mipMaps.front().extent.width,
@@ -69,7 +69,7 @@ Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     std::vector<Mip> mipChain;
     const VkDeviceSize bufferSize = setupMipmap(mipChain, mipMaps);
     std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr,
-        std::move(allocator), Buffer::Descriptor(), sharing);
+        std::move(allocator), Buffer::Initializer(), sharing);
     helpers::mapScoped<uint8_t>(srcBuffer,
         [&](uint8_t *buffer)
         {

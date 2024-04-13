@@ -36,7 +36,7 @@ namespace magma
             bool barStagedMemory = false,
             std::shared_ptr<Allocator> allocator = nullptr,
             uint32_t arraySize = 1,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing()):
             Buffer(std::move(device), sizeof(Type) * arraySize,
                 0, // flags
@@ -95,7 +95,7 @@ namespace magma
             uint32_t arraySize,
             bool barStagedMemory = false,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Buffer::Descriptor& optional = Buffer::Descriptor(),
+            const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
             UniformBuffer<Type>(device, barStagedMemory, std::move(allocator), alignedArraySize(device, arraySize), optional, sharing),
             alignment(std::max(

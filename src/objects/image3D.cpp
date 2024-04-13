@@ -28,7 +28,7 @@ namespace magma
 {
 Image3D::Image3D(std::shared_ptr<Device> device, VkFormat format, const VkExtent3D& extent, uint32_t mipLevels,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_3D, format, extent,
         mipLevels,
@@ -44,7 +44,7 @@ Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMaps,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Image3D(cmdBuffer->getDevice(), format, mipMaps.front().extent, MAGMA_COUNT(mipMaps),
         std::move(allocator), optional, sharing)
@@ -54,7 +54,7 @@ Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
 
 Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image3D(cmdBuffer->getDevice(), format, mipMaps.front().extent, MAGMA_COUNT(mipMaps), // mipLevels
@@ -64,7 +64,7 @@ Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     std::vector<Mip> mipChain;
     const VkDeviceSize bufferSize = setupMipmap(mipChain, mipMaps);
     std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr,
-        std::move(allocator), Buffer::Descriptor(), sharing);
+        std::move(allocator), Buffer::Initializer(), sharing);
     helpers::mapScoped<uint8_t>(srcBuffer,
         [&](uint8_t *buffer)
         {
@@ -85,7 +85,7 @@ Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
 
 Image3D::Image3D(std::shared_ptr<Device> device, VkFormat format, const VkExtent3D& extent,
     VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling,
-    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Image(std::move(device), VK_IMAGE_TYPE_3D, format, extent,
         1, // mipLevels,
         1, // arrayLayers

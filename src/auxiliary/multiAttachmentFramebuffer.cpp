@@ -40,7 +40,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     colorClearOp(colorClearOp),
     depthStencilClearOp(depthStencilClearOp)
 {   // Let it know what view format will be paired with the image
-    Image::Descriptor imageFormatList;
+    Image::Initializer imageFormatList;
     imageFormatList.viewFormats.push_back(VK_FORMAT_UNDEFINED);
     uint32_t index = 0;
     for (const VkFormat colorFormat : colorAttachmentFormats)

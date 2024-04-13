@@ -34,7 +34,7 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
     std::shared_ptr<Allocator> allocator /* nullptr */):
     Framebuffer(VK_FORMAT_UNDEFINED, depthFormat, 1)
 {   // Let it know what view format will be paired with the image
-    Image::Descriptor imageFormatList;
+    Image::Initializer imageFormatList;
     imageFormatList.viewFormats.push_back(depthFormat);
     // Create depth attachment
     constexpr bool sampled = true;

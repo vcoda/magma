@@ -25,7 +25,7 @@ namespace magma
 {
 MutableImage::MutableImage(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageCreateFlags flags, const Descriptor& optional, const Sharing& sharing,
+    VkImageCreateFlags flags, const Initializer& optional, const Sharing& sharing,
     std::shared_ptr<Allocator> allocator):
     Image(std::move(device), imageType, format, extent, mipLevels, arrayLayers, samples,
         VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT | flags |

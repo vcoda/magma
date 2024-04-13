@@ -29,7 +29,7 @@ namespace magma
             VkDeviceSize size,
             const void *data = nullptr,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };

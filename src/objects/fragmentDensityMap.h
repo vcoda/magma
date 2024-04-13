@@ -40,7 +40,7 @@ namespace magma
             VkDeviceSize size,
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -50,7 +50,7 @@ namespace magma
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 #endif // VK_EXT_fragment_density_map

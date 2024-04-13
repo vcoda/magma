@@ -25,7 +25,7 @@ namespace magma
 {
 IndirectBuffer::IndirectBuffer(std::shared_ptr<Device> device,
     uint32_t maxDrawCount, std::size_t stride, bool persistentlyMapped,
-    const Descriptor& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
+    const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Buffer(std::move(device),
         static_cast<VkDeviceSize>(maxDrawCount * stride),
         0, // flags
@@ -47,7 +47,7 @@ IndirectBuffer::~IndirectBuffer()
 DrawIndirectBuffer::DrawIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     IndirectBuffer(std::move(device), maxDrawCount, sizeof(VkDrawIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
@@ -94,7 +94,7 @@ uint32_t DrawIndirectBuffer::writeDrawCommand(const VkDrawIndirectCommand& drawC
 DrawIndexedIndirectBuffer::DrawIndexedIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawIndexedCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     IndirectBuffer(std::move(device), maxDrawIndexedCount, sizeof(VkDrawIndexedIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
@@ -145,7 +145,7 @@ uint32_t DrawIndexedIndirectBuffer::writeDrawIndexedCommand(const VkDrawIndexedI
 DispatchIndirectBuffer::DispatchIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDispatchCommands,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     IndirectBuffer(std::move(device), maxDispatchCommands, sizeof(VkDispatchIndirectCommand),
         persistentlyMapped, optional, sharing, std::move(allocator)),
@@ -168,7 +168,7 @@ uint32_t DispatchIndirectBuffer::writeDispatchCommand(uint32_t x, uint32_t y, ui
 DrawMeshTasksIndirectBuffer::DrawMeshTasksIndirectBuffer(std::shared_ptr<Device> device, uint32_t maxDrawMeshTasksCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     bool persistentlyMapped /* false */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* Sharing() */):
     IndirectBuffer(device, maxDrawMeshTasksCount, indirectCommandStride(device),
         persistentlyMapped, optional, sharing, std::move(allocator)),

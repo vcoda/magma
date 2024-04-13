@@ -33,7 +33,7 @@ namespace magma
         explicit TransformFeedbackBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 
@@ -49,7 +49,7 @@ namespace magma
         explicit TransformFeedbackCounterBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 #endif // VK_EXT_transform_feedback

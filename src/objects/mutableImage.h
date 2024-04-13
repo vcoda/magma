@@ -38,7 +38,7 @@ namespace magma
             uint32_t arrayLayers,
             uint32_t samples,
             VkImageCreateFlags flags,
-            const Descriptor& optional,
+            const Initializer& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
     };

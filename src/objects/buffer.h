@@ -33,7 +33,7 @@ namespace magma
     class Buffer : public NonDispatchableResource<Buffer, VkBuffer>
     {
     public:
-        struct Descriptor;
+        struct Initializer;
 
     public:
         ~Buffer();
@@ -76,7 +76,7 @@ namespace magma
             VkBufferCreateFlags flags,
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,
-            const Descriptor& optional,
+            const Initializer& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
@@ -84,7 +84,7 @@ namespace magma
         VkBufferUsageFlags usage;
     };
 
-    struct Buffer::Descriptor
+    struct Buffer::Initializer
     {
         VkBufferCreateFlags flags = 0;
         bool lazy = false;

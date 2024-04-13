@@ -46,7 +46,7 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
     Framebuffer(colorFormat, depthStencilFormat, 1),
     colorClearOp(colorClearOp)
 {   // Let it know what view format will be paired with the image
-    Image::Descriptor imageFormatList;
+    Image::Initializer imageFormatList;
     imageFormatList.viewFormats.push_back(colorFormat);
     // Create color attachment
     constexpr bool colorSampled = true;

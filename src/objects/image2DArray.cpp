@@ -28,7 +28,7 @@ namespace magma
 {
 Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, extent,
         mipLevels,
@@ -46,7 +46,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMaps,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Image2DArray(cmdBuffer->getDevice(), format, mipMaps.front().extent,
         MAGMA_COUNT(mipMaps) / arrayLayers, arrayLayers,
@@ -59,7 +59,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
 Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t arrayLayers,
     const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image2DArray(cmdBuffer->getDevice(), format, mipMaps.front().extent,
@@ -71,7 +71,7 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     std::vector<Mip> mipChain;
     const VkDeviceSize bufferSize = setupMipmap(mipChain, mipMaps);
     std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr,
-        std::move(allocator), Buffer::Descriptor(), sharing);
+        std::move(allocator), Buffer::Initializer(), sharing);
     helpers::mapScoped<uint8_t>(srcBuffer,
         [&](uint8_t *buffer)
         {

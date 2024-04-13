@@ -53,7 +53,7 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     Framebuffer(colorFormat, depthStencilFormat, sampleCount),
     colorClearOp(colorClearOp)
 {   // Let it know what view format will be paired with the image
-    Image::Descriptor imageFormatList;
+    Image::Initializer imageFormatList;
     imageFormatList.viewFormats.push_back(colorFormat);
     // Create multisample color attachment
     constexpr bool explicitResolve = false;

@@ -41,7 +41,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainImage> color
     colorView = std::make_shared<ImageView>(color, swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Let it know what view format will be paired with the image
-        Image::Descriptor imageFormatList;
+        Image::Initializer imageFormatList;
         imageFormatList.viewFormats.push_back(colorFormat);
         // Create depth/stencil attachment
         const VkExtent2D extent{color->getWidth(), color->getHeight()};

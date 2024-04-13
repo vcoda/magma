@@ -24,7 +24,7 @@ namespace magma
 #ifdef VK_KHR_acceleration_structure
 AccelerationStructureStorageBuffer::AccelerationStructureStorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Descriptor& optional /* default */,
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
         0, // flags

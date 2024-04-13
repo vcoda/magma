@@ -38,7 +38,7 @@ namespace magma
             VkDeviceSize size,
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,
-            const Descriptor& optional,
+            const Initializer& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
 
@@ -54,14 +54,14 @@ namespace magma
             VkIndexType indexType,
             VkDeviceSize size,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
         explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkIndexType indexType,
             VkDeviceSize size,
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -70,7 +70,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 
@@ -91,7 +91,7 @@ namespace magma
             bool barStagedMemory,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initialData = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };
@@ -105,7 +105,7 @@ namespace magma
             VkDeviceSize size,
             const void *data = nullptr,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -114,7 +114,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
-            const Descriptor& optional = Descriptor(),
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
     };
 #endif // VK_NV_ray_tracing
