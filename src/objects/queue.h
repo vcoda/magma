@@ -72,15 +72,12 @@ namespace magma
     #if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
         void submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore,
             uint64_t waitValue,
-            uint64_t signalValue,
-            const StructureChain& extendedInfo = StructureChain());
-    #ifdef VK_KHR_timeline_semaphore
+            uint64_t signalValue);
+        #ifdef VK_KHR_timeline_semaphore
         void submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semaphore,
             uint64_t waitValue,
-            uint64_t signalValue,
-            const StructureChain& extendedInfo = StructureChain());
-    #endif // VK_KHR_timeline_semaphore
-    #endif // VK_KHR_external_semaphore && VK_KHR_external_semaphore_win32
+            uint64_t signalValue);
+        #endif // VK_KHR_timeline_semaphore
     #ifdef VK_KHR_device_group
         void submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
             const std::vector<uint32_t>& cmdBufferDeviceMasks = {},

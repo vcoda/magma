@@ -147,14 +147,13 @@ void Queue::submit(std::shared_ptr<const TimelineSemaphore> semaphore, uint64_t 
 }
 #endif // #ifdef VK_KHR_timeline_semaphore
 
-#if defined(VK_KHR_external_semaphore) && defined(VK_KHR_external_semaphore_win32)
-void Queue::submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
-    const StructureChain& extendedInfo /* default */)
+#ifdef VK_KHR_external_semaphore_win32
+void Queue::submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue)
 {
     VkSubmitInfo submitInfo;
-    VkD3D12FenceSubmitInfoKHR submitInfoFenceD3D12;
+    VkD3D12FenceSubmitInfoKHR submitFenceInfoD3d12;
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext = &submitInfoFenceD3D12;
+    submitInfo.pNext = &submitFenceInfoD3d12;
     submitInfo.waitSemaphoreCount = 1;
     submitInfo.pWaitSemaphores = semaphore->getHandleAddress();
     submitInfo.pWaitDstStageMask = 0;
@@ -162,24 +161,23 @@ void Queue::submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore, uint
     submitInfo.pCommandBuffers = nullptr;
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = semaphore->getHandleAddress();
-    submitInfoFenceD3D12.sType = VK_STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR;
-    submitInfoFenceD3D12.pNext = extendedInfo.chainNodes();
-    submitInfoFenceD3D12.waitSemaphoreValuesCount = 1;
-    submitInfoFenceD3D12.pWaitSemaphoreValues = &waitValue;
-    submitInfoFenceD3D12.signalSemaphoreValuesCount = 1;
-    submitInfoFenceD3D12.pSignalSemaphoreValues = &signalValue;
+    submitFenceInfoD3d12.sType = VK_STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR;
+    submitFenceInfoD3d12.pNext = nullptr;
+    submitFenceInfoD3d12.waitSemaphoreValuesCount = 1;
+    submitFenceInfoD3d12.pWaitSemaphoreValues = &waitValue;
+    submitFenceInfoD3d12.signalSemaphoreValuesCount = 1;
+    submitFenceInfoD3d12.pSignalSemaphoreValues = &signalValue;
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
     MAGMA_HANDLE_RESULT(result, "queue submission with Direct3D fence failed");
 }
 
 #ifdef VK_KHR_timeline_semaphore
-void Queue::submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue,
-    const StructureChain& extendedInfo /* default */)
+void Queue::submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue)
 {
     VkSubmitInfo submitInfo;
-    VkD3D12FenceSubmitInfoKHR submitInfoFenceD3D12;
+    VkD3D12FenceSubmitInfoKHR submitFenceInfoD3d12;
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext = &submitInfoFenceD3D12;
+    submitInfo.pNext = &submitFenceInfoD3d12;
     submitInfo.waitSemaphoreCount = 1;
     submitInfo.pWaitSemaphores = semaphore->getHandleAddress();
     submitInfo.pWaitDstStageMask = 0;
@@ -187,12 +185,12 @@ void Queue::submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semapho
     submitInfo.pCommandBuffers = nullptr;
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = semaphore->getHandleAddress();
-    submitInfoFenceD3D12.sType = VK_STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR;
-    submitInfoFenceD3D12.pNext = extendedInfo.chainNodes();
-    submitInfoFenceD3D12.waitSemaphoreValuesCount = 1;
-    submitInfoFenceD3D12.pWaitSemaphoreValues = &waitValue;
-    submitInfoFenceD3D12.signalSemaphoreValuesCount = 1;
-    submitInfoFenceD3D12.pSignalSemaphoreValues = &signalValue;
+    submitFenceInfoD3d12.sType = VK_STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR;
+    submitFenceInfoD3d12.pNext = nullptr;;
+    submitFenceInfoD3d12.waitSemaphoreValuesCount = 1;
+    submitFenceInfoD3d12.pWaitSemaphoreValues = &waitValue;
+    submitFenceInfoD3d12.signalSemaphoreValuesCount = 1;
+    submitFenceInfoD3d12.pSignalSemaphoreValues = &signalValue;
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
     MAGMA_HANDLE_RESULT(result, "queue submission with Direct3D fence failed");
 }
