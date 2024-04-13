@@ -68,7 +68,7 @@ void TimelineSemaphore::signal(uint64_t counter)
     signalInfo.value = counter;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkSignalSemaphoreKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkSignalSemaphoreKHR(MAGMA_HANDLE(device), &signalInfo);
-    MAGMA_HANDLE_RESULT(result, "failed to signal timeline semaphore from a host");
+    MAGMA_HANDLE_RESULT(result, "failed to signal timeline semaphore");
 }
 
 bool TimelineSemaphore::wait(uint64_t counter,
@@ -83,7 +83,7 @@ bool TimelineSemaphore::wait(uint64_t counter,
     waitInfo.pValues = &counter;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
     const VkResult result = vkWaitSemaphoresKHR(MAGMA_HANDLE(device), &waitInfo, timeout);
-    MAGMA_HANDLE_RESULT(result, "failed to wait timeline semaphore from a host");
+    MAGMA_HANDLE_RESULT(result, "failed to wait timeline semaphore");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
 }

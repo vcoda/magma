@@ -95,7 +95,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
         submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;
     }
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
-    MAGMA_HANDLE_RESULT(result, "queue submission command failed");
+    MAGMA_HANDLE_RESULT(result, "queue submission failed");
     for (auto& cmdBuffer : cmdBuffers)
     {   // Change state of command buffer
         cmdBuffer->onSubmit();
@@ -144,7 +144,7 @@ void Queue::submit(std::shared_ptr<const TimelineSemaphore> semaphore, uint64_t 
     submitInfoTimelineSemaphore.signalSemaphoreValueCount = 1;
     submitInfoTimelineSemaphore.pSignalSemaphoreValues = &signalValue;
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
-    MAGMA_HANDLE_RESULT(result, "failed to submit queue");
+    MAGMA_HANDLE_RESULT(result, "queue submission failed");
 }
 #endif // #ifdef VK_KHR_timeline_semaphore
 
@@ -170,7 +170,7 @@ void Queue::submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore, uint
     submitInfoFenceD3D12.signalSemaphoreValuesCount = 1;
     submitInfoFenceD3D12.pSignalSemaphoreValues = &signalValue;
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
-    MAGMA_HANDLE_RESULT(result, "failed to submit queue with D3D fence");
+    MAGMA_HANDLE_RESULT(result, "queue submission with Direct3D fence failed");
 }
 
 #ifdef VK_KHR_timeline_semaphore
@@ -195,7 +195,7 @@ void Queue::submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semapho
     submitInfoFenceD3D12.signalSemaphoreValuesCount = 1;
     submitInfoFenceD3D12.pSignalSemaphoreValues = &signalValue;
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
-    MAGMA_HANDLE_RESULT(result, "failed to submit queue with D3D fence");
+    MAGMA_HANDLE_RESULT(result, "queue submission with Direct3D fence failed");
 }
 #endif // VK_KHR_timeline_semaphore
 #endif // VK_KHR_external_semaphore && VK_KHR_external_semaphore_win32
