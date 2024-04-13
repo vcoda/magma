@@ -77,8 +77,8 @@ namespace magma
     /* Provides a mechanism to create surface objects
        independently of any window system or display device.
        The presentation operation for a swapchain created
-       from a headless surface is by default a no-op, resulting
-       in no externally-visible result. */
+       from a headless surface is by default a no-op,
+       resulting in no externally-visible result. */
 
 #ifdef VK_EXT_headless_surface
     class HeadlessSurface : public Surface

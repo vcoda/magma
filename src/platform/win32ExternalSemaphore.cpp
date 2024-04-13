@@ -37,18 +37,16 @@ Win32ExternalSemaphore::Win32ExternalSemaphore(const Semaphore *self,
 {}
 
 Win32ExternalSemaphore::~Win32ExternalSemaphore()
-{
-    /* Do applications need to call CloseHandle() on the values
-       returned from vkGetSemaphoreWin32HandleKHR when handleType
-       is VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR? */
+{   // Do applications need to call CloseHandle() on the values
+    // returned from vkGetSemaphoreWin32HandleKHR when handleType
+    // is VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR?
     if (VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR == handleType)
-    {
-        /* Yes. A successful get call transfers ownership of the handle
-           to the application. Destroying the semaphore object will not
-           destroy the handle or the handle's reference to the underlying
-           semaphore resource. Unlike file descriptor opaque handles,
-           win32 opaque handle ownership can not be transferred back
-           to a driver by an import operation. */
+    {   // Yes. A successful get call transfers ownership of the handle
+        // to the application. Destroying the semaphore object will not
+        // destroy the handle or the handle's reference to the underlying
+        // semaphore resource. Unlike file descriptor opaque handles,
+        // win32 opaque handle ownership can not be transferred back
+        // to a driver by an import operation.
         CloseHandle(hSemaphore);
     }
 }

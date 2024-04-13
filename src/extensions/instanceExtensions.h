@@ -70,10 +70,10 @@ namespace magma
         const VkBool32 KHR_xcb_surface : 1;
         const VkBool32 KHR_xlib_surface : 1;
 
-        // LunarG
+        // LunarG, Inc.
         const VkBool32 LUNARG_direct_driver_loading : 1;
 
-        // MoltenVK
+        // The Brenwill Workshop Ltd.
         const VkBool32 MVK_ios_surface : 1;
         const VkBool32 MVK_macos_surface : 1;
 

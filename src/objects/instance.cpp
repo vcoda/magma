@@ -26,8 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../helpers/stackArray.h"
 #include "../core/refCountChecker.h"
 
-// Redefine macro because here we use handle directly
-// instead of using circular reference to itself
+// Redefine macro to reference VkInstance handle directly
 #ifdef MAGMA_HANDLE
 #undef MAGMA_HANDLE
 #define MAGMA_HANDLE(p) handle
