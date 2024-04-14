@@ -41,7 +41,7 @@ namespace magma
         ~SwapchainImage();
         VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
         int32_t getChainIndex() const noexcept { return chainIndex; }
-        bool isChained() const noexcept { return chainIndex >= 0; }
+        bool chained() const noexcept { return chainIndex >= 0; }
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group
