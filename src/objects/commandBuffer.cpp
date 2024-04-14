@@ -63,6 +63,8 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     withinRenderPass(VK_FALSE),
     withinConditionalRendering(VK_FALSE),
     withinTransformFeedback(VK_FALSE),
+    labeledRecording(VK_FALSE),
+    labeledRenderPass(VK_FALSE),
     queryFlags(0),
     pipelineStatistics(0)
 {
