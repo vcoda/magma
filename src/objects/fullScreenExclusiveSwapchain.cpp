@@ -33,17 +33,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_full_screen_exclusive
-FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device, std::shared_ptr<const Surface> surface,
-    uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent, uint32_t arrayLayers,
-    VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
-    VkFullScreenExclusiveEXT fullScreenExclusive, VkPresentModeKHR presentMode,
-#ifdef VK_EXT_swapchain_maintenance1
-    const std::vector<VkPresentModeKHR>& presentModes /* empty */,
-#endif
-#ifdef VK_KHR_device_group
-    VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes /* 0 */,
-#endif
-    VkSwapchainCreateFlagsKHR flags /* 0 */,
+FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device,
+    std::shared_ptr<const Surface> surface, uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat,
+    const VkExtent2D& extent, uint32_t arrayLayers, VkImageUsageFlags imageUsage,
+    VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
+    VkPresentModeKHR presentMode, VkFullScreenExclusiveEXT fullScreenExclusive,
 #ifdef VK_KHR_win32_surface
     // Allows to specify full-screen exclusive mode for physical display
     // that is represented by a monitor handle of type HMONITOR. See:
@@ -52,15 +46,10 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 #endif // VK_KHR_win32_surface
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<Swapchain> oldSwapchain /* nullptr */,
-#ifdef VK_EXT_debug_report
-    std::shared_ptr<DebugReportCallback> debugReportCallback /* nullptr */,
-#endif
-#ifdef VK_EXT_debug_utils
-    std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger /* nullptr */,
-#endif
+    const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    Swapchain(std::move(device), surfaceFormat, extent, arrayLayers, imageUsage, presentMode, flags, sharing, oldSwapchain, std::move(allocator)),
+    Swapchain(std::move(device), surfaceFormat, extent, arrayLayers, imageUsage, presentMode, optional.flags, sharing, oldSwapchain, std::move(allocator)),
 #ifdef VK_KHR_win32_surface
     hMonitor(hMonitor),
 #endif
@@ -69,7 +58,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     swapchainInfo.pNext = extendedInfo.chainNodes();
-    swapchainInfo.flags = flags;
+    swapchainInfo.flags = optional.flags;
     swapchainInfo.surface = *surface;
     swapchainInfo.minImageCount = minImageCount;
     swapchainInfo.imageFormat = surfaceFormat.format;
@@ -102,7 +91,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 #endif // VK_KHR_win32_surface
 #ifdef VK_EXT_swapchain_maintenance1
     VkSwapchainPresentModesCreateInfoEXT swapchainPresentModesInfo;
-    if (device->extensionEnabled(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME) && !presentModes.empty())
+    if (!optional.presentModes.empty() && device->extensionEnabled(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
     {
         swapchainPresentModesInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODES_CREATE_INFO_EXT;
         swapchainPresentModesInfo.pNext = nullptr;
@@ -113,11 +102,11 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 #endif // VK_EXT_swapchain_maintenance1
 #ifdef VK_KHR_device_group
     VkDeviceGroupSwapchainCreateInfoKHR swapchainDeviceGroupInfo;
-    if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    if (optional.deviceGroupPresentModes && device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
     {
         swapchainDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR;
         swapchainDeviceGroupInfo.pNext = nullptr;
-        swapchainDeviceGroupInfo.modes = deviceGroupPresentModes;
+        swapchainDeviceGroupInfo.modes = optional.deviceGroupPresentModes;
         linkNode(swapchainInfo, swapchainDeviceGroupInfo);
     }
 #endif // VK_KHR_device_group
@@ -154,17 +143,17 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
             out << swapchainDeviceGroupInfo << std::endl;
     #endif
     #ifdef VK_EXT_debug_report
-        if (debugReportCallback)
+        if (optional.debugReportCallback)
         {
-            debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT,
+            optional.debugReportCallback->message(VK_DEBUG_REPORT_ERROR_BIT_EXT,
                 getObjectType(), (uint64_t)VK_NULL_HANDLE, 0, 0,
                 "magma", out.str().c_str());
         }
     #endif // VK_EXT_debug_report
     #ifdef VK_EXT_debug_utils
-        if (debugUtilsMessenger)
+        if (optional.debugUtilsMessenger)
         {
-            debugUtilsMessenger->message(VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
+            optional.debugUtilsMessenger->message(VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
                 VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT,
                 "magma", 0, out.str().c_str());
         }

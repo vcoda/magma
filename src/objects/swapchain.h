@@ -47,6 +47,7 @@ namespace magma
     class Swapchain : public NonDispatchable<VkSwapchainKHR>
     {
     public:
+        struct Initializer;
         explicit Swapchain(std::shared_ptr<Device> device,
             std::shared_ptr<const Surface> surface,
             uint32_t minImageCount,
@@ -57,21 +58,9 @@ namespace magma
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
             VkPresentModeKHR presentMode,
-        #ifdef VK_EXT_swapchain_maintenance1
-            const std::vector<VkPresentModeKHR>& presentModes = {},
-        #endif
-        #ifdef VK_KHR_device_group
-            VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes = 0,
-        #endif
-            VkSwapchainCreateFlagsKHR flags = 0,
+            const Initializer& optional,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<Swapchain> oldSwapchain = nullptr,
-        #ifdef VK_EXT_debug_report
-            std::shared_ptr<DebugReportCallback> debugReportCallback = nullptr,
-        #endif
-        #ifdef VK_EXT_debug_utils
-            std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger = nullptr,
-        #endif
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
         ~Swapchain();
@@ -136,6 +125,23 @@ namespace magma
         mutable std::vector<std::shared_ptr<SwapchainImage>> bindedImages;
         uint32_t imageIndex;
         friend class FullScreenExclusiveSwapchain;
+    };
+
+    struct Swapchain::Initializer
+    {
+        VkSwapchainCreateFlagsKHR flags = 0;
+    #ifdef VK_EXT_swapchain_maintenance1
+        const std::vector<VkPresentModeKHR> presentModes;
+    #endif
+    #ifdef VK_KHR_device_group
+        VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes = 0;
+    #endif
+    #ifdef VK_EXT_debug_report
+        std::shared_ptr<DebugReportCallback> debugReportCallback;
+    #endif
+    #ifdef VK_EXT_debug_utils
+        std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger;
+    #endif
     };
 #endif // VK_KHR_swapchain
 } // namespace magma

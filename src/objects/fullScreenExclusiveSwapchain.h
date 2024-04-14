@@ -42,26 +42,14 @@ namespace magma
             VkImageUsageFlags imageUsage,
             VkSurfaceTransformFlagBitsKHR preTransform,
             VkCompositeAlphaFlagBitsKHR compositeAlpha,
-            VkFullScreenExclusiveEXT fullScreenExclusive,
             VkPresentModeKHR presentMode,
-        #ifdef VK_EXT_swapchain_maintenance1
-            const std::vector<VkPresentModeKHR>& presentModes = {},
-        #endif
-        #ifdef VK_KHR_device_group
-            VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes = 0,
-        #endif
-            VkSwapchainCreateFlagsKHR flags = 0,
+            VkFullScreenExclusiveEXT fullScreenExclusive,
         #ifdef VK_KHR_win32_surface
             HMONITOR hMonitor = NULL,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<Swapchain> oldSwapchain = nullptr,
-        #ifdef VK_EXT_debug_report
-            std::shared_ptr<DebugReportCallback> debugReportCallback = nullptr,
-        #endif
-        #ifdef VK_EXT_debug_utils
-            std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger = nullptr,
-        #endif
+            const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
         void acquireFullScreenExclusiveMode();
