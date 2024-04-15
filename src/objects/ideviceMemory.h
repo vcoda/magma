@@ -77,6 +77,7 @@ namespace magma
     {
         VkBool32 deviceLocal: 1;
         VkBool32 hostVisible: 1;
+        VkBool32 hostCoherent: 1;
         VkBool32 hostCached: 1;
         VkBool32 lazilyAllocated: 1;
         VkBool32 deviceHostCoherent: 1;

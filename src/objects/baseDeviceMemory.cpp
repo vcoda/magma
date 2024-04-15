@@ -35,24 +35,21 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
     binding(VK_NULL_HANDLE),
     mapPointer(nullptr)
 {
-    constexpr VkMemoryPropertyFlags hostVisibleFlags =
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-    flags.deviceLocal = (memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-    flags.hostVisible = (memoryFlags & hostVisibleFlags) == hostVisibleFlags;
-    flags.hostCached = flags.hostVisible && (memoryFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
-    flags.lazilyAllocated = (memoryFlags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT);
+    flags.deviceLocal = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    flags.hostVisible = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+    flags.hostCoherent = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    flags.hostCached = MAGMA_BITWISE_AND(memoryFlags,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+    flags.lazilyAllocated = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT);
 #ifdef VK_AMD_device_coherent_memory
     // For any memory allocated with both the HOST_COHERENT and
     // the DEVICE_COHERENT flags, host or device accesses also
     // perform automatic memory domain transfer operations,
     // such that writes are always automatically available and
     // visible to both host and device memory domains.
-    constexpr VkMemoryPropertyFlags deviceHostCoherentFlags =
-        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
-        VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD;
-    flags.deviceHostCoherent = (memoryFlags & deviceHostCoherentFlags) == deviceHostCoherentFlags;
-    flags.deviceUncached = (memoryFlags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD);
+    flags.deviceHostCoherent = MAGMA_BITWISE_AND(memoryFlags,
+        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD);
+    flags.deviceUncached = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD);
 #else
     flags.deviceHostCoherent = VK_FALSE;
     flags.deviceUncached = VK_FALSE;
