@@ -17,70 +17,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "uniformBuffer.h"
+#include "uniformBufferAligned.h"
 
 namespace magma
 {
-    /* Base class of dynamic uniform buffer that implements
-       some alignment-related functionality shared between
-       dynamic and non-coherent dynamic uniform buffers. */
-
-    template<class Type>
-    class AlignedUniformBuffer
-    {
-    public:
-        VkDeviceSize getAlignment() const noexcept
-        {
-            return alignment;
-        }
-
-        VkDeviceSize getNonCoherentAtomSize() const noexcept
-        {
-            return atomSize;
-        }
-
-        uint32_t getDynamicOffset(uint32_t index) const noexcept
-        {
-            return static_cast<uint32_t>(index * alignment);
-        }
-
-    protected:
-        AlignedUniformBuffer(const std::shared_ptr<Device>& device) noexcept
-        {
-            const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
-            const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
-            const VkPhysicalDeviceLimits& limits = properties.limits;
-            const VkDeviceSize minAlignment = limits.minUniformBufferOffsetAlignment;
-            const VkDeviceSize sizeOfType = static_cast<VkDeviceSize>(sizeof(Type));
-            alignment = std::max(minAlignment, sizeOfType);
-            atomSize = limits.nonCoherentAtomSize;
-        }
-
-        static uint32_t alignedArraySize(const std::shared_ptr<Device>& device, uint32_t arraySize) noexcept
-        {
-            const VkDeviceSize alignment = device->getPhysicalDevice()->getProperties().limits.minUniformBufferOffsetAlignment;
-            if (sizeof(Type) >= alignment)
-                return arraySize;
-            const VkDeviceSize multiplier = alignment / sizeof(Type);
-            return static_cast<uint32_t>(arraySize * multiplier);
-        }
-
-        static VkDescriptorBufferInfo getBufferDescriptor(VkBuffer buffer) noexcept
-        {
-            VkDescriptorBufferInfo bufferDescriptorInfo;
-            bufferDescriptorInfo.buffer = buffer;
-            bufferDescriptorInfo.offset = 0;
-            // For UNIFORM_BUFFER_DYNAMIC and STORAGE_BUFFER_DYNAMIC descriptor types,
-            // offset is the base offset from which the dynamic offset is applied
-            // and range is the static size used for all dynamic offsets.
-            bufferDescriptorInfo.range = static_cast<VkDeviceSize>(sizeof(Type));
-            return bufferDescriptorInfo;
-        }
-
-    private:
-        VkDeviceSize alignment;
-        VkDeviceSize atomSize;
-    };
-
     /* An array of aligned uniform values that can be fetched
        from buffer with dynamic offset. Alignment is determined
        by hardware requirements. To access elements of a buffer,
@@ -98,7 +38,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
-            UniformBuffer<Type>(std::move(device), barStagedMemory, std::move(allocator), alignedArraySize(device, arraySize), optional, sharing),
+            UniformBuffer<Type>(std::move(device), barStagedMemory, std::move(allocator), getAlignedArraySize(device, arraySize), optional, sharing),
             AlignedUniformBuffer<Type>(this->device)
         {}
 
@@ -134,7 +74,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
-            NonCoherentUniformBuffer(device, std::move(allocator), true, alignedArraySize(device, arraySize), optional, sharing),
+            NonCoherentUniformBuffer(device, std::move(allocator), true, getAlignedArraySize(device, arraySize), optional, sharing),
             AlignedUniformBuffer<Type>(std::move(device))
         {}
 

@@ -351,6 +351,7 @@
     <ClInclude Include="..\..\src\objects\transformFeedbackBuffer.h" />
     <ClInclude Include="..\..\src\objects\typedefs.h" />
     <ClInclude Include="..\..\src\objects\uniformBuffer.h" />
+    <ClInclude Include="..\..\src\objects\uniformBufferAligned.h" />
     <ClInclude Include="..\..\src\objects\uniformTexelBuffer.h" />
     <ClInclude Include="..\..\src\objects\validationCache.h" />
     <ClInclude Include="..\..\src\objects\vertexBuffer.h" />

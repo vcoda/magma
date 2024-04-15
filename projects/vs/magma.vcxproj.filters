@@ -879,6 +879,9 @@
     <ClInclude Include="..\..\src\objects\dynamicUniformBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\uniformBufferAligned.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
