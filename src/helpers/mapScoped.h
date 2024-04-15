@@ -115,7 +115,7 @@ inline void mapScoped(std::shared_ptr<DynamicUniformBuffer<Type>> uniformBuffer,
         {
             AlignedUniformArray<Type> array(data,
                 uniformBuffer->getArraySize(),
-                uniformBuffer->getElementAlignment());
+                uniformBuffer->getAlignment());
             mapFn(array);
         }
         catch (...)
