@@ -44,6 +44,7 @@ namespace magma
         virtual uint32_t getMemoryTypeBits() const noexcept = 0;
         virtual Flags getFlags() const noexcept = 0;
         virtual uint32_t getDeviceMask() const noexcept = 0;
+        virtual void *getMapPointer() const noexcept = 0;
         virtual float getPriority() const noexcept = 0;
         virtual void setPriority(float priority) noexcept = 0;
         virtual bool managed() const noexcept = 0;
