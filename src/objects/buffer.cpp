@@ -271,22 +271,24 @@ void Buffer::realloc(VkDeviceSize newSize)
     bindMemory(std::move(memory), offset);
 }
 
-void Buffer::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
+void Buffer::bindMemory(std::shared_ptr<IDeviceMemory> deviceMemory,
     VkDeviceSize offset_ /* 0 */)
 {
-    memory_->bind(handle, VK_OBJECT_TYPE_BUFFER, offset_);
-    memory = std::move(memory_);
+    MAGMA_ASSERT(deviceMemory->getSize() >= getSize());
+    deviceMemory->bind(handle, VK_OBJECT_TYPE_BUFFER, offset_);
+    memory = std::move(deviceMemory);
     offset = offset_;
 }
 
 #ifdef VK_KHR_device_group
-void Buffer::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
+void Buffer::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> deviceMemory,
     const std::vector<uint32_t>& deviceIndices,
     const std::vector<VkRect2D>& /* splitInstanceBindRegions */,
     VkDeviceSize offset_ /* 0 */)
 {
-    memory_->bindDeviceGroup(handle, VK_OBJECT_TYPE_BUFFER, deviceIndices, {/* unused */}, offset_);
-    memory = std::move(memory_);
+    MAGMA_ASSERT(deviceMemory->getSize() >= getSize());
+    deviceMemory->bindDeviceGroup(handle, VK_OBJECT_TYPE_BUFFER, deviceIndices, {/* unused */}, offset_);
+    memory = std::move(deviceMemory);
     offset = offset_;
 }
 #endif // VK_KHR_device_group
