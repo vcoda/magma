@@ -44,6 +44,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/display.h"
 #include "src/objects/displayMode.h"
 #include "src/objects/dstTransferBuffer.h"
+#include "src/objects/dynamicUniformBuffer.h"
 #include "src/objects/event.h"
 #include "src/objects/externalImage.h"
 #include "src/objects/fence.h"

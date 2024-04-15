@@ -876,6 +876,9 @@
     <ClInclude Include="..\..\src\extensions\deviceExtensions.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\dynamicUniformBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">

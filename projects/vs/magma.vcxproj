@@ -285,6 +285,7 @@
     <ClInclude Include="..\..\src\objects\display.h" />
     <ClInclude Include="..\..\src\objects\displayMode.h" />
     <ClInclude Include="..\..\src\objects\dstTransferBuffer.h" />
+    <ClInclude Include="..\..\src\objects\dynamicUniformBuffer.h" />
     <ClInclude Include="..\..\src\objects\event.h" />
     <ClInclude Include="..\..\src\objects\externalImage.h" />
     <ClInclude Include="..\..\src\objects\fence.h" />
