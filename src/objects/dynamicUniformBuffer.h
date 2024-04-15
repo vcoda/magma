@@ -44,6 +44,18 @@ namespace magma
             ))
         {}
 
+        virtual VkDescriptorBufferInfo getDescriptor() const noexcept override
+        {
+            VkDescriptorBufferInfo bufferDescriptorInfo;
+            bufferDescriptorInfo.buffer = UniformBuffer<Type>::handle;
+            bufferDescriptorInfo.offset = 0;
+            // For UNIFORM_BUFFER_DYNAMIC and STORAGE_BUFFER_DYNAMIC descriptor types,
+            // offset is the base offset from which the dynamic offset is applied
+            // and range is the static size used for all dynamic offsets.
+            bufferDescriptorInfo.range = elementSize;
+            return bufferDescriptorInfo;
+        }
+
         virtual uint32_t getArraySize() const noexcept override
         {
             if (elementSize >= alignment)

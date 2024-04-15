@@ -18,9 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "uniformArray.h"
 #include "alignedUniformArray.h"
-#include "../objects/deviceMemory.h"
-#include "../objects/buffer.h"
-#include "../objects/uniformBuffer.h"
+#include "../objects/dynamicUniformBuffer.h"
 #include "../objects/image.h"
 
 namespace magma

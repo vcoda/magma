@@ -43,7 +43,7 @@ namespace magma
     #ifdef VK_KHR_get_memory_requirements2
         VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const;
     #endif
-        VkDescriptorBufferInfo getDescriptor() const noexcept;
+        virtual VkDescriptorBufferInfo getDescriptor() const noexcept;
     #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
         VkDeviceAddress getDeviceAddress() const noexcept;
     #endif
