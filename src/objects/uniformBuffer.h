@@ -80,5 +80,68 @@ namespace magma
         const uint32_t arraySize;
     };
 
+    /* An array of uniform values that are used in various
+       shader stages. It is host visible so can be mapped
+       by user to write uniform values. */
+
+    template<class Type>
+    class NonCoherentUniformBuffer : public Buffer
+    {
+    public:
+        typedef Type UniformType;
+        explicit NonCoherentUniformBuffer(std::shared_ptr<Device> device,
+            bool permanentlyMapped,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            uint32_t arraySize = 1,
+            const Initializer& optional = Initializer(),
+            const Sharing& sharing = Sharing()):
+            Buffer(std::move(device), sizeof(Type) * arraySize,
+                0, // flags
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+                optional, sharing, std::move(allocator)),
+            permanentlyMapped(permanentlyMapped),
+            arraySize(arraySize)
+        {
+            static_assert(std::alignment_of<Type>() == 16, "uniform type should have 16-byte alignment");
+            if (permanentlyMapped)
+                memory->map();
+        }
+
+        ~NonCoherentUniformBuffer()
+        {
+            if (permanentlyMapped)
+                memory->unmap();
+        }
+
+        void updateRange(VkDeviceSize offset, VkDeviceSize size, const void *srcData) noexcept
+        {
+            MAGMA_ASSERT(size % sizeof(Type) == 0);
+            MAGMA_ASSERT(offset + size <= memory->getSize());
+            if (permanentlyMapped)
+                memcpy((uint8_t *)memory->getMapPointer() + offset, srcData, size);
+            else if (void *const mapData = memory->map(offset, size))
+                memcpy(mapData, srcData, size);
+            memory->flushMappedRange(offset, size);
+            if (!permanentlyMapped)
+                memory->unmap();
+        }
+
+        void updateRange(const Type& element) noexcept
+        {
+            updateRange(0, sizeof(Type), &element);
+        }
+
+        virtual uint32_t getArraySize() const noexcept
+        {
+            return arraySize;
+        }
+
+    protected:
+        const bool permanentlyMapped;
+        const uint32_t arraySize;
+    };
+
     template<class Type> using UniformBufferPtr = std::shared_ptr<UniformBuffer<Type>>;
+    template<class Type> using NonCoherentUniformBufferPtr = std::shared_ptr<NonCoherentUniformBuffer<Type>>;
 } // namespace magma
