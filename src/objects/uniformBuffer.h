@@ -104,7 +104,7 @@ namespace magma
             arraySize(arraySize)
         {
             static_assert(std::alignment_of<Type>() == 16, "uniform type should have 16-byte alignment");
-            if (permanentlyMapped)
+            if (persistent)
                 memory->map();
         }
 
