@@ -90,8 +90,8 @@ namespace magma
     public:
         typedef Type UniformType;
         explicit NonCoherentUniformBuffer(std::shared_ptr<Device> device,
-            bool permanentlyMapped,
             std::shared_ptr<Allocator> allocator = nullptr,
+            bool persistentlyMapped = false,
             uint32_t arraySize = 1,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing()):
@@ -100,7 +100,7 @@ namespace magma
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
                 optional, sharing, std::move(allocator)),
-            permanentlyMapped(permanentlyMapped),
+            persistent(persistentlyMapped),
             arraySize(arraySize)
         {
             static_assert(std::alignment_of<Type>() == 16, "uniform type should have 16-byte alignment");
@@ -110,20 +110,25 @@ namespace magma
 
         ~NonCoherentUniformBuffer()
         {
-            if (permanentlyMapped)
+            if (persistent)
                 memory->unmap();
+        }
+
+        bool persistentlyMapped() const noexcept
+        {
+            return persistent;
         }
 
         void updateRange(VkDeviceSize offset, VkDeviceSize size, const void *srcData) noexcept
         {
             MAGMA_ASSERT(size % sizeof(Type) == 0);
             MAGMA_ASSERT(offset + size <= memory->getSize());
-            if (permanentlyMapped)
+            if (persistent)
                 memcpy((uint8_t *)memory->getMapPointer() + offset, srcData, size);
             else if (void *const mapData = memory->map(offset, size))
                 memcpy(mapData, srcData, size);
             memory->flushMappedRange(offset, size);
-            if (!permanentlyMapped)
+            if (!persistent)
                 memory->unmap();
         }
 
@@ -138,7 +143,7 @@ namespace magma
         }
 
     protected:
-        const bool permanentlyMapped;
+        const bool persistent;
         const uint32_t arraySize;
     };
 
