@@ -119,15 +119,15 @@ namespace magma
             return persistent;
         }
 
-        void updateRange(VkDeviceSize offset, VkDeviceSize size, const void *srcData) noexcept
+        void updateRange(VkDeviceSize offset, std::size_t size, const void *srcData) noexcept
         {
             MAGMA_ASSERT(size % sizeof(Type) == 0);
             MAGMA_ASSERT(offset + size <= memory->getSize());
             if (persistent)
                 memcpy((uint8_t *)memory->getMapPointer() + offset, srcData, size);
-            else if (void *const mapData = memory->map(offset, size))
+            else if (void *const mapData = memory->map(offset, static_cast<VkDeviceSize>(size)))
                 memcpy(mapData, srcData, size);
-            memory->flushMappedRange(offset, size);
+            memory->flushMappedRange(offset, static_cast<VkDeviceSize>(size));
             if (!persistent)
                 memory->unmap();
         }
