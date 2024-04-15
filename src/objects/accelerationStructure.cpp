@@ -98,22 +98,24 @@ AccelerationStructure::~AccelerationStructure()
     delete[] accelerationStructureInfo.pGeometries;
 }
 
-void AccelerationStructure::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
+void AccelerationStructure::bindMemory(std::shared_ptr<IDeviceMemory> deviceMemory,
     VkDeviceSize offset_ /* 0 */)
 {
-    memory_->bind(handle, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, offset_);
-    memory = std::move(memory_);
+    MAGMA_ASSERT(deviceMemory->getSize() >= getSize());
+    deviceMemory->bind(handle, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, offset_);
+    memory = std::move(deviceMemory);
     offset = offset_;
 }
 
 #ifdef VK_KHR_device_group
-void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
+void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> deviceMemory,
     const std::vector<uint32_t>& deviceIndices /* {} */,
     const std::vector<VkRect2D>& /* splitInstanceBindRegions */,
     VkDeviceSize offset_ /* 0 */)
 {
-    memory_->bindDeviceGroup(handle, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, deviceIndices, {/* unused */}, offset_);
-    memory = std::move(memory_);
+    MAGMA_ASSERT(deviceMemory->getSize() >= getSize());
+    deviceMemory->bindDeviceGroup(handle, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, deviceIndices, {/* unused */}, offset_);
+    memory = std::move(deviceMemory);
     offset = offset_;
 }
 #endif // VK_KHR_device_group
