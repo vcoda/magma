@@ -39,20 +39,9 @@ namespace magma
         }
 
     public:
-        VkDeviceSize getAlignment() const noexcept
-        {
-            return alignment;
-        }
-
-        VkDeviceSize getNonCoherentAtomSize() const noexcept
-        {
-            return nonCoherentAtomSize;
-        }
-
-        uint32_t getDynamicOffset(uint32_t index) const noexcept
-        {
-            return static_cast<uint32_t>(index * alignment);
-        }
+        VkDeviceSize getAlignment() const noexcept { return alignment; }
+        VkDeviceSize getNonCoherentAtomSize() const noexcept { return nonCoherentAtomSize; }
+        uint32_t getDynamicOffset(uint32_t index) const noexcept { return static_cast<uint32_t>(index * alignment); }
 
     protected:
         static uint32_t getAlignedArraySize(const std::shared_ptr<Device>& device, uint32_t arraySize) noexcept
