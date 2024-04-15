@@ -34,6 +34,8 @@ namespace magma
             explicit AlignedUniformArray(void *const buffer, const uint32_t arraySize,
                 const VkDeviceSize alignment) noexcept;
             uint32_t getArraySize() const noexcept { return arraySize; }
+            uint32_t getFirstIndex() const noexcept { return minIndex; }
+            uint32_t getUpdatedRange() const noexcept { return maxIndex - minIndex + 1; }
             constexpr std::size_t getElementSize() const noexcept { return sizeof(Type); }
             VkDeviceSize getElementAlignment() const noexcept { return alignment; }
             Iterator begin() const noexcept { return Iterator(buffer, alignment); }
@@ -44,6 +46,7 @@ namespace magma
             char *const buffer;
             const uint32_t arraySize;
             const VkDeviceSize alignment;
+            uint32_t minIndex, maxIndex;
         };
     } // namespace helpers
 } // namespace magma

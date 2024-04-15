@@ -6,7 +6,9 @@ template<class Type>
 inline AlignedUniformArray<Type>::AlignedUniformArray(void *const buffer, const uint32_t arraySize, const VkDeviceSize alignment) noexcept:
     buffer(reinterpret_cast<char *const>(buffer)),
     arraySize(arraySize),
-    alignment(alignment)
+    alignment(alignment),
+    minIndex(std::numeric_limits<uint32_t>::max()),
+    maxIndex(std::numeric_limits<uint32_t>::min())
 {
     MAGMA_ASSERT(buffer);
     MAGMA_ASSERT(arraySize > 0);
@@ -17,6 +19,8 @@ template<class Type>
 inline Type& AlignedUniformArray<Type>::operator[](const uint32_t index) noexcept
 {
     MAGMA_ASSERT(index < arraySize);
+    minIndex = std::min(minIndex, index);
+    maxIndex = std::max(maxIndex, index);
     char *const elem = buffer + index * alignment;
     return *reinterpret_cast<Type *>(elem);
 }
