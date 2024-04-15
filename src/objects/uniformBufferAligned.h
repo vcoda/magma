@@ -65,6 +65,14 @@ namespace magma
             return bufferDescriptorInfo;
         }
 
+        uint32_t getAlignedArraySize(uint32_t arraySize) const noexcept
+        {
+            if (sizeof(Type) >= getAlignment())
+                return arraySize;
+            const VkDeviceSize divisor = getAlignment() / sizeof(Type);
+            return static_cast<uint32_t>(arraySize / divisor);
+        }
+
     private:
         VkDeviceSize alignment;
         VkDeviceSize nonCoherentAtomSize;

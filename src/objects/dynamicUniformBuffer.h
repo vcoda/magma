@@ -49,10 +49,7 @@ namespace magma
 
         uint32_t getArraySize() const noexcept override
         {
-            if (sizeof(Type) >= getAlignment())
-                return UniformBuffer<Type>::arraySize;
-            const VkDeviceSize divisor = getAlignment() / sizeof(Type);
-            return static_cast<uint32_t>(UniformBuffer<Type>::arraySize / divisor);
+            return getAlignedArraySize(UniformBuffer<Type>::arraySize);
         }
     };
 
@@ -85,10 +82,7 @@ namespace magma
 
         uint32_t getArraySize() const noexcept override
         {
-            if (sizeof(Type) >= getAlignment())
-                return NonCoherentUniformBuffer<Type>::arraySize;
-            const VkDeviceSize divisor = getAlignment() / sizeof(Type);
-            return static_cast<uint32_t>(NonCoherentUniformBuffer<Type>::arraySize / divisor);
+            return getAlignedArraySize(NonCoherentUniformBuffer<Type>::arraySize);
         }
     };
 
