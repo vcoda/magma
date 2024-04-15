@@ -34,7 +34,7 @@ namespace magma
 Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     VkBufferCreateFlags flags_, VkBufferUsageFlags usage_, VkMemoryPropertyFlags memoryFlags,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, std::move(device_), sharing, allocator),
+    NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, std::move(device_), size, sharing, allocator),
     flags(flags_ | optional.flags),
     usage(usage_)
 {
@@ -277,7 +277,6 @@ void Buffer::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
     memory_->bind(handle, VK_OBJECT_TYPE_BUFFER, offset_);
     memory = std::move(memory_);
     offset = offset_;
-    size = memory->getSize();
 }
 
 #ifdef VK_KHR_device_group
@@ -289,7 +288,6 @@ void Buffer::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
     memory_->bindDeviceGroup(handle, VK_OBJECT_TYPE_BUFFER, deviceIndices, {/* unused */}, offset_);
     memory = std::move(memory_);
     offset = offset_;
-    size = memory->getSize();
 }
 #endif // VK_KHR_device_group
 
@@ -318,7 +316,7 @@ void Buffer::copyHost(const void *srcBuffer, VkDeviceSize srcBufferSize,
 {
     if (VK_WHOLE_SIZE == size)
         MAGMA_ASSERT(0 == dstOffset);
-    const VkDeviceSize wholeSize = std::min(getSize(), srcBufferSize); 
+    const VkDeviceSize wholeSize = std::min(getSize(), srcBufferSize);
     if (VK_WHOLE_SIZE != size)
         size = std::min(size, wholeSize);
     void *dstBuffer = memory->map(dstOffset, size);
@@ -339,7 +337,7 @@ void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_
 {
     if (VK_WHOLE_SIZE == size)
         MAGMA_ASSERT(0 == dstOffset);
-    const VkDeviceSize wholeSize = std::min(getSize(), srcBuffer->getSize()); 
+    const VkDeviceSize wholeSize = std::min(getSize(), srcBuffer->getSize());
     if (VK_WHOLE_SIZE != size)
         size = std::min(size, wholeSize);
     VkBufferCopy region;

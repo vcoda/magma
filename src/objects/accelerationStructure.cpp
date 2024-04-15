@@ -32,7 +32,7 @@ namespace magma
 AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device_, VkAccelerationStructureTypeNV type,
     uint32_t instanceCount, const std::list<Geometry>& geometries, VkBuildAccelerationStructureFlagsNV flags,
     VkDeviceSize compactedSize, float memoryPriority, std::shared_ptr<Allocator> allocator):
-    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, std::move(device), Sharing(), allocator)
+    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, std::move(device), compactedSize, Sharing(), allocator)
 {
     MAGMA_UNUSED(memoryPriority);
     VkAccelerationStructureCreateInfoNV accelerationStructureInfo;
@@ -104,7 +104,6 @@ void AccelerationStructure::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
     memory_->bind(handle, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, offset_);
     memory = std::move(memory_);
     offset = offset_;
-    size = memory->getSize();
 }
 
 #ifdef VK_KHR_device_group
@@ -116,7 +115,6 @@ void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory>
     memory_->bindDeviceGroup(handle, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV, deviceIndices, {/* unused */}, offset_);
     memory = std::move(memory_);
     offset = offset_;
-    size = memory->getSize();
 }
 #endif // VK_KHR_device_group
 

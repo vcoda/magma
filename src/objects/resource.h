@@ -45,10 +45,12 @@ namespace magma
         const std::shared_ptr<IDeviceMemoryAllocator>& getDeviceAllocator() const noexcept { return deviceAllocator; }
 
     protected:
-        Resource(const Sharing& sharing,
+        Resource(VkDeviceSize size,
+            const Sharing& sharing,
             std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept;
         void commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer);
 
+    protected:
         VkDeviceSize size;
         VkDeviceSize offset;
         const Sharing sharing;
@@ -69,10 +71,11 @@ namespace magma
     protected:
         explicit NonDispatchableResource(VkObjectType objectType,
             std::shared_ptr<Device> device,
+            VkDeviceSize size,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator) noexcept:
             NonDispatchable<Type>(objectType, std::move(device), MAGMA_HOST_ALLOCATOR(allocator)),
-            Resource(sharing, MAGMA_DEVICE_ALLOCATOR(allocator))
+            Resource(size, sharing, MAGMA_DEVICE_ALLOCATOR(allocator))
         {}
     };
 } // namespace magma

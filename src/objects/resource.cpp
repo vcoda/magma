@@ -26,8 +26,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Resource::Resource(const Sharing& sharing, std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept:
-    size(0),
+Resource::Resource(VkDeviceSize size, const Sharing& sharing, std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept:
+    size(size),
     offset(0),
     sharing(sharing),
     deviceAllocator(std::move(deviceAllocator))
