@@ -269,6 +269,7 @@ bool DeviceMemory::flushMappedRange(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
+    MAGMA_ASSERT(!flags.hostCoherent);
     VkMappedMemoryRange memoryRange;
     memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
     memoryRange.pNext = nullptr;
@@ -283,6 +284,7 @@ bool DeviceMemory::invalidateMappedRange(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
+    MAGMA_ASSERT(!flags.hostCoherent);
     VkMappedMemoryRange memoryRange;
     memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
     memoryRange.pNext = nullptr;
