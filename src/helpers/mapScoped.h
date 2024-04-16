@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "uniformArray.h"
 #include "alignedUniformArray.h"
+#include "../objects/uniformBuffer.h"
 #include "../objects/dynamicUniformBuffer.h"
 #include "../objects/image.h"
 
@@ -26,7 +27,7 @@ namespace magma
 namespace helpers
 {
 template<class Type>
-inline void mapRangeScoped(std::shared_ptr<Buffer> buffer,
+inline void mapScopedRange(std::shared_ptr<Buffer> buffer,
     VkDeviceSize offset,
     VkDeviceSize size,
     std::function<void(Type *data)> mapFn)
@@ -34,21 +35,21 @@ inline void mapRangeScoped(std::shared_ptr<Buffer> buffer,
     MAGMA_ASSERT(buffer);
     MAGMA_ASSERT(mapFn);
     MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= buffer->getSize());
-    IDeviceMemory *bufferMemory = buffer->getMemory().get();
+    const std::shared_ptr<IDeviceMemory>& bufferMemory = buffer->getMemory();
     if (bufferMemory)
     {
         if (void *const data = bufferMemory->map(offset, size))
         {
             try
             {
-                mapFn(static_cast<Type *>(data));
+                mapFn(reinterpret_cast<Type *>(data));
+                bufferMemory->unmap();
             }
             catch (...)
             {
                 bufferMemory->unmap();
                 throw;
             }
-            bufferMemory->unmap();
         }
     }
 }
@@ -57,7 +58,7 @@ template<class Type>
 inline void mapScoped(std::shared_ptr<Buffer> buffer,
     std::function<void(Type *data)> mapFn)
 {
-    mapRangeScoped(std::move(buffer), 0, VK_WHOLE_SIZE, std::move(mapFn));
+    mapScopedRange(std::move(buffer), 0, VK_WHOLE_SIZE, std::move(mapFn));
 }
 
 template<class Type>
@@ -66,18 +67,18 @@ inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(mapFn);
-    if (Type *const data = uniformBuffer->map())
+    if (void *const data = uniformBuffer->map())
     {
         try
         {
-            mapFn(data);
+            mapFn(reinterpret_cast<Type *>(data));
+            uniformBuffer->unmap();
         }
         catch (...)
         {
             uniformBuffer->unmap();
             throw;
         }
-        uniformBuffer->unmap();
     }
 }
 
@@ -87,19 +88,19 @@ inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(mapFn);
-    if (Type *const data = uniformBuffer->map())
+    if (void *const data = uniformBuffer->map())
     {
         try
         {
             UniformArray<Type> array(data, uniformBuffer->getArraySize());
             mapFn(array);
+            uniformBuffer->unmap();
         }
         catch (...)
         {
             uniformBuffer->unmap();
             throw;
         }
-        uniformBuffer->unmap();
     }
 }
 
@@ -109,7 +110,7 @@ inline void mapScoped(std::shared_ptr<DynamicUniformBuffer<Type>> uniformBuffer,
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(mapFn);
-    if (Type *const data = uniformBuffer->map())
+    if (void *const data = uniformBuffer->map())
     {
         try
         {
@@ -117,18 +118,18 @@ inline void mapScoped(std::shared_ptr<DynamicUniformBuffer<Type>> uniformBuffer,
                 uniformBuffer->getArraySize(),
                 uniformBuffer->getAlignment());
             mapFn(array);
+            uniformBuffer->unmap();
         }
         catch (...)
         {
             uniformBuffer->unmap();
             throw;
         }
-        uniformBuffer->unmap();
     }
 }
 
 template<class Type>
-inline void updateMapped(std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>> uniformBuffer,
+inline void mapScoped(std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>> uniformBuffer,
     std::function<void(AlignedUniformArray<Type>& array)> mapFn)
 {
     MAGMA_ASSERT(uniformBuffer);
@@ -136,12 +137,26 @@ inline void updateMapped(std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>> 
     const std::shared_ptr<IDeviceMemory>& memory = uniformBuffer->getMemory();
     const uint32_t arraySize = uniformBuffer->getArraySize();
     const VkDeviceSize alignment = uniformBuffer->getAlignment();
-    AlignedUniformArray<Type> array(memory->getMapPointer(), arraySize, alignment);
+    VkDeviceSize offset = 0, size = 0;
+    if (uniformBuffer->mappedPersistently())
     {
+        AlignedUniformArray<Type> array(memory->getMapPointer(), arraySize, alignment);
         mapFn(array);
+        offset = array.getFirstIndex() * alignment;
+        size = array.getUpdatedRange() * alignment;
     }
-    VkDeviceSize offset = array.getFirstIndex() * alignment;
-    VkDeviceSize size = array.getUpdatedRange() * alignment;
+    else if (void *data = uniformBuffer->map()) try
+    {
+        AlignedUniformArray<Type> array(data, arraySize, alignment);
+        mapFn(array);
+        offset = array.getFirstIndex() * alignment;
+        size = array.getUpdatedRange() * alignment;
+    }
+    catch (...)
+    {
+        memory->unmap();
+        throw;
+    }
     if (size)
     {
         const VkDeviceSize nonCoherentAtomSize = uniformBuffer->getNonCoherentAtomSize();
@@ -158,10 +173,12 @@ inline void updateMapped(std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>> 
         // ever be visible to the device.
         memory->flushMappedRange(offset, size);
     }
+    if (!uniformBuffer->mappedPersistently())
+        uniformBuffer->unmap();
 }
 
 template<class Type>
-inline void mapRangeScoped(std::shared_ptr<Image> image,
+inline void mapScopedRange(std::shared_ptr<Image> image,
     VkDeviceSize offset,
     VkDeviceSize size,
     std::function<void(Type *data)> mapFn)
@@ -169,7 +186,7 @@ inline void mapRangeScoped(std::shared_ptr<Image> image,
     MAGMA_ASSERT(image);
     MAGMA_ASSERT(mapFn);
     MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= image->getSize());
-    IDeviceMemory *imageMemory = image->getMemory().get();
+    const std::shared_ptr<IDeviceMemory>& imageMemory = image->getMemory();
     if (imageMemory)
     {
         if (void *const data = imageMemory->map(offset, size))
@@ -177,13 +194,13 @@ inline void mapRangeScoped(std::shared_ptr<Image> image,
             try
             {
                 mapFn(static_cast<Type *>(data));
+                imageMemory->unmap();
             }
             catch (...)
             {
                 imageMemory->unmap();
                 throw;
             }
-            imageMemory->unmap();
         }
     }
 }
@@ -192,7 +209,7 @@ template<class Type>
 inline void mapScoped(std::shared_ptr<Image> image,
     std::function<void(Type *data)> mapFn)
 {
-    mapRangeScoped(std::move(image), 0, VK_WHOLE_SIZE, std::move(mapFn));
+    mapScopedRange(std::move(image), 0, VK_WHOLE_SIZE, std::move(mapFn));
 }
 } // namespace helpers
 } // namespace magma

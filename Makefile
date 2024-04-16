@@ -84,6 +84,7 @@ SRC_OBJS= \
 	src/objects/accelerationStructureInstanceBuffer.o \
 	src/objects/accelerationStructureStorageBuffer.o \
 	src/objects/baseDeviceMemory.o \
+	src/objects/baseUniformBuffer.o \
 	src/objects/buffer.o \
 	src/objects/bufferView.o \
 	src/objects/commandBuffer.o \
@@ -104,6 +105,7 @@ SRC_OBJS= \
 	src/objects/display.o \
 	src/objects/displayMode.o \
 	src/objects/dstTransferBuffer.o \
+	src/objects/dynamicUniformBuffer.o \
 	src/objects/event.o \
 	src/objects/externalImage.o \
 	src/objects/fence.o \

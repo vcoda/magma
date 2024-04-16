@@ -120,7 +120,7 @@ void FrameGrabber::readPixels(std::function<void(uint32_t col, uint32_t row, uin
     const VkDeviceSize rowPitch = subresourceLayout.rowPitch;
     const uint32_t width = dstImage->getWidth();
     const uint32_t height = dstImage->getHeight();
-    helpers::mapRangeScoped<uint8_t>(dstImage, subresourceLayout.offset, VK_WHOLE_SIZE,
+    helpers::mapScopedRange<uint8_t>(dstImage, subresourceLayout.offset, VK_WHOLE_SIZE,
         [this, width, height, rowPitch, forEachPixel](const uint8_t *data)
         {
             for (uint32_t y = 0; y < height; ++y)
@@ -153,7 +153,7 @@ void FrameGrabber::readPixels(std::function<void(uint32_t row, const std::vector
     const VkDeviceSize rowPitch = subresourceLayout.rowPitch;
     const uint32_t width = dstImage->getWidth();
     const uint32_t height = dstImage->getHeight();
-    helpers::mapRangeScoped<uint8_t>(dstImage, subresourceLayout.offset, VK_WHOLE_SIZE,
+    helpers::mapScopedRange<uint8_t>(dstImage, subresourceLayout.offset, VK_WHOLE_SIZE,
         [this, width, height, rowPitch, forEachRow](const uint8_t *data)
         {
             std::vector<uint32_t> rowPixels(width);

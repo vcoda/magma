@@ -879,7 +879,7 @@
     <ClInclude Include="..\..\src\objects\dynamicUniformBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\uniformBufferAligned.h">
+    <ClInclude Include="..\..\src\objects\baseUniformBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1402,6 +1402,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\extensions\deviceExtensions.cpp">
       <Filter>Source Files\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\dynamicUniformBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\baseUniformBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

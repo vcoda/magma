@@ -29,7 +29,7 @@ namespace magma
         {
         public:
             class Iterator;
-            explicit UniformArray(Type *const buffer, uint32_t arraySize) noexcept;
+            explicit UniformArray(void *const buffer, uint32_t arraySize) noexcept;
             uint32_t getArraySize() const noexcept { return arraySize; }
             constexpr std::size_t getElementSize() const noexcept { return sizeof(Type); }
             Iterator begin() const noexcept { return Iterator(buffer); }

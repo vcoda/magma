@@ -265,6 +265,7 @@
     <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureStorageBuffer.h" />
     <ClInclude Include="..\..\src\objects\baseDeviceMemory.h" />
+    <ClInclude Include="..\..\src\objects\baseUniformBuffer.h" />
     <ClInclude Include="..\..\src\objects\buffer.h" />
     <ClInclude Include="..\..\src\objects\bufferView.h" />
     <ClInclude Include="..\..\src\objects\commandBuffer.h" />
@@ -351,7 +352,6 @@
     <ClInclude Include="..\..\src\objects\transformFeedbackBuffer.h" />
     <ClInclude Include="..\..\src\objects\typedefs.h" />
     <ClInclude Include="..\..\src\objects\uniformBuffer.h" />
-    <ClInclude Include="..\..\src\objects\uniformBufferAligned.h" />
     <ClInclude Include="..\..\src\objects\uniformTexelBuffer.h" />
     <ClInclude Include="..\..\src\objects\validationCache.h" />
     <ClInclude Include="..\..\src\objects\vertexBuffer.h" />
@@ -483,6 +483,7 @@
     <ClCompile Include="..\..\src\objects\accelerationStructureInstanceBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructureStorageBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\baseDeviceMemory.cpp" />
+    <ClCompile Include="..\..\src\objects\baseUniformBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\buffer.cpp" />
     <ClCompile Include="..\..\src\objects\bufferView.cpp" />
     <ClCompile Include="..\..\src\objects\commandBuffer.cpp" />
@@ -503,6 +504,7 @@
     <ClCompile Include="..\..\src\objects\display.cpp" />
     <ClCompile Include="..\..\src\objects\displayMode.cpp" />
     <ClCompile Include="..\..\src\objects\dstTransferBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\dynamicUniformBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\event.cpp" />
     <ClCompile Include="..\..\src\objects\externalImage.cpp" />
     <ClCompile Include="..\..\src\objects\fence.cpp" />

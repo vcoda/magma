@@ -16,40 +16,72 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "uniformBuffer.h"
-#include "uniformBufferAligned.h"
+#include "baseUniformBuffer.h"
+#include "../helpers/alignedUniformArray.h"
+#include "../exceptions/exception.h"
 
 namespace magma
 {
+    /* Base class of dynamic uniform buffer. */
+
+    class BaseDynamicUniformBuffer : public BaseUniformBuffer
+    {
+    public:
+        VkDeviceSize getAlignment() const noexcept override { return alignment; }
+        VkDeviceSize getNonCoherentAtomSize() const noexcept { return nonCoherentAtomSize; }
+        uint32_t getDynamicOffset(uint32_t index) const noexcept { return static_cast<uint32_t>(index * alignment); }
+        VkDescriptorBufferInfo getDescriptor() const noexcept override;
+        bool dynamic() const noexcept override { return true; }
+
+    protected:
+        BaseDynamicUniformBuffer(std::shared_ptr<Device> device,
+            std::size_t typeSize,
+            uint32_t arraySize,
+            VkMemoryPropertyFlags memoryFlags,
+            const Initializer& optional,
+            const Sharing& sharing,
+            std::shared_ptr<Allocator> allocator,
+            bool mappedPersistently);
+
+    protected:
+        static uint32_t calculateAlignedArraySize(std::shared_ptr<Device> device,
+            std::size_t typeSize,
+            uint32_t arraySize) noexcept;
+
+        VkDeviceSize alignment;
+        VkDeviceSize nonCoherentAtomSize;
+    };
+
     /* An array of aligned uniform values that can be fetched
        from buffer with dynamic offset. Alignment is determined
        by hardware requirements. To access elements of a buffer,
        iterator of AlignedUniformArray should be used. */
 
     template<class Type>
-    class DynamicUniformBuffer : public UniformBuffer<Type>,
-        public AlignedUniformBuffer<Type>
+    class DynamicUniformBuffer : public BaseDynamicUniformBuffer
     {
     public:
         typedef Type UniformType;
         explicit DynamicUniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize,
-            bool barStagedMemory = false,
+            bool stagedPool = false,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
-            UniformBuffer<Type>(std::move(device), barStagedMemory, std::move(allocator), getAlignedArraySize(device, arraySize), optional, sharing),
-            AlignedUniformBuffer<Type>(this->device)
+            BaseDynamicUniformBuffer(std::move(device), sizeof(Type), arraySize,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+                    (stagedPool ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0),
+                optional, sharing, std::move(allocator),
+                false)
         {}
 
-        VkDescriptorBufferInfo getDescriptor() const noexcept override
+        helpers::AlignedUniformArray<Type> mapToArray(uint32_t firstIndex = 0,
+            uint32_t arraySize = std::numeric_limits<uint32_t>::max())
         {
-            return getBufferDescriptor(UniformBuffer<Type>::handle);
-        }
-
-        uint32_t getArraySize() const noexcept override
-        {
-            return getAlignedArraySize(UniformBuffer<Type>::arraySize);
+            void *data = mapRange(firstIndex, arraySize);
+            if (!data)
+                MAGMA_ERROR("failed to map range of dynamic uniform buffer");
+            return helpers::AlignedUniformArray<Type>(data, arraySize, alignment);
         }
     };
 
@@ -58,31 +90,43 @@ namespace magma
        determined by hardware requirements. To access elements
        of a buffer, iterator of AlignedUniformArray should be used.
        Requires to flush mapped memory range after data upload.
-       Mapping and unmapping uniform buffer have a CPU cost,
-       so it is persistenly mapped. */
+       Mapping and unmapping uniform buffer have a CPU cost.
+       Therefore, if updated frequently, user may define it
+       as persistenly mapped. */
 
     template<class Type>
-    class NonCoherentDynamicUniformBuffer : public NonCoherentUniformBuffer<Type>,
-        public AlignedUniformBuffer<Type>
+    class NonCoherentDynamicUniformBuffer : public BaseDynamicUniformBuffer
     {
     public:
+        typedef Type UniformType;
         explicit NonCoherentDynamicUniformBuffer(std::shared_ptr<Device> device,
             uint32_t arraySize,
+            bool mappedPersistently = false,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
-            NonCoherentUniformBuffer(device, std::move(allocator), true, getAlignedArraySize(device, arraySize), optional, sharing),
-            AlignedUniformBuffer<Type>(std::move(device))
+            BaseDynamicUniformBuffer(std::move(device), sizeof(Type), arraySize,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+                optional, sharing, std::move(allocator),
+                mappedPersistently)
         {}
 
-        VkDescriptorBufferInfo getDescriptor() const noexcept override
+        helpers::AlignedUniformArray<Type> mapToArray(uint32_t firstIndex = 0,
+            uint32_t arraySize = std::numeric_limits<uint32_t>::max())
         {
-            return getBufferDescriptor(NonCoherentUniformBuffer<Type>::handle);
+            void *data = mapRange(firstIndex, arraySize);
+            if (!data)
+                MAGMA_ERROR("failed to map range of non-coherent dynamic uniform buffer");
+            return helpers::AlignedUniformArray<Type>(data, arraySize, alignment);
         }
 
-        uint32_t getArraySize() const noexcept override
+        void flush(uint32_t firstIndex = 0,
+            uint32_t arraySize = std::numeric_limits<uint32_t>::max())
         {
-            return getAlignedArraySize(NonCoherentUniformBuffer<Type>::arraySize);
+            const VkDeviceSize offset = firstIndex * getAlignment();
+            const VkDeviceSize size = arraySize * getAlignment();
+            if (memory->mapped())
+                memory->flushMappedRange(offset, size);
         }
     };
 

@@ -3,8 +3,8 @@ namespace magma
 namespace helpers
 {
 template<class Type>
-inline UniformArray<Type>::UniformArray(Type *const buffer, const uint32_t arraySize) noexcept:
-    buffer(buffer),
+inline UniformArray<Type>::UniformArray(void *const buffer, const uint32_t arraySize) noexcept:
+    buffer(reinterpret_cast<Type *const>(buffer)),
     arraySize(arraySize)
 {
     MAGMA_ASSERT(buffer);
@@ -15,7 +15,7 @@ template<class Type>
 inline Type& UniformArray<Type>::operator[](const uint32_t index) noexcept
 {
     MAGMA_ASSERT(index < arraySize);
-    return *buffer[index];
+    return buffer[index];
 }
 
 template<class Type>

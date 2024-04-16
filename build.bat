@@ -117,6 +117,7 @@ src\objects\accelerationStructure.cpp ^
 src\objects\accelerationStructureInstanceBuffer.cpp ^
 src\objects\accelerationStructureStorageBuffer.cpp ^
 src\objects\baseDeviceMemory.cpp ^
+src\objects\baseUniformBuffer.cpp ^
 src\objects\buffer.cpp ^
 src\objects\bufferView.cpp ^
 src\objects\commandBuffer.cpp ^
@@ -137,6 +138,7 @@ src\objects\deviceMemory.cpp ^
 src\objects\display.cpp ^
 src\objects\displayMode.cpp ^
 src\objects\dstTransferBuffer.cpp ^
+src\objects\dynamicUniformBuffer.cpp ^
 src\objects\event.cpp ^
 src\objects\externalImage.cpp ^
 src\objects\fence.cpp ^
@@ -309,6 +311,7 @@ accelerationStructure.obj ^
 accelerationStructureInstanceBuffer.obj ^
 accelerationStructureStorageBuffer.obj ^
 baseDeviceMemory.obj ^
+baseUniformBuffer.obj ^
 buffer.obj ^
 bufferView.obj ^
 commandBuffer.obj ^
@@ -329,6 +332,7 @@ deviceMemory.obj ^
 display.obj ^
 displayMode.obj ^
 dstTransferBuffer.obj ^
+dynamicUniformBuffer.obj ^
 event.obj ^
 externalImage.obj ^
 fence.obj ^
