@@ -35,8 +35,6 @@ namespace magma
     {
     public:
         struct Flags;
-
-    public:
         virtual VkDeviceMemory getNativeHandle() const noexcept = 0;
         virtual VkDeviceSize getSuballocationOffset() const noexcept = 0;
         virtual VkDeviceSize getSize() const noexcept = 0;

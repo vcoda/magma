@@ -34,8 +34,6 @@ namespace magma
     {
     public:
         struct Initializer;
-
-    public:
         ~Buffer();
         VkBufferCreateFlags getFlags() const noexcept { return flags; }
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
