@@ -105,16 +105,17 @@ namespace magma
 
         bool flushMappedRange(const helpers::UniformArray<Type>& array) noexcept
         {
-            if (!memory->mapped())
+            if (!Buffer::memory->mapped())
                 return false;
-            VkDeviceSize offset = array.getFirstIndex() * BaseUniformBuffer::getAlignment();
+            const VkDeviceSize alignment = BaseUniformBuffer::getAlignment();
             const VkDeviceSize nonCoherentAtomSize = BaseUniformBuffer::getNonCoherentAtomSize();
+            VkDeviceSize offset = array.getFirstIndex() * alignment;
             if (offset % nonCoherentAtomSize)
                 offset = offset / nonCoherentAtomSize * nonCoherentAtomSize;
-            VkDeviceSize size = array.getUpdatedRange() * getAlignment();
+            VkDeviceSize size = array.getUpdatedRange() * alignment;
             const VkDeviceSize minFlushSize = std::min(memory->getSize(), nonCoherentAtomSize);
             size = std::max(size, minFlushSize);
-            return memory->flushMappedRange(offset + getMapOffset(), size);
+            return Buffer::memory->flushMappedRange(offset + BaseUniformBuffer::getMapOffset(), size);
         }
     };
 
