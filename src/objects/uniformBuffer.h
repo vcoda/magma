@@ -101,13 +101,13 @@ namespace magma
             return helpers::UniformArray<Type>(data, arraySize);
         }
 
-        void flush(uint32_t firstIndex = 0,
-            uint32_t arraySize = std::numeric_limits<uint32_t>::max())
+        bool flushMappedRange(const helpers::UniformArray<Type>& array) noexcept
         {
-            const VkDeviceSize offset = firstIndex * getAlignment();
-            const VkDeviceSize size = arraySize * getAlignment();
-            if (memory->mapped())
-                memory->flushMappedRange(offset, size);
+            if (!memory->mapped())
+                return false;
+            const VkDeviceSize offset = array.getFirstIndex() * getAlignment();
+            const VkDeviceSize size = array.getUpdatedRange() * getAlignment();
+            return memory->flushMappedRange(offset + getMapOffset(), size);
         }
     };
 
