@@ -135,9 +135,6 @@
     <ClInclude Include="..\..\src\objects\accelerationStructureStorageBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\baseDeviceMemory.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\objects\buffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -882,6 +879,9 @@
     <ClInclude Include="..\..\src\objects\baseUniformBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\baseDeviceMemory.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1411,9 +1411,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\objects\baseDeviceMemory.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
     <None Include="..\..\src\objects\commandBuffer.inl">
       <Filter>Header Files\objects</Filter>
     </None>

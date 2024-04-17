@@ -98,4 +98,11 @@ uint32_t BaseDeviceMemory::findTypeIndex(VkMemoryPropertyFlags flags) const
     MAGMA_ERROR("failed to find suitable memory type");
     return 0;
 }
+
+float BaseDeviceMemory::clampPriority(float value) noexcept
+{
+    priority = std::max(MAGMA_MEMORY_PRIORITY_LOWEST, value);
+    priority = std::min(MAGMA_MEMORY_PRIORITY_HIGHEST, priority);
+    return priority;
+}
 } // namespace magma

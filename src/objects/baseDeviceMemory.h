@@ -35,8 +35,8 @@ namespace magma
         void *getMapPointer() const noexcept override { return mapPointer; }
         VkDeviceSize getMapOffset() const noexcept override { return mapOffset; }
         VkDeviceSize getMapSize() const noexcept override { return mapSize; }
-        bool binded() const noexcept override;
-        bool mapped() const noexcept override;
+        bool binded() const noexcept override { return binding != VK_NULL_HANDLE; }
+        bool mapped() const noexcept override { return mapPointer != nullptr; }
 
     protected:
         BaseDeviceMemory(std::shared_ptr<Device> device,
@@ -59,4 +59,3 @@ namespace magma
     };
 } // namespace magma
 
-#include "baseDeviceMemory.inl"
