@@ -194,7 +194,7 @@ bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
                 VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
             const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
-            if ((memoryType.propertyFlags & deviceLocalHostVisibleFlags) == deviceLocalHostVisibleFlags)
+            if (MAGMA_BITWISE_AND(memoryType.propertyFlags, deviceLocalHostVisibleFlags))
                 return true;
         }
     }
