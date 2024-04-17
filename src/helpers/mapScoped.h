@@ -129,6 +129,54 @@ inline void mapScoped(std::shared_ptr<DynamicUniformBuffer<Type>> uniformBuffer,
 }
 
 template<class Type>
+inline void mapScoped(std::shared_ptr<NonCoherentUniformBuffer<Type>> uniformBuffer,
+    std::function<void(UniformArray<Type>& array)> mapFn)
+{
+    MAGMA_ASSERT(uniformBuffer);
+    MAGMA_ASSERT(mapFn);
+    const std::shared_ptr<IDeviceMemory>& memory = uniformBuffer->getMemory();
+    const uint32_t arraySize = uniformBuffer->getArraySize();
+    const VkDeviceSize alignment = uniformBuffer->getAlignment();
+    VkDeviceSize offset = 0, size = 0;
+    if (uniformBuffer->mappedPersistently())
+    {
+        UniformArray<Type> array(memory->getMapPointer(), arraySize, alignment);
+        mapFn(array);
+        offset = array.getFirstIndex() * alignment;
+        size = array.getUpdatedRange() * alignment;
+    }
+    else if (void *data = uniformBuffer->map()) try
+    {
+        UniformArray<Type> array(data, arraySize, alignment);
+        mapFn(array);
+        offset = array.getFirstIndex() * alignment;
+        size = array.getUpdatedRange() * alignment;
+    }
+    catch (...)
+    {
+        uniformBuffer->unmap();
+        MAGMA_THROW;
+    }
+    if (size)
+    {
+        const VkDeviceSize nonCoherentAtomSize = uniformBuffer->getNonCoherentAtomSize();
+        if (offset % nonCoherentAtomSize)
+            offset = offset / nonCoherentAtomSize * nonCoherentAtomSize;
+        const VkDeviceSize minFlushSize = std::min(memory->getSize(), nonCoherentAtomSize);
+        size = std::max(size, minFlushSize);
+        // vkFlushMappedMemoryRanges() guarantees that host writes to the
+        // memory ranges are made available to the host memory domain,
+        // such that they can be made available to the device memory domain
+        // using the VK_ACCESS_HOST_WRITE_BIT access type.
+        // Unmapping non-coherent memory does not implicitly flush the host
+        // mapped memory, and host writes that have not been flushed may not
+        // ever be visible to the device.
+        memory->flushMappedRange(offset, size);
+    }
+    uniformBuffer->unmap();
+}
+
+template<class Type>
 inline void mapScoped(std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>> uniformBuffer,
     std::function<void(AlignedUniformArray<Type>& array)> mapFn)
 {
