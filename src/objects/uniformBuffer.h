@@ -113,7 +113,7 @@ namespace magma
             if (offset % nonCoherentAtomSize)
                 offset = offset / nonCoherentAtomSize * nonCoherentAtomSize;
             VkDeviceSize size = array.getUpdatedRange() * alignment;
-            const VkDeviceSize minFlushSize = std::min(memory->getSize(), nonCoherentAtomSize);
+            const VkDeviceSize minFlushSize = std::min(Buffer::memory->getSize(), nonCoherentAtomSize);
             size = std::max(size, minFlushSize);
             return Buffer::memory->flushMappedRange(offset + BaseUniformBuffer::getMapOffset(), size);
         }
