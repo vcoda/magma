@@ -22,33 +22,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* An array of uniform values that are used in various
-       shader stages. It is host visible so can be mapped
-       by user to write uniform values. */
+    /* Base template of uniform buffer. */
 
     template<class Type>
-    class UniformBuffer : public BaseUniformBuffer
+    class TBaseUniformBuffer : public BaseUniformBuffer
     {
     public:
         typedef Type UniformType;
-        explicit UniformBuffer(std::shared_ptr<Device> device,
-            bool stagedPool = false,
-            bool mappedPersistently = false,
-            uint32_t arraySize = 1,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            const Initializer& optional = Initializer(),
-            const Sharing& sharing = Sharing()):
-            BaseUniformBuffer(std::move(device),
-                sizeof(Type), arraySize,
-                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, // Make it compatible with vkCmdUpdateBuffer
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
-                    (stagedPool ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0),
-                optional, sharing, std::move(allocator),
-                mappedPersistently)
-        {
-            static_assert(std::alignment_of<Type>() == 16, "uniform type should have 16-byte alignment");
-        }
-
         VkDeviceSize getAlignment() const noexcept override { return std::alignment_of<Type>(); }
         bool dynamic() const noexcept override { return false; }
 
@@ -60,6 +40,45 @@ namespace magma
                 MAGMA_ERROR("failed to map range of uniform buffer");
             return helpers::UniformArray<Type>(data, arraySize);
         }
+
+    protected:
+        TBaseUniformBuffer(std::shared_ptr<Device> device,
+            std::size_t typeSize,
+            uint32_t arraySize,
+            VkBufferUsageFlags usage,
+            VkMemoryPropertyFlags memoryFlags,
+            const Initializer& optional,
+            const Sharing& sharing,
+            std::shared_ptr<Allocator> allocator,
+            bool mappedPersistently):
+            BaseUniformBuffer(std::move(device), typeSize, arraySize, usage, memoryFlags,
+                optional, sharing, std::move(allocator), mappedPersistently)
+            {
+                static_assert(std::alignment_of<Type>() == 16, "uniform type should have 16-byte alignment");
+            }
+    };
+
+    /* An array of uniform values that are used in various
+       shader stages. It is host visible so can be mapped
+       by user to write uniform values. */
+
+    template<class Type>
+    class UniformBuffer : public TBaseUniformBuffer<Type>
+    {
+    public:
+        explicit UniformBuffer(std::shared_ptr<Device> device,
+            bool stagedPool = false,
+            bool mappedPersistently = false,
+            uint32_t arraySize = 1,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Buffer::Initializer& optional = Buffer::Initializer(),
+            const Sharing& sharing = Sharing()):
+            TBaseUniformBuffer<Type>(std::move(device), sizeof(Type), arraySize,
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, // Make it compatible with vkCmdUpdateBuffer
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+                    (stagedPool ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0),
+                optional, sharing, std::move(allocator), mappedPersistently)
+        {}
     };
 
     /* Host visible but non-coherent uniform buffer.
@@ -69,44 +88,27 @@ namespace magma
        as persistenly mapped. */
 
     template<class Type>
-    class NonCoherentUniformBuffer : public BaseUniformBuffer
+    class NonCoherentUniformBuffer : public TBaseUniformBuffer<Type>
     {
     public:
-        typedef Type UniformType;
         explicit NonCoherentUniformBuffer(std::shared_ptr<Device> device,
             bool mappedPersistently,
             std::shared_ptr<Allocator> allocator = nullptr,
             uint32_t arraySize = 1,
-            const Initializer& optional = Initializer(),
+            const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
-            BaseUniformBuffer(std::move(device),
-                sizeof(Type), arraySize,
+            TBaseUniformBuffer<Type>(std::move(device), sizeof(Type), arraySize,
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
-                optional, sharing, std::move(allocator),
-                false)
-        {
-            static_assert(std::alignment_of<Type>() == 16, "non-coherent uniform type should have 16-byte alignment");
-        }
-
-        VkDeviceSize getAlignment() const noexcept override { return std::alignment_of<Type>(); }
-        bool dynamic() const noexcept override { return false; }
-
-        helpers::UniformArray<Type> mapToArray(uint32_t firstIndex = 0,
-            uint32_t arraySize = std::numeric_limits<uint32_t>::max())
-        {
-            void *data = mapRange(firstIndex, arraySize);
-            if (!data)
-                MAGMA_ERROR("failed to map range of non-coherent uniform buffer");
-            return helpers::UniformArray<Type>(data, arraySize);
-        }
+                optional, sharing, std::move(allocator), mappedPersistently)
+        {}
 
         bool flushMappedRange(const helpers::UniformArray<Type>& array) noexcept
         {
             if (!memory->mapped())
                 return false;
-            VkDeviceSize offset = array.getFirstIndex() * getAlignment();
-            const VkDeviceSize nonCoherentAtomSize = getNonCoherentAtomSize();
+            VkDeviceSize offset = array.getFirstIndex() * BaseUniformBuffer::getAlignment();
+            const VkDeviceSize nonCoherentAtomSize = BaseUniformBuffer::getNonCoherentAtomSize();
             if (offset % nonCoherentAtomSize)
                 offset = offset / nonCoherentAtomSize * nonCoherentAtomSize;
             VkDeviceSize size = array.getUpdatedRange() * getAlignment();
