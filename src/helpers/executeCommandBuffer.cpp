@@ -51,7 +51,7 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
         catch (...)
         {
             cmdBuffer->end();
-            throw;
+            MAGMA_THROW;
         }
         cmdBuffer->end();
     }

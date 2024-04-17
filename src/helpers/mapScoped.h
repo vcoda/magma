@@ -48,7 +48,7 @@ inline void mapScopedRange(std::shared_ptr<Buffer> buffer,
             catch (...)
             {
                 bufferMemory->unmap();
-                throw;
+                MAGMA_THROW;
             }
         }
     }
@@ -77,7 +77,7 @@ inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
         catch (...)
         {
             uniformBuffer->unmap();
-            throw;
+            MAGMA_THROW;
         }
     }
 }
@@ -99,7 +99,7 @@ inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
         catch (...)
         {
             uniformBuffer->unmap();
-            throw;
+            MAGMA_THROW;
         }
     }
 }
@@ -123,7 +123,7 @@ inline void mapScoped(std::shared_ptr<DynamicUniformBuffer<Type>> uniformBuffer,
         catch (...)
         {
             uniformBuffer->unmap();
-            throw;
+            MAGMA_THROW;
         }
     }
 }
@@ -155,7 +155,7 @@ inline void mapScoped(std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>> uni
     catch (...)
     {
         memory->unmap();
-        throw;
+        MAGMA_THROW;
     }
     if (size)
     {
@@ -199,7 +199,7 @@ inline void mapScopedRange(std::shared_ptr<Image> image,
             catch (...)
             {
                 imageMemory->unmap();
-                throw;
+                MAGMA_THROW;
             }
         }
     }
