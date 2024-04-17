@@ -37,7 +37,6 @@ BaseDynamicUniformBuffer::BaseDynamicUniformBuffer(std::shared_ptr<Device> devic
     const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
     const VkPhysicalDeviceLimits& limits = properties.limits;
     alignment = std::max(limits.minUniformBufferOffsetAlignment, getTypeSize());
-    nonCoherentAtomSize = limits.nonCoherentAtomSize;
 }
 
 VkDescriptorBufferInfo BaseDynamicUniformBuffer::getDescriptor() const noexcept

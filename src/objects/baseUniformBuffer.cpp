@@ -23,12 +23,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-BaseUniformBuffer::BaseUniformBuffer(std::shared_ptr<Device> device,
+BaseUniformBuffer::BaseUniformBuffer(std::shared_ptr<Device> device_,
     std::size_t typeSize, uint32_t arraySize,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
     const Initializer& optional, const Sharing& sharing,
     std::shared_ptr<Allocator> allocator, bool mappedPersistently):
-    Buffer(std::move(device), typeSize * arraySize, 0, // flags
+    Buffer(std::move(device_), typeSize * arraySize, 0, // flags
         usage, memoryFlags, optional, sharing, std::move(allocator)),
     typeSize((VkDeviceSize)typeSize),
     arraySize(arraySize),
@@ -40,6 +40,10 @@ BaseUniformBuffer::BaseUniformBuffer(std::shared_ptr<Device> device,
         if (!memory->map())
             MAGMA_ERROR("failed to map uniform buffer persistently");
     }
+    const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+    const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
+    const VkPhysicalDeviceLimits& limits = properties.limits;
+    nonCoherentAtomSize = limits.nonCoherentAtomSize;
 }
 
 BaseUniformBuffer::~BaseUniformBuffer()

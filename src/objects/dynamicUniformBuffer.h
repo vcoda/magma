@@ -28,7 +28,6 @@ namespace magma
     {
     public:
         VkDeviceSize getAlignment() const noexcept override { return alignment; }
-        VkDeviceSize getNonCoherentAtomSize() const noexcept { return nonCoherentAtomSize; }
         uint32_t getDynamicOffset(uint32_t index) const noexcept { return static_cast<uint32_t>(index * alignment); }
         VkDescriptorBufferInfo getDescriptor() const noexcept override;
         bool dynamic() const noexcept override { return true; }
@@ -49,7 +48,6 @@ namespace magma
             uint32_t arraySize) noexcept;
 
         VkDeviceSize alignment;
-        VkDeviceSize nonCoherentAtomSize;
     };
 
     /* An array of aligned uniform values that can be fetched
