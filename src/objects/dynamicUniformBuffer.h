@@ -43,7 +43,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator,
             bool mappedPersistently);
 
-    protected:
+    private:
         static uint32_t calculateAlignedArraySize(std::shared_ptr<Device> device,
             std::size_t typeSize,
             uint32_t arraySize) noexcept;
@@ -81,7 +81,7 @@ namespace magma
             void *data = mapRange(firstIndex, arraySize);
             if (!data)
                 MAGMA_ERROR("failed to map range of dynamic uniform buffer");
-            return helpers::AlignedUniformArray<Type>(data, arraySize, alignment);
+            return helpers::AlignedUniformArray<Type>(data, arraySize, getAlignment());
         }
     };
 
@@ -117,7 +117,7 @@ namespace magma
             void *data = mapRange(firstIndex, arraySize);
             if (!data)
                 MAGMA_ERROR("failed to map range of non-coherent dynamic uniform buffer");
-            return helpers::AlignedUniformArray<Type>(data, arraySize, alignment);
+            return helpers::AlignedUniformArray<Type>(data, arraySize, getAlignment());
         }
 
         bool flushMappedRange(const helpers::AlignedUniformArray<Type>& array) noexcept
