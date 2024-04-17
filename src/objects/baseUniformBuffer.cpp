@@ -32,7 +32,8 @@ BaseUniformBuffer::BaseUniformBuffer(std::shared_ptr<Device> device,
         usage, memoryFlags, optional, sharing, std::move(allocator)),
     typeSize((VkDeviceSize)typeSize),
     arraySize(arraySize),
-    persistent(mappedPersistently)
+    persistent(mappedPersistently),
+    mapOffset(0)
 {
     if (persistent)
         memory->map();
@@ -61,12 +62,12 @@ void *BaseUniformBuffer::mapRange(uint32_t firstIndex /* 0 */,
         arraySize = getArraySize() - firstIndex;
     if (firstIndex + arraySize > getArraySize())
         return nullptr;
-    const VkDeviceSize offset = firstIndex * getAlignment();
-    const VkDeviceSize size = arraySize * getAlignment();
-    MAGMA_ASSERT(size <= memory->getSize());
+    mapOffset = firstIndex * getAlignment();
     if (persistent)
-        return (char *)memory->getMapPointer() + offset;
-    return memory->map(offset, size);
+        return (char *)memory->getMapPointer() + mapOffset;
+    const VkDeviceSize mapSize = arraySize * getAlignment();
+    MAGMA_ASSERT(mapSize <= memory->getSize());
+    return memory->map(mapOffset, mapSize);
 }
 
 void *BaseUniformBuffer::mapZeroMemory() noexcept
@@ -81,7 +82,10 @@ void BaseUniformBuffer::unmap() noexcept
     if (!persistent)
     {
         if (memory->mapped())
+        {
             memory->unmap();
+            mapOffset = 0;
+        }
     }
 }
 } // namespace magma

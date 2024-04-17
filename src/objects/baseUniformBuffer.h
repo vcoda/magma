@@ -28,6 +28,8 @@ namespace magma
         ~BaseUniformBuffer();
         VkDeviceSize getTypeSize() const noexcept { return typeSize; }
         uint32_t getArraySize() const noexcept { return arraySize; }
+        VkDeviceSize getMapOffset() const noexcept
+            { return persistent ? mapOffset : memory->getMapOffset(); }
         virtual VkDeviceSize getAlignment() const noexcept = 0;
         virtual bool dynamic() const noexcept = 0;
         bool mappedPersistently() const noexcept { return persistent; }
@@ -52,5 +54,6 @@ namespace magma
         const VkDeviceSize typeSize;
         const uint32_t arraySize;
         const bool persistent;
+        VkDeviceSize mapOffset;
     };
 } // namespace magma
