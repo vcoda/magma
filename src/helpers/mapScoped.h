@@ -154,7 +154,7 @@ inline void mapScoped(std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>> uni
     }
     catch (...)
     {
-        memory->unmap();
+        uniformBuffer->unmap();
         MAGMA_THROW;
     }
     if (size)
