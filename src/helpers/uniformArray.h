@@ -31,6 +31,8 @@ namespace magma
             class Iterator;
             explicit UniformArray(void *const buffer, uint32_t arraySize) noexcept;
             uint32_t getArraySize() const noexcept { return arraySize; }
+            uint32_t getFirstIndex() const noexcept { return minIndex; }
+            uint32_t getUpdatedRange() const noexcept { return maxIndex - minIndex + 1; }
             constexpr std::size_t getElementSize() const noexcept { return sizeof(Type); }
             Iterator begin() const noexcept { return Iterator(buffer); }
             Iterator end() const noexcept { return Iterator(buffer + arraySize); }
@@ -39,6 +41,7 @@ namespace magma
         private:
             Type *const buffer;
             const uint32_t arraySize;
+            uint32_t minIndex, maxIndex;
         };
     } // namespace helpers
 } // namespace magma
