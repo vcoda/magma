@@ -78,11 +78,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
      (frontFace ? VK_STENCIL_FACE_FRONT_BIT : VK_STENCIL_FACE_BACK_BIT))
 
 #define MAGMA_TRY_CATCH(expression)\
-    try {\
-        expression;\
-    }\
-    catch (...) {\
-    }
+try {\
+    expression;\
+}\
+catch (...) {\
+}
 
 #ifdef MAGMA_NO_EXCEPTIONS
     #define MAGMA_THROW return
@@ -91,16 +91,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 #define MAGMA_MAKE_SHARED(Type)\
-    template<typename ...Args>\
-    static std::shared_ptr<Type> makeShared(Args&& ...args)\
+template<typename ...Args>\
+static std::shared_ptr<Type> makeShared(Args&& ...args)\
+{\
+    struct Type##_ : Type\
     {\
-        struct Type##_ : Type\
-        {\
-            Type##_(Args&& ...args):\
-                Type(std::forward<Args>(args)...) {}\
-        };\
-        return std::make_shared<Type##_>(std::forward<Args>(args)...);\
-    }
+        Type##_(Args&& ...args):\
+            Type(std::forward<Args>(args)...) {}\
+    };\
+    return std::make_shared<Type##_>(std::forward<Args>(args)...);\
+}
 
 #define MAGMA_TYPEDEF_SHARED_PTR(Type) typedef std::shared_ptr<class Type> Type##Ptr
 #define MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Type) typedef std::shared_ptr<class I##Type> Type##Ptr
