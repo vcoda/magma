@@ -33,7 +33,9 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
     deviceMask(0),
     priority(MAGMA_MEMORY_PRIORITY_DEFAULT),
     binding(VK_NULL_HANDLE),
-    mapPointer(nullptr)
+    mapPointer(nullptr),
+    mapOffset(0),
+    mapSize(0)
 {
     flags.deviceLocal = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
     flags.hostVisible = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);

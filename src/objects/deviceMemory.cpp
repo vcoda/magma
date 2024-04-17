@@ -252,6 +252,8 @@ void *DeviceMemory::map(
             return nullptr;
         }
     }
+    mapOffset = offset;
+    mapSize = (VK_WHOLE_SIZE == size) ? getSize() : size;
     return mapPointer;
 }
 
@@ -262,6 +264,8 @@ void DeviceMemory::unmap() noexcept
     {
         vkUnmapMemory(MAGMA_HANDLE(device), handle);
         mapPointer = nullptr;
+        mapOffset = 0;
+        mapSize = 0;
     }
 }
 

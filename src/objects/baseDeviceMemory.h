@@ -32,7 +32,9 @@ namespace magma
         uint32_t getMemoryTypeBits() const noexcept override { return memoryRequirements.memoryTypeBits; }
         Flags getFlags() const noexcept override { return flags; }
         uint32_t getDeviceMask() const noexcept override { return deviceMask; }
-        void *getMapPointer() const noexcept { return mapPointer; }
+        void *getMapPointer() const noexcept override { return mapPointer; }
+        VkDeviceSize getMapOffset() const noexcept override { return mapOffset; }
+        VkDeviceSize getMapSize() const noexcept override { return mapSize; }
         bool binded() const noexcept override;
         bool mapped() const noexcept override;
 
@@ -52,6 +54,8 @@ namespace magma
         float priority;
         NonDispatchableHandle binding;
         void *mapPointer;
+        VkDeviceSize mapOffset;
+        VkDeviceSize mapSize;
     };
 } // namespace magma
 

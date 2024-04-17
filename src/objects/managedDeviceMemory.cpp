@@ -127,6 +127,8 @@ void *ManagedDeviceMemory::map(
             return nullptr;
         }
     }
+    mapOffset = offset;
+    mapSize = (VK_WHOLE_SIZE == size) ? getSize() : size;
     return mapPointer;
 }
 
@@ -137,6 +139,8 @@ void ManagedDeviceMemory::unmap() noexcept
     {
         deviceAllocator->unmap(allocation);
         mapPointer = nullptr;
+        mapOffset = 0;
+        mapSize = 0;
     }
 }
 
