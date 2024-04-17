@@ -56,7 +56,7 @@ namespace magma
     public:
         explicit DynamicStorageTexelBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
-            bool barStagedMemory,
+            bool stagedPool,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initialData = nullptr,
             const Initializer& optional = Initializer(),

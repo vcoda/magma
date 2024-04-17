@@ -102,7 +102,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
-DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size, bool barStagedMemory,
+DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size, bool stagedPool,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
     const Initializer& optional /* default */,
@@ -110,7 +110,8 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexTy
     CopyMemoryFunction copyFn /* nullptr */):
     BaseIndexBuffer(std::move(device), indexType, size,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-        (barStagedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+            (stagedPool ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0),
         optional, sharing, std::move(allocator))
 {
     if (initialData)

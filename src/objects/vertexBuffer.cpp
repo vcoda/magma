@@ -77,7 +77,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
-DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool barStagedMemory,
+DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool stagedPool,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
     const Initializer& optional /* default */,
@@ -85,7 +85,8 @@ DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDevic
     CopyMemoryFunction copyFn /* nullptr */):
     BaseVertexBuffer(std::move(device), size,
         VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-        (barStagedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+            (stagedPool ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0),
         optional, sharing, std::move(allocator))
 {
     if (initialData)

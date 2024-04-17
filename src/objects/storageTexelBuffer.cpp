@@ -58,7 +58,7 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
-DynamicStorageTexelBuffer::DynamicStorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool barStagedMemory,
+DynamicStorageTexelBuffer::DynamicStorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool stagedPool,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const void *initialData /* nullptr */,
     const Initializer& optional /* default */,
@@ -67,7 +67,8 @@ DynamicStorageTexelBuffer::DynamicStorageTexelBuffer(std::shared_ptr<Device> dev
     Buffer(std::move(device), size,
         0, // flags
         VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT,
-        (barStagedMemory ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0) | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+            (stagedPool ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0),
         optional, sharing, std::move(allocator))
 {
     if (initialData)

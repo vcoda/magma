@@ -88,7 +88,7 @@ namespace magma
         explicit DynamicIndexBuffer(std::shared_ptr<Device> device,
             VkIndexType indexType,
             VkDeviceSize size,
-            bool barStagedMemory,
+            bool stagedPool,
             std::shared_ptr<Allocator> allocator = nullptr,
             const void *initialData = nullptr,
             const Initializer& optional = Initializer(),
