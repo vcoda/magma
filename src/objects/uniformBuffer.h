@@ -105,8 +105,13 @@ namespace magma
         {
             if (!memory->mapped())
                 return false;
-            const VkDeviceSize offset = array.getFirstIndex() * getAlignment();
-            const VkDeviceSize size = array.getUpdatedRange() * getAlignment();
+            VkDeviceSize offset = array.getFirstIndex() * getAlignment();
+            const VkDeviceSize nonCoherentAtomSize = getNonCoherentAtomSize();
+            if (offset % nonCoherentAtomSize)
+                offset = offset / nonCoherentAtomSize * nonCoherentAtomSize;
+            VkDeviceSize size = array.getUpdatedRange() * getAlignment();
+            const VkDeviceSize minFlushSize = std::min(memory->getSize(), nonCoherentAtomSize);
+            size = std::max(size, minFlushSize);
             return memory->flushMappedRange(offset + getMapOffset(), size);
         }
     };
