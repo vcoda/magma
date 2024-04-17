@@ -36,7 +36,10 @@ BaseUniformBuffer::BaseUniformBuffer(std::shared_ptr<Device> device,
     mapOffset(0)
 {
     if (persistent)
-        memory->map();
+    {
+        if (!memory->map())
+            MAGMA_ERROR("failed to map uniform buffer persistently");
+    }
 }
 
 BaseUniformBuffer::~BaseUniformBuffer()
