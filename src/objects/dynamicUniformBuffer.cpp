@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "dynamicUniformbuffer.h"
+#include "dynamicUniformBuffer.h"
 #include "device.h"
 #include "physicalDevice.h"
 
