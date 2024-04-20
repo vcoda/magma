@@ -62,6 +62,7 @@ namespace magma
             struct DescriptorSetTable;
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<DescriptorPool> descriptorPool;
+            std::shared_ptr<DescriptorSet> descriptorSet;
             std::shared_ptr<Sampler> nearestSampler;
             std::shared_ptr<Sampler> bilinearSampler;
             std::shared_ptr<Sampler> cubicSampler;

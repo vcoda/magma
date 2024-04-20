@@ -78,7 +78,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
         descriptor::CombinedImageSamplerPool(maxDescriptorSets), allocator);
     static DescriptorSetTable setTable;
-    std::shared_ptr<DescriptorSet> descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setTable, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
+    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setTable, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
     // Create texture samplers
     nearestSampler = std::make_shared<Sampler>(device, sampler::magMinMipNearestClampToEdge, allocator);
     bilinearSampler = std::make_shared<Sampler>(device, sampler::magMinLinearMipNearestClampToEdge, allocator);
