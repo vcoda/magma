@@ -89,7 +89,7 @@ namespace magma
             const std::vector<uint32_t>& signalSemaphoreDeviceIndices = {},
             std::shared_ptr<const Fence> fence = nullptr);
     #endif // VK_KHR_device_group
-        bool waitIdle() noexcept;
+        void waitIdle();
         void present(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,

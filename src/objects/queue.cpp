@@ -223,10 +223,10 @@ void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>&
 }
 #endif // VK_KHR_device_group
 
-bool Queue::waitIdle() noexcept
+void Queue::waitIdle()
 {
     const VkResult result = vkQueueWaitIdle(handle);
-    return (VK_SUCCESS == result);
+    MAGMA_HANDLE_RESULT(result, "failed to wait for a queue to become idle");
 }
 
 void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
