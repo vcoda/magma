@@ -698,7 +698,6 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../src/auxiliary/spirv/output/immv</Outputs>
     </CustomBuild>
-    <None Include="..\..\src\barriers\bufferMemoryBarrier.inl" />
     <None Include="..\..\src\barriers\memoryBarrier.inl" />
     <None Include="..\..\src\barriers\subpassDependency.inl" />
     <None Include="..\..\src\barriers\subpassDependency2.inl" />

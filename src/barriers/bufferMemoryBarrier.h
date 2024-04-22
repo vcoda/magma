@@ -28,9 +28,10 @@ namespace magma
        barriers can also be used to define a queue family
        ownership transfer for the specified buffer range. */
 
-    struct BufferMemoryBarrier : VkBufferMemoryBarrier
+    class BufferMemoryBarrier : public VkBufferMemoryBarrier
     {
-        constexpr BufferMemoryBarrier(VkAccessFlags srcAccessMask,
+    public:
+        BufferMemoryBarrier(VkAccessFlags srcAccessMask,
             VkAccessFlags dstAccessMask,
             VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
@@ -41,18 +42,17 @@ namespace magma
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
         BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
             const BufferMemoryBarrier& barrier) noexcept;
+
+    private:
+        std::shared_ptr<const Buffer> buffer;
+        friend class CommandBuffer;
     };
-} // namespace magma
 
-#include "bufferMemoryBarrier.inl"
-
-namespace magma
-{
     namespace barrier
     {
-        constexpr BufferMemoryBarrier hostWriteTransferRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
-        constexpr BufferMemoryBarrier transferWriteHostRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_HOST_READ_BIT);
-        constexpr BufferMemoryBarrier transferWriteShaderRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
-        constexpr BufferMemoryBarrier shaderWriteTransferRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
+        extern const BufferMemoryBarrier hostWriteTransferRead;
+        extern const BufferMemoryBarrier transferWriteHostRead;
+        extern const BufferMemoryBarrier transferWriteShaderRead;
+        extern const BufferMemoryBarrier shaderWriteTransferRead;
     } // namespace barrier
 } // namespace magma

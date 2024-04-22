@@ -58,7 +58,7 @@ namespace magma
     class AccelerationStructureCompactedSizeQuery;
 
     struct MemoryBarrier;
-    struct BufferMemoryBarrier;
+    class BufferMemoryBarrier;
     class ImageMemoryBarrier;
 
     /* Command buffers are objects used to record commands which

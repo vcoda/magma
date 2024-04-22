@@ -22,7 +22,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
+BufferMemoryBarrier::BufferMemoryBarrier(const VkAccessFlags srcAccessMask, const VkAccessFlags dstAccessMask,
+    const VkDeviceSize offset /* 0 */, const VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept:
+    VkBufferMemoryBarrier{
+        VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+        nullptr, // pNext
+        srcAccessMask,
+        dstAccessMask,
+        VK_QUEUE_FAMILY_IGNORED, // srcQueueFamilyIndex
+        VK_QUEUE_FAMILY_IGNORED, // dstQueueFamilyIndex
+        VK_NULL_HANDLE, // buffer
+        offset,
+        size
+    }
+{}
+
+BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer_,
     VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
     VkDeviceSize offset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept:
     VkBufferMemoryBarrier{
@@ -32,13 +47,14 @@ BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
         dstAccessMask,
         VK_QUEUE_FAMILY_IGNORED, // srcQueueFamilyIndex
         VK_QUEUE_FAMILY_IGNORED, // dstQueueFamilyIndex
-        *buffer,
+        *buffer_,
         offset,
         size
-    }
+    },
+    buffer(std::move(buffer_))
 {}
 
-BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer, const BufferMemoryBarrier& barrier) noexcept:
+BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer_, const BufferMemoryBarrier& barrier) noexcept:
     VkBufferMemoryBarrier{
         VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
         barrier.pNext,
@@ -46,9 +62,18 @@ BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer, c
         barrier.dstAccessMask,
         barrier.srcQueueFamilyIndex,
         barrier.dstQueueFamilyIndex,
-        *buffer,
+        *buffer_,
         barrier.offset,
         barrier.size
-    }
+    },
+    buffer(std::move(buffer_))
 {}
+
+namespace barrier
+{
+const BufferMemoryBarrier hostWriteTransferRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
+const BufferMemoryBarrier transferWriteHostRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_HOST_READ_BIT);
+const BufferMemoryBarrier transferWriteShaderRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
+const BufferMemoryBarrier shaderWriteTransferRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
+} // namespace barrier
 } // namespace magma
