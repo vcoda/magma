@@ -185,6 +185,7 @@ bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
     {
+        releaseBoundResources();
         state = State::Initial;
         withinRenderPass = VK_FALSE;
         withinConditionalRendering = VK_FALSE;

@@ -91,6 +91,7 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
     for (auto& cmdBuffer: cmdBuffers)
     {
         commandBuffers.put(*cmdBuffer);
+        cmdBuffer->releaseBoundResources();
         cmdBuffer->handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in destructor
     }
     vkFreeCommandBuffers(MAGMA_HANDLE(device), handle, commandBuffers.size(), commandBuffers);
