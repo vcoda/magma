@@ -506,21 +506,21 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
 inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    PipelineBarrierBatch *batch = findBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
+    PipelineBarrierBatch *batch = lookupBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
     if (batch) MAGMA_TRY_CATCH(batch->memoryBarriers.push_back(barrier))
 }
 
 inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    PipelineBarrierBatch *batch = findBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
+    PipelineBarrierBatch *batch = lookupBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
     if (batch) MAGMA_TRY_CATCH(batch->bufferMemoryBarriers.push_back(barrier))
 }
 
 inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    PipelineBarrierBatch *batch = findBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
+    PipelineBarrierBatch *batch = lookupBarrierBatch(srcStageMask, dstStageMask, dependencyFlags);
     if (batch) MAGMA_TRY_CATCH(batch->imageMemoryBarriers.push_back(barrier))
 }
 
