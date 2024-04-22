@@ -283,12 +283,12 @@ inline void CommandBuffer::drawMeshTasks(uint32_t groupCountX,
     else
 #endif // VK_EXT_mesh_shader
     {
+        MAGMA_UNUSED(groupCountY);
+        MAGMA_UNUSED(groupCountZ);
     #ifdef VK_NV_mesh_shader
         // Y and Z dimension are implicitly set to 1
         MAGMA_ASSERT(1 == groupCountY);
         MAGMA_ASSERT(1 == groupCountZ);
-        MAGMA_UNUSED(groupCountY);
-        MAGMA_UNUSED(groupCountZ);
         MAGMA_DEVICE_EXTENSION(vkCmdDrawMeshTasksNV);
         if (vkCmdDrawMeshTasksNV)
             vkCmdDrawMeshTasksNV(handle, groupCountX, 0 /* firstTask */);
