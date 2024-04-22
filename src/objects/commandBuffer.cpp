@@ -180,7 +180,12 @@ bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
     MAGMA_ASSERT(state != State::Pending);
     VkCommandBufferResetFlags flags = 0;
     if (releaseResources)
+    {   // Specifies that most or all memory resources currently owned by
+        // the command buffer should be returned to the parent command pool.
+        // If this flag is not set, then the command buffer may hold onto
+        // memory resources and reuse them when recording commands.
         flags |= VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
+    }
     const VkResult result = vkResetCommandBuffer(handle, flags);
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
