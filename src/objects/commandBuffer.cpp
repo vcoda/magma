@@ -245,7 +245,10 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
         dereferencedDescriptorSets.put(*descriptorSet);
         MAGMA_DEFER(descriptorSet);
     }
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(), firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets, MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
+    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(),
+        firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets,
+        MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
+    MAGMA_DEFER(pipeline->getLayout());
 }
 
 // inline void CommandBuffer::bindIndexBuffer
@@ -382,20 +385,29 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
     MAGMA_ASSERT(srcStageMask);
     MAGMA_ASSERT(dstStageMask);
     MAGMA_STACK_ARRAY(VkEvent, dereferencedEvents, events.size());
+    MAGMA_STACK_ARRAY(VkBufferMemoryBarrier, dereferencedBufferMemoryBarriers, bufferMemoryBarriers.size());
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
     for (auto const& event: events)
     {
         dereferencedEvents.put(*event);
         MAGMA_DEFER(event);
     }
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
-    for (auto const& barrier : imageMemoryBarriers)
+    for (auto const& barrier: bufferMemoryBarriers)
+    {
+        dereferencedBufferMemoryBarriers.put(barrier);
+        MAGMA_DEFER(barrier.buffer);
+    }
+    for (auto const& barrier: imageMemoryBarriers)
+    {
         dereferencedImageMemoryBarriers.put(barrier);
+        MAGMA_DEFER(barrier.image);
+    }
     vkCmdWaitEvents(handle, dereferencedEvents.size(), dereferencedEvents, srcStageMask, dstStageMask,
         MAGMA_COUNT(memoryBarriers),
         memoryBarriers.data(),
-        MAGMA_COUNT(bufferMemoryBarriers),
-        bufferMemoryBarriers.data(),
-        MAGMA_COUNT(imageMemoryBarriers),
+        dereferencedBufferMemoryBarriers.size(),
+        dereferencedBufferMemoryBarriers,
+        dereferencedImageMemoryBarriers.size(),
         dereferencedImageMemoryBarriers);
 }
 
@@ -409,19 +421,28 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* empty */,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
+    MAGMA_STACK_ARRAY(VkBufferMemoryBarrier, dereferencedBufferMemoryBarriers, bufferMemoryBarriers.size());
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
-    for (auto const& barrier : imageMemoryBarriers)
-        dereferencedImageMemoryBarriers.put(barrier);
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        MAGMA_COUNT(memoryBarriers), memoryBarriers.data(),
-        MAGMA_COUNT(bufferMemoryBarriers), bufferMemoryBarriers.data(),
-        MAGMA_COUNT(imageMemoryBarriers), dereferencedImageMemoryBarriers);
-    // TODO: Queue barriers and update image layout on submit?
+    for (auto const& barrier: bufferMemoryBarriers)
+    {
+        dereferencedBufferMemoryBarriers.put(barrier);
+        MAGMA_DEFER(barrier.buffer);
+    }
     for (auto const& barrier: imageMemoryBarriers)
     {
-        barrier.image->setLayout(barrier.newLayout);
+        dereferencedImageMemoryBarriers.put(barrier);
         MAGMA_DEFER(barrier.image);
     }
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        MAGMA_COUNT(memoryBarriers),
+        memoryBarriers.data(),
+        dereferencedBufferMemoryBarriers.size(),
+        dereferencedBufferMemoryBarriers,
+        dereferencedImageMemoryBarriers.size(),
+        dereferencedImageMemoryBarriers);
+    // TODO: Queue barriers and update image layout on submit?
+    for (auto const& barrier: imageMemoryBarriers)
+        barrier.image->setLayout(barrier.newLayout);
 }
 
 // inline void CommandBuffer::beginQuery
