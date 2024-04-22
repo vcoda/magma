@@ -536,6 +536,8 @@ namespace magma
         void enableConditionalRendering(bool enable) noexcept;
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
 
+        void releaseBoundResources() const noexcept;
+
         // Debug stuff
         bool begin(const char *blockName,
             uint32_t blockColor,
@@ -601,6 +603,39 @@ namespace magma
         friend Queue;
 
     private:
+    #ifdef MAGMA_DEFERRED_RELEASE
+        struct BoundResourcesToBeReleasedDeferredly
+        {
+            std::unordered_set<std::shared_ptr<const Buffer>> buffers;
+            std::unordered_set<std::shared_ptr<const Image>> images;
+            std::unordered_set<std::shared_ptr<const DescriptorSet>> descriptorSets;
+            std::unordered_set<std::shared_ptr<const RenderPass>> renderPasses;
+            std::unordered_set<std::shared_ptr<const Framebuffer>> framebuffers;
+            std::unordered_set<std::shared_ptr<const ImageView>> imageViews;
+            std::unordered_set<std::shared_ptr<const Pipeline>> pipelines;
+            std::unordered_set<std::shared_ptr<const PipelineLayout>> layouts;
+            std::unordered_set<std::shared_ptr<const QueryPool>> queryPools;
+            std::unordered_set<std::shared_ptr<const Event>> events;
+        #ifdef VK_NV_ray_tracing
+            std::unordered_set<std::shared_ptr<const AccelerationStructure>> accelerationStructures;
+        #endif
+            // Insertion complexity: Average case: O(1), worst case O(size()).
+            void store(std::shared_ptr<const Buffer> buffer) { buffers.insert(buffer); }
+            void store(std::shared_ptr<const Image> image) { images.insert(image); }
+            void store(std::shared_ptr<const DescriptorSet> descriptorSet) { descriptorSets.insert(descriptorSet); }
+            void store(std::shared_ptr<const RenderPass> renderPass) { renderPasses.insert(renderPass); }
+            void store(std::shared_ptr<const Framebuffer> framebuffer) { framebuffers.insert(framebuffer); }
+            void store(std::shared_ptr<const ImageView> imageView) { imageViews.insert(imageView); }
+            void store(std::shared_ptr<const Pipeline> pipeline) { pipelines.insert(pipeline); }
+            void store(std::shared_ptr<const PipelineLayout> layout) { layouts.insert(layout); }
+            void store(std::shared_ptr<const QueryPool> queryPool) { queryPools.insert(queryPool); }
+            void store(std::shared_ptr<const Event> event) { events.insert(event); }
+        #ifdef VK_NV_ray_tracing
+            void store(std::shared_ptr<const AccelerationStructure> as) { accelerationStructures.insert(as); }
+        #endif
+        } mutable bound;
+    #endif // MAGMA_DEFERRED_RELEASE
+
         struct PipelineBarrierBatch
         {
             VkPipelineStageFlags srcStageMask;
@@ -648,5 +683,14 @@ namespace magma
         Initial, Recording, Executable, Pending, Invalid
     };
 } // namespace magma
+
+/* User may optionally compile library with MAGMA_DEFERRED_RELEASE define
+   to allow deferred release of resources bound to command buffer. */
+
+#ifdef MAGMA_DEFERRED_RELEASE
+    #define MAGMA_DEFER(resource) MAGMA_TRY_CATCH(bound.store(resource))
+#else
+    #define MAGMA_DEFER(resource)
+#endif // MAGMA_DEFERRED_RELEASE
 
 #include "commandBuffer.inl"
