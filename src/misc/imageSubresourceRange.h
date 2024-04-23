@@ -28,15 +28,15 @@ namespace magma
 
     struct ImageSubresourceRange : VkImageSubresourceRange
     {
-        explicit ImageSubresourceRange(std::shared_ptr<const Image> image,
+        ImageSubresourceRange(std::shared_ptr<const Image> image,
             uint32_t baseMipLevel = 0,
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS) noexcept;
-        explicit ImageSubresourceRange(std::shared_ptr<const Image1DArray> image,
+        ImageSubresourceRange(std::shared_ptr<const Image1DArray> image,
             uint32_t baseMipLevel = 0,
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
             uint32_t baseArrayLayer = 0,
             uint32_t layerCount = VK_REMAINING_ARRAY_LAYERS) noexcept;
-        explicit ImageSubresourceRange(std::shared_ptr<const Image2DArray> image,
+        ImageSubresourceRange(std::shared_ptr<const Image2DArray> image,
             uint32_t baseMipLevel = 0,
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
             uint32_t baseArrayLayer = 0,
