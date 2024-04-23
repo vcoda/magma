@@ -41,10 +41,10 @@ namespace magma
 {
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
-    VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling,
+    VkImageCreateFlags flags_, VkImageUsageFlags usage_, VkImageTiling tiling,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, device, 0, sharing, allocator),
-    flags(flags | optional.flags),
+    flags(flags_| optional.flags),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -53,12 +53,12 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     arrayLayers(arrayLayers),
     samples(samples),
     tiling(tiling),
-    usage(usage)
+    usage(usage_| (optional.sourceTransfer ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0))
 {
     VkImageCreateInfo imageInfo;
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.pNext = nullptr;
-    imageInfo.flags = flags | optional.flags;
+    imageInfo.flags = flags;
     imageInfo.imageType = imageType;
     imageInfo.format = format;
     imageInfo.extent = extent;

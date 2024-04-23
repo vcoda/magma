@@ -85,6 +85,7 @@ namespace magma
     struct Buffer::Initializer
     {
         VkBufferCreateFlags flags = 0;
+        bool sourceTransfer = false;
         bool lazy = false;
         // VK_KHR_device_group
         uint32_t deviceMask = 0;

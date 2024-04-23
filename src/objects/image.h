@@ -165,6 +165,7 @@ namespace magma
     struct Image::Initializer
     {
         VkImageCreateFlags flags = 0;
+        bool sourceTransfer = false;
         bool lazy = false;
         // VK_KHR_image_format_list
         std::vector<VkFormat> viewFormats;
