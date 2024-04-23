@@ -37,6 +37,10 @@ namespace magma
         ImageMemoryBarrier(std::shared_ptr<Image> image,
             VkImageLayout newLayout,
             const VkImageSubresourceRange& subresourceRange) noexcept;
+        ImageMemoryBarrier(std::shared_ptr<Image> image,
+            VkImageLayout newLayout,
+            VkAccessFlags srcAccessMask,
+            VkAccessFlags dstAccessMask) noexcept;
 
     private:
         std::shared_ptr<Image> image; // Image layout will be updated by CommandBuffer::pipelineBarrier()

@@ -171,4 +171,21 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLay
         MAGMA_FAILURE("unknown new image layout");
     }
 }
+
+ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLayout newLayout,
+    VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept:
+    VkImageMemoryBarrier{
+        VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+        nullptr, // pNext
+        srcAccessMask,
+        dstAccessMask,
+        image_->getLayout(),
+        newLayout,
+        VK_QUEUE_FAMILY_IGNORED,
+        VK_QUEUE_FAMILY_IGNORED,
+        *image_,
+        subresourceRange
+    },
+    image(std::move(image_))
+{}
 } // namespace magma
