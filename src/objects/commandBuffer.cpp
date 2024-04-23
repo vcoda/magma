@@ -828,6 +828,7 @@ void CommandBuffer::releaseBoundResources() const noexcept
     inUse.accelerationStructures.clear();
 #endif
 #endif // MAGMA_DEFERRED_RELEASE
+    pipelineBarriers.clear();
 }
 
 CommandBuffer::PipelineBarrierBatch *CommandBuffer::lookupBarrierBatch(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags) noexcept
