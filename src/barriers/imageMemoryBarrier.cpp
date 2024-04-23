@@ -54,14 +54,10 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLay
         // frame buffer compression state, or similar.
         break;
     case VK_IMAGE_LAYOUT_GENERAL:
-        // Specifies all read accesses. It is always valid in any
+        // Specifies all read/write accesses. It is always valid in any
         // access mask, and is treated as equivalent to setting all
-        // READ access flags that are valid where it is used.
+        // READ/WRITE access flags that are valid where it is used.
         srcAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
-        // Specifies read access to a sampled image or storage image
-        // in any shader pipeline stage.
-        if (image->getUsage() & (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT))
-            srcAccessMask |= (VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT);
         break;
         break;
     case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
