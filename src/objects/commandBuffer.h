@@ -688,7 +688,7 @@ namespace magma
    to allow deferred release of resources bound to command buffer. */
 
 #ifdef MAGMA_DEFERRED_RELEASE
-    #define MAGMA_DEFER(resource) MAGMA_TRY_CATCH(inUse.store(resource))
+    #define MAGMA_DEFER(resource) if (resource) MAGMA_TRY_CATCH(inUse.store(resource))
 #else
     #define MAGMA_DEFER(resource)
 #endif // MAGMA_DEFERRED_RELEASE
