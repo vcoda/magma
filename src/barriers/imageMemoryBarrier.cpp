@@ -91,7 +91,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLay
     switch (newLayout)
     {
     case VK_IMAGE_LAYOUT_UNDEFINED:
-        MAGMA_FAILURE("image memory cannot be transitioned into VK_IMAGE_LAYOUT_UNDEFINED layout");
+        MAGMA_FAILURE("image cannot be transitioned into VK_IMAGE_LAYOUT_UNDEFINED layout");
         break;
     case VK_IMAGE_LAYOUT_GENERAL:
         dstAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
@@ -126,7 +126,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLay
         dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         break;
     case VK_IMAGE_LAYOUT_PREINITIALIZED:
-        MAGMA_FAILURE("image memory cannot be transitioned into VK_IMAGE_LAYOUT_PREINITIALIZED layout");
+        MAGMA_FAILURE("image cannot be transitioned into VK_IMAGE_LAYOUT_PREINITIALIZED layout");
         break;
 #ifdef VK_KHR_maintenance2
     case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR:
