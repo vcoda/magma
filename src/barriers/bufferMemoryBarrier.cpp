@@ -22,8 +22,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-BufferMemoryBarrier::BufferMemoryBarrier(const VkAccessFlags srcAccessMask, const VkAccessFlags dstAccessMask,
-    const VkDeviceSize offset /* 0 */, const VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept:
+BufferMemoryBarrier::BufferMemoryBarrier(VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
+    VkDeviceSize offset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept:
     VkBufferMemoryBarrier{
         VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
         nullptr, // pNext

@@ -28,8 +28,7 @@ namespace helpers
 {
 template<class Type>
 inline void mapScopedRange(std::shared_ptr<Buffer> buffer,
-    VkDeviceSize offset,
-    VkDeviceSize size,
+    VkDeviceSize offset, VkDeviceSize size,
     std::function<void(Type *data)> mapFn)
 {
     MAGMA_ASSERT(buffer);

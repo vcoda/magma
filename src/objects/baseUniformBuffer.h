@@ -51,7 +51,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator,
             bool mappedPersistently);
 
-    protected:
+    private:
         const VkDeviceSize typeSize;
         const uint32_t arraySize;
         const bool persistent;

@@ -698,18 +698,18 @@ inline void CommandBuffer::beginTransformFeedback() noexcept
     if (vkCmdBeginTransformFeedbackEXT)
     {
         vkCmdBeginTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);
-        withinTransformFeedback = VK_TRUE;
+        inTransformFeedback = VK_TRUE;
     }
 }
 
 inline void CommandBuffer::endTransformFeedback() noexcept
 {
-    MAGMA_ASSERT(withinTransformFeedback);
+    MAGMA_ASSERT(inTransformFeedback);
     MAGMA_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
     if (vkCmdEndTransformFeedbackEXT)
     {
         vkCmdEndTransformFeedbackEXT(handle, 0, 0, nullptr, nullptr);
-        withinTransformFeedback = VK_FALSE;
+        inTransformFeedback = VK_FALSE;
     }
 }
 #endif // VK_EXT_transform_feedback
