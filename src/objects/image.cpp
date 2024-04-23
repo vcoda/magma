@@ -44,7 +44,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, device, 0, sharing, allocator),
-    flags(flags),
+    flags(flags | optional.flags),
     imageType(imageType),
     format(format),
     layout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -177,6 +177,36 @@ Image::~Image()
     vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
+VkImageAspectFlags Image::getAspectMask() const noexcept
+{
+    const Format imageFormat(format);
+#ifdef VK_KHR_sampler_ycbcr_conversion
+    if (imageFormat.multiPlanar())
+    {
+        if (2 == imageFormat.planeCount())
+            return VK_IMAGE_ASPECT_PLANE_0_BIT_KHR | VK_IMAGE_ASPECT_PLANE_1_BIT_KHR;
+        return VK_IMAGE_ASPECT_PLANE_0_BIT_KHR | VK_IMAGE_ASPECT_PLANE_1_BIT_KHR | VK_IMAGE_ASPECT_PLANE_2_BIT_KHR;
+    }
+#endif // VK_KHR_sampler_ycbcr_conversion
+    if (flags & (VK_IMAGE_CREATE_SPARSE_BINDING_BIT |
+                 VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT |
+                 VK_IMAGE_CREATE_SPARSE_ALIASED_BIT)) try
+    {
+        for (auto const& req: getSparseMemoryRequirements())
+        {   // Metadata should not be combined with other aspects
+            if (req.formatProperties.aspectMask == VK_IMAGE_ASPECT_METADATA_BIT)
+                return VK_IMAGE_ASPECT_METADATA_BIT;
+        }
+    } catch (...) {}
+    if (imageFormat.depth())
+        return VK_IMAGE_ASPECT_DEPTH_BIT;
+    else if (imageFormat.stencil())
+        return VK_IMAGE_ASPECT_STENCIL_BIT;
+    else if (imageFormat.depthStencil())
+        return VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+    return VK_IMAGE_ASPECT_COLOR_BIT;
+}
+
 VkExtent3D Image::calculateMipExtent(uint32_t level) const noexcept
 {
     MAGMA_ASSERT(level < mipLevels);
@@ -206,15 +236,7 @@ VkExtent3D Image::calculateMipExtent(uint32_t level) const noexcept
 VkSubresourceLayout Image::getSubresourceLayout(uint32_t mipLevel, uint32_t arrayLayer /* 0 */) const noexcept
 {
     VkImageSubresource subresource;
-    const Format imageFormat(format);
-    if (imageFormat.depth())
-        subresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-    else if (imageFormat.stencil())
-        subresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
-    else if (imageFormat.depthStencil())
-        subresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-    else
-        subresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresource.aspectMask = getAspectMask();
     subresource.mipLevel = mipLevel;
     subresource.arrayLayer = this->arrayLayers > 1 ? arrayLayer : 0; // Ignore for non-arrays
     VkSubresourceLayout subresourceLayout;
@@ -225,15 +247,7 @@ VkSubresourceLayout Image::getSubresourceLayout(uint32_t mipLevel, uint32_t arra
 VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t arrayLayer /* 0 */) const noexcept
 {
     VkImageSubresourceLayers subresourceLayers;
-    const Format imageFormat(format);
-    if (imageFormat.depth())
-        subresourceLayers.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-    else if (imageFormat.stencil())
-        subresourceLayers.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
-    else if (imageFormat.depthStencil())
-        subresourceLayers.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-    else
-        subresourceLayers.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresourceLayers.aspectMask = getAspectMask();
     subresourceLayers.mipLevel = mipLevel;
     subresourceLayers.baseArrayLayer = this->arrayLayers > 1 ? arrayLayer : 0; // Ignore for non-arrays
     subresourceLayers.layerCount = this->arrayLayers;
@@ -243,15 +257,7 @@ VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t
 VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32_t baseArrayLayer /* 0 */) const noexcept
 {
     VkImageSubresourceRange subresourceRange;
-    const Format imageFormat(format);
-    if (imageFormat.depth())
-        subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-    else if (imageFormat.stencil())
-        subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
-    else if (imageFormat.depthStencil())
-        subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-    else
-        subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresourceRange.aspectMask = getAspectMask();
     subresourceRange.baseMipLevel = baseMipLevel;
     subresourceRange.levelCount = mipLevels - baseMipLevel;
     subresourceRange.baseArrayLayer = arrayLayers > 1 ? baseArrayLayer : 0;
