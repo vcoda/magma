@@ -815,18 +815,18 @@ void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBinding
 void CommandBuffer::releaseBoundResources() const noexcept
 {
 #ifdef MAGMA_DEFERRED_RELEASE
-    bound.buffers.clear();
-    bound.images.clear();
-    bound.descriptorSets.clear();
-    bound.renderPasses.clear();
-    bound.framebuffers.clear();
-    bound.imageViews.clear();
-    bound.pipelines.clear();
-    bound.layouts.clear();
-    bound.queryPools.clear();
-    bound.events.clear();
+    inUse.buffers.clear();
+    inUse.images.clear();
+    inUse.descriptorSets.clear();
+    inUse.renderPasses.clear();
+    inUse.framebuffers.clear();
+    inUse.imageViews.clear();
+    inUse.pipelines.clear();
+    inUse.layouts.clear();
+    inUse.queryPools.clear();
+    inUse.events.clear();
 #ifdef VK_NV_ray_tracing
-    bound.accelerationStructures.clear();
+    inUse.accelerationStructures.clear();
 #endif
 #endif // MAGMA_DEFERRED_RELEASE
 }

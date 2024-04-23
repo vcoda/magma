@@ -604,7 +604,7 @@ namespace magma
 
     private:
     #ifdef MAGMA_DEFERRED_RELEASE
-        struct BoundResourcesToBeReleasedDeferredly
+        struct InUseResources
         {
             std::unordered_set<std::shared_ptr<const Buffer>> buffers;
             std::unordered_set<std::shared_ptr<const Image>> images;
@@ -633,7 +633,7 @@ namespace magma
         #ifdef VK_NV_ray_tracing
             void store(std::shared_ptr<const AccelerationStructure> as) { accelerationStructures.insert(as); }
         #endif
-        } mutable bound;
+        } mutable inUse;
     #endif // MAGMA_DEFERRED_RELEASE
 
         struct PipelineBarrierBatch
@@ -688,7 +688,7 @@ namespace magma
    to allow deferred release of resources bound to command buffer. */
 
 #ifdef MAGMA_DEFERRED_RELEASE
-    #define MAGMA_DEFER(resource) MAGMA_TRY_CATCH(bound.store(resource))
+    #define MAGMA_DEFER(resource) MAGMA_TRY_CATCH(inUse.store(resource))
 #else
     #define MAGMA_DEFER(resource)
 #endif // MAGMA_DEFERRED_RELEASE
