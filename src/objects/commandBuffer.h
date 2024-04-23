@@ -603,6 +603,13 @@ namespace magma
         friend Queue;
 
     private:
+        struct RenderPassState
+        {
+            std::shared_ptr<RenderPass> renderPass;
+            std::shared_ptr<Framebuffer> framebuffer;
+            std::vector<std::shared_ptr<ImageView>> attachments;
+        } renderpass;
+
     #ifdef MAGMA_DEFERRED_RELEASE
         struct InUseResources
         {
@@ -645,6 +652,7 @@ namespace magma
             std::vector<BufferMemoryBarrier> bufferMemoryBarriers;
             std::vector<ImageMemoryBarrier> imageMemoryBarriers;
         };
+        mutable std::unordered_map<hash_t, PipelineBarrierBatch> pipelineBarriers;
 
         PipelineBarrierBatch *lookupBarrierBatch(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
@@ -665,14 +673,6 @@ namespace magma
         VkBool32 labeledRenderPass : 1;
         VkQueryControlFlags queryFlags;
         VkQueryPipelineStatisticFlags pipelineStatistics;
-
-        struct ResourceBindings
-        {
-            std::shared_ptr<RenderPass> renderPass;
-            std::shared_ptr<Framebuffer> framebuffer;
-            std::vector<std::shared_ptr<ImageView>> attachments;
-        } bindings;
-        std::unordered_map<hash_t, PipelineBarrierBatch> pipelineBarriers;
     };
 
     /* See 6.1. Command Buffer Lifecycle
