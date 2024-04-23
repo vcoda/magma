@@ -527,9 +527,9 @@ namespace magma
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
         State getState() const noexcept { return state; }
         VkCommandBufferUsageFlags getUsageFlags() const noexcept { return usageFlags; }
-        bool insideRenderPass() const noexcept { return withinRenderPass; }
-        bool insideConditionalRendering() const noexcept { return withinConditionalRendering; }
-        bool insideTransformFeedback() const noexcept { return withinTransformFeedback; }
+        bool insideRenderPass() const noexcept { return inRenderPass; }
+        bool insideConditionalRendering() const noexcept { return inConditionalRendering; }
+        bool insideTransformFeedback() const noexcept { return inTransformFeedback; }
 
         void enableOcclusionQuery(bool enable,
             VkQueryControlFlags queryFlags) noexcept;
@@ -666,9 +666,9 @@ namespace magma
         VkBool32 occlusionQueryEnable : 1;
         VkBool32 conditionalRenderingEnable : 1;
         VkBool32 negativeViewportHeightEnabled : 1;
-        VkBool32 withinRenderPass : 1;
-        VkBool32 withinConditionalRendering : 1;
-        VkBool32 withinTransformFeedback : 1;
+        VkBool32 inRenderPass : 1;
+        VkBool32 inConditionalRendering : 1;
+        VkBool32 inTransformFeedback : 1;
         VkBool32 labeledRecording : 1;
         VkBool32 labeledRenderPass : 1;
         VkQueryControlFlags queryFlags;

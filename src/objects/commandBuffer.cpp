@@ -41,9 +41,9 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
     negativeViewportHeightEnabled(device->getFeatures()->negativeViewportHeightEnabled()),
-    withinRenderPass(VK_FALSE),
-    withinConditionalRendering(VK_FALSE),
-    withinTransformFeedback(VK_FALSE),
+    inRenderPass(VK_FALSE),
+    inConditionalRendering(VK_FALSE),
+    inTransformFeedback(VK_FALSE),
     labeledRecording(VK_FALSE),
     labeledRenderPass(VK_FALSE),
     queryFlags(0),
@@ -60,9 +60,9 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
     negativeViewportHeightEnabled(device->getFeatures()->negativeViewportHeightEnabled()),
-    withinRenderPass(VK_FALSE),
-    withinConditionalRendering(VK_FALSE),
-    withinTransformFeedback(VK_FALSE),
+    inRenderPass(VK_FALSE),
+    inConditionalRendering(VK_FALSE),
+    inTransformFeedback(VK_FALSE),
     labeledRecording(VK_FALSE),
     labeledRenderPass(VK_FALSE),
     queryFlags(0),
@@ -138,9 +138,9 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
 void CommandBuffer::end()
 {
     MAGMA_ASSERT(State::Recording == state);
-    MAGMA_ASSERT(!withinRenderPass);
-    MAGMA_ASSERT(!withinConditionalRendering);
-    MAGMA_ASSERT(!withinTransformFeedback);
+    MAGMA_ASSERT(!inRenderPass);
+    MAGMA_ASSERT(!inConditionalRendering);
+    MAGMA_ASSERT(!inTransformFeedback);
     if (State::Recording == state)
     {
         if (!pipelineBarriers.empty())
@@ -192,9 +192,9 @@ bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
     {
         releaseBoundResources();
         state = State::Initial;
-        withinRenderPass = VK_FALSE;
-        withinConditionalRendering = VK_FALSE;
-        withinTransformFeedback = VK_FALSE;
+        inRenderPass = VK_FALSE;
+        inConditionalRendering = VK_FALSE;
+        inTransformFeedback = VK_FALSE;
         renderpass.renderPass.reset();
         renderpass.framebuffer.reset();
         renderpass.attachments.clear();
@@ -483,7 +483,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     renderPass->begin(framebuffer->getAttachments());
     renderpass.renderPass = renderPass;
     renderpass.framebuffer = framebuffer;
-    withinRenderPass = VK_TRUE;
+    inRenderPass = VK_TRUE;
 }
 
 #ifdef VK_KHR_imageless_framebuffer
@@ -524,7 +524,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     renderpass.renderPass = renderPass;
     renderpass.framebuffer = framebuffer;
     renderpass.attachments = attachments;
-    withinRenderPass = VK_TRUE;
+    inRenderPass = VK_TRUE;
 }
 #endif // VK_KHR_imageless_framebuffer
 
@@ -532,8 +532,8 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 
 void CommandBuffer::endRenderPass() noexcept
 {
-    MAGMA_ASSERT(withinRenderPass);
-    if (withinRenderPass)
+    MAGMA_ASSERT(inRenderPass);
+    if (inRenderPass)
     {
     #ifdef MAGMA_DEBUG_LABEL
         if (labeledRenderPass)
@@ -550,7 +550,7 @@ void CommandBuffer::endRenderPass() noexcept
         renderpass.renderPass.reset();
         renderpass.framebuffer.reset();
         renderpass.attachments.clear();
-        withinRenderPass = VK_FALSE;
+        inRenderPass = VK_FALSE;
     }
 }
 
@@ -605,7 +605,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     MAGMA_DEFER(renderPass);
     MAGMA_DEFER(framebuffer);
     renderPass->begin(framebuffer->getAttachments());
-    withinRenderPass = VK_TRUE;
+    inRenderPass = VK_TRUE;
     renderpass.renderPass = renderPass;
     renderpass.framebuffer = framebuffer;
 }
@@ -652,7 +652,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     MAGMA_DEFER(renderPass);
     MAGMA_DEFER(framebuffer);
     renderPass->begin(attachments);
-    withinRenderPass = VK_TRUE;
+    inRenderPass = VK_TRUE;
     renderpass.renderPass = renderPass;
     renderpass.framebuffer = framebuffer;
     renderpass.attachments = attachments;
@@ -678,18 +678,18 @@ void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buf
         conditionalRenderingBeginInfo.flags = inverted ? VK_CONDITIONAL_RENDERING_INVERTED_BIT_EXT : 0;
         vkCmdBeginConditionalRenderingEXT(handle, &conditionalRenderingBeginInfo);
         MAGMA_DEFER(buffer);
-        withinConditionalRendering = VK_TRUE;
+        inConditionalRendering = VK_TRUE;
     }
 }
 
 void CommandBuffer::endConditionalRendering() noexcept
 {
-    MAGMA_ASSERT(withinConditionalRendering);
+    MAGMA_ASSERT(inConditionalRendering);
     MAGMA_DEVICE_EXTENSION(vkCmdEndConditionalRenderingEXT);
     if (vkCmdEndConditionalRenderingEXT)
     {
         vkCmdEndConditionalRenderingEXT(handle);
-        withinConditionalRendering = VK_FALSE;
+        inConditionalRendering = VK_FALSE;
     }
 }
 #endif // VK_EXT_conditional_rendering
@@ -714,14 +714,14 @@ void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const st
             MAGMA_DEFER(buffer);
         }
         vkCmdBeginTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
-        withinTransformFeedback = VK_TRUE;
+        inTransformFeedback = VK_TRUE;
     }
 }
 
 void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
     const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
-    MAGMA_ASSERT(withinTransformFeedback);
+    MAGMA_ASSERT(inTransformFeedback);
     if (counterBufferOffsets.size() > 0) {
         MAGMA_ASSERT(counterBufferOffsets.size() >= counterBuffers.size());
     }
@@ -735,7 +735,7 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
             MAGMA_DEFER(buffer);
         }
         vkCmdEndTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
-        withinTransformFeedback = VK_FALSE;
+        inTransformFeedback = VK_FALSE;
     }
 }
 #endif // VK_EXT_transform_feedback
