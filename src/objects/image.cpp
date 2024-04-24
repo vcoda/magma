@@ -53,7 +53,8 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     arrayLayers(arrayLayers),
     samples(samples),
     tiling(tiling),
-    usage(usage_| (optional.sourceTransfer ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0))
+    usage(usage_| (optional.srcTransfer ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0)),
+    viewFormats(optional.viewFormats)
 {
     VkImageCreateInfo imageInfo;
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -73,7 +74,6 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     imageInfo.initialLayout = layout;
 #ifdef VK_KHR_image_format_list
     VkImageFormatListCreateInfoKHR imageFormatListInfo;
-    viewFormats = optional.viewFormats;
     if (device->extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME) && !viewFormats.empty())
     {
         imageInfo.pNext = &imageFormatListInfo;
@@ -133,9 +133,15 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
         extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
     }
 #endif // VK_EXT_memory_priority
-    const VkMemoryPropertyFlags memoryFlags = (VK_IMAGE_TILING_LINEAR == tiling)
-        ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-        : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | (optional.lazy ? VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT : 0);
+    VkMemoryPropertyFlags memoryFlags;
+    if (VK_IMAGE_TILING_LINEAR == tiling)
+        memoryFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    else
+    {
+        memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        if (optional.lazilyAllocated)
+            memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
+    }
     std::shared_ptr<IDeviceMemory> memory;
     if (MAGMA_DEVICE_ALLOCATOR(allocator))
     {

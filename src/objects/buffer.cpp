@@ -42,7 +42,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     #elif defined(VK_EXT_buffer_device_address)
         (optional.deviceAddress ? VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT : 0) |
     #endif
-        (optional.sourceTransfer ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0))
+        (optional.srcTransfer ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0))
 {
     VkBufferCreateInfo bufferInfo;
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -113,8 +113,12 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
         extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
     }
 #endif // VK_EXT_memory_priority
-    if (optional.lazy && !(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT))
-        memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
+    if (optional.lazilyAllocated)
+    {   // Memory types must not have both VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT
+        // and VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT set.
+        if (!(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT))
+            memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
+    }
     std::shared_ptr<IDeviceMemory> memory;
     if (MAGMA_DEVICE_ALLOCATOR(allocator))
     {

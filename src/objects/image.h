@@ -165,8 +165,8 @@ namespace magma
     struct Image::Initializer
     {
         VkImageCreateFlags flags = 0;
-        bool sourceTransfer = false;
-        bool lazy = false;
+        bool srcTransfer = false;
+        bool lazilyAllocated = false;
         // VK_KHR_image_format_list
         std::vector<VkFormat> viewFormats;
         // VK_KHR_device_group
