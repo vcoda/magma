@@ -244,19 +244,19 @@ VkSubresourceLayout Image::getSubresourceLayout(uint32_t mipLevel, uint32_t arra
     VkImageSubresource subresource;
     subresource.aspectMask = getAspectMask();
     subresource.mipLevel = mipLevel;
-    subresource.arrayLayer = this->arrayLayers > 1 ? arrayLayer : 0; // Ignore for non-arrays
+    subresource.arrayLayer = getArrayLayers() ? arrayLayer : 0;
     VkSubresourceLayout subresourceLayout;
     vkGetImageSubresourceLayout(MAGMA_HANDLE(device), handle, &subresource, &subresourceLayout);
     return subresourceLayout;
 }
 
-VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t arrayLayer /* 0 */) const noexcept
+VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t baseArrayLayer /* 0 */) const noexcept
 {
     VkImageSubresourceLayers subresourceLayers;
     subresourceLayers.aspectMask = getAspectMask();
     subresourceLayers.mipLevel = mipLevel;
-    subresourceLayers.baseArrayLayer = this->arrayLayers > 1 ? arrayLayer : 0; // Ignore for non-arrays
-    subresourceLayers.layerCount = this->arrayLayers;
+    subresourceLayers.baseArrayLayer = getArrayLayers() ? baseArrayLayer : 0;
+    subresourceLayers.layerCount = VK_REMAINING_ARRAY_LAYERS;
     return subresourceLayers;
 }
 
@@ -265,9 +265,9 @@ VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32
     VkImageSubresourceRange subresourceRange;
     subresourceRange.aspectMask = getAspectMask();
     subresourceRange.baseMipLevel = baseMipLevel;
-    subresourceRange.levelCount = mipLevels - baseMipLevel;
-    subresourceRange.baseArrayLayer = arrayLayers > 1 ? baseArrayLayer : 0;
-    subresourceRange.layerCount = arrayLayers - baseArrayLayer;
+    subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+    subresourceRange.baseArrayLayer = getArrayLayers() ? baseArrayLayer : 0;
+    subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
     return subresourceRange;
 }
 

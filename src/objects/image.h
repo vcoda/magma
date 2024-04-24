@@ -60,7 +60,7 @@ namespace magma
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
         VkImageSubresourceLayers getSubresourceLayers(uint32_t mipLevel,
-            uint32_t arrayLayer = 0) const noexcept;
+            uint32_t baseArrayLayer = 0) const noexcept;
         VkImageSubresourceRange getSubresourceRange(uint32_t baseMipLevel,
             uint32_t baseArrayLayer = 0) const noexcept;
         VkMemoryRequirements getMemoryRequirements() const noexcept;
