@@ -24,19 +24,29 @@ namespace magma
     class Device;
     class IAllocator;
 
+    /* Base interface class of Vulkan object that has associated
+       handle. Any virtual methods that are implemented by derived
+       classes should be declared here as pure virtual. */
+
+    class IObject
+    {
+    public:
+        virtual ~IObject() = default;
+        virtual VkObjectType getObjectType() const noexcept = 0;
+        virtual bool nonDispatchable() const noexcept = 0;
+        virtual uint64_t getHandle() const noexcept = 0;
+    };
+
     /* Base non-copyable class for dispatchable and non-
        dispatchable objects. Allows to give a user-friendly
        name and to attach arbitrary data to an object. */
 
-    class Object : public CxxAllocator,
-        public IDestructible,
+    class Object : public IObject,
         /* private */ NonCopyable
     {
     public:
         explicit Object(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
-        virtual VkObjectType getObjectType() const noexcept = 0;
-        virtual uint64_t getHandle() const noexcept = 0;
         const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
         const std::shared_ptr<IAllocator>& getHostAllocator() const noexcept { return hostAllocator; }
         void setPrivateData(uint64_t data);

@@ -40,6 +40,7 @@ namespace magma
             "invalid size of non-dispatchable handle type");
 
     public:
+        bool nonDispatchable() const noexcept override { return true; }
         uint64_t getHandle() const noexcept override
         {
         #ifdef MAGMA_X64
