@@ -59,7 +59,6 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLay
         // READ/WRITE access flags that are valid where it is used.
         srcAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
         break;
-        break;
     case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
         srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
         break;
