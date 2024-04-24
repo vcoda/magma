@@ -186,14 +186,6 @@ Image::~Image()
 VkImageAspectFlags Image::getAspectMask() const noexcept
 {
     const Format imageFormat(format);
-#ifdef VK_KHR_sampler_ycbcr_conversion
-    if (imageFormat.multiPlanar())
-    {
-        if (2 == imageFormat.planeCount())
-            return VK_IMAGE_ASPECT_PLANE_0_BIT_KHR | VK_IMAGE_ASPECT_PLANE_1_BIT_KHR;
-        return VK_IMAGE_ASPECT_PLANE_0_BIT_KHR | VK_IMAGE_ASPECT_PLANE_1_BIT_KHR | VK_IMAGE_ASPECT_PLANE_2_BIT_KHR;
-    }
-#endif // VK_KHR_sampler_ycbcr_conversion
     if (flags & (VK_IMAGE_CREATE_SPARSE_BINDING_BIT |
                  VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT |
                  VK_IMAGE_CREATE_SPARSE_ALIASED_BIT)) try
@@ -204,6 +196,17 @@ VkImageAspectFlags Image::getAspectMask() const noexcept
                 return VK_IMAGE_ASPECT_METADATA_BIT;
         }
     } catch (...) {}
+#ifdef VK_KHR_sampler_ycbcr_conversion
+    if (imageFormat.multiPlanar())
+    {
+        if (2 == imageFormat.planeCount())
+            return VK_IMAGE_ASPECT_PLANE_0_BIT_KHR | VK_IMAGE_ASPECT_PLANE_1_BIT_KHR;
+        MAGMA_ASSERT(3 == imageFormat.planeCount());
+        return VK_IMAGE_ASPECT_PLANE_0_BIT_KHR |
+               VK_IMAGE_ASPECT_PLANE_1_BIT_KHR |
+               VK_IMAGE_ASPECT_PLANE_2_BIT_KHR;
+    }
+#endif // VK_KHR_sampler_ycbcr_conversion
     if (imageFormat.depth())
         return VK_IMAGE_ASPECT_DEPTH_BIT;
     else if (imageFormat.stencil())
