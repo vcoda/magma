@@ -79,7 +79,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator);
 
         const VkBufferCreateFlags flags;
-        VkBufferUsageFlags usage;
+        const VkBufferUsageFlags usage;
     };
 
     struct Buffer::Initializer
