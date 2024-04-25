@@ -69,7 +69,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     colorBlendStates.push_front(colorBlendState);
     dynamicStates.push_front(dynamicStates_);
     if (!layout)
-        layout = std::make_shared<PipelineLayout>(renderPass->getDevice());
+        layout = std::make_shared<PipelineLayout>(device);
     layouts.push_front(layout);
     renderPasses.push_front(renderPass);
     basePipelines.push_front(basePipeline);
