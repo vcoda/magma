@@ -36,6 +36,8 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     VkPipelineCreateFlags flags /* 0 */)
 {
     stages.emplace_front(1, shaderStage);
+    if (!layout)
+        layout = std::make_shared<PipelineLayout>(device);
     layouts.push_front(layout);
     basePipelines.push_front(basePipeline);
     VkComputePipelineCreateInfo pipelineInfo;
@@ -45,7 +47,7 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stage = stages.front().front();
-    pipelineInfo.layout = MAGMA_HANDLE(layouts.front());
+    pipelineInfo.layout = *layout;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.front());
     pipelineInfo.basePipelineIndex = -1;
 #ifdef VK_AMD_pipeline_compiler_control
