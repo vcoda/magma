@@ -218,7 +218,7 @@ void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>&
     deviceGroupSubmitInfo.signalSemaphoreCount = MAGMA_COUNT(signalSemaphoreDeviceIndices);
     deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.data();
     StructureChain extendedInfo;
-    extendedInfo.addNode(deviceGroupSubmitInfo);
+    extendedInfo.linkNode(deviceGroupSubmitInfo);
     submit(cmdBuffers, waitStageMasks, waitSemaphores, signalSemaphores, std::move(fence), extendedInfo);
 }
 #endif // VK_KHR_device_group

@@ -76,11 +76,11 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     VkImageFormatListCreateInfoKHR imageFormatListInfo;
     if (device->extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME) && !viewFormats.empty())
     {
-        imageInfo.pNext = &imageFormatListInfo;
         imageFormatListInfo.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
         imageFormatListInfo.pNext = nullptr;
         imageFormatListInfo.viewFormatCount = MAGMA_COUNT(viewFormats);
         imageFormatListInfo.pViewFormats = viewFormats.data();
+        linkNode(imageInfo, imageFormatListInfo);
     }
 #endif // VK_KHR_image_format_list
     const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -103,7 +103,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
             dedicatedAllocateInfo.pNext = nullptr;
             dedicatedAllocateInfo.image = handle;
             dedicatedAllocateInfo.buffer = VK_NULL_HANDLE;
-            extendedMemoryInfo.addNode(dedicatedAllocateInfo);
+            extendedMemoryInfo.linkNode(dedicatedAllocateInfo);
         }
     }
     else
@@ -120,7 +120,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
         memoryAllocateFlagsInfo.pNext = nullptr;
         memoryAllocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
         memoryAllocateFlagsInfo.deviceMask = optional.deviceMask;
-        extendedMemoryInfo.addNode(memoryAllocateFlagsInfo);
+        extendedMemoryInfo.linkNode(memoryAllocateFlagsInfo);
     }
 #endif // VK_KHR_device_group
 #ifdef VK_EXT_memory_priority
@@ -130,7 +130,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
         memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
         memoryPriorityAllocateInfo.pNext = nullptr;
         memoryPriorityAllocateInfo.priority = optional.memoryPriority;
-        extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
+        extendedMemoryInfo.linkNode(memoryPriorityAllocateInfo);
     }
 #endif // VK_EXT_memory_priority
     VkMemoryPropertyFlags memoryFlags;

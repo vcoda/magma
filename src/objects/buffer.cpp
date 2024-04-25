@@ -73,7 +73,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
             dedicatedAllocateInfo.pNext = nullptr;
             dedicatedAllocateInfo.image = VK_NULL_HANDLE;
             dedicatedAllocateInfo.buffer = handle;
-            extendedMemoryInfo.addNode(dedicatedAllocateInfo);
+            extendedMemoryInfo.linkNode(dedicatedAllocateInfo);
         }
     }
     else
@@ -101,7 +101,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
 #endif // VK_KHR_buffer_device_address
 #ifdef VK_KHR_device_group
     if (memoryAllocateFlagsInfo.flags)
-        extendedMemoryInfo.addNode(memoryAllocateFlagsInfo);
+        extendedMemoryInfo.linkNode(memoryAllocateFlagsInfo);
 #endif // VK_KHR_device_group
 #ifdef VK_EXT_memory_priority
     if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
@@ -110,7 +110,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
         memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
         memoryPriorityAllocateInfo.pNext = nullptr;
         memoryPriorityAllocateInfo.priority = optional.memoryPriority;
-        extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
+        extendedMemoryInfo.linkNode(memoryPriorityAllocateInfo);
     }
 #endif // VK_EXT_memory_priority
     if (optional.lazilyAllocated)
@@ -240,7 +240,7 @@ void Buffer::realloc(VkDeviceSize newSize)
             dedicatedAllocateInfo.pNext = nullptr;
             dedicatedAllocateInfo.image = VK_NULL_HANDLE;
             dedicatedAllocateInfo.buffer = handle;
-            extendedMemoryInfo.addNode(dedicatedAllocateInfo);
+            extendedMemoryInfo.linkNode(dedicatedAllocateInfo);
         }
     }
     else
@@ -256,7 +256,7 @@ void Buffer::realloc(VkDeviceSize newSize)
         memoryAllocateFlagsInfo.pNext = nullptr;
         memoryAllocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
         memoryAllocateFlagsInfo.deviceMask = memory->getDeviceMask();
-        extendedMemoryInfo.addNode(memoryAllocateFlagsInfo);
+        extendedMemoryInfo.linkNode(memoryAllocateFlagsInfo);
     }
 #endif // VK_KHR_device_group
 #ifdef VK_EXT_memory_priority
@@ -266,7 +266,7 @@ void Buffer::realloc(VkDeviceSize newSize)
         memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
         memoryPriorityAllocateInfo.pNext = nullptr;
         memoryPriorityAllocateInfo.priority = memory->getPriority();
-        extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
+        extendedMemoryInfo.linkNode(memoryPriorityAllocateInfo);
     }
 #endif // VK_EXT_memory_priority
     memory->realloc(handle, memoryRequirements, extendedMemoryInfo);

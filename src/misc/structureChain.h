@@ -19,6 +19,37 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Binary data blob of Vulkan structure. */
+
+    class ChainNode
+    {
+    public:
+        template<class T>
+        ChainNode(const T& n) noexcept:
+            size(sizeof(T)), data(core::copyBinaryData(n))
+        {
+            static_assert(std::is_trivially_copyable<T>::value,
+                "node type is required to be trivially copyable");
+        }
+        ChainNode(const ChainNode& n) noexcept: size(n.size),
+            data(MAGMA_NEW uint8_t[n.size])
+            { memcpy(data, n.data, n.size); }
+        ChainNode(ChainNode&& n) noexcept: size(n.size), data(n.data)
+            { memset(&n, 0, sizeof(ChainNode)); }
+        ~ChainNode() { delete[] data; }
+        VkBaseOutStructure *getNode() noexcept
+            { return reinterpret_cast<VkBaseOutStructure *>(data); }
+        const VkBaseInStructure *getNode() const noexcept
+            { return reinterpret_cast<const VkBaseInStructure *>(data); }
+        std::size_t getSize() const noexcept { return size; }
+        hash_t getHash() const noexcept
+            { return core::hashArray(data, size); }
+
+    private:
+        size_t size;
+        uint8_t *data;
+    };
+
     /* Vulkan structures that are chained into linked list with head
        node assigned to the pNext member of Vk*CreateInfo structure. */
 
@@ -26,13 +57,17 @@ namespace magma
     {
     public:
         template<class StructureType>
-        void addNode(const StructureType& node);
+        void linkNode(const StructureType& node) { chain.emplace_back(node); }
         template<class StructureType>
         StructureType *findNode() const noexcept;
-        VkBaseOutStructure *firstNode() noexcept;
-        const VkBaseInStructure *firstNode() const noexcept;
-        VkBaseOutStructure *lastNode() noexcept;
-        const VkBaseInStructure *lastNode() const noexcept;
+        VkBaseOutStructure *firstNode() noexcept
+            { return chain.empty() ? nullptr : chain.begin()->getNode(); }
+        const VkBaseInStructure *firstNode() const noexcept
+            { return chain.empty() ? nullptr : chain.cbegin()->getNode(); }
+        VkBaseOutStructure *lastNode() noexcept
+            { return chain.empty() ? nullptr : chain.rbegin()->getNode(); }
+        const VkBaseInStructure *lastNode() const noexcept
+            { return chain.empty() ? nullptr : chain.crbegin()->getNode(); }
         uint32_t getSize() const noexcept { return MAGMA_COUNT(chain); }
         bool empty() const noexcept { return chain.empty(); }
         VkBaseOutStructure *chainNodes() noexcept;
@@ -40,8 +75,7 @@ namespace magma
         hash_t getHash() const noexcept;
 
     private:
-        class Node;
-        mutable std::list<Node> chain;
+        mutable std::list<ChainNode> chain;
     };
 } // namespace magma
 
@@ -59,5 +93,4 @@ inline StructureType *magma::StructureChain::findNode<StructureType>() const noe
     return nullptr;\
 }
 
-#include "structureChain.inl"
 #include "structureChainNode.inl"

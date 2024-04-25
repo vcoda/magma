@@ -1528,12 +1528,6 @@
     <None Include="..\..\src\misc\scissor.inl">
       <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\src\misc\structureChain.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
-    <None Include="..\..\src\misc\structureChainNode.inl">
-      <Filter>Header Files\misc</Filter>
-    </None>
     <None Include="..\..\src\misc\viewport.inl">
       <Filter>Header Files\misc</Filter>
     </None>
@@ -1641,6 +1635,9 @@
     </None>
     <None Include="..\..\src\objects\renderPass.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\misc\structureChainNode.inl">
+      <Filter>Header Files\misc</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

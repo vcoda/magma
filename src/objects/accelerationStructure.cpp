@@ -67,7 +67,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device_, Vk
         memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
         memoryPriorityAllocateInfo.pNext = nullptr;
         memoryPriorityAllocateInfo.priority = memoryPriority;
-        extendedMemoryInfo.addNode(memoryPriorityAllocateInfo);
+        extendedMemoryInfo.linkNode(memoryPriorityAllocateInfo);
     }
 #endif // VK_EXT_memory_priority
     std::shared_ptr<IDeviceMemory> memory;

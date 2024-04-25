@@ -44,7 +44,7 @@ std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<Devi
     deviceGroupDeviceInfo.physicalDeviceCount = getPhysicalDeviceCount();
     deviceGroupDeviceInfo.pPhysicalDevices = dereferencedPhysicalDevices;
     StructureChain extendedDeviceGroupInfo(extendedInfo);
-    extendedDeviceGroupInfo.addNode(deviceGroupDeviceInfo);
+    extendedDeviceGroupInfo.linkNode(deviceGroupDeviceInfo);
     return physicalDevices.front()->createDevice(queueDescriptors,
         enabledLayers, enabledExtensions,
         enabledFeatures, enabledExtendedFeatures,
