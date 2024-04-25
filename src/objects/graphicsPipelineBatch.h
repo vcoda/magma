@@ -44,7 +44,7 @@ namespace magma
     class GraphicsPipelineBatch : public TPipelineBatch<GraphicsPipeline>
     {
     public:
-        explicit GraphicsPipelineBatch(uint32_t capacity = 256);
+        explicit GraphicsPipelineBatch(std::shared_ptr<Device> device) noexcept;
         uint32_t batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const VertexInputState& vertexInputState,
             const InputAssemblyState& inputAssemblyState,
@@ -61,26 +61,25 @@ namespace magma
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        void buildPipelines(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        void buildPipelines(std::shared_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr) override;
 
     private:
-        std::list<VertexInputState> vertexInputStates;
-        std::list<InputAssemblyState> inputAssemblyStates;
-        std::list<TesselationState> tesselationStates;
-        std::list<ViewportState> viewportStates;
-        std::list<RasterizationState> rasterizationStates;
-        std::list<MultisampleState> multisampleStates;
-        std::list<DepthStencilState> depthStencilStates;
-        std::list<ColorBlendState> colorBlendStates;
-        std::list<std::vector<VkDynamicState>> dynamicStates;
-        std::list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
-        std::list<std::shared_ptr<RenderPass>> renderPasses;
+        std::forward_list<VertexInputState> vertexInputStates;
+        std::forward_list<InputAssemblyState> inputAssemblyStates;
+        std::forward_list<TesselationState> tesselationStates;
+        std::forward_list<ViewportState> viewportStates;
+        std::forward_list<RasterizationState> rasterizationStates;
+        std::forward_list<MultisampleState> multisampleStates;
+        std::forward_list<DepthStencilState> depthStencilStates;
+        std::forward_list<ColorBlendState> colorBlendStates;
+        std::forward_list<std::vector<VkDynamicState>> dynamicStates;
+        std::forward_list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
+        std::forward_list<std::shared_ptr<RenderPass>> renderPasses;
+        std::forward_list<hash_t> rsHashes;
         std::vector<VkGraphicsPipelineCreateInfo> pipelineInfos;
-        std::vector<hash_t> rsHashes;
     };
 } // namespace magma

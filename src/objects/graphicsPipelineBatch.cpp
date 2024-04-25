@@ -37,11 +37,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-GraphicsPipelineBatch::GraphicsPipelineBatch(uint32_t capacity /* 256 */):
-    TPipelineBatch<GraphicsPipeline>(capacity)
-{
-    pipelineInfos.reserve(capacity);
-}
+GraphicsPipelineBatch::GraphicsPipelineBatch(std::shared_ptr<Device> device) noexcept:
+    TPipelineBatch<GraphicsPipeline>(std::move(device))
+{}
 
 uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
     const VertexInputState& vertexInputState,
@@ -60,28 +58,28 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */)
 {
-    stages.push_back(shaderStages);
-    vertexInputStates.push_back(vertexInputState);
-    inputAssemblyStates.push_back(inputAssemblyState);
-    tesselationStates.push_back(tesselationState);
-    viewportStates.push_back(viewportState);
-    rasterizationStates.push_back(rasterizationState);
-    multisampleStates.push_back(multisampleState);
-    depthStencilStates.push_back(depthStencilState);
-    colorBlendStates.push_back(colorBlendState);
-    dynamicStates.push_back(dynamicStates_);
+    stages.push_front(shaderStages);
+    vertexInputStates.push_front(vertexInputState);
+    inputAssemblyStates.push_front(inputAssemblyState);
+    tesselationStates.push_front(tesselationState);
+    viewportStates.push_front(viewportState);
+    rasterizationStates.push_front(rasterizationState);
+    multisampleStates.push_front(multisampleState);
+    depthStencilStates.push_front(depthStencilState);
+    colorBlendStates.push_front(colorBlendState);
+    dynamicStates.push_front(dynamicStates_);
     if (!layout)
         layout = std::make_shared<PipelineLayout>(renderPass->getDevice());
-    layouts.push_back(layout);
-    renderPasses.push_back(renderPass);
-    basePipelines.push_back(basePipeline);
+    layouts.push_front(layout);
+    renderPasses.push_front(renderPass);
+    basePipelines.push_front(basePipeline);
     VkPipelineDynamicStateCreateInfo dynamicStateInfo;
     dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
     dynamicStateInfo.pNext = 0;
     dynamicStateInfo.flags = 0;
-    dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates.back());
-    dynamicStateInfo.pDynamicStates = dynamicStates.back().data();
-    dynamicStateInfos.push_back(dynamicStateInfo);
+    dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates.front());
+    dynamicStateInfo.pDynamicStates = dynamicStates.front().data();
+    dynamicStateInfos.push_front(dynamicStateInfo);
     VkGraphicsPipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = extendedInfo.chainNodes();
@@ -90,44 +88,44 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stageCount = MAGMA_COUNT(shaderStages);
     pipelineInfo.pStages = nullptr; // Fixup later
-    pipelineInfo.pVertexInputState = &vertexInputStates.back();
-    pipelineInfo.pInputAssemblyState = &inputAssemblyStates.back();
-    pipelineInfo.pTessellationState = &tesselationStates.back();
-    pipelineInfo.pViewportState = &viewportStates.back();
-    pipelineInfo.pRasterizationState = &rasterizationStates.back();
-    pipelineInfo.pMultisampleState = &multisampleStates.back();
-    pipelineInfo.pDepthStencilState = &depthStencilStates.back();
-    pipelineInfo.pColorBlendState = &colorBlendStates.back();
-    pipelineInfo.pDynamicState = &dynamicStateInfos.back();
+    pipelineInfo.pVertexInputState = &vertexInputStates.front();
+    pipelineInfo.pInputAssemblyState = &inputAssemblyStates.front();
+    pipelineInfo.pTessellationState = &tesselationStates.front();
+    pipelineInfo.pViewportState = &viewportStates.front();
+    pipelineInfo.pRasterizationState = &rasterizationStates.front();
+    pipelineInfo.pMultisampleState = &multisampleStates.front();
+    pipelineInfo.pDepthStencilState = &depthStencilStates.front();
+    pipelineInfo.pColorBlendState = &colorBlendStates.front();
+    pipelineInfo.pDynamicState = &dynamicStateInfos.front();
     pipelineInfo.layout = *layout;
     pipelineInfo.renderPass = *renderPass;
     pipelineInfo.subpass = subpass;
-    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
+    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.front());
     pipelineInfo.basePipelineIndex = -1;
 #ifdef VK_AMD_pipeline_compiler_control
-    if (renderPass->getDevice()->extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))
+    if (device->extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))
     {
         VkPipelineCompilerControlCreateInfoAMD pipelineCompilerControlInfo;
         pipelineCompilerControlInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD;
         pipelineCompilerControlInfo.pNext = nullptr;
         pipelineCompilerControlInfo.compilerControlFlags = compilerControlFlags;
-        pipelineCompilerControlInfos.push_back(pipelineCompilerControlInfo);
-        linkNode(pipelineInfo, pipelineCompilerControlInfos.back());
+        pipelineCompilerControlInfos.push_front(pipelineCompilerControlInfo);
+        linkNode(pipelineInfo, pipelineCompilerControlInfos.front());
     }
 #endif // VK_AMD_pipeline_compiler_control
 #ifdef VK_EXT_pipeline_creation_feedback
-    if (renderPass->getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    if (device->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
-        creationFeedbacks.push_back(VkPipelineCreationFeedbackEXT());
-        stageCreationFeedbacks.emplace_back(pipelineInfo.stageCount);
+        creationFeedbacks.push_front(VkPipelineCreationFeedbackEXT());
+        stageCreationFeedbacks.emplace_front(pipelineInfo.stageCount);
         VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
         creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
         creationFeedbackInfo.pNext = pipelineInfo.pNext;
-        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedbacks.back();
+        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedbacks.front();
         creationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
-        creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.back().data();
-        creationFeedbackInfos.push_back(creationFeedbackInfo);
-        linkNode(pipelineInfo, creationFeedbackInfos.back());
+        creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.front().data();
+        creationFeedbackInfos.push_front(creationFeedbackInfo);
+        linkNode(pipelineInfo, creationFeedbackInfos.front());
     }
 #endif // VK_EXT_pipeline_creation_feedback
     pipelineInfos.push_back(pipelineInfo);
@@ -147,13 +145,12 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
         std::move(renderPass),
         subpass,
         extendedInfo);
-    hashes.push_back(hash.first);
-    rsHashes.push_back(hash.second);
+    hashes.push_front(hash.first);
+    rsHashes.push_front(hash.second);
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
-void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
     std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
@@ -195,7 +192,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<Device> device,
         auto rsHash = rsHashes.cbegin();
         while (handle != handles.cend())
         {
-            pipelines.emplace_back(GraphicsPipeline::makeShared(
+            pipelines.emplace_front(GraphicsPipeline::makeShared(
                 *handle++, device, *layout++, *basePipeline++, allocator,
                 MAGMA_COUNT(*shaderStages++),
             #ifdef VK_EXT_pipeline_creation_feedback

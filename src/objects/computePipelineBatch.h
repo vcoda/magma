@@ -31,13 +31,12 @@ namespace magma
     class ComputePipelineBatch : public TPipelineBatch<ComputePipeline>
     {
     public:
-        explicit ComputePipelineBatch(uint32_t capacity = 32);
+        explicit ComputePipelineBatch(std::shared_ptr<Device> device) noexcept;
         uint32_t batchPipeline(const PipelineShaderStage& shaderStage,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
-        void buildPipelines(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        void buildPipelines(std::shared_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif

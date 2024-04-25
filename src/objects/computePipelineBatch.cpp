@@ -27,65 +27,62 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ComputePipelineBatch::ComputePipelineBatch(uint32_t capacity /* 32 */):
-    TPipelineBatch<ComputePipeline>(capacity)
-{
-    pipelineInfos.reserve(capacity);
-}
+ComputePipelineBatch::ComputePipelineBatch(std::shared_ptr<Device> device) noexcept:
+    TPipelineBatch<ComputePipeline>(std::move(device))
+{}
 
 uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderStage, std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */)
 {
-    stages.emplace_back(1, shaderStage);
-    layouts.push_back(layout);
-    basePipelines.push_back(basePipeline);
+    stages.emplace_front(1, shaderStage);
+    layouts.push_front(layout);
+    basePipelines.push_front(basePipeline);
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = nullptr;
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stage = stages.back().front();
-    pipelineInfo.layout = MAGMA_HANDLE(layouts.back());
-    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.back());
+    pipelineInfo.stage = stages.front().front();
+    pipelineInfo.layout = MAGMA_HANDLE(layouts.front());
+    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.front());
     pipelineInfo.basePipelineIndex = -1;
 #ifdef VK_AMD_pipeline_compiler_control
-    if (layout->getDevice()->extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))
+    if (device->extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))
     {
         VkPipelineCompilerControlCreateInfoAMD pipelineCompilerControlInfo;
         pipelineCompilerControlInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD;
         pipelineCompilerControlInfo.pNext = nullptr;
         pipelineCompilerControlInfo.compilerControlFlags = compilerControlFlags;
-        pipelineCompilerControlInfos.push_back(pipelineCompilerControlInfo);
-        linkNode(pipelineInfo, pipelineCompilerControlInfos.back());
+        pipelineCompilerControlInfos.push_front(pipelineCompilerControlInfo);
+        linkNode(pipelineInfo, pipelineCompilerControlInfos.front());
     }
 #endif // VK_AMD_pipeline_compiler_control
 #ifdef VK_EXT_pipeline_creation_feedback
-    if (layout->getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    if (device->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
-        creationFeedbacks.push_back(VkPipelineCreationFeedbackEXT());
-        stageCreationFeedbacks.emplace_back(1);
+        creationFeedbacks.push_front(VkPipelineCreationFeedbackEXT());
+        stageCreationFeedbacks.emplace_front(1);
         VkPipelineCreationFeedbackCreateInfoEXT creationFeedbackInfo;
         creationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
         creationFeedbackInfo.pNext = nullptr;
-        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedbacks.back();
+        creationFeedbackInfo.pPipelineCreationFeedback = &creationFeedbacks.front();
         creationFeedbackInfo.pipelineStageCreationFeedbackCount = 1;
-        creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.back().data();
-        creationFeedbackInfos.push_back(creationFeedbackInfo);
-        linkNode(pipelineInfo, creationFeedbackInfos.back());
+        creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.front().data();
+        creationFeedbackInfos.push_front(creationFeedbackInfo);
+        linkNode(pipelineInfo, creationFeedbackInfos.front());
     }
 #endif // VK_EXT_pipeline_creation_feedback
     pipelineInfos.push_back(pipelineInfo);
     hash_t hash = core::hash(flags);
     hash = core::hashCombine(hash, shaderStage.getHash());
     hash = core::hashCombine(hash, layout->getHash());
-    hashes.push_back(hash);
+    hashes.push_front(hash);
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
-void ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+void ComputePipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
     std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
@@ -112,7 +109,7 @@ void ComputePipelineBatch::buildPipelines(std::shared_ptr<Device> device,
         auto hash = hashes.cbegin();
         while (handle != handles.cend())
         {
-            pipelines.emplace_back(ComputePipeline::makeShared(
+            pipelines.emplace_front(ComputePipeline::makeShared(
                 *handle++, device, *layout++, *basePipeline++, allocator,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,

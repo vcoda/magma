@@ -40,38 +40,38 @@ namespace magma
         void setCompilerControlFlags(VkPipelineCompilerControlFlagsAMD flags) noexcept { compilerControlFlags = flags; }
         VkPipelineCompilerControlFlagsAMD getCompilerControlFlags() noexcept { return compilerControlFlags; }
     #endif // VK_AMD_pipeline_compiler_control
-        virtual void buildPipelines(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        virtual void buildPipelines(std::shared_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr) = 0;
-        std::future<void> buildPipelinesAsync(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        std::future<void> buildPipelinesAsync(std::shared_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr);
 
     protected:
+        PipelineBatch(std::shared_ptr<Device> device) noexcept;
         void collectShaderStageInfos() const;
 
-        std::list<std::vector<PipelineShaderStage>> stages;
-        std::list<std::shared_ptr<PipelineLayout>> layouts;
-        std::list<std::shared_ptr<Pipeline>> basePipelines;
+        std::shared_ptr<Device> device;
+        std::forward_list<std::vector<PipelineShaderStage>> stages;
+        std::forward_list<std::shared_ptr<PipelineLayout>> layouts;
+        std::forward_list<std::shared_ptr<Pipeline>> basePipelines;
     #ifdef VK_AMD_pipeline_compiler_control
-        std::list<VkPipelineCompilerControlCreateInfoAMD> pipelineCompilerControlInfos;
+        std::forward_list<VkPipelineCompilerControlCreateInfoAMD> pipelineCompilerControlInfos;
         VkPipelineCompilerControlFlagsAMD compilerControlFlags;
     #endif
     #ifdef VK_EXT_pipeline_creation_feedback
-        std::list<VkPipelineCreationFeedbackEXT> creationFeedbacks;
-        std::list<std::vector<VkPipelineCreationFeedbackEXT>> stageCreationFeedbacks;
-        std::list<VkPipelineCreationFeedbackCreateInfoEXT> creationFeedbackInfos;
+        std::forward_list<VkPipelineCreationFeedbackEXT> creationFeedbacks;
+        std::forward_list<std::vector<VkPipelineCreationFeedbackEXT>> stageCreationFeedbacks;
+        std::forward_list<VkPipelineCreationFeedbackCreateInfoEXT> creationFeedbackInfos;
     #endif // VK_EXT_pipeline_creation_feedback
     #ifdef VK_KHR_pipeline_library
-        std::list<VkPipelineLibraryCreateInfoKHR> pipelineLibraryInfos;
+        std::forward_list<VkPipelineLibraryCreateInfoKHR> pipelineLibraryInfos;
     #endif
-        std::vector<hash_t> hashes;
+        std::forward_list<hash_t> hashes;
         mutable std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
     };
 
@@ -83,7 +83,7 @@ namespace magma
         const std::shared_ptr<PipelineType>& getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 
     protected:
-        TPipelineBatch(uint32_t capacity);
+        TPipelineBatch(std::shared_ptr<Device> device) noexcept;
         template<class PipelineInfoType>
         void fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept;
     #ifdef VK_KHR_pipeline_library
@@ -94,7 +94,7 @@ namespace magma
         void postCreate();
         void postBuild();
 
-        std::vector<std::shared_ptr<PipelineType>> pipelines;
+        std::deque<std::shared_ptr<PipelineType>> pipelines;
     };
 } // namespace magma
 

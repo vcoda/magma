@@ -30,7 +30,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 // Containers
 #include <vector>
+#include <deque>
 #include <list>
+#include <forward_list>
 #include <map>
 #include <unordered_map>
 #include <set>

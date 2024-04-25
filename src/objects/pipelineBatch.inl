@@ -1,10 +1,9 @@
 namespace magma
 {
 template<class PipelineType>
-inline TPipelineBatch<PipelineType>::TPipelineBatch(uint32_t capacity)
-{
-    pipelines.reserve(capacity);
-}
+inline TPipelineBatch<PipelineType>::TPipelineBatch(std::shared_ptr<Device> device) noexcept:
+    PipelineBatch(std::move(device))
+{}
 
 template<class PipelineType>
 template<class PipelineInfoType>
@@ -35,8 +34,8 @@ inline void TPipelineBatch<PipelineType>::linkPipelineLibrary(std::vector<Pipeli
         pipelineLibraryInfo.pLibraries = pipelineLibrary->getLibraries();
         for (auto& pipelineInfo: pipelineInfos)
         {   // For each pipeline info we link a new instance of library info
-            pipelineLibraryInfos.push_back(pipelineLibraryInfo);
-            linkNode(pipelineInfo, pipelineLibraryInfos.back());
+            pipelineLibraryInfos.push_front(pipelineLibraryInfo);
+            linkNode(pipelineInfo, pipelineLibraryInfos.front());
         }
     }
 }

@@ -33,23 +33,21 @@ namespace magma
     class RayTracingPipelineBatch : public TPipelineBatch<RayTracingPipeline>
     {
     public:
-        explicit RayTracingPipelineBatch(uint32_t capacity = 32);
+        explicit RayTracingPipelineBatch(std::shared_ptr<Device> device) noexcept;
         uint32_t batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
             uint32_t maxRecursionDepth,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0);
-        void buildPipelines(std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+        void buildPipelines(std::shared_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr) override;
 
     private:
-        std::shared_ptr<Device> device;
-        std::list<std::vector<RayTracingShaderGroup>> groups;
+        std::forward_list<std::vector<RayTracingShaderGroup>> groups;
         std::vector<VkRayTracingPipelineCreateInfoNV> pipelineInfos;
     };
 #endif // VK_NV_ray_tracing
