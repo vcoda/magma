@@ -68,7 +68,7 @@ namespace magma
             std::shared_ptr<Sampler> cubicSampler;
             std::shared_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
-            mutable std::list<DescriptorSetTable> setTables;
+            mutable std::forward_list<DescriptorSetTable> setTables;
             mutable std::map<std::shared_ptr<const ImageView>, std::shared_ptr<DescriptorSet>> descriptorSets;
         };
     } // namespace aux

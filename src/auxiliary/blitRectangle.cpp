@@ -146,10 +146,10 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     {
         std::shared_ptr<Sampler> sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
             ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
-        setTables.emplace_back();
-        setTables.back().image = {imageView, sampler};
+        setTables.emplace_front();
+        setTables.front().image = {imageView, sampler};
         // Allocate each descriptor set per unique image
-        imageDescriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setTables.back(), VK_SHADER_STAGE_FRAGMENT_BIT, descriptorPool->getHostAllocator());
+        imageDescriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setTables.front(), VK_SHADER_STAGE_FRAGMENT_BIT, descriptorPool->getHostAllocator());
         descriptorSets[imageView] = imageDescriptorSet;
     }
     int32_t height = static_cast<int32_t>(rc.extent.height);
