@@ -60,15 +60,17 @@ namespace magma
         void linkNode(const StructureType& node)
             { insertNode(node); }
         template<class StructureType>
+        StructureType *findNode() noexcept;
+        template<class StructureType>
         const StructureType *findNode() const noexcept;
         VkBaseOutStructure *firstNode() noexcept
             { return chain.empty() ? nullptr : chain.begin()->getNode(); }
         const VkBaseInStructure *firstNode() const noexcept
             { return chain.empty() ? nullptr : chain.cbegin()->getNode(); }
         VkBaseOutStructure *lastNode() noexcept
-            { return chain.empty() ? nullptr : chain.end()->getNode(); }
+            { return chain.empty() ? nullptr : chain.rbegin()->getNode(); }
         const VkBaseInStructure *lastNode() const noexcept
-            { return chain.empty() ? nullptr : chain.cend()->getNode(); }
+            { return chain.empty() ? nullptr : chain.crbegin()->getNode(); }
         uint32_t getSize() const noexcept { return MAGMA_COUNT(chain); }
         bool empty() const noexcept { return chain.empty(); }
         VkBaseOutStructure *getChain() noexcept
@@ -79,6 +81,8 @@ namespace magma
 
     private:
         void insertNode(const ChainNode& node);
+        VkBaseOutStructure *lookupNode(VkStructureType sType) noexcept;
+        const VkBaseInStructure *lookupNode(VkStructureType sType) const noexcept;
 
         std::vector<ChainNode> chain;
     };
@@ -86,15 +90,20 @@ namespace magma
 
 #define MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(StructureType, structureType)\
 template<>\
+inline StructureType *magma::StructureChain::findNode<StructureType>() noexcept\
+{\
+    VkBaseOutStructure *node = lookupNode(structureType);\
+    if (node)\
+        return reinterpret_cast<StructureType *>(node);\
+    return nullptr;\
+}\
+\
+template<>\
 inline const StructureType *magma::StructureChain::findNode<StructureType>() const noexcept\
 {\
-    auto it = std::find_if(chain.begin(), chain.end(),\
-        [](auto& it)\
-        {\
-           return (it.getNode()->sType == structureType);\
-        });\
-    if (it != chain.end())\
-        return reinterpret_cast<const StructureType *>(it->getNode());\
+    const VkBaseInStructure *node = lookupNode(structureType);\
+    if (node)\
+        return reinterpret_cast<const StructureType *>(node);\
     return nullptr;\
 }
 
