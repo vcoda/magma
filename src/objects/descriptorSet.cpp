@@ -68,7 +68,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     // Allocate descriptor set
     VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
     descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    descriptorSetAllocateInfo.pNext = extendedInfo.chainNodes();
+    descriptorSetAllocateInfo.pNext = extendedInfo.getChain();
     descriptorSetAllocateInfo.descriptorPool = MAGMA_HANDLE(descriptorPool);
     descriptorSetAllocateInfo.descriptorSetCount = 1;
     descriptorSetAllocateInfo.pSetLayouts = setLayout->getHandleAddress();

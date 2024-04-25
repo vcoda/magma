@@ -57,31 +57,36 @@ namespace magma
     {
     public:
         template<class StructureType>
-        void linkNode(const StructureType& node) { chain.emplace_back(node); }
+        void linkNode(const StructureType& node)
+            { insertNode(node); }
         template<class StructureType>
-        StructureType *findNode() const noexcept;
+        const StructureType *findNode() const noexcept;
         VkBaseOutStructure *firstNode() noexcept
             { return chain.empty() ? nullptr : chain.begin()->getNode(); }
         const VkBaseInStructure *firstNode() const noexcept
             { return chain.empty() ? nullptr : chain.cbegin()->getNode(); }
         VkBaseOutStructure *lastNode() noexcept
-            { return chain.empty() ? nullptr : chain.rbegin()->getNode(); }
+            { return chain.empty() ? nullptr : chain.end()->getNode(); }
         const VkBaseInStructure *lastNode() const noexcept
-            { return chain.empty() ? nullptr : chain.crbegin()->getNode(); }
+            { return chain.empty() ? nullptr : chain.cend()->getNode(); }
         uint32_t getSize() const noexcept { return MAGMA_COUNT(chain); }
         bool empty() const noexcept { return chain.empty(); }
-        VkBaseOutStructure *chainNodes() noexcept;
-        const VkBaseInStructure *chainNodes() const noexcept;
+        VkBaseOutStructure *getChain() noexcept
+            { return chain.empty() ? nullptr : chain.begin()->getNode(); }
+        const VkBaseInStructure *getChain() const noexcept
+            { return chain.empty() ? nullptr : chain.cbegin()->getNode(); }
         hash_t getHash() const noexcept;
 
     private:
-        mutable std::list<ChainNode> chain;
+        void insertNode(const ChainNode& node);
+
+        std::vector<ChainNode> chain;
     };
 } // namespace magma
 
 #define MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(StructureType, structureType)\
 template<>\
-inline StructureType *magma::StructureChain::findNode<StructureType>() const noexcept\
+inline const StructureType *magma::StructureChain::findNode<StructureType>() const noexcept\
 {\
     auto it = std::find_if(chain.begin(), chain.end(),\
         [](auto& it)\
@@ -89,7 +94,7 @@ inline StructureType *magma::StructureChain::findNode<StructureType>() const noe
            return (it.getNode()->sType == structureType);\
         });\
     if (it != chain.end())\
-        return reinterpret_cast<StructureType *>(it->getNode());\
+        return reinterpret_cast<const StructureType *>(it->getNode());\
     return nullptr;\
 }
 

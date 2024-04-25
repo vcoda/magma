@@ -42,7 +42,7 @@ TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t in
     semaphoreInfo.pNext = &semaphoreTypeInfo;
     semaphoreInfo.flags = flags;
     semaphoreTypeInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR;
-    semaphoreTypeInfo.pNext = extendedInfo.chainNodes();
+    semaphoreTypeInfo.pNext = extendedInfo.getChain();
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE_KHR;
     semaphoreTypeInfo.initialValue = initialValue;
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,

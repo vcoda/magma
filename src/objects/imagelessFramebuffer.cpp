@@ -48,7 +48,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferInfo.height = height;
     framebufferInfo.layers = layerCount;
     framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-    framebufferAttachmentsInfo.pNext = extendedInfo.chainNodes();
+    framebufferAttachmentsInfo.pNext = extendedInfo.getChain();
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
     framebufferAttachmentsInfo.pAttachmentImageInfos = &framebufferAttachmentImageInfo;
     framebufferAttachmentImageInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
@@ -81,7 +81,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferInfo.height = extent.height;
     framebufferInfo.layers = layerCount;
     framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-    framebufferAttachmentsInfo.pNext = extendedInfo.chainNodes();
+    framebufferAttachmentsInfo.pNext = extendedInfo.getChain();
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
     framebufferAttachmentsInfo.pAttachmentImageInfos = &attachment;
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -105,7 +105,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferInfo.height = extent.height;
     framebufferInfo.layers = layerCount;
     framebufferAttachmentsInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
-    framebufferAttachmentsInfo.pNext = extendedInfo.chainNodes();
+    framebufferAttachmentsInfo.pNext = extendedInfo.getChain();
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
     framebufferAttachmentsInfo.pAttachmentImageInfos = attachments.data();
     const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);

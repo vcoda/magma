@@ -57,7 +57,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 {
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapchainInfo.pNext = extendedInfo.chainNodes();
+    swapchainInfo.pNext = extendedInfo.getChain();
     swapchainInfo.flags = optional.flags;
     swapchainInfo.surface = *surface;
     swapchainInfo.minImageCount = minImageCount;

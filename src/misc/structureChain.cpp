@@ -21,36 +21,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-VkBaseOutStructure *StructureChain::chainNodes() noexcept
+void StructureChain::insertNode(const ChainNode& node)
 {
-    if (chain.empty())
-        return nullptr;
-    auto head = chain.begin(), curr = head, next = head;
-    while (++next != chain.end())
+    VkBaseOutStructure *lastNode = nullptr;
+    if (!chain.empty())
     {
-        VkBaseOutStructure *node = curr->getNode();
-        node->pNext = next->getNode();
-        curr = next;
+        lastNode = chain.end()->getNode();
+        MAGMA_ASSERT(!lastNode->pNext);
     }
-    VkBaseOutStructure *last = curr->getNode();
-    last->pNext = nullptr;
-    return head->getNode();
-}
-
-const VkBaseInStructure *StructureChain::chainNodes() const noexcept
-{
-    if (chain.empty())
-        return nullptr;
-    auto head = chain.begin(), curr = head, next = head;
-    while (++next != chain.end())
-    {
-        VkBaseOutStructure *node = curr->getNode();
-        node->pNext = next->getNode();
-        curr = next;
-    }
-    VkBaseOutStructure *last = curr->getNode();
-    last->pNext = nullptr;
-    return (const VkBaseInStructure *)head->getNode();
+    chain.emplace_back(node);
+    VkBaseOutStructure *newNode = chain.end()->getNode();
+    if (lastNode)
+        lastNode->pNext = newNode;
+    newNode->pNext = nullptr;
 }
 
 hash_t StructureChain::getHash() const noexcept

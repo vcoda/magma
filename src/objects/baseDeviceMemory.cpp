@@ -65,7 +65,7 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
     if (!extendedInfo.empty())
     {
     #ifdef VK_KHR_device_group
-        VkMemoryAllocateFlagsInfoKHR *memoryAllocateFlagsInfo = extendedInfo.findNode<VkMemoryAllocateFlagsInfoKHR>();
+        const VkMemoryAllocateFlagsInfoKHR *memoryAllocateFlagsInfo = extendedInfo.findNode<VkMemoryAllocateFlagsInfoKHR>();
         if (memoryAllocateFlagsInfo)
         {
             if (memoryAllocateFlagsInfo->flags & VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR)
@@ -73,7 +73,7 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
         }
     #endif // VK_KHR_device_group
     #ifdef VK_EXT_memory_priority
-        VkMemoryPriorityAllocateInfoEXT *memoryPriorityAllocateInfo = extendedInfo.findNode<VkMemoryPriorityAllocateInfoEXT>();
+        const VkMemoryPriorityAllocateInfoEXT *memoryPriorityAllocateInfo = extendedInfo.findNode<VkMemoryPriorityAllocateInfoEXT>();
         if (memoryPriorityAllocateInfo)
             clampPriority(memoryPriorityAllocateInfo->priority);
     #endif // VK_EXT_memory_priority

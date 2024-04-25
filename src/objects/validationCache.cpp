@@ -41,7 +41,7 @@ ValidationCache::ValidationCache(std::shared_ptr<Device> device,
 {
     VkValidationCacheCreateInfoEXT validationCacheInfo;
     validationCacheInfo.sType = VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT;
-    validationCacheInfo.pNext = extendedInfo.chainNodes();
+    validationCacheInfo.pNext = extendedInfo.getChain();
     validationCacheInfo.flags = 0;
     validationCacheInfo.initialDataSize = dataSize;
     validationCacheInfo.pInitialData = cacheData;

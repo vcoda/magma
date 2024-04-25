@@ -50,7 +50,7 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device_, uint32_t maxSets
     MAGMA_UNUSED(maxInlineUniformBlockBindings);
     VkDescriptorPoolCreateInfo descriptorPoolInfo;
     descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    descriptorPoolInfo.pNext = extendedInfo.chainNodes();
+    descriptorPoolInfo.pNext = extendedInfo.getChain();
     descriptorPoolInfo.flags = 0;
     if (freeDescriptorSet)
     {   // Mobile implementations may use a simpler allocator if that flag is not set,
@@ -73,7 +73,7 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device_, uint32_t maxSets
     {
         descriptorPoolInfo.pNext = &descriptorPoolInlineUniformBlockInfo;
         descriptorPoolInlineUniformBlockInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT;
-        descriptorPoolInlineUniformBlockInfo.pNext = extendedInfo.chainNodes();
+        descriptorPoolInlineUniformBlockInfo.pNext = extendedInfo.getChain();
         descriptorPoolInlineUniformBlockInfo.maxInlineUniformBlockBindings = maxInlineUniformBlockBindings;
     }
 #endif // VK_EXT_inline_uniform_block

@@ -46,7 +46,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     fenceInfo.pNext = &exportFenceInfo;
     fenceInfo.flags = flags;
     exportFenceInfo.sType = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO_KHR;
-    exportFenceInfo.pNext = extendedInfo.chainNodes();
+    exportFenceInfo.pNext = extendedInfo.getChain();
     exportFenceInfo.handleTypes =
     #if defined(VK_KHR_external_fence_win32)
         VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
@@ -85,7 +85,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
 {
     VkFenceCreateInfo fenceInfo;
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.pNext = extendedInfo.chainNodes();
+    fenceInfo.pNext = extendedInfo.getChain();
     fenceInfo.flags = flags;
     VkResult result = vkCreateFence(MAGMA_HANDLE(device), &fenceInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);

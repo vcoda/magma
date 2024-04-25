@@ -34,7 +34,7 @@ PrivateDataSlot::PrivateDataSlot(std::shared_ptr<Device> device,
 {
     VkPrivateDataSlotCreateInfoEXT privateDataSlotInfo;
     privateDataSlotInfo.sType = VK_STRUCTURE_TYPE_PRIVATE_DATA_SLOT_CREATE_INFO_EXT;
-    privateDataSlotInfo.pNext = extendedInfo.chainNodes();
+    privateDataSlotInfo.pNext = extendedInfo.getChain();
     privateDataSlotInfo.flags = flags;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreatePrivateDataSlotEXT, VK_EXT_PRIVATE_DATA_EXTENSION_NAME);
     const VkResult result = vkCreatePrivateDataSlotEXT(MAGMA_HANDLE(device),

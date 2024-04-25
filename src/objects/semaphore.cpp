@@ -36,7 +36,7 @@ Semaphore::Semaphore(std::shared_ptr<Device> device,
 {
     VkSemaphoreCreateInfo semaphoreInfo;
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    semaphoreInfo.pNext = extendedInfo.chainNodes();
+    semaphoreInfo.pNext = extendedInfo.getChain();
     semaphoreInfo.flags = flags;
     const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);

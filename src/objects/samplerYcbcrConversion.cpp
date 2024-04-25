@@ -40,7 +40,7 @@ SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
 {
     VkSamplerYcbcrConversionCreateInfoKHR samplerYcbcrConversionInfo;
     samplerYcbcrConversionInfo.sType = state.sType;
-    samplerYcbcrConversionInfo.pNext = extendedInfo.chainNodes();
+    samplerYcbcrConversionInfo.pNext = extendedInfo.getChain();
     samplerYcbcrConversionInfo.format = format;
     samplerYcbcrConversionInfo.ycbcrModel = state.ycbcrModel;
     samplerYcbcrConversionInfo.ycbcrRange = state.ycbcrRange;

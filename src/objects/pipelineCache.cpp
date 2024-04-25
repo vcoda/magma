@@ -40,7 +40,7 @@ PipelineCache::PipelineCache(std::shared_ptr<Device> device,
 {
     VkPipelineCacheCreateInfo pipelineCacheInfo;
     pipelineCacheInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-    pipelineCacheInfo.pNext = extendedInfo.chainNodes();
+    pipelineCacheInfo.pNext = extendedInfo.getChain();
     pipelineCacheInfo.flags = flags;
     pipelineCacheInfo.initialDataSize = dataSize;
     pipelineCacheInfo.pInitialData = initialData;
