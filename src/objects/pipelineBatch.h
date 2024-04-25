@@ -75,25 +75,26 @@ namespace magma
         mutable std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos;
     };
 
-    template<class PipelineType>
-    class TPipelineBatch : public PipelineBatch
+    /* Template base pipeline batch that holds an arrays of
+       create descriptors and handles of pipeline objects. */
+
+    template<class PipelineType, class PipelineCreateInfo>
+    class BasePipelineBatch : public PipelineBatch
     {
     public:
         uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(pipelines); }
         const std::shared_ptr<PipelineType>& getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 
     protected:
-        TPipelineBatch(std::shared_ptr<Device> device) noexcept;
-        template<class PipelineInfoType>
-        void fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept;
+        BasePipelineBatch(std::shared_ptr<Device> device) noexcept;
+        void fixup() noexcept;
     #ifdef VK_KHR_pipeline_library
-        template<class PipelineInfoType>
-        void linkPipelineLibrary(std::vector<PipelineInfoType>& pipelineInfos,
-            std::shared_ptr<PipelineLibrary> pipelineLibrary);
+        void linkPipelineLibrary(std::shared_ptr<PipelineLibrary> pipelineLibrary);
     #endif // VK_KHR_pipeline_library
         void postCreate();
         void postBuild();
 
+        std::vector<PipelineCreateInfo> pipelineInfos; // Use vector to preserve order
         std::deque<std::shared_ptr<PipelineType>> pipelines;
     };
 } // namespace magma

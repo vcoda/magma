@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ComputePipelineBatch::ComputePipelineBatch(std::shared_ptr<Device> device) noexcept:
-    TPipelineBatch<ComputePipeline>(std::move(device))
+    BasePipelineBatch<ComputePipeline, VkComputePipelineCreateInfo>(std::move(device))
 {}
 
 uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderStage, std::shared_ptr<PipelineLayout> layout,
@@ -90,13 +90,12 @@ void ComputePipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelin
 {
 #ifdef VK_KHR_pipeline_library
     if (device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
-        linkPipelineLibrary(pipelineInfos, std::move(pipelineLibrary));
+        linkPipelineLibrary(std::move(pipelineLibrary));
 #endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
     postCreate();
-    pipelineInfos.clear();
     if (VK_SUCCESS == result)
     {
         auto handle = handles.cbegin();

@@ -30,7 +30,7 @@ namespace magma
        program, it may be more efficient for graphics driver
        to create all of them at once. */
 
-    class RayTracingPipelineBatch : public TPipelineBatch<RayTracingPipeline>
+    class RayTracingPipelineBatch : public BasePipelineBatch<RayTracingPipeline, VkRayTracingPipelineCreateInfoNV>
     {
     public:
         explicit RayTracingPipelineBatch(std::shared_ptr<Device> device) noexcept;
@@ -48,7 +48,6 @@ namespace magma
 
     private:
         std::forward_list<std::vector<RayTracingShaderGroup>> groups;
-        std::vector<VkRayTracingPipelineCreateInfoNV> pipelineInfos;
     };
 #endif // VK_NV_ray_tracing
 } // namespace magma

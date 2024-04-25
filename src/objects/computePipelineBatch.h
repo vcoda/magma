@@ -28,7 +28,7 @@ namespace magma
        program, it may be more efficient for graphics driver
        to create all of them at once. */
 
-    class ComputePipelineBatch : public TPipelineBatch<ComputePipeline>
+    class ComputePipelineBatch : public BasePipelineBatch<ComputePipeline, VkComputePipelineCreateInfo>
     {
     public:
         explicit ComputePipelineBatch(std::shared_ptr<Device> device) noexcept;
@@ -41,8 +41,5 @@ namespace magma
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr) override;
-
-    private:
-        std::vector<VkComputePipelineCreateInfo> pipelineInfos;
     };
 } // namespace magma

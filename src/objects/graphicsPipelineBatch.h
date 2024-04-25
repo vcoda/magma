@@ -41,7 +41,7 @@ namespace magma
        program, it may be more efficient for graphics driver
        to create all of them at once. */
 
-    class GraphicsPipelineBatch : public TPipelineBatch<GraphicsPipeline>
+    class GraphicsPipelineBatch : public BasePipelineBatch<GraphicsPipeline, VkGraphicsPipelineCreateInfo>
     {
     public:
         explicit GraphicsPipelineBatch(std::shared_ptr<Device> device) noexcept;
@@ -80,6 +80,5 @@ namespace magma
         std::forward_list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
         std::forward_list<std::shared_ptr<RenderPass>> renderPasses;
         std::forward_list<hash_t> rsHashes;
-        std::vector<VkGraphicsPipelineCreateInfo> pipelineInfos;
     };
 } // namespace magma

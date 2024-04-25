@@ -38,7 +38,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 GraphicsPipelineBatch::GraphicsPipelineBatch(std::shared_ptr<Device> device) noexcept:
-    TPipelineBatch<GraphicsPipeline>(std::move(device))
+    BasePipelineBatch<GraphicsPipeline, VkGraphicsPipelineCreateInfo>(std::move(device))
 {}
 
 uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
@@ -156,10 +156,10 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipeli
 #endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
-    fixup(pipelineInfos);
+    fixup();
 #ifdef VK_KHR_pipeline_library
     if (device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
-        linkPipelineLibrary(pipelineInfos, std::move(pipelineLibrary));
+        linkPipelineLibrary(std::move(pipelineLibrary));
 #endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
@@ -177,7 +177,6 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipeli
     dynamicStates.clear();
     dynamicStateInfos.clear();
     renderPasses.clear();
-    pipelineInfos.clear();
     if (VK_SUCCESS == result)
     {
         auto handle = handles.cbegin();

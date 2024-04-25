@@ -30,7 +30,7 @@ namespace magma
 {
 #ifdef VK_NV_ray_tracing
 RayTracingPipelineBatch::RayTracingPipelineBatch(std::shared_ptr<Device> device) noexcept:
-    TPipelineBatch<RayTracingPipeline>(std::move(device))
+    BasePipelineBatch<RayTracingPipeline, VkRayTracingPipelineCreateInfoNV>(std::move(device))
 {}
 
 uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
@@ -55,7 +55,7 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.front());
     pipelineInfo.basePipelineIndex = -1;
 #ifdef VK_EXT_pipeline_creation_feedback
-    if (layout->getDevice()->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    if (device->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
         creationFeedbacks.push_front(VkPipelineCreationFeedbackEXT());
         stageCreationFeedbacks.emplace_front(pipelineInfo.stageCount);
@@ -91,10 +91,10 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipe
 #endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
-    fixup(pipelineInfos);
+    fixup();
 #ifdef VK_KHR_pipeline_library
     if (device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
-        linkPipelineLibrary(pipelineInfos, std::move(pipelineLibrary));
+        linkPipelineLibrary(std::move(pipelineLibrary));
 #endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);

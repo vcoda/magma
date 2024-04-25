@@ -1,13 +1,12 @@
 namespace magma
 {
-template<class PipelineType>
-inline TPipelineBatch<PipelineType>::TPipelineBatch(std::shared_ptr<Device> device) noexcept:
+template<class PipelineType, class PipelineCreateInfo>
+inline BasePipelineBatch<PipelineType, PipelineCreateInfo>::BasePipelineBatch(std::shared_ptr<Device> device) noexcept:
     PipelineBatch(std::move(device))
 {}
 
-template<class PipelineType>
-template<class PipelineInfoType>
-inline void TPipelineBatch<PipelineType>::fixup(std::vector<PipelineInfoType>& pipelineInfos) const noexcept
+template<class PipelineType, class PipelineCreateInfo>
+inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::fixup() noexcept
 {
     collectShaderStageInfos();
     uint32_t offset = 0;
@@ -20,10 +19,8 @@ inline void TPipelineBatch<PipelineType>::fixup(std::vector<PipelineInfoType>& p
 }
 
 #ifdef VK_KHR_pipeline_library
-template<class PipelineType>
-template<class PipelineInfoType>
-inline void TPipelineBatch<PipelineType>::linkPipelineLibrary(std::vector<PipelineInfoType>& pipelineInfos,
-    std::shared_ptr<PipelineLibrary> pipelineLibrary)
+template<class PipelineType, class PipelineCreateInfo>
+inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::linkPipelineLibrary(std::shared_ptr<PipelineLibrary> pipelineLibrary)
 {
     if (pipelineLibrary)
     {
@@ -41,9 +38,10 @@ inline void TPipelineBatch<PipelineType>::linkPipelineLibrary(std::vector<Pipeli
 }
 #endif // VK_KHR_pipeline_library
 
-template<class PipelineType>
-inline void TPipelineBatch<PipelineType>::postCreate()
+template<class PipelineType, class PipelineCreateInfo>
+inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::postCreate()
 {   // Free storage that had to be preserved until vkCreate*Pipelines() call
+    pipelineInfos.clear();
     pipelines.clear();
 #ifdef VK_AMD_pipeline_compiler_control
     pipelineCompilerControlInfos.clear();
@@ -56,8 +54,8 @@ inline void TPipelineBatch<PipelineType>::postCreate()
 #endif
 }
 
-template<class PipelineType>
-inline void TPipelineBatch<PipelineType>::postBuild()
+template<class PipelineType, class PipelineCreateInfo>
+inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::postBuild()
 {   // Free storage that had to be preserved until objects are constructed
     stages.clear();
     layouts.clear();
