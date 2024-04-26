@@ -27,10 +27,10 @@ void StructureChain::insertNode(const ChainNode& node)
     VkBaseOutStructure *lastNode = nullptr;
     if (chain.size() > 1)
     {   // Get only after possible reallocation
-        lastNode = std::prev(chain.rbegin())->getNode();
+        lastNode = std::next(chain.rbegin())->getNode();
         MAGMA_ASSERT(!lastNode->pNext);
     }
-    VkBaseOutStructure *newNode = chain.rbegin()->getNode();
+    VkBaseOutStructure *newNode = chain.back().getNode();
     if (lastNode)
         lastNode->pNext = newNode;
     newNode->pNext = nullptr;
