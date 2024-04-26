@@ -23,14 +23,14 @@ namespace magma
 {
 void StructureChain::insertNode(const ChainNode& node)
 {
-    chain.emplace_back(node);
+    emplace_back(node);
     VkBaseOutStructure *lastNode = nullptr;
-    if (chain.size() > 1)
+    if (size() > 1)
     {   // Get only after possible reallocation
-        lastNode = std::next(chain.rbegin())->getNode();
+        lastNode = std::next(rbegin())->getNode();
         MAGMA_ASSERT(!lastNode->pNext);
     }
-    VkBaseOutStructure *newNode = chain.back().getNode();
+    VkBaseOutStructure *newNode = back().getNode();
     if (lastNode)
         lastNode->pNext = newNode;
     newNode->pNext = nullptr;
@@ -39,31 +39,34 @@ void StructureChain::insertNode(const ChainNode& node)
 hash_t StructureChain::getHash() const noexcept
 {
     hash_t hash = 0ull;
-    for (auto const& node: chain)
-        hash = core::hashCombine(hash, node.getHash());
+    std::for_each(begin(), end(),
+        [&hash](auto& it)
+        {
+            hash = core::hashCombine(hash, it.getHash());
+        });
     return hash;
 }
 
 VkBaseOutStructure *StructureChain::lookupNode(VkStructureType sType) noexcept
 {
-    auto it = std::find_if(chain.begin(), chain.end(),
+    auto it = std::find_if(begin(), end(),
         [sType](auto& it)
         {
            return (it.getNode()->sType == sType);
         });
-    if (it != chain.end())
+    if (it != end())
         return it->getNode();
     return nullptr;
 }
 
 const VkBaseInStructure *StructureChain::lookupNode(VkStructureType sType) const noexcept
 {
-    auto it = std::find_if(chain.cbegin(), chain.cend(),
+    auto it = std::find_if(cbegin(), cend(),
         [sType](auto& it)
         {
            return (it.getNode()->sType == sType);
         });
-    if (it != chain.cend())
+    if (it != cend())
         return it->getNode();
     return nullptr;
 }

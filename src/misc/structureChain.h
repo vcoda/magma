@@ -52,7 +52,7 @@ namespace magma
     /* Vulkan structures that are chained into linked list with head
        node assigned to the pNext member of Vk*CreateInfo structure. */
 
-    class StructureChain
+    class StructureChain : std::vector<ChainNode>
     {
     public:
         template<class StructureType>
@@ -63,27 +63,26 @@ namespace magma
         template<class StructureType>
         const StructureType *findNode() const noexcept;
         VkBaseOutStructure *firstNode() noexcept
-            { return chain.empty() ? nullptr : chain.begin()->getNode(); }
+            { return empty() ? nullptr : begin()->getNode(); }
         const VkBaseInStructure *firstNode() const noexcept
-            { return chain.empty() ? nullptr : chain.cbegin()->getNode(); }
+            { return empty() ? nullptr : cbegin()->getNode(); }
         VkBaseOutStructure *lastNode() noexcept
-            { return chain.empty() ? nullptr : chain.rbegin()->getNode(); }
+            { return empty() ? nullptr : rbegin()->getNode(); }
         const VkBaseInStructure *lastNode() const noexcept
-            { return chain.empty() ? nullptr : chain.crbegin()->getNode(); }
-        uint32_t getSize() const noexcept { return MAGMA_COUNT(chain); }
-        bool empty() const noexcept { return chain.empty(); }
+            { return empty() ? nullptr : crbegin()->getNode(); }
+        size_t getSize() const noexcept { return size(); }
+        bool empty() const noexcept
+            { return std::vector<ChainNode>::empty(); }
         VkBaseOutStructure *getChain() noexcept
-            { return chain.empty() ? nullptr : chain.begin()->getNode(); }
+            { return empty() ? nullptr : begin()->getNode(); }
         const VkBaseInStructure *getChain() const noexcept
-            { return chain.empty() ? nullptr : chain.cbegin()->getNode(); }
+            { return empty() ? nullptr : cbegin()->getNode(); }
         hash_t getHash() const noexcept;
 
     private:
         void insertNode(const ChainNode& node);
         VkBaseOutStructure *lookupNode(VkStructureType sType) noexcept;
         const VkBaseInStructure *lookupNode(VkStructureType sType) const noexcept;
-
-        std::vector<ChainNode> chain;
     };
 } // namespace magma
 
