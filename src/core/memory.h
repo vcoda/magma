@@ -153,10 +153,7 @@ inline uint8_t *copyBinaryData(const void *src, std::size_t size) noexcept
 template<class Type>
 inline uint8_t *copyBinaryData(const Type& src) noexcept
 {
-    uint8_t *dst = MAGMA_NEW uint8_t[sizeof(Type)];
-    if (dst)
-        memcpy(dst, &src, sizeof(Type));
-    return dst;
+    return copyBinaryData(&src, sizeof(Type));
 }
 
 template<class Type>
