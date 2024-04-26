@@ -32,10 +32,9 @@ namespace magma
                 "node type is required to be trivially copyable");
         }
         ChainNode(const ChainNode& n) noexcept: size(n.size),
-            data(MAGMA_NEW uint8_t[n.size])
-            { memcpy(data, n.data, n.size); }
+            data(core::copyBinaryData(n.data, n.size)) {}
         ChainNode(ChainNode&& n) noexcept: size(n.size), data(n.data)
-            { memset(&n, 0, sizeof(ChainNode)); }
+            { core::zeroMemory(n); }
         ~ChainNode() { delete[] data; }
         VkBaseOutStructure *getNode() noexcept
             { return reinterpret_cast<VkBaseOutStructure *>(data); }
