@@ -2,29 +2,6 @@ namespace magma
 {
 namespace aux
 {
-struct ImmediateRender::Vertex
-{
-    Float4 position;
-    Float4 normalPSize;
-    Float4 color;
-    Float2 texCoord;
-};
-
-struct ImmediateRender::Primitive
-{
-    VkBool32 wideLineState : 1;
-    VkBool32 stippledLineState: 1;
-    std::shared_ptr<GraphicsPipeline> pipeline;
-    float lineWidth;
-    uint32_t lineStippleFactor;
-    uint16_t lineStipplePattern;
-    float transform[4][4];
-    uint32_t vertexCount;
-    uint32_t firstVertex;
-    const char *labelName;
-    uint32_t labelColor;
-};
-
 inline void ImmediateRender::setVertexShader(const VertexShaderStage& shader) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
