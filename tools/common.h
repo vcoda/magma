@@ -140,10 +140,14 @@ bool isMemoryAllocateStructure(const std::string& line) noexcept
     if ((line.find("typedef Vk") == std::string::npos) &&
         (line.find("typedef struct Vk") == std::string::npos))
         return false;
-    if ((line.find("Memory") != std::string::npos) &&
-        (line.find("Allocate") != std::string::npos) &&
-        (line.find("Info") != std::string::npos))
+    if (line.find("MemoryDedicated") != std::string::npos)
         return true;
+    for (const auto& ext: vendors)
+    {
+        if ((line.find("AllocateInfo" + ext) != std::string::npos) ||
+            (line.find("AllocateFlagsInfo" + ext) != std::string::npos))
+            return true;
+    }
     return false;
 }
 
