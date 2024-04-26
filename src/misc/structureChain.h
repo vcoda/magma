@@ -92,19 +92,13 @@ namespace magma
 template<>\
 inline StructureType *magma::StructureChain::findNode<StructureType>() noexcept\
 {\
-    VkBaseOutStructure *node = lookupNode(structureType);\
-    if (node)\
-        return reinterpret_cast<StructureType *>(node);\
-    return nullptr;\
+    return reinterpret_cast<StructureType *>(lookupNode(structureType));\
 }\
 \
 template<>\
 inline const StructureType *magma::StructureChain::findNode<StructureType>() const noexcept\
 {\
-    const VkBaseInStructure *node = lookupNode(structureType);\
-    if (node)\
-        return reinterpret_cast<const StructureType *>(node);\
-    return nullptr;\
+    return reinterpret_cast<const StructureType *>(lookupNode(structureType));\
 }
 
 #include "structureChainNode.inl"
