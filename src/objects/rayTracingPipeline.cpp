@@ -56,7 +56,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_,
         MAGMA_ERROR("shader groups are empty");
     VkRayTracingPipelineCreateInfoNV pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV;
-    pipelineInfo.pNext = extendedInfo.getChain();
+    pipelineInfo.pNext = extendedInfo.firstNode();
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;

@@ -71,7 +71,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
 {
     VkSwapchainCreateInfoKHR swapchainInfo;
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapchainInfo.pNext = extendedInfo.getChain();
+    swapchainInfo.pNext = extendedInfo.firstNode();
     swapchainInfo.flags = optional.flags;
     swapchainInfo.surface = *surface;
     swapchainInfo.minImageCount = minImageCount;

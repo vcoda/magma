@@ -56,7 +56,7 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
 {
     VkInstanceCreateInfo instanceInfo;
     instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    instanceInfo.pNext = extendedInfo.getChain();
+    instanceInfo.pNext = extendedInfo.firstNode();
     instanceInfo.flags = flags;
     instanceInfo.pApplicationInfo = applicationInfo;
     instanceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers);

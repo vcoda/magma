@@ -59,7 +59,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkSubmitInfo.html
     VkSubmitInfo submitInfo;
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext = extendedInfo.getChain();
+    submitInfo.pNext = extendedInfo.firstNode();
     if (waitSemaphores.empty())
     {
         submitInfo.waitSemaphoreCount = 0;

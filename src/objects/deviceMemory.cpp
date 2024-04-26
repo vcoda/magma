@@ -37,7 +37,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
 {
     VkMemoryAllocateInfo memoryAllocateInfo;
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    memoryAllocateInfo.pNext = extendedInfo.getChain();
+    memoryAllocateInfo.pNext = extendedInfo.firstNode();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
@@ -61,7 +61,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
     importAndroidHardwareBufferInfo.sType = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
-    importAndroidHardwareBufferInfo.pNext = extendedInfo.getChain();
+    importAndroidHardwareBufferInfo.pNext = extendedInfo.firstNode();
     importAndroidHardwareBufferInfo.buffer = hardwareBuffer->getBuffer();
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -125,7 +125,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     memoryRequirements = memoryRequirements_;
     VkMemoryAllocateInfo memoryAllocateInfo;
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    memoryAllocateInfo.pNext = extendedInfo.getChain();
+    memoryAllocateInfo.pNext = extendedInfo.firstNode();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(memoryFlags);
     const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,

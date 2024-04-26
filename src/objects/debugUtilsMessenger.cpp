@@ -43,7 +43,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<const Instance> instanc
     {
         VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerInfo;
         debugUtilsMessengerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        debugUtilsMessengerInfo.pNext = extendedInfo.getChain();
+        debugUtilsMessengerInfo.pNext = extendedInfo.firstNode();
         debugUtilsMessengerInfo.flags = 0;
         debugUtilsMessengerInfo.messageSeverity = messageSeverity;
         debugUtilsMessengerInfo.messageType = messageType;

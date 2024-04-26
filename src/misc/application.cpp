@@ -26,7 +26,7 @@ Application::Application(const char *applicationName, uint32_t applicationVersio
     const StructureChain& extendedInfo /* default */) noexcept:
     VkApplicationInfo{
         VK_STRUCTURE_TYPE_APPLICATION_INFO,
-        extendedInfo.getChain(),
+        extendedInfo.firstNode(),
         applicationName,
         applicationVersion,
         engineName,

@@ -36,7 +36,7 @@ CommandPool::CommandPool(std::shared_ptr<Device> device, uint32_t queueFamilyInd
 {
     VkCommandPoolCreateInfo cmdPoolInfo;
     cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    cmdPoolInfo.pNext = extendedInfo.getChain();
+    cmdPoolInfo.pNext = extendedInfo.firstNode();
     cmdPoolInfo.flags = 0;
     if (transient)
         cmdPoolInfo.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
@@ -67,7 +67,7 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
 {
     VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
     cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    cmdBufferAllocateInfo.pNext = extendedInfo.getChain();
+    cmdBufferAllocateInfo.pNext = extendedInfo.firstNode();
     cmdBufferAllocateInfo.commandPool = handle;
     cmdBufferAllocateInfo.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
     cmdBufferAllocateInfo.commandBufferCount = commandBufferCount;

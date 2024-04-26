@@ -71,10 +71,6 @@ namespace magma
         const VkBaseInStructure *lastNode() const noexcept
             { return empty() ? nullptr : crbegin()->getNode(); }
         using std::vector<ChainNode>::empty;
-        void *getChain() noexcept
-            { return size() ? front().getNode() : nullptr; }
-        const void *getChain() const noexcept
-            { return size() ? front().getNode() : nullptr; }
         hash_t getHash() const noexcept;
 
     private:

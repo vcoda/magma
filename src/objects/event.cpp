@@ -31,7 +31,7 @@ Event::Event(std::shared_ptr<Device> device,
 {
     VkEventCreateInfo eventInfo;
     eventInfo.sType = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
-    eventInfo.pNext = extendedInfo.getChain();
+    eventInfo.pNext = extendedInfo.firstNode();
     eventInfo.flags = 0;
     const VkResult result = vkCreateEvent(MAGMA_HANDLE(device), &eventInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create event");

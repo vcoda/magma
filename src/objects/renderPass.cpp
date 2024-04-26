@@ -99,7 +99,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     };
     VkRenderPassCreateInfo renderPassInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.pNext = extendedInfo.getChain();
+    renderPassInfo.pNext = extendedInfo.firstNode();
     renderPassInfo.flags = 0;
     renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
     renderPassInfo.pAttachments = attachments.data();
@@ -133,7 +133,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
 {
     VkRenderPassCreateInfo renderPassInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.pNext = extendedInfo.getChain();
+    renderPassInfo.pNext = extendedInfo.firstNode();
     renderPassInfo.flags = 0;
     renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
     renderPassInfo.pAttachments = attachments.data();

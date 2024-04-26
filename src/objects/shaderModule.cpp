@@ -42,7 +42,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     MAGMA_ASSERT(bytecodeSize % sizeof(SpirvWord) == 0);
     VkShaderModuleCreateInfo shaderModuleInfo;
     shaderModuleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    shaderModuleInfo.pNext = extendedInfo.getChain();
+    shaderModuleInfo.pNext = extendedInfo.firstNode();
     shaderModuleInfo.flags = flags;
     shaderModuleInfo.codeSize = bytecodeSize;
     shaderModuleInfo.pCode = bytecode;
@@ -52,7 +52,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     {
         shaderModuleInfo.pNext = &shaderModuleValidationCacheInfo;
         shaderModuleValidationCacheInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT;
-        shaderModuleValidationCacheInfo.pNext = extendedInfo.getChain();
+        shaderModuleValidationCacheInfo.pNext = extendedInfo.firstNode();
         shaderModuleValidationCacheInfo.validationCache = MAGMA_OPTIONAL_HANDLE(validationCache);
     }
 #endif // VK_EXT_validation_cache

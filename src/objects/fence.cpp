@@ -36,7 +36,7 @@ Fence::Fence(std::shared_ptr<Device> device,
 {
     VkFenceCreateInfo fenceInfo;
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.pNext = extendedInfo.getChain();
+    fenceInfo.pNext = extendedInfo.firstNode();
     fenceInfo.flags = flags;
     const VkResult result = vkCreateFence(MAGMA_HANDLE(device), &fenceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create fence");

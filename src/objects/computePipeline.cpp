@@ -43,7 +43,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
 {
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
-    pipelineInfo.pNext = extendedInfo.getChain();
+    pipelineInfo.pNext = extendedInfo.firstNode();
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
