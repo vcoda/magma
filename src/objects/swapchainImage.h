@@ -37,7 +37,9 @@ namespace magma
     class SwapchainImage : public Image2D
     {
     public:
+    #ifdef VK_VERSION_1_1
         explicit SwapchainImage(std::shared_ptr<Swapchain> swapchain);
+    #endif
         ~SwapchainImage();
         VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
         int32_t getChainIndex() const noexcept { return chainIndex; }

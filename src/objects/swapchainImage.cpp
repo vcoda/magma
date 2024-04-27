@@ -38,6 +38,7 @@ SwapchainImage::SwapchainImage(std::shared_ptr<Device> device, VkImage handle, V
 // with multiple physical devices to create peer memory bindings of swapchain memory.
 // These images and bindings have no effect on what memory is presented.
 // Unlike images retrieved from vkGetSwapchainImagesKHR, these images must be destroyed with vkDestroyImage.
+#ifdef VK_VERSION_1_1
 SwapchainImage::SwapchainImage(std::shared_ptr<Swapchain> swapchain):
     Image2D(swapchain->getDevice(), VK_NULL_HANDLE, swapchain->getSurfaceFormat().format, swapchain->getExtent()),
     implementationControlled(false),
@@ -77,6 +78,7 @@ SwapchainImage::SwapchainImage(std::shared_ptr<Swapchain> swapchain):
     const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create swapchain image");
 }
+#endif // VK_VERSION_1_1
 
 SwapchainImage::~SwapchainImage()
 {
