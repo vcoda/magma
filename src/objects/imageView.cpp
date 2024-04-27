@@ -80,12 +80,12 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     imageViewInfo.subresourceRange.layerCount = layerCount;
 #ifdef VK_KHR_maintenance2
     VkImageViewUsageCreateInfoKHR imageViewUsageInfo;
-    if (usage)
+    if (usage && device->extensionEnabled(VK_KHR_MAINTENANCE2_EXTENSION_NAME))
     {   // Usage of image view can be restricted compared to the parent image's usage flags
-        imageViewInfo.pNext = &imageViewUsageInfo;
         imageViewUsageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO_KHR;
-        imageViewUsageInfo.pNext = extendedInfo.headNode();
+        imageViewUsageInfo.pNext = nullptr;
         imageViewUsageInfo.usage = usage;
+        linkNode(imageViewInfo, imageViewUsageInfo);
     }
 #endif // VK_KHR_maintenance2
     const VkResult result = vkCreateImageView(MAGMA_HANDLE(device), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
