@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef MAGMA_X64
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
     template<class Type>
     struct ObjectType
     {
@@ -86,5 +86,5 @@ namespace magma
 #ifdef VK_NV_ray_tracing
     MAGMA_SPECIALIZE_OBJECT_TYPE(VkAccelerationStructureNV, VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV)
 #endif
-#endif // MAGMA_X64
+#endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
 } // namespace magma

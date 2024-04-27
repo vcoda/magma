@@ -81,7 +81,7 @@ namespace magma
 
     template<class Type>
     class TObject :
-    #ifdef MAGMA_X64
+    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         public ObjectType<Type>, // Use custom template specialization
     #endif
         public Object
@@ -105,7 +105,7 @@ namespace magma
         // Additional storage is required under x86 target
         // as Vulkan non-dispatchable handles are defined as uint64_t
         // and thus cannot be used in custom template specialization.
-    #if !defined(MAGMA_X64)
+    #if (VK_USE_64_BIT_PTR_DEFINES == 0)
         const VkObjectType objectType;
     #endif
         NativeHandle handle;

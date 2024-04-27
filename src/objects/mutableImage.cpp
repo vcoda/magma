@@ -32,7 +32,10 @@ MutableImage::MutableImage(std::shared_ptr<Device> device, VkImageType imageType
             // Image with compressed format can be used to create an image view
             // with an uncompressed format where each texel in the image view
             // corresponds to a compressed texel block of the image.
-            (Format(format).blockCompressed() ? VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT : 0),
+        #ifdef VK_KHR_maintenance2
+            (Format(format).blockCompressed() ? VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT_KHR : 0) |
+        #endif
+            0,
         VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
         VK_IMAGE_TILING_OPTIMAL,
         optional, sharing, std::move(allocator))

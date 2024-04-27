@@ -618,9 +618,9 @@ constexpr bool Format::pvrtc() const noexcept
 
 constexpr bool Format::ycbcr() const noexcept
 {
+#ifdef VK_KHR_sampler_ycbcr_conversion
     switch (format)
     {
-#ifdef VK_KHR_sampler_ycbcr_conversion
     case VK_FORMAT_B10X6G10X6R10X6G10X6_422_UNORM_4PACK16_KHR:
     case VK_FORMAT_B12X4G12X4R12X4G12X4_422_UNORM_4PACK16_KHR:
     case VK_FORMAT_B16G16R16G16_422_UNORM_KHR:
@@ -655,17 +655,20 @@ constexpr bool Format::ycbcr() const noexcept
     case VK_FORMAT_R12X4G12X4B12X4A12X4_UNORM_4PACK16_KHR:
     case VK_FORMAT_R12X4G12X4_UNORM_2PACK16_KHR:
     case VK_FORMAT_R12X4_UNORM_PACK16_KHR:
+        return true;
+    }
 #endif // VK_KHR_sampler_ycbcr_conversion
 #ifdef VK_EXT_ycbcr_2plane_444_formats
+    switch (format)
+    {
     case VK_FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT:
     case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
-#endif // VK_EXT_ycbcr_2plane_444_formats
         return true;
-    default:
-        return false;
     }
+#endif // VK_EXT_ycbcr_2plane_444_formats
+    return false;
 }
 
 constexpr bool Format::packed() const noexcept
@@ -737,9 +740,9 @@ constexpr bool Format::packed() const noexcept
 
 constexpr bool Format::multiPlanar() const noexcept
 {
+#ifdef VK_KHR_sampler_ycbcr_conversion
     switch (format)
     {
-#ifdef VK_KHR_sampler_ycbcr_conversion
     case VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM_KHR:
     case VK_FORMAT_G8_B8R8_2PLANE_420_UNORM_KHR:
     case VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM_KHR:
@@ -760,17 +763,20 @@ constexpr bool Format::multiPlanar() const noexcept
     case VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM_KHR:
     case VK_FORMAT_G16_B16R16_2PLANE_422_UNORM_KHR:
     case VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR:
+        return true;
+    }
 #endif // VK_KHR_sampler_ycbcr_conversion
 #ifdef VK_EXT_ycbcr_2plane_444_formats
+    switch (format)
+    {
     case VK_FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT:
     case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
-#endif // VK_EXT_ycbcr_2plane_444_formats
         return true;
-    default:
-        return false;
     }
+#endif // VK_EXT_ycbcr_2plane_444_formats
+    return false;
 }
 
 constexpr std::size_t Format::depthStencilSize() const noexcept

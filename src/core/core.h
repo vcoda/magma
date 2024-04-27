@@ -17,15 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#if defined(__LP64__) ||\
-    defined(_WIN64) ||\
-    (defined(__x86_64__) && !defined(__ILP32__) ) ||\
-    defined(_M_X64) ||\
-    defined(__ia64) ||\
-    defined (_M_IA64) ||\
-    defined(__aarch64__) ||\
-    defined(__powerpc64__)
-  #define MAGMA_X64
+#if !defined(VK_USE_64_BIT_PTR_DEFINES)
+    #if defined(__LP64__) || defined(_WIN64) || (defined(__x86_64__) && !defined(__ILP32__) ) || defined(_M_X64) || defined(__ia64) || defined (_M_IA64) || defined(__aarch64__) || defined(__powerpc64__)
+        #define VK_USE_64_BIT_PTR_DEFINES 1
+    #else
+        #define VK_USE_64_BIT_PTR_DEFINES 0
+    #endif
 #endif
 
 #if defined(_MSC_VER)

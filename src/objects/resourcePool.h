@@ -45,7 +45,7 @@ namespace magma
         VkDeviceSize countAllocatedImageMemory() const;
         VkDeviceSize countAllocatedAccelerationStructureMemory() const;
         bool hasAnyDeviceResource() const;
-    #ifdef MAGMA_X64
+    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         template<class Type>
         core::ThreadSafeUnorderedSet<Type>& getPool();
     #endif

@@ -18,6 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 
+#include "../misc/compatibility.h"
+
 #ifdef _MSC_VER
 #pragma warning(disable: 4100) // unreferenced formal parameter
 #pragma warning(disable: 4189) // local variable is initialized but not referenced

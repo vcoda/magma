@@ -24,7 +24,7 @@ inline void Object::setDebugTag(uint64_t tagName, const Type& tag)
 template<class Type>
 inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<IAllocator> hostAllocator) noexcept:
     Object(nullptr, std::move(hostAllocator)),
-#if !defined(MAGMA_X64)
+#if (VK_USE_64_BIT_PTR_DEFINES == 0)
     objectType(objectType),
 #endif
     handle(VK_NULL_HANDLE)
@@ -35,7 +35,7 @@ inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<IAllocato
 template<class Type>
 inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<Device> device_, std::shared_ptr<IAllocator> hostAllocator) noexcept:
     Object(std::move(device_), std::move(hostAllocator)),
-#if !defined(MAGMA_X64)
+#if (VK_USE_64_BIT_PTR_DEFINES == 0)
     objectType(objectType),
 #endif
     handle(VK_NULL_HANDLE)
@@ -46,7 +46,7 @@ inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<Device> d
 template<class Type>
 inline TObject<Type>::TObject(VkObjectType objectType, Type handle, std::shared_ptr<Device> device_, std::shared_ptr<IAllocator> hostAllocator) noexcept:
     Object(std::move(device_), std::move(hostAllocator)),
-#if !defined(MAGMA_X64)
+#if (VK_USE_64_BIT_PTR_DEFINES == 0)
     objectType(objectType),
 #endif
     handle(handle)
@@ -57,7 +57,7 @@ inline TObject<Type>::TObject(VkObjectType objectType, Type handle, std::shared_
 template<class Type>
 inline VkObjectType TObject<Type>::getObjectType() const noexcept
 {
-#ifdef MAGMA_X64
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
     return ObjectType<Type>::getObjectType();
 #else
     return objectType;

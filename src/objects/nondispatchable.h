@@ -32,7 +32,7 @@ namespace magma
         /* private */ DeviceResourcePool
     {
         static_assert(
-        #if (VK_USE_64_BIT_PTR_DEFINES==1)
+        #if (VK_USE_64_BIT_PTR_DEFINES == 1)
             sizeof(Type) == sizeof(intptr_t),
         #else
             sizeof(Type) == sizeof(uint64_t),
@@ -43,12 +43,12 @@ namespace magma
         bool nonDispatchable() const noexcept override { return true; }
         uint64_t getHandle() const noexcept override
         {
-        #ifdef MAGMA_X64
+        #if (VK_USE_64_BIT_PTR_DEFINES == 1)
             // VK_EXT_debug_utils/VK_EXT_debug_marker requires uint64_t type
             return reinterpret_cast<uint64_t>(TObject<Type>::handle);
         #else
             return TObject<Type>::handle;
-        #endif // MAGMA_X64
+        #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
         }
 
     protected:
@@ -61,20 +61,20 @@ namespace magma
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
             TObject<Type>(objectType, std::move(device), std::move(hostAllocator))
         {
-        #ifdef MAGMA_X64
+        #if (VK_USE_64_BIT_PTR_DEFINES == 1)
             std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(this->device);
             if (pool) // Put resource in pool
                 pool->getPool<NonDispatchable<Type>>().insert(this);
-        #endif // MAGMA_X64
+        #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
         }
 
         ~NonDispatchable()
         {
-        #ifdef MAGMA_X64
+        #if (VK_USE_64_BIT_PTR_DEFINES == 1)
             std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(this->device);
             if (pool) // Remove resource from pool
                 pool->getPool<NonDispatchable<Type>>().erase(this);
-        #endif // MAGMA_X64
+        #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
         }
     };
 } // namespace magma

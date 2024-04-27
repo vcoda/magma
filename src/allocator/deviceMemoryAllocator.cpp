@@ -63,7 +63,9 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device_,
     allocatorInfo.pVulkanFunctions = nullptr;
     allocatorInfo.instance = *physicalDevice->getInstance();
     allocatorInfo.vulkanApiVersion = physicalDevice->getInstance()->getApiVersion();
+#ifdef VK_KHR_external_memory
     allocatorInfo.pTypeExternalMemoryHandleTypes = nullptr;
+#endif
     const VkResult result = vmaCreateAllocator(&allocatorInfo, &allocator);
     MAGMA_HANDLE_RESULT(result, "failed to create VMA allocator");
 }

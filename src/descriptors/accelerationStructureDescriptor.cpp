@@ -68,7 +68,7 @@ AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const ma
 #ifdef VK_KHR_acceleration_structure
     // TODO: refactor this when VK_KHR_acceleration_structure support will be implemented!
     VkAccelerationStructureKHR handleKHR;
-    #ifdef MAGMA_X64
+    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
     handleKHR = reinterpret_cast<VkAccelerationStructureKHR>((VkAccelerationStructureNV)*accelerationStructure);
     #else
     handleKHR = static_cast<VkAccelerationStructureKHR>((VkAccelerationStructureNV)*accelerationStructure);

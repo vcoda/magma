@@ -1,6 +1,6 @@
 namespace magma
 {
-#ifdef MAGMA_X64
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
 #define MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(Type, pool)\
 template<>\
 inline core::ThreadSafeUnorderedSet<NonDispatchable<Type>>& ResourcePool::getPool<NonDispatchable<Type>>()\
@@ -54,5 +54,5 @@ MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(VkPrivateDataSlotEXT, privateDataSlots)
 #ifdef VK_NV_ray_tracing
 MAGMA_RESOURCE_POOL_IMPLEMENT_ACCESSOR(VkAccelerationStructureNV, accelerationStructures)
 #endif
-#endif // MAGMA_X64
+#endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
 } // namespace magma
