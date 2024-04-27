@@ -115,11 +115,7 @@ inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& ptr)
 {
     if (ptr)
         return *ptr;
-#ifdef VK_NULL_HANDLE
     return VK_NULL_HANDLE;
-#else
-    return 0ull;
-#endif
 }
 
 template<class VkObject>
@@ -133,11 +129,7 @@ inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
         return static_cast<VkObject>(handle);
     #endif
     }
-#ifdef VK_NULL_HANDLE
     return VK_NULL_HANDLE;
-#else
-    return 0ull;
-#endif
 }
 
 template<class Int>

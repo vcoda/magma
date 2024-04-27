@@ -86,11 +86,6 @@ constexpr VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KH
 constexpr VkAccessFlagBits VK_ACCESS_NONE_KHR = VkAccessFlagBits(0);
 #endif
 
-typedef struct VkNode {
-    VkStructureType sType;
-    void*           pNext;
-} VkNode;
-
 #if VK_HEADER_VERSION < 75
 typedef struct VkBaseOutStructure {
     VkStructureType               sType;
@@ -101,7 +96,17 @@ typedef struct VkBaseInStructure {
     VkStructureType                    sType;
     const struct VkBaseInStructure*    pNext;
 } VkBaseInStructure;
-#endif
+#endif // VK_HEADER_VERSION < 75
+
+#if VK_HEADER_VERSION < 184
+typedef struct VkPipelineCacheHeaderVersionOne {
+    uint32_t                        headerSize;
+    VkPipelineCacheHeaderVersion    headerVersion;
+    uint32_t                        vendorID;
+    uint32_t                        deviceID;
+    uint8_t                         pipelineCacheUUID[VK_UUID_SIZE];
+} VkPipelineCacheHeaderVersionOne;
+#endif // VK_HEADER_VERSION < 184
 
 #if VK_HEADER_VERSION < 131
 constexpr VkResult VK_ERROR_UNKNOWN = VkResult(-13);

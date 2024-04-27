@@ -156,13 +156,13 @@ std::string stringifyPipelineShaderStageFlags(VkPipelineShaderStageCreateFlags f
     if (!flags)
         return "0";
     std::ostringstream out;
+#ifdef VK_EXT_subgroup_size_control
     for (VkPipelineShaderStageCreateFlagBits bit: {
-    #ifdef VK_EXT_subgroup_size_control
         VK_PIPELINE_SHADER_STAGE_CREATE_ALLOW_VARYING_SUBGROUP_SIZE_BIT_EXT,
         VK_PIPELINE_SHADER_STAGE_CREATE_REQUIRE_FULL_SUBGROUPS_BIT_EXT,
-    #endif // VK_EXT_subgroup_size_control
         VK_PIPELINE_SHADER_STAGE_CREATE_FLAG_BITS_MAX_ENUM
     }) stringifyOredBit(flags, bit, out);
+#endif // VK_EXT_subgroup_size_control
     return out.str();
 }
 
@@ -199,12 +199,11 @@ std::string strinfigyRenderPassFlags(VkRenderPassCreateFlags flags)
     if (!flags)
         return "0";
     std::ostringstream out;
+#ifdef VK_QCOM_render_pass_transform
     for (VkAttachmentDescriptionFlags bit: {
-    #ifdef VK_QCOM_render_pass_transform
-        VK_RENDER_PASS_CREATE_TRANSFORM_BIT_QCOM,
-    #endif
-        VK_RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM
+        VK_RENDER_PASS_CREATE_TRANSFORM_BIT_QCOM
     }) stringifyOredBit(flags, bit, out);
+#endif // VK_QCOM_render_pass_transform
     return out.str();
 }
 

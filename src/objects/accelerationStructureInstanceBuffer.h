@@ -69,7 +69,7 @@ namespace magma
         void setAccelerationStructure(std::shared_ptr<const AccelerationStructure> accelerationStructure);
 
     private:
-        void setFlag(VkGeometryInstanceFlagBitsKHR bit, bool set) noexcept { if (set) flags |= bit; else flags &= ~bit; }
+        void setFlag(VkGeometryInstanceFlagBitsNV bit, bool set) noexcept { if (set) flags |= bit; else flags &= ~bit; }
     };
 
     /* Buffer containing an array of VkAccelerationStructureInstanceKHR

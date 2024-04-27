@@ -36,7 +36,6 @@ namespace magma
     class PipelineCache : public NonDispatchable<VkPipelineCache>
     {
     public:
-        struct Header;
         explicit PipelineCache(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
@@ -51,22 +50,4 @@ namespace magma
         void mergeCache(std::shared_ptr<const PipelineCache> srcCache);
         void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& srcCaches);
     };
-
-    /* To enable applications to detect when previously retrieved
-       data  is incompatible with the device, the pipeline cache
-       data must begin with a valid pipeline cache header. Version 1
-       of the pipeline cache header is defined as: */
-
-    struct PipelineCache::Header
-    {
-        uint32_t size = 0;
-        VkPipelineCacheHeaderVersion version =
-            VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
-        uint32_t vendorID = 0;
-        uint32_t deviceID = 0;
-        uint8_t pipelineCacheUUID[VK_UUID_SIZE] = {};
-    };
-
-    static_assert(sizeof(PipelineCache::Header) == sizeof(VkPipelineCacheHeaderVersionOne),
-        "pipeline cache header structure size mismatch");
 } // namespace magma

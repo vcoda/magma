@@ -74,7 +74,9 @@ MAGMA_STREAM_INSERT_OPERATOR(VkQueryResultFlagBits);
 MAGMA_STREAM_INSERT_OPERATOR(VkBufferCreateFlagBits);
 MAGMA_STREAM_INSERT_OPERATOR(VkBufferUsageFlagBits);
 MAGMA_STREAM_INSERT_OPERATOR(VkPipelineCreateFlagBits);
+#ifdef VK_EXT_subgroup_size_control
 MAGMA_STREAM_INSERT_OPERATOR(VkPipelineShaderStageCreateFlagBits);
+#endif
 MAGMA_STREAM_INSERT_OPERATOR(VkShaderStageFlagBits);
 MAGMA_STREAM_INSERT_OPERATOR(VkCullModeFlagBits);
 MAGMA_STREAM_INSERT_OPERATOR(VkColorComponentFlagBits);

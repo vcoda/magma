@@ -95,7 +95,8 @@ namespace magma
         MAGMA_SAMPLER_STATE_PERMUTATIONS(ClampToEdge, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE)
         MAGMA_SAMPLER_STATE_PERMUTATIONS(ClampToBorder, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER)
     #ifdef VK_KHR_sampler_mirror_clamp_to_edge
-        MAGMA_SAMPLER_STATE_PERMUTATIONS(MirrorClampToEdge, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE_KHR)
+        // Original extension did not use an author suffix on the enum VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE
+        MAGMA_SAMPLER_STATE_PERMUTATIONS(MirrorClampToEdge, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE)
     #endif
 
     #ifdef VK_EXT_filter_cubic
@@ -104,7 +105,8 @@ namespace magma
         MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(ClampToEdge, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE)
         MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(ClampToBorder, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER)
     #ifdef VK_KHR_sampler_mirror_clamp_to_edge
-        MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(MirrorClampToEdge, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE_KHR)
+        // Original extension did not use an author suffix on the enum VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE
+        MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(MirrorClampToEdge, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE)
     #endif
     #endif // VK_EXT_filter_cubic
     } // namespace sampler

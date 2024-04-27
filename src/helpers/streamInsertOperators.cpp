@@ -1181,17 +1181,17 @@ std::ostream& operator<<(std::ostream& out, VkPipelineCreateFlagBits bit)
     }
 }
 
+#ifdef VK_EXT_subgroup_size_control
 std::ostream& operator<<(std::ostream& out, VkPipelineShaderStageCreateFlagBits bit)
 {
     switch (bit)
     {
-#ifdef VK_EXT_subgroup_size_control
     MAGMA_OUTPUT_ENUMERATION(VK_PIPELINE_SHADER_STAGE_CREATE_ALLOW_VARYING_SUBGROUP_SIZE_BIT_EXT)
     MAGMA_OUTPUT_ENUMERATION(VK_PIPELINE_SHADER_STAGE_CREATE_REQUIRE_FULL_SUBGROUPS_BIT_EXT)
-#endif // VK_EXT_subgroup_size_control
     MAGMA_OUTPUT_UNKNOWN
     }
 }
+#endif // VK_EXT_subgroup_size_control
 
 std::ostream& operator<<(std::ostream& out, VkShaderStageFlagBits bit)
 {
@@ -1498,9 +1498,14 @@ std::ostream& operator<<(std::ostream& out, VkDriverIdKHR driverId)
     MAGMA_OUTPUT_ENUMERATION(VK_DRIVER_ID_IMAGINATION_PROPRIETARY_KHR)
     MAGMA_OUTPUT_ENUMERATION(VK_DRIVER_ID_QUALCOMM_PROPRIETARY_KHR)
     MAGMA_OUTPUT_ENUMERATION(VK_DRIVER_ID_ARM_PROPRIETARY_KHR)
+#ifdef VK_VERSION_1_2
     MAGMA_OUTPUT_ENUMERATION(VK_DRIVER_ID_GOOGLE_SWIFTSHADER_KHR)
     MAGMA_OUTPUT_ENUMERATION(VK_DRIVER_ID_GGP_PROPRIETARY_KHR)
     MAGMA_OUTPUT_ENUMERATION(VK_DRIVER_ID_BROADCOM_PROPRIETARY_KHR)
+#elif VK_HEADER_VERSION >= 93
+    // https://android.googlesource.com/platform/frameworks/native/+/e561cf83bb0ee8e67602e9e1bde2081ff01fa1be%5E1..e561cf83bb0ee8e67602e9e1bde2081ff01fa1be/
+    MAGMA_OUTPUT_ENUMERATION(VK_DRIVER_ID_GOOGLE_PASTEL_KHR)
+#endif
     MAGMA_OUTPUT_UNKNOWN
     }
 }
