@@ -56,7 +56,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
 {
     VkDeviceCreateInfo deviceInfo;
     deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    deviceInfo.pNext = extendedInfo.firstNode();
+    deviceInfo.pNext = extendedInfo.headNode();
     deviceInfo.flags = 0;
     deviceInfo.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
     deviceInfo.pQueueCreateInfos = queueDescriptors.data();
@@ -70,14 +70,14 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     if (!enabledExtendedFeatures.empty())
     {
         deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR;
-        deviceFeatures2.pNext = (void *)enabledExtendedFeatures.firstNode();
+        deviceFeatures2.pNext = (void *)enabledExtendedFeatures.headNode();
         deviceFeatures2.features = enabledFeatures;
         if (!deviceInfo.pNext)
             deviceInfo.pNext = &deviceFeatures2;
         else
-        {   // Link extended features as last node
-            VkNode *lastNode = (VkNode *)extendedInfo.lastNode();
-            lastNode->pNext = &deviceFeatures2;
+        {   // Link extended features as tail node
+            auto *tailNode = (VkBaseInStructure *)extendedInfo.tailNode();
+            tailNode->pNext = (const VkBaseInStructure *)&deviceFeatures2;
         }
     }
 #endif // VK_KHR_get_physical_device_properties2
@@ -96,7 +96,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     for (auto const& extension: enabledExtensions_)
         enabledExtensions.emplace(extension);
     // Store feature nodes for fast search in getEnabledExtendedFeatures()
-    const VkBaseInStructure *featureNode = enabledExtendedFeatures.firstNode();
+    const VkBaseInStructure *featureNode = enabledExtendedFeatures.headNode();
     while (featureNode)
     {
         extendedFeatures[featureNode->sType] = featureNode;
@@ -238,7 +238,7 @@ bool Device::getDescriptorSetLayoutSupport(const std::vector<VkDescriptorSetLayo
     VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo;
     VkDescriptorSetLayoutSupportKHR descriptorSetLayoutSupport;
     descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    descriptorSetLayoutInfo.pNext = extendedInfo.firstNode();
+    descriptorSetLayoutInfo.pNext = extendedInfo.headNode();
     descriptorSetLayoutInfo.flags = flags;
     descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
     descriptorSetLayoutInfo.pBindings = bindings.data();
@@ -259,7 +259,7 @@ uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDes
     VkDescriptorSetLayoutSupportKHR descriptorSetLayoutSupport;
     VkDescriptorSetVariableDescriptorCountLayoutSupportEXT descriptorSetVariableDescriptorCountLayoutSupport;
     descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    descriptorSetLayoutInfo.pNext = extendedInfo.firstNode();
+    descriptorSetLayoutInfo.pNext = extendedInfo.headNode();
     descriptorSetLayoutInfo.flags = flags;
     descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
     descriptorSetLayoutInfo.pBindings = bindings.data();

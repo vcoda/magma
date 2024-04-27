@@ -105,7 +105,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     VkGraphicsPipelineCreateInfo pipelineInfo;
     VkPipelineDynamicStateCreateInfo pipelineDynamicStateInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.pNext = extendedInfo.firstNode();
+    pipelineInfo.pNext = extendedInfo.headNode();
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;

@@ -24,16 +24,16 @@ namespace magma
 void StructureChain::insertNode(const ChainNode& node)
 {
     emplace_back(node);
-    VkBaseOutStructure *lastNode = nullptr;
+    VkBaseOutStructure *prevNode = nullptr;
     if (size() > 1)
     {   // Get only after possible reallocation
-        lastNode = std::next(rbegin())->getNode();
-        MAGMA_ASSERT(!lastNode->pNext);
+        prevNode = std::next(rbegin())->getNode();
+        MAGMA_ASSERT(!prevNode->pNext);
     }
-    VkBaseOutStructure *newNode = back().getNode();
-    if (lastNode)
-        lastNode->pNext = newNode;
-    newNode->pNext = nullptr;
+    VkBaseOutStructure *tailNode = back().getNode();
+    if (prevNode)
+        prevNode->pNext = tailNode;
+    tailNode->pNext = nullptr;
 }
 
 hash_t StructureChain::getHash() const noexcept

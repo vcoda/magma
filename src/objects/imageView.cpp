@@ -58,7 +58,7 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     MAGMA_UNUSED(usage);
     VkImageViewCreateInfo imageViewInfo;
     imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-    imageViewInfo.pNext = extendedInfo.firstNode();
+    imageViewInfo.pNext = extendedInfo.headNode();
     imageViewInfo.flags = flags;
     imageViewInfo.image = *image;
     imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags());
@@ -91,7 +91,7 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     {   // Usage of image view can be restricted compared to the parent image's usage flags
         imageViewInfo.pNext = &imageViewUsageInfo;
         imageViewUsageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO_KHR;
-        imageViewUsageInfo.pNext = extendedInfo.firstNode();
+        imageViewUsageInfo.pNext = extendedInfo.headNode();
         imageViewUsageInfo.usage = usage;
     }
 #endif // VK_KHR_maintenance2

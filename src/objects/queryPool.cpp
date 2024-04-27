@@ -46,7 +46,7 @@ QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<Device> device, uint
 {
     VkQueryPoolCreateInfo queryPoolInfo;
     queryPoolInfo.sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO;
-    queryPoolInfo.pNext = extendedInfo.firstNode();
+    queryPoolInfo.pNext = extendedInfo.headNode();
     queryPoolInfo.flags = 0;
     queryPoolInfo.queryType = queryType;
     queryPoolInfo.queryCount = queryCount;

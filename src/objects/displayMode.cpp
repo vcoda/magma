@@ -40,7 +40,7 @@ DisplayMode::DisplayMode(std::shared_ptr<const Display> display, const VkExtent2
 {
     VkDisplayModeCreateInfoKHR displayModeInfo;
     displayModeInfo.sType = VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR;
-    displayModeInfo.pNext = extendedInfo.firstNode();
+    displayModeInfo.pNext = extendedInfo.headNode();
     displayModeInfo.flags = 0;
     displayModeInfo.parameters.visibleRegion = visibleRegion;
     displayModeInfo.parameters.refreshRate = refreshRate;

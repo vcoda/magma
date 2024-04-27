@@ -115,7 +115,7 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     renderPassInfo.dependencyCount = 2;
     renderPassInfo.pDependencies = dependencies;
     renderPassMultiviewInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO_KHR;
-    renderPassMultiviewInfo.pNext = extendedInfo.firstNode();
+    renderPassMultiviewInfo.pNext = extendedInfo.headNode();
     renderPassMultiviewInfo.subpassCount = MAGMA_COUNT(this->viewMasks);
     renderPassMultiviewInfo.pViewMasks = this->viewMasks.data();
     renderPassMultiviewInfo.dependencyCount = MAGMA_COUNT(this->viewOffsets);

@@ -62,13 +62,13 @@ namespace magma
         StructureType *findNode() noexcept;
         template<class StructureType>
         const StructureType *findNode() const noexcept;
-        VkBaseOutStructure *firstNode() noexcept
+        VkBaseOutStructure *headNode() noexcept
             { return empty() ? nullptr : begin()->getNode(); }
-        const VkBaseInStructure *firstNode() const noexcept
+        const VkBaseInStructure *headNode() const noexcept
             { return empty() ? nullptr : cbegin()->getNode(); }
-        VkBaseOutStructure *lastNode() noexcept
+        VkBaseOutStructure *tailNode() noexcept
             { return empty() ? nullptr : rbegin()->getNode(); }
-        const VkBaseInStructure *lastNode() const noexcept
+        const VkBaseInStructure *tailNode() const noexcept
             { return empty() ? nullptr : crbegin()->getNode(); }
         using std::vector<ChainNode>::empty;
         hash_t getHash() const noexcept;

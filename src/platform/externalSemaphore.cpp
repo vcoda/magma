@@ -50,7 +50,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     semaphoreInfo.pNext = &exportSemaphoreInfo;
     semaphoreInfo.flags = flags;
     exportSemaphoreInfo.sType = VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO_KHR;
-    exportSemaphoreInfo.pNext = extendedInfo.firstNode();
+    exportSemaphoreInfo.pNext = extendedInfo.headNode();
     exportSemaphoreInfo.handleTypes =
     #ifdef VK_KHR_external_semaphore_win32
         handleType;

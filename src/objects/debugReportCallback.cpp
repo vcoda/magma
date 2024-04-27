@@ -47,7 +47,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instanc
     #else   // Compatibility with old SDK
         debugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
     #endif
-        debugReportCallbackInfo.pNext = extendedInfo.firstNode();
+        debugReportCallbackInfo.pNext = extendedInfo.headNode();
         debugReportCallbackInfo.flags = flags;
         debugReportCallbackInfo.pfnCallback = userCallback;
         debugReportCallbackInfo.pUserData = userData;

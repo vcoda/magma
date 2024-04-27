@@ -41,7 +41,7 @@ MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image_, VkForma
 {
     VkImageViewCreateInfo imageViewInfo;
     imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-    imageViewInfo.pNext = extendedInfo.firstNode();
+    imageViewInfo.pNext = extendedInfo.headNode();
     imageViewInfo.flags = 0;
     imageViewInfo.image = *image;
     imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags());
