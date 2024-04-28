@@ -193,7 +193,7 @@ bool isMemoryAllocateStructure(const std::string& line) noexcept
     return false;
 }
 
-std::string fixupStructureTypeName(const std::string& name)
+std::string fixupStructureEnumName(const std::string& name)
 {
     const std::map<std::string, std::string> mapping = {
         {"VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16_BIT_STORAGE_FEATURES_KHR",
@@ -214,6 +214,31 @@ std::string fixupStructureTypeName(const std::string& name)
          "VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXTURE_COMPRESSION_ASTC_HDR_FEATURES_EXT"},
         {"VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2AMD",
          "VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD"}
+    };
+    // Vulkan naming convention doesn't follow strict rules about
+    // underscores with digits and also has another issues,
+    // so use this name mapping to fix conversion errors.
+    auto it = mapping.find(name);
+    if (it == mapping.end())
+        return name;
+    return it->second;
+}
+
+std::string fixupStructureTypeName(const std::string& name)
+{
+    const std::map<std::string, std::string> mapping = {
+        {"VkPhysicalDeviceIdProperties",
+         "VkPhysicalDeviceIDProperties"},
+        {"VkPhysicalDeviceTextureCompressionASTCHdrFeatures",
+         "VkPhysicalDeviceTextureCompressionASTCHDRFeatures"},
+        {"VkPhysicalDeviceTextureCompressionASTCHdrFeaturesEXT",
+         "VkPhysicalDeviceTextureCompressionASTCHDRFeaturesEXT"},
+        {"VkTextureLodGatherFormatPropertiesAMD",
+         "VkTextureLODGatherFormatPropertiesAMD"},
+        {"VkDebugReportCreateInfoEXT",
+         "VkDebugReportCallbackCreateInfoEXT"},
+        {"VkPhysicalDeviceIdPropertiesKHR",
+         "VkPhysicalDeviceIDPropertiesKHR"}
     };
     // Vulkan naming convention doesn't follow strict rules about
     // underscores with digits and also has another issues,
@@ -258,7 +283,7 @@ std::string convertStructureNameToStructureType(const std::string& structureName
         if (prevDigit && i < len)
             name.append(1, '_');
     }
-    return fixupStructureTypeName(name);
+    return fixupStructureEnumName(name);
 }
 
 void writeGeneratedByUtilityToolWarning(std::ofstream& fs)
