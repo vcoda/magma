@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-StructureChain::StructureChain(const StructureChain& other):
+StructureChain::StructureChain(const StructureChain& other) noexcept:
     head(nullptr),
     hash(other.hash)
 {

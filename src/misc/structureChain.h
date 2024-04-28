@@ -28,8 +28,8 @@ namespace magma
     {
     public:
         StructureChain() noexcept;
-        StructureChain(const StructureChain& chain);
-        StructureChain(StructureChain&& chain) noexcept;
+        StructureChain(const StructureChain& other) noexcept;
+        StructureChain(StructureChain&& other) noexcept;
         ~StructureChain() { clear(); }
         template<class StructureType>
         void linkNode(const StructureType& node) noexcept;
