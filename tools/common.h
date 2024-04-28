@@ -10,12 +10,50 @@
 #define VULKAN_CORE_HEADER "\\Include\\vulkan\\vulkan_core.h"
 
 // https://registry.khronos.org/vulkan/
-const std::array<std::string, 18> vendors = {
-    "AMD", "ANDROID", "ARM", "EXT", "FUCHSIA",
-    "GGP", "GOOGLE", "HUAWEI", "IMG", "INTEL",
-    "KHR", "MVK", "NN", "NV", "NVX", "QCOM",
+const std::string vendors[] = {
+    "AMD", "ANDROID", "ARM", "EXT",
+    "FUCHSIA", "GGP", "GOOGLE", "HUAWEI",
+    "IMG", "INTEL", "KHR", "MVK", "NN",
+    "NV", "NVX", "QCOM", "QNX",
     "SEC", "VALVE"
 };
+
+const std::string platforms[] = {
+    "ANDROID", "FUCHSIA", "GGP",
+    "MVK", "NN", "QNX"
+};
+
+bool isExtensionSuffix(const std::string& token)
+{
+    for (const auto& ext: vendors)
+    {
+        if (token == ext)
+            return true;
+    }
+    return false;
+}
+
+bool isPlatformSuffix(const std::string& token)
+{
+    for (const auto& ext: platforms)
+    {
+        if (token == ext)
+            return true;
+    }
+    for (auto platform: {
+        "DIRECTFB",
+        "LOADER", // Reserved for internal use by the loader
+        "METAL",
+        "XLIB",
+        "XCB",
+        "WAYLAND",
+        "WIN32"})
+    {
+        if (token == platform)
+            return true;
+    }
+    return false;
+}
 
 std::string::size_type findExtensionPrefix(const std::string& line, std::string& prefix)
 {
