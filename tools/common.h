@@ -3,6 +3,7 @@
 #include <map>
 #include <functional>
 #include <string>
+#include <sstream>
 #include <fstream>
 
 #define VK_SDK_PATH "VK_SDK_PATH"
@@ -41,6 +42,7 @@ bool isPlatformSuffix(const std::string& token)
             return true;
     }
     for (auto platform: {
+        "D3D12",
         "DIRECTFB",
         "LOADER", // Reserved for internal use by the loader
         "METAL",
@@ -284,6 +286,59 @@ std::string convertStructureNameToStructureType(const std::string& structureName
             name.append(1, '_');
     }
     return fixupStructureEnumName(name);
+}
+
+std::string pascalCaseName(const std::string& name)
+{
+    std::string pascalName;
+    bool prevDigit = false;
+    for (size_t i = 0, size = name.length(); i < size; ++i)
+    {
+        char c = name.at(i);
+        if (i == 0 || prevDigit)
+            pascalName.append(1, toupper(c));
+        else
+            pascalName.append(1, tolower(c));
+        prevDigit = isdigit(c);
+    }
+    return pascalName;
+}
+
+bool isSpecialToken(const std::string& token)
+{
+    const std::string tokens[] = {
+        "2D", "3D", "ASTC", "AABB",
+        "D3D12", "IOS",
+        "RGBA10X6", "RDMA",
+        "PCI", "SM"
+    };
+    for (const auto& tok: tokens)
+    {
+        if (token == tok)
+            return true;
+    }
+    return false;
+}
+
+std::string convertStructureEnumToStructureType(std::string structureEnum)
+{
+    structureEnum.erase(0, strlen("VK_STRUCTURE_TYPE_"));
+    std::stringstream ss(structureEnum);
+    std::vector<std::string> tokens;
+    std::string token;
+    while (std::getline(ss, token, '_'))
+        tokens.push_back(token);
+    std::string structureType = "Vk";
+    for (const auto& token: tokens)
+    {
+        if (isPlatformSuffix(token))
+            return std::string(); // Skip platform-dependent structures for now
+        if (isExtensionSuffix(token) || isSpecialToken(token))
+            structureType += token;
+        else
+            structureType += pascalCaseName(token);
+    }
+    return fixupStructureTypeName(structureType);
 }
 
 void writeGeneratedByUtilityToolWarning(std::ofstream& fs)
