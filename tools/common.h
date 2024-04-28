@@ -92,7 +92,7 @@ bool isFeaturesStructure(const std::string& line)
         return false;
     for (const auto& vendor: vendors)
     {   // Handle all extension versions
-        for (int ver = 1; ver < 9; ++ver)
+        for (int ver = 1; ver < 10; ++ver)
         {
             auto pos = line.find("Features" + extensionVersionStr(ver, vendor));
             if (pos != std::string::npos)
@@ -108,7 +108,7 @@ bool isPropertiesStructure(const std::string& line)
         return false;
     for (const auto& vendor: vendors)
     {   // Handle all extension versions
-        for (int ver = 1; ver < 9; ++ver)
+        for (int ver = 1; ver < 10; ++ver)
         {
             auto pos = line.find("Properties" + extensionVersionStr(ver, vendor));
             if (pos != std::string::npos)
@@ -126,9 +126,13 @@ bool isCreateInfoStructure(const std::string& line) noexcept
         (line.find("typedef struct Vk") == std::string::npos))
         return false;
     for (const auto& ext: vendors)
-    {
-        if (line.find("CreateInfo" + ext) != std::string::npos)
-            return true;
+    {   // Handle all extension versions
+        for (int ver = 1; ver < 10; ++ver)
+        {
+            auto pos = line.find("CreateInfo" + extensionVersionStr(ver, ext));
+            if (pos != std::string::npos)
+                return true;
+        }
     }
     return false;
 }
@@ -213,6 +217,8 @@ std::string convertStructureNameToStructureType(const std::string& structureName
         name.append(1, toupper(c));
         prevLower = islower(c);
         prevDigit = isdigit(c);
+        if (prevDigit && i < len)
+            name.append(1, '_');
     }
     return fixupStructureTypeName(name);
 }
