@@ -20,78 +20,43 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Binary data blob of Vulkan structure. */
+    /* A chain of Vulkan structures that is implemented
+       as singly-linked list. No extra storage is required.
+       Instance of this class is copyable and movable. */
 
-    class ChainNode
+    class StructureChain
     {
     public:
-        template<class T>
-        ChainNode(const T& n) noexcept:
-            size(sizeof(T)), data(core::copyBinaryData(n))
-        {
-            static_assert(std::is_trivially_copyable<T>::value,
-                "node type is required to be trivially copyable");
-        }
-        ChainNode(const ChainNode& n) noexcept: size(n.size),
-            data(core::copyBinaryData(n.data, n.size)) {}
-        ChainNode(ChainNode&& n) noexcept: size(n.size), data(n.data)
-            { core::zeroMemory(n); }
-        ~ChainNode() { delete[] data; }
-        VkBaseOutStructure *getNode() noexcept
-            { return reinterpret_cast<VkBaseOutStructure *>(data); }
-        const VkBaseInStructure *getNode() const noexcept
-            { return reinterpret_cast<const VkBaseInStructure *>(data); }
-        std::size_t getSize() const noexcept { return size; }
-        hash_t getHash() const noexcept
-            { return core::hashArray(data, size); }
-
-    private:
-        size_t size;
-        uint8_t *data;
-    };
-
-    /* Vulkan structures that are chained into linked list with head
-       node assigned to the pNext member of Vk*CreateInfo structure. */
-
-    class StructureChain : std::vector<ChainNode>
-    {
-    public:
+        StructureChain() noexcept;
+        StructureChain(const StructureChain& chain);
+        StructureChain(StructureChain&& chain) noexcept;
+        ~StructureChain() { clear(); }
         template<class StructureType>
-        void linkNode(const StructureType& node)
-            { insertNode(node); }
+        void linkNode(const StructureType& node) noexcept;
         template<class StructureType>
         StructureType *findNode() noexcept;
         template<class StructureType>
         const StructureType *findNode() const noexcept;
-        VkBaseOutStructure *headNode() noexcept
-            { return empty() ? nullptr : begin()->getNode(); }
+        VkBaseOutStructure *headNode() noexcept { return head; }
         const VkBaseInStructure *headNode() const noexcept
-            { return empty() ? nullptr : cbegin()->getNode(); }
-        VkBaseOutStructure *tailNode() noexcept
-            { return empty() ? nullptr : rbegin()->getNode(); }
-        const VkBaseInStructure *tailNode() const noexcept
-            { return empty() ? nullptr : crbegin()->getNode(); }
-        using std::vector<ChainNode>::empty;
-        hash_t getHash() const noexcept;
+            { return reinterpret_cast<const VkBaseInStructure *>(head); }
+        VkBaseOutStructure *tailNode() noexcept;
+        const VkBaseInStructure *tailNode() const noexcept;
+        size_t getSize() const noexcept;
+        void clear() noexcept;
+        bool empty() const noexcept { return !head; }
+        hash_t getHash() const noexcept { return hash; }
 
     private:
-        void insertNode(const ChainNode& node);
-        VkBaseOutStructure *lookupNode(VkStructureType sType) noexcept;
-        const VkBaseInStructure *lookupNode(VkStructureType sType) const noexcept;
+        VkBaseOutStructure *getNode(VkStructureType) noexcept;
+        const VkBaseInStructure *getNode(VkStructureType) const noexcept;
+        static VkBaseOutStructure *copyNode(const VkBaseOutStructure *node) noexcept;
+        static size_t sizeofNode(VkStructureType) noexcept;
+
+        VkBaseOutStructure *head;
+        hash_t hash;
     };
 } // namespace magma
 
-#define MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(StructureType, structureType)\
-template<>\
-inline StructureType *magma::StructureChain::findNode<StructureType>() noexcept\
-{\
-    return reinterpret_cast<StructureType *>(lookupNode(structureType));\
-}\
-\
-template<>\
-inline const StructureType *magma::StructureChain::findNode<StructureType>() const noexcept\
-{\
-    return reinterpret_cast<const StructureType *>(lookupNode(structureType));\
-}
-
+#include "structureChain.inl"
 #include "structureChainNode.inl"

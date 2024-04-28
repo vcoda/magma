@@ -21,53 +21,98 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-void StructureChain::insertNode(const ChainNode& node)
+StructureChain::StructureChain(const StructureChain& other):
+    head(nullptr),
+    hash(other.hash)
 {
-    emplace_back(node);
-    VkBaseOutStructure *prevNode = nullptr;
-    if (size() > 1)
-    {   // Get only after possible reallocation
-        prevNode = std::next(rbegin())->getNode();
-        MAGMA_ASSERT(!prevNode->pNext);
+    if (other.head)
+    {
+        head = copyNode(other.head);
+        for (auto src = other.head->pNext, dst = head;
+            src; src = src->pNext, dst = dst->pNext)
+        {
+            dst->pNext = copyNode(src);
+        }
     }
-    VkBaseOutStructure *tailNode = back().getNode();
-    if (prevNode)
-        prevNode->pNext = tailNode;
-    tailNode->pNext = nullptr;
 }
 
-hash_t StructureChain::getHash() const noexcept
+VkBaseOutStructure *StructureChain::tailNode() noexcept
 {
-    hash_t hash = 0ull;
-    std::for_each(begin(), end(),
-        [&hash](auto& it)
-        {
-            hash = core::hashCombine(hash, it.getHash());
-        });
-    return hash;
+    auto node = head;
+    if (node)
+    {
+        while (node->pNext)
+            node = node->pNext;
+    }
+    return node;
 }
 
-VkBaseOutStructure *StructureChain::lookupNode(VkStructureType sType) noexcept
+const VkBaseInStructure *StructureChain::tailNode() const noexcept
 {
-    auto it = std::find_if(begin(), end(),
-        [sType](auto& it)
-        {
-           return (it.getNode()->sType == sType);
-        });
-    if (it != end())
-        return it->getNode();
+    auto node = head;
+    if (node)
+    {
+        while (node->pNext)
+            node = node->pNext;
+    }
+    return reinterpret_cast<const VkBaseInStructure *>(node);
+}
+
+size_t StructureChain::getSize() const noexcept
+{
+    if (!head)
+        return 0;
+    size_t size = 1;
+    for (auto node = head; node->pNext; ++size)
+        node = node->pNext;
+    return size;
+}
+
+void StructureChain::clear() noexcept
+{
+    while (head)
+    {
+        auto node = head;
+        head = node->pNext;
+        node->pNext = nullptr;
+        free(node);
+    }
+    head = nullptr;
+    hash = 0ull;
+}
+
+VkBaseOutStructure *StructureChain::getNode(VkStructureType sType) noexcept
+{
+    for (auto node = head; node; node = node->pNext)
+    {
+        if (node->sType == sType)
+            return node;
+    }
     return nullptr;
 }
 
-const VkBaseInStructure *StructureChain::lookupNode(VkStructureType sType) const noexcept
+const VkBaseInStructure *StructureChain::getNode(VkStructureType sType) const noexcept
 {
-    auto it = std::find_if(cbegin(), cend(),
-        [sType](auto& it)
-        {
-           return (it.getNode()->sType == sType);
-        });
-    if (it != cend())
-        return it->getNode();
+    for (auto node = head; node; node = node->pNext)
+    {
+        if (node->sType == sType)
+            return reinterpret_cast<const VkBaseInStructure *>(node);
+    }
     return nullptr;
+}
+
+VkBaseOutStructure *StructureChain::copyNode(const VkBaseOutStructure *src) noexcept
+{
+    MAGMA_ASSERT(src);
+    const size_t size = sizeofNode(src->sType);
+    MAGMA_ASSERT(size >= sizeof(VkBaseOutStructure));
+    auto dst = (VkBaseOutStructure *)malloc(size);
+    MAGMA_ASSERT(dst);
+    if (dst)
+    {   // Copy body, clear link
+        memcpy(dst, src, size);
+        dst->pNext = nullptr;
+    }
+    return dst;
 }
 } // namespace magma

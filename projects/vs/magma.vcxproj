@@ -479,6 +479,7 @@
     <ClCompile Include="..\..\src\misc\scopedDebugMarker.cpp" />
     <ClCompile Include="..\..\src\misc\sharing.cpp" />
     <ClCompile Include="..\..\src\misc\structureChain.cpp" />
+    <ClCompile Include="..\..\src\misc\structureNodeSize.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructureInstanceBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructureStorageBuffer.cpp" />
@@ -724,6 +725,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\misc\imageSubresourceRange.inl" />
     <None Include="..\..\src\misc\pushConstantRange.inl" />
     <None Include="..\..\src\misc\scissor.inl" />
+    <None Include="..\..\src\misc\structureChain.inl" />
     <None Include="..\..\src\misc\structureChainNode.inl" />
     <None Include="..\..\src\misc\viewport.inl" />
     <None Include="..\..\src\objects\commandBuffer.inl" />
