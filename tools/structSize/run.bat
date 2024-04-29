@@ -1,1 +1,1 @@
-structSize ../../src/misc/structureSize.cpp
+structSize sizeOf.h

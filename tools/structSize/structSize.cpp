@@ -1,6 +1,11 @@
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
+//#define OBFUSCATE
+#ifdef OBFUSCATE
+#include <vulkan/vulkan.h>
+#include "sizeOf.h"
+#endif
 #include <iostream>
 #include <vector>
 #include "../common.h"
@@ -13,6 +18,36 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    std::ofstream source(argv[1]);
+    if (!source.is_open())
+    {
+        std::cout << "Couldn't write to file " << argv[1] << "." << std::endl;
+        return -1;
+    }
+    writeGeneratedByUtilityToolWarning(source);
+
+#ifdef OBFUSCATE
+    source << "#include \"pch.h\"" << std::endl;
+    source << "#pragma hdrstop" << std::endl;
+    source << "#include \"structureChain.h\"" << std::endl << std::endl;
+    source << "namespace magma" << std::endl << "{" << std::endl;
+    source << "size_t StructureChain::sizeOf(VkStructureType sType) noexcept" << std::endl << "{" << std::endl;
+    source << "    switch (sType)" << std::endl;
+    source << "    {" << std::endl;
+    for (uint32_t i = VK_STRUCTURE_TYPE_APPLICATION_INFO; i <= VK_STRUCTURE_TYPE_AMIGO_PROFILING_SUBMIT_INFO_SEC; ++i)
+    {   // Use earlier generated values
+        const size_t size = sizeOf((VkStructureType)i);
+        if (size)
+            source << "    case " << i << ": return " << size << ";" << std::endl;
+        if (i == 100)
+            i = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR; // Jump to extended enums
+    }
+    source << "    default: MAGMA_ASSERT(false);" << std::endl;
+    source << "    }" << std::endl;
+    source << "    return 0;" << std::endl;
+    source << "}" << std::endl;
+    source << "} // namespace magma" << std::endl;
+#else
     // Find Vulkan SDK header
     const char *vulkanSdkPath = getenv(VK_SDK_PATH);
     if (!vulkanSdkPath)
@@ -74,27 +109,14 @@ int main(int argc, char *argv[])
         }
     }
 
-    // Generate source file
-    std::ofstream source(argv[1]);
-    if (!source.is_open())
-    {
-        std::cout << "Couldn't write to file " << argv[1] << "." << std::endl;
-        return -1;
-    }
-    writeGeneratedByUtilityToolWarning(source);
-    source << "#include \"pch.h\"" << std::endl;
-    source << "#pragma hdrstop" << std::endl;
-    source << "#include \"structureChain.h\"" << std::endl << std::endl;
-    source << "namespace magma" << std::endl << "{" << std::endl;
-    source << "size_t StructureChain::sizeofNode(VkStructureType sType) noexcept" << std::endl << "{" << std::endl;
+    source << "size_t sizeOf(VkStructureType sType)" << std::endl << "{" << std::endl;
     for (auto [structureEnum, structureType]: structureTypes)
     {   // Use "if" expression instead of "switch" to avoid collisions due to ext-to-core promotions
         source << "    if (" << structureEnum << " == sType) return sizeof(" << structureType << ");" << std::endl;
     }
-    source << "    MAGMA_ASSERT(false);" << std::endl;
     source << "    return 0;" << std::endl;
     source << "}" << std::endl;
-    source << "} // namespace magma" << std::endl;
+#endif // OBFUSCATE
 
     std::cout << "End of source generation" << std::endl;
     return 0;
