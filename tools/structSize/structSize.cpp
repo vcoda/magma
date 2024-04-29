@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 #include <iostream>
-#include <unordered_map>
+#include <vector>
 #include "../common.h"
 
 int main(int argc, char *argv[])
@@ -30,8 +30,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    // Parse extended CreateInfo structures
-    std::unordered_map<std::string, std::string> structureTypes;
+    std::vector<std::pair<std::string, std::string>> structureTypes;
     std::string line;
     bool insideEnum = false;
     bool underIfDef = false;
@@ -70,7 +69,7 @@ int main(int argc, char *argv[])
                 if (structureType.find("FullScreen") != std::string::npos)
                     continue; // Skip as platform (Win32)
                 std::cout << "Added " << structureEnum << std::endl;
-                structureTypes[structureEnum] = structureType;
+                structureTypes.push_back({structureEnum, structureType});
             }
         }
     }
