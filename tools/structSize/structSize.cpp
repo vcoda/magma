@@ -35,12 +35,13 @@ int main(int argc, char *argv[])
     source << "    switch (sType)" << std::endl;
     source << "    {" << std::endl;
     for (uint32_t i = VK_STRUCTURE_TYPE_APPLICATION_INFO; i <= VK_STRUCTURE_TYPE_AMIGO_PROFILING_SUBMIT_INFO_SEC; ++i)
-    {   // Use earlier generated values
+    {
+        if (i == 100) // Jump to extended enums
+            i = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+        // Use earlier generated values
         const size_t size = sizeOf((VkStructureType)i);
         if (size)
             source << "    case " << i << ": return " << size << ";" << std::endl;
-        if (i == 100)
-            i = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR; // Jump to extended enums
     }
     source << "    default: MAGMA_ASSERT(false);" << std::endl;
     source << "    }" << std::endl;

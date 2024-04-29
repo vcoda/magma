@@ -62,6 +62,7 @@ size_t StructureChain::sizeOf(VkStructureType sType) noexcept
     case 52: return 736;
     case 53: return 80;
     case 54: return 216;
+    case 1000001000: return 104;
     case 1000001001: return 64;
     case 1000002000: return 32;
     case 1000002001: return 64;
