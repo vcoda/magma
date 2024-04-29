@@ -20,8 +20,10 @@ const std::string vendors[] = {
 };
 
 const std::string platforms[] = {
-    "ANDROID", "FUCHSIA", "GGP",
-    "MVK", "NN", "QNX"
+    "ANDROID", "D3D12", "DIRECTFB",
+    "FUCHSIA", "GGP",
+    "METAL", "MVK", "NN", "QNX",
+    "XCB", "XLIB", "WAYLAND", "WIN32"
 };
 
 bool isExtensionSuffix(const std::string& token)
@@ -41,19 +43,8 @@ bool isPlatformSuffix(const std::string& token)
         if (token == ext)
             return true;
     }
-    for (auto platform: {
-        "D3D12",
-        "DIRECTFB",
-        "LOADER", // Reserved for internal use by the loader
-        "METAL",
-        "XLIB",
-        "XCB",
-        "WAYLAND",
-        "WIN32"})
-    {
-        if (token == platform)
-            return true;
-    }
+    if (token == "LOADER")
+        return true; // Reserved for internal use
     return false;
 }
 
