@@ -28,10 +28,15 @@ StructureChain::StructureChain(const StructureChain& other) noexcept:
     if (other.head)
     {
         head = copyNode(other.head);
-        for (auto src = other.head->pNext, dst = head;
-            src; src = src->pNext, dst = dst->pNext)
+        if (head)
         {
-            dst->pNext = copyNode(src);
+            for (auto src = other.head->pNext, dst = head;
+                src; src = src->pNext, dst = dst->pNext)
+            {
+                dst->pNext = copyNode(src);
+                if (!dst->pNext)
+                    break;
+            }
         }
     }
 }
