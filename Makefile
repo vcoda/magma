@@ -79,6 +79,7 @@ SRC_OBJS= \
 	src/misc/scopedDebugMarker.o \
 	src/misc/sharing.o \
 	src/misc/structureChain.o \
+	src/misc/structureSize.o \
 	\
 	src/objects/accelerationStructure.o \
 	src/objects/accelerationStructureInstanceBuffer.o \

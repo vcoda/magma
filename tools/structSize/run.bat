@@ -1,1 +1,1 @@
-structSize ../../src/misc/structureNodeSize.cpp
+structSize ../../src/misc/structureSize.cpp
