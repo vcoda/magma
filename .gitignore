@@ -2,6 +2,7 @@
 Debug/
 Release/
 x64/
+src/auxiliary/spirv/output
 
 *.suo
 *.user
