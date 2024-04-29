@@ -74,7 +74,6 @@ void StructureChain::clear() noexcept
     {
         auto node = head;
         head = node->pNext;
-        node->pNext = nullptr;
         free(node);
     }
     head = nullptr;
