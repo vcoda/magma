@@ -24,7 +24,7 @@ namespace magma
        as singly-linked list. No extra storage is required.
        Instance of this class is copyable and movable. */
 
-    class StructureChain
+    class StructureChain final
     {
     public:
         StructureChain() noexcept;
