@@ -32,6 +32,34 @@ inline void StructureChain::linkNode(const StructureType& node) noexcept
     }
 }
 
+inline VkBaseOutStructure *StructureChain::tailNode() noexcept
+{
+    for (auto node = head; node; node = node->pNext)
+    {
+        if (!node->pNext)
+            return node;
+    }
+    return nullptr;
+}
+
+inline const VkBaseInStructure *StructureChain::tailNode() const noexcept
+{
+    for (auto node = head; node; node = node->pNext)
+    {
+        if (!node->pNext)
+            return reinterpret_cast<const VkBaseInStructure *>(node);
+    }
+    return nullptr;
+}
+
+inline size_t StructureChain::getSize() const noexcept
+{
+    size_t size = 0;
+    for (auto node = head; node; node = node->pNext)
+        ++size;
+    return size;
+}
+
 #define MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(StructureType, structureType)\
 template<>\
 inline StructureType *magma::StructureChain::findNode<StructureType>() noexcept\

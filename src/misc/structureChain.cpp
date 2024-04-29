@@ -41,38 +41,6 @@ StructureChain::StructureChain(const StructureChain& other) noexcept:
     }
 }
 
-VkBaseOutStructure *StructureChain::tailNode() noexcept
-{
-    auto node = head;
-    if (node)
-    {
-        while (node->pNext)
-            node = node->pNext;
-    }
-    return node;
-}
-
-const VkBaseInStructure *StructureChain::tailNode() const noexcept
-{
-    auto node = head;
-    if (node)
-    {
-        while (node->pNext)
-            node = node->pNext;
-    }
-    return reinterpret_cast<const VkBaseInStructure *>(node);
-}
-
-size_t StructureChain::getSize() const noexcept
-{
-    if (!head)
-        return 0;
-    size_t size = 1;
-    for (auto node = head; node->pNext; ++size)
-        node = node->pNext;
-    return size;
-}
-
 void StructureChain::clear() noexcept
 {
     while (head)
