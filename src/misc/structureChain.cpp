@@ -106,7 +106,9 @@ VkBaseOutStructure *StructureChain::copyNode(const VkBaseOutStructure *src) noex
     MAGMA_ASSERT(src);
     const size_t size = sizeofNode(src->sType);
     MAGMA_ASSERT(size >= sizeof(VkBaseOutStructure));
-    auto dst = (VkBaseOutStructure *)malloc(size);
+    if (size < sizeof(VkBaseOutStructure))
+        return nullptr; // Unknown structure
+    auto dst = reinterpret_cast<VkBaseOutStructure *>(malloc(size));
     MAGMA_ASSERT(dst);
     if (dst)
     {   // Copy body, clear link
