@@ -20,20 +20,16 @@ inline void StructureChain::linkNode(const StructureType& node) noexcept
     static_assert(sizeof(StructureType) > sizeof(VkBaseOutStructure),
         "node type size mismatch");
     MAGMA_ASSERT(sizeofNode(node.sType) == sizeof(StructureType));
-    VkBaseOutStructure *tail = (VkBaseOutStructure *)malloc(sizeof(StructureType));
-    MAGMA_ASSERT(tail);
-    memcpy(tail, &node, sizeof(StructureType));
-    if (!head)
-        head = tail;
-    else
+    VkBaseOutStructure *tail = copyNode(reinterpret_cast<const VkBaseOutStructure *>(&node));
+    if (tail)
     {
-        VkBaseOutStructure *curr;
-        for (curr = head; curr->pNext; curr = curr->pNext);
-        curr->pNext = tail;
+        if (!head)
+            head = tail;
+        else
+            tailNode()->pNext = tail;
+        hash = core::hashCombine(hash, core::hashArray(
+            (uint8_t *)tail, sizeof(StructureType)));
     }
-    tail->pNext = nullptr;
-    hash = core::hashCombine(hash, core::hashArray(
-        (uint8_t *)tail, sizeof(StructureType)));
 }
 
 #define MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(StructureType, structureType)\
