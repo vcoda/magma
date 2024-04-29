@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_STREAM_INSERT_OPERATOR(Type) std::ostream& operator<<(std::ostream&, Type)
 
 MAGMA_STREAM_INSERT_OPERATOR(VkResult);
+MAGMA_STREAM_INSERT_OPERATOR(VkStructureType);
 MAGMA_STREAM_INSERT_OPERATOR(VkSystemAllocationScope);
 MAGMA_STREAM_INSERT_OPERATOR(VkInternalAllocationType);
 MAGMA_STREAM_INSERT_OPERATOR(VkFormat);
