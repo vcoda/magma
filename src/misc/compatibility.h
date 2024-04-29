@@ -79,6 +79,10 @@ typedef enum VkObjectType {
 } VkObjectType;
 #endif // !VK_VERSION_1_1
 
+#ifndef VK_HEADER_VERSION
+#define VK_HEADER_VERSION 1
+#endif
+
 #if VK_HEADER_VERSION < 34 // TODO: exact version
 #if defined(VK_EXT_debug_report) && defined(VK_KHR_display)
 constexpr VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT = VkDebugReportObjectTypeEXT(29);
