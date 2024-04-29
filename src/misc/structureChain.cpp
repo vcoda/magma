@@ -76,7 +76,7 @@ const VkBaseInStructure *StructureChain::getNode(VkStructureType sType) const no
 VkBaseOutStructure *StructureChain::copyNode(const VkBaseOutStructure *src) noexcept
 {
     MAGMA_ASSERT(src);
-    const size_t size = sizeofNode(src->sType);
+    const size_t size = sizeOf(src->sType);
     MAGMA_ASSERT(size >= sizeof(VkBaseOutStructure));
     if (size < sizeof(VkBaseOutStructure))
         return nullptr; // Unknown structure

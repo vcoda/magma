@@ -19,7 +19,7 @@ inline void StructureChain::linkNode(const StructureType& node) noexcept
         "node type is required to be trivially copyable");
     static_assert(sizeof(StructureType) > sizeof(VkBaseOutStructure),
         "node type size mismatch");
-    MAGMA_ASSERT(sizeofNode(node.sType) == sizeof(StructureType));
+    MAGMA_ASSERT(sizeOf(node.sType) == sizeof(StructureType));
     VkBaseOutStructure *tail = copyNode(reinterpret_cast<const VkBaseOutStructure *>(&node));
     if (tail)
     {

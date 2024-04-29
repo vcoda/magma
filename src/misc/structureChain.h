@@ -51,7 +51,7 @@ namespace magma
         VkBaseOutStructure *getNode(VkStructureType) noexcept;
         const VkBaseInStructure *getNode(VkStructureType) const noexcept;
         static VkBaseOutStructure *copyNode(const VkBaseOutStructure *node) noexcept;
-        static size_t sizeofNode(VkStructureType) noexcept;
+        static size_t sizeOf(VkStructureType) noexcept;
 
         VkBaseOutStructure *head;
         hash_t hash;
