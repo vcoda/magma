@@ -17,6 +17,8 @@ inline void StructureChain::linkNode(const StructureType& node) noexcept
 {
     static_assert(std::is_trivially_copyable<StructureType>::value,
         "node type is required to be trivially copyable");
+    static_assert(sizeof(StructureType) > sizeof(VkBaseOutStructure),
+        "node type size mismatch");
     MAGMA_ASSERT(sizeofNode(node.sType) == sizeof(StructureType));
     VkBaseOutStructure *tail = (VkBaseOutStructure *)malloc(sizeof(StructureType));
     MAGMA_ASSERT(tail);
