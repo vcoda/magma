@@ -1,9 +1,5 @@
 namespace magma
 {
-inline StructureChain::StructureChain() noexcept:
-    head(nullptr)
-{}
-
 inline StructureChain::StructureChain(StructureChain&& other) noexcept:
     head(other.head)
 {
