@@ -5,6 +5,7 @@
 #ifdef OBFUSCATE
 #include <vulkan/vulkan.h>
 #include "sizeOf.h"
+#include "nameOf.h"
 #endif
 #include <iostream>
 #include <vector>
@@ -34,14 +35,15 @@ int main(int argc, char *argv[])
     source << "size_t StructureChain::sizeOf(VkStructureType sType) noexcept" << std::endl << "{" << std::endl;
     source << "    switch (sType)" << std::endl;
     source << "    {" << std::endl;
-    for (uint32_t i = VK_STRUCTURE_TYPE_APPLICATION_INFO; i <= VK_STRUCTURE_TYPE_AMIGO_PROFILING_SUBMIT_INFO_SEC; ++i)
+    #include "coreStructs.inl"
+    for (uint32_t i = VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO + 1; i <= VK_STRUCTURE_TYPE_AMIGO_PROFILING_SUBMIT_INFO_SEC; ++i)
     {
         if (i == 100) // Jump to extended enums
             i = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
         // Use earlier generated values
         const size_t size = sizeOf((VkStructureType)i);
         if (size)
-            source << "    case " << i << ": return " << size << ";" << std::endl;
+            source << "    case " << i << ": return " << size << "; // " << nameOf((VkStructureType)i) << std::endl;
     }
     source << "    default: MAGMA_ASSERT(false);" << std::endl;
     source << "    }" << std::endl;
@@ -102,21 +104,32 @@ int main(int argc, char *argv[])
                 const std::string structureType = convertStructureEnumToStructureType(structureEnum);
                 if (structureType.empty())
                     continue;
-                if (structureType.find("FullScreen") != std::string::npos)
-                    continue; // Skip as platform (Win32)
+                if (structureType.find("FullScreenExclusive") != std::string::npos)
+                    continue; // Skip as platform type (Win32)
                 std::cout << "Added " << structureEnum << std::endl;
                 structureTypes.push_back({structureEnum, structureType});
             }
         }
     }
 
+    std::ofstream source2("nameOf.h");
+    if (!source2.is_open())
+    {
+        std::cout << "Couldn't write to file nameOf.h" << std::endl;
+        return -1;
+    }
+
     source << "size_t sizeOf(VkStructureType sType)" << std::endl << "{" << std::endl;
+    source2 << "const char *nameOf(VkStructureType sType)" << std::endl << "{" << std::endl;
     for (auto [structureEnum, structureType]: structureTypes)
     {   // Use "if" expression instead of "switch" to avoid collisions due to ext-to-core promotions
         source << "    if (" << structureEnum << " == sType) return sizeof(" << structureType << ");" << std::endl;
+        source2 << "    if (" << structureEnum << " == sType) return \"" << structureEnum << "\";" << std::endl;
     }
     source << "    return 0;" << std::endl;
     source << "}" << std::endl;
+    source2 << "    return nullptr;" << std::endl;
+    source2 << "}" << std::endl;
 #endif // OBFUSCATE
 
     std::cout << "End of source generation" << std::endl;
