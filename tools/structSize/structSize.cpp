@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
     for (auto [structureEnum, structureType]: structureTypes)
     {   // Use "if" expression instead of "switch" to avoid collisions due to ext-to-core promotions
         source << "    if (" << structureEnum << " == sType) return sizeof(" << structureType << ");" << std::endl;
-        source2 << "    if (" << structureEnum << " == sType) return \"" << structureEnum << "\";" << std::endl;
+        source2 << "    if (" << structureEnum << " == sType) return \"" << structureType << "\";" << std::endl;
     }
     source << "    return 0;" << std::endl;
     source << "}" << std::endl;
