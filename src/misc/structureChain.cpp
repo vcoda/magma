@@ -22,8 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 StructureChain::StructureChain(const StructureChain& other) noexcept:
-    head(nullptr),
-    hash(other.hash)
+    head(nullptr)
 {
     if (other.head)
     {
@@ -46,7 +45,20 @@ void StructureChain::clear() noexcept
         free(node);
     }
     head = nullptr;
-    hash = 0ull;
+}
+
+hash_t StructureChain::hash() const noexcept
+{
+    hash_t hash = 0ull;
+    for (auto node = head; node; node = node->pNext)
+    {
+        VkBaseOutStructure *next = node->pNext;
+        node->pNext = nullptr; // Should not affect hash
+        hash = core::hashCombine(hash, core::hashArray(
+            (uint8_t *)node, sizeOf(node->sType)));
+        node->pNext = next;
+    }
+    return hash;
 }
 
 VkBaseOutStructure *StructureChain::getNode(VkStructureType sType) noexcept

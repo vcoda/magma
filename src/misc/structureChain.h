@@ -42,10 +42,10 @@ namespace magma
             { return reinterpret_cast<const VkBaseInStructure *>(head); }
         VkBaseOutStructure *tailNode() noexcept;
         const VkBaseInStructure *tailNode() const noexcept;
-        size_t getSize() const noexcept;
+        size_t size() const noexcept;
         void clear() noexcept;
         bool empty() const noexcept { return !head; }
-        hash_t getHash() const noexcept { return hash; }
+        hash_t hash() const noexcept;
 
     private:
         VkBaseOutStructure *getNode(VkStructureType) noexcept;
@@ -54,7 +54,6 @@ namespace magma
         static size_t sizeOf(VkStructureType) noexcept;
 
         VkBaseOutStructure *head;
-        hash_t hash;
     };
 } // namespace magma
 

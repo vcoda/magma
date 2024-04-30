@@ -21,8 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef VK_KHR_external_memory
 void test(const magma::StructureChain& structureChain)
 {
-    std::cout << "Chain length: " << structureChain.getSize() << std::endl;
-    std::cout << "Hash: " << structureChain.getHash() << std::endl;
+    std::cout << "Chain length: " << structureChain.size() << std::endl;
+    std::cout << "Hash: " << structureChain.hash() << std::endl;
     const VkExportMemoryAllocateInfoKHR *exportMemoryAllocateNode = structureChain.findNode<VkExportMemoryAllocateInfoKHR>();
     if (!exportMemoryAllocateNode)
         std::cerr << "Node VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_KHR not found!" << std::endl;

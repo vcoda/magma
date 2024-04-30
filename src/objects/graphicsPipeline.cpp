@@ -273,7 +273,7 @@ std::pair<hash_t, hash_t> psoHash(VkPipelineCreateFlags flags,
         hash = core::hashCombine(hash, core::hash(subpass));
     }
     if (!extendedInfo.empty()) // TODO: not all extended info may affect pipeline state
-        hash = core::hashCombine(hash, extendedInfo.getHash());
+        hash = core::hashCombine(hash, extendedInfo.hash());
     return {hash, rsHash};
 }
 } // namespace magma

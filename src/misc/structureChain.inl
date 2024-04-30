@@ -1,15 +1,13 @@
 namespace magma
 {
 inline StructureChain::StructureChain() noexcept:
-    head(nullptr),
-    hash(0ull)
+    head(nullptr)
 {}
 
 inline StructureChain::StructureChain(StructureChain&& other) noexcept:
-    head(other.head), hash(other.hash)
+    head(other.head)
 {
     other.head = nullptr;
-    other.hash = 0ull;
 }
 
 template<class StructureType>
@@ -27,8 +25,6 @@ inline void StructureChain::linkNode(const StructureType& node) noexcept
             head = tail;
         else
             tailNode()->pNext = tail;
-        hash = core::hashCombine(hash, core::hashArray(
-            (uint8_t *)tail, sizeof(StructureType)));
     }
 }
 
@@ -52,7 +48,7 @@ inline const VkBaseInStructure *StructureChain::tailNode() const noexcept
     return nullptr;
 }
 
-inline size_t StructureChain::getSize() const noexcept
+inline size_t StructureChain::size() const noexcept
 {
     size_t size = 0;
     for (auto node = head; node; node = node->pNext)
