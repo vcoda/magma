@@ -41,9 +41,11 @@ int main(int argc, char *argv[])
         if (i == 100) // Jump to extended enums
             i = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
         // Use earlier generated values
-        const size_t size = sizeOf((VkStructureType)i);
+        const VkStructureType sType = (VkStructureType)i;
+        const size_t size = sizeOf(sType);
+        const char *name = nameOf(sType);
         if (size)
-            source << "    case " << i << ": return " << size << "; // " << nameOf((VkStructureType)i) << std::endl;
+            source << "    case " << i << ": return " << size << "; // " << name << std::endl;
     }
     source << "    default: MAGMA_ASSERT(false);" << std::endl;
     source << "    }" << std::endl;
