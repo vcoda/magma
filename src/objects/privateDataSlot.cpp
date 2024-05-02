@@ -47,5 +47,20 @@ PrivateDataSlot::~PrivateDataSlot()
     MAGMA_DEVICE_EXTENSION(vkDestroyPrivateDataSlotEXT);
     vkDestroyPrivateDataSlotEXT(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
+
+void PrivateDataSlot::setPrivateData(const IObject *object, uint64_t data)
+{
+    MAGMA_DEVICE_EXTENSION(vkSetPrivateDataEXT);
+    const VkResult result = vkSetPrivateDataEXT(MAGMA_HANDLE(device), object->getObjectType(), object->getObjectHandle(), handle, data);
+    MAGMA_HANDLE_RESULT(result, "failed to set private data");
+}
+
+uint64_t PrivateDataSlot::getPrivateData(const IObject *object) const noexcept
+{
+    uint64_t data = 0ull;
+    MAGMA_DEVICE_EXTENSION(vkGetPrivateDataEXT);
+    vkGetPrivateDataEXT(MAGMA_HANDLE(device), object->getObjectType(), object->getObjectHandle(), handle, &data);
+    return data;
+}
 #endif // VK_EXT_private_data
 } // namespace magma
