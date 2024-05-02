@@ -17,65 +17,72 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "object.h"
-#include "ideviceMemory.h"
 #include "resourcePool.h"
 #include "../misc/structureChain.h"
 
 namespace magma
 {
+    class Device;
+    class NonDispatchableImpl;
+
     /* Non-dispatchable handle types are a 64-bit integer type
        whose meaning is implementation-dependent, and may encode
        object information directly in the handle rather than acting
        as a reference to an underlying object. */
 
     template<class Type>
-    class NonDispatchable : public TObject<Type>,
+    class NonDispatchable : public Object<Type>,
         /* private */ DeviceResourcePool
     {
-        static_assert(
-        #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-            sizeof(Type) == sizeof(intptr_t),
-        #else
-            sizeof(Type) == sizeof(uint64_t),
-        #endif
+    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
+        static_assert(sizeof(Type) == sizeof(intptr_t),
+    #else
+        static_assert(sizeof(Type) == sizeof(uint64_t),
+    #endif
             "invalid size of non-dispatchable handle type");
 
     public:
-        uint64_t getObjectHandle() const noexcept override
-        {
-        #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-            return reinterpret_cast<uint64_t>(TObject<Type>::handle);
-        #else
-            return TObject<Type>::handle;
-        #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
-        }
-
+        const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
+        uint64_t getObjectHandle() const noexcept override;
+        void setPrivateData(uint64_t data) override;
+        uint64_t getPrivateData() const noexcept override;
         bool nonDispatchable() const noexcept override { return true; }
+        void setDebugName(const char *name);
+        void setDebugTag(uint64_t tagName, size_t tagSize, const void *tag);
 
     protected:
-        explicit NonDispatchable(VkObjectType objectType,
-            std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            TObject<Type>(objectType, std::move(hostAllocator)) {}
+        NonDispatchable(VkObjectType objectType,
+            std::shared_ptr<IAllocator> allocator) noexcept;
+        NonDispatchable(VkObjectType objectType,
+            std::shared_ptr<Device> device_,
+            std::shared_ptr<IAllocator> allocator) noexcept;
+        ~NonDispatchable();
 
-        explicit NonDispatchable(VkObjectType objectType,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            TObject<Type>(objectType, std::move(device), std::move(hostAllocator))
-        {
-        #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(this->device);
-            if (pool) // Put resource in pool
-                pool->getPool<NonDispatchable<Type>>().insert(this);
-        #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
-        }
+        std::shared_ptr<Device> device;
+        std::unique_ptr<NonDispatchableImpl> pimpl;
+    };
 
-        ~NonDispatchable()
-        {
-        #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-            std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(this->device);
-            if (pool) // Remove resource from pool
-                pool->getPool<NonDispatchable<Type>>().erase(this);
-        #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
-        }
+    /* The purpose is to implement functionality of template
+       NonDispatchable class without circular reference to it
+       from PrivateDataSlot object. Also allows include dependencies
+       from implementation file and not from base header file. */
+
+    class NonDispatchableImpl
+    {
+    public:
+        template<class Type>
+        explicit NonDispatchableImpl(const NonDispatchable<Type> *parent) noexcept:
+            parent(parent), device(parent->getDevice().get()) {}
+        void setPrivateData(uint64_t data);
+        uint64_t getPrivateData() const noexcept;
+        void setDebugName(const char *name);
+        void setDebugTag(uint64_t tagName, size_t tagSize, const void *tag);
+
+    private:
+        const IObject *parent;
+        Device *device;
+        static std::mutex mtx;
     };
 } // namespace magma
+
+#include "nondispatchable.inl"

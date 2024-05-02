@@ -32,7 +32,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool_):
-    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle, cmdPool_->getDevice(), nullptr),
+    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle),
+    device(cmdPool_->getDevice()),
     cmdPool(std::move(cmdPool_)),
     fence(std::make_shared<Fence>(device)),
     level(level),
@@ -51,7 +52,8 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
 {}
 
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> cmdPool_):
-    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, cmdPool_->getDevice(), nullptr),
+    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER),
+    device(cmdPool_->getDevice()),
     cmdPool(std::move(cmdPool_)),
     fence(std::make_shared<Fence>(device)),
     level(level),

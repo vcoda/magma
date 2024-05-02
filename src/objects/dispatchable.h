@@ -27,26 +27,23 @@ namespace magma
        type must have a unique handle value during its lifetime. */
 
     template<class Type>
-    class Dispatchable : public TObject<Type>
+    class Dispatchable : public Object<Type>
     {
         static_assert(sizeof(Type) == sizeof(intptr_t),
             "invalid size of dispatchable handle type");
 
     protected:
-        explicit Dispatchable(VkObjectType objectType,
-            std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            TObject<Type>(objectType, std::move(hostAllocator)) {}
-        explicit Dispatchable(VkObjectType objectType,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            TObject<Type>(objectType, std::move(device), std::move(hostAllocator)) {}
-        explicit Dispatchable(VkObjectType objectType,
-            Type handle,
-            std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> hostAllocator) noexcept:
-            TObject<Type>(objectType, handle, std::move(device), std::move(hostAllocator)) {}
+        Dispatchable(VkObjectType objectType,
+            Type handle = VK_NULL_HANDLE) noexcept:
+            Object<Type>(objectType, nullptr, handle) {}
+        Dispatchable(VkObjectType objectType,
+            std::shared_ptr<IAllocator> allocator,
+            Type handle = VK_NULL_HANDLE) noexcept:
+            Object<Type>(objectType, std::move(allocator), handle) {}
         uint64_t getObjectHandle() const noexcept override
-            { return reinterpret_cast<uint64_t>(TObject<Type>::handle); }
+            { return reinterpret_cast<uint64_t>(Object<Type>::handle); }
+        void setPrivateData(uint64_t) override {}
+        uint64_t getPrivateData() const noexcept override { return 0ull; }
         bool nonDispatchable() const noexcept override { return false; }
     };
 } // namespace magma

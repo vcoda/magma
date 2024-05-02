@@ -131,9 +131,7 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
             vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queueHandle);
             if (VK_NULL_HANDLE == queueHandle)
                 MAGMA_ERROR("failed to get device queue");
-            auto queue = Queue::makeShared(queueHandle,
-                std::const_pointer_cast<Device>(shared_from_this()),
-                flags, queueDesc.queueFamilyIndex, queueIndex);
+            auto queue = Queue::makeShared(queueHandle, flags, queueDesc.queueFamilyIndex, queueIndex);
             // Cache using weak_ptr to break circular references
             pair.second = queue;
             return queue;
@@ -159,7 +157,7 @@ std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) cons
     {   // Try to get new instance
         try
         {
-            auto queue = device->getQueue(flag, 0);
+            auto queue = getQueue(flag, 0);
             if (queue->getFamilyIndex() == queueFamilyIndex)
                 return queue;
         } catch (...) {}

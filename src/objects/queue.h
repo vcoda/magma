@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Device;
     class CommandBuffer;
     class Semaphore;
 #ifdef VK_KHR_timeline_semaphore
@@ -108,8 +109,8 @@ namespace magma
 
     private:
         MAGMA_MAKE_SHARED(Queue)
-        Queue(VkQueue handle, std::shared_ptr<Device> device,
-            VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index);
+        Queue(VkQueue handle, VkQueueFlagBits flags,
+            uint32_t familyIndex, uint32_t index) noexcept;
 
         const VkQueueFlagBits flags;
         const uint32_t familyIndex;

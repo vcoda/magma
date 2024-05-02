@@ -1,61 +1,19 @@
 namespace magma
 {
-inline Object::Object(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> hostAllocator) noexcept:
-    device(std::move(device)),
-    hostAllocator(std::move(hostAllocator))
-{}
-
-#ifdef MAGMA_DEBUG
 template<class Type>
-inline void Object::setDebugTag(uint64_t tagName, const Type& tag)
-{
-    setDebugTag(tagName, sizeof(Type), &tag);
-}
-#endif // MAGMA_DEBUG
-
-// The following Vulkan objects are created before logical device is initialized,
-// so they call constructor w/o <device> parameter:
-// VK_OBJECT_TYPE_INSTANCE
-// VK_OBJECT_TYPE_SURFACE_KHR
-// VK_OBJECT_TYPE_PHYSICAL_DEVICE
-// VK_OBJECT_TYPE_DEVICE
-// VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT
-// VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT
-template<class Type>
-inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<IAllocator> hostAllocator) noexcept:
-    Object(nullptr, std::move(hostAllocator)),
+inline Object<Type>::Object(VkObjectType objectType, std::shared_ptr<IAllocator> allocator,
+    Type handle /* VK_NULL_HANDLE */) noexcept:
 #if (VK_USE_64_BIT_PTR_DEFINES == 0)
     objectType(objectType),
 #endif
-    handle(VK_NULL_HANDLE)
+    handle(handle),
+    hostAllocator(std::move(allocator))
 {
     MAGMA_UNUSED(objectType);
 }
 
 template<class Type>
-inline TObject<Type>::TObject(VkObjectType objectType, std::shared_ptr<Device> device_, std::shared_ptr<IAllocator> hostAllocator) noexcept:
-    Object(std::move(device_), std::move(hostAllocator)),
-#if (VK_USE_64_BIT_PTR_DEFINES == 0)
-    objectType(objectType),
-#endif
-    handle(VK_NULL_HANDLE)
-{
-    MAGMA_UNUSED(objectType);
-}
-
-template<class Type>
-inline TObject<Type>::TObject(VkObjectType objectType, Type handle, std::shared_ptr<Device> device_, std::shared_ptr<IAllocator> hostAllocator) noexcept:
-    Object(std::move(device_), std::move(hostAllocator)),
-#if (VK_USE_64_BIT_PTR_DEFINES == 0)
-    objectType(objectType),
-#endif
-    handle(handle)
-{
-    MAGMA_UNUSED(objectType);
-}
-
-template<class Type>
-inline VkObjectType TObject<Type>::getObjectType() const noexcept
+inline VkObjectType Object<Type>::getObjectType() const noexcept
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
     return ObjectType<Type>::getObjectType();

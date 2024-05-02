@@ -134,7 +134,7 @@ SRC_OBJS= \
 	src/objects/managedDeviceMemory.o \
 	src/objects/mutableImage.o \
 	src/objects/mutableImageView.o \
-	src/objects/object.o \
+	src/objects/nondispatchable.o \
 	src/objects/physicalDevice.o \
 	src/objects/physicalDeviceFeatures.o \
 	src/objects/physicalDeviceGroup.o \

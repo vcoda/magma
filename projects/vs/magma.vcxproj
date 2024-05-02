@@ -533,7 +533,7 @@
     <ClCompile Include="..\..\src\objects\managedDeviceMemory.cpp" />
     <ClCompile Include="..\..\src\objects\mutableImage.cpp" />
     <ClCompile Include="..\..\src\objects\mutableImageView.cpp" />
-    <ClCompile Include="..\..\src\objects\object.cpp" />
+    <ClCompile Include="..\..\src\objects\nondispatchable.cpp" />
     <ClCompile Include="..\..\src\objects\physicalDevice.cpp" />
     <ClCompile Include="..\..\src\objects\physicalDeviceFeatures.cpp" />
     <ClCompile Include="..\..\src\objects\physicalDeviceGroup.cpp" />
@@ -731,6 +731,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\objects\commandBuffer.inl" />
     <None Include="..\..\src\objects\device.inl" />
     <None Include="..\..\src\objects\indirectBuffer.inl" />
+    <None Include="..\..\src\objects\nondispatchable.inl" />
     <None Include="..\..\src\objects\object.inl" />
     <None Include="..\..\src\objects\pipeline.inl" />
     <None Include="..\..\src\objects\pipelineBatch.inl" />

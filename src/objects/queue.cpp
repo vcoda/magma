@@ -30,14 +30,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Queue::Queue(VkQueue handle_, std::shared_ptr<Device> device,
-    VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index):
-    Dispatchable(VK_OBJECT_TYPE_QUEUE, std::move(device), nullptr),
+Queue::Queue(VkQueue handle, VkQueueFlagBits flags, uint32_t familyIndex, uint32_t index) noexcept:
+    Dispatchable(VK_OBJECT_TYPE_QUEUE, handle),
     flags(flags),
     familyIndex(familyIndex),
     index(index)
 {
-    handle = handle_;
 #ifdef VK_EXT_swapchain_maintenance1
     presentMode = VK_PRESENT_MODE_MAX_ENUM_KHR;
 #endif

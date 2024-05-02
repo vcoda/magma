@@ -41,6 +41,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Device;
     class CommandPool;
     class Queue;
     class Framebuffer;
@@ -521,6 +522,7 @@ namespace magma
             uint32_t color) noexcept;
     #endif // VK_EXT_debug_utils
 
+        const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
         const std::shared_ptr<CommandPool>& getCommandPool() const noexcept { return cmdPool; }
         const std::shared_ptr<Fence>& getFence() const noexcept { return fence; }
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
@@ -658,6 +660,7 @@ namespace magma
             VkPipelineStageFlags dstStageMask,
             VkDependencyFlags dependencyFlags) noexcept;
 
+        std::shared_ptr<Device> device;
         std::shared_ptr<CommandPool> cmdPool;
         std::shared_ptr<Fence> fence;
         const VkCommandBufferLevel level;

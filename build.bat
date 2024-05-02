@@ -167,7 +167,7 @@ src\objects\instance.cpp ^
 src\objects\managedDeviceMemory.cpp ^
 src\objects\mutableImage.cpp ^
 src\objects\mutableImageView.cpp ^
-src\objects\object.cpp ^
+src\objects\nondispatchable.cpp ^
 src\objects\physicalDevice.cpp ^
 src\objects\physicalDeviceFeatures.cpp ^
 src\objects\physicalDeviceGroup.cpp ^
@@ -362,7 +362,7 @@ instance.obj ^
 managedDeviceMemory.obj ^
 mutableImage.obj ^
 mutableImageView.obj ^
-object.obj ^
+nondispatchable.obj ^
 physicalDevice.obj ^
 physicalDeviceFeatures.obj ^
 physicalDeviceGroup.obj ^

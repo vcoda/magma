@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "nondispatchable.h"
+#include "ideviceMemory.h"
 
 namespace magma
 {

@@ -1034,9 +1034,6 @@
     <ClCompile Include="..\..\src\objects\mutableImageView.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objects\object.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\objects\physicalDevice.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -1644,6 +1641,9 @@
     </None>
     <None Include="..\..\src\misc\structureChain.inl">
       <Filter>Header Files\misc</Filter>
+    </None>
+    <None Include="..\..\src\objects\nondispatchable.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
