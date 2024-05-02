@@ -33,8 +33,8 @@ namespace magma
     public:
         virtual ~IObject() = default;
         virtual VkObjectType getObjectType() const noexcept = 0;
+        virtual uint64_t getObjectHandle() const noexcept = 0;
         virtual bool nonDispatchable() const noexcept = 0;
-        virtual uint64_t getHandle() const noexcept = 0;
     };
 
     /* Base non-copyable class for dispatchable and non-
@@ -97,9 +97,10 @@ namespace magma
             Type handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept;
-        VkObjectType getObjectType() const noexcept override;
-        const NativeHandle *getHandleAddress() const noexcept { return &handle; }
+        NativeHandle getHandle() const noexcept { return handle; }
         operator NativeHandle() const noexcept { return handle; }
+        const NativeHandle *getHandleAddress() const noexcept { return &handle; }
+        VkObjectType getObjectType() const noexcept override;
 
     protected:
         // Additional storage is required under x86 target

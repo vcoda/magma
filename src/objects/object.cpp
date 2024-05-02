@@ -30,39 +30,37 @@ std::mutex Object::mtx;
 
 void Object::setPrivateData(uint64_t data)
 {
-    const uint64_t handle = getHandle();
 #ifdef VK_EXT_private_data
     std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
     if (privateDataSlot)
     {
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkSetPrivateDataEXT, VK_EXT_PRIVATE_DATA_EXTENSION_NAME);
-        const VkResult result = vkSetPrivateDataEXT(MAGMA_HANDLE(device), getObjectType(), handle, *privateDataSlot, data);
+        const VkResult result = vkSetPrivateDataEXT(MAGMA_HANDLE(device), getObjectType(), getObjectHandle(), *privateDataSlot, data);
         MAGMA_HANDLE_RESULT(result, "failed to set private data");
     }
 #endif // VK_EXT_private_data
     // Fallback if extension not present
     std::lock_guard<std::mutex> lock(mtx);
     std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
-    privateData[handle] = data;
+    privateData[getObjectHandle()] = data;
 }
 
 uint64_t Object::getPrivateData() const
 {
-    const uint64_t handle = getHandle();
 #ifdef VK_EXT_private_data
     std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
     if (privateDataSlot)
     {
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPrivateDataEXT, VK_EXT_PRIVATE_DATA_EXTENSION_NAME);
         uint64_t data = 0;
-        vkGetPrivateDataEXT(MAGMA_HANDLE(device), getObjectType(), handle, *privateDataSlot, &data);
+        vkGetPrivateDataEXT(MAGMA_HANDLE(device), getObjectType(), getObjectHandle(), *privateDataSlot, &data);
         return data;
     }
 #endif // VK_EXT_private_data
     // Fallback if extension not present
     std::lock_guard<std::mutex> lock(mtx);
     std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
-    auto it = privateData.find(handle);
+    auto it = privateData.find(getObjectHandle());
     if (it != privateData.end())
         return it->second;
     return 0;
@@ -84,7 +82,7 @@ void Object::setDebugName(const std::string& name_)
             objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
             objectNameInfo.pNext = nullptr;
             objectNameInfo.objectType = getObjectType();
-            objectNameInfo.objectHandle = getHandle();
+            objectNameInfo.objectHandle = getObjectHandle();
             objectNameInfo.pObjectName = name.c_str();
             result = vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
         } else
@@ -99,7 +97,7 @@ void Object::setDebugName(const std::string& name_)
                 objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
                 objectNameInfo.pNext = nullptr;
                 objectNameInfo.objectType = helpers::objectToDebugReportType(getObjectType());
-                objectNameInfo.object = getHandle();
+                objectNameInfo.object = getObjectHandle();
                 objectNameInfo.pObjectName = name.c_str();
                 result = vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
             }
@@ -128,7 +126,7 @@ void Object::setDebugTag(uint64_t tagName_, std::size_t tagSize, const void *tag
             objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
             objectTagInfo.pNext = nullptr;
             objectTagInfo.objectType = getObjectType();
-            objectTagInfo.objectHandle = getHandle();
+            objectTagInfo.objectHandle = getObjectHandle();
             objectTagInfo.tagName = tagName;
             objectTagInfo.tagSize = tagSize;
             objectTagInfo.pTag = tag;
@@ -145,7 +143,7 @@ void Object::setDebugTag(uint64_t tagName_, std::size_t tagSize, const void *tag
                 objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
                 objectTagInfo.pNext = nullptr;
                 objectTagInfo.objectType = helpers::objectToDebugReportType(getObjectType());
-                objectTagInfo.object = getHandle();
+                objectTagInfo.object = getObjectHandle();
                 objectTagInfo.tagName = tagName;
                 objectTagInfo.tagSize = tagSize;
                 objectTagInfo.pTag = tag;

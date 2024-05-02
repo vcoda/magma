@@ -46,8 +46,8 @@ namespace magma
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> hostAllocator) noexcept:
             TObject<Type>(objectType, handle, std::move(device), std::move(hostAllocator)) {}
-        bool nonDispatchable() const noexcept override { return false; }
-        uint64_t getHandle() const noexcept override
+        uint64_t getObjectHandle() const noexcept override
             { return reinterpret_cast<uint64_t>(TObject<Type>::handle); }
+        bool nonDispatchable() const noexcept override { return false; }
     };
 } // namespace magma

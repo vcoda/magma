@@ -40,16 +40,16 @@ namespace magma
             "invalid size of non-dispatchable handle type");
 
     public:
-        bool nonDispatchable() const noexcept override { return true; }
-        uint64_t getHandle() const noexcept override
+        uint64_t getObjectHandle() const noexcept override
         {
         #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-            // VK_EXT_debug_utils/VK_EXT_debug_marker requires uint64_t type
             return reinterpret_cast<uint64_t>(TObject<Type>::handle);
         #else
             return TObject<Type>::handle;
         #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
         }
+
+        bool nonDispatchable() const noexcept override { return true; }
 
     protected:
         explicit NonDispatchable(VkObjectType objectType,
