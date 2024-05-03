@@ -17,7 +17,7 @@ template<class Type>
 inline NonDispatchable<Type>::NonDispatchable(VkObjectType objectType, std::shared_ptr<Device> device_,
     std::shared_ptr<IAllocator> allocator) noexcept:
     Object<Type>(objectType, std::move(allocator)),
-    device(std::move(device_))
+    DebugUtilsObject(std::move(device_))
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
     std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(device);
@@ -49,34 +49,28 @@ inline uint64_t NonDispatchable<Type>::getObjectHandle() const noexcept
 template<class Type>
 inline void NonDispatchable<Type>::setPrivateData(uint64_t data)
 {
-    getPimpl()->setPrivateData(data);
+    if (!pimpl)
+        pimpl = std::make_unique<NonDispatchableImpl>(device.get());
+    pimpl->setPrivateData(this, data);
 }
 
 template<class Type>
 inline uint64_t NonDispatchable<Type>::getPrivateData() const noexcept
 {
     if (pimpl)
-        return pimpl->getPrivateData();
+        return pimpl->getPrivateData(this);
     return 0ull;
 }
 
 template<class Type>
 inline void NonDispatchable<Type>::setDebugName(const char *name)
 {
-    getPimpl()->setDebugName(name);
+    DebugUtilsObject::setDebugName(this, name);
 }
 
 template<class Type>
 inline void NonDispatchable<Type>::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
 {
-    getPimpl()->setDebugTag(tagName, tagSize, tag);
-}
-
-template<class Type>
-inline std::unique_ptr<NonDispatchableImpl>& NonDispatchable<Type>::getPimpl()
-{
-    if (!pimpl)
-        pimpl = std::make_unique<NonDispatchableImpl>(this);
-    return pimpl;
+    DebugUtilsObject::setDebugTag(this, tagName, tagSize, tag);
 }
 } // namespace magma

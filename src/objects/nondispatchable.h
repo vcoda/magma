@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "object.h"
+#include "debugUtilsObject.h"
 #include "resourcePool.h"
 #include "../misc/structureChain.h"
 
@@ -32,6 +33,7 @@ namespace magma
 
     template<class Type>
     class NonDispatchable : public Object<Type>,
+        public DebugUtilsObject,
         /* private */ DeviceResourcePool
     {
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
@@ -54,37 +56,29 @@ namespace magma
         NonDispatchable(VkObjectType objectType,
             std::shared_ptr<IAllocator> allocator) noexcept;
         NonDispatchable(VkObjectType objectType,
-            std::shared_ptr<Device> device_,
+            std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept;
         ~NonDispatchable();
 
-        std::shared_ptr<Device> device;
-
     private:
-        std::unique_ptr<NonDispatchableImpl>& getPimpl();
         std::unique_ptr<NonDispatchableImpl> pimpl;
     };
 
     /* The purpose is to implement functionality of template
        NonDispatchable class without circular reference to it
-       from PrivateDataSlot object. Also allows include dependencies
-       from implementation file and not from base header file. */
+       from PrivateDataSlot object. */
 
-    class NonDispatchableImpl
+    class NonDispatchableImpl : NonCopyable
     {
     public:
-        template<class Type>
-        explicit NonDispatchableImpl(const NonDispatchable<Type> *parent) noexcept:
-            parent(parent), device(parent->getDevice().get()) {}
-        void setPrivateData(uint64_t data);
-        uint64_t getPrivateData() const noexcept;
-        void setDebugName(const char *name);
-        void setDebugTag(uint64_t tagName, size_t tagSize, const void *tag);
+        explicit NonDispatchableImpl(Device *device) noexcept:
+            device(device) {}
+        void setPrivateData(const IObject *parent, uint64_t data);
+        uint64_t getPrivateData(const IObject *parent) const noexcept;
 
     private:
-        const IObject *parent;
-        Device *device;
         static std::mutex mtx;
+        Device *device;
     };
 } // namespace magma
 
