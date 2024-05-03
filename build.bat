@@ -130,7 +130,6 @@ src\objects\computePipelineLibrary.cpp ^
 src\objects\conditionalRenderingBuffer.cpp ^
 src\objects\debugReportCallback.cpp ^
 src\objects\debugUtilsMessenger.cpp ^
-src\objects\debugUtilsObject.cpp ^
 src\objects\deferredOperation.cpp ^
 src\objects\descriptorPool.cpp ^
 src\objects\descriptorSet.cpp ^
@@ -326,7 +325,6 @@ computePipelineLibrary.obj ^
 conditionalRenderingBuffer.obj ^
 debugReportCallback.obj ^
 debugUtilsMessenger.obj ^
-debugUtilsObject.obj ^
 deferredOperation.obj ^
 descriptorPool.obj ^
 descriptorSet.obj ^

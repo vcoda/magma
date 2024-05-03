@@ -97,7 +97,6 @@ SRC_OBJS= \
 	src/objects/conditionalRenderingBuffer.o \
 	src/objects/debugReportCallback.o \
 	src/objects/debugUtilsMessenger.o \
-	src/objects/debugUtilsObject.o \
 	src/objects/deferredOperation.o \
 	src/objects/descriptorPool.o \
 	src/objects/descriptorSet.o \

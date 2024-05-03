@@ -17,14 +17,44 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "object.h"
-#include "debugUtilsObject.h"
 #include "resourcePool.h"
 #include "../misc/structureChain.h"
 
 namespace magma
 {
     class Device;
-    class NonDispatchableImpl;
+
+    /* Introduces concepts of object naming and tagging,
+       for better tracking of Vulkan objects. This can be
+       used by debugging layers to easily filter for only
+       data that can be used by that implementation.
+
+       Allows to implement functionality of template
+       NonDispatchable class without circular reference
+       to it from PrivateDataSlot class. */
+
+    class NonDispatchableImpl
+    {
+    public:
+        const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
+
+    protected:
+        NonDispatchableImpl(std::shared_ptr<Device> device) noexcept:
+            device(std::move(device)) {}
+        VkDevice getNativeDevice() const noexcept;
+        void setPrivateData(const IObject *child,
+            uint64_t data);
+        uint64_t getPrivateData(const IObject *child) const noexcept;
+        void setDebugName(const IObject *child,
+            const char *name);
+        void setDebugTag(const IObject *child,
+            uint64_t tagName, size_t tagSize, const void *tag);
+
+        std::shared_ptr<Device> device;
+
+    private:
+        static std::mutex mtx;
+    };
 
     /* Non-dispatchable handle types are a 64-bit integer type
        whose meaning is implementation-dependent, and may encode
@@ -33,7 +63,7 @@ namespace magma
 
     template<class Type>
     class NonDispatchable : public Object<Type>,
-        public DebugUtilsObject,
+        public NonDispatchableImpl,
         /* private */ DeviceResourcePool
     {
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
@@ -60,26 +90,6 @@ namespace magma
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept;
         ~NonDispatchable();
-
-    private:
-        std::unique_ptr<NonDispatchableImpl> pimpl;
-    };
-
-    /* The purpose is to implement functionality of template
-       NonDispatchable class without circular reference to it
-       from PrivateDataSlot object. */
-
-    class NonDispatchableImpl : NonCopyable
-    {
-    public:
-        void setPrivateData(const IObject *parent,
-            std::shared_ptr<Device> device,
-            uint64_t data);
-        uint64_t getPrivateData(const IObject *parent,
-            std::shared_ptr<Device> device) const noexcept;
-
-    private:
-        static std::mutex mtx;
     };
 } // namespace magma
 

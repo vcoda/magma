@@ -1,5 +1,8 @@
 namespace magma
 {
+void setPrivateData(const IObject *object, std::shared_ptr<Device> device, uint64_t data);
+uint64_t getPrivateData(const IObject *object, std::shared_ptr<Device> device) noexcept;
+
 // The following Vulkan objects are created before logical device is initialized,
 // so they call constructor w/o <device> parameter:
 // VK_OBJECT_TYPE_INSTANCE
@@ -10,14 +13,15 @@ namespace magma
 // VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT
 template<class Type>
 inline NonDispatchable<Type>::NonDispatchable(VkObjectType objectType, std::shared_ptr<IAllocator> allocator) noexcept:
-    Object<Type>(objectType, std::move(allocator))
+    Object<Type>(objectType, std::move(allocator)),
+    NonDispatchableImpl(nullptr)
 {}
 
 template<class Type>
 inline NonDispatchable<Type>::NonDispatchable(VkObjectType objectType, std::shared_ptr<Device> device_,
     std::shared_ptr<IAllocator> allocator) noexcept:
     Object<Type>(objectType, std::move(allocator)),
-    DebugUtilsObject(std::move(device_))
+    NonDispatchableImpl(std::move(device_))
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
     std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(device);
@@ -49,35 +53,31 @@ inline uint64_t NonDispatchable<Type>::getObjectHandle() const noexcept
 template<class Type>
 inline void NonDispatchable<Type>::setPrivateData(uint64_t data)
 {
-    if (!pimpl)
-        pimpl = std::make_unique<NonDispatchableImpl>();
-    pimpl->setPrivateData(this, device, data);
+    NonDispatchableImpl::setPrivateData(this, data);
 }
 
 template<class Type>
 inline uint64_t NonDispatchable<Type>::getPrivateData() const noexcept
 {
-    if (pimpl)
-        return pimpl->getPrivateData(this, device);
-    return 0ull;
+    return NonDispatchableImpl::getPrivateData(this);
 }
 
 template<class Type>
 inline void NonDispatchable<Type>::setDebugName(const char *name)
 {
-    DebugUtilsObject::setDebugName(this, name);
+    NonDispatchableImpl::setDebugName(this, name);
 }
 
 template<class Type>
 inline void NonDispatchable<Type>::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
 {
-    DebugUtilsObject::setDebugTag(this, tagName, tagSize, tag);
+    NonDispatchableImpl::setDebugTag(this, tagName, tagSize, tag);
 }
 
 template<class Type>
 template<class Tag>
 inline void NonDispatchable<Type>::setDebugTag(uint64_t tagName, const Tag& tag)
 {
-    DebugUtilsObject::setDebugTag(this, tagName, sizeof(Tag), &tag);
+    NonDispatchableImpl::setDebugTag(this, tagName, sizeof(Tag), &tag);
 }
 } // namespace magma

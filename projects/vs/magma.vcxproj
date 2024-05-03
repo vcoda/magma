@@ -274,7 +274,6 @@
     <ClInclude Include="..\..\src\objects\computePipelineBatch.h" />
     <ClInclude Include="..\..\src\objects\computePipelineLibrary.h" />
     <ClInclude Include="..\..\src\objects\conditionalRenderingBuffer.h" />
-    <ClInclude Include="..\..\src\objects\debugUtilsObject.h" />
     <ClInclude Include="..\..\src\objects\debugReportCallback.h" />
     <ClInclude Include="..\..\src\objects\debugUtilsMessenger.h" />
     <ClInclude Include="..\..\src\objects\deferredOperation.h" />
@@ -496,7 +495,6 @@
     <ClCompile Include="..\..\src\objects\computePipelineBatch.cpp" />
     <ClCompile Include="..\..\src\objects\computePipelineLibrary.cpp" />
     <ClCompile Include="..\..\src\objects\conditionalRenderingBuffer.cpp" />
-    <ClCompile Include="..\..\src\objects\debugUtilsObject.cpp" />
     <ClCompile Include="..\..\src\objects\debugReportCallback.cpp" />
     <ClCompile Include="..\..\src\objects\debugUtilsMessenger.cpp" />
     <ClCompile Include="..\..\src\objects\deferredOperation.cpp" />
