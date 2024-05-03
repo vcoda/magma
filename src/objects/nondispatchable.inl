@@ -1,16 +1,5 @@
 namespace magma
 {
-void setPrivateData(const IObject *object, std::shared_ptr<Device> device, uint64_t data);
-uint64_t getPrivateData(const IObject *object, std::shared_ptr<Device> device) noexcept;
-
-// The following Vulkan objects are created before logical device is initialized,
-// so they call constructor w/o <device> parameter:
-// VK_OBJECT_TYPE_INSTANCE
-// VK_OBJECT_TYPE_SURFACE_KHR
-// VK_OBJECT_TYPE_PHYSICAL_DEVICE
-// VK_OBJECT_TYPE_DEVICE
-// VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT
-// VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT
 template<class Type>
 inline NonDispatchable<Type>::NonDispatchable(VkObjectType objectType, std::shared_ptr<IAllocator> allocator) noexcept:
     Object<Type>(objectType, std::move(allocator)),

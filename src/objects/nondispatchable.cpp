@@ -35,6 +35,13 @@ std::mutex NonDispatchableImpl::mtx;
 
 VkDevice NonDispatchableImpl::getNativeDevice() const noexcept
 {
+    // The following Vulkan objects are created before logical device is initialized:
+    // VK_OBJECT_TYPE_INSTANCE
+    // VK_OBJECT_TYPE_SURFACE_KHR
+    // VK_OBJECT_TYPE_PHYSICAL_DEVICE
+    // VK_OBJECT_TYPE_DEVICE
+    // VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT
+    // VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT
     return MAGMA_OPTIONAL_HANDLE(device);
 }
 
