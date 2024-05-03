@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_MVK_ios_surface
-iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
+iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance_,
     const void *view,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkIOSSurfaceCreateFlagsMVK flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator)),
+    Surface(std::move(instance_), std::move(allocator)),
     view(view)
 {
     VkIOSSurfaceCreateInfoMVK surfaceInfo;
@@ -39,7 +39,7 @@ iOSSurface::iOSSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.pNext = nullptr;
     surfaceInfo.flags = flags;
     surfaceInfo.pView = view;
-    const VkResult result = vkCreateIOSSurfaceMVK(MAGMA_HANDLE(instance), &surfaceInfo,
+    const VkResult result = vkCreateIOSSurfaceMVK(*instance, &surfaceInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create iOS surface");
 }

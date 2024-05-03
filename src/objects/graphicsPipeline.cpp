@@ -85,7 +85,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates,
-    std::shared_ptr<PipelineLayout> pipelineLayout,
+    std::shared_ptr<PipelineLayout> layout_,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
@@ -96,7 +96,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     std::shared_ptr<GraphicsPipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), pipelineLayout, std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages)),
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages)),
     rsHash(0ull)
 {
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
@@ -197,7 +197,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
         depthStencilState,
         colorBlendState,
         dynamicStates,
-        std::move(pipelineLayout),
+        layout,
         std::move(renderPass),
         subpass,
         extendedInfo);

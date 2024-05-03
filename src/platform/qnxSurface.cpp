@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_QNX_screen_surface
-QnxSurface::QnxSurface(std::shared_ptr<const Instance> instance,
+QnxSurface::QnxSurface(std::shared_ptr<const Instance> instance_,
     struct _screen_context *context, struct _screen_window *window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkScreenSurfaceCreateFlagsQNX flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator)),
+    Surface(std::move(instance_), std::move(allocator)),
     context(context),
     window(window)
 {
@@ -41,7 +41,7 @@ QnxSurface::QnxSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.flags = false;
     surfaceInfo.context = context;
     surfaceInfo.window = window;
-    const VkResult result = vkCreateScreenSurfaceQNX(MAGMA_HANDLE(instance), &surfaceInfo,
+    const VkResult result = vkCreateScreenSurfaceQNX(*instance, &surfaceInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create QNX surface");
 }

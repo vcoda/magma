@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_FUCHSIA_imagepipe_surface
-FuchsiaImagePipeSurface::FuchsiaImagePipeSurface(std::shared_ptr<const Instance> instance,
+FuchsiaImagePipeSurface::FuchsiaImagePipeSurface(std::shared_ptr<const Instance> instance_,
     zx_handle_t imagePipeHandle,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkImagePipeSurfaceCreateFlagsFUCHSIA flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator)),
+    Surface(std::move(instance_), std::move(allocator)),
     imagePipeHandle(imagePipeHandle)
 {
     VkImagePipeSurfaceCreateInfoFUCHSIA surfaceInfo;
@@ -39,7 +39,7 @@ FuchsiaImagePipeSurface::FuchsiaImagePipeSurface(std::shared_ptr<const Instance>
     surfaceInfo.pNext = nullptr;
     surfaceInfo.flags = flags;
     surfaceInfo.imagePipeHandle = imagePipeHandle;
-    const VkResult result = vkCreateImagePipeSurfaceFUCHSIA(MAGMA_HANDLE(instance), &surfaceInfo,
+    const VkResult result = vkCreateImagePipeSurfaceFUCHSIA(*instance, &surfaceInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Fuchsia image pipe surface");
 }

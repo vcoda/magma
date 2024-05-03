@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_win32_surface
-Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
+Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance_,
     HINSTANCE hInstance, HWND hWnd,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkWin32SurfaceCreateFlagsKHR flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator)),
+    Surface(std::move(instance_), std::move(allocator)),
     hInstance(hInstance),
     hWnd(hWnd)
 {
@@ -41,7 +41,7 @@ Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance,
     surfaceInfo.flags = flags;
     surfaceInfo.hinstance = hInstance;
     surfaceInfo.hwnd = hWnd;
-    const VkResult result = vkCreateWin32SurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo,
+    const VkResult result = vkCreateWin32SurfaceKHR(*instance, &surfaceInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Win32 surface");
 }

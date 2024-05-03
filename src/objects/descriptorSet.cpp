@@ -32,16 +32,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
+DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
     DescriptorSetTable& setTable, VkShaderStageFlags stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */,
     uint32_t setIndex /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool->getDevice(), std::move(allocator)),
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool_->getDevice(), std::move(allocator)),
     setTable(setTable),
-    descriptorPool(std::move(descriptorPool))
+    descriptorPool(std::move(descriptorPool_))
 {   // Check that all descriptors have unique layout bindings
     const DescriptorList& descriptors = setTable.getReflection();
     std::vector<uint32_t> locations;
@@ -69,7 +69,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
     descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     descriptorSetAllocateInfo.pNext = extendedInfo.headNode();
-    descriptorSetAllocateInfo.descriptorPool = MAGMA_HANDLE(descriptorPool);
+    descriptorSetAllocateInfo.descriptorPool = *descriptorPool;
     descriptorSetAllocateInfo.descriptorSetCount = 1;
     descriptorSetAllocateInfo.pSetLayouts = setLayout->getHandleAddress();
     const VkResult result = vkAllocateDescriptorSets(getNativeDevice(), &descriptorSetAllocateInfo, &handle);

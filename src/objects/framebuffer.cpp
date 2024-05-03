@@ -36,17 +36,17 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const VkE
     layerCount(layerCount)
 {}
 
-Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, std::shared_ptr<ImageView> attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass), attachment->getExtent(), attachment->getArrayLayerCount(), std::move(allocator))
+    Framebuffer(std::move(renderPass_), attachment->getExtent(), attachment->getArrayLayerCount(), std::move(allocator))
 {
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.pNext = extendedInfo.headNode();
     framebufferInfo.flags = flags;
-    framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
+    framebufferInfo.renderPass = *renderPass;
     framebufferInfo.attachmentCount = 1;
     framebufferInfo.pAttachments = attachment->getHandleAddress();
     framebufferInfo.width = extent.width;
@@ -57,11 +57,11 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, std::shar
     attachments.push_back(attachment);
 }
 
-Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments,
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const std::vector<std::shared_ptr<ImageView>>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass), attachments.front()->getExtent(), attachments.front()->getArrayLayerCount(), std::move(allocator))
+    Framebuffer(std::move(renderPass_), attachments.front()->getExtent(), attachments.front()->getArrayLayerCount(), std::move(allocator))
 {
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
     for (auto& attachment : attachments)
@@ -70,7 +70,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const std
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.pNext = extendedInfo.headNode();
     framebufferInfo.flags = flags;
-    framebufferInfo.renderPass = MAGMA_HANDLE(renderPass);
+    framebufferInfo.renderPass = *renderPass;
     framebufferInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
     framebufferInfo.pAttachments = dereferencedAttachments;
     framebufferInfo.width = extent.width;

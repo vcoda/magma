@@ -57,7 +57,7 @@ void GraphicsPipelineLibrary::compileVertexInputInterface(const VertexInputState
     graphicsPipelineLibraryInfo.pNext = nullptr;
     graphicsPipelineLibraryInfo.flags = VK_GRAPHICS_PIPELINE_LIBRARY_VERTEX_INPUT_INTERFACE_BIT_EXT;
     VkPipeline handle = 0;
-    const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
+    const VkResult result = vkCreateGraphicsPipelines(*device, VK_NULL_HANDLE,
         1, &graphicsPipelineInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to compile vertex input interface");
     libraries.push_back(handle);
@@ -114,7 +114,7 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
     pipelineDynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
     pipelineDynamicStateInfo.pDynamicStates = dynamicStates.data();
     VkPipeline handle = 0;
-    const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
+    const VkResult result = vkCreateGraphicsPipelines(*device, VK_NULL_HANDLE,
         1, &graphicsPipelineInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to compile pre-rasterization shaders");
     libraries.push_back(handle);
@@ -145,7 +145,7 @@ void GraphicsPipelineLibrary::compileFragmentShader(const PipelineShaderStage& s
     graphicsPipelineLibraryInfo.pNext = nullptr;
     graphicsPipelineLibraryInfo.flags = VK_GRAPHICS_PIPELINE_LIBRARY_FRAGMENT_SHADER_BIT_EXT;
     VkPipeline handle = 0;
-    const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
+    const VkResult result = vkCreateGraphicsPipelines(*device, VK_NULL_HANDLE,
         1, &graphicsPipelineInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to compile fragment shader");
     libraries.push_back(handle);
@@ -169,7 +169,7 @@ void GraphicsPipelineLibrary::compileFragmentOutputInterface(const MultisampleSt
     graphicsPipelineLibraryInfo.pNext = nullptr;
     graphicsPipelineLibraryInfo.flags = VK_GRAPHICS_PIPELINE_LIBRARY_FRAGMENT_OUTPUT_INTERFACE_BIT_EXT;
     VkPipeline handle = 0;
-    const VkResult result = vkCreateGraphicsPipelines(MAGMA_HANDLE(device), VK_NULL_HANDLE,
+    const VkResult result = vkCreateGraphicsPipelines(*device, VK_NULL_HANDLE,
         1, &graphicsPipelineInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to compile fragment output interface");
     libraries.push_back(handle);

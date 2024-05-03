@@ -43,7 +43,7 @@ AndroidHardwareBuffer::AndroidHardwareBuffer(std::shared_ptr<Device> device, AHa
     formatProperties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID;
     formatProperties.pNext = nullptr;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetAndroidHardwareBufferPropertiesANDROID, VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME);
-    const VkResult result = vkGetAndroidHardwareBufferPropertiesANDROID(MAGMA_HANDLE(device), buffer, &properties);
+    const VkResult result = vkGetAndroidHardwareBufferPropertiesANDROID(*device, buffer, &properties);
     MAGMA_HANDLE_RESULT(result, "failed to get properties of android hardware buffer");
 }
 

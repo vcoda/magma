@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_xcb_surface
-XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
+XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance_,
     xcb_connection_t *connection, xcb_window_t window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkXcbSurfaceCreateFlagsKHR flags /* 0 */):
-    Surface(std::move(instance), std::move(allocator)),
+    Surface(std::move(instance_), std::move(allocator)),
     connection(connection),
     window(window)
 {
@@ -41,7 +41,7 @@ XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance,
     surfaceInfo.flags = flags;
     surfaceInfo.connection = connection;
     surfaceInfo.window = window;
-    const VkResult result = vkCreateXcbSurfaceKHR(MAGMA_HANDLE(instance), &surfaceInfo,
+    const VkResult result = vkCreateXcbSurfaceKHR(*instance, &surfaceInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Xcb surface");
 }

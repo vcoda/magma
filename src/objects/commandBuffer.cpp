@@ -73,18 +73,20 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
     cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     cmdBufferAllocateInfo.pNext = nullptr;
-    cmdBufferAllocateInfo.commandPool = MAGMA_HANDLE(cmdPool);
+    cmdBufferAllocateInfo.commandPool = *cmdPool;
     cmdBufferAllocateInfo.level = level;
     cmdBufferAllocateInfo.commandBufferCount = 1;
-    const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &cmdBufferAllocateInfo, &handle);
+    const VkResult result = vkAllocateCommandBuffers(*device, &cmdBufferAllocateInfo, &handle);
     MAGMA_HANDLE_RESULT(result, VK_COMMAND_BUFFER_LEVEL_PRIMARY == level ?
         "failed to allocate primary command buffer" : "failed to allocate secondary command buffer");
 }
 
 CommandBuffer::~CommandBuffer()
-{   // Release if not freed through command pool
+{
     if (handle)
-        vkFreeCommandBuffers(MAGMA_HANDLE(device), MAGMA_HANDLE(cmdPool), 1, &handle);
+    {   // Release if not freed through command pool
+        vkFreeCommandBuffers(*device, *cmdPool, 1, &handle);
+    }
 }
 
 bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
