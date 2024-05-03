@@ -71,14 +71,14 @@ namespace magma
     class NonDispatchableImpl : NonCopyable
     {
     public:
-        explicit NonDispatchableImpl(Device *device) noexcept:
-            device(device) {}
-        void setPrivateData(const IObject *parent, uint64_t data);
-        uint64_t getPrivateData(const IObject *parent) const noexcept;
+        void setPrivateData(const IObject *parent,
+            std::shared_ptr<Device> device,
+            uint64_t data);
+        uint64_t getPrivateData(const IObject *parent,
+            std::shared_ptr<Device> device) const noexcept;
 
     private:
         static std::mutex mtx;
-        Device *device;
     };
 } // namespace magma
 

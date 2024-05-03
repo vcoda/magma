@@ -25,7 +25,7 @@ namespace magma
 {
 std::mutex NonDispatchableImpl::mtx;
 
-void NonDispatchableImpl::setPrivateData(const IObject *parent, uint64_t data)
+void NonDispatchableImpl::setPrivateData(const IObject *parent, std::shared_ptr<Device> device, uint64_t data)
 {
     if (!device)
         return;
@@ -42,7 +42,7 @@ void NonDispatchableImpl::setPrivateData(const IObject *parent, uint64_t data)
     privateData[parent->getObjectHandle()] = data;
 }
 
-uint64_t NonDispatchableImpl::getPrivateData(const IObject *parent) const noexcept
+uint64_t NonDispatchableImpl::getPrivateData(const IObject *parent, std::shared_ptr<Device> device) const noexcept
 {
     if (!device)
         return 0ull;

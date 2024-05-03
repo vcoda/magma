@@ -50,15 +50,15 @@ template<class Type>
 inline void NonDispatchable<Type>::setPrivateData(uint64_t data)
 {
     if (!pimpl)
-        pimpl = std::make_unique<NonDispatchableImpl>(device.get());
-    pimpl->setPrivateData(this, data);
+        pimpl = std::make_unique<NonDispatchableImpl>();
+    pimpl->setPrivateData(this, device, data);
 }
 
 template<class Type>
 inline uint64_t NonDispatchable<Type>::getPrivateData() const noexcept
 {
     if (pimpl)
-        return pimpl->getPrivateData(this);
+        return pimpl->getPrivateData(this, device);
     return 0ull;
 }
 
