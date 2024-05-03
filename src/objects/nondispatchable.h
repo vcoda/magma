@@ -44,7 +44,6 @@ namespace magma
             "invalid size of non-dispatchable handle type");
 
     public:
-        const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
         uint64_t getObjectHandle() const noexcept override;
         void setPrivateData(uint64_t data) override;
         uint64_t getPrivateData() const noexcept override;

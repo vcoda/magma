@@ -28,6 +28,9 @@ namespace magma
 
     class DebugUtilsObject : NonCopyable
     {
+    public:
+        const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
+
     protected:
         DebugUtilsObject(std::shared_ptr<Device> device = nullptr) noexcept:
             device(std::move(device)) {}
