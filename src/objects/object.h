@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "iobject.h"
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
 #include "objectType.h"
 #endif
@@ -23,21 +24,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class IAllocator;
-
-    /* Base interface class of Vulkan object that has associated
-       handle. Any virtual methods that are implemented by derived
-       classes should be declared here as pure virtual. */
-
-    class IObject
-    {
-    public:
-        virtual ~IObject() = default;
-        virtual VkObjectType getObjectType() const noexcept = 0;
-        virtual uint64_t getObjectHandle() const noexcept = 0;
-        virtual void setPrivateData(uint64_t data) = 0;
-        virtual uint64_t getPrivateData() const noexcept = 0;
-        virtual bool nonDispatchable() const noexcept = 0;
-    };
 
     /* Base non-copyable template class of dispatchable and non-
        dispatchable objects. Stores native Vulkan handle and

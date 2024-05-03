@@ -313,6 +313,7 @@
     <ClInclude Include="..\..\src\objects\indexBuffer.h" />
     <ClInclude Include="..\..\src\objects\indirectBuffer.h" />
     <ClInclude Include="..\..\src\objects\instance.h" />
+    <ClInclude Include="..\..\src\objects\iobject.h" />
     <ClInclude Include="..\..\src\objects\iresource.h" />
     <ClInclude Include="..\..\src\objects\managedDeviceMemory.h" />
     <ClInclude Include="..\..\src\objects\mutableImage.h" />
