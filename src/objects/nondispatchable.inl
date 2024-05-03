@@ -49,9 +49,7 @@ inline uint64_t NonDispatchable<Type>::getObjectHandle() const noexcept
 template<class Type>
 inline void NonDispatchable<Type>::setPrivateData(uint64_t data)
 {
-    if (!pimpl)
-        pimpl = std::make_unique<NonDispatchableImpl>(this);
-    pimpl->setPrivateData(data);
+    getPimpl()->setPrivateData(data);
 }
 
 template<class Type>
@@ -65,16 +63,20 @@ inline uint64_t NonDispatchable<Type>::getPrivateData() const noexcept
 template<class Type>
 inline void NonDispatchable<Type>::setDebugName(const char *name)
 {
-    if (!pimpl)
-        pimpl = std::make_unique<NonDispatchableImpl>(this);
-    pimpl->setDebugName(name);
+    getPimpl()->setDebugName(name);
 }
 
 template<class Type>
 inline void NonDispatchable<Type>::setDebugTag(uint64_t tagName, std::size_t tagSize, const void *tag)
 {
+    getPimpl()->setDebugTag(tagName, tagSize, tag);
+}
+
+template<class Type>
+inline std::unique_ptr<NonDispatchableImpl>& NonDispatchable<Type>::getPimpl()
+{
     if (!pimpl)
         pimpl = std::make_unique<NonDispatchableImpl>(this);
-    pimpl->setDebugTag(tagName, tagSize, tag);
+    return pimpl;
 }
 } // namespace magma

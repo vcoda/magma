@@ -59,6 +59,9 @@ namespace magma
         ~NonDispatchable();
 
         std::shared_ptr<Device> device;
+
+    private:
+        std::unique_ptr<NonDispatchableImpl>& getPimpl();
         std::unique_ptr<NonDispatchableImpl> pimpl;
     };
 
