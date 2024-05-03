@@ -60,7 +60,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferAttachmentImageInfo.layerCount = layerCount;
     framebufferAttachmentImageInfo.viewFormatCount = MAGMA_COUNT(viewFormats);
     framebufferAttachmentImageInfo.pViewFormats = viewFormats.data();
-    const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create imageless framebuffer");
 }
 
@@ -84,7 +84,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferAttachmentsInfo.pNext = extendedInfo.headNode();
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
     framebufferAttachmentsInfo.pAttachmentImageInfos = &attachment;
-    const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create imageless framebuffer");
 }
 
@@ -108,7 +108,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferAttachmentsInfo.pNext = extendedInfo.headNode();
     framebufferAttachmentsInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
     framebufferAttachmentsInfo.pAttachmentImageInfos = attachments.data();
-    const VkResult result = vkCreateFramebuffer(MAGMA_HANDLE(device), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create multi-attachment imageless framebuffer");
 }
 #endif // VK_KHR_imageless_framebuffer

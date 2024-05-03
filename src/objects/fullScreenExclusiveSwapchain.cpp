@@ -117,12 +117,12 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
     {
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
-        result = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        result = vkCreateSharedSwapchainsKHR(getNativeDevice(), 1, &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     }
     else
 #endif // VK_KHR_display_swapchain && VK_KHR_display_surface
     {
-        result = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        result = vkCreateSwapchainKHR(getNativeDevice(), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     }
     if (oldSwapchain)
     {   // oldSwapchain is retired even if creation of the new swapchain fails
@@ -170,7 +170,7 @@ void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
     // For example, set window style as WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS and call
     // SetWindowPos(hwnd, HWND_TOP, 0, 0, screenWidth, screenHeight, SWP_SHOWWINDOW).
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquireFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
-    const VkResult result = vkAcquireFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
+    const VkResult result = vkAcquireFullScreenExclusiveModeEXT(getNativeDevice(), handle);
     handleError(result, "failed to acquire full-screen exclusive mode");
     fullScreenExclusive = true;
 }
@@ -178,7 +178,7 @@ void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
 void FullScreenExclusiveSwapchain::releaseFullScreenExclusiveMode()
 {
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkReleaseFullScreenExclusiveModeEXT, VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
-    const VkResult result = vkReleaseFullScreenExclusiveModeEXT(MAGMA_HANDLE(device), handle);
+    const VkResult result = vkReleaseFullScreenExclusiveModeEXT(getNativeDevice(), handle);
     handleError(result, "failed to release full-screen exclusive mode");
     fullScreenExclusive = false;
 }

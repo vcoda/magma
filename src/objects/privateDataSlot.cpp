@@ -37,7 +37,7 @@ PrivateDataSlot::PrivateDataSlot(std::shared_ptr<Device> device,
     privateDataSlotInfo.pNext = extendedInfo.headNode();
     privateDataSlotInfo.flags = flags;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreatePrivateDataSlotEXT, VK_EXT_PRIVATE_DATA_EXTENSION_NAME);
-    const VkResult result = vkCreatePrivateDataSlotEXT(MAGMA_HANDLE(device),
+    const VkResult result = vkCreatePrivateDataSlotEXT(getNativeDevice(),
         &privateDataSlotInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create private data slot");
 }
@@ -45,13 +45,13 @@ PrivateDataSlot::PrivateDataSlot(std::shared_ptr<Device> device,
 PrivateDataSlot::~PrivateDataSlot()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyPrivateDataSlotEXT);
-    vkDestroyPrivateDataSlotEXT(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyPrivateDataSlotEXT(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 void PrivateDataSlot::setPrivateData(const IObject *object, uint64_t data)
 {
     MAGMA_DEVICE_EXTENSION(vkSetPrivateDataEXT);
-    const VkResult result = vkSetPrivateDataEXT(MAGMA_HANDLE(device), object->getObjectType(), object->getObjectHandle(), handle, data);
+    const VkResult result = vkSetPrivateDataEXT(getNativeDevice(), object->getObjectType(), object->getObjectHandle(), handle, data);
     MAGMA_HANDLE_RESULT(result, "failed to set private data");
 }
 
@@ -59,7 +59,7 @@ uint64_t PrivateDataSlot::getPrivateData(const IObject *object) const noexcept
 {
     uint64_t data = 0ull;
     MAGMA_DEVICE_EXTENSION(vkGetPrivateDataEXT);
-    vkGetPrivateDataEXT(MAGMA_HANDLE(device), object->getObjectType(), object->getObjectHandle(), handle, &data);
+    vkGetPrivateDataEXT(getNativeDevice(), object->getObjectType(), object->getObjectHandle(), handle, &data);
     return data;
 }
 #endif // VK_EXT_private_data

@@ -77,18 +77,18 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device_, uint32_t maxSets
         descriptorPoolInlineUniformBlockInfo.maxInlineUniformBlockBindings = maxInlineUniformBlockBindings;
     }
 #endif // VK_EXT_inline_uniform_block
-    const VkResult result = vkCreateDescriptorPool(MAGMA_HANDLE(device), &descriptorPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDescriptorPool(getNativeDevice(), &descriptorPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create descriptor pool");
 }
 
 DescriptorPool::~DescriptorPool()
 {
-    vkDestroyDescriptorPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyDescriptorPool(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 void DescriptorPool::reset(VkDescriptorPoolResetFlags flags /* 0 */)
 {   // Set the pointer back to the start of pool memory
-    const VkResult result = vkResetDescriptorPool(MAGMA_HANDLE(device), handle, flags);
+    const VkResult result = vkResetDescriptorPool(getNativeDevice(), handle, flags);
     MAGMA_HANDLE_RESULT(result, "failed to reset descriptor pool");
 }
 } // namespace magma

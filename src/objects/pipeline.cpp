@@ -58,7 +58,7 @@ Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device
 
 Pipeline::~Pipeline()
 {
-    vkDestroyPipeline(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyPipeline(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 #ifdef VK_KHR_pipeline_executable_properties
@@ -70,14 +70,14 @@ std::vector<std::shared_ptr<PipelineExecutable>> Pipeline::getExecutables() cons
     pipelineInfo.pipeline = handle;
     uint32_t executableCount = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPipelineExecutablePropertiesKHR, VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME);
-    VkResult result = vkGetPipelineExecutablePropertiesKHR(MAGMA_HANDLE(device), &pipelineInfo, &executableCount, nullptr);
+    VkResult result = vkGetPipelineExecutablePropertiesKHR(getNativeDevice(), &pipelineInfo, &executableCount, nullptr);
     std::vector<VkPipelineExecutablePropertiesKHR> executableProperties;
     if (executableCount)
     {
         VkPipelineExecutablePropertiesKHR properties = {};
         properties.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_PROPERTIES_KHR;
         executableProperties.resize(executableCount, properties);
-        result = vkGetPipelineExecutablePropertiesKHR(MAGMA_HANDLE(device), &pipelineInfo, &executableCount, executableProperties.data());
+        result = vkGetPipelineExecutablePropertiesKHR(getNativeDevice(), &pipelineInfo, &executableCount, executableProperties.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to get properties of pipeline executables");
     std::vector<std::shared_ptr<PipelineExecutable>> executables;
@@ -94,7 +94,7 @@ VkShaderStatisticsInfoAMD Pipeline::getShaderStatistics(VkShaderStageFlagBits st
     std::size_t infoSize = sizeof(VkShaderStatisticsInfoAMD);
     VkShaderStatisticsInfoAMD shaderStatisticInfo;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
-    const VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &shaderStatisticInfo);
+    const VkResult result = vkGetShaderInfoAMD(getNativeDevice(), handle, stage, VK_SHADER_INFO_TYPE_STATISTICS_AMD, &infoSize, &shaderStatisticInfo);
     MAGMA_HANDLE_RESULT(result, "failed to get shader statistics");
     return shaderStatisticInfo;
 }
@@ -103,11 +103,11 @@ std::vector<uint8_t> Pipeline::getShaderBinary(VkShaderStageFlagBits stage) cons
 {
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
     std::size_t binarySize;
-    VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, nullptr);
+    VkResult result = vkGetShaderInfoAMD(getNativeDevice(), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, nullptr);
     if (VK_SUCCESS == result)
     {
         std::vector<uint8_t> binary(binarySize);
-        result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, binary.data());
+        result = vkGetShaderInfoAMD(getNativeDevice(), handle, stage, VK_SHADER_INFO_TYPE_BINARY_AMD, &binarySize, binary.data());
         if (VK_SUCCESS == result)
             return binary;
     }
@@ -118,11 +118,11 @@ std::string Pipeline::getShaderDisassembly(VkShaderStageFlagBits stage) const
 {
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetShaderInfoAMD, VK_AMD_SHADER_INFO_EXTENSION_NAME);
     std::size_t disassemblySize;
-    VkResult result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, nullptr);
+    VkResult result = vkGetShaderInfoAMD(getNativeDevice(), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, nullptr);
     if (VK_SUCCESS == result)
     {   // May be large enough, so allocate in the heap
         std::vector<char> disassembly(disassemblySize, '\0');
-        result = vkGetShaderInfoAMD(MAGMA_HANDLE(device), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
+        result = vkGetShaderInfoAMD(getNativeDevice(), handle, stage, VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD, &disassemblySize, disassembly.data());
         if (VK_SUCCESS == result)
             return std::string(&disassembly[0]);
     }

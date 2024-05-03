@@ -55,7 +55,7 @@ MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image_, VkForma
     imageViewInfo.subresourceRange.levelCount = levelCount;
     imageViewInfo.subresourceRange.baseArrayLayer = baseArrayLayer;
     imageViewInfo.subresourceRange.layerCount = layerCount;
-    const VkResult result = vkCreateImageView(MAGMA_HANDLE(device), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateImageView(getNativeDevice(), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create mutable image view");
 }
 } // namespace magma

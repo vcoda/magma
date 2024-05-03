@@ -38,31 +38,31 @@ Fence::Fence(std::shared_ptr<Device> device,
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.pNext = extendedInfo.headNode();
     fenceInfo.flags = flags;
-    const VkResult result = vkCreateFence(MAGMA_HANDLE(device), &fenceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateFence(getNativeDevice(), &fenceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create fence");
 }
 
 Fence::~Fence()
 {
-    vkDestroyFence(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyFence(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 bool Fence::reset() noexcept
 {
-    const VkResult reset = vkResetFences(MAGMA_HANDLE(device), 1, &handle);
+    const VkResult reset = vkResetFences(getNativeDevice(), 1, &handle);
     MAGMA_ASSERT(VK_SUCCESS == reset);
     return (VK_SUCCESS == reset);
 }
 
 VkResult Fence::getStatus() const noexcept
 {
-    return vkGetFenceStatus(MAGMA_HANDLE(device), handle);
+    return vkGetFenceStatus(getNativeDevice(), handle);
 }
 
 bool Fence::wait(uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
     constexpr VkBool32 waitAll = VK_TRUE;
-    const VkResult result = vkWaitForFences(MAGMA_HANDLE(device), 1, &handle, waitAll, timeout);
+    const VkResult result = vkWaitForFences(getNativeDevice(), 1, &handle, waitAll, timeout);
     MAGMA_HANDLE_RESULT(result, "failed to wait fence");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);

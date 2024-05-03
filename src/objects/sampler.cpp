@@ -54,13 +54,13 @@ Sampler::Sampler(std::shared_ptr<Device> device_, const SamplerState& state,
         samplerInfo.pNext = &samplerCustomBorderInfo;
     }
 #endif // VK_EXT_custom_border_color
-    const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateSampler(getNativeDevice(), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create sampler");
 }
 
 Sampler::~Sampler()
 {
-    vkDestroySampler(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroySampler(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 float Sampler::getMaxAnisotropy() const noexcept
@@ -115,7 +115,7 @@ LodSampler::LodSampler(std::shared_ptr<Device> device_, const SamplerState& stat
         samplerInfo.pNext = &samplerCustomBorderInfo;
     }
 #endif // VK_EXT_custom_border_color
-    const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateSampler(getNativeDevice(), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create lod sampler");
 }
 
@@ -142,7 +142,7 @@ UnnormalizedSampler::UnnormalizedSampler(std::shared_ptr<Device> device, bool li
     samplerInfo.maxLod = 0.f;
     samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
     samplerInfo.unnormalizedCoordinates = VK_TRUE;
-    const VkResult result = vkCreateSampler(MAGMA_HANDLE(device), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateSampler(getNativeDevice(), &samplerInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create unnormalized sampler");
 }
 } // namespace magma

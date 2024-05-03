@@ -40,7 +40,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     memoryAllocateInfo.pNext = extendedInfo.headNode();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
-    const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
+    const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to allocate device memory");
     ++allocationCount;
@@ -63,7 +63,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     importAndroidHardwareBufferInfo.sType = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
     importAndroidHardwareBufferInfo.pNext = extendedInfo.headNode();
     importAndroidHardwareBufferInfo.buffer = hardwareBuffer->getBuffer();
-    const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
+    const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to import memory from android hardware buffer");
     ++allocationCount;
@@ -74,8 +74,8 @@ DeviceMemory::~DeviceMemory()
 {
     MAGMA_ASSERT(!mapped());
     if (mapPointer)
-        vkUnmapMemory(MAGMA_HANDLE(device), handle);
-    vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+        vkUnmapMemory(getNativeDevice(), handle);
+    vkFreeMemory(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     --allocationCount;
 }
 
@@ -85,7 +85,7 @@ void DeviceMemory::setPriority(float priority) noexcept
 #ifdef VK_EXT_pageable_device_local_memory
     MAGMA_DEVICE_EXTENSION(vkSetDeviceMemoryPriorityEXT);
     if (vkSetDeviceMemoryPriorityEXT)
-        vkSetDeviceMemoryPriorityEXT(MAGMA_HANDLE(device), handle, clampPriority(priority));
+        vkSetDeviceMemoryPriorityEXT(getNativeDevice(), handle, clampPriority(priority));
 #endif // VK_EXT_pageable_device_local_memory
 }
 
@@ -100,7 +100,7 @@ AHardwareBuffer* DeviceMemory::getHardwareBuffer() const noexcept
     if (vkGetMemoryAndroidHardwareBufferANDROID)
     {   // A new reference acquired in addition to the reference held by the VkDeviceMemory
         AHardwareBuffer *buffer = nullptr;
-        const VkResult result = vkGetMemoryAndroidHardwareBufferANDROID(MAGMA_HANDLE(device),
+        const VkResult result = vkGetMemoryAndroidHardwareBufferANDROID(getNativeDevice(),
             &androidHardwareBufferInfo, &buffer);
         if (MAGMA_SUCCEEDED(result))
             return buffer;
@@ -116,10 +116,10 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     MAGMA_ASSERT(!mapped());
     if (mapPointer)
     {
-        vkUnmapMemory(MAGMA_HANDLE(device), handle);
+        vkUnmapMemory(getNativeDevice(), handle);
         mapPointer = nullptr;
     }
-    vkFreeMemory(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkFreeMemory(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     handle = VK_NULL_HANDLE;
     --allocationCount;
     memoryRequirements = memoryRequirements_;
@@ -128,7 +128,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     memoryAllocateInfo.pNext = extendedInfo.headNode();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(memoryFlags);
-    const VkResult result = vkAllocateMemory(MAGMA_HANDLE(device), &memoryAllocateInfo,
+    const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to reallocate device memory");
     ++allocationCount;
@@ -141,10 +141,10 @@ void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
     switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:
-        result = vkBindBufferMemory(MAGMA_HANDLE(device), core::reinterpret<VkBuffer>(object), handle, offset);
+        result = vkBindBufferMemory(getNativeDevice(), core::reinterpret<VkBuffer>(object), handle, offset);
         break;
     case VK_OBJECT_TYPE_IMAGE:
-        result = vkBindImageMemory(MAGMA_HANDLE(device), core::reinterpret<VkImage>(object), handle, offset);
+        result = vkBindImageMemory(getNativeDevice(), core::reinterpret<VkImage>(object), handle, offset);
         break;
 #ifdef VK_NV_ray_tracing
     case VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV:
@@ -158,7 +158,7 @@ void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
             bindAccelerationStructureMemoryInfo.deviceIndexCount = 0;
             bindAccelerationStructureMemoryInfo.pDeviceIndices = nullptr;
             MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-            result = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindAccelerationStructureMemoryInfo);
+            result = vkBindAccelerationStructureMemoryNV(getNativeDevice(), 1, &bindAccelerationStructureMemoryInfo);
         }
         break;
 #endif // VK_NV_ray_tracing
@@ -191,7 +191,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
         bindBufferMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
         bindBufferMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindBufferMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-        result = vkBindBufferMemory2KHR(MAGMA_HANDLE(device), 1, &bindBufferMemoryInfo);
+        result = vkBindBufferMemory2KHR(getNativeDevice(), 1, &bindBufferMemoryInfo);
     }
     else if (VK_OBJECT_TYPE_IMAGE == objectType)
     {
@@ -209,7 +209,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
         bindImageMemoryDeviceGroupInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
         bindImageMemoryDeviceGroupInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-        result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindImageMemoryInfo);
+        result = vkBindImageMemory2KHR(getNativeDevice(), 1, &bindImageMemoryInfo);
     }
 #ifdef VK_NV_ray_tracing
     else if (VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV == objectType)
@@ -223,7 +223,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
         bindAccelerationStructureMemoryInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
         bindAccelerationStructureMemoryInfo.pDeviceIndices = deviceIndices.data();
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-        result = vkBindAccelerationStructureMemoryNV(MAGMA_HANDLE(device), 1, &bindAccelerationStructureMemoryInfo);
+        result = vkBindAccelerationStructureMemoryNV(getNativeDevice(), 1, &bindAccelerationStructureMemoryInfo);
     }
 #endif // VK_NV_ray_tracing
     else
@@ -244,7 +244,7 @@ void *DeviceMemory::map(
     MAGMA_ASSERT(flags.hostVisible);
     if (!mapPointer)
     {
-        const VkResult result = vkMapMemory(MAGMA_HANDLE(device), handle, offset, size, mapFlags, &mapPointer);
+        const VkResult result = vkMapMemory(getNativeDevice(), handle, offset, size, mapFlags, &mapPointer);
         if (result != VK_SUCCESS)
         {   // VK_ERROR_OUT_OF_HOST_MEMORY
             // VK_ERROR_OUT_OF_DEVICE_MEMORY
@@ -262,7 +262,7 @@ void DeviceMemory::unmap() noexcept
     MAGMA_ASSERT(flags.hostVisible);
     if (mapPointer)
     {
-        vkUnmapMemory(MAGMA_HANDLE(device), handle);
+        vkUnmapMemory(getNativeDevice(), handle);
         mapPointer = nullptr;
         mapOffset = 0;
         mapSize = 0;
@@ -280,7 +280,7 @@ bool DeviceMemory::flushMappedRange(
     memoryRange.memory = handle;
     memoryRange.offset = offset;
     memoryRange.size = size;
-    const VkResult result = vkFlushMappedMemoryRanges(MAGMA_HANDLE(device), 1, &memoryRange);
+    const VkResult result = vkFlushMappedMemoryRanges(getNativeDevice(), 1, &memoryRange);
     return (VK_SUCCESS == result);
 }
 
@@ -295,7 +295,7 @@ bool DeviceMemory::invalidateMappedRange(
     memoryRange.memory = handle;
     memoryRange.offset = offset;
     memoryRange.size = size;
-    const VkResult result = vkInvalidateMappedMemoryRanges(MAGMA_HANDLE(device), 1, &memoryRange);
+    const VkResult result = vkInvalidateMappedMemoryRanges(getNativeDevice(), 1, &memoryRange);
     return (VK_SUCCESS == result);
 }
 

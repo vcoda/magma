@@ -88,7 +88,7 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
         linkNode(imageViewInfo, imageViewUsageInfo);
     }
 #endif // VK_KHR_maintenance2
-    const VkResult result = vkCreateImageView(MAGMA_HANDLE(device), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateImageView(getNativeDevice(), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create image view");
 }
 
@@ -108,7 +108,7 @@ ImageView::ImageView(std::shared_ptr<Image> image, uint32_t baseMipLevel, uint32
 
 ImageView::~ImageView()
 {
-    vkDestroyImageView(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyImageView(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 uint32_t ImageView::getMipLevelCount() const noexcept

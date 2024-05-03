@@ -66,7 +66,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     #else
         0;
     #endif // VK_KHR_external_semaphore_fd
-    const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
+    const VkResult result = vkCreateSemaphore(getNativeDevice(), &semaphoreInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create external semaphore");
 }
@@ -104,7 +104,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     importZirconHandleInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
     importZirconHandleInfo.zirconHandle = zirconHandle;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreZirconHandleFUCHSIA, VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
-    const VkResult result = vkImportSemaphoreZirconHandleFUCHSIA(MAGMA_HANDLE(device), &importZirconHandleInfo);
+    const VkResult result = vkImportSemaphoreZirconHandleFUCHSIA(getNativeDevice(), &importZirconHandleInfo);
     MAGMA_HANDLE_RESULT(result, "failed to import Zircon handle");
 #elif defined(VK_KHR_external_semaphore_fd)
     VkImportSemaphoreFdInfoKHR importFdInfo;
@@ -120,7 +120,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     #endif
     importFdInfo.fd = fd;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreFdKHR, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
-    const VkResult result = vkImportSemaphoreFdKHR(MAGMA_HANDLE(device), &importFdInfo);
+    const VkResult result = vkImportSemaphoreFdKHR(getNativeDevice(), &importFdInfo);
     #ifdef VK_USE_PLATFORM_ANDROID_KHR
     MAGMA_HANDLE_RESULT(result, "failed to import Android fence descriptor");
     #else
@@ -153,7 +153,7 @@ zx_handle_t ExternalSemaphore::getEvent() const
     zirconHandleInfo.semaphore = handle;
     zirconHandleInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreWin32HandleKHR, VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
-    const VkResult result = vkGetSemaphoreZirconHandleFUCHSIA(MAGMA_HANDLE(device), &zirconHandleInfo, &zirconHandle);
+    const VkResult result = vkGetSemaphoreZirconHandleFUCHSIA(getNativeDevice(), &zirconHandleInfo, &zirconHandle);
     MAGMA_HANDLE_RESULT(result, "failed to get Zircon handle");
     return zirconHandle;
 }
@@ -172,7 +172,7 @@ int ExternalSemaphore::getFd() const
         VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
     #endif
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreFdKHR, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
-    const VkResult result = vkGetSemaphoreFdKHR(MAGMA_HANDLE(device), &fdInfo, &fd);
+    const VkResult result = vkGetSemaphoreFdKHR(getNativeDevice(), &fdInfo, &fd);
     #ifdef VK_USE_PLATFORM_ANDROID_KHR
     MAGMA_HANDLE_RESULT(result, "failed to get Android fence descriptor");
     #else

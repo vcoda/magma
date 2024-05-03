@@ -119,12 +119,12 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
     if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
     {
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
-        result = vkCreateSharedSwapchainsKHR(MAGMA_HANDLE(device), 1, &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        result = vkCreateSharedSwapchainsKHR(getNativeDevice(), 1, &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     }
     else
 #endif // VK_KHR_display_swapchain && VK_KHR_display_surface
     {
-        result = vkCreateSwapchainKHR(MAGMA_HANDLE(device), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        result = vkCreateSwapchainKHR(getNativeDevice(), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     }
     if (oldSwapchain)
     {   // oldSwapchain is retired even if creation of the new swapchain fails
@@ -162,13 +162,13 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
 
 Swapchain::~Swapchain()
 {
-    vkDestroySwapchainKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroySwapchainKHR(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 uint32_t Swapchain::getImageCount() const
 {
     uint32_t swapchainImageCount = 0;
-    const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &swapchainImageCount, nullptr);
+    const VkResult result = vkGetSwapchainImagesKHR(getNativeDevice(), handle, &swapchainImageCount, nullptr);
     MAGMA_HANDLE_RESULT(result, "failed to get swapchain image count");
     return swapchainImageCount;
 }
@@ -178,11 +178,11 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
     if (bindedImages.empty())
     {
         uint32_t swapchainImageCount = 0;
-        vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &swapchainImageCount, nullptr);
+        vkGetSwapchainImagesKHR(getNativeDevice(), handle, &swapchainImageCount, nullptr);
         if (swapchainImageCount)
         {
             MAGMA_STACK_ARRAY(VkImage, swapchainImages, swapchainImageCount);
-            const VkResult result = vkGetSwapchainImagesKHR(MAGMA_HANDLE(device), handle, &swapchainImageCount, swapchainImages);
+            const VkResult result = vkGetSwapchainImagesKHR(getNativeDevice(), handle, &swapchainImageCount, swapchainImages);
             MAGMA_HANDLE_RESULT(result, "failed to get swapchain images");
             uint32_t imageIndex = 0;
             for (VkImage handle: swapchainImages)
@@ -200,7 +200,7 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore 
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
 {
     uint32_t imageIndex = 0;
-    const VkResult result = vkAcquireNextImageKHR(MAGMA_HANDLE(device), handle, timeout,
+    const VkResult result = vkAcquireNextImageKHR(getNativeDevice(), handle, timeout,
         MAGMA_OPTIONAL_HANDLE(semaphore), MAGMA_OPTIONAL_HANDLE(fence), &imageIndex);
     handleError(result, "failed to acquire next image");
     return imageIndex;
@@ -222,7 +222,7 @@ uint32_t Swapchain::acquireNextDeviceGroupImage(uint32_t deviceMask,
     aquireNextImageInfo.deviceMask = deviceMask;
     uint32_t imageIndex = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquireNextImage2KHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
-    const VkResult result = vkAcquireNextImage2KHR(MAGMA_HANDLE(device), &aquireNextImageInfo, &imageIndex);
+    const VkResult result = vkAcquireNextImage2KHR(getNativeDevice(), &aquireNextImageInfo, &imageIndex);
     handleError(result, "failed to acquire next image within device group");
     return imageIndex;
 }
@@ -243,7 +243,7 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     bindImageMemorySwapchainInfo.swapchain = handle;
     bindImageMemorySwapchainInfo.imageIndex = imageIndex;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindImageMemoryInfo);
+    const VkResult result = vkBindImageMemory2KHR(getNativeDevice(), 1, &bindImageMemoryInfo);
     MAGMA_HANDLE_RESULT(result, "failed to bind image to swapchain");
     addImage(std::move(image), imageIndex);
 }
@@ -272,7 +272,7 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     bindImageMemorySwapchainInfo.swapchain = handle;
     bindImageMemorySwapchainInfo.imageIndex = imageIndex;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
-    const VkResult result = vkBindImageMemory2KHR(MAGMA_HANDLE(device), 1, &bindImageMemoryInfo);
+    const VkResult result = vkBindImageMemory2KHR(getNativeDevice(), 1, &bindImageMemoryInfo);
     MAGMA_HANDLE_RESULT(result, "failed to bind image to swapchain within device group");
     addImage(std::move(image), imageIndex);
 }
@@ -284,7 +284,7 @@ void Swapchain::setLocalDimming(bool enable) noexcept
 {
     MAGMA_DEVICE_EXTENSION(vkSetLocalDimmingAMD);
     if (vkSetLocalDimmingAMD)
-        vkSetLocalDimmingAMD(MAGMA_HANDLE(device), handle, MAGMA_BOOLEAN(enable));
+        vkSetLocalDimmingAMD(getNativeDevice(), handle, MAGMA_BOOLEAN(enable));
 }
 #endif // VK_AMD_display_native_hdr
 

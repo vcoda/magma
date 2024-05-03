@@ -31,32 +31,32 @@ DeferredOperation::DeferredOperation(std::shared_ptr<Device> device,
     NonDispatchable(VK_OBJECT_TYPE_DEFERRED_OPERATION_KHR, std::move(device), std::move(allocator))
 {
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateDeferredOperationKHR, VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
-    const VkResult result = vkCreateDeferredOperationKHR(MAGMA_HANDLE(device), MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDeferredOperationKHR(getNativeDevice(), MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create deferred operation");
 }
 
 DeferredOperation::~DeferredOperation()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyDeferredOperationKHR);
-    vkDestroyDeferredOperationKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyDeferredOperationKHR(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 uint32_t DeferredOperation::getMaxConcurrency() const noexcept
 {
     MAGMA_DEVICE_EXTENSION(vkGetDeferredOperationMaxConcurrencyKHR);
-    return vkGetDeferredOperationMaxConcurrencyKHR(MAGMA_HANDLE(device), handle);
+    return vkGetDeferredOperationMaxConcurrencyKHR(getNativeDevice(), handle);
 }
 
 VkResult DeferredOperation::getResult() const noexcept
 {
     MAGMA_DEVICE_EXTENSION(vkGetDeferredOperationResultKHR);
-    return vkGetDeferredOperationResultKHR(MAGMA_HANDLE(device), handle);
+    return vkGetDeferredOperationResultKHR(getNativeDevice(), handle);
 }
 
 VkResult DeferredOperation::join() const noexcept
 {
     MAGMA_DEVICE_EXTENSION(vkDeferredOperationJoinKHR);
-    return vkDeferredOperationJoinKHR(MAGMA_HANDLE(device), handle);
+    return vkDeferredOperationJoinKHR(getNativeDevice(), handle);
 }
 #endif // VK_KHR_deferred_host_operations
 } // namespace magma

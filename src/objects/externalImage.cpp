@@ -60,7 +60,7 @@ ExternalImage2D::ExternalImage2D(std::shared_ptr<Device> device, std::shared_ptr
         externalFormat.pNext = nullptr;
         externalFormat.externalFormat = hardwareBuffer->getFormatProperties().externalFormat;
     }
-    const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create external image");
     std::shared_ptr<IDeviceMemory> memory = std::make_shared<DeviceMemory>(device,
         std::move(hardwareBuffer),

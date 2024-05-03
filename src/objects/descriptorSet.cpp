@@ -72,7 +72,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
     descriptorSetAllocateInfo.descriptorPool = MAGMA_HANDLE(descriptorPool);
     descriptorSetAllocateInfo.descriptorSetCount = 1;
     descriptorSetAllocateInfo.pSetLayouts = setLayout->getHandleAddress();
-    const VkResult result = vkAllocateDescriptorSets(MAGMA_HANDLE(device), &descriptorSetAllocateInfo, &handle);
+    const VkResult result = vkAllocateDescriptorSets(getNativeDevice(), &descriptorSetAllocateInfo, &handle);
     MAGMA_HANDLE_RESULT(result, "failed to allocate descriptor set");
     if (dirty())
     {   // Once allocated, descriptor set can be updated
@@ -83,7 +83,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
 DescriptorSet::~DescriptorSet()
 {
     if (descriptorPool->canFreeDescriptorSet())
-        vkFreeDescriptorSets(MAGMA_HANDLE(device), *descriptorPool, 1, &handle);
+        vkFreeDescriptorSets(getNativeDevice(), *descriptorPool, 1, &handle);
 }
 
 bool DescriptorSet::dirty() const

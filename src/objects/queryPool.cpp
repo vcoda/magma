@@ -51,13 +51,13 @@ QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<Device> device, uint
     queryPoolInfo.queryType = queryType;
     queryPoolInfo.queryCount = queryCount;
     queryPoolInfo.pipelineStatistics = pipelineStatistics;
-    const VkResult result = vkCreateQueryPool(MAGMA_HANDLE(device), &queryPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateQueryPool(getNativeDevice(), &queryPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create query pool");
 }
 
 QueryPool::~QueryPool()
 {
-    vkDestroyQueryPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyQueryPool(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 #ifdef VK_EXT_host_query_reset
@@ -65,7 +65,7 @@ void QueryPool::reset(uint32_t firstQuery, uint32_t queryCount) noexcept
 {
     MAGMA_DEVICE_EXTENSION(vkResetQueryPoolEXT);
     if (vkResetQueryPoolEXT)
-        vkResetQueryPoolEXT(MAGMA_HANDLE(device), handle, firstQuery, queryCount);
+        vkResetQueryPoolEXT(getNativeDevice(), handle, firstQuery, queryCount);
 }
 #endif // VK_EXT_host_query_reset
 
@@ -121,7 +121,7 @@ PipelineStatisticsQuery::Result PipelineStatisticsQuery::getResults(bool wait) c
     const size_t dataSize = sizeof(uint64_t) * data.size();
     const VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT | (wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
     std::fill(data.begin(), data.end(), BadQueryResult<uint64_t>::value);
-    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, dataSize, data.data(), sizeof(uint64_t), flags);
+    const VkResult result = vkGetQueryPoolResults(getNativeDevice(), handle, 0, 1, dataSize, data.data(), sizeof(uint64_t), flags);
     MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
     if (VK_SUCCESS == result)
     {
@@ -137,7 +137,7 @@ QueryPool::Result<PipelineStatisticsQuery::Result, uint64_t> PipelineStatisticsQ
     const size_t dataSize = sizeof(uint64_t) * data.size();
     const VkQueryResultFlags flags = VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
     std::fill(data.begin(), data.end(), BadQueryResult<uint64_t>::value);
-    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, 0, 1, dataSize, data.data(), sizeof(uint64_t), flags);
+    const VkResult result = vkGetQueryPoolResults(getNativeDevice(), handle, 0, 1, dataSize, data.data(), sizeof(uint64_t), flags);
     MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
     if (VK_SUCCESS == result)
     {

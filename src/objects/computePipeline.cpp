@@ -85,7 +85,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
         linkNode(pipelineInfo, pipelineLibraryInfo);
     }
 #endif // VK_KHR_pipeline_library
-    const VkResult result = vkCreateComputePipelines(MAGMA_HANDLE(device), MAGMA_OPTIONAL_HANDLE(pipelineCache),
+    const VkResult result = vkCreateComputePipelines(getNativeDevice(), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     if (result != VK_SUCCESS)
     {

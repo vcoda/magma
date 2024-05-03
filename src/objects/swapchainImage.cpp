@@ -75,7 +75,7 @@ SwapchainImage::SwapchainImage(std::shared_ptr<Swapchain> swapchain):
     imageSwapchainInfo.sType = VK_STRUCTURE_TYPE_IMAGE_SWAPCHAIN_CREATE_INFO_KHR;
     imageSwapchainInfo.pNext = nullptr;
     imageSwapchainInfo.swapchain = *swapchain;
-    const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create swapchain image");
 }
 #endif // VK_VERSION_1_1

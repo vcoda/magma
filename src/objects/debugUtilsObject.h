@@ -34,6 +34,7 @@ namespace magma
     protected:
         DebugUtilsObject(std::shared_ptr<Device> device = nullptr) noexcept:
             device(std::move(device)) {}
+        VkDevice getNativeDevice() const noexcept;
         void setDebugName(const IObject *parent,
             const char *name);
         void setDebugTag(const IObject *parent,

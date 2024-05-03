@@ -50,7 +50,7 @@ SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
     samplerYcbcrConversionInfo.chromaFilter = state.chromaFilter;
     samplerYcbcrConversionInfo.forceExplicitReconstruction = MAGMA_BOOLEAN(forceExplicitReconstruction);
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateSamplerYcbcrConversionKHR, VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
-    const VkResult result = vkCreateSamplerYcbcrConversionKHR(MAGMA_HANDLE(device), &samplerYcbcrConversionInfo,
+    const VkResult result = vkCreateSamplerYcbcrConversionKHR(getNativeDevice(), &samplerYcbcrConversionInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Ycbcr sampler");
 }
@@ -58,7 +58,7 @@ SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
 SamplerYcbcrConversion::~SamplerYcbcrConversion()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroySamplerYcbcrConversionKHR);
-    vkDestroySamplerYcbcrConversionKHR(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroySamplerYcbcrConversionKHR(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 #endif // VK_KHR_sampler_ycbcr_conversion
 } // namespace magma

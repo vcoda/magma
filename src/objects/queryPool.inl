@@ -4,7 +4,7 @@ template<class Type>
 inline std::vector<Type> QueryPool::getQueryResults(uint32_t firstQuery, uint32_t queryCount, VkQueryResultFlags flags) const
 {
     std::vector<Type> data(queryCount);
-    const VkResult result = vkGetQueryPoolResults(MAGMA_HANDLE(device), handle, firstQuery, queryCount,
+    const VkResult result = vkGetQueryPoolResults(getNativeDevice(), handle, firstQuery, queryCount,
         sizeof(Type) * queryCount, data.data(), sizeof(Type), flags);
     MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
     return data;

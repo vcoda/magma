@@ -60,7 +60,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     #else
         0;
     #endif // VK_KHR_external_fence_fd
-    const VkResult result = vkCreateFence(MAGMA_HANDLE(device), &fenceInfo,
+    const VkResult result = vkCreateFence(getNativeDevice(), &fenceInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create external fence");
 }
@@ -87,7 +87,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.pNext = extendedInfo.headNode();
     fenceInfo.flags = flags;
-    VkResult result = vkCreateFence(MAGMA_HANDLE(device), &fenceInfo,
+    VkResult result = vkCreateFence(getNativeDevice(), &fenceInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create fence");
 #if defined(VK_KHR_external_fence_win32)
@@ -100,7 +100,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     importWin32HandleInfo.handle = hFence;
     importWin32HandleInfo.name = name;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportFenceWin32HandleKHR, VK_KHR_EXTERNAL_FENCE_WIN32_EXTENSION_NAME);
-    result = vkImportFenceWin32HandleKHR(MAGMA_HANDLE(device), &importWin32HandleInfo);
+    result = vkImportFenceWin32HandleKHR(getNativeDevice(), &importWin32HandleInfo);
     MAGMA_HANDLE_RESULT(result, "failed to import Win32 handle");
 #elif defined(VK_KHR_external_fence_fd)
     VkImportFenceFdInfoKHR importFdInfo;
@@ -116,7 +116,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     #endif
     importFdInfo.fd = fd;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportFenceFdKHR, VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME);
-    result = vkImportFenceFdKHR(MAGMA_HANDLE(device), &importFdInfo);
+    result = vkImportFenceFdKHR(getNativeDevice(), &importFdInfo);
     #ifdef VK_USE_PLATFORM_ANDROID_KHR
     MAGMA_HANDLE_RESULT(result, "failed to import Android fence descriptor");
     #else
@@ -143,7 +143,7 @@ HANDLE ExternalFence::getNtHandle() const
     win32HandleInfo.fence = handle;
     win32HandleInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetFenceWin32HandleKHR, VK_KHR_EXTERNAL_FENCE_WIN32_EXTENSION_NAME);
-    const VkResult result = vkGetFenceWin32HandleKHR(MAGMA_HANDLE(device), &win32HandleInfo, &hFence);
+    const VkResult result = vkGetFenceWin32HandleKHR(getNativeDevice(), &win32HandleInfo, &hFence);
     MAGMA_HANDLE_RESULT(result, "failed to get Win32 handle");
     return hFence;
 }
@@ -162,7 +162,7 @@ int ExternalFence::getFd() const
         VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR;
     #endif
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetFenceFdKHR, VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME);
-    const VkResult result = vkGetFenceFdKHR(MAGMA_HANDLE(device), &fdInfo, &fd);
+    const VkResult result = vkGetFenceFdKHR(getNativeDevice(), &fdInfo, &fd);
     #ifdef VK_USE_PLATFORM_ANDROID_KHR
     MAGMA_HANDLE_RESULT(result, "failed to get Android fence descriptor");
     #else

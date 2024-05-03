@@ -53,7 +53,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     bufferInfo.sharingMode = sharing.getMode();
     bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create buffer");
     // Allocate buffer memory
     StructureChain extendedMemoryInfo;
@@ -147,7 +147,7 @@ Buffer::~Buffer()
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
 {
     VkMemoryRequirements memoryRequirements = {};
-    vkGetBufferMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    vkGetBufferMemoryRequirements(getNativeDevice(), handle, &memoryRequirements);
     return memoryRequirements;
 }
 
@@ -163,7 +163,7 @@ VkMemoryRequirements Buffer::getMemoryRequirements2(void *memoryRequirements) co
     bufferMemoryRequirementsInfo2.pNext = nullptr;
     bufferMemoryRequirementsInfo2.buffer = handle;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetBufferMemoryRequirements2KHR, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
-    vkGetBufferMemoryRequirements2KHR(MAGMA_HANDLE(device), &bufferMemoryRequirementsInfo2, &memoryRequirements2);
+    vkGetBufferMemoryRequirements2KHR(getNativeDevice(), &bufferMemoryRequirementsInfo2, &memoryRequirements2);
     return memoryRequirements2.memoryRequirements;
 }
 #endif // VK_KHR_get_memory_requirements2
@@ -188,7 +188,7 @@ VkDeviceAddress Buffer::getDeviceAddress() const noexcept
         bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_KHR;
         bufferDeviceAddressInfo.pNext = nullptr;
         bufferDeviceAddressInfo.buffer = handle;
-        return vkGetBufferDeviceAddressKHR(MAGMA_HANDLE(device), &bufferDeviceAddressInfo);
+        return vkGetBufferDeviceAddressKHR(getNativeDevice(), &bufferDeviceAddressInfo);
     }
 #endif // VK_KHR_buffer_device_address
 #ifdef VK_EXT_buffer_device_address
@@ -199,7 +199,7 @@ VkDeviceAddress Buffer::getDeviceAddress() const noexcept
         bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT;
         bufferDeviceAddressInfo.pNext = nullptr;
         bufferDeviceAddressInfo.buffer = handle;
-        return vkGetBufferDeviceAddressEXT(MAGMA_HANDLE(device), &bufferDeviceAddressInfo);
+        return vkGetBufferDeviceAddressEXT(getNativeDevice(), &bufferDeviceAddressInfo);
     }
 #endif // VK_EXT_buffer_device_address
     return 0ull;
@@ -219,8 +219,8 @@ void Buffer::realloc(VkDeviceSize newSize)
     bufferInfo.sharingMode = sharing.getMode();
     bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to reallocate buffer");
     // Reallocate buffer memory
     StructureChain extendedMemoryInfo;
@@ -306,8 +306,8 @@ void Buffer::onDefragment()
     bufferInfo.sharingMode = sharing.getMode();
     bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    vkDestroyBuffer(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    const VkResult result = vkCreateBuffer(MAGMA_HANDLE(device), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to recreate defragmented buffer");
     bindMemory(std::move(memory), offset);
 }

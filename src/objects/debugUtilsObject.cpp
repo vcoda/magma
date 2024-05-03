@@ -31,6 +31,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+VkDevice DebugUtilsObject::getNativeDevice() const noexcept
+{
+    return device ? device->getHandle() : VK_NULL_HANDLE;
+}
+
 void DebugUtilsObject::setDebugName(const IObject *parent, const char *name)
 {
     MAGMA_UNUSED(name);
@@ -51,7 +56,7 @@ void DebugUtilsObject::setDebugName(const IObject *parent, const char *name)
             objectNameInfo.objectType = parent->getObjectType();
             objectNameInfo.objectHandle = parent->getObjectHandle();
             objectNameInfo.pObjectName = name;
-            const VkResult result = vkSetDebugUtilsObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
+            const VkResult result = vkSetDebugUtilsObjectNameEXT(getNativeDevice(), &objectNameInfo);
             MAGMA_HANDLE_RESULT(result, "failed to set object name");
             return;
         }
@@ -71,7 +76,7 @@ void DebugUtilsObject::setDebugName(const IObject *parent, const char *name)
             objectNameInfo.objectType = helpers::objectToDebugReportType(parent->getObjectType());
             objectNameInfo.object = parent->getObjectHandle();
             objectNameInfo.pObjectName = name;
-            const VkResult result = vkDebugMarkerSetObjectNameEXT(MAGMA_HANDLE(device), &objectNameInfo);
+            const VkResult result = vkDebugMarkerSetObjectNameEXT(getNativeDevice(), &objectNameInfo);
             MAGMA_HANDLE_RESULT(result, "failed to set object name");
         }
     }
@@ -103,7 +108,7 @@ void DebugUtilsObject::setDebugTag(const IObject *parent, uint64_t tagName, size
             objectTagInfo.tagName = tagName;
             objectTagInfo.tagSize = tagSize;
             objectTagInfo.pTag = tag;
-            const VkResult result = vkSetDebugUtilsObjectTagEXT(MAGMA_HANDLE(device), &objectTagInfo);
+            const VkResult result = vkSetDebugUtilsObjectTagEXT(getNativeDevice(), &objectTagInfo);
             MAGMA_HANDLE_RESULT(result, "failed to set object tag");
             return;
         }
@@ -125,7 +130,7 @@ void DebugUtilsObject::setDebugTag(const IObject *parent, uint64_t tagName, size
             objectTagInfo.tagName = tagName;
             objectTagInfo.tagSize = tagSize;
             objectTagInfo.pTag = tag;
-            const VkResult result = vkDebugMarkerSetObjectTagEXT(MAGMA_HANDLE(device), &objectTagInfo);
+            const VkResult result = vkDebugMarkerSetObjectTagEXT(getNativeDevice(), &objectTagInfo);
             MAGMA_HANDLE_RESULT(result, "failed to set object tag");
         }
     }

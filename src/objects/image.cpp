@@ -83,7 +83,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
         linkNode(imageInfo, imageFormatListInfo);
     }
 #endif // VK_KHR_image_format_list
-    const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create image");
     // Allocate image memory
     StructureChain extendedMemoryInfo;
@@ -180,7 +180,7 @@ Image::Image(std::shared_ptr<Device> device, VkImage handle_, VkImageType imageT
 
 Image::~Image()
 {
-    vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 VkImageAspectFlags Image::getAspectMask() const noexcept
@@ -249,7 +249,7 @@ VkSubresourceLayout Image::getSubresourceLayout(uint32_t mipLevel, uint32_t arra
     subresource.mipLevel = mipLevel;
     subresource.arrayLayer = getArrayLayers() ? arrayLayer : 0;
     VkSubresourceLayout subresourceLayout;
-    vkGetImageSubresourceLayout(MAGMA_HANDLE(device), handle, &subresource, &subresourceLayout);
+    vkGetImageSubresourceLayout(getNativeDevice(), handle, &subresource, &subresourceLayout);
     return subresourceLayout;
 }
 
@@ -277,19 +277,19 @@ VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32
 VkMemoryRequirements Image::getMemoryRequirements() const noexcept
 {
     VkMemoryRequirements memoryRequirements = {};
-    vkGetImageMemoryRequirements(MAGMA_HANDLE(device), handle, &memoryRequirements);
+    vkGetImageMemoryRequirements(getNativeDevice(), handle, &memoryRequirements);
     return memoryRequirements;
 }
 
 std::vector<VkSparseImageMemoryRequirements> Image::getSparseMemoryRequirements() const
 {
     uint32_t sparseMemoryRequirementCount = 0;
-    vkGetImageSparseMemoryRequirements(MAGMA_HANDLE(device), handle, &sparseMemoryRequirementCount, nullptr);
+    vkGetImageSparseMemoryRequirements(getNativeDevice(), handle, &sparseMemoryRequirementCount, nullptr);
     std::vector<VkSparseImageMemoryRequirements> sparseMemoryRequirements;
     if (sparseMemoryRequirementCount)
     {
         sparseMemoryRequirements.resize(sparseMemoryRequirementCount);
-        vkGetImageSparseMemoryRequirements(MAGMA_HANDLE(device), handle, &sparseMemoryRequirementCount, sparseMemoryRequirements.data());
+        vkGetImageSparseMemoryRequirements(getNativeDevice(), handle, &sparseMemoryRequirementCount, sparseMemoryRequirements.data());
     }
     return sparseMemoryRequirements;
 }
@@ -305,7 +305,7 @@ VkMemoryRequirements Image::getMemoryRequirements2(void *memoryRequirements) con
     memoryRequirements2.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR;
     memoryRequirements2.pNext = memoryRequirements;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetImageMemoryRequirements2KHR, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
-    vkGetImageMemoryRequirements2KHR(MAGMA_HANDLE(device), &imageMemoryRequirementsInfo2, &memoryRequirements2);
+    vkGetImageMemoryRequirements2KHR(getNativeDevice(), &imageMemoryRequirementsInfo2, &memoryRequirements2);
     return memoryRequirements2.memoryRequirements;
 }
 
@@ -317,7 +317,7 @@ std::vector<VkSparseImageMemoryRequirements2KHR> Image::getSparseMemoryRequireme
     imageSparseMemoryRequirementsInfo2.image = handle;
     uint32_t sparseMemoryRequirementCount = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetImageSparseMemoryRequirements2KHR, VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
-    vkGetImageSparseMemoryRequirements2KHR(MAGMA_HANDLE(device), &imageSparseMemoryRequirementsInfo2,
+    vkGetImageSparseMemoryRequirements2KHR(getNativeDevice(), &imageSparseMemoryRequirementsInfo2,
         &sparseMemoryRequirementCount, nullptr);
     std::vector<VkSparseImageMemoryRequirements2KHR> sparseMemoryRequirements2;
     if (sparseMemoryRequirementCount)
@@ -330,7 +330,7 @@ std::vector<VkSparseImageMemoryRequirements2KHR> Image::getSparseMemoryRequireme
             sparseImageMemoryRequirements2.memoryRequirements = {};
             sparseMemoryRequirements2.push_back(sparseImageMemoryRequirements2);
         }
-        vkGetImageSparseMemoryRequirements2KHR(MAGMA_HANDLE(device), &imageSparseMemoryRequirementsInfo2,
+        vkGetImageSparseMemoryRequirements2KHR(getNativeDevice(), &imageSparseMemoryRequirementsInfo2,
             &sparseMemoryRequirementCount, sparseMemoryRequirements2.data());
     }
     return sparseMemoryRequirements2;
@@ -377,8 +377,8 @@ void Image::onDefragment()
     imageInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     imageInfo.initialLayout = layout;
-    vkDestroyImage(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    const VkResult result = vkCreateImage(MAGMA_HANDLE(device), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to recreate defragmented image");
     bindMemory(std::move(memory), offset);
 }

@@ -43,13 +43,13 @@ CommandPool::CommandPool(std::shared_ptr<Device> device, uint32_t queueFamilyInd
     if (resetCommandBuffer)
         cmdPoolInfo.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     cmdPoolInfo.queueFamilyIndex = queueFamilyIndex;
-    const VkResult result = vkCreateCommandPool(MAGMA_HANDLE(device), &cmdPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateCommandPool(getNativeDevice(), &cmdPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create command pool");
 }
 
 CommandPool::~CommandPool()
 {
-    vkDestroyCommandPool(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyCommandPool(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 bool CommandPool::reset(bool releaseResources /* false */) noexcept
@@ -57,7 +57,7 @@ bool CommandPool::reset(bool releaseResources /* false */) noexcept
     VkCommandPoolResetFlags flags = 0;
     if (releaseResources)
         flags |= VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
-    const VkResult result = vkResetCommandPool(MAGMA_HANDLE(device), handle, flags);
+    const VkResult result = vkResetCommandPool(getNativeDevice(), handle, flags);
     MAGMA_ASSERT(VK_SUCCESS == result);
     return (VK_SUCCESS == result);
 }
@@ -72,7 +72,7 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     cmdBufferAllocateInfo.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
     cmdBufferAllocateInfo.commandBufferCount = commandBufferCount;
     MAGMA_STACK_ARRAY(VkCommandBuffer, commandBuffers, commandBufferCount);
-    const VkResult result = vkAllocateCommandBuffers(MAGMA_HANDLE(device), &cmdBufferAllocateInfo, commandBuffers);
+    const VkResult result = vkAllocateCommandBuffers(getNativeDevice(), &cmdBufferAllocateInfo, commandBuffers);
     MAGMA_HANDLE_RESULT(result, "failed to allocate command buffers");
     std::vector<std::shared_ptr<CommandBuffer>> cmdBuffers;
     for (auto handle: commandBuffers)
@@ -94,7 +94,7 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
         cmdBuffer->releaseBoundResources();
         cmdBuffer->handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in destructor
     }
-    vkFreeCommandBuffers(MAGMA_HANDLE(device), handle, commandBuffers.size(), commandBuffers);
+    vkFreeCommandBuffers(getNativeDevice(), handle, commandBuffers.size(), commandBuffers);
     cmdBuffers.clear();
 }
 
@@ -102,7 +102,7 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
 void CommandPool::trim(VkCommandPoolTrimFlagsKHR flags /* 0 */)
 {
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkTrimCommandPoolKHR, VK_KHR_MAINTENANCE1_EXTENSION_NAME);
-    vkTrimCommandPoolKHR(MAGMA_HANDLE(device), handle, flags);
+    vkTrimCommandPoolKHR(getNativeDevice(), handle, flags);
 }
 #endif // VK_KHR_maintenance1
 } // namespace magma

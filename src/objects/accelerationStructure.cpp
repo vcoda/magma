@@ -55,7 +55,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device_, Vk
             *pGeometries++ = geometry;
     }
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult result = vkCreateAccelerationStructureNV(MAGMA_HANDLE(device), &accelerationStructureInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateAccelerationStructureNV(getNativeDevice(), &accelerationStructureInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create acceleration structure");
     // Allocate acceleration structure memory
     StructureChain extendedMemoryInfo;
@@ -94,7 +94,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device_, Vk
 AccelerationStructure::~AccelerationStructure()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureNV);
-    vkDestroyAccelerationStructureNV(MAGMA_HANDLE(device), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyAccelerationStructureNV(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     delete[] accelerationStructureInfo.pGeometries;
 }
 
@@ -144,7 +144,7 @@ uint64_t AccelerationStructure::getReferenceHandle() const
 {
     uint64_t refHandle;
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureHandleNV);
-    const VkResult result = vkGetAccelerationStructureHandleNV(MAGMA_HANDLE(device), handle, sizeof(uint64_t), &refHandle);
+    const VkResult result = vkGetAccelerationStructureHandleNV(getNativeDevice(), handle, sizeof(uint64_t), &refHandle);
     MAGMA_HANDLE_RESULT(result, "failed to get acceleration structure handle");
     return refHandle;
 }
@@ -159,7 +159,7 @@ VkMemoryRequirements2 AccelerationStructure::getMemoryRequirements(VkAcceleratio
     memoryRequirementsInfo.accelerationStructure = handle;
     memoryRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2;
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureMemoryRequirementsNV);
-    vkGetAccelerationStructureMemoryRequirementsNV(MAGMA_HANDLE(device), &memoryRequirementsInfo, &memoryRequirements);
+    vkGetAccelerationStructureMemoryRequirementsNV(getNativeDevice(), &memoryRequirementsInfo, &memoryRequirements);
     return memoryRequirements;
 }
 #endif // VK_NV_ray_tracing

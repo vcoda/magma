@@ -45,7 +45,7 @@ TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t in
     semaphoreTypeInfo.pNext = extendedInfo.headNode();
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE_KHR;
     semaphoreTypeInfo.initialValue = initialValue;
-    const VkResult result = vkCreateSemaphore(MAGMA_HANDLE(device), &semaphoreInfo,
+    const VkResult result = vkCreateSemaphore(getNativeDevice(), &semaphoreInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create timeline semaphore");
 }
@@ -54,7 +54,7 @@ uint64_t TimelineSemaphore::getCounterValue() const
 {
     uint64_t counter = 0ull;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreCounterValueKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
-    const VkResult result = vkGetSemaphoreCounterValueKHR(MAGMA_HANDLE(device), handle, &counter);
+    const VkResult result = vkGetSemaphoreCounterValueKHR(getNativeDevice(), handle, &counter);
     MAGMA_HANDLE_RESULT(result, "failed to get counter value of the timeline semaphore");
     return counter;
 }
@@ -67,7 +67,7 @@ void TimelineSemaphore::signal(uint64_t counter)
     signalInfo.semaphore = handle;
     signalInfo.value = counter;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkSignalSemaphoreKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
-    const VkResult result = vkSignalSemaphoreKHR(MAGMA_HANDLE(device), &signalInfo);
+    const VkResult result = vkSignalSemaphoreKHR(getNativeDevice(), &signalInfo);
     MAGMA_HANDLE_RESULT(result, "failed to signal timeline semaphore");
 }
 
@@ -82,7 +82,7 @@ bool TimelineSemaphore::wait(uint64_t counter,
     waitInfo.pSemaphores = &handle;
     waitInfo.pValues = &counter;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
-    const VkResult result = vkWaitSemaphoresKHR(MAGMA_HANDLE(device), &waitInfo, timeout);
+    const VkResult result = vkWaitSemaphoresKHR(getNativeDevice(), &waitInfo, timeout);
     MAGMA_HANDLE_RESULT(result, "failed to wait timeline semaphore");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
