@@ -73,4 +73,11 @@ inline void NonDispatchable<Type>::setDebugTag(uint64_t tagName, std::size_t tag
 {
     DebugUtilsObject::setDebugTag(this, tagName, tagSize, tag);
 }
+
+template<class Type>
+template<class Tag>
+inline void NonDispatchable<Type>::setDebugTag(uint64_t tagName, const Tag& tag)
+{
+    DebugUtilsObject::setDebugTag(this, tagName, sizeof(Tag), &tag);
+}
 } // namespace magma

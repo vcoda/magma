@@ -50,6 +50,8 @@ namespace magma
         bool nonDispatchable() const noexcept override { return true; }
         void setDebugName(const char *name);
         void setDebugTag(uint64_t tagName, size_t tagSize, const void *tag);
+        template<class Tag>
+        void setDebugTag(uint64_t tagName, const Tag& tag);
 
     protected:
         NonDispatchable(VkObjectType objectType,
