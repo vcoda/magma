@@ -30,7 +30,7 @@ namespace magma
        provides getObjectType() method. */
 
     template<class Type>
-    class Object : public IObject,
+    class Object : virtual public IObject,
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         public ObjectType<Type>, // Use custom template specialization
     #endif

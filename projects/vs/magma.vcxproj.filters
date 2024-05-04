@@ -882,6 +882,9 @@
     <ClInclude Include="..\..\src\objects\deviceResourcePool.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\deviceChild.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1406,10 +1409,10 @@
     <ClCompile Include="..\..\src\misc\structureSize.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objects\nondispatchable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\objects\deviceResourcePool.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\deviceChild.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "nondispatchable.h"
+#include "deviceChild.h"
 #include "instance.h"
 #include "device.h"
 #include "physicalDevice.h"
@@ -28,33 +28,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-std::mutex NonDispatchableImpl::mtx;
+std::mutex DeviceChild::mtx;
 
-VkDevice NonDispatchableImpl::getNativeDevice() const noexcept
-{
-    // The following Vulkan objects are created before logical device is initialized:
-    // VK_OBJECT_TYPE_INSTANCE
-    // VK_OBJECT_TYPE_SURFACE_KHR
-    // VK_OBJECT_TYPE_PHYSICAL_DEVICE
-    // VK_OBJECT_TYPE_DEVICE
-    // VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT
-    // VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT
-    return MAGMA_OPTIONAL_HANDLE(device);
-}
-
-VkInstance NonDispatchableImpl::getNativeInstance() const noexcept
-{
-    return device ? device->getPhysicalDevice()->getInstance()->getHandle() : VK_NULL_HANDLE;
-}
-
-#if (VK_USE_64_BIT_PTR_DEFINES == 1)
-std::shared_ptr<DeviceResourcePool> NonDispatchableImpl::getResourcePool() noexcept
-{
-    return device ? device->getResourcePool() : nullptr;
-}
-#endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
-
-void NonDispatchableImpl::setPrivateData(const IObject *self, uint64_t data)
+void DeviceChild::setPrivateData(uint64_t data)
 {
     if (!device)
         return;
@@ -62,33 +38,33 @@ void NonDispatchableImpl::setPrivateData(const IObject *self, uint64_t data)
     std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
     if (privateDataSlot)
     {
-        privateDataSlot->setPrivateData(self, data);
+        privateDataSlot->setPrivateData(this, data);
         return;
     }
 #endif // VK_EXT_private_data
     std::lock_guard<std::mutex> lock(mtx);
     std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
-    privateData[self->getObjectHandle()] = data;
+    privateData[getObjectHandle()] = data;
 }
 
-uint64_t NonDispatchableImpl::getPrivateData(const IObject *self) const noexcept
+uint64_t DeviceChild::getPrivateData() const noexcept
 {
     if (!device)
         return 0ull;
 #ifdef VK_EXT_private_data
     std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
     if (privateDataSlot)
-        return privateDataSlot->getPrivateData(self);
+        return privateDataSlot->getPrivateData(this);
 #endif // VK_EXT_private_data
     std::lock_guard<std::mutex> lock(mtx);
     std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
-    auto it = privateData.find(self->getObjectHandle());
+    auto it = privateData.find(getObjectHandle());
     if (it != privateData.end())
         return it->second;
     return 0ull;
 }
 
-void NonDispatchableImpl::setDebugName(const IObject *self, const char *name)
+void DeviceChild::setDebugName(const char *name)
 {
     MAGMA_UNUSED(name);
     MAGMA_ASSERT(name);
@@ -105,8 +81,8 @@ void NonDispatchableImpl::setDebugName(const IObject *self, const char *name)
             VkDebugUtilsObjectNameInfoEXT objectNameInfo;
             objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
             objectNameInfo.pNext = nullptr;
-            objectNameInfo.objectType = self->getObjectType();
-            objectNameInfo.objectHandle = self->getObjectHandle();
+            objectNameInfo.objectType = getObjectType();
+            objectNameInfo.objectHandle = getObjectHandle();
             objectNameInfo.pObjectName = name;
             const VkResult result = vkSetDebugUtilsObjectNameEXT(getNativeDevice(), &objectNameInfo);
             MAGMA_HANDLE_RESULT(result, "failed to set child name");
@@ -125,8 +101,8 @@ void NonDispatchableImpl::setDebugName(const IObject *self, const char *name)
             objectNameInfo.pNext = nullptr;
             // No future object type handle enumeration values will be added to
             // VkDebugReportObjectTypeEXT since the creation of VkObjectType!
-            objectNameInfo.objectType = helpers::objectToDebugReportType(self->getObjectType());
-            objectNameInfo.object = self->getObjectHandle();
+            objectNameInfo.objectType = helpers::objectToDebugReportType(getObjectType());
+            objectNameInfo.object = getObjectHandle();
             objectNameInfo.pObjectName = name;
             const VkResult result = vkDebugMarkerSetObjectNameEXT(getNativeDevice(), &objectNameInfo);
             MAGMA_HANDLE_RESULT(result, "failed to set child name");
@@ -135,7 +111,7 @@ void NonDispatchableImpl::setDebugName(const IObject *self, const char *name)
 #endif // VK_EXT_debug_marker
 }
 
-void NonDispatchableImpl::setDebugTag(const IObject *self, uint64_t tagName, size_t tagSize, const void *tag)
+void DeviceChild::setDebugTag(uint64_t tagName, size_t tagSize, const void *tag)
 {
     MAGMA_UNUSED(tagName);
     MAGMA_UNUSED(tagSize);
@@ -155,8 +131,8 @@ void NonDispatchableImpl::setDebugTag(const IObject *self, uint64_t tagName, siz
             VkDebugUtilsObjectTagInfoEXT objectTagInfo;
             objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
             objectTagInfo.pNext = nullptr;
-            objectTagInfo.objectType = self->getObjectType();
-            objectTagInfo.objectHandle = self->getObjectHandle();
+            objectTagInfo.objectType = getObjectType();
+            objectTagInfo.objectHandle = getObjectHandle();
             objectTagInfo.tagName = tagName;
             objectTagInfo.tagSize = tagSize;
             objectTagInfo.pTag = tag;
@@ -177,8 +153,8 @@ void NonDispatchableImpl::setDebugTag(const IObject *self, uint64_t tagName, siz
             objectTagInfo.pNext = nullptr;
             // No future object type handle enumeration values will be added to
             // VkDebugReportObjectTypeEXT since the creation of VkObjectType!
-            objectTagInfo.objectType = helpers::objectToDebugReportType(self->getObjectType());
-            objectTagInfo.object = self->getObjectHandle();
+            objectTagInfo.objectType = helpers::objectToDebugReportType(getObjectType());
+            objectTagInfo.object = getObjectHandle();
             objectTagInfo.tagName = tagName;
             objectTagInfo.tagSize = tagSize;
             objectTagInfo.pTag = tag;
@@ -188,4 +164,27 @@ void NonDispatchableImpl::setDebugTag(const IObject *self, uint64_t tagName, siz
     }
 #endif // VK_EXT_debug_marker
 }
+
+VkDevice DeviceChild::getNativeDevice() const noexcept
+{
+    // The following Vulkan objects are created before logical device is initialized:
+    // VK_OBJECT_TYPE_SURFACE_KHR
+    // VK_OBJECT_TYPE_DEVICE
+    // VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT
+    // VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT
+    return MAGMA_OPTIONAL_HANDLE(device);
+}
+
+VkInstance DeviceChild::getNativeInstance() const noexcept
+{
+    return device ? device->getPhysicalDevice()->getInstance()->getHandle() : VK_NULL_HANDLE;
+}
+
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
+std::shared_ptr<DeviceResourcePool> DeviceChild::getResourcePool() noexcept
+{
+    return device ? device->getResourcePool() : nullptr;
+}
+#endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
 } // namespace magma
+

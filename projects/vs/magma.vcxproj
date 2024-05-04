@@ -273,6 +273,7 @@
     <ClInclude Include="..\..\src\objects\computePipelineBatch.h" />
     <ClInclude Include="..\..\src\objects\computePipelineLibrary.h" />
     <ClInclude Include="..\..\src\objects\conditionalRenderingBuffer.h" />
+    <ClInclude Include="..\..\src\objects\deviceChild.h" />
     <ClInclude Include="..\..\src\objects\debugReportCallback.h" />
     <ClInclude Include="..\..\src\objects\debugUtilsMessenger.h" />
     <ClInclude Include="..\..\src\objects\deferredOperation.h" />
@@ -494,6 +495,7 @@
     <ClCompile Include="..\..\src\objects\computePipelineBatch.cpp" />
     <ClCompile Include="..\..\src\objects\computePipelineLibrary.cpp" />
     <ClCompile Include="..\..\src\objects\conditionalRenderingBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\deviceChild.cpp" />
     <ClCompile Include="..\..\src\objects\debugReportCallback.cpp" />
     <ClCompile Include="..\..\src\objects\debugUtilsMessenger.cpp" />
     <ClCompile Include="..\..\src\objects\deferredOperation.cpp" />
@@ -533,7 +535,6 @@
     <ClCompile Include="..\..\src\objects\managedDeviceMemory.cpp" />
     <ClCompile Include="..\..\src\objects\mutableImage.cpp" />
     <ClCompile Include="..\..\src\objects\mutableImageView.cpp" />
-    <ClCompile Include="..\..\src\objects\nondispatchable.cpp" />
     <ClCompile Include="..\..\src\objects\physicalDevice.cpp" />
     <ClCompile Include="..\..\src\objects\physicalDeviceFeatures.cpp" />
     <ClCompile Include="..\..\src\objects\physicalDeviceGroup.cpp" />

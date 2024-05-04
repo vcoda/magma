@@ -102,6 +102,7 @@ SRC_OBJS= \
 	src/objects/descriptorSet.o \
 	src/objects/descriptorSetLayout.o \
 	src/objects/device.o \
+	src/objects/deviceChild.o \
 	src/objects/deviceMemory.o \
 	src/objects/deviceResourcePool.o \
 	src/objects/display.o \
@@ -135,7 +136,6 @@ SRC_OBJS= \
 	src/objects/managedDeviceMemory.o \
 	src/objects/mutableImage.o \
 	src/objects/mutableImageView.o \
-	src/objects/nondispatchable.o \
 	src/objects/physicalDevice.o \
 	src/objects/physicalDeviceFeatures.o \
 	src/objects/physicalDeviceGroup.o \

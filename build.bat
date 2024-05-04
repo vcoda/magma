@@ -135,6 +135,7 @@ src\objects\descriptorPool.cpp ^
 src\objects\descriptorSet.cpp ^
 src\objects\descriptorSetLayout.cpp ^
 src\objects\device.cpp ^
+src\objects\deviceChild.cpp ^
 src\objects\deviceMemory.cpp ^
 src\objects\deviceResourcePool.cpp ^
 src\objects\display.cpp ^
@@ -168,7 +169,6 @@ src\objects\instance.cpp ^
 src\objects\managedDeviceMemory.cpp ^
 src\objects\mutableImage.cpp ^
 src\objects\mutableImageView.cpp ^
-src\objects\nondispatchable.cpp ^
 src\objects\physicalDevice.cpp ^
 src\objects\physicalDeviceFeatures.cpp ^
 src\objects\physicalDeviceGroup.cpp ^
@@ -330,6 +330,7 @@ descriptorPool.obj ^
 descriptorSet.obj ^
 descriptorSetLayout.obj ^
 device.obj ^
+deviceChild.obj ^
 deviceMemory.obj ^
 deviceResourcePool.obj ^
 display.obj ^
@@ -363,7 +364,6 @@ instance.obj ^
 managedDeviceMemory.obj ^
 mutableImage.obj ^
 mutableImageView.obj ^
-nondispatchable.obj ^
 physicalDevice.obj ^
 physicalDeviceFeatures.obj ^
 physicalDeviceGroup.obj ^
