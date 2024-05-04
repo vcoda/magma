@@ -55,7 +55,7 @@ std::shared_ptr<ResourcePool> NonDispatchableImpl::getResourcePool() noexcept
 }
 #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
 
-void NonDispatchableImpl::setPrivateData(const IObject *child, uint64_t data)
+void NonDispatchableImpl::setPrivateData(const IObject *self, uint64_t data)
 {
     if (!device)
         return;
@@ -63,33 +63,33 @@ void NonDispatchableImpl::setPrivateData(const IObject *child, uint64_t data)
     std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
     if (privateDataSlot)
     {
-        privateDataSlot->setPrivateData(child, data);
+        privateDataSlot->setPrivateData(self, data);
         return;
     }
 #endif // VK_EXT_private_data
     std::lock_guard<std::mutex> lock(mtx);
     std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
-    privateData[child->getObjectHandle()] = data;
+    privateData[self->getObjectHandle()] = data;
 }
 
-uint64_t NonDispatchableImpl::getPrivateData(const IObject *child) const noexcept
+uint64_t NonDispatchableImpl::getPrivateData(const IObject *self) const noexcept
 {
     if (!device)
         return 0ull;
 #ifdef VK_EXT_private_data
     std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
     if (privateDataSlot)
-        return privateDataSlot->getPrivateData(child);
+        return privateDataSlot->getPrivateData(self);
 #endif // VK_EXT_private_data
     std::lock_guard<std::mutex> lock(mtx);
     std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
-    auto it = privateData.find(child->getObjectHandle());
+    auto it = privateData.find(self->getObjectHandle());
     if (it != privateData.end())
         return it->second;
     return 0ull;
 }
 
-void NonDispatchableImpl::setDebugName(const IObject *child, const char *name)
+void NonDispatchableImpl::setDebugName(const IObject *self, const char *name)
 {
     MAGMA_UNUSED(name);
     MAGMA_ASSERT(name);
@@ -106,8 +106,8 @@ void NonDispatchableImpl::setDebugName(const IObject *child, const char *name)
             VkDebugUtilsObjectNameInfoEXT objectNameInfo;
             objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
             objectNameInfo.pNext = nullptr;
-            objectNameInfo.objectType = child->getObjectType();
-            objectNameInfo.objectHandle = child->getObjectHandle();
+            objectNameInfo.objectType = self->getObjectType();
+            objectNameInfo.objectHandle = self->getObjectHandle();
             objectNameInfo.pObjectName = name;
             const VkResult result = vkSetDebugUtilsObjectNameEXT(getNativeDevice(), &objectNameInfo);
             MAGMA_HANDLE_RESULT(result, "failed to set child name");
@@ -126,8 +126,8 @@ void NonDispatchableImpl::setDebugName(const IObject *child, const char *name)
             objectNameInfo.pNext = nullptr;
             // No future object type handle enumeration values will be added to
             // VkDebugReportObjectTypeEXT since the creation of VkObjectType!
-            objectNameInfo.objectType = helpers::objectToDebugReportType(child->getObjectType());
-            objectNameInfo.object = child->getObjectHandle();
+            objectNameInfo.objectType = helpers::objectToDebugReportType(self->getObjectType());
+            objectNameInfo.object = self->getObjectHandle();
             objectNameInfo.pObjectName = name;
             const VkResult result = vkDebugMarkerSetObjectNameEXT(getNativeDevice(), &objectNameInfo);
             MAGMA_HANDLE_RESULT(result, "failed to set child name");
@@ -136,7 +136,7 @@ void NonDispatchableImpl::setDebugName(const IObject *child, const char *name)
 #endif // VK_EXT_debug_marker
 }
 
-void NonDispatchableImpl::setDebugTag(const IObject *child, uint64_t tagName, size_t tagSize, const void *tag)
+void NonDispatchableImpl::setDebugTag(const IObject *self, uint64_t tagName, size_t tagSize, const void *tag)
 {
     MAGMA_UNUSED(tagName);
     MAGMA_UNUSED(tagSize);
@@ -156,8 +156,8 @@ void NonDispatchableImpl::setDebugTag(const IObject *child, uint64_t tagName, si
             VkDebugUtilsObjectTagInfoEXT objectTagInfo;
             objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT;
             objectTagInfo.pNext = nullptr;
-            objectTagInfo.objectType = child->getObjectType();
-            objectTagInfo.objectHandle = child->getObjectHandle();
+            objectTagInfo.objectType = self->getObjectType();
+            objectTagInfo.objectHandle = self->getObjectHandle();
             objectTagInfo.tagName = tagName;
             objectTagInfo.tagSize = tagSize;
             objectTagInfo.pTag = tag;
@@ -178,8 +178,8 @@ void NonDispatchableImpl::setDebugTag(const IObject *child, uint64_t tagName, si
             objectTagInfo.pNext = nullptr;
             // No future object type handle enumeration values will be added to
             // VkDebugReportObjectTypeEXT since the creation of VkObjectType!
-            objectTagInfo.objectType = helpers::objectToDebugReportType(child->getObjectType());
-            objectTagInfo.object = child->getObjectHandle();
+            objectTagInfo.objectType = helpers::objectToDebugReportType(self->getObjectType());
+            objectTagInfo.object = self->getObjectHandle();
             objectTagInfo.tagName = tagName;
             objectTagInfo.tagSize = tagSize;
             objectTagInfo.pTag = tag;

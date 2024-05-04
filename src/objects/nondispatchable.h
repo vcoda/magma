@@ -46,12 +46,12 @@ namespace magma
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         std::shared_ptr<ResourcePool> getResourcePool() noexcept;
     #endif
-        void setPrivateData(const IObject *child,
+        void setPrivateData(const IObject *self,
             uint64_t data);
-        uint64_t getPrivateData(const IObject *child) const noexcept;
-        void setDebugName(const IObject *child,
+        uint64_t getPrivateData(const IObject *self) const noexcept;
+        void setDebugName(const IObject *self,
             const char *name);
-        void setDebugTag(const IObject *child,
+        void setDebugTag(const IObject *self,
             uint64_t tagName, size_t tagSize, const void *tag);
 
         std::shared_ptr<Device> device;
