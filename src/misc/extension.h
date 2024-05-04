@@ -77,9 +77,13 @@ namespace magma
     };
 } // namespace magma
 
+#include "extension.inl"
+
+/* Users of these macros should have implemented
+   getNativeInstance() or getNativeDevice() methods
+   in the scope of extension function call. */
+
 #define MAGMA_INSTANCE_EXTENSION(proc) static const magma::InstanceExtension<PFN_##proc> proc(getNativeInstance(), MAGMA_STRINGIZE(proc))
 #define MAGMA_REQUIRED_INSTANCE_EXTENSION(proc, extensionName) static const magma::InstanceExtension<PFN_##proc> proc(getNativeInstance(), MAGMA_STRINGIZE(proc), extensionName)
 #define MAGMA_DEVICE_EXTENSION(proc) static const magma::DeviceExtension<PFN_##proc> proc(getNativeDevice(), MAGMA_STRINGIZE(proc))
 #define MAGMA_REQUIRED_DEVICE_EXTENSION(proc, extensionName) static const magma::DeviceExtension<PFN_##proc> proc(getNativeDevice(), MAGMA_STRINGIZE(proc), extensionName)
-
-#include "extension.inl"
