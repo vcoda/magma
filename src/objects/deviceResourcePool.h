@@ -30,15 +30,15 @@ namespace magma
        for application profiling, memory usage optimization and so on.
        Each logical device has it's own resource pool. */
 
-    class ResourcePool final : NonCopyable
+    class DeviceResourcePool final : NonCopyable
     {
     public:
-        struct DeviceResources;
+        struct Resources;
         struct PhysicalDeviceResources;
 
         std::mutex& getMutex() const noexcept { return mtx; }
         template<class Type> Pool<Type>& getPool();
-        DeviceResources countDeviceResources() const;
+        Resources countDeviceResources() const;
         PhysicalDeviceResources countPhysicalDeviceResources() const;
         VkDeviceSize countAllocatedDeviceLocalMemory() const;
         VkDeviceSize countAllocatedHostVisibleMemory() const;
@@ -103,7 +103,7 @@ namespace magma
         mutable std::mutex mtx;
     };
 
-    struct ResourcePool::DeviceResources
+    struct DeviceResourcePool::Resources
     {
         uint32_t semaphoreCount = 0;
         uint32_t fenceCount = 0;
@@ -138,12 +138,12 @@ namespace magma
         uint32_t accelerationStructureCount = 0;
     };
 
-    struct ResourcePool::PhysicalDeviceResources
+    struct DeviceResourcePool::PhysicalDeviceResources
     {
         uint32_t displayCount = 0;
         uint32_t displayModeCount = 0;
     };
 } // namespace magma
 
-#include "resourcePool.inl"
+#include "deviceResourcePool.inl"
 #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)

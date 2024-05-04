@@ -336,7 +336,7 @@
     <ClInclude Include="..\..\src\objects\renderPass.h" />
     <ClInclude Include="..\..\src\objects\renderPassMultiview.h" />
     <ClInclude Include="..\..\src\objects\resource.h" />
-    <ClInclude Include="..\..\src\objects\resourcePool.h" />
+    <ClInclude Include="..\..\src\objects\deviceResourcePool.h" />
     <ClInclude Include="..\..\src\objects\sampler.h" />
     <ClInclude Include="..\..\src\objects\samplerYcbcrConversion.h" />
     <ClInclude Include="..\..\src\objects\secondaryCommandBuffer.h" />
@@ -552,7 +552,7 @@
     <ClCompile Include="..\..\src\objects\renderPass.cpp" />
     <ClCompile Include="..\..\src\objects\renderPassMultiview.cpp" />
     <ClCompile Include="..\..\src\objects\resource.cpp" />
-    <ClCompile Include="..\..\src\objects\resourcePool.cpp" />
+    <ClCompile Include="..\..\src\objects\deviceResourcePool.cpp" />
     <ClCompile Include="..\..\src\objects\sampler.cpp" />
     <ClCompile Include="..\..\src\objects\samplerYcbcrConversion.cpp" />
     <ClCompile Include="..\..\src\objects\semaphore.cpp" />
@@ -738,7 +738,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\objects\pipelineLayout.inl" />
     <None Include="..\..\src\objects\queryPool.inl" />
     <None Include="..\..\src\objects\renderPass.inl" />
-    <None Include="..\..\src\objects\resourcePool.inl" />
+    <None Include="..\..\src\objects\deviceResourcePool.inl" />
     <None Include="..\..\src\objects\shaderModule.inl" />
     <None Include="..\..\src\packed\b4g4r4a4unorm.inl" />
     <None Include="..\..\src\packed\b5g5r5a1unorm.inl" />

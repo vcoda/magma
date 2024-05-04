@@ -136,6 +136,7 @@ src\objects\descriptorSet.cpp ^
 src\objects\descriptorSetLayout.cpp ^
 src\objects\device.cpp ^
 src\objects\deviceMemory.cpp ^
+src\objects\deviceResourcePool.cpp ^
 src\objects\display.cpp ^
 src\objects\displayMode.cpp ^
 src\objects\dstTransferBuffer.cpp ^
@@ -186,7 +187,6 @@ src\objects\rayTracingPipelineBatch.cpp ^
 src\objects\renderPass.cpp ^
 src\objects\renderPassMultiview.cpp ^
 src\objects\resource.cpp ^
-src\objects\resourcePool.cpp ^
 src\objects\sampler.cpp ^
 src\objects\samplerYcbcrConversion.cpp ^
 src\objects\semaphore.cpp ^
@@ -331,6 +331,7 @@ descriptorSet.obj ^
 descriptorSetLayout.obj ^
 device.obj ^
 deviceMemory.obj ^
+deviceResourcePool.obj ^
 display.obj ^
 displayMode.obj ^
 dstTransferBuffer.obj ^
@@ -381,7 +382,6 @@ rayTracingPipelineBatch.obj ^
 renderPass.obj ^
 renderPassMultiview.obj ^
 resource.obj ^
-resourcePool.obj ^
 sampler.obj ^
 samplerYcbcrConversion.obj ^
 semaphore.obj ^

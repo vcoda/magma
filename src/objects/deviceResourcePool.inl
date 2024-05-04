@@ -1,6 +1,6 @@
 #define MAGMA_RESOURCE_POOL(Type, pool)\
 template<>\
-inline magma::Pool<Type>& magma::ResourcePool::getPool<Type>()\
+inline magma::Pool<Type>& magma::DeviceResourcePool::getPool<Type>()\
 {\
     return pool;\
 }
@@ -55,7 +55,7 @@ MAGMA_RESOURCE_POOL(VkAccelerationStructureNV, accelerationStructures)
 namespace magma
 {
 template<class NonDispatchableChild, class NonDispatchable>
-inline void ResourcePool::foreach(const Pool<NonDispatchable>& pool, const Fn<NonDispatchableChild>& fn) const
+inline void DeviceResourcePool::foreach(const Pool<NonDispatchable>& pool, const Fn<NonDispatchableChild>& fn) const
 {
     std::lock_guard<std::mutex> guard(mtx);
     std::for_each(pool.begin(), pool.end(),

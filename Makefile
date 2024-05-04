@@ -103,6 +103,7 @@ SRC_OBJS= \
 	src/objects/descriptorSetLayout.o \
 	src/objects/device.o \
 	src/objects/deviceMemory.o \
+	src/objects/deviceResourcePool.o \
 	src/objects/display.o \
 	src/objects/displayMode.o \
 	src/objects/dstTransferBuffer.o \
@@ -153,7 +154,6 @@ SRC_OBJS= \
 	src/objects/renderPass.o \
 	src/objects/renderPassMultiview.o \
 	src/objects/resource.o \
-	src/objects/resourcePool.o \
 	src/objects/sampler.o \
 	src/objects/samplerYcbcrConversion.o \
 	src/objects/semaphore.o \

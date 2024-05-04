@@ -333,9 +333,6 @@
     <ClInclude Include="..\..\src\objects\resource.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\resourcePool.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\objects\sampler.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -882,6 +879,9 @@
     <ClInclude Include="..\..\src\objects\iobject.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\deviceResourcePool.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1080,9 +1080,6 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\resource.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\objects\resourcePool.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\sampler.cpp">
@@ -1412,6 +1409,9 @@
     <ClCompile Include="..\..\src\objects\nondispatchable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\objects\deviceResourcePool.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\objects\commandBuffer.inl">
@@ -1436,9 +1436,6 @@
       <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\src\objects\queryPool.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\src\objects\resourcePool.inl">
       <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\src\objects\shaderModule.inl">
@@ -1646,6 +1643,9 @@
       <Filter>Header Files\misc</Filter>
     </None>
     <None Include="..\..\src\objects\nondispatchable.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\objects\deviceResourcePool.inl">
       <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>

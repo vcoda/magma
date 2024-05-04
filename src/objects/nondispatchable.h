@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "object.h"
-#include "resourcePool.h"
+#include "deviceResourcePool.h"
 #include "../misc/structureChain.h"
 
 namespace magma
@@ -44,7 +44,7 @@ namespace magma
         VkDevice getNativeDevice() const noexcept;
         VkInstance getNativeInstance() const noexcept;
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        std::shared_ptr<ResourcePool> getResourcePool() noexcept;
+        std::shared_ptr<DeviceResourcePool> getResourcePool() noexcept;
     #endif
         void setPrivateData(const IObject *self,
             uint64_t data);

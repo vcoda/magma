@@ -22,7 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "privateDataSlot.h"
-#include "resourcePool.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/enumerationCast.h"
 #include "../misc/extension.h"
@@ -49,7 +48,7 @@ VkInstance NonDispatchableImpl::getNativeInstance() const noexcept
 }
 
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-std::shared_ptr<ResourcePool> NonDispatchableImpl::getResourcePool() noexcept
+std::shared_ptr<DeviceResourcePool> NonDispatchableImpl::getResourcePool() noexcept
 {
     return device ? device->getResourcePool() : nullptr;
 }

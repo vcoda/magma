@@ -41,6 +41,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/descriptorSetLayout.h"
 #include "src/objects/device.h"
 #include "src/objects/deviceMemory.h"
+#include "src/objects/deviceResourcePool.h"
 #include "src/objects/display.h"
 #include "src/objects/displayMode.h"
 #include "src/objects/dstTransferBuffer.h"

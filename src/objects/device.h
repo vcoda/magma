@@ -34,7 +34,7 @@ namespace magma
     class TimelineSemaphore;
 #endif
     class DeviceFeatures;
-    class ResourcePool;
+    class DeviceResourcePool;
 
     /* Device objects represent logical connections to physical
        devices. Each device exposes a number of queue families
@@ -113,7 +113,7 @@ namespace magma
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        const std::shared_ptr<ResourcePool>& getResourcePool() const noexcept { return resourcePool; }
+        const std::shared_ptr<DeviceResourcePool>& getResourcePool() const noexcept { return resourcePool; }
     #endif
 
     private:
@@ -141,7 +141,7 @@ namespace magma
         std::weak_ptr<PrivateDataSlot> privateDataSlot;
     #endif
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        std::shared_ptr<ResourcePool> resourcePool;
+        std::shared_ptr<DeviceResourcePool> resourcePool;
     #endif
         friend PhysicalDevice;
     };

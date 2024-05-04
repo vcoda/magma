@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "resourcePool.h"
+#include "deviceResourcePool.h"
 #include "device.h"
 #include "deviceMemory.h"
 #include "buffer.h"
@@ -28,10 +28,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
+DeviceResourcePool::Resources DeviceResourcePool::countDeviceResources() const
 {
     std::lock_guard<std::mutex> guard(mtx);
-    DeviceResources statistics;
+    Resources statistics;
     statistics.semaphoreCount = MAGMA_COUNT(semaphores);
     statistics.fenceCount = MAGMA_COUNT(fences);
     statistics.deviceMemoryCount = MAGMA_COUNT(deviceMemories);
@@ -108,7 +108,7 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
     return statistics;
 }
 
-ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources() const
+DeviceResourcePool::PhysicalDeviceResources DeviceResourcePool::countPhysicalDeviceResources() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     PhysicalDeviceResources statistics;
@@ -119,7 +119,7 @@ ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources
     return statistics;
 }
 
-VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedDeviceLocalMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize deviceLocalAllocatedSize = 0;
@@ -132,7 +132,7 @@ VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const
     return deviceLocalAllocatedSize;
 }
 
-VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedHostVisibleMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize hostVisibleAllocatedSize = 0;
@@ -145,7 +145,7 @@ VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const
     return hostVisibleAllocatedSize;
 }
 
-VkDeviceSize ResourcePool::countAllocatedBufferMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedBufferMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize bufferAllocatedSize = 0;
@@ -159,7 +159,7 @@ VkDeviceSize ResourcePool::countAllocatedBufferMemory() const
     return bufferAllocatedSize;
 }
 
-VkDeviceSize ResourcePool::countAllocatedImageMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedImageMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize imageAllocatedSize = 0;
@@ -173,7 +173,7 @@ VkDeviceSize ResourcePool::countAllocatedImageMemory() const
     return imageAllocatedSize;
 }
 
-VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedAccelerationStructureMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize accelerationStructureAllocatedSize = 0;
@@ -189,7 +189,7 @@ VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const
     return accelerationStructureAllocatedSize;
 }
 
-bool ResourcePool::hasAnyDeviceResource() const
+bool DeviceResourcePool::hasAnyDeviceResource() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     return semaphores.size() ||

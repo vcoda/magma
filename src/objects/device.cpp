@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "privateDataSlot.h"
 #include "timelineSemaphore.h"
-#include "resourcePool.h"
+#include "deviceResourcePool.h"
 #include "../misc/deviceFeatures.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
@@ -46,7 +46,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     enabledFeatures(enabledFeatures_),
     enabledExtendedFeatures(enabledExtendedFeatures_)
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-   ,resourcePool(std::make_shared<ResourcePool>())
+   ,resourcePool(std::make_shared<DeviceResourcePool>())
 #endif
 {
     VkDeviceCreateInfo deviceInfo;
