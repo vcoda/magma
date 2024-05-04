@@ -57,10 +57,11 @@ namespace magma
 template<class NonDispatchableChild, class Type>
 inline void DeviceResourcePool::foreach(const Pool<Type>& pool, const Fn<NonDispatchableChild>& fn) const
 {
-    std::for_each(pool.begin(), pool.end(),
-        [&fn](auto parent)
-        {
+    std::for_each(pool.cbegin(), pool.cend(),
+        [&fn](const NonDispatchable<Type> *parent)
+        {   // We need costly dynamic_cast to get properties of object of concrete type
             auto child = dynamic_cast<const NonDispatchableChild *>(parent);
+            MAGMA_ASSERT(child);
             if (child)
                 fn(child);
         });
