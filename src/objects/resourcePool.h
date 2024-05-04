@@ -36,7 +36,6 @@ namespace magma
         struct DeviceResources;
         struct PhysicalDeviceResources;
 
-    public:
         std::mutex& getMutex() const noexcept { return mtx; }
         template<class Type> Pool<Type>& getPool();
         DeviceResources countDeviceResources() const;
@@ -102,8 +101,6 @@ namespace magma
         Pool<VkAccelerationStructureNV> accelerationStructures;
     #endif
         mutable std::mutex mtx;
-        template<class Type>
-        friend class NonDispatchable;
     };
 
     struct ResourcePool::DeviceResources
