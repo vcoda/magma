@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "device.h"
 #include "dispatchable.h"
 #include "descriptorSet.h"
 #include "vertexBuffer.h"
@@ -605,6 +604,8 @@ namespace magma
         friend Queue;
 
     private:
+        VkDevice getNativeDevice() const noexcept;
+
         struct RenderPassState
         {
             std::shared_ptr<RenderPass> renderPass;

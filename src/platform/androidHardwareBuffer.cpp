@@ -23,18 +23,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "androidHardwareBuffer.h"
 #include "../objects/device.h"
 #include "../exceptions/errorResult.h"
-
-#undef MAGMA_HANDLE
-#define MAGMA_HANDLE(device) *device
-
 #include "../misc/extension.h"
 
 namespace magma
 {
 #ifdef VK_ANDROID_external_memory_android_hardware_buffer
-AndroidHardwareBuffer::AndroidHardwareBuffer(std::shared_ptr<Device> device, AHardwareBuffer* buffer):
+AndroidHardwareBuffer::AndroidHardwareBuffer(std::shared_ptr<Device> device, AHardwareBuffer *buffer):
     buffer(buffer)
 {
+    auto getNativeDevice = [&device]() -> VkDevice
+    {
+        return device->getHandle();
+    };
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
     AHardwareBuffer_describe(buffer, &bufferDesc);
 #endif
@@ -43,7 +43,7 @@ AndroidHardwareBuffer::AndroidHardwareBuffer(std::shared_ptr<Device> device, AHa
     formatProperties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID;
     formatProperties.pNext = nullptr;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetAndroidHardwareBufferPropertiesANDROID, VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME);
-    const VkResult result = vkGetAndroidHardwareBufferPropertiesANDROID(*device, buffer, &properties);
+    const VkResult result = vkGetAndroidHardwareBufferPropertiesANDROID(getNativeDevice(), buffer, &properties);
     MAGMA_HANDLE_RESULT(result, "failed to get properties of android hardware buffer");
 }
 

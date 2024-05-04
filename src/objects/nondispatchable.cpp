@@ -18,15 +18,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "nondispatchable.h"
+#include "instance.h"
 #include "device.h"
 #include "physicalDevice.h"
-#include "instance.h"
 #include "privateDataSlot.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/enumerationCast.h"
-
-#undef MAGMA_HANDLE
-#define MAGMA_HANDLE(obj) *(obj)
 #include "../misc/extension.h"
 
 namespace magma
@@ -43,6 +40,11 @@ VkDevice NonDispatchableImpl::getNativeDevice() const noexcept
     // VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT
     // VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT
     return MAGMA_OPTIONAL_HANDLE(device);
+}
+
+VkInstance NonDispatchableImpl::getNativeInstance() const noexcept
+{
+    return device ? device->getPhysicalDevice()->getInstance()->getHandle() : VK_NULL_HANDLE;
 }
 
 void NonDispatchableImpl::setPrivateData(const IObject *child, uint64_t data)

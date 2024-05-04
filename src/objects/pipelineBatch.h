@@ -53,6 +53,7 @@ namespace magma
 
     protected:
         PipelineBatch(std::shared_ptr<Device> device) noexcept;
+        VkDevice getNativeDevice() const noexcept;
         void collectShaderStageInfos() const;
 
         std::shared_ptr<Device> device;

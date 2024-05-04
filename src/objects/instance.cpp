@@ -25,12 +25,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
 #include "../core/refCountChecker.h"
-
-// Redefine macro to reference VkInstance handle directly
-#ifdef MAGMA_HANDLE
-#undef MAGMA_HANDLE
-#define MAGMA_HANDLE(p) handle
-#endif
 #include "../misc/extension.h"
 
 #ifdef MAGMA_DEBUG

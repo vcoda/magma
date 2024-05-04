@@ -44,7 +44,7 @@ void ComputePipelineLibrary::compileComputeShader(const PipelineShaderStage& sha
     computePipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
     computePipelineInfo.basePipelineIndex = -1;
     VkPipeline handle = 0;
-    const VkResult result = vkCreateComputePipelines(*device, VK_NULL_HANDLE,
+    const VkResult result = vkCreateComputePipelines(getNativeDevice(), VK_NULL_HANDLE,
         1, &computePipelineInfo, MAGMA_OPTIONAL_INSTANCE(allocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to compile compute pipeline");
     libraries.push_back(handle);

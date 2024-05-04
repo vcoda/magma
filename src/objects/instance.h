@@ -48,6 +48,7 @@ namespace magma
             void *userData = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         ~Instance();
+        VkInstance getNativeInstance() const noexcept { return handle; }
         uint32_t getApiVersion() const noexcept { return apiVersion; }
         const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
         const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }

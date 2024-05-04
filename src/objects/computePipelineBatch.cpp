@@ -95,7 +95,7 @@ void ComputePipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelin
         linkPipelineLibrary(std::move(pipelineLibrary));
 #endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
-    const VkResult result = vkCreateComputePipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
+    const VkResult result = vkCreateComputePipelines(getNativeDevice(), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
     postCreate();
     if (VK_SUCCESS == result)

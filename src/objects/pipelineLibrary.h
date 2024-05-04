@@ -37,6 +37,7 @@ namespace magma
     protected:
         PipelineLibrary(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept;
+        VkDevice getNativeDevice() const noexcept;
 
         std::shared_ptr<Device> device;
         std::shared_ptr<IAllocator> allocator;

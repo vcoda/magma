@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "sprite.h"
+#include "../objects/device.h"
 #include "../objects/srcTransferBuffer.h"
 #include "../objects/commandBuffer.h"
 #include "../misc/deviceFeatures.h"

@@ -22,10 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/pipeline.h"
 #include "../exceptions/errorResult.h"
 #include "../core/foreach.h"
-
-#undef MAGMA_HANDLE
-#define MAGMA_HANDLE(p) *pipeline->getDevice()
-
 #include "../misc/extension.h"
 
 namespace magma
@@ -47,14 +43,14 @@ std::vector<VkPipelineExecutableStatisticKHR> PipelineExecutable::getStatistics(
     pipelineExecutableInfo.executableIndex = executableIndex;
     uint32_t statisticCount = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPipelineExecutableStatisticsKHR, VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME);
-    VkResult result = vkGetPipelineExecutableStatisticsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo, &statisticCount, nullptr);
+    VkResult result = vkGetPipelineExecutableStatisticsKHR(getNativeDevice(), &pipelineExecutableInfo, &statisticCount, nullptr);
     std::vector<VkPipelineExecutableStatisticKHR> pipelineExecutableStatistics;
     if (statisticCount > 0)
     {
         VkPipelineExecutableStatisticKHR pipelineExecutableStatistic = {};
         pipelineExecutableStatistic.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_STATISTIC_KHR;
         pipelineExecutableStatistics.resize(statisticCount, pipelineExecutableStatistic);
-        result = vkGetPipelineExecutableStatisticsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo, &statisticCount, pipelineExecutableStatistics.data());
+        result = vkGetPipelineExecutableStatisticsKHR(getNativeDevice(), &pipelineExecutableInfo, &statisticCount, pipelineExecutableStatistics.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to get statistics of pipeline executable");
     return pipelineExecutableStatistics;
@@ -69,14 +65,14 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
     pipelineExecutableInfo.executableIndex = executableIndex;
     uint32_t internalRepresentationCount = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPipelineExecutableInternalRepresentationsKHR, VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME);
-    VkResult result = vkGetPipelineExecutableInternalRepresentationsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo, &internalRepresentationCount, nullptr);
+    VkResult result = vkGetPipelineExecutableInternalRepresentationsKHR(getNativeDevice(), &pipelineExecutableInfo, &internalRepresentationCount, nullptr);
     std::vector<VkPipelineExecutableInternalRepresentationKHR> internalRepresentations;
     if (internalRepresentationCount > 0)
     {
         VkPipelineExecutableInternalRepresentationKHR pipelineExecutableInternalRepresentation = {};
         pipelineExecutableInternalRepresentation.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_INTERNAL_REPRESENTATION_KHR;
         internalRepresentations.resize(internalRepresentationCount, pipelineExecutableInternalRepresentation);
-        result = vkGetPipelineExecutableInternalRepresentationsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo,
+        result = vkGetPipelineExecutableInternalRepresentationsKHR(getNativeDevice(), &pipelineExecutableInfo,
             &internalRepresentationCount, internalRepresentations.data());
         MAGMA_ASSERT(MAGMA_SUCCEEDED(result));
         if (data.empty())
@@ -89,11 +85,16 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
             {   // Assign cached pointer
                 ir->pData = data->get();
             });
-        result = vkGetPipelineExecutableInternalRepresentationsKHR(MAGMA_HANDLE(device), &pipelineExecutableInfo,
+        result = vkGetPipelineExecutableInternalRepresentationsKHR(getNativeDevice(), &pipelineExecutableInfo,
             &internalRepresentationCount, internalRepresentations.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to get internal representations of pipeline executable");
     return internalRepresentations;
+}
+
+inline VkDevice PipelineExecutable::getNativeDevice() const noexcept
+{
+    return pipeline->getDevice()->getHandle();
 }
 #endif // VK_KHR_pipeline_executable_properties
 } // namespace magma

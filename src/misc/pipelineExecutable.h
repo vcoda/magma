@@ -47,6 +47,7 @@ namespace magma
         PipelineExecutable(std::shared_ptr<const Pipeline> pipeline,
             const VkPipelineExecutablePropertiesKHR& properties,
             uint32_t executableIndex) noexcept;
+        VkDevice getNativeDevice() const noexcept;
 
         std::shared_ptr<const Pipeline> pipeline;
         const VkPipelineExecutablePropertiesKHR properties;

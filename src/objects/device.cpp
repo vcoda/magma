@@ -29,13 +29,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
-
-// Redefine macro because here we use handle directly
-// instead of using circular reference to itself
-#ifdef MAGMA_HANDLE
-#undef MAGMA_HANDLE
-#define MAGMA_HANDLE(p) handle
-#endif
 #include "../misc/extension.h"
 
 namespace magma

@@ -47,8 +47,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (MAGMA_ALIGNMENT) == 0)
 
-#define MAGMA_HANDLE(obj) *(this->obj)
-
 #define MAGMA_BUFFER_HANDLE(obj) core::reinterpret<VkBuffer>(obj)
 
 #define MAGMA_IMAGE_HANDLE(obj) core::reinterpret<VkImage>(obj)

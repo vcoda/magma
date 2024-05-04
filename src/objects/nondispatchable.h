@@ -42,6 +42,7 @@ namespace magma
         NonDispatchableImpl(std::shared_ptr<Device> device) noexcept:
             device(std::move(device)) {}
         VkDevice getNativeDevice() const noexcept;
+        VkInstance getNativeInstance() const noexcept;
         void setPrivateData(const IObject *child,
             uint64_t data);
         uint64_t getPrivateData(const IObject *child) const noexcept;

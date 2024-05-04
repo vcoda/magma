@@ -539,6 +539,11 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     return core::compare(cacheHeader, &requiredHeader);
 }
 
+inline VkInstance PhysicalDevice::getNativeInstance() const noexcept
+{
+    return instance->getHandle();
+}
+
 VkPhysicalDeviceFeatures PhysicalDevice::getFeatures2(void *features) const
 {
 #ifdef VK_KHR_get_physical_device_properties2

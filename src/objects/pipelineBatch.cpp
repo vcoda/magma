@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include "device.h"
 #include "pipelineBatch.h"
 
 namespace magma
@@ -44,6 +45,11 @@ std::future<void> PipelineBatch::buildPipelinesAsync(std::shared_ptr<PipelineCac
             #endif
                 std::move(allocator));
         });
+}
+
+VkDevice PipelineBatch::getNativeDevice() const noexcept
+{
+    return device->getHandle();
 }
 
 void PipelineBatch::collectShaderStageInfos() const

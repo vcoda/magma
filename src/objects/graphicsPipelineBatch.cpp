@@ -162,7 +162,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipeli
         linkPipelineLibrary(std::move(pipelineLibrary));
 #endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
-    const VkResult result = vkCreateGraphicsPipelines(*device, MAGMA_OPTIONAL_HANDLE(pipelineCache),
+    const VkResult result = vkCreateGraphicsPipelines(getNativeDevice(), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
     // Free storage that had to be preserved until API call
     postCreate();

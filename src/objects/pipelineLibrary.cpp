@@ -32,7 +32,12 @@ PipelineLibrary::PipelineLibrary(std::shared_ptr<Device> device, std::shared_ptr
 PipelineLibrary::~PipelineLibrary()
 {
     for (auto handle: libraries)
-        vkDestroyPipeline(*device, handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+        vkDestroyPipeline(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+}
+
+VkDevice PipelineLibrary::getNativeDevice() const noexcept
+{
+    return device->getHandle();
 }
 #endif // VK_KHR_pipeline_library
 } // namespace magma

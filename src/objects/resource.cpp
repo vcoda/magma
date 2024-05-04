@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "resource.h"
+#include "device.h"
 #include "physicalDevice.h"
 #include "commandBuffer.h"
 #include "commandPool.h"

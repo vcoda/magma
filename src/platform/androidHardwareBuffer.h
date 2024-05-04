@@ -31,7 +31,7 @@ namespace magma
     {
     public:
         explicit AndroidHardwareBuffer(std::shared_ptr<Device> device,
-            AHardwareBuffer* buffer);
+            AHardwareBuffer *buffer);
         AHardwareBuffer* getBuffer() const noexcept { return buffer; }
         VkFormat getFormat() const noexcept { return formatProperties.format; }
         const VkAndroidHardwareBufferPropertiesANDROID& getProperties() const noexcept { return properties; }

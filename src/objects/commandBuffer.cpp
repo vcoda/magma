@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include "device.h"
 #include "commandBuffer.h"
 #include "commandPool.h"
 #include "framebuffer.h"
@@ -76,7 +77,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     cmdBufferAllocateInfo.commandPool = *cmdPool;
     cmdBufferAllocateInfo.level = level;
     cmdBufferAllocateInfo.commandBufferCount = 1;
-    const VkResult result = vkAllocateCommandBuffers(*device, &cmdBufferAllocateInfo, &handle);
+    const VkResult result = vkAllocateCommandBuffers(getNativeDevice(), &cmdBufferAllocateInfo, &handle);
     MAGMA_HANDLE_RESULT(result, VK_COMMAND_BUFFER_LEVEL_PRIMARY == level ?
         "failed to allocate primary command buffer" : "failed to allocate secondary command buffer");
 }
@@ -85,7 +86,7 @@ CommandBuffer::~CommandBuffer()
 {
     if (handle)
     {   // Release if not freed through command pool
-        vkFreeCommandBuffers(*device, *cmdPool, 1, &handle);
+        vkFreeCommandBuffers(getNativeDevice(), *cmdPool, 1, &handle);
     }
 }
 
@@ -833,6 +834,11 @@ void CommandBuffer::releaseBoundResources() const noexcept
 #endif
 #endif // MAGMA_DEFERRED_RELEASE
     pipelineBarriers.clear();
+}
+
+inline VkDevice CommandBuffer::getNativeDevice() const noexcept
+{
+    return device->getHandle();
 }
 
 CommandBuffer::PipelineBarrierBatch *CommandBuffer::lookupBarrierBatch(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags) noexcept

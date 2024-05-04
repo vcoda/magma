@@ -124,6 +124,7 @@ namespace magma
             const StructureChain& enabledExtendedFeatures,
             const StructureChain& extendedInfo,
             std::shared_ptr<IAllocator> allocator);
+        VkDevice getNativeDevice() const noexcept { return handle; }
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
         mutable std::shared_ptr<DeviceFeatures> features;

@@ -141,7 +141,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
 
 Buffer::~Buffer()
 {
-    vkDestroyBuffer(*device, handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
