@@ -38,16 +38,17 @@ namespace magma
     {
     public:
         typedef Type NativeHandle;
-        explicit Object(VkObjectType objectType,
-            std::shared_ptr<IAllocator> allocator,
-            Type handle = VK_NULL_HANDLE) noexcept;
-        const std::shared_ptr<IAllocator>& getHostAllocator() const noexcept { return hostAllocator; }
         NativeHandle getHandle() const noexcept { return handle; }
         operator NativeHandle() const noexcept { return handle; }
         const NativeHandle *getHandleAddress() const noexcept { return &handle; }
+        const std::shared_ptr<IAllocator>& getHostAllocator() const noexcept { return hostAllocator; }
         VkObjectType getObjectType() const noexcept override;
 
     protected:
+        Object(VkObjectType objectType,
+            std::shared_ptr<IAllocator> allocator,
+            Type handle = VK_NULL_HANDLE) noexcept;
+
         // Additional storage is required under x86 target as
         // Vulkan non-dispatchable handles are defined as uint64_t
         // and thus cannot be used with template specialization.
