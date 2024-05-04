@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "privateDataSlot.h"
+#include "resourcePool.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/enumerationCast.h"
 #include "../misc/extension.h"
@@ -46,6 +47,13 @@ VkInstance NonDispatchableImpl::getNativeInstance() const noexcept
 {
     return device ? device->getPhysicalDevice()->getInstance()->getHandle() : VK_NULL_HANDLE;
 }
+
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
+std::shared_ptr<ResourcePool> NonDispatchableImpl::getResourcePool() noexcept
+{
+    return device ? device->getResourcePool() : nullptr;
+}
+#endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
 
 void NonDispatchableImpl::setPrivateData(const IObject *child, uint64_t data)
 {
@@ -116,7 +124,7 @@ void NonDispatchableImpl::setDebugName(const IObject *child, const char *name)
             VkDebugMarkerObjectNameInfoEXT objectNameInfo;
             objectNameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
             objectNameInfo.pNext = nullptr;
-            // No future child type handle enumeration values will be added to
+            // No future object type handle enumeration values will be added to
             // VkDebugReportObjectTypeEXT since the creation of VkObjectType!
             objectNameInfo.objectType = helpers::objectToDebugReportType(child->getObjectType());
             objectNameInfo.object = child->getObjectHandle();
@@ -168,7 +176,7 @@ void NonDispatchableImpl::setDebugTag(const IObject *child, uint64_t tagName, si
             VkDebugMarkerObjectTagInfoEXT objectTagInfo;
             objectTagInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT;
             objectTagInfo.pNext = nullptr;
-            // No future child type handle enumeration values will be added to
+            // No future object type handle enumeration values will be added to
             // VkDebugReportObjectTypeEXT since the creation of VkObjectType!
             objectTagInfo.objectType = helpers::objectToDebugReportType(child->getObjectType());
             objectTagInfo.object = child->getObjectHandle();

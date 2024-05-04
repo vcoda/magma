@@ -43,9 +43,11 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, std::move(allocator)),
     physicalDevice(std::move(physicalDevice_)),
-    resourcePool(std::make_shared<ResourcePool>()),
     enabledFeatures(enabledFeatures_),
     enabledExtendedFeatures(enabledExtendedFeatures_)
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
+   ,resourcePool(std::make_shared<ResourcePool>())
+#endif
 {
     VkDeviceCreateInfo deviceInfo;
     deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -99,7 +101,9 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
 
 Device::~Device()
 {
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
     MAGMA_ASSERT(resourcePool->hasAnyDeviceResource() == false);
+#endif
     vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 

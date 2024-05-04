@@ -513,9 +513,6 @@
     <ClInclude Include="..\..\src\core\refCountChecker.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\threadSafeUnorderedSet.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\zeroMemory.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>

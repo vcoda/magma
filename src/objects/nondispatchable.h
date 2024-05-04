@@ -43,6 +43,9 @@ namespace magma
             device(std::move(device)) {}
         VkDevice getNativeDevice() const noexcept;
         VkInstance getNativeInstance() const noexcept;
+    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
+        std::shared_ptr<ResourcePool> getResourcePool() noexcept;
+    #endif
         void setPrivateData(const IObject *child,
             uint64_t data);
         uint64_t getPrivateData(const IObject *child) const noexcept;
@@ -64,8 +67,7 @@ namespace magma
 
     template<class Type>
     class NonDispatchable : public Object<Type>,
-        public NonDispatchableImpl,
-        /* private */ DeviceResourcePool
+        public NonDispatchableImpl
     {
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         static_assert(sizeof(Type) == sizeof(intptr_t),

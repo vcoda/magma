@@ -27,15 +27,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
 ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     DeviceResources statistics;
-    statistics.semaphoreCount = semaphores.count();
-    statistics.fenceCount = fences.count();
-    statistics.deviceMemoryCount = deviceMemories.count();
-    statistics.bufferCount = buffers.count();
-    images.forEach<Image>(
+    statistics.semaphoreCount = MAGMA_COUNT(semaphores);
+    statistics.fenceCount = MAGMA_COUNT(fences);
+    statistics.deviceMemoryCount = MAGMA_COUNT(deviceMemories);
+    statistics.bufferCount = MAGMA_COUNT(buffers);
+    foreach<Image>(images,
         [&statistics](const Image *image)
         {
             switch (image->getType())
@@ -57,15 +58,15 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
                 break;
             }
         });
-    statistics.eventCount = events.count();
-    statistics.queryPoolCount = queryPools.count();
-    statistics.bufferViewCount = bufferViews.count();
-    statistics.imageViewCount = imageViews.count();
-    statistics.shaderModuleCount = shaderModules.count();
-    statistics.pipelineCacheCount = pipelineCaches.count();
-    statistics.pipelineLayoutCount = pipelineLayouts.count();
-    statistics.renderPassCount = renderPasses.count();
-    pipelines.forEach<Pipeline>(
+    statistics.eventCount = MAGMA_COUNT(events);
+    statistics.queryPoolCount = MAGMA_COUNT(queryPools);
+    statistics.bufferViewCount = MAGMA_COUNT(bufferViews);
+    statistics.imageViewCount = MAGMA_COUNT(imageViews);
+    statistics.shaderModuleCount = MAGMA_COUNT(shaderModules);
+    statistics.pipelineCacheCount = MAGMA_COUNT(pipelineCaches);
+    statistics.pipelineLayoutCount = MAGMA_COUNT(pipelineLayouts);
+    statistics.renderPassCount = MAGMA_COUNT(renderPasses);
+    foreach<Pipeline>(pipelines,
         [&statistics](const Pipeline *pipeline)
         {
             switch (pipeline->getBindPoint())
@@ -76,33 +77,33 @@ ResourcePool::DeviceResources ResourcePool::countDeviceResources() const
             case VK_PIPELINE_BIND_POINT_COMPUTE:
                 ++statistics.computePipelineCount;
                 break;
-#ifdef VK_NV_ray_tracing
+        #ifdef VK_NV_ray_tracing
             case VK_PIPELINE_BIND_POINT_RAY_TRACING_NV:
                 ++statistics.rayTracingPipelineCount;
                 break;
-#endif
+        #endif
             }
         });
-    statistics.descriptorSetLayoutCount = descriptorSetLayouts.count();
-    statistics.samplerCount = samplers.count();
+    statistics.descriptorSetLayoutCount = MAGMA_COUNT(descriptorSetLayouts);
+    statistics.samplerCount = MAGMA_COUNT(samplers);
 #ifdef VK_KHR_sampler_ycbcr_conversion
-    statistics.ycbcrSamplerCount = ycbcrSamplers.count();
+    statistics.ycbcrSamplerCount = MAGMA_COUNT(ycbcrSamplers);
 #endif
-    statistics.descriptorPoolCount = descriptorPools.count();
-    statistics.descriptorSetCount = descriptorSets.count();
-    statistics.framebufferCount = framebuffers.count();
-    statistics.commandPoolCount = commandPools.count();
+    statistics.descriptorPoolCount = MAGMA_COUNT(descriptorPools);
+    statistics.descriptorSetCount = MAGMA_COUNT(descriptorSets);
+    statistics.framebufferCount = MAGMA_COUNT(framebuffers);
+    statistics.commandPoolCount = MAGMA_COUNT(commandPools);
 #ifdef VK_KHR_deferred_host_operations
-    statistics.deferredOperationCount = deferredOperations.count();
+    statistics.deferredOperationCount = MAGMA_COUNT(deferredOperations);
 #endif
 #ifdef VK_KHR_swapchain
-    statistics.swapchainCount = swapchains.count();
+    statistics.swapchainCount = MAGMA_COUNT(swapchains);
 #endif
 #ifdef VK_EXT_private_data
-    statistics.privateDataSlotCount = privateDataSlots.count();
+    statistics.privateDataSlotCount = MAGMA_COUNT(privateDataSlots);
 #endif
 #ifdef VK_NV_ray_tracing
-    statistics.accelerationStructureCount = accelerationStructures.count();
+    statistics.accelerationStructureCount = MAGMA_COUNT(accelerationStructures);
 #endif
     return statistics;
 }
@@ -112,8 +113,8 @@ ResourcePool::PhysicalDeviceResources ResourcePool::countPhysicalDeviceResources
     std::lock_guard<std::mutex> guard(mtx);
     PhysicalDeviceResources statistics;
 #ifdef VK_KHR_display
-    statistics.displayCount = displays.count();
-    statistics.displayModeCount = displayModes.count();
+    statistics.displayCount = MAGMA_COUNT(displays);
+    statistics.displayModeCount = MAGMA_COUNT(displayModes);
 #endif
     return statistics;
 }
@@ -122,8 +123,8 @@ VkDeviceSize ResourcePool::countAllocatedDeviceLocalMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize deviceLocalAllocatedSize = 0;
-    deviceMemories.forEach<DeviceMemory>(
-        [&deviceLocalAllocatedSize](const DeviceMemory *memory)
+    foreach<DeviceMemory>(deviceMemories,
+        [&deviceLocalAllocatedSize](const BaseDeviceMemory *memory)
         {
             if (memory->getFlags().deviceLocal)
                 deviceLocalAllocatedSize += memory->getSize();
@@ -135,8 +136,8 @@ VkDeviceSize ResourcePool::countAllocatedHostVisibleMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize hostVisibleAllocatedSize = 0;
-    deviceMemories.forEach<DeviceMemory>(
-        [&hostVisibleAllocatedSize](const DeviceMemory *memory)
+    foreach<DeviceMemory>(deviceMemories,
+        [&hostVisibleAllocatedSize](const BaseDeviceMemory *memory)
         {
             if (memory->getFlags().hostVisible)
                 hostVisibleAllocatedSize += memory->getSize();
@@ -148,7 +149,7 @@ VkDeviceSize ResourcePool::countAllocatedBufferMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize bufferAllocatedSize = 0;
-    buffers.forEach<Buffer>(
+    foreach<Buffer>(deviceMemories,
         [&bufferAllocatedSize](const Buffer *buffer)
         {
             const IDeviceMemory *memory = buffer->getMemory().get();
@@ -162,7 +163,7 @@ VkDeviceSize ResourcePool::countAllocatedImageMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize imageAllocatedSize = 0;
-    images.forEach<Image>(
+    foreach<Image>(images,
         [&imageAllocatedSize](const Image *image)
         {
             const IDeviceMemory *memory = image->getMemory().get();
@@ -177,7 +178,7 @@ VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize accelerationStructureAllocatedSize = 0;
 #ifdef VK_NV_ray_tracing
-    images.forEach<AccelerationStructure>(
+    foreach<AccelerationStructure>(accelerationStructures,
         [&accelerationStructureAllocatedSize](const AccelerationStructure *accelerationStructure)
         {
             const IDeviceMemory *memory = accelerationStructure->getMemory().get();
@@ -191,43 +192,39 @@ VkDeviceSize ResourcePool::countAllocatedAccelerationStructureMemory() const
 bool ResourcePool::hasAnyDeviceResource() const
 {
     std::lock_guard<std::mutex> guard(mtx);
-    return semaphores.count() > 0 ||
-        fences.count() > 0 ||
-        deviceMemories.count() > 0 ||
-        buffers.count() > 0 ||
-        images.count() > 0 ||
-        events.count() > 0 ||
-        queryPools.count() > 0 ||
-        bufferViews.count() > 0 ||
-        imageViews.count() > 0 ||
-        shaderModules.count() > 0 ||
-        pipelineCaches.count() > 0 ||
-        pipelineLayouts.count() > 0 ||
-        renderPasses.count() > 0 ||
-        pipelines.count() > 0 ||
-        descriptorSetLayouts.count() > 0 ||
-        samplers.count() > 0 ||
-        descriptorPools.count() > 0 ||
-        descriptorSets.count() > 0 ||
-        framebuffers.count() > 0 ||
-        commandPools.count() > 0 ||
-#ifdef VK_KHR_deferred_host_operations
-        deferredOperations.count() > 0 ||
-#endif
-#ifdef VK_KHR_swapchain
-        swapchains.count() > 0 ||
-#endif
-#ifdef VK_EXT_private_data
-        privateDataSlots.count() > 0 ||
-#endif
-#ifdef VK_NV_ray_tracing
-        accelerationStructures.count() > 0 ||
-#endif
+    return semaphores.size() ||
+        fences.size() ||
+        deviceMemories.size() ||
+        buffers.size() ||
+        images.size() ||
+        events.size() ||
+        queryPools.size() ||
+        bufferViews.size() ||
+        imageViews.size() ||
+        shaderModules.size() ||
+        pipelineCaches.size() ||
+        pipelineLayouts.size() ||
+        renderPasses.size() ||
+        pipelines.size() ||
+        descriptorSetLayouts.size() ||
+        samplers.size() ||
+        descriptorPools.size() ||
+        descriptorSets.size() ||
+        framebuffers.size() ||
+        commandPools.size() ||
+    #ifdef VK_KHR_deferred_host_operations
+        deferredOperations.size() ||
+    #endif
+    #ifdef VK_KHR_swapchain
+        swapchains.size() ||
+    #endif
+    #ifdef VK_EXT_private_data
+        privateDataSlots.size() ||
+    #endif
+    #ifdef VK_NV_ray_tracing
+        accelerationStructures.size() ||
+    #endif
         false;
 }
-
-std::shared_ptr<ResourcePool> DeviceResourcePool::getPool(std::shared_ptr<Device> device) noexcept
-{
-    return device ? device->getResourcePool() : nullptr;
-}
+#endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
 } // namespace magma

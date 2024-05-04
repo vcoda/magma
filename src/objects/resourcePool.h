@@ -16,13 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../core/threadSafeUnorderedSet.h"
 
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
 namespace magma
 {
     template<class Type>
     class NonDispatchable;
-    class Device;
+    template<class Type> using Pool = std::unordered_set<NonDispatchable<Type> *>;
 
     /* Resource pool stores pointers to different Vulkan objects
        that were created by device. Pool allows to keep statistics
@@ -37,6 +37,8 @@ namespace magma
         struct PhysicalDeviceResources;
 
     public:
+        std::mutex& getMutex() const noexcept { return mtx; }
+        template<class Type> Pool<Type>& getPool();
         DeviceResources countDeviceResources() const;
         PhysicalDeviceResources countPhysicalDeviceResources() const;
         VkDeviceSize countAllocatedDeviceLocalMemory() const;
@@ -45,58 +47,59 @@ namespace magma
         VkDeviceSize countAllocatedImageMemory() const;
         VkDeviceSize countAllocatedAccelerationStructureMemory() const;
         bool hasAnyDeviceResource() const;
-    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        template<class Type>
-        core::ThreadSafeUnorderedSet<Type>& getPool();
-    #endif
+
     private:
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkSemaphore>> semaphores;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkFence>> fences;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkDeviceMemory>> deviceMemories;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkBuffer>> buffers;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkImage>> images;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkEvent>> events;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkQueryPool>> queryPools;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkBufferView>> bufferViews;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkImageView>> imageViews;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkShaderModule>> shaderModules;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkPipelineCache>> pipelineCaches;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkPipelineLayout>> pipelineLayouts;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkRenderPass>> renderPasses;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkPipeline>> pipelines;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkDescriptorSetLayout>> descriptorSetLayouts;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkSampler>> samplers;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkDescriptorPool>> descriptorPools;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkDescriptorSet>> descriptorSets;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkFramebuffer>> framebuffers;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkCommandPool>> commandPools;
+        template<class NonDispatchableChild> using Fn = std::function<void(const NonDispatchableChild *)>;
+        template<class NonDispatchableChild, class NonDispatchable>
+        void foreach(const Pool<NonDispatchable>& pool, const Fn<NonDispatchableChild>& fn) const;
+
+        Pool<VkSemaphore> semaphores;
+        Pool<VkFence> fences;
+        Pool<VkDeviceMemory> deviceMemories;
+        Pool<VkBuffer> buffers;
+        Pool<VkImage> images;
+        Pool<VkEvent> events;
+        Pool<VkQueryPool> queryPools;
+        Pool<VkBufferView> bufferViews;
+        Pool<VkImageView> imageViews;
+        Pool<VkShaderModule> shaderModules;
+        Pool<VkPipelineCache> pipelineCaches;
+        Pool<VkPipelineLayout> pipelineLayouts;
+        Pool<VkRenderPass> renderPasses;
+        Pool<VkPipeline> pipelines;
+        Pool<VkDescriptorSetLayout> descriptorSetLayouts;
+        Pool<VkSampler> samplers;
+        Pool<VkDescriptorPool> descriptorPools;
+        Pool<VkDescriptorSet> descriptorSets;
+        Pool<VkFramebuffer> framebuffers;
+        Pool<VkCommandPool> commandPools;
     #ifdef VK_KHR_deferred_host_operations
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkDeferredOperationKHR>> deferredOperations;
+        Pool<VkDeferredOperationKHR> deferredOperations;
     #endif
     #ifdef VK_KHR_sampler_ycbcr_conversion
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkSamplerYcbcrConversionKHR>> ycbcrSamplers;
+        Pool<VkSamplerYcbcrConversionKHR> ycbcrSamplers;
     #endif
     #ifdef VK_KHR_surface
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkSurfaceKHR>> surfaces;
+        Pool<VkSurfaceKHR> surfaces;
     #endif
     #ifdef VK_KHR_swapchain
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkSwapchainKHR>> swapchains;
+        Pool<VkSwapchainKHR> swapchains;
     #endif
     #ifdef VK_KHR_display
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkDisplayKHR>> displays;
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkDisplayModeKHR>> displayModes;
+        Pool<VkDisplayKHR> displays;
+        Pool<VkDisplayModeKHR> displayModes;
     #endif
     #ifdef VK_EXT_debug_report
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkDebugReportCallbackEXT>> debugReportCallbacks;
+        Pool<VkDebugReportCallbackEXT> debugReportCallbacks;
     #endif
     #ifdef VK_EXT_debug_utils
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkDebugUtilsMessengerEXT>> debugUtilsMessengers;
+        Pool<VkDebugUtilsMessengerEXT> debugUtilsMessengers;
     #endif
     #ifdef VK_EXT_private_data
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkPrivateDataSlotEXT>> privateDataSlots;
+        Pool<VkPrivateDataSlotEXT> privateDataSlots;
     #endif
     #ifdef VK_NV_ray_tracing
-        core::ThreadSafeUnorderedSet<NonDispatchable<VkAccelerationStructureNV>> accelerationStructures;
+        Pool<VkAccelerationStructureNV> accelerationStructures;
     #endif
         mutable std::mutex mtx;
         template<class Type>
@@ -143,14 +146,7 @@ namespace magma
         uint32_t displayCount = 0;
         uint32_t displayModeCount = 0;
     };
-
-    /* The only purpose is to hide device interface. */
-
-    class DeviceResourcePool
-    {
-    public:
-        static std::shared_ptr<ResourcePool> getPool(std::shared_ptr<Device> device) noexcept;
-    };
 } // namespace magma
 
 #include "resourcePool.inl"
+#endif // (VK_USE_64_BIT_PTR_DEFINES == 1)

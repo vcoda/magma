@@ -49,7 +49,6 @@ namespace magma
     public:
         ~Device();
         const std::shared_ptr<PhysicalDevice>& getPhysicalDevice() const noexcept { return physicalDevice; }
-        const std::shared_ptr<ResourcePool>& getResourcePool() const noexcept { return resourcePool; }
         const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
         const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
@@ -113,6 +112,9 @@ namespace magma
         template<class PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
+    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
+        const std::shared_ptr<ResourcePool>& getResourcePool() const noexcept { return resourcePool; }
+    #endif
 
     private:
         MAGMA_MAKE_SHARED(Device)
@@ -129,7 +131,6 @@ namespace magma
         std::shared_ptr<PhysicalDevice> physicalDevice;
         mutable std::shared_ptr<DeviceFeatures> features;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
-        std::shared_ptr<ResourcePool> resourcePool;
         std::set<std::string> enabledLayers;
         std::set<std::string> enabledExtensions;
         const VkPhysicalDeviceFeatures enabledFeatures;
@@ -138,6 +139,9 @@ namespace magma
         std::unordered_map<uint64_t, uint64_t> privateData;
     #ifdef VK_EXT_private_data
         std::weak_ptr<PrivateDataSlot> privateDataSlot;
+    #endif
+    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
+        std::shared_ptr<ResourcePool> resourcePool;
     #endif
         friend PhysicalDevice;
     };

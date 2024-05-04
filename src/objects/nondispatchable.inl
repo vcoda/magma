@@ -13,9 +13,9 @@ inline NonDispatchable<Type>::NonDispatchable(VkObjectType objectType, std::shar
     NonDispatchableImpl(std::move(device_))
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-    std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(device);
-    if (pool)
-        pool->getPool<NonDispatchable<Type>>().insert(this);
+    auto pool = NonDispatchableImpl::getResourcePool();
+    std::lock_guard<std::mutex> lock(pool->getMutex());
+    pool->getPool<Type>().insert(this);
 #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
 }
 
@@ -23,9 +23,12 @@ template<class Type>
 inline NonDispatchable<Type>::~NonDispatchable()
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-    std::shared_ptr<ResourcePool> pool = DeviceResourcePool::getPool(device);
-    if (pool)
-        pool->getPool<NonDispatchable<Type>>().erase(this);
+    if (device)
+    {
+        auto pool = NonDispatchableImpl::getResourcePool();
+        std::lock_guard<std::mutex> lock(pool->getMutex());
+        pool->getPool<Type>().erase(this);
+    }
 #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
 }
 
