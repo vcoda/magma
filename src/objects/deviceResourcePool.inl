@@ -54,8 +54,8 @@ MAGMA_RESOURCE_POOL(VkAccelerationStructureNV, accelerationStructures)
 
 namespace magma
 {
-template<class NonDispatchableChild, class NonDispatchable>
-inline void DeviceResourcePool::foreach(const Pool<NonDispatchable>& pool, const Fn<NonDispatchableChild>& fn) const
+template<class NonDispatchableChild, class Type>
+inline void DeviceResourcePool::foreach(const Pool<Type>& pool, const Fn<NonDispatchableChild>& fn) const
 {
     std::lock_guard<std::mutex> guard(mtx);
     std::for_each(pool.begin(), pool.end(),

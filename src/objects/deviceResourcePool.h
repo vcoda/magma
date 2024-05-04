@@ -50,8 +50,8 @@ namespace magma
     private:
         template<class NonDispatchableChild> using Fn =
             std::function<void(const NonDispatchableChild *)>;
-        template<class NonDispatchableChild, class NonDispatchable>
-        void foreach(const Pool<NonDispatchable>& pool,
+        template<class NonDispatchableChild, class Type>
+        void foreach(const Pool<Type>& pool,
             const Fn<NonDispatchableChild>& fn) const;
 
         Pool<VkSemaphore> semaphores;
