@@ -40,6 +40,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/descriptorSet.h"
 #include "src/objects/descriptorSetLayout.h"
 #include "src/objects/device.h"
+#include "src/objects/deviceChild.h"
 #include "src/objects/deviceMemory.h"
 #include "src/objects/deviceResourcePool.h"
 #include "src/objects/display.h"
