@@ -32,6 +32,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(DescriptorSet);
     MAGMA_TYPEDEF_SHARED_PTR(DescriptorSetLayout);
     MAGMA_TYPEDEF_SHARED_PTR(Device);
+    MAGMA_TYPEDEF_SHARED_PTR(DeviceChild);
     MAGMA_TYPEDEF_SHARED_PTR(DeviceMemory);
     MAGMA_TYPEDEF_SHARED_PTR(DispatchIndirectBuffer);
     MAGMA_TYPEDEF_SHARED_PTR(DrawIndexedIndirectBuffer);
@@ -196,6 +197,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(TopLevelAccelerationStructure);
 #endif // VK_NV_ray_tracing
 
+    MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Object);
     MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Allocator);
     MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(DeviceMemoryAllocator);
 
