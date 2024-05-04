@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#if !defined(VK_VERSION_1_1)
+#ifndef VK_VERSION_1_1
 typedef enum VkObjectType {
     VK_OBJECT_TYPE_UNKNOWN = 0,
     VK_OBJECT_TYPE_INSTANCE = 1,

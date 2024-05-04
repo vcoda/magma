@@ -38,7 +38,8 @@ namespace magma
             VkPrivateDataSlotCreateFlagsEXT flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~PrivateDataSlot();
-        void setPrivateData(const IObject *object, uint64_t data);
+        void setPrivateData(const IObject *object,
+            uint64_t data);
         uint64_t getPrivateData(const IObject *object) const noexcept;
     };
 #endif // VK_EXT_private_data

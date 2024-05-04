@@ -19,25 +19,25 @@ inline void Extension<Fn, instance>::checkProcAddress(const char *extensionName)
 }
 
 template<class Fn>
-inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *name) noexcept:
-    Extension<Fn, true>(vkGetInstanceProcAddr(instance, name))
+inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *procName) noexcept:
+    Extension<Fn, true>(vkGetInstanceProcAddr(instance, procName))
 {}
 
 template<class Fn>
-inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *name, const char *extensionName):
-    InstanceExtension(instance, name)
+inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *procName, const char *extensionName):
+    InstanceExtension(instance, procName)
 {
     Extension<Fn, true>::checkProcAddress(extensionName);
 }
 
 template<class Fn>
-inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *name) noexcept:
-    Extension<Fn, false>(vkGetDeviceProcAddr(device, name))
+inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *procName) noexcept:
+    Extension<Fn, false>(vkGetDeviceProcAddr(device, procName))
 {}
 
 template<class Fn>
-inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *name, const char *extensionName):
-    DeviceExtension(device, name)
+inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *procName, const char *extensionName):
+    DeviceExtension(device, procName)
 {
     Extension<Fn, false>::checkProcAddress(extensionName);
 }

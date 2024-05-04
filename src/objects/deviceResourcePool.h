@@ -48,9 +48,11 @@ namespace magma
         bool hasAnyDeviceResource() const;
 
     private:
-        template<class NonDispatchableChild> using Fn = std::function<void(const NonDispatchableChild *)>;
+        template<class NonDispatchableChild> using Fn =
+            std::function<void(const NonDispatchableChild *)>;
         template<class NonDispatchableChild, class NonDispatchable>
-        void foreach(const Pool<NonDispatchable>& pool, const Fn<NonDispatchableChild>& fn) const;
+        void foreach(const Pool<NonDispatchable>& pool,
+            const Fn<NonDispatchableChild>& fn) const;
 
         Pool<VkSemaphore> semaphores;
         Pool<VkFence> fences;

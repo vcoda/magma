@@ -49,9 +49,9 @@ namespace magma
     {
     public:
         explicit InstanceExtension(VkInstance instance,
-            const char *name) noexcept;
+            const char *procName) noexcept;
         explicit InstanceExtension(VkInstance instance,
-            const char *name,
+            const char *procName,
             const char *extensionName);
     };
 
@@ -70,9 +70,9 @@ namespace magma
     {
     public:
         explicit DeviceExtension(VkDevice device,
-            const char *name) noexcept;
+            const char *procName) noexcept;
         explicit DeviceExtension(VkDevice device,
-            const char *name,
+            const char *procName,
             const char *extensionName);
     };
 } // namespace magma
