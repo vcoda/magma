@@ -30,11 +30,10 @@ namespace magma
        provides getObjectType() method. */
 
     template<class Type>
-    class Object : virtual public IObject,
+    class Object : virtual public IObject, NonCopyable
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        public ObjectType<Type>, // Use custom template specialization
+        ,public ObjectType<Type>
     #endif
-        /* private */ NonCopyable
     {
     public:
         typedef Type NativeHandle;
