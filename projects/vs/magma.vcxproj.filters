@@ -885,6 +885,9 @@
     <ClInclude Include="..\..\src\objects\deviceChild.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\core\typedefs.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">

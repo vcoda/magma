@@ -206,7 +206,4 @@ namespace magma
     class Display;
     typedef std::shared_ptr<Display> DisplayPtr;
 #endif
-
-    typedef std::function<void *(void *, const void *, std::size_t)> CopyMemoryFunction;
-    typedef std::function<void *(void *, std::size_t)> ZeroMemoryFunction;
 } // namespace magma
