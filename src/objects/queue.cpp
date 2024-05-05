@@ -252,7 +252,7 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
 #ifdef VK_EXT_swapchain_maintenance1
     VkSwapchainPresentFenceInfoEXT presentFenceInfo;
     VkSwapchainPresentModeInfoEXT presentModeInfo;
-    if (device->extensionEnabled(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
+    if (swapchain->getDevice()->extensionEnabled(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
     {
         if (presentFence)
         {
