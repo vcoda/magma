@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Instance;
-    class PhysicalDevice;
     class Display;
 
     /* Each display has one or more supported modes associated
@@ -36,13 +34,16 @@ namespace magma
             uint32_t refreshRate,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
+        const std::shared_ptr<const Display>& getDisplay() const noexcept { return display; }
         const VkDisplayPlaneCapabilitiesKHR& getPlaneCapabilities(uint32_t planeIndex) const;
         const VkExtent2D& getVisibleRegion() const noexcept { return visibleRegion; }
         uint32_t getRefreshRate() const noexcept { return refreshRate; }
 
     private:
-        std::shared_ptr<const Instance> instance;
-        std::shared_ptr<const PhysicalDevice> physicalDevice;
+        VkInstance getNativeInstance() const noexcept override;
+        VkPhysicalDevice getNativePhysicalDevice() const noexcept override;
+
+        std::shared_ptr<const Display> display;
         const VkExtent2D visibleRegion;
         const uint32_t refreshRate;
         mutable std::map<uint32_t, VkDisplayPlaneCapabilitiesKHR> capabilities;

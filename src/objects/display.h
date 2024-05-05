@@ -43,8 +43,9 @@ namespace magma
         Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
             VkDisplayKHR handle,
             uint32_t planeIndex) noexcept;
+        VkInstance getNativeInstance() const noexcept override;
+        VkPhysicalDevice getNativePhysicalDevice() const noexcept override;
 
-        std::shared_ptr<const Instance> instance;
         std::shared_ptr<const PhysicalDevice> physicalDevice;
         const uint32_t planeIndex;
         friend PhysicalDevice;

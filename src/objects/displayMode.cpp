@@ -19,9 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "displayMode.h"
 #include "display.h"
-#include "instance.h"
 #include "physicalDevice.h"
-#include "device.h"
+#include "instance.h"
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
@@ -29,12 +28,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_display
-DisplayMode::DisplayMode(std::shared_ptr<const Display> display, const VkExtent2D& visibleRegion, uint32_t refreshRate,
+DisplayMode::DisplayMode(std::shared_ptr<const Display> display_, const VkExtent2D& visibleRegion, uint32_t refreshRate,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_DISPLAY_MODE_KHR, display->getDevice(), std::move(allocator)),
-    instance(display->getPhysicalDevice()->getInstance()),
-    physicalDevice(display->getPhysicalDevice()),
+    NonDispatchable(VK_OBJECT_TYPE_DISPLAY_MODE_KHR, std::move(allocator)),
+    display(std::move(display_)),
     visibleRegion(visibleRegion),
     refreshRate(refreshRate)
 {
@@ -45,7 +43,7 @@ DisplayMode::DisplayMode(std::shared_ptr<const Display> display, const VkExtent2
     displayModeInfo.parameters.visibleRegion = visibleRegion;
     displayModeInfo.parameters.refreshRate = refreshRate;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkCreateDisplayModeKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
-    const VkResult result = vkCreateDisplayModeKHR(*physicalDevice, *display, &displayModeInfo,
+    const VkResult result = vkCreateDisplayModeKHR(getNativePhysicalDevice(), display->getHandle(), &displayModeInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create display mode");
 }
@@ -57,11 +55,21 @@ const VkDisplayPlaneCapabilitiesKHR& DisplayMode::getPlaneCapabilities(uint32_t 
     {
         VkDisplayPlaneCapabilitiesKHR planeCapabilities;
         MAGMA_INSTANCE_EXTENSION(vkGetDisplayPlaneCapabilitiesKHR);
-        const VkResult result = vkGetDisplayPlaneCapabilitiesKHR(*physicalDevice, handle, planeIndex, &planeCapabilities);
+        const VkResult result = vkGetDisplayPlaneCapabilitiesKHR(getNativePhysicalDevice(), handle, planeIndex, &planeCapabilities);
         MAGMA_HANDLE_RESULT(result, "failed to get display plane capabilities");
         capabilities[planeIndex] = planeCapabilities;
     }
     return capabilities[planeIndex];
+}
+
+VkInstance DisplayMode::getNativeInstance() const noexcept
+{
+    return display->getPhysicalDevice()->getInstance()->getHandle();
+}
+
+VkPhysicalDevice DisplayMode::getNativePhysicalDevice() const noexcept
+{
+    return display->getPhysicalDevice()->getHandle();
 }
 #endif // VK_KHR_display
 } // namespace magma

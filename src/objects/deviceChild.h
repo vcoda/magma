@@ -44,11 +44,11 @@ namespace magma
         DeviceChild(std::shared_ptr<Device> device) noexcept:
             device(std::move(device)) {}
         VkDevice getNativeDevice() const noexcept;
-        VkInstance getNativeInstance() const noexcept;
+        virtual VkPhysicalDevice getNativePhysicalDevice() const noexcept;
+        virtual VkInstance getNativeInstance() const noexcept;
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         std::shared_ptr<DeviceResourcePool> getResourcePool() noexcept;
     #endif
-
         std::shared_ptr<Device> device;
 
     private:

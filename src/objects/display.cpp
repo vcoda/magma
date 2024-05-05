@@ -18,8 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "display.h"
-#include "instance.h"
 #include "physicalDevice.h"
+#include "instance.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
 
@@ -27,27 +27,34 @@ namespace magma
 {
 #ifdef VK_KHR_display
 Display::Display(std::shared_ptr<const PhysicalDevice> physicalDevice, VkDisplayKHR handle, uint32_t planeIndex) noexcept:
-    NonDispatchable(VK_OBJECT_TYPE_DISPLAY_KHR, nullptr, nullptr),
-    instance(physicalDevice->getInstance()),
+    NonDispatchable(VK_OBJECT_TYPE_DISPLAY_KHR, handle),
     physicalDevice(std::move(physicalDevice)),
     planeIndex(planeIndex)
-{
-    this->handle = handle;
-}
+{}
 
 std::vector<VkDisplayModePropertiesKHR> Display::getModeProperties() const
 {
     uint32_t propertyCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetDisplayModePropertiesKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
-    VkResult result = vkGetDisplayModePropertiesKHR(*physicalDevice, handle, &propertyCount, nullptr);
+    VkResult result = vkGetDisplayModePropertiesKHR(getNativePhysicalDevice(), handle, &propertyCount, nullptr);
     std::vector<VkDisplayModePropertiesKHR> displayModeProperties;
     if (propertyCount)
     {
         displayModeProperties.resize(propertyCount);
-        result = vkGetDisplayModePropertiesKHR(*physicalDevice, handle, &propertyCount, displayModeProperties.data());
+        result = vkGetDisplayModePropertiesKHR(getNativePhysicalDevice(), handle, &propertyCount, displayModeProperties.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to get display mode properties");
     return displayModeProperties;
+}
+
+VkInstance Display::getNativeInstance() const noexcept
+{
+    return physicalDevice->getInstance()->getHandle();
+}
+
+VkPhysicalDevice Display::getNativePhysicalDevice() const noexcept
+{
+    return physicalDevice->getHandle();
 }
 #endif // VK_KHR_display
 } // namespace magma

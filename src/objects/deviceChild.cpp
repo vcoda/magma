@@ -175,6 +175,11 @@ VkDevice DeviceChild::getNativeDevice() const noexcept
     return MAGMA_OPTIONAL_HANDLE(device);
 }
 
+VkPhysicalDevice DeviceChild::getNativePhysicalDevice() const noexcept
+{
+    return device ? device->getPhysicalDevice()->getHandle() : VK_NULL_HANDLE;
+}
+
 VkInstance DeviceChild::getNativeInstance() const noexcept
 {
     return device ? device->getPhysicalDevice()->getInstance()->getHandle() : VK_NULL_HANDLE;
