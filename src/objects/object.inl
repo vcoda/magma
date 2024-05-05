@@ -1,8 +1,7 @@
 namespace magma
 {
 template<class Type>
-inline Object<Type>::Object(VkObjectType objectType, std::shared_ptr<IAllocator> allocator,
-    Type handle /* VK_NULL_HANDLE */) noexcept:
+inline Object<Type>::Object(VkObjectType objectType, Type handle, std::shared_ptr<IAllocator> allocator) noexcept:
 #if (VK_USE_64_BIT_PTR_DEFINES == 0)
     objectType(objectType),
 #endif

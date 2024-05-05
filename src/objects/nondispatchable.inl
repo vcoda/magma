@@ -1,15 +1,21 @@
 namespace magma
 {
 template<class Type>
+inline NonDispatchable<Type>::NonDispatchable(VkObjectType objectType, Type handle) noexcept:
+    Object<Type>(objectType, handle, nullptr),
+    DeviceChild(nullptr)
+{}
+
+template<class Type>
 inline NonDispatchable<Type>::NonDispatchable(VkObjectType objectType, std::shared_ptr<IAllocator> allocator) noexcept:
-    Object<Type>(objectType, std::move(allocator)),
+    Object<Type>(objectType, VK_NULL_HANDLE, std::move(allocator)),
     DeviceChild(nullptr)
 {}
 
 template<class Type>
 inline NonDispatchable<Type>::NonDispatchable(VkObjectType objectType, std::shared_ptr<Device> device_,
     std::shared_ptr<IAllocator> allocator) noexcept:
-    Object<Type>(objectType, std::move(allocator)),
+    Object<Type>(objectType, VK_NULL_HANDLE, std::move(allocator)),
     DeviceChild(std::move(device_))
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)

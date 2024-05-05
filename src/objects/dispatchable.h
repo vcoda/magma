@@ -36,11 +36,11 @@ namespace magma
     protected:
         Dispatchable(VkObjectType objectType,
             Type handle = VK_NULL_HANDLE) noexcept:
-            Object<Type>(objectType, nullptr, handle) {}
+            Object<Type>(objectType, handle, nullptr) {}
         Dispatchable(VkObjectType objectType,
             std::shared_ptr<IAllocator> allocator,
             Type handle = VK_NULL_HANDLE) noexcept:
-            Object<Type>(objectType, std::move(allocator), handle) {}
+            Object<Type>(objectType, handle, std::move(allocator)) {}
         VkObjectType getObjectType() const noexcept override
             { return Object<Type>::getType(); }
         uint64_t getObjectHandle() const noexcept override

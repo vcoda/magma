@@ -46,6 +46,8 @@ namespace magma
 
     protected:
         NonDispatchable(VkObjectType objectType,
+            Type handle) noexcept;
+        NonDispatchable(VkObjectType objectType,
             std::shared_ptr<IAllocator> allocator) noexcept;
         NonDispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,

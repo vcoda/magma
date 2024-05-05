@@ -42,8 +42,8 @@ namespace magma
 
     protected:
         Object(VkObjectType objectType,
-            std::shared_ptr<IAllocator> allocator,
-            Type handle = VK_NULL_HANDLE) noexcept;
+            Type handle,
+            std::shared_ptr<IAllocator> allocator) noexcept;
         VkObjectType getType() const noexcept;
 
         // Additional storage is required under x86 target as
