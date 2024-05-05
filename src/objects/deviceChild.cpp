@@ -166,12 +166,14 @@ void DeviceChild::setDebugTag(uint64_t tagName, size_t tagSize, const void *tag)
 }
 
 VkDevice DeviceChild::getNativeDevice() const noexcept
-{
-    // The following Vulkan objects are created before logical device is initialized:
+{   // The following Vulkan objects are created before
+    // logical device has been initialized or without it:
     // VK_OBJECT_TYPE_SURFACE_KHR
     // VK_OBJECT_TYPE_DEVICE
     // VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT
     // VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT
+    // VK_OBJECT_TYPE_DISPLAY_KHR
+    // VK_OBJECT_TYPE_DISPLAY_MODE_KHR
     return MAGMA_OPTIONAL_HANDLE(device);
 }
 

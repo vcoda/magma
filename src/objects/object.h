@@ -23,9 +23,13 @@ namespace magma
 {
     class IAllocator;
 
-    /* Base non-copyable template class of dispatchable and non-
-       dispatchable objects. Stores native Vulkan handle and
-       provides getObjectType() method. */
+    /* Base non-copyable class of dispatchable and non-
+       dispatchable objects. Stores native Vulkan handle,
+       VkObjectType and allocator used to create object.
+       Additional storage is required under x86 target
+       as Vulkan non-dispatchable handles are all defined
+       as single uint64_t type and thus cannot be
+       distinguished with template specialization. */
 
     template<class Type>
     class Object : NonCopyable
@@ -46,9 +50,6 @@ namespace magma
             std::shared_ptr<IAllocator> allocator) noexcept;
         VkObjectType getType() const noexcept;
 
-        // Additional storage is required under x86 target as
-        // Vulkan non-dispatchable handles are defined as uint64_t
-        // and thus cannot be used with template specialization.
     #if (VK_USE_64_BIT_PTR_DEFINES == 0)
         const VkObjectType objectType;
     #endif
