@@ -48,18 +48,14 @@ DisplayMode::DisplayMode(std::shared_ptr<const Display> display_, const VkExtent
     MAGMA_HANDLE_RESULT(result, "failed to create display mode");
 }
 
-const VkDisplayPlaneCapabilitiesKHR& DisplayMode::getPlaneCapabilities(uint32_t planeIndex) const
+VkDisplayPlaneCapabilitiesKHR DisplayMode::getDisplayPlaneCapabilities(uint32_t planeIndex) const
 {
-    const auto it = capabilities.find(planeIndex);
-    if (it == capabilities.end())
-    {
-        VkDisplayPlaneCapabilitiesKHR planeCapabilities;
-        MAGMA_INSTANCE_EXTENSION(vkGetDisplayPlaneCapabilitiesKHR);
-        const VkResult result = vkGetDisplayPlaneCapabilitiesKHR(getNativePhysicalDevice(), handle, planeIndex, &planeCapabilities);
-        MAGMA_HANDLE_RESULT(result, "failed to get display plane capabilities");
-        capabilities[planeIndex] = planeCapabilities;
-    }
-    return capabilities[planeIndex];
+    VkDisplayPlaneCapabilitiesKHR displayPlaneCapabilities;
+    MAGMA_INSTANCE_EXTENSION(vkGetDisplayPlaneCapabilitiesKHR);
+    const VkResult result = vkGetDisplayPlaneCapabilitiesKHR(getNativePhysicalDevice(), handle,
+        planeIndex, &displayPlaneCapabilities);
+    MAGMA_HANDLE_RESULT(result, "failed to get display plane capabilities");
+    return displayPlaneCapabilities;
 }
 
 VkInstance DisplayMode::getNativeInstance() const noexcept

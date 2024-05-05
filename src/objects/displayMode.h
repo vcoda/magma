@@ -35,7 +35,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         const std::shared_ptr<const Display>& getDisplay() const noexcept { return display; }
-        const VkDisplayPlaneCapabilitiesKHR& getPlaneCapabilities(uint32_t planeIndex) const;
+        VkDisplayPlaneCapabilitiesKHR getDisplayPlaneCapabilities(uint32_t planeIndex) const;
         const VkExtent2D& getVisibleRegion() const noexcept { return visibleRegion; }
         uint32_t getRefreshRate() const noexcept { return refreshRate; }
 
@@ -46,7 +46,6 @@ namespace magma
         std::shared_ptr<const Display> display;
         const VkExtent2D visibleRegion;
         const uint32_t refreshRate;
-        mutable std::map<uint32_t, VkDisplayPlaneCapabilitiesKHR> capabilities;
     };
 #endif // VK_KHR_display
 } // namespace magma
