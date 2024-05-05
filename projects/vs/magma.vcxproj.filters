@@ -678,9 +678,6 @@
     <ClInclude Include="..\..\src\packed\vector.h">
       <Filter>Header Files\packed</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\platform\androidHardwareBuffer.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\renderpass\attachment.h">
       <Filter>Header Files\renderpass</Filter>
     </ClInclude>
@@ -819,36 +816,6 @@
     <ClInclude Include="..\..\src\platform\win32Surface.h">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\platform\xlibSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\xcbSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\waylandSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\qnxSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\androidSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\iosSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\macosSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\metalSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\viSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\fuchsiaSurface.h">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\platform\typedefs.h">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
@@ -860,9 +827,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\objects\computePipelineLibrary.h">
       <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\platform\directFbSurface.h">
-      <Filter>Header Files\platform</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\extensions\deviceExtensions.h">
       <Filter>Header Files\extensions</Filter>
@@ -1226,9 +1190,6 @@
     <ClCompile Include="..\..\src\misc\structureChain.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\platform\androidHardwareBuffer.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\renderpass\subpass.cpp">
       <Filter>Source Files\renderpass</Filter>
     </ClCompile>
@@ -1358,36 +1319,6 @@
     <ClCompile Include="..\..\src\platform\win32Surface.cpp">
       <Filter>Source Files\platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\platform\xlibSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\xcbSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\waylandSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\qnxSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\androidSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\iosSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\macosSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\metalSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\viSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\fuchsiaSurface.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\objects\pipelineLibrary.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -1396,9 +1327,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\objects\computePipelineLibrary.cpp">
       <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\platform\directFbSurface.cpp">
-      <Filter>Source Files\platform</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\extensions\deviceExtensions.cpp">
       <Filter>Source Files\extensions</Filter>
