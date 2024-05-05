@@ -75,5 +75,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #include <cmath>
 #endif
 
-// Internal code
 #include "core.h"
+#include "../objects/dispatchable.h"
+#include "../objects/nondispatchable.h"
+#include "../objects/device.h"
+#include "../misc/extension.h"
+#include "../allocator/allocator.h"
+#include "../exceptions/errorResult.h"
