@@ -17,9 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "iobject.h"
-#if (VK_USE_64_BIT_PTR_DEFINES == 1)
 #include "objectType.h"
-#endif
 
 namespace magma
 {
