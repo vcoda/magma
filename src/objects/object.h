@@ -30,7 +30,7 @@ namespace magma
        provides getObjectType() method. */
 
     template<class Type>
-    class Object : virtual public IObject, NonCopyable
+    class Object : NonCopyable
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         ,public ObjectType<Type>
     #endif
@@ -41,12 +41,12 @@ namespace magma
         operator NativeHandle() const noexcept { return handle; }
         const NativeHandle *getHandleAddress() const noexcept { return &handle; }
         const std::shared_ptr<IAllocator>& getHostAllocator() const noexcept { return hostAllocator; }
-        VkObjectType getObjectType() const noexcept override;
 
     protected:
         Object(VkObjectType objectType,
             std::shared_ptr<IAllocator> allocator,
             Type handle = VK_NULL_HANDLE) noexcept;
+        VkObjectType getType() const noexcept;
 
         // Additional storage is required under x86 target as
         // Vulkan non-dispatchable handles are defined as uint64_t

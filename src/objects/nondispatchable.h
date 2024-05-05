@@ -21,10 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceResourcePool.h"
 #include "../misc/structureChain.h"
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4250) // inherits via dominance
-#endif
-
 namespace magma
 {
     /* Non-dispatchable handle types are a 64-bit integer type
@@ -33,8 +29,8 @@ namespace magma
        as a reference to an underlying object. */
 
     template<class Type>
-    class NonDispatchable : public Object<Type>,
-        public DeviceChild
+    class NonDispatchable : public DeviceChild,
+        public Object<Type>
     {
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         static_assert(sizeof(Type) == sizeof(intptr_t),
@@ -44,6 +40,7 @@ namespace magma
             "invalid size of non-dispatchable handle type");
 
     public:
+        VkObjectType getObjectType() const noexcept override;
         uint64_t getObjectHandle() const noexcept override;
         bool nonDispatchable() const noexcept override { return true; }
 

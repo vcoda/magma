@@ -28,7 +28,7 @@ namespace magma
        used by debugging layers to easily filter for only
        data that can be used by that implementation. */
 
-    class DeviceChild : virtual public IObject
+    class DeviceChild : public IObject
     {
     public:
         void setPrivateData(uint64_t data) override;

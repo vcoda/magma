@@ -27,7 +27,8 @@ namespace magma
        type must have a unique handle value during its lifetime. */
 
     template<class Type>
-    class Dispatchable : public Object<Type>
+    class Dispatchable : public IObject,
+        public Object<Type>
     {
         static_assert(sizeof(Type) == sizeof(intptr_t),
             "invalid size of dispatchable handle type");
@@ -40,6 +41,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator,
             Type handle = VK_NULL_HANDLE) noexcept:
             Object<Type>(objectType, std::move(allocator), handle) {}
+        VkObjectType getObjectType() const noexcept override
+            { return Object<Type>::getType(); }
         uint64_t getObjectHandle() const noexcept override
             { return reinterpret_cast<uint64_t>(Object<Type>::handle); }
         void setPrivateData(uint64_t) override {}

@@ -33,6 +33,12 @@ inline NonDispatchable<Type>::~NonDispatchable()
 }
 
 template<class Type>
+inline VkObjectType NonDispatchable<Type>::getObjectType() const noexcept
+{
+    return Object<Type>::getType();
+}
+
+template<class Type>
 inline uint64_t NonDispatchable<Type>::getObjectHandle() const noexcept
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
