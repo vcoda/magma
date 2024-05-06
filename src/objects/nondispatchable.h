@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "object.h"
 #include "deviceChild.h"
 #include "deviceResourcePool.h"
-#include "../misc/structureChain.h"
 
 namespace magma
 {

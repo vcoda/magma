@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../misc/structureChain.h"
 
 // The granularity of the priorities is implementation-dependent.
 #define MAGMA_MEMORY_PRIORITY_LOWEST 0.f

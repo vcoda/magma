@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "rayTracingPipelineBatch.h"
 #include "rayTracingPipeline.h"
 #include "pipelineLayout.h"
+#include "pipelineLibrary.h"
 #include "pipelineCache.h"
 #include "device.h"
 #include "../allocator/allocator.h"
