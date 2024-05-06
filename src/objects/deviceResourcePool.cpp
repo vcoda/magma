@@ -117,17 +117,6 @@ DeviceResourcePool::Resources DeviceResourcePool::countDeviceResources() const
     return statistics;
 }
 
-DeviceResourcePool::PhysicalDeviceResources DeviceResourcePool::countPhysicalDeviceResources() const
-{
-    std::lock_guard<std::mutex> guard(mtx);
-    PhysicalDeviceResources statistics;
-#ifdef VK_KHR_display
-    statistics.displayCount = MAGMA_COUNT(displays);
-    statistics.displayModeCount = MAGMA_COUNT(displayModes);
-#endif
-    return statistics;
-}
-
 VkDeviceSize DeviceResourcePool::countAllocatedDeviceLocalMemory() const
 {
     std::lock_guard<std::mutex> guard(mtx);

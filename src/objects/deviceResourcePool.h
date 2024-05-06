@@ -34,12 +34,10 @@ namespace magma
     {
     public:
         struct Resources;
-        struct PhysicalDeviceResources;
         template<class Type>
         Pool<Type>& getPool() noexcept;
         std::mutex& getMutex() const noexcept { return mtx; }
         Resources countDeviceResources() const;
-        PhysicalDeviceResources countPhysicalDeviceResources() const;
         VkDeviceSize countAllocatedDeviceLocalMemory() const;
         VkDeviceSize countAllocatedHostVisibleMemory() const;
         VkDeviceSize countAllocatedBufferMemory() const;
@@ -155,12 +153,6 @@ namespace magma
         uint32_t indirectCommandsLayoutCount = 0;
         uint32_t ycbcrSamplerCount = 0;
         uint32_t privateDataSlotCount = 0;
-    };
-
-    struct DeviceResourcePool::PhysicalDeviceResources
-    {
-        uint32_t displayCount = 0;
-        uint32_t displayModeCount = 0;
     };
 } // namespace magma
 
