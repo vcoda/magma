@@ -35,9 +35,9 @@ namespace magma
     public:
         struct Resources;
         struct PhysicalDeviceResources;
-
+        template<class Type>
+        Pool<Type>& getPool() noexcept;
         std::mutex& getMutex() const noexcept { return mtx; }
-        template<class Type> Pool<Type>& getPool();
         Resources countDeviceResources() const;
         PhysicalDeviceResources countPhysicalDeviceResources() const;
         VkDeviceSize countAllocatedDeviceLocalMemory() const;

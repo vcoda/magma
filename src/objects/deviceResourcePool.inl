@@ -1,6 +1,6 @@
 #define MAGMA_RESOURCE_POOL(Type, pool)\
 template<>\
-inline magma::Pool<Type>& magma::DeviceResourcePool::getPool<Type>()\
+inline magma::Pool<Type>& magma::DeviceResourcePool::getPool<Type>() noexcept\
 {\
     return pool;\
 }
