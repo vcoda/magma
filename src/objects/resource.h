@@ -25,10 +25,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class IDeviceMemory;
     class PhysicalDevice;
     class CommandBuffer;
-    class Queue;
 
     /* Vulkan supports two primary resource types: buffers and images.
        Resources are views of memory with associated formatting and

@@ -22,9 +22,6 @@ namespace magma
 {
     class GraphicsPipeline;
     class RenderPass;
-#ifdef VK_KHR_pipeline_library
-    class PipelineLibrary;
-#endif
 
     class VertexInputState;
     struct InputAssemblyState;

@@ -26,6 +26,9 @@ namespace magma
     class Pipeline;
     class PipelineLayout;
     class PipelineCache;
+#ifdef VK_KHR_pipeline_library
+    class PipelineLibrary;
+#endif
     class IAllocator;
 
     /* Base class to batch compilation of pipeline state objects.

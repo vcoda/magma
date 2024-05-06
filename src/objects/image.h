@@ -23,7 +23,6 @@ namespace magma
 {
     class Buffer;
     class SrcTransferBuffer;
-    class CommandBuffer;
 
     /* Images represent multidimensional - up to 3 - arrays
        of data which can be used for various purposes (e.g.
