@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class IAllocator;
+    class StructureChain;
 
     /* Base non-copyable class of dispatchable and non-
        dispatchable objects. Stores native Vulkan handle,

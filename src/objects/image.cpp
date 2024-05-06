@@ -28,7 +28,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/format.h"
-#include "../misc/structureChain.h"
 #include "../exceptions/errorResult.h"
 
 // Vulkan validation layers may complain about image regions for block-compressed formats. See:
