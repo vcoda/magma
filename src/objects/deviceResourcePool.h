@@ -37,7 +37,7 @@ namespace magma
         template<class Type>
         Pool<Type>& getPool() noexcept;
         std::mutex& getMutex() const noexcept { return mtx; }
-        Resources countDeviceResources() const;
+        Resources countResources() const noexcept;
         VkDeviceSize countAllocatedDeviceLocalMemory() const;
         VkDeviceSize countAllocatedHostVisibleMemory() const;
         VkDeviceSize countAllocatedBufferMemory() const;

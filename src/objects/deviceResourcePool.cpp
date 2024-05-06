@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-DeviceResourcePool::Resources DeviceResourcePool::countDeviceResources() const
+DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
     Resources statistics;
