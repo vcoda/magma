@@ -117,7 +117,7 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
     return statistics;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedDeviceLocalMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedDeviceLocalMemory() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize deviceLocalAllocatedSize = 0;
@@ -130,7 +130,7 @@ VkDeviceSize DeviceResourcePool::countAllocatedDeviceLocalMemory() const
     return deviceLocalAllocatedSize;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedHostVisibleMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedHostVisibleMemory() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize hostVisibleAllocatedSize = 0;
@@ -143,7 +143,7 @@ VkDeviceSize DeviceResourcePool::countAllocatedHostVisibleMemory() const
     return hostVisibleAllocatedSize;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedBufferMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedBufferMemory() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize bufferAllocatedSize = 0;
@@ -157,7 +157,7 @@ VkDeviceSize DeviceResourcePool::countAllocatedBufferMemory() const
     return bufferAllocatedSize;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedImageMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedImageMemory() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize imageAllocatedSize = 0;
@@ -171,7 +171,7 @@ VkDeviceSize DeviceResourcePool::countAllocatedImageMemory() const
     return imageAllocatedSize;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedAccelerationStructureMemory() const
+VkDeviceSize DeviceResourcePool::countAllocatedAccelerationStructureMemory() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize accelerationStructureAllocatedSize = 0;
@@ -187,7 +187,7 @@ VkDeviceSize DeviceResourcePool::countAllocatedAccelerationStructureMemory() con
     return accelerationStructureAllocatedSize;
 }
 
-bool DeviceResourcePool::hasAnyDeviceResource() const
+bool DeviceResourcePool::hasAnyDeviceResource() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
     return semaphores.size() ||

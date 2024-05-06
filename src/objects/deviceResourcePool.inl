@@ -71,7 +71,7 @@ MAGMA_RESOURCE_POOL(VkPrivateDataSlotEXT, privateDataSlots)
 namespace magma
 {
 template<class NonDispatchableChild, class Type>
-inline void DeviceResourcePool::foreach(const Pool<Type>& pool, const Fn<NonDispatchableChild>& fn) const
+inline void DeviceResourcePool::foreach(const Pool<Type>& pool, const Fn<NonDispatchableChild>& fn) const noexcept
 {
     std::for_each(pool.cbegin(), pool.cend(),
         [&fn](const NonDispatchable<Type> *parent)

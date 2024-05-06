@@ -38,19 +38,19 @@ namespace magma
         Pool<Type>& getPool() noexcept;
         std::mutex& getMutex() const noexcept { return mtx; }
         Resources countResources() const noexcept;
-        VkDeviceSize countAllocatedDeviceLocalMemory() const;
-        VkDeviceSize countAllocatedHostVisibleMemory() const;
-        VkDeviceSize countAllocatedBufferMemory() const;
-        VkDeviceSize countAllocatedImageMemory() const;
-        VkDeviceSize countAllocatedAccelerationStructureMemory() const;
-        bool hasAnyDeviceResource() const;
+        VkDeviceSize countAllocatedDeviceLocalMemory() const noexcept;
+        VkDeviceSize countAllocatedHostVisibleMemory() const noexcept;
+        VkDeviceSize countAllocatedBufferMemory() const noexcept;
+        VkDeviceSize countAllocatedImageMemory() const noexcept;
+        VkDeviceSize countAllocatedAccelerationStructureMemory() const noexcept;
+        bool hasAnyDeviceResource() const noexcept;
 
     private:
         template<class NonDispatchableChild> using Fn =
             std::function<void(const NonDispatchableChild *)>;
         template<class NonDispatchableChild, class Type>
         void foreach(const Pool<Type>& pool,
-            const Fn<NonDispatchableChild>& fn) const;
+            const Fn<NonDispatchableChild>& fn) const noexcept;
 
         Pool<VkSemaphore> semaphores;
         Pool<VkFence> fences;
