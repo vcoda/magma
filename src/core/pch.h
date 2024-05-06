@@ -17,13 +17,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
+/*
+ * C Runtime
+ */
+
 #include <cassert>
 #include <cstring>
+#include <cmath>
 #ifdef _MSC_VER
-    #include <malloc.h>
+#include <malloc.h>
 #else
-    #include <mm_malloc.h>
+#include <mm_malloc.h>
 #endif
+
+/*
+ * Standard Template Library
+ */
 
 #include <vector>
 #include <deque>
@@ -34,6 +43,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <unordered_set>
 #include <array>
+#include <initializer_list>
 #include <string>
 #include <memory>
 #include <thread>
@@ -42,30 +52,40 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <mutex>
 #include <algorithm>
 #include <functional>
-#include <initializer_list>
 #include <limits>
 #include <iostream>
 #include <sstream>
 
+/*
+ * Vulkan SDK
+ */
+
 #ifdef _WIN32
-    #define WIN32_LEAN_AND_MEAN
-    #define VC_EXTRALEAN
-    #define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #endif
+
 #include <vulkan/vulkan.h>
 
+/*
+ * x86 SIMD
+ */
+
 #ifdef MAGMA_SSE
-    #include <xmmintrin.h>
-    #include <smmintrin.h>
-#else
-    #include <cmath>
+#include <xmmintrin.h>
+#include <smmintrin.h>
 #endif
+
+/*
+ * Magma Library
+ */
 
 #include "core.h"
 #include "../objects/dispatchable.h"
 #include "../objects/nondispatchable.h"
 #include "../objects/device.h"
-#include "../misc/extension.h"
 #include "../allocator/allocator.h"
+#include "../misc/extension.h"
+#include "../misc/structureChain.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
