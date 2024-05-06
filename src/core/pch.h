@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,11 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#ifdef _MSC_VER
-    #pragma once
-#endif
+#pragma once
 
-// C lib
 #include <cassert>
 #include <cstring>
 #ifdef _MSC_VER
@@ -28,7 +25,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #include <mm_malloc.h>
 #endif
 
-// Containers
 #include <vector>
 #include <deque>
 #include <list>
@@ -39,35 +35,25 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <unordered_set>
 #include <array>
 #include <string>
-
-// Smart pointers
 #include <memory>
-
-// Threading
 #include <thread>
 #include <future>
 #include <atomic>
 #include <mutex>
-
-// Misc
 #include <algorithm>
 #include <functional>
 #include <initializer_list>
 #include <limits>
-
-// Input/output
 #include <iostream>
+#include <sstream>
 
-// Lean & mean windows.h
 #ifdef _WIN32
     #define WIN32_LEAN_AND_MEAN
     #define VC_EXTRALEAN
     #define NOMINMAX
-#endif // _WIN32
-
+#endif
 #include <vulkan/vulkan.h>
 
-// SIMD intrinsics
 #ifdef MAGMA_SSE
     #include <xmmintrin.h>
     #include <smmintrin.h>
@@ -82,3 +68,4 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/extension.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
+#include "../helpers/stackArray.h"
