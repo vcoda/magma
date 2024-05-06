@@ -102,7 +102,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
 Device::~Device()
 {
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-    MAGMA_ASSERT(resourcePool->hasAnyDeviceResource() == false);
+    MAGMA_ASSERT(!resourcePool->hasUnreleasedResources());
 #endif
     vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }

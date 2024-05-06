@@ -43,7 +43,7 @@ namespace magma
         VkDeviceSize countAllocatedBufferMemory() const noexcept;
         VkDeviceSize countAllocatedImageMemory() const noexcept;
         VkDeviceSize countAllocatedAccelerationStructureMemory() const noexcept;
-        bool hasAnyDeviceResource() const noexcept;
+        bool hasUnreleasedResources() const noexcept;
 
     private:
         template<class NonDispatchableChild> using Fn =

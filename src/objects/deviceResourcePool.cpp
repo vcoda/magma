@@ -187,7 +187,7 @@ VkDeviceSize DeviceResourcePool::countAllocatedAccelerationStructureMemory() con
     return accelerationStructureAllocatedSize;
 }
 
-bool DeviceResourcePool::hasAnyDeviceResource() const noexcept
+bool DeviceResourcePool::hasUnreleasedResources() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
     return semaphores.size() ||
