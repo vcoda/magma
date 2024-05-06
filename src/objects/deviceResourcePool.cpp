@@ -221,17 +221,45 @@ bool DeviceResourcePool::hasAnyDeviceResource() const
         descriptorSets.size() ||
         framebuffers.size() ||
         commandPools.size() ||
-    #ifdef VK_KHR_deferred_host_operations
-        deferredOperations.size() ||
+    #ifdef VK_KHR_surface
+        surfaces.size() ||
     #endif
     #ifdef VK_KHR_swapchain
         swapchains.size() ||
     #endif
+    #ifdef VK_KHR_display
+        displays.size() ||
+        displayModes.size() ||
+    #endif
+    #ifdef VK_EXT_debug_report
+        debugReportCallbacks.size() ||
+    #endif
+    #ifdef VK_EXT_debug_utils
+        debugUtilsMessengers.size() ||
+    #endif
+    #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
+        accelerationStructures.size() ||
+    #endif
+    #ifdef VK_EXT_validation_cache
+        validationCaches.size() ||
+    #endif
+    #ifdef VK_INTEL_performance_query
+        performanceConfigurations.size() ||
+    #endif
+    #ifdef VK_KHR_deferred_host_operations
+        deferredOperations.size() ||
+    #endif
+    #ifdef VK_KHR_descriptor_update_template
+        descriptorUpdateTemplates.size() ||
+    #endif
+    #ifdef VK_NV_device_generated_commands
+        indirectCommandsLayouts.size() ||
+    #endif
+    #ifdef VK_KHR_sampler_ycbcr_conversion
+        ycbcrSamplers.size() ||
+    #endif
     #ifdef VK_EXT_private_data
         privateDataSlots.size() ||
-    #endif
-    #ifdef VK_NV_ray_tracing
-        accelerationStructures.size() ||
     #endif
         false;
 }
