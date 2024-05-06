@@ -74,12 +74,6 @@ namespace magma
         Pool<VkDescriptorSet> descriptorSets;
         Pool<VkFramebuffer> framebuffers;
         Pool<VkCommandPool> commandPools;
-    #ifdef VK_KHR_deferred_host_operations
-        Pool<VkDeferredOperationKHR> deferredOperations;
-    #endif
-    #ifdef VK_KHR_sampler_ycbcr_conversion
-        Pool<VkSamplerYcbcrConversionKHR> ycbcrSamplers;
-    #endif
     #ifdef VK_KHR_surface
         Pool<VkSurfaceKHR> surfaces;
     #endif
@@ -96,11 +90,31 @@ namespace magma
     #ifdef VK_EXT_debug_utils
         Pool<VkDebugUtilsMessengerEXT> debugUtilsMessengers;
     #endif
+    #ifdef VK_KHR_acceleration_structure
+        Pool<VkAccelerationStructureKHR> accelerationStructures;
+    #elif defined(VK_NV_ray_tracing)
+        Pool<VkAccelerationStructureNV> accelerationStructures;
+    #endif
+    #ifdef VK_EXT_validation_cache
+        Pool<VkValidationCacheEXT> validationCaches;
+    #endif
+    #ifdef VK_INTEL_performance_query
+        Pool<VkPerformanceConfigurationINTEL> performanceConfigurations;
+    #endif
+    #ifdef VK_KHR_deferred_host_operations
+        Pool<VkDeferredOperationKHR> deferredOperations;
+    #endif
+    #ifdef VK_KHR_descriptor_update_template
+        Pool<VkDescriptorUpdateTemplateKHR> descriptorUpdateTemplates;
+    #endif
+    #ifdef VK_NV_device_generated_commands
+        Pool<VkIndirectCommandsLayoutNV> indirectCommandsLayouts;
+    #endif
+    #ifdef VK_KHR_sampler_ycbcr_conversion
+        Pool<VkSamplerYcbcrConversionKHR> ycbcrSamplers;
+    #endif
     #ifdef VK_EXT_private_data
         Pool<VkPrivateDataSlotEXT> privateDataSlots;
-    #endif
-    #ifdef VK_NV_ray_tracing
-        Pool<VkAccelerationStructureNV> accelerationStructures;
     #endif
         mutable std::mutex mtx;
     };
@@ -129,15 +143,18 @@ namespace magma
         uint32_t rayTracingPipelineCount = 0;
         uint32_t descriptorSetLayoutCount = 0;
         uint32_t samplerCount = 0;
-        uint32_t ycbcrSamplerCount = 0;
         uint32_t descriptorPoolCount = 0;
         uint32_t descriptorSetCount = 0;
         uint32_t framebufferCount = 0;
         uint32_t commandPoolCount = 0;
-        uint32_t deferredOperationCount = 0;
-        uint32_t swapchainCount = 0;
-        uint32_t privateDataSlotCount = 0;
         uint32_t accelerationStructureCount = 0;
+        uint32_t validationCacheCount = 0;
+        uint32_t performanceConfigurationCount = 0;
+        uint32_t deferredOperationCount = 0;
+        uint32_t descriptorUpdateTemplateCount = 0;
+        uint32_t indirectCommandsLayoutCount = 0;
+        uint32_t ycbcrSamplerCount = 0;
+        uint32_t privateDataSlotCount = 0;
     };
 
     struct DeviceResourcePool::PhysicalDeviceResources

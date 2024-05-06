@@ -77,33 +77,42 @@ DeviceResourcePool::Resources DeviceResourcePool::countDeviceResources() const
             case VK_PIPELINE_BIND_POINT_COMPUTE:
                 ++statistics.computePipelineCount;
                 break;
-        #ifdef VK_NV_ray_tracing
-            case VK_PIPELINE_BIND_POINT_RAY_TRACING_NV:
+            #ifdef VK_KHR_acceleration_structure
+            case VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR:
                 ++statistics.rayTracingPipelineCount;
                 break;
-        #endif
+            #endif
             }
         });
     statistics.descriptorSetLayoutCount = MAGMA_COUNT(descriptorSetLayouts);
     statistics.samplerCount = MAGMA_COUNT(samplers);
-#ifdef VK_KHR_sampler_ycbcr_conversion
-    statistics.ycbcrSamplerCount = MAGMA_COUNT(ycbcrSamplers);
-#endif
     statistics.descriptorPoolCount = MAGMA_COUNT(descriptorPools);
     statistics.descriptorSetCount = MAGMA_COUNT(descriptorSets);
     statistics.framebufferCount = MAGMA_COUNT(framebuffers);
     statistics.commandPoolCount = MAGMA_COUNT(commandPools);
+#if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
+    statistics.accelerationStructureCount = MAGMA_COUNT(accelerationStructures);
+#endif
+#ifdef VK_EXT_validation_cache
+    statistics.validationCacheCount = MAGMA_COUNT(validationCaches);
+#endif
+#ifdef VK_INTEL_performance_query
+    statistics.performanceConfigurationCount = MAGMA_COUNT(performanceConfigurations);
+#endif
 #ifdef VK_KHR_deferred_host_operations
     statistics.deferredOperationCount = MAGMA_COUNT(deferredOperations);
 #endif
-#ifdef VK_KHR_swapchain
-    statistics.swapchainCount = MAGMA_COUNT(swapchains);
+#ifdef VK_KHR_descriptor_update_template
+    statistics.descriptorUpdateTemplateCount = MAGMA_COUNT(descriptorUpdateTemplates);
+#endif
+#ifdef VK_NV_device_generated_commands
+    statistics.indirectCommandsLayoutCount = MAGMA_COUNT(indirectCommandsLayouts);
+#endif
+#ifdef VK_KHR_sampler_ycbcr_conversion
+    statistics.ycbcrSamplerCount = MAGMA_COUNT(ycbcrSamplers);
 #endif
 #ifdef VK_EXT_private_data
     statistics.privateDataSlotCount = MAGMA_COUNT(privateDataSlots);
-#endif
-#ifdef VK_NV_ray_tracing
-    statistics.accelerationStructureCount = MAGMA_COUNT(accelerationStructures);
 #endif
     return statistics;
 }

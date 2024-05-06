@@ -25,16 +25,12 @@ MAGMA_RESOURCE_POOL(VkDescriptorPool, descriptorPools)
 MAGMA_RESOURCE_POOL(VkDescriptorSet, descriptorSets)
 MAGMA_RESOURCE_POOL(VkFramebuffer, framebuffers)
 MAGMA_RESOURCE_POOL(VkCommandPool, commandPools)
-#ifdef VK_KHR_deferred_host_operations
-MAGMA_RESOURCE_POOL(VkDeferredOperationKHR, deferredOperations)
-#endif
-#ifdef VK_KHR_sampler_ycbcr_conversion
-MAGMA_RESOURCE_POOL(VkSamplerYcbcrConversionKHR, ycbcrSamplers)
-#endif
 #ifdef VK_KHR_surface
 MAGMA_RESOURCE_POOL(VkSurfaceKHR, surfaces)
 #endif
+#ifdef VK_KHR_swapchain
 MAGMA_RESOURCE_POOL(VkSwapchainKHR, swapchains)
+#endif
 #ifdef VK_KHR_display
 MAGMA_RESOURCE_POOL(VkDisplayKHR, displays)
 MAGMA_RESOURCE_POOL(VkDisplayModeKHR, displayModes)
@@ -45,11 +41,31 @@ MAGMA_RESOURCE_POOL(VkDebugReportCallbackEXT, debugReportCallbacks)
 #ifdef VK_EXT_debug_utils
 MAGMA_RESOURCE_POOL(VkDebugUtilsMessengerEXT, debugUtilsMessengers)
 #endif
+#ifdef VK_KHR_acceleration_structure
+MAGMA_RESOURCE_POOL(VkAccelerationStructureKHR, accelerationStructures)
+#elif defined(VK_NV_ray_tracing)
+MAGMA_RESOURCE_POOL(VkAccelerationStructureNV, accelerationStructures)
+#endif
+#ifdef VK_EXT_validation_cache
+MAGMA_RESOURCE_POOL(VkValidationCacheEXT, validationCaches)
+#endif
+#ifdef VK_INTEL_performance_query
+MAGMA_RESOURCE_POOL(VkPerformanceConfigurationINTEL, performanceConfigurations)
+#endif
+#ifdef VK_KHR_deferred_host_operations
+MAGMA_RESOURCE_POOL(VkDeferredOperationKHR, deferredOperations)
+#endif
+#ifdef VK_KHR_descriptor_update_template
+MAGMA_RESOURCE_POOL(VkDescriptorUpdateTemplateKHR, descriptorUpdateTemplates)
+#endif
+#ifdef VK_NV_device_generated_commands
+MAGMA_RESOURCE_POOL(VkIndirectCommandsLayoutNV, indirectCommandsLayouts)
+#endif
+#ifdef VK_KHR_sampler_ycbcr_conversion
+MAGMA_RESOURCE_POOL(VkSamplerYcbcrConversionKHR, ycbcrSamplers)
+#endif
 #ifdef VK_EXT_private_data
 MAGMA_RESOURCE_POOL(VkPrivateDataSlotEXT, privateDataSlots)
-#endif
-#ifdef VK_NV_ray_tracing
-MAGMA_RESOURCE_POOL(VkAccelerationStructureNV, accelerationStructures)
 #endif
 
 namespace magma
