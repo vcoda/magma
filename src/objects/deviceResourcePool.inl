@@ -1,6 +1,8 @@
+namespace magma
+{
 #define MAGMA_RESOURCE_POOL(Type, pool)\
 template<>\
-inline magma::Pool<Type>& magma::DeviceResourcePool::getPool<Type>() noexcept\
+inline Pool<Type>& DeviceResourcePool::getPool<Type>() noexcept\
 {\
     return pool;\
 }
@@ -68,8 +70,6 @@ MAGMA_RESOURCE_POOL(VkSamplerYcbcrConversionKHR, ycbcrSamplers)
 MAGMA_RESOURCE_POOL(VkPrivateDataSlotEXT, privateDataSlots)
 #endif
 
-namespace magma
-{
 template<class NonDispatchableChild, class Type>
 inline void DeviceResourcePool::foreach(const Pool<Type>& pool, const Fn<NonDispatchableChild>& fn) const noexcept
 {
