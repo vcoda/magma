@@ -30,10 +30,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"
 
-// Vulkan validation layers may complain about image regions for block-compressed formats. See:
-// https://vulkan.lunarg.com/doc/view/1.3.224.1/windows/1.3-extensions/vkspec.html#VUID-vkCmdCopyBufferToImage-pRegions-06218
-// "For each element of pRegions, imageOffset.x and (imageExtent.width + imageOffset.x) must both be
-// greater than or equal to 0 and less than or equal to the width of the specified imageSubresource of dstImage".
 #define MAGMA_VIRTUAL_MIP_EXTENT 1
 
 namespace magma
@@ -625,6 +621,13 @@ VkExtent3D Image::virtualMipExtent(uint32_t level) const noexcept
     MAGMA_ASSERT(level < mipLevels);
     if (!level)
         return extent;
+    /* Vulkan validation layers may complain about image regions for
+       block-compressed formats. See:
+       https://vulkan.lunarg.com/doc/view/1.3.224.1/windows/1.3-extensions/vkspec.html#VUID-vkCmdCopyBufferToImage-pRegions-06218
+       "For each element of pRegions, imageOffset.x and
+       (imageExtent.width + imageOffset.x) must both be greater than
+       or equal to 0 and less than or equal to the width of the
+       specified imageSubresource of dstImage". */
 #if MAGMA_VIRTUAL_MIP_EXTENT
     return VkExtent3D{
         std::max(1u, extent.width >> level),
