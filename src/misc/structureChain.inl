@@ -1,5 +1,16 @@
 namespace magma
 {
+inline StructureChain::StructureChain() noexcept:
+    head(nullptr)
+{}
+
+template<class StructureType>
+inline StructureChain::StructureChain(const StructureType& node) noexcept:
+    head(nullptr)
+{
+    linkNode(node);
+}
+
 inline StructureChain::StructureChain(StructureChain&& other) noexcept:
     head(other.head)
 {
