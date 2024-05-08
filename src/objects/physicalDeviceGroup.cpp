@@ -43,12 +43,12 @@ std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<Devi
     deviceGroupDeviceInfo.pNext = nullptr;
     deviceGroupDeviceInfo.physicalDeviceCount = getPhysicalDeviceCount();
     deviceGroupDeviceInfo.pPhysicalDevices = dereferencedPhysicalDevices;
-    StructureChain extendedDeviceGroupInfo(extendedInfo);
-    extendedDeviceGroupInfo.linkNode(deviceGroupDeviceInfo);
+    StructureChain deviceGroupInfo(deviceGroupDeviceInfo);
+    deviceGroupInfo.tailNode()->pNext = (VkBaseOutStructure *)(extendedInfo.headNode());
     return physicalDevices.front()->createDevice(queueDescriptors,
         enabledLayers, enabledExtensions,
         enabledFeatures, enabledExtendedFeatures,
-        extendedDeviceGroupInfo);
+        deviceGroupInfo);
 }
 #endif // VK_KHR_device_group
 } // namespace magma
