@@ -816,6 +816,55 @@ void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBinding
 }
 #endif // VK_NV_ray_tracing
 
+#ifdef VK_INTEL_performance_query
+bool CommandBuffer::setPerformanceMarker(uint64_t marker) noexcept
+{
+    MAGMA_DEVICE_EXTENSION(vkCmdSetPerformanceMarkerINTEL);
+    if (vkCmdSetPerformanceMarkerINTEL)
+    {
+        VkPerformanceMarkerInfoINTEL performanceMarker;
+        performanceMarker.sType = VK_STRUCTURE_TYPE_PERFORMANCE_MARKER_INFO_INTEL;
+        performanceMarker.pNext = nullptr;
+        performanceMarker.marker = marker;
+        const VkResult result = vkCmdSetPerformanceMarkerINTEL(handle, &performanceMarker);
+        return (VK_SUCCESS == result);
+    }
+    return false;
+}
+
+bool CommandBuffer::setPerformanceStreamMarker(uint32_t marker) noexcept
+{
+    MAGMA_DEVICE_EXTENSION(vkCmdSetPerformanceStreamMarkerINTEL);
+    if (vkCmdSetPerformanceStreamMarkerINTEL)
+    {
+        VkPerformanceStreamMarkerInfoINTEL performanceMarker;
+        performanceMarker.sType = VK_STRUCTURE_TYPE_PERFORMANCE_STREAM_MARKER_INFO_INTEL;
+        performanceMarker.pNext = nullptr;
+        performanceMarker.marker = marker;
+        const VkResult result = vkCmdSetPerformanceStreamMarkerINTEL(handle, &performanceMarker);
+        return (VK_SUCCESS == result);
+    }
+    return false;
+}
+
+bool CommandBuffer::setPerformanceOverride(VkPerformanceOverrideTypeINTEL type, bool enable, uint64_t parameter) noexcept
+{
+    MAGMA_DEVICE_EXTENSION(vkCmdSetPerformanceOverrideINTEL);
+    if (vkCmdSetPerformanceOverrideINTEL)
+    {
+        VkPerformanceOverrideInfoINTEL performanceOverride;
+        performanceOverride.sType = VK_STRUCTURE_TYPE_PERFORMANCE_OVERRIDE_INFO_INTEL;
+        performanceOverride.pNext = nullptr;
+        performanceOverride.type = type;
+        performanceOverride.enable = MAGMA_BOOLEAN(enable);
+        performanceOverride.parameter = parameter;
+        const VkResult result = vkCmdSetPerformanceOverrideINTEL(handle, &performanceOverride);
+        return (VK_SUCCESS == result);
+    }
+    return false;
+}
+#endif // VK_INTEL_performance_query
+
 void CommandBuffer::releaseBoundResources() const noexcept
 {
 #ifdef MAGMA_DEFERRED_RELEASE

@@ -504,6 +504,14 @@ namespace magma
             uint32_t depth) noexcept;
     #endif // VK_NV_ray_tracing
 
+    #ifdef VK_INTEL_performance_query
+        bool setPerformanceMarker(uint64_t marker) noexcept;
+        bool setPerformanceStreamMarker(uint32_t marker) noexcept;
+        bool setPerformanceOverride(VkPerformanceOverrideTypeINTEL type,
+            bool enable,
+            uint64_t parameter) noexcept;
+    #endif // VK_INTEL_performance_query
+
     #ifdef VK_EXT_debug_marker
         void beginDebugMarker(const char *name,
             uint32_t color) noexcept;
