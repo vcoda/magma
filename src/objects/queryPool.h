@@ -172,6 +172,25 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
     };
 
+    /* Allows an application to capture performance data to be
+       interpreted by an external application or library. Such a
+       library is available at https://github.com/intel/metrics-discovery
+       Performance analysis tools such as Graphics Performance Analyzers
+       make use of this extension and the metrics-discovery library
+       to present the data in a human readable way. */
+
+#ifdef VK_INTEL_performance_query
+    class PerformanceQueryIntel : public QueryPool
+    {
+    public:
+        explicit PerformanceQueryIntel(std::shared_ptr<Device> device,
+            VkQueryPoolSamplingModeINTEL samplingMode,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        std::vector<uint8_t> getResults(VkDeviceSize queryReportSize,
+            bool wait) const;
+    };
+#endif // VK_INTEL_performance_query
+
     /* The mesh-primitives-generated count is incremented every time
        a primitive emitted from the mesh shader stage reaches the
        fragment shader stage. When a generated mesh primitives query

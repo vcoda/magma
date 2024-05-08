@@ -185,6 +185,30 @@ TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCou
     IntegerQueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator), extendedInfo)
 {}
 
+#ifdef VK_INTEL_performance_query
+PerformanceQueryIntel::PerformanceQueryIntel(std::shared_ptr<Device> device, VkQueryPoolSamplingModeINTEL samplingMode,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    QueryPool(VK_QUERY_TYPE_PERFORMANCE_QUERY_INTEL, std::move(device), 1, 0, 0, std::move(allocator),
+        StructureChain(
+            VkQueryPoolPerformanceQueryCreateInfoINTEL{
+                VK_STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_QUERY_CREATE_INFO_INTEL,
+                nullptr,
+                samplingMode
+            }
+        )
+    )
+{}
+
+std::vector<uint8_t> PerformanceQueryIntel::getResults(VkDeviceSize queryReportSize, bool wait) const
+{
+    const VkQueryResultFlags flags = (wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
+    std::vector<uint8_t> data(queryReportSize, 0);
+    const VkResult result = vkGetQueryPoolResults(getNativeDevice(), handle, 0, 1, queryReportSize, data.data(), queryReportSize, flags);
+    MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
+    return data;
+}
+#endif // VK_INTEL_performance_query
+
 #ifdef VK_EXT_mesh_shader
 MeshPrimitivesQuery::MeshPrimitivesQuery(std::shared_ptr<Device> device, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
