@@ -27,7 +27,9 @@ namespace magma
     class StructureChain final
     {
     public:
-        StructureChain() noexcept: head(nullptr) {}
+        StructureChain() noexcept;
+        template<class StructureType>
+        StructureChain(const StructureType& node) noexcept;
         StructureChain(const StructureChain& other) noexcept;
         StructureChain(StructureChain&& other) noexcept;
         ~StructureChain() { clear(); }

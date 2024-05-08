@@ -1,5 +1,19 @@
 namespace magma
 {
+inline StructureChain::StructureChain() noexcept:
+    head(nullptr)
+{}
+
+template<class StructureType>
+inline StructureChain::StructureChain(const StructureType& node) noexcept:
+    head(copyNode(reinterpret_cast<const VkBaseOutStructure *>(&node)))
+{
+    static_assert(std::is_trivially_copyable<StructureType>::value,
+        "node type is required to be trivially copyable");
+    static_assert(sizeof(StructureType) > sizeof(VkBaseOutStructure),
+        "node type size mismatch");
+}
+
 inline StructureChain::StructureChain(StructureChain&& other) noexcept:
     head(other.head)
 {
