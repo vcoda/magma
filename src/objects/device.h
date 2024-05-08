@@ -109,6 +109,11 @@ namespace magma
         void setPrivateDataSlot(std::shared_ptr<PrivateDataSlot> privateDataSlot_) noexcept { privateDataSlot = privateDataSlot_; }
         std::shared_ptr<PrivateDataSlot> getPrivateDataSlot() const noexcept { return privateDataSlot.lock(); }
     #endif // VK_EXT_private_data
+    #ifdef VK_INTEL_performance_query
+        void acquirePerformanceConfiguration();
+        void releasePerformanceConfiguration();
+        VkPerformanceConfigurationINTEL getPerformanceConfiguration() const noexcept { return performanceConfiguration; }
+    #endif // VK_INTEL_performance_query
         template<class PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
@@ -139,6 +144,9 @@ namespace magma
         std::unordered_map<uint64_t, uint64_t> privateData;
     #ifdef VK_EXT_private_data
         std::weak_ptr<PrivateDataSlot> privateDataSlot;
+    #endif
+    #ifdef VK_INTEL_performance_query
+        VkPerformanceConfigurationINTEL performanceConfiguration;
     #endif
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         std::shared_ptr<DeviceResourcePool> resourcePool;

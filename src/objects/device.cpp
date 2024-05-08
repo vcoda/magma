@@ -45,6 +45,9 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     physicalDevice(std::move(physicalDevice_)),
     enabledFeatures(enabledFeatures_),
     enabledExtendedFeatures(enabledExtendedFeatures_)
+#ifdef VK_INTEL_performance_query
+   ,performanceConfiguration(VK_NULL_HANDLE)
+#endif
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
    ,resourcePool(std::make_shared<DeviceResourcePool>())
 #endif
@@ -394,6 +397,29 @@ DeviceFaultInfo Device::getFaultInfo() const
     return DeviceFaultInfo();
 }
 #endif // VK_EXT_device_fault
+
+#ifdef VK_INTEL_performance_query
+void Device::acquirePerformanceConfiguration()
+{
+    MAGMA_ASSERT(!performanceConfiguration);
+    VkPerformanceConfigurationAcquireInfoINTEL performanceConfigurationAcquireInfo;
+    performanceConfigurationAcquireInfo.sType = VK_STRUCTURE_TYPE_PERFORMANCE_CONFIGURATION_ACQUIRE_INFO_INTEL;
+    performanceConfigurationAcquireInfo.pNext = nullptr;
+    performanceConfigurationAcquireInfo.type = VK_PERFORMANCE_CONFIGURATION_TYPE_COMMAND_QUEUE_METRICS_DISCOVERY_ACTIVATED_INTEL;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquirePerformanceConfigurationINTEL, VK_INTEL_PERFORMANCE_QUERY_EXTENSION_NAME);
+    const VkResult result = vkAcquirePerformanceConfigurationINTEL(handle, &performanceConfigurationAcquireInfo, &performanceConfiguration);
+    MAGMA_HANDLE_RESULT(result, "failed to acquire performance configuration");
+}
+
+void Device::releasePerformanceConfiguration()
+{
+    MAGMA_ASSERT(performanceConfiguration);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkReleasePerformanceConfigurationINTEL, VK_INTEL_PERFORMANCE_QUERY_EXTENSION_NAME);
+    const VkResult result = vkReleasePerformanceConfigurationINTEL(handle, performanceConfiguration);
+    MAGMA_HANDLE_RESULT(result, "failed to release performance configuration");
+    performanceConfiguration = VK_NULL_HANDLE;
+}
+#endif // VK_INTEL_performance_query
 
 bool Device::extensionEnabled(const char *extensionName) const noexcept
 {
