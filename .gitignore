@@ -10,6 +10,7 @@ src/auxiliary/spirv/output
 
 *.obj
 *.pch
+*.gch
 *.ipch
 *.pdb
 
