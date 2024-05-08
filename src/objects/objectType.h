@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../misc/compatibility.h"
 
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
 namespace magma
 {
 /* This class should be specialized for concrete Vulkan type. */
@@ -40,7 +41,6 @@ MAGMA_SPECIALIZE_OBJECT_TYPE(VkPhysicalDevice, VK_OBJECT_TYPE_PHYSICAL_DEVICE)
 MAGMA_SPECIALIZE_OBJECT_TYPE(VkDevice, VK_OBJECT_TYPE_DEVICE)
 MAGMA_SPECIALIZE_OBJECT_TYPE(VkQueue, VK_OBJECT_TYPE_QUEUE)
 MAGMA_SPECIALIZE_OBJECT_TYPE(VkCommandBuffer, VK_OBJECT_TYPE_COMMAND_BUFFER)
-#if (VK_USE_64_BIT_PTR_DEFINES == 1)
 MAGMA_SPECIALIZE_OBJECT_TYPE(VkSemaphore, VK_OBJECT_TYPE_SEMAPHORE)
 MAGMA_SPECIALIZE_OBJECT_TYPE(VkFence, VK_OBJECT_TYPE_FENCE)
 MAGMA_SPECIALIZE_OBJECT_TYPE(VkDeviceMemory, VK_OBJECT_TYPE_DEVICE_MEMORY)
