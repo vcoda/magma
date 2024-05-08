@@ -41,6 +41,18 @@ Queue::Queue(VkQueue handle, VkQueueFlagBits flags, uint32_t familyIndex, uint32
 #endif
 }
 
+#ifdef VK_INTEL_performance_query
+void Queue::setPerformanceConfiguration(std::shared_ptr<const Device> device)
+{
+    auto getNativeDevice = [&device]() -> VkDevice { return device->getHandle(); };
+    VkPerformanceConfigurationINTEL configuration = device->getPerformanceConfiguration();
+    MAGMA_ASSERT(configuration);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkQueueSetPerformanceConfigurationINTEL, VK_INTEL_PERFORMANCE_QUERY_EXTENSION_NAME);
+    const VkResult result = vkQueueSetPerformanceConfigurationINTEL(handle, configuration);
+    MAGMA_HANDLE_RESULT(result, "failed to set performance configuration");
+}
+#endif // VK_INTEL_performance_query
+
 void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
     const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
     const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,

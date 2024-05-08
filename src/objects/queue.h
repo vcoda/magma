@@ -53,6 +53,9 @@ namespace magma
         void setPresentMode(VkPresentModeKHR presentMode_) noexcept { presentMode = presentMode_; }
         VkPresentModeKHR getPresentMode() const noexcept { return presentMode; }
     #endif // VK_EXT_swapchain_maintenance1
+    #ifdef VK_INTEL_performance_query
+        void setPerformanceConfiguration(std::shared_ptr<const Device> device);
+    #endif
         void submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
             const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
             const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},
