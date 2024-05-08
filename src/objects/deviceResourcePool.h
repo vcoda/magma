@@ -88,11 +88,12 @@ namespace magma
     #ifdef VK_EXT_debug_utils
         Pool<VkDebugUtilsMessengerEXT> debugUtilsMessengers;
     #endif
-    #ifdef VK_KHR_acceleration_structure
-        Pool<VkAccelerationStructureKHR> accelerationStructures;
-    #elif defined(VK_NV_ray_tracing)
-        Pool<VkAccelerationStructureNV> accelerationStructures;
-    #endif
+#ifdef VK_KHR_acceleration_structure
+    Pool<VkAccelerationStructureKHR> accelerationStructuresKhr;
+#endif
+#ifdef VK_NV_ray_tracing
+    Pool<VkAccelerationStructureNV> accelerationStructures;
+#endif
     #ifdef VK_EXT_validation_cache
         Pool<VkValidationCacheEXT> validationCaches;
     #endif
