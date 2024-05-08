@@ -26,13 +26,10 @@ inline void StructureChain::linkNode(const StructureType& node) noexcept
         "node type size mismatch");
     MAGMA_ASSERT(sizeOf(node.sType) == sizeof(StructureType));
     VkBaseOutStructure *tail = copyNode(reinterpret_cast<const VkBaseOutStructure *>(&node));
-    if (tail)
-    {
-        if (!head)
-            head = tail;
-        else
-            tailNode()->pNext = tail;
-    }
+    if (!head)
+        head = tail;
+    else
+        tailNode()->pNext = tail;
 }
 
 inline VkBaseOutStructure *StructureChain::tailNode() noexcept
