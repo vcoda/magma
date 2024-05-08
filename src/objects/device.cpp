@@ -419,6 +419,15 @@ void Device::releasePerformanceConfiguration()
     MAGMA_HANDLE_RESULT(result, "failed to release performance configuration");
     performanceConfiguration = VK_NULL_HANDLE;
 }
+
+VkPerformanceValueINTEL Device::getPerformanceParameter(VkPerformanceParameterTypeINTEL parameter)
+{
+    VkPerformanceValueINTEL value;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPerformanceParameterINTEL, VK_INTEL_PERFORMANCE_QUERY_EXTENSION_NAME);
+    const VkResult result = vkGetPerformanceParameterINTEL(handle, parameter, &value);
+    MAGMA_HANDLE_RESULT(result, "failed to get performance parameter");
+    return value;
+}
 #endif // VK_INTEL_performance_query
 
 bool Device::extensionEnabled(const char *extensionName) const noexcept

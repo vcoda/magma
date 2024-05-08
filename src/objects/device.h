@@ -113,6 +113,7 @@ namespace magma
         void acquirePerformanceConfiguration();
         void releasePerformanceConfiguration();
         VkPerformanceConfigurationINTEL getPerformanceConfiguration() const noexcept { return performanceConfiguration; }
+        VkPerformanceValueINTEL getPerformanceParameter(VkPerformanceParameterTypeINTEL parameter);
     #endif // VK_INTEL_performance_query
         template<class PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
