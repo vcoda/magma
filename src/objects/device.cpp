@@ -76,12 +76,22 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
         }
     }
 #endif // VK_KHR_get_physical_device_properties2
-    const VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
 #ifndef MAGMA_NO_EXCEPTIONS
     if (VK_ERROR_INITIALIZATION_FAILED == result)
         throw exception::InitializationFailed("failed to create logical device");
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create logical device");
+    if (extensionEnabled(VK_INTEL_PERFORMANCE_QUERY_EXTENSION_NAME))
+    {
+        VkInitializePerformanceApiInfoINTEL initializePerformanceApiInfo;
+        initializePerformanceApiInfo.sType = VK_STRUCTURE_TYPE_INITIALIZE_PERFORMANCE_API_INFO_INTEL;
+        initializePerformanceApiInfo.pNext = nullptr;
+        initializePerformanceApiInfo.pUserData = nullptr;
+        MAGMA_REQUIRED_DEVICE_EXTENSION(vkInitializePerformanceApiINTEL, VK_INTEL_PERFORMANCE_QUERY_EXTENSION_NAME);
+        result = vkInitializePerformanceApiINTEL(handle, &initializePerformanceApiInfo);
+        MAGMA_HANDLE_RESULT(result, "failed to initializer performance API");
+    }
     queues.reserve(queueDescriptors.size());
     for (auto const& desc: queueDescriptors)
         queues.emplace_back(desc, std::weak_ptr<Queue>());
@@ -104,6 +114,11 @@ Device::~Device()
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
     MAGMA_ASSERT(!resourcePool->hasUnreleasedResources());
 #endif
+    if (extensionEnabled(VK_INTEL_PERFORMANCE_QUERY_EXTENSION_NAME))
+    {
+        MAGMA_REQUIRED_DEVICE_EXTENSION(vkUninitializePerformanceApiINTEL, VK_INTEL_PERFORMANCE_QUERY_EXTENSION_NAME);
+        vkUninitializePerformanceApiINTEL(handle);
+    }
     vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
