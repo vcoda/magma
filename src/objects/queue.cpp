@@ -229,11 +229,11 @@ void Queue::waitIdle()
 void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     std::shared_ptr<Fence> presentFence /* nullptr */,
-    const void *extendedInfo /* nullptr */)
+    const StructureChain& extendedInfo /* default */)
 {
     VkPresentInfoKHR presentInfo;
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    presentInfo.pNext = extendedInfo;
+    presentInfo.pNext = extendedInfo.headNode();
     if (waitSemaphore)
     {
         presentInfo.waitSemaphoreCount = 1;
@@ -306,7 +306,8 @@ void Queue::presentDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t 
     displayPresentInfo.srcRect = srcRect;
     displayPresentInfo.dstRect = dstRect;
     displayPresentInfo.persistent = MAGMA_BOOLEAN(persistent);
-    present(std::move(swapchain), imageIndex, std::move(waitSemaphore), std::move(presentFence), &displayPresentInfo);
+    present(std::move(swapchain), imageIndex, std::move(waitSemaphore), std::move(presentFence),
+        StructureChain(displayPresentInfo));
 }
 #endif // VK_KHR_display_swapchain
 } // namespace magma
