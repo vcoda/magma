@@ -257,6 +257,55 @@ std::vector<VkRect2D> PhysicalDevice::getPresentRectangles(std::shared_ptr<const
     return presentRects;
 }
 #endif // VK_KHR_device_group
+
+#ifdef VK_KHR_performance_query
+std::vector<VkPerformanceCounterKHR> PhysicalDevice::enumerateQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const
+{
+    uint32_t counterCount = 0;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
+    VkResult result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex, &counterCount, nullptr, nullptr);
+    std::vector<VkPerformanceCounterKHR> counters;
+    if (counterCount)
+    {
+        counters.resize(counterCount);
+        result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex,
+            &counterCount, counters.data(), nullptr);
+    }
+    MAGMA_HANDLE_RESULT(result, "failed to enumerate performance counters");
+    return counters;
+}
+
+std::vector<VkPerformanceCounterDescriptionKHR> PhysicalDevice::enumerateQueueFamilyPerformanceCounterDescriptions(uint32_t queueFamilyIndex) const
+{
+    uint32_t counterCount = 0;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
+    VkResult result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex, &counterCount, nullptr, nullptr);
+    std::vector<VkPerformanceCounterDescriptionKHR> counterDescriptions;
+    if (counterCount)
+    {
+        counterDescriptions.resize(counterCount);
+        result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex,
+            &counterCount, nullptr, counterDescriptions.data());
+    }
+    MAGMA_HANDLE_RESULT(result, "failed to enumerate descriptions of performance counters");
+    return counterDescriptions;
+}
+
+uint32_t PhysicalDevice::getNumPerformanceQueryPasses(uint32_t queueFamilyIndex, const std::vector<uint32_t>& counterIndices) const
+{
+    VkQueryPoolPerformanceCreateInfoKHR queryPoolPerformanceInfo;
+    queryPoolPerformanceInfo.sType = VK_STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_CREATE_INFO_KHR;
+    queryPoolPerformanceInfo.pNext = nullptr;
+    queryPoolPerformanceInfo.queueFamilyIndex = queueFamilyIndex;
+    queryPoolPerformanceInfo.counterIndexCount = MAGMA_COUNT(counterIndices),
+    queryPoolPerformanceInfo.pCounterIndices = counterIndices.data();
+    uint32_t numPasses = 0;
+    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
+    vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR(handle, &queryPoolPerformanceInfo, &numPasses);
+    return numPasses;
+}
+#endif // VK_KHR_performance_query
+
 #ifdef VK_AMD_display_native_hdr
 bool PhysicalDevice::getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const
 {

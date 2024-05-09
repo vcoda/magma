@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 #include "queryPool.h"
 #include "device.h"
+#include "physicalDevice.h"
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
@@ -184,6 +185,40 @@ TimestampQuery::TimestampQuery(std::shared_ptr<Device> device, uint32_t queryCou
     const StructureChain& extendedInfo /* default */):
     IntegerQueryPool(VK_QUERY_TYPE_TIMESTAMP, std::move(device), queryCount, 0, std::move(allocator), extendedInfo)
 {}
+
+#ifdef VK_KHR_performance_query
+PerformanceQuery::PerformanceQuery(std::shared_ptr<Device> device, uint32_t queueFamilyIndex, const std::vector<uint32_t>& counterIndices,
+    std::shared_ptr<IAllocator> allocator /* nullptr */):
+    QueryPool(VK_QUERY_TYPE_PERFORMANCE_QUERY_KHR, std::move(device), 1, 0, 0, std::move(allocator),
+        StructureChain(
+            VkQueryPoolPerformanceCreateInfoKHR{
+                VK_STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_CREATE_INFO_KHR,
+                nullptr,
+                queueFamilyIndex,
+                MAGMA_COUNT(counterIndices),
+                counterIndices.data()
+            })),
+    queueFamilyIndex(queueFamilyIndex),
+    counterIndices(counterIndices)
+{}
+
+uint32_t PerformanceQuery::getNumPasses() const
+{
+    return device->getPhysicalDevice()->getNumPerformanceQueryPasses(queueFamilyIndex, counterIndices);
+}
+
+std::vector<VkPerformanceCounterResultKHR> PerformanceQuery::getResults(bool wait) const
+{
+    std::vector<VkPerformanceCounterResultKHR> counters(counterIndices.size(), VkPerformanceCounterResultKHR{});
+    const VkResult result = vkGetQueryPoolResults(getNativeDevice(), handle, 0, 1,
+        sizeof(VkPerformanceCounterResultKHR) * counters.size(),
+        counters.data(),
+        sizeof(VkPerformanceCounterResultKHR) * counters.size(),
+        wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
+    MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
+    return counters;
+}
+#endif // VK_KHR_performance_query
 
 #ifdef VK_EXT_mesh_shader
 MeshPrimitivesQuery::MeshPrimitivesQuery(std::shared_ptr<Device> device, uint32_t queryCount,

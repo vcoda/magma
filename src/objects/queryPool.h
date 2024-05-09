@@ -172,6 +172,30 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
     };
 
+    /* Adds a mechanism to allow querying of performance counters
+       for use in applications and by profiling tools. Each queue
+       family may expose counters that can be enabled on a queue
+       of that family. */
+
+#ifdef VK_KHR_performance_query
+    class PerformanceQuery : public QueryPool
+    {
+    public:
+        explicit PerformanceQuery(std::shared_ptr<Device> device,
+            uint32_t queueFamilyIndex,
+            const std::vector<uint32_t>& counterIndices,
+            std::shared_ptr<IAllocator> allocator = nullptr);
+        const uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
+        const std::vector<uint32_t>& getCounterIndices() const noexcept { return counterIndices; }
+        uint32_t getNumPasses() const;
+        std::vector<VkPerformanceCounterResultKHR> getResults(bool wait) const;
+
+    private:
+        const uint32_t queueFamilyIndex;
+        const std::vector<uint32_t> counterIndices;
+    };
+#endif // VK_KHR_performance_query
+
     /* The mesh-primitives-generated count is incremented every time
        a primitive emitted from the mesh shader stage reaches the
        fragment shader stage. When a generated mesh primitives query

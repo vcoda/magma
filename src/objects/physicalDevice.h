@@ -72,6 +72,12 @@ namespace magma
     #ifdef VK_KHR_device_group
         std::vector<VkRect2D> getPresentRectangles(std::shared_ptr<const Surface> surface) const;
     #endif
+    #ifdef VK_KHR_performance_query
+        std::vector<VkPerformanceCounterKHR> enumerateQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const;
+        std::vector<VkPerformanceCounterDescriptionKHR> enumerateQueueFamilyPerformanceCounterDescriptions(uint32_t queueFamilyIndex) const;
+        uint32_t getNumPerformanceQueryPasses(uint32_t queueFamilyIndex,
+            const std::vector<uint32_t>& counterIndices) const;
+    #endif // VK_KHR_performance_query
     #ifdef VK_AMD_display_native_hdr
         bool getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const;
     #endif

@@ -82,6 +82,11 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain()) const;
     #endif // VK_EXT_descriptor_indexing
     #endif // VK_KHR_maintenance3
+    #ifdef VK_KHR_performance_query
+        void acquireProfilingLock(VkAcquireProfilingLockFlagsKHR flags = 0,
+            uint64_t timeout = std::numeric_limits<uint64_t>::max());
+        void releaseProfilingLock();
+    #endif // VK_KHR_performance_query
     #ifdef VK_KHR_device_group
         VkDeviceGroupPresentCapabilitiesKHR getDeviceGroupPresentCapabilitiesKHR() const;
         VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfacePresentModes(std::shared_ptr<const Surface> surface) const;

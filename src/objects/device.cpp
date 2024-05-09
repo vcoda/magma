@@ -271,6 +271,27 @@ uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDes
 #endif // VK_EXT_descriptor_indexing
 #endif // VK_KHR_maintenance3
 
+#ifdef VK_KHR_performance_query
+void Device::acquireProfilingLock(VkAcquireProfilingLockFlagsKHR flags /* 0 */,
+    uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
+{
+    VkAcquireProfilingLockInfoKHR acquireProfilingLockInfo;
+    acquireProfilingLockInfo.sType = VK_STRUCTURE_TYPE_ACQUIRE_PROFILING_LOCK_INFO_KHR;
+    acquireProfilingLockInfo.pNext = nullptr;
+    acquireProfilingLockInfo.flags = flags;
+    acquireProfilingLockInfo.timeout = timeout;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquireProfilingLockKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
+    const VkResult result = vkAcquireProfilingLockKHR(handle, &acquireProfilingLockInfo);
+    MAGMA_HANDLE_RESULT(result, "failed to acquire profiling lock");
+}
+
+void Device::releaseProfilingLock()
+{
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkReleaseProfilingLockKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
+    vkReleaseProfilingLockKHR(handle);
+}
+#endif // VK_KHR_performance_query
+
 #ifdef VK_KHR_device_group
 VkDeviceGroupPresentCapabilitiesKHR Device::getDeviceGroupPresentCapabilitiesKHR() const
 {
