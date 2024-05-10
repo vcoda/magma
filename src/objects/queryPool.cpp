@@ -210,6 +210,9 @@ uint32_t PerformanceQuery::getNumPasses() const
 std::vector<VkPerformanceCounterResultKHR> PerformanceQuery::getResults(bool wait) const
 {
     std::vector<VkPerformanceCounterResultKHR> counters(counterIndices.size(), VkPerformanceCounterResultKHR{});
+    // If the queryType used to create queryPool was VK_QUERY_TYPE_PERFORMANCE_QUERY_KHR,
+    // flags must not contain VK_QUERY_RESULT_WITH_AVAILABILITY_BIT, VK_QUERY_RESULT_WITH_STATUS_BIT_KHR,
+    // VK_QUERY_RESULT_PARTIAL_BIT, or VK_QUERY_RESULT_64_BIT.
     const VkResult result = vkGetQueryPoolResults(getNativeDevice(), handle, 0, 1,
         sizeof(VkPerformanceCounterResultKHR) * counters.size(),
         counters.data(),
