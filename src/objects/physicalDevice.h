@@ -73,6 +73,7 @@ namespace magma
         std::vector<VkRect2D> getPresentRectangles(std::shared_ptr<const Surface> surface) const;
     #endif
     #ifdef VK_KHR_performance_query
+        uint32_t getNumQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const noexcept;
         std::vector<VkPerformanceCounterKHR> enumerateQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const;
         std::vector<VkPerformanceCounterDescriptionKHR> enumerateQueueFamilyPerformanceCounterDescriptions(uint32_t queueFamilyIndex) const;
         uint32_t getNumPerformanceQueryPasses(uint32_t queueFamilyIndex,

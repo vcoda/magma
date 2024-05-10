@@ -259,35 +259,41 @@ std::vector<VkRect2D> PhysicalDevice::getPresentRectangles(std::shared_ptr<const
 #endif // VK_KHR_device_group
 
 #ifdef VK_KHR_performance_query
-std::vector<VkPerformanceCounterKHR> PhysicalDevice::enumerateQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const
+uint32_t PhysicalDevice::getNumQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const noexcept
 {
     uint32_t counterCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
-    VkResult result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex, &counterCount, nullptr, nullptr);
+    vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex, &counterCount, nullptr, nullptr);
+    return counterCount;
+}
+
+std::vector<VkPerformanceCounterKHR> PhysicalDevice::enumerateQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const
+{
     std::vector<VkPerformanceCounterKHR> counters;
+    uint32_t counterCount = getNumQueueFamilyPerformanceCounters(queueFamilyIndex);
     if (counterCount)
     {
         counters.resize(counterCount, {VK_STRUCTURE_TYPE_PERFORMANCE_COUNTER_KHR});
-        result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex,
+        MAGMA_REQUIRED_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
+        const VkResult result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex,
             &counterCount, counters.data(), nullptr);
+        MAGMA_HANDLE_RESULT(result, "failed to enumerate performance counters");
     }
-    MAGMA_HANDLE_RESULT(result, "failed to enumerate performance counters");
     return counters;
 }
 
 std::vector<VkPerformanceCounterDescriptionKHR> PhysicalDevice::enumerateQueueFamilyPerformanceCounterDescriptions(uint32_t queueFamilyIndex) const
 {
-    uint32_t counterCount = 0;
-    MAGMA_REQUIRED_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
-    VkResult result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex, &counterCount, nullptr, nullptr);
     std::vector<VkPerformanceCounterDescriptionKHR> counterDescriptions;
+    uint32_t counterCount = getNumQueueFamilyPerformanceCounters(queueFamilyIndex);
     if (counterCount)
     {
         counterDescriptions.resize(counterCount, {VK_STRUCTURE_TYPE_PERFORMANCE_COUNTER_DESCRIPTION_KHR});
-        result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex,
+        MAGMA_REQUIRED_INSTANCE_EXTENSION(vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
+        const VkResult result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex,
             &counterCount, nullptr, counterDescriptions.data());
+        MAGMA_HANDLE_RESULT(result, "failed to enumerate descriptions of performance counters");
     }
-    MAGMA_HANDLE_RESULT(result, "failed to enumerate descriptions of performance counters");
     return counterDescriptions;
 }
 
