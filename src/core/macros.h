@@ -73,13 +73,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     ((frontFace && backFace) ? VK_STENCIL_FRONT_AND_BACK :\
      (frontFace ? VK_STENCIL_FACE_FRONT_BIT : VK_STENCIL_FACE_BACK_BIT))
 
-#define MAGMA_TRY_CATCH(expression)\
-try {\
-    expression;\
-}\
-catch (...) {\
-}
-
 #ifdef MAGMA_NO_EXCEPTIONS
     #define MAGMA_THROW return
 #else

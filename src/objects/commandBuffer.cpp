@@ -852,7 +852,11 @@ CommandBuffer::PipelineBarrierBatch *CommandBuffer::lookupBarrierBatch(VkPipelin
     if (it != pipelineBarriers.end())
         return &it->second;
     PipelineBarrierBatch batch{srcStageMask, dstStageMask, dependencyFlags};
-    MAGMA_TRY_CATCH(it = pipelineBarriers.emplace(hash, batch).first);
+    try
+    {
+        it = pipelineBarriers.emplace(hash, batch).first;
+    }
+    catch (...) {}
     if (it != pipelineBarriers.end())
         return &it->second;
     return nullptr;
