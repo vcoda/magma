@@ -17,17 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__) || defined(_X86_) || defined(__amd64__)
-#include <nmmintrin.h>
-#else
-#include <arm_neon.h>
-#endif
 #include "queryPool.h"
 #include "device.h"
 #include "physicalDevice.h"
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
+#include "../core/popCount.h"
 
 namespace magma
 {
@@ -89,28 +85,7 @@ PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
     flags(flags)
 {   // Pipeline statistics queries write one integer value for each bit
     // that is enabled in the pipelineStatistics when the pool is created.
-    int count;
-#if defined(_INCLUDED_NMM) /* msc */ ||\
-    defined(_NMMINTRIN_H_INCLUDED) /* gcc */ ||\
-    defined(_NMMINTRIN_H) /* clang */
-    count = _mm_popcnt_u32(flags);
-#elif defined(__aarch64__)
-    #if __has_builtin(__builtin_popcount)
-    count = __builtin_popcount(flags);
-    #else
-    count = (int)vaddlv_u8(vcnt_u8(vcreate_u8((uint64_t)flags)));
-    #endif // __has_builtin(__builtin_popcount)
-#else
-    constexpr uint32_t c1 = 0x55555555u;
-    constexpr uint32_t c2 = 0x33333333u;
-    constexpr uint32_t c4 = 0x0f0f0f0fu;
-    uint32_t x = flags;
-    x -= (x >> 1) & c1;
-    x = ((x >> 2) & c2) + (x & c2);
-    x = (x + (x >> 4)) & c4;
-    x *= 0x01010101u;
-    count = int(x >> 24);
-#endif // !defined(__aarch64__)
+    const int count = core::popCount(flags);
     // If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
     // of each query's result is an integer indicating whether the query's result
     // is available, with any non-zero value indicating that it is available.

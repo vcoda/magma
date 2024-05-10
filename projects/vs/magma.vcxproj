@@ -202,6 +202,8 @@
     <ClInclude Include="..\..\src\core\macros.h" />
     <ClInclude Include="..\..\src\core\memory.h" />
     <ClInclude Include="..\..\src\core\pch.h" />
+    <ClInclude Include="..\..\src\core\popCount.h" />
+    <ClInclude Include="..\..\src\core\popCount.inl" />
     <ClInclude Include="..\..\src\core\refCountChecker.h" />
     <ClInclude Include="..\..\src\core\typedefs.h" />
     <ClInclude Include="..\..\src\core\zeroMemory.h" />
