@@ -297,7 +297,7 @@ std::vector<VkPerformanceCounterDescriptionKHR> PhysicalDevice::enumerateQueueFa
     return counterDescriptions;
 }
 
-uint32_t PhysicalDevice::getNumPerformanceQueryPasses(uint32_t queueFamilyIndex, const std::vector<uint32_t>& counterIndices) const
+uint32_t PhysicalDevice::getNumQueueFamilyPerformanceQueryPasses(uint32_t queueFamilyIndex, const std::vector<uint32_t>& counterIndices) const
 {
     VkQueryPoolPerformanceCreateInfoKHR queryPoolPerformanceInfo;
     queryPoolPerformanceInfo.sType = VK_STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_CREATE_INFO_KHR;

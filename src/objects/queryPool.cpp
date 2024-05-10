@@ -204,7 +204,7 @@ PerformanceQuery::PerformanceQuery(std::shared_ptr<Device> device, uint32_t queu
 
 uint32_t PerformanceQuery::getNumPasses() const
 {
-    return device->getPhysicalDevice()->getNumPerformanceQueryPasses(queueFamilyIndex, counterIndices);
+    return device->getPhysicalDevice()->getNumQueueFamilyPerformanceQueryPasses(queueFamilyIndex, counterIndices);
 }
 
 std::vector<VkPerformanceCounterResultKHR> PerformanceQuery::getResults(bool wait) const

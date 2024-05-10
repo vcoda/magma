@@ -76,7 +76,7 @@ namespace magma
         uint32_t getNumQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const noexcept;
         std::vector<VkPerformanceCounterKHR> enumerateQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const;
         std::vector<VkPerformanceCounterDescriptionKHR> enumerateQueueFamilyPerformanceCounterDescriptions(uint32_t queueFamilyIndex) const;
-        uint32_t getNumPerformanceQueryPasses(uint32_t queueFamilyIndex,
+        uint32_t getNumQueueFamilyPerformanceQueryPasses(uint32_t queueFamilyIndex,
             const std::vector<uint32_t>& counterIndices) const;
     #endif // VK_KHR_performance_query
     #ifdef VK_AMD_display_native_hdr
