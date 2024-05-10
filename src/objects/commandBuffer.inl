@@ -730,8 +730,13 @@ inline void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags
     pipelineStatistics = pipelineStatistics_;
 }
 
-inline void CommandBuffer::onSubmit() noexcept
+inline void CommandBuffer::onQueueSubmission() noexcept
 {
-    state = (usageFlags & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT) ? State::Invalid : State::Pending;
+    state = State::Pending;
+}
+
+inline void CommandBuffer::onExecutionCompleted() noexcept
+{
+    state = (usageFlags & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT) ? State::Invalid : State::Executable;
 }
 } // namespace magma

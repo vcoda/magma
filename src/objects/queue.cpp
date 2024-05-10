@@ -96,7 +96,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     MAGMA_HANDLE_RESULT(result, "queue submission failed");
     for (auto& cmdBuffer : cmdBuffers)
     {   // Change state of command buffer
-        cmdBuffer->onSubmit();
+        cmdBuffer->onQueueSubmission();
     }
 }
 

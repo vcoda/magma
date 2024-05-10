@@ -531,11 +531,12 @@ namespace magma
         bool insideRenderPass() const noexcept { return inRenderPass; }
         bool insideConditionalRendering() const noexcept { return inConditionalRendering; }
         bool insideTransformFeedback() const noexcept { return inTransformFeedback; }
-
         void enableOcclusionQuery(bool enable,
             VkQueryControlFlags queryFlags) noexcept;
         void enableConditionalRendering(bool enable) noexcept;
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
+        void onQueueSubmission() noexcept;
+        void onExecutionCompleted() noexcept;
 
         void releaseBoundResources() const noexcept;
 
@@ -599,9 +600,7 @@ namespace magma
             std::shared_ptr<CommandPool> cmdPool);
         CommandBuffer(VkCommandBufferLevel level,
             std::shared_ptr<CommandPool> cmdPool);
-        void onSubmit() noexcept;
         friend CommandPool;
-        friend Queue;
 
     private:
         VkDevice getNativeDevice() const noexcept;
