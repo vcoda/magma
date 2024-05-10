@@ -160,6 +160,9 @@ namespace magma
 #ifdef VK_KHR_multiview
     MAGMA_TYPEDEF_SHARED_PTR(MultiviewRenderPass);
 #endif
+#ifdef VK_KHR_performance_query
+    MAGMA_TYPEDEF_SHARED_PTR(PerformanceQuery);
+#endif
 #ifdef VK_KHR_pipeline_executable_properties
     MAGMA_TYPEDEF_SHARED_PTR(PipelineExecutable);
 #endif
