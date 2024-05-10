@@ -497,20 +497,29 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 1, &barrier, 0, nullptr, 0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        1, &barrier,
+        0, nullptr,
+        0, nullptr);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 1, &barrier, 0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        0, nullptr,
+        1, &barrier,
+        0, nullptr);
     MAGMA_DEFER(barrier.buffer);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 0, nullptr, 1, &barrier);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        0, nullptr,
+        0, nullptr,
+        1, &barrier);
     MAGMA_DEFER(barrier.image);
     barrier.image->setLayout(barrier.newLayout);
 }
