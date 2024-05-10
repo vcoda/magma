@@ -27,18 +27,21 @@ void CommandBuffer::beginDebugMarker(const char *name, uint32_t color) noexcept
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
-    MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerBeginEXT);
-    if (vkCmdDebugMarkerBeginEXT)
+    if (debugMarkerEnabled)
     {
-        VkDebugMarkerMarkerInfoEXT debugMarkerInfo;
-        debugMarkerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
-        debugMarkerInfo.pNext = nullptr;
-        debugMarkerInfo.pMarkerName = name;
-        debugMarkerInfo.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
-        debugMarkerInfo.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
-        debugMarkerInfo.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
-        debugMarkerInfo.color[3] = (color & 0xFF) / 255.f; // A
-        vkCmdDebugMarkerBeginEXT(handle, &debugMarkerInfo);
+        MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerBeginEXT);
+        if (vkCmdDebugMarkerBeginEXT)
+        {
+            VkDebugMarkerMarkerInfoEXT debugMarkerInfo;
+            debugMarkerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
+            debugMarkerInfo.pNext = nullptr;
+            debugMarkerInfo.pMarkerName = name;
+            debugMarkerInfo.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
+            debugMarkerInfo.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
+            debugMarkerInfo.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
+            debugMarkerInfo.color[3] = (color & 0xFF) / 255.f; // A
+            vkCmdDebugMarkerBeginEXT(handle, &debugMarkerInfo);
+        }
     }
 #else
     MAGMA_UNUSED(name);
@@ -49,9 +52,12 @@ void CommandBuffer::beginDebugMarker(const char *name, uint32_t color) noexcept
 void CommandBuffer::endDebugMarker() noexcept
 {
 #ifdef MAGMA_DEBUG
-    MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerEndEXT);
-    if (vkCmdDebugMarkerEndEXT)
-        vkCmdDebugMarkerEndEXT(handle);
+    if (debugMarkerEnabled)
+    {
+        MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerEndEXT);
+        if (vkCmdDebugMarkerEndEXT)
+            vkCmdDebugMarkerEndEXT(handle);
+    }
 #endif // MAGMA_DEBUG
 }
 
@@ -60,18 +66,21 @@ void CommandBuffer::insertDebugMarker(const char *name, uint32_t color) noexcept
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
-    MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
-    if (vkCmdDebugMarkerInsertEXT)
+    if (debugMarkerEnabled)
     {
-        VkDebugMarkerMarkerInfoEXT debugMarkerInfo;
-        debugMarkerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
-        debugMarkerInfo.pNext = nullptr;
-        debugMarkerInfo.pMarkerName = name;
-        debugMarkerInfo.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
-        debugMarkerInfo.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
-        debugMarkerInfo.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
-        debugMarkerInfo.color[3] = (color & 0xFF) / 255.f; // A
-        vkCmdDebugMarkerInsertEXT(handle, &debugMarkerInfo);
+        MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
+        if (vkCmdDebugMarkerInsertEXT)
+        {
+            VkDebugMarkerMarkerInfoEXT debugMarkerInfo;
+            debugMarkerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
+            debugMarkerInfo.pNext = nullptr;
+            debugMarkerInfo.pMarkerName = name;
+            debugMarkerInfo.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
+            debugMarkerInfo.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
+            debugMarkerInfo.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
+            debugMarkerInfo.color[3] = (color & 0xFF) / 255.f; // A
+            vkCmdDebugMarkerInsertEXT(handle, &debugMarkerInfo);
+        }
     }
 #else
     MAGMA_UNUSED(name);
@@ -86,18 +95,21 @@ void CommandBuffer::beginDebugLabel(const char *name, uint32_t color) noexcept
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
-    MAGMA_DEVICE_EXTENSION(vkCmdBeginDebugUtilsLabelEXT);
-    if (vkCmdBeginDebugUtilsLabelEXT)
+    if (debugUtilsEnabled)
     {
-        VkDebugUtilsLabelEXT debugUtilsLabel;
-        debugUtilsLabel.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
-        debugUtilsLabel.pNext = nullptr;
-        debugUtilsLabel.pLabelName = name;
-        debugUtilsLabel.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
-        debugUtilsLabel.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
-        debugUtilsLabel.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
-        debugUtilsLabel.color[3] = (color & 0xFF) / 255.f; // A
-        vkCmdBeginDebugUtilsLabelEXT(handle, &debugUtilsLabel);
+        MAGMA_DEVICE_EXTENSION(vkCmdBeginDebugUtilsLabelEXT);
+        if (vkCmdBeginDebugUtilsLabelEXT)
+        {
+            VkDebugUtilsLabelEXT debugUtilsLabel;
+            debugUtilsLabel.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
+            debugUtilsLabel.pNext = nullptr;
+            debugUtilsLabel.pLabelName = name;
+            debugUtilsLabel.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
+            debugUtilsLabel.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
+            debugUtilsLabel.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
+            debugUtilsLabel.color[3] = (color & 0xFF) / 255.f; // A
+            vkCmdBeginDebugUtilsLabelEXT(handle, &debugUtilsLabel);
+        }
     }
 #else
     MAGMA_UNUSED(name);
@@ -107,9 +119,12 @@ void CommandBuffer::beginDebugLabel(const char *name, uint32_t color) noexcept
 
 void CommandBuffer::endDebugLabel() noexcept
 {
-    MAGMA_DEVICE_EXTENSION(vkCmdEndDebugUtilsLabelEXT);
-    if (vkCmdEndDebugUtilsLabelEXT)
-        vkCmdEndDebugUtilsLabelEXT(handle);
+    if (debugUtilsEnabled)
+    {
+        MAGMA_DEVICE_EXTENSION(vkCmdEndDebugUtilsLabelEXT);
+        if (debugUtilsEnabled && vkCmdEndDebugUtilsLabelEXT)
+            vkCmdEndDebugUtilsLabelEXT(handle);
+    }
 }
 
 void CommandBuffer::insertDebugLabel(const char *name, uint32_t color) noexcept
@@ -117,18 +132,21 @@ void CommandBuffer::insertDebugLabel(const char *name, uint32_t color) noexcept
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
 #ifdef MAGMA_DEBUG
-    MAGMA_DEVICE_EXTENSION(vkCmdInsertDebugUtilsLabelEXT);
-    if (vkCmdInsertDebugUtilsLabelEXT)
+    if (debugUtilsEnabled)
     {
-        VkDebugUtilsLabelEXT debugUtilsLabel;
-        debugUtilsLabel.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
-        debugUtilsLabel.pNext = nullptr;
-        debugUtilsLabel.pLabelName = name;
-        debugUtilsLabel.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
-        debugUtilsLabel.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
-        debugUtilsLabel.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
-        debugUtilsLabel.color[3] = (color & 0xFF) / 255.f; // A
-        vkCmdInsertDebugUtilsLabelEXT(handle, &debugUtilsLabel);
+          MAGMA_DEVICE_EXTENSION(vkCmdInsertDebugUtilsLabelEXT);
+        if (vkCmdInsertDebugUtilsLabelEXT)
+        {
+            VkDebugUtilsLabelEXT debugUtilsLabel;
+            debugUtilsLabel.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
+            debugUtilsLabel.pNext = nullptr;
+            debugUtilsLabel.pLabelName = name;
+            debugUtilsLabel.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
+            debugUtilsLabel.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
+            debugUtilsLabel.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
+            debugUtilsLabel.color[3] = (color & 0xFF) / 255.f; // A
+            vkCmdInsertDebugUtilsLabelEXT(handle, &debugUtilsLabel);
+        }
     }
 #else
     MAGMA_UNUSED(name);
