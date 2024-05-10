@@ -267,7 +267,7 @@ std::vector<VkPerformanceCounterKHR> PhysicalDevice::enumerateQueueFamilyPerform
     std::vector<VkPerformanceCounterKHR> counters;
     if (counterCount)
     {
-        counters.resize(counterCount);
+        counters.resize(counterCount, {VK_STRUCTURE_TYPE_PERFORMANCE_COUNTER_KHR});
         result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex,
             &counterCount, counters.data(), nullptr);
     }
@@ -283,7 +283,7 @@ std::vector<VkPerformanceCounterDescriptionKHR> PhysicalDevice::enumerateQueueFa
     std::vector<VkPerformanceCounterDescriptionKHR> counterDescriptions;
     if (counterCount)
     {
-        counterDescriptions.resize(counterCount);
+        counterDescriptions.resize(counterCount, {VK_STRUCTURE_TYPE_PERFORMANCE_COUNTER_DESCRIPTION_KHR});
         result = vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(handle, queueFamilyIndex,
             &counterCount, nullptr, counterDescriptions.data());
     }
