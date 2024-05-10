@@ -185,7 +185,7 @@ namespace magma
             uint32_t queueFamilyIndex,
             const std::vector<uint32_t>& counterIndices,
             std::shared_ptr<IAllocator> allocator = nullptr);
-        const uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
+        uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
         const std::vector<uint32_t>& getCounterIndices() const noexcept { return counterIndices; }
         uint32_t getNumPasses() const;
         std::vector<VkPerformanceCounterResultKHR> getResults(bool wait) const;
