@@ -67,12 +67,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <vulkan/vulkan.h>
 
 /*
- * x86 SIMD
+ * SIMD
  */
 
 #ifdef MAGMA_SSE
 #include <xmmintrin.h>
 #include <smmintrin.h>
+#elif defined(MAGMA_NEON)
+#include <arm_neon.h>
 #endif
 
 /*
