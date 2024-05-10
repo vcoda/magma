@@ -485,6 +485,15 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
     MAGMA_DEFER(imageMemoryBarrier.image);
 }
 
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
+        0, nullptr,
+        0, nullptr,
+        0, nullptr);
+}
+
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {

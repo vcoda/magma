@@ -331,6 +331,9 @@ namespace magma
 
         void pipelineBarrier(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
+            VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
             const MemoryBarrier& barrier,
             VkDependencyFlags dependencyFlags = 0) noexcept;
         void pipelineBarrier(VkPipelineStageFlags srcStageMask,
