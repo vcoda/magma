@@ -29,7 +29,7 @@ namespace magma
            to the graphics queue. */
 
         void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
-            std::function<void(std::shared_ptr<CommandBuffer>)>& drawFn,
+            std::function<void(std::shared_ptr<CommandBuffer>)> drawFn,
             bool primaryLevel = true,
             VkQueueFlagBits queueType = VK_QUEUE_GRAPHICS_BIT,
             const char *blockName = "magma::helpers::executeCommandBuffer",
