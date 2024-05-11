@@ -138,7 +138,7 @@ std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
     return nullptr;
 }
 
-std::shared_ptr<Queue> Device::getQueueForFamily(uint32_t queueFamilyIndex) const
+std::shared_ptr<Queue> Device::getQueueByFamily(uint32_t queueFamilyIndex) const
 {
     auto it = std::find_if(queues.begin(), queues.end(),
         [queueFamilyIndex](auto const& pair)

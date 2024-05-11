@@ -36,13 +36,13 @@ Resource::Resource(VkDeviceSize size, const Sharing& sharing, std::shared_ptr<ID
 
 void Resource::commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer)
 {
-    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
+    const std::shared_ptr<Device>& device = cmdBuffer->getDevice();
+    const std::shared_ptr<CommandPool>& cmdPool = cmdBuffer->getCommandPool();
+    const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
     const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
-    std::shared_ptr<Device> device = cmdBuffer->getDevice();
-    std::shared_ptr<Queue> queue = device->getQueueForFamily(queueFamilyIndex);
-    std::shared_ptr<Fence> fence = cmdBuffer->getFence();
+    std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
     fence->reset();
-    queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
+    queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
     fence->wait();
 }
 } // namespace magma
