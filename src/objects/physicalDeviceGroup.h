@@ -31,7 +31,7 @@ namespace magma
        present a swapchain image from one or more subdevices. */
 
 #ifdef VK_KHR_device_group
-    class PhysicalDeviceGroup
+    class PhysicalDeviceGroup : NonCopyable
     {
     public:
         std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
