@@ -667,8 +667,8 @@ namespace magma
         const VkCommandBufferLevel level;
         VkCommandBufferUsageFlags usageFlags;
         std::atomic<State> state;
-        const VkBool32 debugMarkerEnabled : 1;
-        const VkBool32 debugUtilsEnabled : 1;
+        VkBool32 debugMarkerEnabled : 1;
+        VkBool32 debugUtilsEnabled : 1;
         VkBool32 occlusionQueryEnable : 1;
         VkBool32 conditionalRenderingEnable : 1;
         VkBool32 negativeViewportHeightEnabled : 1;

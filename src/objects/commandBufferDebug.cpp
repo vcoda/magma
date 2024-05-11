@@ -121,8 +121,13 @@ bool CommandBuffer::begin(const char *blockName, uint32_t blockColor,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     const bool beginResult = begin(flags);
+#ifdef VK_EXT_debug_utils
     beginDebugLabel(blockName, blockColor);
     labeledRecording = VK_TRUE;
+#else
+    MAGMA_UNUSED(blockName);
+    MAGMA_UNUSED(blockColor);
+#endif // VK_EXT_debug_utils
     return beginResult;
 }
 
@@ -131,31 +136,46 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     const bool beginResult = beginInherited(renderPass, subpass, framebuffer, flags);
+#ifdef VK_EXT_debug_utils
     beginDebugLabel(blockName, blockColor);
     labeledRecording = VK_TRUE;
+#else
+    MAGMA_UNUSED(blockName);
+    MAGMA_UNUSED(blockColor);
+#endif // VK_EXT_debug_utils
     return beginResult;
 }
 
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
+    const std::vector<ClearValue>& clearValues, const char *passName, uint32_t passColor,
     const VkRect2D& renderArea /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginRenderPass(renderPass, framebuffer, clearValues, renderArea, contents);
-    beginDebugLabel(renderPassName, renderPassColor);
+#ifdef VK_EXT_debug_utils
+    beginDebugLabel(passName, passColor);
     labeledRenderPass = VK_TRUE;
+#else
+    MAGMA_UNUSED(passName);
+    MAGMA_UNUSED(passColor);
+#endif // VK_EXT_debug_utils
 }
 
 #ifdef VK_KHR_imageless_framebuffer
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
     const std::vector<std::shared_ptr<ImageView>>& attachments, const std::vector<ClearValue>& clearValues,
-    const char *renderPassName, uint32_t renderPassColor,
+    const char *passName, uint32_t passColor,
     const VkRect2D& renderArea /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginRenderPass(renderPass, framebuffer, attachments, clearValues, renderArea, contents);
-    beginDebugLabel(renderPassName, renderPassColor);
+#ifdef VK_EXT_debug_utils
+    beginDebugLabel(passName, passColor);
     labeledRenderPass = VK_TRUE;
+#else
+    MAGMA_UNUSED(passName);
+    MAGMA_UNUSED(passColor);
+#endif // VK_EXT_debug_utils
 }
 #endif // VK_KHR_imageless_framebuffer
 
@@ -164,32 +184,47 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName,
     VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
     const bool result = beginDeviceGroup(deviceMask, flags);
+#ifdef VK_EXT_debug_utils
     beginDebugLabel(blockName, blockColor);
     labeledRecording = VK_TRUE;
+#else
+    MAGMA_UNUSED(blockName);
+    MAGMA_UNUSED(blockColor);
+#endif // VK_EXT_debug_utils
     return result;
 }
 
 void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
     const std::vector<VkRect2D>& deviceRenderAreas, const std::vector<ClearValue>& clearValues,
-    const char *renderPassName, uint32_t renderPassColor,
+    const char *passName, uint32_t passColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, deviceRenderAreas, clearValues, contents);
-    beginDebugLabel(renderPassName, renderPassColor);
+#ifdef VK_EXT_debug_utils
+    beginDebugLabel(passName, passColor);
     labeledRenderPass = VK_TRUE;
+#else
+    MAGMA_UNUSED(passName);
+    MAGMA_UNUSED(passColor);
+#endif // VK_EXT_debug_utils
 }
 
 #ifdef VK_KHR_imageless_framebuffer
 void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
     const std::vector<std::shared_ptr<ImageView>>& attachments, const std::vector<VkRect2D>& deviceRenderAreas,
-    const std::vector<ClearValue>& clearValues, const char *renderPassName, uint32_t renderPassColor,
+    const std::vector<ClearValue>& clearValues, const char *passName, uint32_t passColor,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, attachments, deviceRenderAreas, clearValues, contents);
-    beginDebugLabel(renderPassName, renderPassColor);
+#ifdef VK_EXT_debug_utils
+    beginDebugLabel(passName, passColor);
     labeledRenderPass = VK_TRUE;
+#else
+    MAGMA_UNUSED(passName);
+    MAGMA_UNUSED(passColor);
+#endif // VK_EXT_debug_utils
 }
 #endif // VK_KHR_imageless_framebuffer
 #endif // VK_KHR_device_group

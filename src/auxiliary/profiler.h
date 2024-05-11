@@ -45,7 +45,7 @@ namespace magma
             static void set(Profiler *profiler) noexcept;
             static Profiler *get(Queue queue) noexcept { return profilers[queue]; }
             VkQueueFlags getQueueType() const noexcept { return queueType; }
-            void setLabelUsage(bool enable) noexcept;
+            void setLabelUsage(bool enable) noexcept { useLabels = enable; }
             bool getLabelUsage() const noexcept { return useLabels; }
             uint32_t getQueryCount() const noexcept { return queryCount; }
             bool beginFrame(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -77,8 +77,6 @@ namespace magma
             std::forward_list<Section> sections;
             std::stack<const Section *> stack;
             bool hostQueryReset = false;
-            bool debugUtils = false;
-            bool debugMarker = false;
             bool useLabels = false;
             bool insideFrame = false;
         };

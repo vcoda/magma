@@ -22,46 +22,40 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name) noexcept:
-    ScopedDebugMarker(std::move(cmdBuffer), name, 0.f, 0.f, 0.f, 1.f)
-{}
-
-ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name,
-    float r, float g, float b, float a /* 1 */) noexcept:
-    cmdBuffer(std::move(cmdBuffer))
+#if defined(VK_EXT_debug_marker) || defined(VK_EXT_debug_utils)
+ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer_,
+    const char *name, float r, float g, float b, float a /* 1 */) noexcept:
+    cmdBuffer(std::move(cmdBuffer_))
 {
-#ifdef MAGMA_DEBUG
-    uint32_t color = uint32_t(a * 255.f) |
-                    (uint32_t(b * 255.f) << 8) |
-                    (uint32_t(g * 255.f) << 16) |
-                    (uint32_t(r * 255.f) << 24);
-    this->cmdBuffer->beginDebugLabel(name, color);
+    const uint32_t color = uint32_t(a * 255.f) |
+        (uint32_t(b * 255.f) << 8) |
+        (uint32_t(g * 255.f) << 16) |
+        (uint32_t(r * 255.f) << 24);
+#ifdef VK_EXT_debug_utils
+    cmdBuffer->beginDebugLabel(name, color);
 #else
-    MAGMA_UNUSED(cmdBuffer);
-    MAGMA_UNUSED(name);
-    MAGMA_UNUSED(r);
-    MAGMA_UNUSED(g);
-    MAGMA_UNUSED(b);
-    MAGMA_UNUSED(a);
-#endif // MAGMA_DEBUG
+    cmdBuffer->beginDebugMarker(name, color);
+#endif
 }
 
-ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, uint32_t color) noexcept:
-    cmdBuffer(std::move(cmdBuffer))
+ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer_,
+    const char *name, uint32_t color /* 0x0 */) noexcept:
+    cmdBuffer(std::move(cmdBuffer_))
 {
-#ifdef MAGMA_DEBUG
-    this->cmdBuffer->beginDebugLabel(name, color);
+#ifdef VK_EXT_debug_utils
+    cmdBuffer->beginDebugLabel(name, color);
 #else
-    MAGMA_UNUSED(cmdBuffer);
-    MAGMA_UNUSED(name);
-    MAGMA_UNUSED(color);
-#endif // MAGMA_DEBUG
+    cmdBuffer->beginDebugMarker(name, color);
+#endif
 }
 
 ScopedDebugMarker::~ScopedDebugMarker()
 {
-#ifdef MAGMA_DEBUG
-    this->cmdBuffer->endDebugLabel();
+#ifdef VK_EXT_debug_utils
+    cmdBuffer->endDebugLabel();
+#else
+    cmdBuffer->endDebugMarker();
 #endif
 }
+#endif // VK_EXT_debug_marker || VK_EXT_debug_utils
 } // namespace magma

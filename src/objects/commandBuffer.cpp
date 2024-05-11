@@ -42,38 +42,8 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
     level(level),
     usageFlags(0),
     state(State::Initial),
-#ifdef VK_EXT_debug_marker
-    debugMarkerEnabled(device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME)),
-#endif
-#ifdef VK_EXT_debug_utils
-    debugUtilsEnabled(device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME)),
-#endif
-    occlusionQueryEnable(VK_FALSE),
-    conditionalRenderingEnable(VK_FALSE),
-    negativeViewportHeightEnabled(device->getFeatures()->negativeViewportHeightEnabled()),
-    inRenderPass(VK_FALSE),
-    inConditionalRendering(VK_FALSE),
-    inTransformFeedback(VK_FALSE),
-    labeledRecording(VK_FALSE),
-    labeledRenderPass(VK_FALSE),
-    queryFlags(0),
-    pipelineStatistics(0)
-{}
-
-CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> cmdPool_):
-    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER),
-    device(cmdPool_->getDevice()),
-    cmdPool(std::move(cmdPool_)),
-    fence(std::make_shared<Fence>(device)),
-    level(level),
-    usageFlags(0),
-    state(State::Initial),
-#ifdef VK_EXT_debug_marker
-    debugMarkerEnabled(device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME)),
-#endif
-#ifdef VK_EXT_debug_utils
-    debugUtilsEnabled(device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME)),
-#endif
+    debugMarkerEnabled(VK_FALSE),
+    debugUtilsEnabled(VK_FALSE),
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
     negativeViewportHeightEnabled(device->getFeatures()->negativeViewportHeightEnabled()),
@@ -85,6 +55,41 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     queryFlags(0),
     pipelineStatistics(0)
 {
+#ifdef VK_EXT_debug_marker
+    debugMarkerEnabled = device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
+#endif
+#ifdef VK_EXT_debug_utils
+    debugUtilsEnabled = device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+#endif
+}
+
+CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> cmdPool_):
+    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER),
+    device(cmdPool_->getDevice()),
+    cmdPool(std::move(cmdPool_)),
+    fence(std::make_shared<Fence>(device)),
+    level(level),
+    usageFlags(0),
+    state(State::Initial),
+    debugMarkerEnabled(VK_FALSE),
+    debugUtilsEnabled(VK_FALSE),
+    occlusionQueryEnable(VK_FALSE),
+    conditionalRenderingEnable(VK_FALSE),
+    negativeViewportHeightEnabled(device->getFeatures()->negativeViewportHeightEnabled()),
+    inRenderPass(VK_FALSE),
+    inConditionalRendering(VK_FALSE),
+    inTransformFeedback(VK_FALSE),
+    labeledRecording(VK_FALSE),
+    labeledRenderPass(VK_FALSE),
+    queryFlags(0),
+    pipelineStatistics(0)
+{
+#ifdef VK_EXT_debug_marker
+    debugMarkerEnabled = device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
+#endif
+#ifdef VK_EXT_debug_utils
+    debugUtilsEnabled = device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+#endif
     VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
     cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     cmdBufferAllocateInfo.pNext = nullptr;
@@ -178,8 +183,10 @@ void CommandBuffer::end()
         }
         if (labeledRecording)
         {
+        #ifdef VK_EXT_debug_utils
             endDebugLabel();
             labeledRecording = VK_FALSE;
+        #endif
         }
         /* Performance - critical commands generally do not have return codes.
            If a run time error occurs in such commands, the implementation will defer
@@ -552,11 +559,13 @@ void CommandBuffer::endRenderPass() noexcept
     MAGMA_ASSERT(inRenderPass);
     if (inRenderPass)
     {
+    #ifdef VK_EXT_debug_utils
         if (labeledRenderPass)
         {
             endDebugLabel();
             labeledRenderPass = VK_FALSE;
         }
+    #endif // VK_EXT_debug_utils
         vkCmdEndRenderPass(handle);
         if (renderpass.attachments.empty())
             renderpass.renderPass->end(renderpass.framebuffer->getAttachments());

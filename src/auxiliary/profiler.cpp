@@ -68,16 +68,6 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
 #ifdef VK_EXT_host_query_reset
     hostQueryReset = device->extensionEnabled(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME);
 #endif // VK_EXT_host_query_reset
-#ifdef VK_EXT_debug_utils
-    std::shared_ptr<const Instance> instance = physicalDevice->getInstance();
-    debugUtils = instance->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-#endif // VK_EXT_debug_utils
-#ifdef VK_EXT_debug_marker
-    if (!debugUtils)
-    {   // This extension has been deprecated, but still may be used with older drivers
-        debugMarker = device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
-    }
-#endif // VK_EXT_debug_marker
 }
 
 void Profiler::set(Profiler *profiler) noexcept
@@ -86,15 +76,6 @@ void Profiler::set(Profiler *profiler) noexcept
         profilers[Graphics] = profiler;
     else // VK_QUEUE_COMPUTE_BIT
         profilers[Compute] = profiler;
-}
-
-void Profiler::setLabelUsage(bool enable) noexcept
-{
-    useLabels = enable;
-    if (useLabels)
-    {   // Check that either debug extension is enabled
-        MAGMA_ASSERT(debugUtils || debugMarker);
-    }
 }
 
 bool Profiler::beginFrame(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t frameIndex_)
@@ -148,17 +129,14 @@ void Profiler::beginSection(std::shared_ptr<CommandBuffer> cmdBuffer, const char
     MAGMA_ASSERT(strlen(name) > 0);
     if (useLabels)
     {
-    #ifdef VK_EXT_debug_utils
-        if (debugUtils)
-            cmdBuffer->beginDebugLabel(name, color);
-        else
-    #endif // VK_EXT_debug_utils
-        {
-        #ifdef VK_EXT_debug_marker
-            if (debugMarker)
-                cmdBuffer->beginDebugMarker(name, color);
-        #endif // VK_EXT_debug_marker
-        }
+    #if defined(VK_EXT_debug_utils)
+        cmdBuffer->beginDebugLabel(name, color);
+    #elif defined(VK_EXT_debug_marker)
+        cmdBuffer->beginDebugMarker(name, color);
+    #else
+        MAGMA_UNUSED(name);
+        MAGMA_UNUSED(color);
+    #endif // VK_EXT_debug_marker
     }
     const uint32_t beginQuery = queryCount % queryPool->getQueryCount();
     sections.emplace_front(name, frameIndex, beginQuery);
@@ -181,17 +159,11 @@ void Profiler::endSection(std::shared_ptr<CommandBuffer> cmdBuffer)
     }
     if (useLabels)
     {
-    #ifdef VK_EXT_debug_utils
-        if (debugUtils)
-            cmdBuffer->endDebugLabel();
-        else
-    #endif // VK_EXT_debug_utils
-        {
-        #ifdef VK_EXT_debug_marker
-            if (debugMarker)
-                cmdBuffer->endDebugMarker();
-        #endif // VK_EXT_debug_marker
-        }
+    #if defined(VK_EXT_debug_utils)
+        cmdBuffer->endDebugLabel();
+    #elif defined(VK_EXT_debug_marker)
+        cmdBuffer->endDebugMarker();
+    #endif
     }
 }
 

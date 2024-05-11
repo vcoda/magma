@@ -21,23 +21,25 @@ namespace magma
 {
     class CommandBuffer;
 
-    /* Uses VK_EXT_debug_utils extension in favor of deprecated VK_EXT_debug_marker.
+    /* Favors VK_EXT_debug_utils extension over deprecated VK_EXT_debug_marker.
        https://www.lunarg.com/wp-content/uploads/2018/05/Vulkan-Debug-Utils_05_18_v1.pdf */
 
+#if defined(VK_EXT_debug_marker) || defined(VK_EXT_debug_utils)
     class ScopedDebugMarker final : NonCopyable
     {
     public:
         explicit ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const char *name) noexcept;
+            const char *name,
+            float r, float g, float b, float a = 1.f) noexcept;
         explicit ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const char *name, float r, float g, float b, float a = 1.f) noexcept;
-        explicit ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const char *name, uint32_t hexColor) noexcept;
+            const char *name,
+            uint32_t color = 0x0) noexcept;
         ~ScopedDebugMarker();
 
     private:
         std::shared_ptr<CommandBuffer> cmdBuffer;
     };
+#endif // VK_EXT_debug_marker || VK_EXT_debug_utils
 
     enum class marker : uint32_t
     {   // Alpha is 1
@@ -59,3 +61,21 @@ namespace magma
         navyColor = 0x000080FF
     };
 } // namespace magma
+
+#if defined(VK_EXT_debug_marker) || defined(VK_EXT_debug_utils)
+#define MAGMA_SCOPED_DEBUG_MARKER(name, cmdBuffer, line) magma::ScopedDebugMarker _magma_debug_marker_##line(cmdBuffer, name);
+#else
+#define MAGMA_SCOPED_DEBUG_MARKER(name, cmdBuffer, line)
+#endif // VK_EXT_debug_marker || VK_EXT_debug_utils
+
+#ifdef MAGMA_DEBUG
+    #define MAGMA_DEBUG_MARKER_INDIRECT(name, cmdBuffer, line) MAGMA_SCOPED_DEBUG_MARKER(name, cmdBuffer, line)
+    #define MAGMA_DEBUG_MARKER(name, cmdBuffer) MAGMA_DEBUG_MARKER_INDIRECT(name, cmdBuffer, __LINE__)
+    #define MAGMA_DEBUG_MARKER_BEGIN(name, cmdBuffer) {\
+        MAGMA_DEBUG_MARKER(name, cmdBuffer)
+    #define MAGMA_DEBUG_MARKER_END }
+#else
+    #define MAGMA_DEBUG_MARKER(name, cmdBuffer)
+    #define MAGMA_DEBUG_MARKER_BEGIN(name, cmdBuffer) {
+    #define MAGMA_DEBUG_MARKER_END }
+#endif // MAGMA_DEBUG
