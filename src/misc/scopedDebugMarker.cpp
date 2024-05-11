@@ -30,7 +30,7 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
     float r, float g, float b, float a /* 1 */) noexcept:
     cmdBuffer(std::move(cmdBuffer))
 {
-#ifdef MAGMA_DEBUG_LABEL
+#ifdef MAGMA_DEBUG
     uint32_t color = uint32_t(a * 255.f) |
                     (uint32_t(b * 255.f) << 8) |
                     (uint32_t(g * 255.f) << 16) |
@@ -43,25 +43,25 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, c
     MAGMA_UNUSED(g);
     MAGMA_UNUSED(b);
     MAGMA_UNUSED(a);
-#endif // MAGMA_DEBUG_LABEL
+#endif // MAGMA_DEBUG
 }
 
 ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer, const char *name, uint32_t color) noexcept:
     cmdBuffer(std::move(cmdBuffer))
 {
-#ifdef MAGMA_DEBUG_LABEL
+#ifdef MAGMA_DEBUG
     this->cmdBuffer->beginDebugLabel(name, color);
 #else
     MAGMA_UNUSED(cmdBuffer);
     MAGMA_UNUSED(name);
     MAGMA_UNUSED(color);
-#endif // MAGMA_DEBUG_LABEL
+#endif // MAGMA_DEBUG
 }
 
 ScopedDebugMarker::~ScopedDebugMarker()
 {
-#ifdef MAGMA_DEBUG_LABEL
+#ifdef MAGMA_DEBUG
     this->cmdBuffer->endDebugLabel();
-#endif // MAGMA_DEBUG_LABEL
+#endif
 }
 } // namespace magma

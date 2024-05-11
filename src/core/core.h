@@ -39,12 +39,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_DEBUG
 #endif
 
-#ifdef _DEBUG
-  #ifdef VK_EXT_debug_utils
-    #define MAGMA_DEBUG_LABEL
-  #endif
-#endif
-
 #define MAGMA_ALIGNMENT 16
 
 #define MAGMA_MAX_STRING 4096

@@ -29,12 +29,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_FAILURE(message) MAGMA_ASSERT(!message)
 
-#ifdef MAGMA_DEBUG
-    #define MAGMA_ASSERT_FOR_EACH(arr, it, expr) for (auto const& it: arr) MAGMA_ASSERT(expr)
-#else
-    #define MAGMA_ASSERT_FOR_EACH(arr, it, expr)
-#endif
-
 #define MAGMA_CONCAT(a, b) a ## b
 
 #define MAGMA_STRINGIZE(name) #name
@@ -78,6 +72,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #else
     #define MAGMA_THROW throw
 #endif
+
+#ifdef MAGMA_DEBUG
+    #define MAGMA_NOOP(param) param
+    #define MAGMA_NOOP_METHOD
+    #define MAGMA_ASSERT_FOR_EACH(arr, it, expr) for (auto const& it: arr) MAGMA_ASSERT(expr)
+#else
+    #define MAGMA_NOOP(param)
+    #define MAGMA_NOOP_METHOD {}
+    #define MAGMA_ASSERT_FOR_EACH(arr, it, expr)
+#endif // MAGMA_DEBUG
 
 #define MAGMA_MAKE_SHARED(Type)\
 template<typename ...Args>\

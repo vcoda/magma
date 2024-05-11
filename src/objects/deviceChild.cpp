@@ -64,6 +64,7 @@ uint64_t DeviceChild::getPrivateData() const noexcept
     return 0ull;
 }
 
+#ifdef MAGMA_DEBUG
 void DeviceChild::setDebugName(const char *name)
 {
     MAGMA_UNUSED(name);
@@ -164,6 +165,7 @@ void DeviceChild::setDebugTag(uint64_t tagName, size_t tagSize, const void *tag)
     }
 #endif // VK_EXT_debug_marker
 }
+#endif // MAGMA_DEBUG
 
 VkDevice DeviceChild::getNativeDevice() const noexcept
 {   // The following Vulkan objects are created before

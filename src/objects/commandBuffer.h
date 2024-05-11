@@ -508,20 +508,18 @@ namespace magma
     #endif // VK_NV_ray_tracing
 
     #ifdef VK_EXT_debug_marker
-        void beginDebugMarker(const char *name,
-            uint32_t color) noexcept;
-        void endDebugMarker() noexcept;
-        void insertDebugMarker(const char *name,
-            uint32_t color) noexcept;
+        void beginDebugMarker(const char *MAGMA_NOOP(name),
+            uint32_t MAGMA_NOOP(color)) noexcept MAGMA_NOOP_METHOD;
+        void endDebugMarker() noexcept MAGMA_NOOP_METHOD;
+        void insertDebugMarker(const char *MAGMA_NOOP(name),
+            uint32_t MAGMA_NOOP(color)) noexcept MAGMA_NOOP_METHOD;
     #endif // VK_EXT_debug_marker
-
     #ifdef VK_EXT_debug_utils
-        void beginDebugLabel(const char *name,
-            uint32_t color) noexcept;
-        void endDebugLabel() noexcept;
-        void insertDebugLabel(
-            const char *name,
-            uint32_t color) noexcept;
+        void beginDebugLabel(const char *MAGMA_NOOP(name),
+            uint32_t MAGMA_NOOP(color)) noexcept MAGMA_NOOP_METHOD;
+        void endDebugLabel() noexcept MAGMA_NOOP_METHOD;
+        void insertDebugLabel(const char *MAGMA_NOOP(name),
+            uint32_t MAGMA_NOOP(color)) noexcept MAGMA_NOOP_METHOD;
     #endif // VK_EXT_debug_utils
 
         const std::shared_ptr<Device>& getDevice() const noexcept { return device; }

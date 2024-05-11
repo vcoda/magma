@@ -176,13 +176,11 @@ void CommandBuffer::end()
             }
             pipelineBarriers.clear();
         }
-    #ifdef MAGMA_DEBUG_LABEL
         if (labeledRecording)
         {
             endDebugLabel();
             labeledRecording = VK_FALSE;
         }
-    #endif // MAGMA_DEBUG_LABEL
         /* Performance - critical commands generally do not have return codes.
            If a run time error occurs in such commands, the implementation will defer
            reporting the error until a specified point. For commands that record
@@ -554,13 +552,11 @@ void CommandBuffer::endRenderPass() noexcept
     MAGMA_ASSERT(inRenderPass);
     if (inRenderPass)
     {
-    #ifdef MAGMA_DEBUG_LABEL
         if (labeledRenderPass)
         {
             endDebugLabel();
             labeledRenderPass = VK_FALSE;
         }
-    #endif // MAGMA_DEBUG_LABEL
         vkCmdEndRenderPass(handle);
         if (renderpass.attachments.empty())
             renderpass.renderPass->end(renderpass.framebuffer->getAttachments());

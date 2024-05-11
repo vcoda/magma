@@ -34,8 +34,10 @@ namespace magma
         void setPrivateData(uint64_t data) override;
         uint64_t getPrivateData() const noexcept override;
         const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
-        void setDebugName(const char *name);
-        void setDebugTag(uint64_t tagName, size_t tagSize, const void *tag);
+        void setDebugName(const char *MAGMA_NOOP(name)) MAGMA_NOOP_METHOD;
+        void setDebugTag(uint64_t MAGMA_NOOP(tagName),
+            size_t MAGMA_NOOP(tagSize),
+            const void *MAGMA_NOOP(tag)) MAGMA_NOOP_METHOD;
         template<class Tag>
         void setDebugTag(uint64_t tagName, const Tag& tag)
             { setDebugTag(tagName, sizeof(Tag), &tag); }
