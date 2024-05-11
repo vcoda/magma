@@ -31,6 +31,9 @@ int main(int argc, char *argv[])
     source << "#include \"pch.h\"" << std::endl;
     source << "#pragma hdrstop" << std::endl;
     source << "#include \"structureChain.h\"" << std::endl << std::endl;
+    source << "#ifdef _MSC_VER" << std::endl;
+    source << "#pragma warning(disable: 4063)" << std::endl;
+    source << "#endif" << std::endl << std::endl;
     source << "namespace magma" << std::endl << "{" << std::endl;
     source << "size_t StructureChain::sizeOf(VkStructureType sType) noexcept" << std::endl << "{" << std::endl;
     source << "    switch (sType)" << std::endl;

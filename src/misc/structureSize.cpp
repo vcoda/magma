@@ -3,6 +3,10 @@
 #pragma hdrstop
 #include "structureChain.h"
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4063)
+#endif
+
 namespace magma
 {
 size_t StructureChain::sizeOf(VkStructureType sType) noexcept
