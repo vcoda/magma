@@ -93,6 +93,12 @@ MAGMA_STREAM_INSERT_OPERATOR(VkCommandBufferUsageFlagBits);
 MAGMA_STREAM_INSERT_OPERATOR(VkQueryControlFlagBits);
 MAGMA_STREAM_INSERT_OPERATOR(VkCommandBufferResetFlagBits);
 MAGMA_STREAM_INSERT_OPERATOR(VkStencilFaceFlagBits);
+#ifdef VK_KHR_performance_query
+MAGMA_STREAM_INSERT_OPERATOR(VkPerformanceCounterUnitKHR);
+MAGMA_STREAM_INSERT_OPERATOR(VkPerformanceCounterScopeKHR);
+MAGMA_STREAM_INSERT_OPERATOR(VkPerformanceCounterStorageKHR);
+MAGMA_STREAM_INSERT_OPERATOR(VkPerformanceCounterDescriptionFlagBitsKHR);
+#endif // VK_KHR_performance_query
 #ifdef VK_KHR_surface
 MAGMA_STREAM_INSERT_OPERATOR(VkPresentModeKHR);
 MAGMA_STREAM_INSERT_OPERATOR(VkColorSpaceKHR);
