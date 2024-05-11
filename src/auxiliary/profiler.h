@@ -119,7 +119,8 @@ namespace magma
         public:
             explicit GraphicsProfiler(std::shared_ptr<Device> device,
                 std::shared_ptr<IAllocator> allocator = nullptr):
-                Profiler(VK_QUEUE_GRAPHICS_BIT, std::move(device), std::move(allocator)) {}
+                Profiler(VK_QUEUE_GRAPHICS_BIT, std::move(device), std::move(allocator))
+            {}
         };
 
         /* Performance profiler for compute queue. */
@@ -129,7 +130,8 @@ namespace magma
         public:
             explicit ComputeProfiler(std::shared_ptr<Device> device,
                 std::shared_ptr<IAllocator> allocator = nullptr):
-                Profiler(VK_QUEUE_COMPUTE_BIT, std::move(device), std::move(allocator)) {}
+                Profiler(VK_QUEUE_COMPUTE_BIT, std::move(device), std::move(allocator))
+            {}
         };
     } // namespace aux
 } // namespace magma

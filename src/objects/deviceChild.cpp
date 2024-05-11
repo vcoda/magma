@@ -73,8 +73,7 @@ void DeviceChild::setDebugName(const char *name)
     if (!device)
         return;
 #ifdef VK_EXT_debug_utils
-    std::shared_ptr<const Instance> instance = device->getPhysicalDevice()->getInstance();
-    if (instance->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME))
+    if (device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME))
     {
         MAGMA_INSTANCE_EXTENSION(vkSetDebugUtilsObjectNameEXT);
         if (vkSetDebugUtilsObjectNameEXT)
@@ -123,8 +122,7 @@ void DeviceChild::setDebugTag(uint64_t tagName, size_t tagSize, const void *tag)
     if (!device)
         return;
 #ifdef VK_EXT_debug_utils
-    std::shared_ptr<const Instance> instance = device->getPhysicalDevice()->getInstance();
-    if (instance->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME))
+    if (device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME))
     {
         MAGMA_INSTANCE_EXTENSION(vkSetDebugUtilsObjectTagEXT);
         if (vkSetDebugUtilsObjectTagEXT)
