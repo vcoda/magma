@@ -18,6 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "device.h"
+#include "physicalDevice.h"
+#include "instance.h"
 #include "commandBuffer.h"
 #include "commandPool.h"
 #include "framebuffer.h"
@@ -40,8 +42,12 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
     level(level),
     usageFlags(0),
     state(State::Initial),
+#ifdef VK_EXT_debug_marker
     debugMarkerEnabled(device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME)),
-    debugUtilsEnabled(device->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME)),
+#endif
+#ifdef VK_EXT_debug_utils
+    debugUtilsEnabled(device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME)),
+#endif
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
     negativeViewportHeightEnabled(device->getFeatures()->negativeViewportHeightEnabled()),
@@ -62,8 +68,12 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     level(level),
     usageFlags(0),
     state(State::Initial),
+#ifdef VK_EXT_debug_marker
     debugMarkerEnabled(device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME)),
-    debugUtilsEnabled(device->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME)),
+#endif
+#ifdef VK_EXT_debug_utils
+    debugUtilsEnabled(device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME)),
+#endif
     occlusionQueryEnable(VK_FALSE),
     conditionalRenderingEnable(VK_FALSE),
     negativeViewportHeightEnabled(device->getFeatures()->negativeViewportHeightEnabled()),
