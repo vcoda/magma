@@ -1384,9 +1384,6 @@
     <None Include="..\..\src\auxiliary\immediateRender.inl">
       <Filter>Header Files\auxiliary</Filter>
     </None>
-    <None Include="..\..\src\auxiliary\profiler.inl">
-      <Filter>Header Files\auxiliary</Filter>
-    </None>
     <None Include="..\..\src\auxiliary\shaderCompiler.inl">
       <Filter>Header Files\auxiliary</Filter>
     </None>

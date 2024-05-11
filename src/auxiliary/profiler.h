@@ -42,7 +42,6 @@ namespace magma
         public:
             enum Queue : uint8_t;
             struct Sample;
-
             static void set(Profiler *profiler) noexcept;
             static Profiler *get(Queue queue) noexcept { return profilers[queue]; }
             VkQueueFlags getQueueType() const noexcept { return queueType; }
@@ -67,14 +66,7 @@ namespace magma
             uint32_t getResetQueryCount() const noexcept;
 
         private:
-            struct Section
-            {
-                const char *name;
-                uint32_t frameIndex;
-                uint32_t beginQuery;
-                Section(const char *, uint32_t, uint32_t) noexcept;
-            };
-
+            struct Section;
             static Profiler *profilers[2];
             const VkQueueFlags queueType;
             float timestampPeriod = 0.f;
@@ -82,8 +74,8 @@ namespace magma
             std::shared_ptr<TimestampQuery> queryPool;
             uint32_t queryCount = 0;
             uint32_t frameIndex = 0;
-            std::vector<Section> sections;
-            std::stack<Section> stack;
+            std::forward_list<Section> sections;
+            std::stack<const Section *> stack;
             bool hostQueryReset = false;
             bool debugUtils = false;
             bool debugMarker = false;
@@ -101,7 +93,23 @@ namespace magma
             const char *name;
             uint32_t frameIndex;
             double time; // In nanoseconds
-            Sample(const char *, uint32_t, double) noexcept;
+            Sample(const char *name, uint32_t frameIndex, double time) noexcept:
+                name(name),
+                frameIndex(frameIndex),
+                time(time)
+            {}
+        };
+
+        struct Profiler::Section
+        {
+            const char *name;
+            uint32_t frameIndex;
+            uint32_t beginQuery;
+            Section(const char *name, uint32_t frameIndex, uint32_t beginQuery) noexcept:
+                name(name),
+                frameIndex(frameIndex),
+                beginQuery(beginQuery)
+            {}
         };
 
         /* Performance profiler for graphics queue. */
@@ -126,5 +134,4 @@ namespace magma
     } // namespace aux
 } // namespace magma
 
-#include "profiler.inl"
 #include "scopedProfile.h"

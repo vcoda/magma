@@ -598,7 +598,6 @@
   <ItemGroup>
     <None Include="..\..\src\allocator\cxxAllocator.inl" />
     <None Include="..\..\src\auxiliary\immediateRender.inl" />
-    <None Include="..\..\src\auxiliary\profiler.inl" />
     <None Include="..\..\src\auxiliary\shaderCompiler.inl" />
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
       <FileType>Document</FileType>

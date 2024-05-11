@@ -161,12 +161,12 @@ void Profiler::beginSection(std::shared_ptr<CommandBuffer> cmdBuffer, const char
         }
     }
     const uint32_t beginQuery = queryCount % queryPool->getQueryCount();
-    sections.emplace_back(name, frameIndex, beginQuery);
-    stack.push(sections.back());
+    sections.emplace_front(name, frameIndex, beginQuery);
+    stack.push(&sections.front());
     // When vkCmdWriteTimestamp is submitted to a queue, it defines an execution dependency on commands
     // that were submitted before it. vkCmdWriteTimestamp latches the value of the timer when all
     // previous commands have completed executing as far as the specified pipeline stage.
-    cmdBuffer->writeTimestamp(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, queryPool, stack.top().beginQuery);
+    cmdBuffer->writeTimestamp(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, queryPool, stack.top()->beginQuery);
     queryCount += 2;
 }
 
@@ -176,7 +176,7 @@ void Profiler::endSection(std::shared_ptr<CommandBuffer> cmdBuffer)
     MAGMA_ASSERT(!stack.empty());
     if (!stack.empty())
     {
-        cmdBuffer->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, stack.top().beginQuery + 1);
+        cmdBuffer->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, stack.top()->beginQuery + 1);
         stack.pop();
     }
     if (useLabels)
@@ -199,7 +199,6 @@ std::vector<Profiler::Sample> Profiler::collectSamples(bool wait) const
 {
     MAGMA_ASSERT(!insideFrame);
     std::vector<Sample> samples;
-    samples.reserve(sections.size());
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
     if (wait)
     {   // Block CPU until all query results will be ready
