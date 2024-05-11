@@ -31,21 +31,17 @@ namespace helpers
 {
 void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     std::function<void(std::shared_ptr<CommandBuffer>)> drawFn,
-    bool primaryLevel /* true */,
     VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */,
     const char *blockName /* magma::helpers::executeCommandBuffer */,
     uint32_t blockColor /* 0x0 */)
 {
-    std::shared_ptr<CommandBuffer> cmdBuffer;
-    if (primaryLevel)
-        cmdBuffer = std::make_shared<PrimaryCommandBuffer>(std::move(cmdPool));
-    else
-        cmdBuffer = std::make_shared<SecondaryCommandBuffer>(std::move(cmdPool));
-    if (cmdBuffer->begin(blockName, blockColor))
+    std::shared_ptr<CommandBuffer> cmdBuffer = std::make_shared<PrimaryCommandBuffer>(std::move(cmdPool));
+    if (cmdBuffer->begin(blockName, blockColor, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
     {
         try
         {   // Draw function may optionally throw an exception.
-            // We should catch it and finish command buffer ahead of exeption handler.
+            // We should catch it and finish command buffer
+            // ahead of exeption handler.
             drawFn(cmdBuffer);
         }
         catch (...)
@@ -55,13 +51,11 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
         }
         cmdBuffer->end();
     }
-    std::shared_ptr<Fence> fence = cmdBuffer->getFence();
+    const std::shared_ptr<Device>& device = cmdBuffer->getDevice();
+    const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
+    std::shared_ptr<Queue> queue = device->getQueue(queueType, 0);
     fence->reset();
-    {
-        std::shared_ptr<Device> device = cmdBuffer->getDevice();
-        std::shared_ptr<Queue> queue = device->getQueue(queueType, 0);
-        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
-    }
+    queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
     fence->wait();
 }
 } // namespace helpers
