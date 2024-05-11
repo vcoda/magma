@@ -61,7 +61,7 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
     VkDebugReportCallbackCreateInfoEXT debugReportCallbackInfo;
     if (debugReportCallback && !instanceInfo.pNext)
     {
-    #ifdef VK_HEADER_VERSION
+    #if VK_HEADER_VERSION > 1
         debugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
     #else // Compatibility with older SDK
         debugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;

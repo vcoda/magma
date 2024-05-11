@@ -17,6 +17,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
+#ifdef __vulkan_h_
+#define VULKAN_H_ 1
+#define VULKAN_CORE_H_ 1
+#endif
+
+#ifndef VK_HEADER_VERSION
+#define VK_HEADER_VERSION 1
+#endif
+
+#ifndef VK_API_VERSION_1_0
+#define VK_API_VERSION_1_0 VK_API_VERSION
+#endif
+
 #ifndef VK_VERSION_1_1
 typedef enum VkObjectType {
     VK_OBJECT_TYPE_UNKNOWN = 0,
@@ -78,10 +91,6 @@ typedef enum VkObjectType {
     VK_OBJECT_TYPE_MAX_ENUM = 0x7FFFFFFF
 } VkObjectType;
 #endif // !VK_VERSION_1_1
-
-#ifndef VK_HEADER_VERSION
-#define VK_HEADER_VERSION 1
-#endif
 
 #if VK_HEADER_VERSION < 34 // TODO: exact version
 #if defined(VK_EXT_debug_report) && defined(VK_KHR_display)
