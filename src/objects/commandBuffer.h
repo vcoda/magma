@@ -536,8 +536,8 @@ namespace magma
             VkQueryControlFlags queryFlags) noexcept;
         void enableConditionalRendering(bool enable) noexcept;
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
-        void onQueueSubmission() noexcept;
-        void onExecutionCompleted() noexcept;
+        void finishedQueueSubmission() noexcept;
+        void finishedExecution() noexcept;
 
         void releaseBoundResources() const noexcept;
 

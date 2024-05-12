@@ -94,9 +94,9 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     }
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
     MAGMA_HANDLE_RESULT(result, "queue submission failed");
-    for (auto& cmdBuffer : cmdBuffers)
-    {   // Change state of command buffer
-        cmdBuffer->onQueueSubmission();
+    for (auto& cmdBuffer: cmdBuffers)
+    {   // Change state of the command buffer
+        cmdBuffer->finishedQueueSubmission();
     }
 }
 

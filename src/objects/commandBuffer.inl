@@ -757,12 +757,12 @@ inline void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags
     pipelineStatistics = pipelineStatistics_;
 }
 
-inline void CommandBuffer::onQueueSubmission() noexcept
+inline void CommandBuffer::finishedQueueSubmission() noexcept
 {
     state = State::Pending;
 }
 
-inline void CommandBuffer::onExecutionCompleted() noexcept
+inline void CommandBuffer::finishedExecution() noexcept
 {
     state = (usageFlags & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT) ? State::Invalid : State::Executable;
 }
