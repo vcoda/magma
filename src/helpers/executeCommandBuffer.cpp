@@ -57,6 +57,7 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     fence->reset();
     queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
     fence->wait();
+    cmdBuffer->finishedExecution();
 }
 } // namespace helpers
 } // namespace magma

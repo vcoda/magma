@@ -44,5 +44,6 @@ void Resource::commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer)
     fence->reset();
     queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
     fence->wait();
+    cmdBuffer->finishedExecution();
 }
 } // namespace magma
