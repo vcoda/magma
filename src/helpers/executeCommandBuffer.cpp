@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandPool.h"
 #include "../objects/primaryCommandBuffer.h"
 #include "../objects/secondaryCommandBuffer.h"
+#include "../objects/dstTransferBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
 
@@ -59,5 +60,31 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     fence->wait();
     cmdBuffer->finishedExecution();
 }
+
+#ifdef VK_AMD_buffer_marker
+std::vector<uint32_t> copyWrittenBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer,
+    VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */)
+{
+    const VkDeviceSize size = cmdBuffer->getMarkerBufferOffset();
+    const std::shared_ptr<Buffer>& srcBuffer = cmdBuffer->getMarkerBuffer();
+    std::shared_ptr<Buffer> dstBuffer = std::make_shared<magma::DstTransferBuffer>(cmdBuffer->getDevice(), size);
+    executeCommandBuffer(cmdBuffer->getCommandPool(),
+        [&srcBuffer, &dstBuffer](std::shared_ptr<magma::CommandBuffer> cmdBuffer)
+        {   // Copy from device to host
+            cmdBuffer->copyBuffer(srcBuffer, dstBuffer, 0, 0, dstBuffer->getSize());
+        },
+        queueType, "magma::helpers::copyWrittenBufferMarkers", 0x0);
+    std::vector<uint32_t> writtenMarkers;
+    const void *data = dstBuffer->getMemory()->map();
+    if (data)
+    {
+        const size_t count = (size_t)size / sizeof(uint32_t);
+        writtenMarkers.resize(count);
+        memcpy(writtenMarkers.data(), data, count * sizeof(uint32_t));
+        dstBuffer->getMemory()->unmap();
+    }
+    return writtenMarkers;
+}
+#endif // VK_AMD_buffer_marker
 } // namespace helpers
 } // namespace magma
