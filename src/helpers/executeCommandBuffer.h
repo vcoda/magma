@@ -34,13 +34,13 @@ namespace magma
             const char *blockName = "magma::helpers::executeCommandBuffer",
             uint32_t blockColor = 0x0);
 
-        /* Helper function to get pipelined writes of marker values into
+        /* Helper function to read pipelined writes of marker values into
            a buffer object. The primary purpose of these markers is to
            facilitate the development of debugging tools for tracking which
            pipelined command contributed to device loss. */
 
     #ifdef VK_AMD_buffer_marker
-        std::vector<uint32_t> copyWrittenBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer,
+        std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer,
             VkQueueFlagBits queueType = VK_QUEUE_GRAPHICS_BIT);
     #endif // VK_AMD_buffer_marker
     } // namespace helpers

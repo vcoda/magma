@@ -62,28 +62,31 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
 }
 
 #ifdef VK_AMD_buffer_marker
-std::vector<uint32_t> copyWrittenBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer,
+std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer,
     VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */)
 {
+    std::vector<uint32_t> bufferMarkers;
     const VkDeviceSize size = cmdBuffer->getMarkerBufferOffset();
-    const std::shared_ptr<Buffer>& srcBuffer = cmdBuffer->getMarkerBuffer();
-    std::shared_ptr<Buffer> dstBuffer = std::make_shared<magma::DstTransferBuffer>(cmdBuffer->getDevice(), size);
-    executeCommandBuffer(cmdBuffer->getCommandPool(),
-        [&srcBuffer, &dstBuffer](std::shared_ptr<magma::CommandBuffer> cmdBuffer)
-        {   // Copy from device to host
-            cmdBuffer->copyBuffer(srcBuffer, dstBuffer, 0, 0, dstBuffer->getSize());
-        },
-        queueType, "magma::helpers::copyWrittenBufferMarkers", 0x0);
-    std::vector<uint32_t> writtenMarkers;
-    const void *data = dstBuffer->getMemory()->map();
-    if (data)
+    if (size)
     {
-        const size_t count = (size_t)size / sizeof(uint32_t);
-        writtenMarkers.resize(count);
-        memcpy(writtenMarkers.data(), data, count * sizeof(uint32_t));
-        dstBuffer->getMemory()->unmap();
+        const std::shared_ptr<Buffer>& srcBuffer = cmdBuffer->getMarkerBuffer();
+        std::shared_ptr<Buffer> dstBuffer = std::make_shared<magma::DstTransferBuffer>(cmdBuffer->getDevice(), size);
+        executeCommandBuffer(cmdBuffer->getCommandPool(),
+            [&srcBuffer, &dstBuffer](std::shared_ptr<magma::CommandBuffer> cmdBuffer)
+            {   // Copy from device to host
+                cmdBuffer->copyBuffer(srcBuffer, dstBuffer, 0, 0, dstBuffer->getSize());
+            },
+            queueType, "magma::helpers::readBufferMarkers", 0x0);
+        const void *data = dstBuffer->getMemory()->map();
+        if (data)
+        {
+            const size_t count = (size_t)size / sizeof(uint32_t);
+            bufferMarkers.resize(count);
+            memcpy(bufferMarkers.data(), data, count * sizeof(uint32_t));
+            dstBuffer->getMemory()->unmap();
+        }
     }
-    return writtenMarkers;
+    return bufferMarkers;
 }
 #endif // VK_AMD_buffer_marker
 } // namespace helpers
