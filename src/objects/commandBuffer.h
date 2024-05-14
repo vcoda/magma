@@ -522,6 +522,12 @@ namespace magma
             uint32_t MAGMA_NOOP(color)) noexcept MAGMA_NOOP_METHOD;
     #endif // VK_EXT_debug_utils
 
+    #ifdef VK_AMD_buffer_marker
+        void writeBufferMarker(VkPipelineStageFlagBits MAGMA_NOOP(pipelineStage),
+            uint32_t MAGMA_NOOP(marker)) noexcept MAGMA_NOOP_METHOD;
+        const std::shared_ptr<Buffer>& getMarkerBuffer() const noexcept { return markerBuffer; }
+        VkDeviceSize getMarkerBufferOffset() const noexcept { return markerBufferOffset; }
+    #endif
     #ifdef VK_NV_device_diagnostic_checkpoints
         void setCheckpoint(const char *MAGMA_NOOP(name)) noexcept MAGMA_NOOP_METHOD;
     #endif
@@ -683,6 +689,10 @@ namespace magma
         VkBool32 labeledRenderPass : 1;
         VkQueryControlFlags queryFlags;
         VkQueryPipelineStatisticFlags pipelineStatistics;
+    #ifdef VK_AMD_buffer_marker
+        std::shared_ptr<Buffer> markerBuffer;
+        std::atomic<VkDeviceSize> markerBufferOffset = 0ull;
+    #endif
     };
 
     /* See 6.1. Command Buffer Lifecycle

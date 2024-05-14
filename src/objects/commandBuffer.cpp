@@ -222,6 +222,9 @@ bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
         renderpass.renderPass.reset();
         renderpass.framebuffer.reset();
         renderpass.attachments.clear();
+    #ifdef VK_AMD_buffer_marker
+        markerBufferOffset = 0ull;
+    #endif
         return true;
     }
     return false;
