@@ -69,9 +69,9 @@ std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmd
     if (size)
     {
         const std::shared_ptr<Buffer>& srcBuffer = cmdBuffer->getMarkerBuffer();
-        std::shared_ptr<Buffer> dstBuffer = std::make_shared<magma::DstTransferBuffer>(cmdBuffer->getDevice(), size);
+        std::shared_ptr<Buffer> dstBuffer = std::make_shared<DstTransferBuffer>(cmdBuffer->getDevice(), size);
         executeCommandBuffer(cmdBuffer->getCommandPool(),
-            [&srcBuffer, &dstBuffer](std::shared_ptr<magma::CommandBuffer> cmdBuffer)
+            [&srcBuffer, &dstBuffer](std::shared_ptr<CommandBuffer> cmdBuffer)
             {   // Copy from device to host
                 cmdBuffer->copyBuffer(srcBuffer, dstBuffer, 0, 0, dstBuffer->getSize());
             },
