@@ -522,6 +522,10 @@ namespace magma
             uint32_t MAGMA_NOOP(color)) noexcept MAGMA_NOOP_METHOD;
     #endif // VK_EXT_debug_utils
 
+    #ifdef VK_NV_device_diagnostic_checkpoints
+        void setCheckpoint(const char *MAGMA_NOOP(name)) noexcept MAGMA_NOOP_METHOD;
+    #endif
+
         const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
         const std::shared_ptr<CommandPool>& getCommandPool() const noexcept { return cmdPool; }
         const std::shared_ptr<Fence>& getFence() const noexcept { return fence; }

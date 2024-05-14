@@ -105,6 +105,9 @@ namespace magma
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<Fence> presentFence = nullptr);
     #endif // VK_KHR_display_swapchain
+    #ifdef VK_NV_device_diagnostic_checkpoints
+        std::vector<VkCheckpointDataNV> getCheckpoints(std::shared_ptr<const Device> device) const;
+    #endif
 
     private:
         MAGMA_MAKE_SHARED(Queue)

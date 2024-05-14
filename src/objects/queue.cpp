@@ -310,4 +310,21 @@ void Queue::presentDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t 
         StructureChain(displayPresentInfo));
 }
 #endif // VK_KHR_display_swapchain
+
+#ifdef VK_NV_device_diagnostic_checkpoints
+std::vector<VkCheckpointDataNV> Queue::getCheckpoints(std::shared_ptr<const Device> device) const
+{
+    auto getNativeDevice = [&device]() -> VkDevice { return device->getHandle(); };
+    std::vector<VkCheckpointDataNV> checkpoints;
+    uint32_t checkpointDataCount = 0;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetQueueCheckpointDataNV, VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME);
+    vkGetQueueCheckpointDataNV(handle, &checkpointDataCount, nullptr);
+    if (checkpointDataCount)
+    {
+        checkpoints.resize(checkpointDataCount, {VK_STRUCTURE_TYPE_CHECKPOINT_DATA_NV});
+        vkGetQueueCheckpointDataNV(handle, &checkpointDataCount, checkpoints.data());
+    }
+    return checkpoints;
+}
+#endif // VK_NV_device_diagnostic_checkpoints
 } // namespace magma

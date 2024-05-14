@@ -115,6 +115,17 @@ void CommandBuffer::insertDebugLabel(const char *name, uint32_t color) noexcept
     }
 }
 #endif // VK_EXT_debug_utils
+
+#ifdef VK_NV_device_diagnostic_checkpoints
+void CommandBuffer::setCheckpoint(const char *name) noexcept
+{
+    MAGMA_ASSERT(name);
+    MAGMA_ASSERT(strlen(name) > 0);
+    MAGMA_DEVICE_EXTENSION(vkCmdSetCheckpointNV);
+    if (vkCmdSetCheckpointNV)
+        vkCmdSetCheckpointNV(handle, name);
+}
+#endif // VK_NV_device_diagnostic_checkpoints
 #endif // MAGMA_DEBUG
 
 bool CommandBuffer::begin(const char *blockName, uint32_t blockColor,
