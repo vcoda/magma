@@ -31,7 +31,7 @@ namespace magma
 namespace helpers
 {
 void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
-    std::function<void(std::shared_ptr<CommandBuffer>)> drawFn,
+    std::function<void(std::shared_ptr<CommandBuffer>)> cmdFn,
     VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */,
     const char *blockName /* magma::helpers::executeCommandBuffer */,
     uint32_t blockColor /* 0x0 */)
@@ -40,10 +40,9 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     if (cmdBuffer->begin(blockName, blockColor, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
     {
         try
-        {   // Draw function may optionally throw an exception.
-            // We should catch it and finish command buffer
-            // ahead of exeption handler.
-            drawFn(cmdBuffer);
+        {   // Callback function may optionally throw an exception.
+            // We should catch it and finish command buffer ahead of exeption handler.
+            cmdFn(cmdBuffer);
         }
         catch (...)
         {
