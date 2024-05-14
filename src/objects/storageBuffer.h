@@ -29,6 +29,11 @@ namespace magma
     class StorageBuffer : public Buffer
     {
     public:
+        explicit StorageBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Initializer& optional = Initializer(),
+            const Sharing& sharing = Sharing());
         explicit StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,

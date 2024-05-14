@@ -23,6 +23,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+StorageBuffer::StorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Initializer& optional /* default */,
+    const Sharing& sharing /* default */):
+    Buffer(std::move(device), size,
+        0, // flags
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, std::move(allocator))
+{}
+
 StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
@@ -34,14 +45,13 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceS
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, allocator)
 {
-    if (data)
-    {   // Data is optional for storage buffer, copy if provided
-        auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
-        cmdBuffer->begin();
-        copyTransfer(cmdBuffer, srcBuffer);
-        cmdBuffer->end();
-        commitAndWait(std::move(cmdBuffer));
-    }
+    MAGMA_ASSERT(data);
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator),
+        Initializer(), sharing, std::move(copyFn));
+    cmdBuffer->begin();
+    copyTransfer(cmdBuffer, srcBuffer);
+    cmdBuffer->end();
+    commitAndWait(std::move(cmdBuffer));
 }
 
 StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
