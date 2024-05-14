@@ -54,9 +54,10 @@ bool Fence::reset() noexcept
     return (VK_SUCCESS == reset);
 }
 
-VkResult Fence::getStatus() const noexcept
+Fence::State Fence::getStatus() const noexcept
 {
-    return vkGetFenceStatus(getNativeDevice(), handle);
+    const VkResult result = vkGetFenceStatus(getNativeDevice(), handle);
+    return (VK_SUCCESS == result) ? State::Signaled : State::Unsignaled;
 }
 
 bool Fence::wait(uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const

@@ -29,17 +29,27 @@ namespace magma
     class Fence : public NonDispatchable<VkFence>
     {
     public:
+        enum class State : uint8_t;
         explicit Fence(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkFenceCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~Fence();
         bool reset() noexcept;
-        VkResult getStatus() const noexcept;
+        State getStatus() const noexcept;
         bool wait(uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
 
     protected:
         Fence(std::shared_ptr<IAllocator> allocator,
             std::shared_ptr<Device> device) noexcept;
+    };
+
+    /* Fences have two states - signaled and unsignaled.
+       A fence can be signaled as part of the execution of
+       a queue submission command. */
+
+    enum class Fence::State : uint8_t
+    {
+        Signaled, Unsignaled
     };
 } // namespace magma
