@@ -16,14 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#if defined(_M_IX86) || defined(_M_X64)
-    #if defined(MAGMA_SSE)
-        #include <nmmintrin.h>
-    #elif defined(_MSC_VER)
-        #include <intrin.h>
-    #endif
-#elif defined(_M_ARM) && defined(MAGMA_NEON)
-    #include <arm_neon.h>
+#ifdef _MSC_VER
+#include <intrin.h>
 #endif
 
 namespace magma
