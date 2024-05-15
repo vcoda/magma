@@ -35,7 +35,6 @@ namespace aux
 FrameGrabber::FrameGrabber(std::shared_ptr<Device> device,
     std::shared_ptr<Allocator> allocator /* nullptr */):
     device(std::move(device)),
-    queue(this->device->getQueue(VK_QUEUE_GRAPHICS_BIT, 0)),
     allocator(std::move(allocator))
 {}
 
@@ -46,65 +45,57 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::s
     std::shared_ptr<DeviceFeatures> deviceFeatures = device->getFeatures();
     const bool srcBlit = deviceFeatures->supportsFormatFeatures(srcImage->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal;
     const bool dstBlit = deviceFeatures->supportsFormatFeatures(dstImage->getFormat(), VK_FORMAT_FEATURE_BLIT_DST_BIT).linear;
-    MAGMA_ASSERT(cmdBuffer->allowsReset());
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-    {
-        const VkImageLayout oldLayout = srcImage->getLayout();
-        // Transition of destination image to transfer dest optimal layout
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-            ImageMemoryBarrier(dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL));
-        // Transition of swapchain image to transfer source optimal layout
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-            ImageMemoryBarrier(srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL));
-        if (srcBlit && dstBlit)
-        {   // Use image blitting, format swizzle will be performed automatically
-            VkOffset3D blitSize;
-            blitSize.x = static_cast<int32_t>(srcImage->getExtent().width);
-            blitSize.y = static_cast<int32_t>(srcImage->getExtent().height);
-            blitSize.z = 1;
-            VkImageBlit blitRegion;
-            blitRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            blitRegion.srcSubresource.mipLevel = 0;
-            blitRegion.srcSubresource.baseArrayLayer = 0;
-            blitRegion.srcSubresource.layerCount = 1;
-            blitRegion.srcOffsets[0] = VkOffset3D{0, 0, 0};
-            blitRegion.srcOffsets[1] = blitSize;
-            blitRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            blitRegion.dstSubresource.mipLevel = 0;
-            blitRegion.dstSubresource.baseArrayLayer = 0;
-            blitRegion.dstSubresource.layerCount = 1;
-            blitRegion.dstOffsets[0] = VkOffset3D{0, 0, 0};
-            blitRegion.dstOffsets[1] = blitSize;
-            cmdBuffer->blitImage(srcImage, dstImage, blitRegion, VK_FILTER_NEAREST);
-        }
-        else
-        {   // Use image copy, format swizzle will be performed later manually
-            VkImageCopy copyRegion;
-            copyRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            copyRegion.srcSubresource.mipLevel = 0;
-            copyRegion.srcSubresource.baseArrayLayer = 0;
-            copyRegion.srcSubresource.layerCount = 1;
-            copyRegion.srcOffset = VkOffset3D{0, 0, 0};
-            copyRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            copyRegion.dstSubresource.mipLevel = 0;
-            copyRegion.dstSubresource.baseArrayLayer = 0;
-            copyRegion.dstSubresource.layerCount = 1;
-            copyRegion.dstOffset = VkOffset3D{0, 0, 0};
-            copyRegion.extent = dstImage->calculateMipExtent(0);
-            cmdBuffer->copyImage(srcImage, dstImage, copyRegion);
-        }
-        // Transition of destination image to general layout, which is the required layout for mapping
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-            ImageMemoryBarrier(dstImage, VK_IMAGE_LAYOUT_GENERAL));
-        // Transition of swapchain image back to old layout
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-            ImageMemoryBarrier(srcImage, oldLayout));
+    const VkImageLayout oldLayout = srcImage->getLayout();
+    MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Recording);
+    // Transition of destination image to transfer dest optimal layout
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+        ImageMemoryBarrier(dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL));
+    // Transition of swapchain image to transfer source optimal layout
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+        ImageMemoryBarrier(srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL));
+    if (srcBlit && dstBlit)
+    {   // Use image blitting, format swizzle will be performed automatically
+        VkOffset3D blitSize;
+        blitSize.x = static_cast<int32_t>(srcImage->getExtent().width);
+        blitSize.y = static_cast<int32_t>(srcImage->getExtent().height);
+        blitSize.z = 1;
+        VkImageBlit blitRegion;
+        blitRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        blitRegion.srcSubresource.mipLevel = 0;
+        blitRegion.srcSubresource.baseArrayLayer = 0;
+        blitRegion.srcSubresource.layerCount = 1;
+        blitRegion.srcOffsets[0] = VkOffset3D{0, 0, 0};
+        blitRegion.srcOffsets[1] = blitSize;
+        blitRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        blitRegion.dstSubresource.mipLevel = 0;
+        blitRegion.dstSubresource.baseArrayLayer = 0;
+        blitRegion.dstSubresource.layerCount = 1;
+        blitRegion.dstOffsets[0] = VkOffset3D{0, 0, 0};
+        blitRegion.dstOffsets[1] = blitSize;
+        cmdBuffer->blitImage(srcImage, dstImage, blitRegion, VK_FILTER_NEAREST);
     }
-    cmdBuffer->end();
-    // Flush command buffer
-    std::shared_ptr<Fence> fence = cmdBuffer->getFence();
-    queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
-    fence->wait();
+    else
+    {   // Use image copy, format swizzle will be performed later manually
+        VkImageCopy copyRegion;
+        copyRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        copyRegion.srcSubresource.mipLevel = 0;
+        copyRegion.srcSubresource.baseArrayLayer = 0;
+        copyRegion.srcSubresource.layerCount = 1;
+        copyRegion.srcOffset = VkOffset3D{0, 0, 0};
+        copyRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        copyRegion.dstSubresource.mipLevel = 0;
+        copyRegion.dstSubresource.baseArrayLayer = 0;
+        copyRegion.dstSubresource.layerCount = 1;
+        copyRegion.dstOffset = VkOffset3D{0, 0, 0};
+        copyRegion.extent = dstImage->calculateMipExtent(0);
+        cmdBuffer->copyImage(srcImage, dstImage, copyRegion);
+    }
+    // Transition of destination image to general layout, which is the required layout for mapping
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+        ImageMemoryBarrier(dstImage, VK_IMAGE_LAYOUT_GENERAL));
+    // Transition of swapchain image back to old layout
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+        ImageMemoryBarrier(srcImage, oldLayout));
     // Do we need to handle swizzling?
     swizzleBgra = false;
     if (!srcBlit || !dstBlit)
