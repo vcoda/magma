@@ -44,8 +44,6 @@ namespace magma
         const VkExternalSemaphoreHandleTypeFlagBits handleType;
 
     private:
-        VkDevice getDeviceNative() const noexcept;
-
         const Semaphore *self;
         mutable HANDLE hSemaphore;
     };
