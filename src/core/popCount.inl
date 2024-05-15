@@ -4,9 +4,9 @@ namespace core
 {
 inline int popCount(uint32_t value) noexcept
 {
-#if (defined(_M_IX86) || defined(_M_X64)) && defined(_MSC_VER)
+#if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
     return __popcnt(value);
-#elif __has_builtin(__builtin_popcount)
+#elif defined(__GNUC__)
     return __builtin_popcount(value);
 #else
     constexpr uint32_t c1 = 0x55555555u;
