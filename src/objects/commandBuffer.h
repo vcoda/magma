@@ -639,6 +639,7 @@ namespace magma
         #ifdef VK_NV_ray_tracing
             std::unordered_set<std::shared_ptr<const AccelerationStructure>> accelerationStructures;
         #endif
+            std::mutex mtx;
             // Insertion complexity: Average case: O(1), worst case O(size()).
             void store(std::shared_ptr<const Buffer> buffer) { buffers.insert(buffer); }
             void store(std::shared_ptr<const Image> image) { images.insert(image); }
@@ -711,6 +712,7 @@ namespace magma
     #define MAGMA_DEFER(resource)\
         if (resource) try\
         {\
+            std::lock_guard<std::mutex> guard(inUse.mtx);\
             inUse.store(resource);\
         }\
         catch(...) {}
