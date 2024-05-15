@@ -61,6 +61,9 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
 #ifdef VK_EXT_debug_utils
     debugUtilsEnabled = device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 #endif
+#ifdef VK_AMD_buffer_marker
+    markerBufferOffset = 0ull;
+#endif
 }
 
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> cmdPool_):
@@ -89,6 +92,9 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
 #endif
 #ifdef VK_EXT_debug_utils
     debugUtilsEnabled = device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+#endif
+#ifdef VK_AMD_buffer_marker
+    markerBufferOffset = 0ull;
 #endif
     VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
     cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;

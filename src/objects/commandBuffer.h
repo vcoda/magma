@@ -691,7 +691,7 @@ namespace magma
         VkQueryPipelineStatisticFlags pipelineStatistics;
     #ifdef VK_AMD_buffer_marker
         std::shared_ptr<Buffer> markerBuffer;
-        std::atomic<VkDeviceSize> markerBufferOffset = 0ull;
+        std::atomic<VkDeviceSize> markerBufferOffset;
     #endif
     };
 
