@@ -35,13 +35,19 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */,
     const char *blockName /* magma::helpers::executeCommandBuffer */,
     uint32_t blockColor /* 0x0 */)
-{
+{   /* VK_COMMAND_POOL_CREATE_TRANSIENT_BIT specifies that command
+       buffers allocated from the pool will be short-lived, meaning
+       that they will be reset or freed in a relatively short timeframe.
+       This flag may be used by the implementation to control memory
+       allocation behavior within the pool. */
+    MAGMA_ASSERT(cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_TRANSIENT_BIT);
     std::shared_ptr<CommandBuffer> cmdBuffer = std::make_shared<PrimaryCommandBuffer>(std::move(cmdPool));
     if (cmdBuffer->begin(blockName, blockColor, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
     {
         try
-        {   // Callback function may optionally throw an exception.
-            // We should catch it and finish command buffer ahead of exeption handler.
+        {   /* Callback function may optionally throw an exception.
+               We should catch throwed exception and finish command
+               buffer ahead of exeption handler. */
             cmdFn(cmdBuffer);
         }
         catch (...)
