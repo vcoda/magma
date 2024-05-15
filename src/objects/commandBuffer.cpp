@@ -208,12 +208,13 @@ void CommandBuffer::end()
 bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
 {   // The command buffer can be in any state other than pending
     MAGMA_ASSERT(state != State::Pending);
+    MAGMA_ASSERT(cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
     VkCommandBufferResetFlags flags = 0;
     if (releaseResources)
-    {   // Specifies that most or all memory resources currently owned by
-        // the command buffer should be returned to the parent command pool.
-        // If this flag is not set, then the command buffer may hold onto
-        // memory resources and reuse them when recording commands.
+    {   /* Specifies that most or all memory resources currently owned by
+           the command buffer should be returned to the parent command pool.
+           If this flag is not set, then the command buffer may hold onto
+           memory resources and reuse them when recording commands. */
         flags |= VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
     }
     const VkResult result = vkResetCommandBuffer(handle, flags);
