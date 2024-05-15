@@ -764,6 +764,14 @@ inline void CommandBuffer::finishedQueueSubmission() noexcept
 
 inline void CommandBuffer::finishedExecution() noexcept
 {
-    state = (usageFlags & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT) ? State::Invalid : State::Executable;
+    if (usageFlags & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT)
+    {
+        state = State::Invalid;
+        releaseBoundResources();
+    }
+    else
+    {
+        state = State::Executable;
+    }
 }
 } // namespace magma
