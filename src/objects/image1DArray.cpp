@@ -82,7 +82,8 @@ Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
                 });
         });
     // Copy buffer to image
-    cmdBuffer->begin();
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     copyMipmap(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));

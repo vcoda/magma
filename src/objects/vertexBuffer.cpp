@@ -57,7 +57,8 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSiz
 {
     MAGMA_ASSERT(data);
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
-    cmdBuffer->begin();
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     copyTransfer(cmdBuffer, srcBuffer);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
@@ -112,7 +113,8 @@ AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared
 {
     MAGMA_ASSERT(data);
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
-    cmdBuffer->begin();
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     copyTransfer(cmdBuffer, srcBuffer);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));

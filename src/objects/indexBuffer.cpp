@@ -82,7 +82,8 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
 {
     MAGMA_ASSERT(data);
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
-    cmdBuffer->begin();
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     copyTransfer(cmdBuffer, srcBuffer);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
@@ -138,7 +139,8 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
 {
     MAGMA_ASSERT(data);
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
-    cmdBuffer->begin();
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     copyTransfer(cmdBuffer, srcBuffer, size);
     cmdBuffer->end();
     commitAndWait(std::move(cmdBuffer));
