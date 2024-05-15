@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_external_semaphore_win32
-#define getNativeDevice getDeviceNative
+#define getNativeDevice() self->getDevice()->getHandle()
 
 Win32ExternalSemaphore::Win32ExternalSemaphore(const Semaphore *self,
     VkExternalSemaphoreHandleTypeFlagBits handleType) noexcept:
@@ -58,7 +58,7 @@ HANDLE Win32ExternalSemaphore::getNtHandle() const
     win32HandleInfo.semaphore = *self;
     win32HandleInfo.handleType = handleType;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreWin32HandleKHR, VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME);
-    const VkResult result = vkGetSemaphoreWin32HandleKHR(getDeviceNative(), &win32HandleInfo, &hSemaphore);
+    const VkResult result = vkGetSemaphoreWin32HandleKHR(getNativeDevice(), &win32HandleInfo, &hSemaphore);
     MAGMA_HANDLE_RESULT(result, "failed to get Win32 handle");
     return hSemaphore;
 }
@@ -74,13 +74,8 @@ void Win32ExternalSemaphore::importNtHandle(HANDLE hSemaphore, LPCWSTR name, VkS
     importWin32HandleInfo.handle = hSemaphore;
     importWin32HandleInfo.name = name;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkImportSemaphoreWin32HandleKHR, VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME);
-    const VkResult result = vkImportSemaphoreWin32HandleKHR(getDeviceNative(), &importWin32HandleInfo);
+    const VkResult result = vkImportSemaphoreWin32HandleKHR(getNativeDevice(), &importWin32HandleInfo);
     MAGMA_HANDLE_RESULT(result, "failed to import Win32 handle");
-}
-
-VkDevice Win32ExternalSemaphore::getDeviceNative() const noexcept
-{
-    return self->getDevice()->getHandle();
 }
 #endif // VK_KHR_external_semaphore_win32
 } // namespace magma
