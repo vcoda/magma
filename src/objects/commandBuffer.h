@@ -539,6 +539,7 @@ namespace magma
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
         State getState() const noexcept { return state; }
         VkCommandBufferUsageFlags getUsageFlags() const noexcept { return usageFlags; }
+        bool allowsReset() const noexcept { return VK_TRUE == resetCommandBuffer; }
         bool insideRenderPass() const noexcept { return inRenderPass; }
         bool insideConditionalRendering() const noexcept { return inConditionalRendering; }
         bool insideTransformFeedback() const noexcept { return inTransformFeedback; }
@@ -678,6 +679,7 @@ namespace magma
         const VkCommandBufferLevel level;
         VkCommandBufferUsageFlags usageFlags;
         std::atomic<State> state;
+        const VkBool32 resetCommandBuffer : 1;
         VkBool32 debugMarkerEnabled : 1;
         VkBool32 debugUtilsEnabled : 1;
         VkBool32 occlusionQueryEnable : 1;
