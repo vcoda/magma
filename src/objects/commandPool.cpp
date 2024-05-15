@@ -28,20 +28,16 @@ namespace magma
 {
 CommandPool::CommandPool(std::shared_ptr<Device> device, uint32_t queueFamilyIndex,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    bool transient /* false */,
-    bool resetCommandBuffer /* true */,
+    VkCommandPoolCreateFlags flags /* VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_COMMAND_POOL, std::move(device), std::move(allocator)),
-    queueFamilyIndex(queueFamilyIndex)
+    queueFamilyIndex(queueFamilyIndex),
+    flags(flags)
 {
     VkCommandPoolCreateInfo cmdPoolInfo;
     cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     cmdPoolInfo.pNext = extendedInfo.headNode();
-    cmdPoolInfo.flags = 0;
-    if (transient)
-        cmdPoolInfo.flags |= VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-    if (resetCommandBuffer)
-        cmdPoolInfo.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    cmdPoolInfo.flags = flags;
     cmdPoolInfo.queueFamilyIndex = queueFamilyIndex;
     const VkResult result = vkCreateCommandPool(getNativeDevice(), &cmdPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create command pool");

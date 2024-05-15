@@ -39,11 +39,11 @@ namespace magma
         explicit CommandPool(std::shared_ptr<Device> device,
             uint32_t queueFamilyIndex,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            bool transient = false,
-            bool resetCommandBuffer = true,
+            VkCommandPoolCreateFlags flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
             const StructureChain& extendedInfo = StructureChain());
         ~CommandPool();
         uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
+        VkCommandPoolCreateFlags getFlags() const noexcept { return flags; }
         bool reset(bool releaseResources = false) noexcept;
         std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
             bool primaryLevel,
@@ -55,5 +55,6 @@ namespace magma
 
     private:
         const uint32_t queueFamilyIndex;
+        const VkCommandPoolCreateFlags flags;
     };
 } // namespace magma
