@@ -39,6 +39,8 @@ namespace magma
         virtual VkDeviceSize getSize() const noexcept = 0;
         virtual VkDeviceSize getAlignment() const noexcept = 0;
         virtual uint32_t getMemoryTypeBits() const noexcept = 0;
+        virtual VkMemoryPropertyFlags getPropertyFlags() const noexcept = 0;
+        virtual uint32_t getHeapIndex() const noexcept = 0;
         virtual Flags getFlags() const noexcept = 0;
         virtual uint32_t getDeviceMask() const noexcept = 0;
         virtual void *getMapPointer() const noexcept = 0;

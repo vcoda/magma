@@ -31,6 +31,8 @@ namespace magma
         VkDeviceSize getSize() const noexcept override { return memoryRequirements.size; }
         VkDeviceSize getAlignment() const noexcept override { return memoryRequirements.alignment; }
         uint32_t getMemoryTypeBits() const noexcept override { return memoryRequirements.memoryTypeBits; }
+        VkMemoryPropertyFlags getPropertyFlags() const noexcept override { return memoryType.propertyFlags; }
+        uint32_t getHeapIndex() const noexcept override { return memoryType.heapIndex; }
         Flags getFlags() const noexcept override { return flags; }
         uint32_t getDeviceMask() const noexcept override { return deviceMask; }
         void *getMapPointer() const noexcept override { return mapPointer; }
