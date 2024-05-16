@@ -42,14 +42,15 @@ namespace magma
     protected:
         BaseDeviceMemory(std::shared_ptr<Device> device,
             const VkMemoryRequirements& memoryRequirements,
-            VkMemoryPropertyFlags memoryFlags,
+            VkMemoryPropertyFlags propertyFlags,
             std::shared_ptr<IAllocator> allocator,
             const StructureChain& extendedInfo) noexcept;
-        uint32_t findTypeIndex(VkMemoryPropertyFlags flags) const;
+        VkMemoryType findMemoryType(VkMemoryPropertyFlags propertyFlags) const;
+        uint32_t findTypeIndex(VkMemoryPropertyFlags propertyFlags) const;
         float clampPriority(float value) noexcept;
 
         VkMemoryRequirements memoryRequirements;
-        const VkMemoryPropertyFlags memoryFlags;
+        const VkMemoryType memoryType;
         Flags flags;
         uint32_t deviceMask;
         float priority;

@@ -57,7 +57,7 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object,
     handle = VK_NULL_HANDLE;
     subOffset = 0ull;
     memoryRequirements = memoryRequirements_;
-    allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, memoryFlags, extendedInfo);
+    allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, memoryType.propertyFlags, extendedInfo);
     onDefragment();
 }
 

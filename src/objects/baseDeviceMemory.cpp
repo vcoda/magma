@@ -25,11 +25,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
-    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags memoryFlags,
+    const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags propertyFlags,
     std::shared_ptr<IAllocator> allocator, const StructureChain& extendedInfo) noexcept:
     NonDispatchable(VK_OBJECT_TYPE_DEVICE_MEMORY, std::move(device), std::move(allocator)),
     memoryRequirements(memoryRequirements),
-    memoryFlags(memoryFlags),
+    memoryType(findMemoryType(propertyFlags)),
     deviceMask(0),
     priority(MAGMA_MEMORY_PRIORITY_DEFAULT),
     binding(VK_NULL_HANDLE),
@@ -37,21 +37,21 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
     mapOffset(0),
     mapSize(0)
 {
-    flags.deviceLocal = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-    flags.hostVisible = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
-    flags.hostCoherent = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-    flags.hostCached = MAGMA_BITWISE_AND(memoryFlags,
+    flags.deviceLocal = MAGMA_BITWISE_AND(memoryType.propertyFlags, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    flags.hostVisible = MAGMA_BITWISE_AND(memoryType.propertyFlags, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+    flags.hostCoherent = MAGMA_BITWISE_AND(memoryType.propertyFlags, VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    flags.hostCached = MAGMA_BITWISE_AND(memoryType.propertyFlags,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
-    flags.lazilyAllocated = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT);
+    flags.lazilyAllocated = MAGMA_BITWISE_AND(memoryType.propertyFlags, VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT);
 #ifdef VK_AMD_device_coherent_memory
     // For any memory allocated with both the HOST_COHERENT and
     // the DEVICE_COHERENT flags, host or device accesses also
     // perform automatic memory domain transfer operations,
     // such that writes are always automatically available and
     // visible to both host and device memory domains.
-    flags.deviceHostCoherent = MAGMA_BITWISE_AND(memoryFlags,
+    flags.deviceHostCoherent = MAGMA_BITWISE_AND(memoryType.propertyFlags,
         VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD);
-    flags.deviceUncached = MAGMA_BITWISE_AND(memoryFlags, VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD);
+    flags.deviceUncached = MAGMA_BITWISE_AND(memoryType.propertyFlags, VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD);
 #else
     flags.deviceHostCoherent = VK_FALSE;
     flags.deviceUncached = VK_FALSE;
@@ -80,20 +80,27 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
     }
 }
 
-uint32_t BaseDeviceMemory::findTypeIndex(VkMemoryPropertyFlags flags) const
+VkMemoryType BaseDeviceMemory::findMemoryType(VkMemoryPropertyFlags propertyFlags) const
 {
-    const VkPhysicalDeviceMemoryProperties& properties = device->getPhysicalDevice()->getMemoryProperties();
-    for (uint32_t memTypeIndex = 0; memTypeIndex < properties.memoryTypeCount; ++memTypeIndex)
+    const VkPhysicalDeviceMemoryProperties properties = device->getPhysicalDevice()->getMemoryProperties();
+    const uint32_t memoryTypeIndex = findTypeIndex(propertyFlags);
+    return properties.memoryTypes[memoryTypeIndex];
+}
+
+uint32_t BaseDeviceMemory::findTypeIndex(VkMemoryPropertyFlags propertyFlags) const
+{
+    const VkPhysicalDeviceMemoryProperties properties = device->getPhysicalDevice()->getMemoryProperties();
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < properties.memoryTypeCount; ++memoryTypeIndex)
     {   // Try to find exact match
-        const VkMemoryType& memType = properties.memoryTypes[memTypeIndex];
-        if (memType.propertyFlags == flags)
-            return memTypeIndex;
+        const VkMemoryType& memoryType = properties.memoryTypes[memoryTypeIndex];
+        if (memoryType.propertyFlags == propertyFlags)
+            return memoryTypeIndex;
     }
-    for (uint32_t memTypeIndex = 0; memTypeIndex < properties.memoryTypeCount; ++memTypeIndex)
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < properties.memoryTypeCount; ++memoryTypeIndex)
     {   // Try to find any suitable memory type
-        const VkMemoryType& memType = properties.memoryTypes[memTypeIndex];
-        if ((memType.propertyFlags & flags) == flags)
-            return memTypeIndex;
+        const VkMemoryType& memoryType = properties.memoryTypes[memoryTypeIndex];
+        if ((memoryType.propertyFlags & propertyFlags) == propertyFlags)
+            return memoryTypeIndex;
     }
     MAGMA_ERROR("failed to find suitable memory type");
     return 0;

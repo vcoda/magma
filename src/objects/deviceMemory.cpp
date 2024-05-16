@@ -127,7 +127,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     memoryAllocateInfo.pNext = extendedInfo.headNode();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
-    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(memoryFlags);
+    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(memoryType.propertyFlags);
     const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to reallocate device memory");
