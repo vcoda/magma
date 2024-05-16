@@ -80,13 +80,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, allocator)
 {
-    MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
-    MAGMA_ASSERT(cmdBuffer->allowsReset());
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-    copyTransfer(cmdBuffer, srcBuffer);
-    cmdBuffer->end();
-    commitAndWait(std::move(cmdBuffer));
+    stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
@@ -137,13 +131,7 @@ AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_p
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, allocator)
 {
-    MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator), Initializer(), sharing, std::move(copyFn));
-    MAGMA_ASSERT(cmdBuffer->allowsReset());
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-    copyTransfer(cmdBuffer, srcBuffer, size);
-    cmdBuffer->end();
-    commitAndWait(std::move(cmdBuffer));
+    stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
 AccelerationStructureIndexBuffer::AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType,

@@ -25,6 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queue.h"
 #include "fence.h"
 #include "commandBuffer.h"
+#include "commandPool.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
 #include "../core/copyMemory.h"
@@ -351,5 +352,30 @@ void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_
     // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
     std::shared_ptr<Buffer> self = std::shared_ptr<Buffer>(this, [](Buffer *) {});
     cmdBuffer->copyBuffer(srcBuffer, self, region);
+}
+
+void Buffer::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const void *data,
+    std::shared_ptr<Allocator> allocator,
+    CopyMemoryFunction copyFn)
+{
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    MAGMA_ASSERT(data);
+    std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+        std::move(allocator), Buffer::Initializer(), Sharing(), std::move(copyFn));
+    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+    {   // Copy from host to device
+        copyTransfer(cmdBuffer, srcBuffer);
+    }
+    cmdBuffer->end();
+    const std::shared_ptr<CommandPool>& cmdPool = cmdBuffer->getCommandPool();
+    const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
+    std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
+    const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
+    fence->reset();
+    {
+        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
+    }
+    fence->wait();
+    cmdBuffer->finishedExecution();
 }
 } // namespace magma
