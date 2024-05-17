@@ -532,8 +532,8 @@ namespace magma
         void setCheckpoint(const char *MAGMA_NOOP(name)) noexcept MAGMA_NOOP_METHOD;
     #endif
 
+        std::shared_ptr<CommandPool> getCommandPool() const noexcept { return cmdPool.lock(); }
         const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
-        const std::shared_ptr<CommandPool>& getCommandPool() const noexcept { return cmdPool; }
         const std::shared_ptr<Fence>& getFence() const noexcept { return fence; }
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
@@ -673,8 +673,8 @@ namespace magma
             VkPipelineStageFlags dstStageMask,
             VkDependencyFlags dependencyFlags) noexcept;
 
+        std::weak_ptr<CommandPool> cmdPool;
         std::shared_ptr<Device> device;
-        std::shared_ptr<CommandPool> cmdPool;
         std::shared_ptr<Fence> fence;
         const VkCommandBufferLevel level;
         VkCommandBufferUsageFlags usageFlags;

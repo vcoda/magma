@@ -29,7 +29,7 @@ namespace helpers
 {
 void flushCommandBuffer(std::shared_ptr<CommandBuffer> cmdBuffer)
 {
-    const std::shared_ptr<CommandPool>& cmdPool = cmdBuffer->getCommandPool();
+    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
     uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
     std::shared_ptr<Queue> queue = cmdPool->getDevice()->getQueueByFamily(queueFamilyIndex);
     const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();

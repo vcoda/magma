@@ -36,13 +36,13 @@ namespace magma
 {
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool_):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle),
+    cmdPool(cmdPool_),
     device(cmdPool_->getDevice()),
-    cmdPool(std::move(cmdPool_)),
     fence(std::make_shared<Fence>(device)),
     level(level),
     usageFlags(0),
     state(State::Initial),
-    resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
+    resetCommandBuffer((cmdPool_->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
     debugMarkerEnabled(VK_FALSE),
     debugUtilsEnabled(VK_FALSE),
     occlusionQueryEnable(VK_FALSE),
@@ -69,13 +69,13 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
 
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> cmdPool_):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER),
+    cmdPool(cmdPool_),
     device(cmdPool_->getDevice()),
-    cmdPool(std::move(cmdPool_)),
     fence(std::make_shared<Fence>(device)),
     level(level),
     usageFlags(0),
     state(State::Initial),
-    resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
+    resetCommandBuffer((cmdPool_->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
     debugMarkerEnabled(VK_FALSE),
     debugUtilsEnabled(VK_FALSE),
     occlusionQueryEnable(VK_FALSE),
@@ -101,7 +101,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
     cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     cmdBufferAllocateInfo.pNext = nullptr;
-    cmdBufferAllocateInfo.commandPool = *cmdPool;
+    cmdBufferAllocateInfo.commandPool = *cmdPool_;
     cmdBufferAllocateInfo.level = level;
     cmdBufferAllocateInfo.commandBufferCount = 1;
     const VkResult result = vkAllocateCommandBuffers(getNativeDevice(), &cmdBufferAllocateInfo, &handle);
@@ -113,7 +113,8 @@ CommandBuffer::~CommandBuffer()
 {
     if (handle)
     {   // Release if not freed through command pool
-        vkFreeCommandBuffers(getNativeDevice(), *cmdPool, 1, &handle);
+        MAGMA_ASSERT(!cmdPool.expired());
+        vkFreeCommandBuffers(getNativeDevice(), *cmdPool.lock(), 1, &handle);
     }
 }
 
