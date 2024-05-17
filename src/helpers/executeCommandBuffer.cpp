@@ -17,11 +17,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "executeCommandBuffer.h"
+#include "flushCommandBuffer.h"
 #include "../objects/device.h"
 #include "../objects/commandPool.h"
 #include "../objects/primaryCommandBuffer.h"
-#include "../objects/secondaryCommandBuffer.h"
 #include "../objects/dstTransferBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
@@ -32,7 +31,6 @@ namespace helpers
 {
 void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     std::function<void(std::shared_ptr<CommandBuffer>)> cmdFn,
-    VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */,
     const char *blockName /* magma::helpers::executeCommandBuffer */,
     uint32_t blockColor /* 0x0 */)
 {   /* VK_COMMAND_POOL_CREATE_TRANSIENT_BIT specifies that command
@@ -57,18 +55,11 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
         }
         cmdBuffer->end();
     }
-    const std::shared_ptr<Device>& device = cmdBuffer->getDevice();
-    const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
-    std::shared_ptr<Queue> queue = device->getQueue(queueType, 0);
-    fence->reset();
-    queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
-    fence->wait();
-    cmdBuffer->finishedExecution();
+    flushCommandBuffer(std::move(cmdBuffer));
 }
 
 #ifdef VK_AMD_buffer_marker
-std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer,
-    VkQueueFlagBits queueType /* VK_QUEUE_GRAPHICS_BIT */)
+std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer)
 {
     std::vector<uint32_t> bufferMarkers;
     const VkDeviceSize size = cmdBuffer->getMarkerBufferOffset();
@@ -80,8 +71,7 @@ std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmd
             [&srcBuffer, &dstBuffer](std::shared_ptr<CommandBuffer> cmdBuffer)
             {   // Copy from device to host
                 cmdBuffer->copyBuffer(srcBuffer, dstBuffer, 0, 0, dstBuffer->getSize());
-            },
-            queueType, "magma::helpers::readBufferMarkers", 0x0);
+            }, "magma::helpers::readBufferMarkers", 0x0);
         const void *data = dstBuffer->getMemory()->map();
         if (data)
         {

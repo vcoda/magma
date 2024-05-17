@@ -858,6 +858,9 @@
     <ClInclude Include="..\..\src\core\popCount.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\helpers\flushCommandBuffer.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1351,6 +1354,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\objects\deviceChild.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\helpers\flushCommandBuffer.cpp">
+      <Filter>Source Files\helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -65,6 +65,7 @@ SRC_OBJS= \
 	\
 	src/helpers/executeCommandBuffer.o \
 	src/helpers/executeDeferredOperation.o \
+	src/helpers/flushCommandBuffer.o \
 	src/helpers/streamInsertOperators.o \
 	src/helpers/stringifyFlags.o \
 	\

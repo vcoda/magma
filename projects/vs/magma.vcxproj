@@ -236,6 +236,7 @@
     <ClInclude Include="..\..\src\helpers\enumerationCast.h" />
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
     <ClInclude Include="..\..\src\helpers\executeDeferredOperation.h" />
+    <ClInclude Include="..\..\src\helpers\flushCommandBuffer.h" />
     <ClInclude Include="..\..\src\helpers\mapScoped.h" />
     <ClInclude Include="..\..\src\helpers\mapTyped.h" />
     <ClInclude Include="..\..\src\helpers\stackArray.h" />
@@ -457,6 +458,7 @@
     <ClCompile Include="..\..\src\extensions\deviceExtensions.cpp" />
     <ClCompile Include="..\..\src\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\src\helpers\executeDeferredOperation.cpp" />
+    <ClCompile Include="..\..\src\helpers\flushCommandBuffer.cpp" />
     <ClCompile Include="..\..\src\helpers\streamInsertOperators.cpp" />
     <ClCompile Include="..\..\src\helpers\stringifyFlags.cpp" />
     <ClCompile Include="..\..\src\magma.cpp" />

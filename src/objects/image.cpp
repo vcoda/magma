@@ -30,6 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/format.h"
 #include "../helpers/mapScoped.h"
+#include "../helpers/flushCommandBuffer.h"
 #include "../exceptions/errorResult.h"
 #include "../core/copyMemory.h"
 #include "../core/foreach.h"
@@ -638,17 +639,7 @@ void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
             dstLayout, dstStageMask);
     }
     cmdBuffer->end();
-    // Submit to the graphics queue
-    const std::shared_ptr<CommandPool>& cmdPool = cmdBuffer->getCommandPool();
-    uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
-    std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
-    const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
-    fence->reset();
-    {
-        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
-    }
-    fence->wait();
-    cmdBuffer->finishedExecution();
+    helpers::flushCommandBuffer(std::move(cmdBuffer));
 }
 
 VkExtent3D Image::virtualMipExtent(uint32_t level) const noexcept

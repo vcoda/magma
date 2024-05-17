@@ -27,6 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "commandPool.h"
 #include "../misc/extension.h"
+#include "../helpers/flushCommandBuffer.h"
 #include "../exceptions/errorResult.h"
 #include "../core/copyMemory.h"
 
@@ -366,16 +367,6 @@ void Buffer::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const void *
         copyTransfer(cmdBuffer, srcBuffer);
     }
     cmdBuffer->end();
-    // Submit to the transfer queue
-    const std::shared_ptr<CommandPool>& cmdPool = cmdBuffer->getCommandPool();
-    uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
-    std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
-    const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
-    fence->reset();
-    {
-        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
-    }
-    fence->wait();
-    cmdBuffer->finishedExecution();
+    helpers::flushCommandBuffer(std::move(cmdBuffer));
 }
 } // namespace magma
