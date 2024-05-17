@@ -538,19 +538,14 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel,
     subresourceRange.layerCount = 1;
     // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
     const std::shared_ptr<Image> self = std::shared_ptr<Image>(this, [](Image *) {});
-    // Transition image layout as a destination of a transfer command
     if (VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL == layout)
         layout = VK_IMAGE_LAYOUT_UNDEFINED; // Hack to select proper srcAccessMask inside ImageMemoryBarrier
-    const ImageMemoryBarrier transferDst(shared_from_this(),
-        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-        subresourceRange);
+    // Image layout transition to destination of a transfer command
+    const ImageMemoryBarrier transferDst(self, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
     cmdBuffer->copyBufferToImage(std::move(srcBuffer), self, region);
-    // Transition image layout to read-only access in a shader as a sampled image
-    const ImageMemoryBarrier shaderRead(self,
-        dstLayout,
-        subresourceRange);
-    // Insert memory dependency between transfer and fragment shader stages
+    // Image layout transition to read-only access in a shader as a sampled image
+    const ImageMemoryBarrier shaderRead(self, dstLayout, subresourceRange);
     cmdBuffer->batchPipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
@@ -605,18 +600,12 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr
     subresourceRange.layerCount = arrayLayers;
     // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
     const std::shared_ptr<Image> self = std::shared_ptr<Image>(this, [](Image *) {});
-    // Transition image layout as a destination of a transfer command
-    const ImageMemoryBarrier transferDst(self,
-        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-        subresourceRange);
-    // Insert memory dependency between host and transfer stages
+    // Image layout transition to destination of a transfer command
+    const ImageMemoryBarrier transferDst(self, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
     cmdBuffer->copyBufferToImage(srcBuffer, self, regions);
-    // Transition image layout to read-only access in a shader as a sampled image
-    const ImageMemoryBarrier shaderRead(self,
-        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-        subresourceRange);
-    // Insert memory dependency between transfer and fragment shader stages
+    // Image layout transition to read-only access in a shader as a sampled image
+    const ImageMemoryBarrier shaderRead(self, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, subresourceRange);
     cmdBuffer->batchPipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 

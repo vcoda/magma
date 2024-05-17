@@ -355,20 +355,20 @@ void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_
 }
 
 void Buffer::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const void *data,
-    std::shared_ptr<Allocator> allocator,
-    CopyMemoryFunction copyFn)
+    std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn)
 {
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(data);
     std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
-        std::move(allocator), Buffer::Initializer(), Sharing(), std::move(copyFn));
+        std::move(allocator), Initializer(), Sharing(), std::move(copyFn));
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {   // Copy from host to device
         copyTransfer(cmdBuffer, srcBuffer);
     }
     cmdBuffer->end();
+    // Submit to the transfer queue
     const std::shared_ptr<CommandPool>& cmdPool = cmdBuffer->getCommandPool();
-    const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
+    uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
     std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
     const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
     fence->reset();
