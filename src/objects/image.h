@@ -151,15 +151,19 @@ namespace magma
 
     struct Image::Mip
     {
-        VkExtent3D extent = {0, 0, 0};
-        VkDeviceSize bufferOffset = 0ull;
+        Mip() noexcept;
+        Mip(const VkExtent3D, VkDeviceSize) noexcept;
+        VkExtent3D extent;
+        VkDeviceSize bufferOffset;
     };
 
     struct Image::MipData
     {
-        VkExtent3D extent = {0, 0, 0};
-        VkDeviceSize size = 0ull;
-        const void *texels = nullptr;
+        MipData() noexcept;
+        MipData(const VkExtent3D, VkDeviceSize, const void *) noexcept;
+        VkExtent3D extent;
+        VkDeviceSize size;
+        const void *texels;
     };
 
     struct Image::CopyLayout
@@ -182,3 +186,5 @@ namespace magma
         float memoryPriority = MAGMA_MEMORY_PRIORITY_DEFAULT;
     };
 } // namespace magma
+
+#include "image.inl"
