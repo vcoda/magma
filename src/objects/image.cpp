@@ -550,25 +550,6 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel,
     cmdBuffer->batchPipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
-VkDeviceSize Image::setupMipmap(std::vector<Mip>& dstMips, const std::vector<MipData>& srcMips) const
-{
-    VkDeviceSize bufferOffset = 0;
-    Mip mip;
-    mip.bufferOffset = bufferOffset;
-    mip.extent = srcMips[0].extent;
-    dstMips.reserve(srcMips.size());
-    dstMips.push_back(mip);
-    bufferOffset += MAGMA_ALIGN(srcMips[0].size); // By default memory copies are aligned
-    for (std::size_t mipIndex = 1, mipCount = srcMips.size(); mipIndex < mipCount; ++mipIndex)
-    {
-        mip.bufferOffset = bufferOffset;
-        mip.extent = srcMips[mipIndex].extent;
-        dstMips.push_back(mip);
-        bufferOffset += MAGMA_ALIGN(srcMips[mipIndex].size);
-    }
-    return bufferOffset;
-}
-
 void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout,
@@ -615,10 +596,18 @@ void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
     const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
-{
+{   // Setup mip chain for buffer copy
     std::vector<Mip> mipChain;
-    const VkDeviceSize size = setupMipmap(mipChain, mipMaps);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr,
+    mipChain.reserve(mipMaps.size());
+    mipChain.emplace_back(mipMaps.front().extent, 0ull);
+    VkDeviceSize bufferOffset = MAGMA_ALIGN(mipMaps.front().size); // By default memory copies are aligned
+    for (std::size_t mipIndex = 1, mipCount = mipMaps.size(); mipIndex < mipCount; ++mipIndex)
+    {
+        mipChain.emplace_back(mipMaps[mipIndex].extent, bufferOffset);
+        bufferOffset += MAGMA_ALIGN(mipMaps[mipIndex].size);
+    }
+    // Allocate staged buffer for mip data
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferOffset, nullptr,
         std::move(allocator), Buffer::Initializer(), Sharing());
     helpers::mapScoped<uint8_t>(srcBuffer,
         [&](uint8_t *buffer)

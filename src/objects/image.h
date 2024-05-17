@@ -115,8 +115,6 @@ namespace magma
             VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent);
-        VkDeviceSize setupMipmap(std::vector<Mip>& dstMips,
-            const std::vector<MipData>& srcMips) const;
         void copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const std::vector<Mip>& mipMaps,

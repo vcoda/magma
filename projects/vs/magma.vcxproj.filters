@@ -1588,6 +1588,9 @@
     <None Include="..\..\src\objects\deviceResourcePool.inl">
       <Filter>Header Files\objects</Filter>
     </None>
+    <None Include="..\..\src\objects\image.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
