@@ -358,10 +358,10 @@ void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_
 void Buffer::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const void *data,
     std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn)
 {
-    MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(data);
-    std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
         std::move(allocator), Initializer(), Sharing(), std::move(copyFn));
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {   // Copy from host to device
         copyTransfer(cmdBuffer, srcBuffer);
