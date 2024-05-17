@@ -210,7 +210,7 @@ void CommandBuffer::end()
 bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
 {   // The command buffer can be in any state other than pending
     MAGMA_ASSERT(state != State::Pending);
-    MAGMA_ASSERT(cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
+    MAGMA_ASSERT(resetCommandBuffer);
     VkCommandBufferResetFlags flags = 0;
     if (releaseResources)
     {   /* Specifies that most or all memory resources currently owned by
