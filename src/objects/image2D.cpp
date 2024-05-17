@@ -18,11 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "image2D.h"
-#include "srcTransferBuffer.h"
 #include "commandBuffer.h"
-#include "../helpers/mapScoped.h"
-#include "../core/copyMemory.h"
-#include "../core/foreach.h"
 
 namespace magma
 {
@@ -60,29 +56,7 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     Image2D(cmdBuffer->getDevice(), format, mipMaps.front().extent, MAGMA_COUNT(mipMaps),
         allocator, optional, sharing)
 {
-    // Setup memory layout of mip maps in the buffer
-    std::vector<Mip> mipChain;
-    const VkDeviceSize bufferSize = setupMipmap(mipChain, mipMaps);
-    // Allocate temporary transfer buffer
-    std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device,
-        bufferSize, nullptr, std::move(allocator), Buffer::Initializer(), sharing);
-    helpers::mapScoped<uint8_t>(srcBuffer,
-        [&](uint8_t *buffer)
-        {
-            if (!copyFn)
-                copyFn = core::copyMemory;
-            core::forConstEach(mipChain, mipMaps,
-                [buffer, copyFn](auto dstMip, auto srcMip)
-                {   // Copy mip texels to buffer
-                    copyFn(buffer + dstMip->bufferOffset, srcMip->texels, (std::size_t)srcMip->size);
-                });
-        });
-    // Copy buffer to image
-    MAGMA_ASSERT(cmdBuffer->allowsReset());
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-    copyMipmap(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
-    cmdBuffer->end();
-    commitAndWait(std::move(cmdBuffer));
+    stagedUpload(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn));
 }
 
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
@@ -90,15 +64,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
     VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Image(std::move(device), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
-        mipLevels,
-        arrayLayers,
-        samples,
-        flags,
-        usage,
-        tiling,
-        optional,
-        sharing,
-        std::move(allocator))
+        mipLevels, arrayLayers, samples, flags, usage, tiling, optional, sharing, std::move(allocator))
 {}
 
 Image2D::Image2D(std::shared_ptr<Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent):

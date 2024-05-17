@@ -18,11 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "image3D.h"
-#include "srcTransferBuffer.h"
 #include "commandBuffer.h"
-#include "../helpers/mapScoped.h"
-#include "../core/copyMemory.h"
-#include "../core/foreach.h"
 
 namespace magma
 {
@@ -60,28 +56,7 @@ Image3D::Image3D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     Image3D(cmdBuffer->getDevice(), format, mipMaps.front().extent, MAGMA_COUNT(mipMaps), // mipLevels
         allocator, optional, sharing)
 {
-    // Setup memory layout of mip maps in the buffer
-    std::vector<Mip> mipChain;
-    const VkDeviceSize bufferSize = setupMipmap(mipChain, mipMaps);
-    std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferSize, nullptr,
-        std::move(allocator), Buffer::Initializer(), sharing);
-    helpers::mapScoped<uint8_t>(srcBuffer,
-        [&](uint8_t *buffer)
-        {
-            if (!copyFn)
-                copyFn = core::copyMemory;
-            core::forConstEach(mipChain, mipMaps,
-                [buffer, copyFn](auto dstMip, auto srcMip)
-                {   // Copy mip texels to buffer
-                    copyFn(buffer + dstMip->bufferOffset, srcMip->texels, (std::size_t)srcMip->size);
-                });
-        });
-    // Copy buffer to image
-    MAGMA_ASSERT(cmdBuffer->allowsReset());
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-    copyMipmap(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
-    cmdBuffer->end();
-    commitAndWait(std::move(cmdBuffer));
+    stagedUpload(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn));
 }
 
 Image3D::Image3D(std::shared_ptr<Device> device, VkFormat format, const VkExtent3D& extent,

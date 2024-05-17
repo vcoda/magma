@@ -122,6 +122,10 @@ namespace magma
             const std::vector<Mip>& mipMaps,
             const CopyLayout& bufferLayout,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+        void stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
+            const std::vector<MipData>& mipMaps,
+            std::shared_ptr<Allocator> allocator,
+            CopyMemoryFunction copyFn);
         VkExtent3D virtualMipExtent(uint32_t mipLevel) const noexcept;
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples) noexcept;
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,

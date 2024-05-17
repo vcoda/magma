@@ -26,9 +26,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queue.h"
 #include "fence.h"
 #include "commandBuffer.h"
+#include "commandPool.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/format.h"
+#include "../helpers/mapScoped.h"
 #include "../exceptions/errorResult.h"
+#include "../core/copyMemory.h"
+#include "../core/foreach.h"
 
 #define MAGMA_VIRTUAL_MIP_EXTENT 1
 
@@ -614,6 +618,43 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr
         subresourceRange);
     // Insert memory dependency between transfer and fragment shader stages
     cmdBuffer->batchPipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
+}
+
+void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const std::vector<MipData>& mipMaps,
+    std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn)
+{
+    std::vector<Mip> mipChain;
+    const VkDeviceSize size = setupMipmap(mipChain, mipMaps);
+    std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr,
+        std::move(allocator), Buffer::Initializer(), Sharing());
+    helpers::mapScoped<uint8_t>(srcBuffer,
+        [&](uint8_t *buffer)
+        {
+            if (!copyFn)
+                copyFn = core::copyMemory;
+            core::forConstEach(mipChain, mipMaps,
+                [buffer, copyFn](auto dstMip, auto srcMip)
+                {   // Copy mip texels to buffer
+                    copyFn(buffer + dstMip->bufferOffset, srcMip->texels, (size_t)srcMip->size);
+                });
+        });
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+    {   // Copy buffer to image
+        copyMipmap(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
+    }
+    cmdBuffer->end();
+    // Submit to the graphics queue
+    const std::shared_ptr<CommandPool>& cmdPool = cmdBuffer->getCommandPool();
+    uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
+    std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
+    const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
+    fence->reset();
+    {
+        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
+    }
+    fence->wait();
+    cmdBuffer->finishedExecution();
 }
 
 VkExtent3D Image::virtualMipExtent(uint32_t level) const noexcept
