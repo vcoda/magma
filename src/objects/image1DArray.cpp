@@ -47,7 +47,9 @@ Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
         std::move(allocator), optional, sharing)
 {
     MAGMA_ASSERT(MAGMA_COUNT(mipMaps) % arrayLayers == 0);
-    copyMipmap(cmdBuffer, srcBuffer, mipMaps, bufferLayout);
+    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 }
 
 Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t arrayLayers,
@@ -61,6 +63,8 @@ Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
         allocator, optional, sharing)
 {
     MAGMA_ASSERT(MAGMA_COUNT(mipMaps) % arrayLayers == 0);
-    stagedUpload(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn));
+    stagedUpload(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn),
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 }
 } // namespace magma

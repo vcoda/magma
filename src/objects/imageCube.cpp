@@ -46,7 +46,9 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
 {
     MAGMA_ASSERT(mipMaps.size() % 6 == 0);
     MAGMA_ASSERT(mipMaps.front().extent.width == mipMaps.front().extent.height);
-    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout);
+    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 }
 
 ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
@@ -59,6 +61,8 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
 {
     MAGMA_ASSERT(mipMaps.size() % 6 == 0);
     MAGMA_ASSERT(mipMaps.front().extent.width == mipMaps.front().extent.height);
-    stagedUpload(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn));
+    stagedUpload(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn),
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 }
 } // namespace magma

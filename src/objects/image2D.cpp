@@ -45,7 +45,9 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
     Image2D(cmdBuffer->getDevice(), format, mipMaps.front().extent, MAGMA_COUNT(mipMaps),
         std::move(allocator), optional, sharing)
 {
-    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout);
+    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 }
 
 Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
@@ -56,7 +58,9 @@ Image2D::Image2D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     Image2D(cmdBuffer->getDevice(), format, mipMaps.front().extent, MAGMA_COUNT(mipMaps),
         allocator, optional, sharing)
 {
-    stagedUpload(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn));
+    stagedUpload(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn),
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 }
 
 Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,

@@ -568,9 +568,10 @@ VkDeviceSize Image::setupMipmap(std::vector<Mip>& dstMips, const std::vector<Mip
     return bufferOffset;
 }
 
-void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout,
-    VkPipelineStageFlags dstStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
+    VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {
     std::vector<VkBufferImageCopy> regions;
     regions.reserve(mipMaps.size());
@@ -605,16 +606,18 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
     cmdBuffer->copyBufferToImage(srcBuffer, self, regions);
     // Image layout transition to read-only access in a shader as a sampled image
-    const ImageMemoryBarrier shaderRead(self, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, subresourceRange);
+    const ImageMemoryBarrier shaderRead(self, dstLayout, subresourceRange);
     cmdBuffer->batchPipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
-void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const std::vector<MipData>& mipMaps,
-    std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn)
+void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
+    const std::vector<MipData>& mipMaps,
+    std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn,
+    VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {
     std::vector<Mip> mipChain;
     const VkDeviceSize size = setupMipmap(mipChain, mipMaps);
-    std::shared_ptr<SrcTransferBuffer> srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr,
+    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr,
         std::move(allocator), Buffer::Initializer(), Sharing());
     helpers::mapScoped<uint8_t>(srcBuffer,
         [&](uint8_t *buffer)
@@ -630,7 +633,9 @@ void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const std::ve
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {   // Copy buffer to image
-        copyMipmap(cmdBuffer, srcBuffer, mipChain, CopyLayout{0, 0, 0});
+        copyMipmap(cmdBuffer, srcBuffer, mipChain,
+            CopyLayout{0, 0, 0},
+            dstLayout, dstStageMask);
     }
     cmdBuffer->end();
     // Submit to the graphics queue
