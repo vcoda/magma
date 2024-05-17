@@ -152,7 +152,7 @@ namespace magma
     {
         VkExtent3D extent = {0, 0, 0};
         VkDeviceSize size = 0ull;
-        void *texels = nullptr;
+        const void *texels = nullptr;
     };
 
     struct Image::CopyLayout
