@@ -516,9 +516,12 @@ VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t 
     return oldLayout;
 }
 
-void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel, uint32_t arrayLayer,
-    std::shared_ptr<const SrcTransferBuffer> srcBuffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
-    VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
+void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
+    uint32_t mipLevel, uint32_t arrayLayer,
+    std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+    const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
+    VkImageLayout dstLayout,
+    VkPipelineStageFlags dstStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
 {
     VkBufferImageCopy region;
     region.bufferOffset = bufferLayout.offset;
