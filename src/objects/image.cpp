@@ -598,13 +598,12 @@ void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {   // Setup mip chain for buffer copy
     std::vector<Mip> mipChain;
+    VkDeviceSize bufferOffset = 0ull;
     mipChain.reserve(mipMaps.size());
-    mipChain.emplace_back(mipMaps.front().extent, 0ull);
-    VkDeviceSize bufferOffset = MAGMA_ALIGN(mipMaps.front().size); // By default memory copies are aligned
-    for (std::size_t mipIndex = 1, mipCount = mipMaps.size(); mipIndex < mipCount; ++mipIndex)
+    for (auto const& mip: mipMaps)
     {
-        mipChain.emplace_back(mipMaps[mipIndex].extent, bufferOffset);
-        bufferOffset += MAGMA_ALIGN(mipMaps[mipIndex].size);
+        mipChain.emplace_back(mip.extent, bufferOffset);
+        bufferOffset += MAGMA_ALIGN(mip.size);
     }
     // Allocate staged buffer for mip data
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferOffset, nullptr,
