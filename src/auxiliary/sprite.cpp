@@ -66,12 +66,12 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT);
 }
 
-Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
+Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent_,
     VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+    Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent_.width, extent_.height, 1},
         1, // mipLevels
         1, // arrayLayers
         1, // samples
@@ -80,7 +80,7 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         VK_IMAGE_TILING_OPTIMAL,
         Initializer(),
         sharing,
-        std::move(allocator)),
+        allocator),
     x(0), y(0),
     width(extent.width),
     height(extent.height),
@@ -97,24 +97,10 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         bottomRight.x *= footprint.first;
         bottomRight.y *= footprint.second;
     }
-    // Copy bitmap data to host visible buffer
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, nullptr, std::move(allocator), Buffer::Initializer(), sharing);
-    helpers::mapScoped<uint8_t>(srcBuffer,
-        [size, data, &copyFn](uint8_t *buffer)
-        {
-            if (!copyFn)
-                copyFn = core::copyMemory;
-            copyFn(buffer, data, static_cast<size_t>(size));
-        });
-    constexpr CopyLayout bufferLayout = {0, 0, 0};
-    constexpr VkOffset3D imageOffset{0, 0, 0};
-    // Copy buffer to image
-    MAGMA_ASSERT(cmdBuffer->allowsReset());
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-    copyMip(cmdBuffer, 0, 0, srcBuffer, bufferLayout, imageOffset,
-        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT);
-    cmdBuffer->end();
-    commitAndWait(std::move(cmdBuffer));
+    const MipData mip = {extent, size, data};
+    stagedUpload(std::move(cmdBuffer), {mip}, std::move(allocator), std::move(copyFn),
+        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+        VK_PIPELINE_STAGE_TRANSFER_BIT);
 }
 
 void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Image> dstImage,
