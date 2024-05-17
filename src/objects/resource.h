@@ -18,9 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "iresource.h"
 #include "nondispatchable.h"
-#include "../allocator/allocator.h"
 #include "../misc/sharing.h"
-#include "../exceptions/exception.h"
 
 namespace magma
 {
@@ -43,10 +41,10 @@ namespace magma
         const std::shared_ptr<IDeviceMemoryAllocator>& getDeviceAllocator() const noexcept { return deviceAllocator; }
 
     protected:
-        Resource(VkDeviceSize size,
-            const Sharing& sharing,
-            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept;
-        void commitAndWait(std::shared_ptr<CommandBuffer> cmdBuffer);
+        Resource(VkDeviceSize size, const Sharing& sharing,
+            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept:
+            size(size), offset(0ull), sharing(sharing),
+            deviceAllocator(std::move(deviceAllocator)) {}
 
     protected:
         VkDeviceSize size;
