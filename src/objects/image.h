@@ -150,7 +150,7 @@ namespace magma
     struct Image::Mip
     {
         Mip() noexcept;
-        Mip(const VkExtent3D, VkDeviceSize) noexcept;
+        Mip(const VkExtent3D&, VkDeviceSize) noexcept;
         VkExtent3D extent;
         VkDeviceSize bufferOffset;
     };
@@ -158,7 +158,7 @@ namespace magma
     struct Image::MipData
     {
         MipData() noexcept;
-        MipData(const VkExtent3D, VkDeviceSize, const void *) noexcept;
+        MipData(const VkExtent3D&, VkDeviceSize, const void *) noexcept;
         VkExtent3D extent;
         VkDeviceSize size;
         const void *texels;

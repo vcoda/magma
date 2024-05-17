@@ -5,7 +5,7 @@ inline Image::Mip::Mip() noexcept:
     bufferOffset(0ull)
 {}
 
-inline Image::Mip::Mip(const VkExtent3D extent, VkDeviceSize bufferOffset) noexcept:
+inline Image::Mip::Mip(const VkExtent3D& extent, VkDeviceSize bufferOffset) noexcept:
     extent(extent),
     bufferOffset(bufferOffset)
 {}
@@ -16,7 +16,7 @@ inline Image::MipData::MipData() noexcept:
     texels(nullptr)
 {}
 
-inline Image::MipData::MipData(const VkExtent3D extent, VkDeviceSize size, const void *texels) noexcept:
+inline Image::MipData::MipData(const VkExtent3D& extent, VkDeviceSize size, const void *texels) noexcept:
     extent(extent),
     size(size),
     texels(texels)
