@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "device.h"
 #include "indexBuffer.h"
 #include "srcTransferBuffer.h"
 #include "commandBuffer.h"
