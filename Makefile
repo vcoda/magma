@@ -65,7 +65,6 @@ SRC_OBJS= \
 	\
 	src/helpers/executeCommandBuffer.o \
 	src/helpers/executeDeferredOperation.o \
-	src/helpers/flushCommandBuffer.o \
 	src/helpers/streamInsertOperators.o \
 	src/helpers/stringifyFlags.o \
 	\
@@ -73,6 +72,7 @@ SRC_OBJS= \
 	src/misc/deviceFaultInfo.o \
 	src/misc/deviceFeatures.o \
 	src/misc/deviceQueueDescriptor.o \
+	src/misc/flush.o \
 	src/misc/format.o \
 	src/misc/framebufferAttachmentImage.o \
 	src/misc/geometry.o \

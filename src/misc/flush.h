@@ -21,11 +21,8 @@ namespace magma
 {
     class CommandBuffer;
 
-    namespace helpers
-    {
-        /* Helper function to submit command buffer to a queue and wait
-           until queue submission is finished. */
+    /* Submits command buffer to a queue and waits until
+       queue submission is finished. */
 
-        void flushCommandBuffer(std::shared_ptr<CommandBuffer> cmdBuffer);
-    } // namespace helpers
+    void flush(std::shared_ptr<CommandBuffer> cmdBuffer);
 } // namespace magma

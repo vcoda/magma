@@ -858,8 +858,8 @@
     <ClInclude Include="..\..\src\core\popCount.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\helpers\flushCommandBuffer.h">
-      <Filter>Header Files\helpers</Filter>
+    <ClInclude Include="..\..\src\misc\flush.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1352,8 +1352,8 @@
     <ClCompile Include="..\..\src\objects\deviceChild.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\helpers\flushCommandBuffer.cpp">
-      <Filter>Source Files\helpers</Filter>
+    <ClCompile Include="..\..\src\misc\flush.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

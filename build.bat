@@ -100,13 +100,13 @@ src\extensions\instanceLayers.cpp ^
 src\extensions\layers.cpp ^
 src\helpers\executeCommandBuffer.cpp ^
 src\helpers\executeDeferredOperation.cpp ^
-src\helpers\flushCommandBuffer.cpp ^
 src\helpers\streamInsertOperators.cpp ^
 src\helpers\stringifyFlags.cpp ^
 src\misc\application.cpp ^
 src\misc\deviceFaultInfo.cpp ^
 src\misc\deviceFeatures.cpp ^
 src\misc\deviceQueueDescriptor.cpp ^
+src\misc\flush.cpp ^
 src\misc\format.cpp ^
 src\misc\framebufferAttachmentImage.cpp ^
 src\misc\geometry.cpp ^
@@ -302,6 +302,7 @@ application.obj ^
 deviceFaultInfo.obj ^
 deviceFeatures.obj ^
 deviceQueueDescriptor.obj ^
+flush.obj ^
 format.obj ^
 framebufferAttachmentImage.obj ^
 geometry.obj ^

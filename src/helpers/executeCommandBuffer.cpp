@@ -17,13 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "flushCommandBuffer.h"
 #include "../objects/device.h"
 #include "../objects/commandPool.h"
 #include "../objects/primaryCommandBuffer.h"
 #include "../objects/dstTransferBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
+#include "../misc/flush.h"
 
 namespace magma
 {
@@ -55,7 +55,7 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
         }
         cmdBuffer->end();
     }
-    flushCommandBuffer(std::move(cmdBuffer));
+    flush(std::move(cmdBuffer));
 }
 
 #ifdef VK_AMD_buffer_marker

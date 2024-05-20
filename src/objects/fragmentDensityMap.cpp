@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "commandBuffer.h"
 #include "srcTransferBuffer.h"
-#include "../helpers/flushCommandBuffer.h"
+#include "../misc/flush.h"
 
 namespace magma
 {
@@ -60,7 +60,7 @@ FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
         }
     }
     cmdBuffer->end();
-    helpers::flushCommandBuffer(std::move(cmdBuffer));
+    flush(std::move(cmdBuffer));
 }
 
 FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,

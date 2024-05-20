@@ -29,8 +29,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandPool.h"
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/format.h"
+#include "../misc/flush.h"
 #include "../helpers/mapScoped.h"
-#include "../helpers/flushCommandBuffer.h"
 #include "../exceptions/errorResult.h"
 #include "../core/copyMemory.h"
 #include "../core/foreach.h"
@@ -630,7 +630,7 @@ void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
             dstLayout, dstStageMask);
     }
     cmdBuffer->end();
-    helpers::flushCommandBuffer(std::move(cmdBuffer));
+    flush(std::move(cmdBuffer));
 }
 
 VkExtent3D Image::virtualMipExtent(uint32_t level) const noexcept

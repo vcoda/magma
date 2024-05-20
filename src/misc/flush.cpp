@@ -25,20 +25,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-namespace helpers
-{
-void flushCommandBuffer(std::shared_ptr<CommandBuffer> cmdBuffer)
+void flush(std::shared_ptr<CommandBuffer> cmdBuffer)
 {
     std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
     uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
     std::shared_ptr<Queue> queue = cmdPool->getDevice()->getQueueByFamily(queueFamilyIndex);
     const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
-    fence->reset();
-    {
-        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
-    }
+    if (Fence::State::Signaled == fence->getStatus())
+        fence->reset();
+    queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
     fence->wait();
     cmdBuffer->finishedExecution();
+    fence->reset();
 }
-} // namespace helpers
 } // namespace magma
