@@ -32,7 +32,7 @@ inline void InlineUniformBlock<UniformBlockType>::write(VkDescriptorSet dstSet, 
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    updated = false;
+    dirty = false;
 }
 
 template<class UniformBlockType>
@@ -41,7 +41,7 @@ inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType
     if (descriptor.pData != &inlineUniformBlock)
     {
         descriptor.pData = &inlineUniformBlock;
-        updated = true;
+        dirty = true;
     }
     return *this;
 }
