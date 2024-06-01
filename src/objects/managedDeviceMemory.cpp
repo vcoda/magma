@@ -42,6 +42,8 @@ ManagedDeviceMemory::ManagedDeviceMemory(std::shared_ptr<Device> device,
 
 ManagedDeviceMemory::~ManagedDeviceMemory()
 {
+    if (mapPointer)
+        deviceAllocator->unmap(allocation);
     deviceAllocator->free(allocation);
 }
 

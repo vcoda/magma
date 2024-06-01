@@ -72,7 +72,6 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
 
 DeviceMemory::~DeviceMemory()
 {
-    MAGMA_ASSERT(!mapped());
     if (mapPointer)
         vkUnmapMemory(getNativeDevice(), handle);
     vkFreeMemory(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
