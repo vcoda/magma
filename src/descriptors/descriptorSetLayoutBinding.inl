@@ -1,10 +1,8 @@
 namespace magma
 {
-namespace descriptor
-{
-inline Binding::Binding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding_) noexcept:
-    binding{
-        binding_,
+inline DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
+    VkDescriptorSetLayoutBinding{
+        binding,
         descriptorType,
         descriptorCount,
         0, // stageFlags
@@ -14,7 +12,7 @@ inline Binding::Binding(VkDescriptorType descriptorType, uint32_t descriptorCoun
     dirty(false)
 {}
 
-inline void Binding::setImageType(VkImageType imageType_) noexcept
+inline void DescriptorSetLayoutBinding::setImageType(VkImageType imageType_) noexcept
 {
     if (imageType != VK_IMAGE_TYPE_MAX_ENUM)
     {   // Descriptor should have the same image type
@@ -22,5 +20,4 @@ inline void Binding::setImageType(VkImageType imageType_) noexcept
     }
     imageType = imageType_;
 }
-} // namespace descriptor
 } // namespace magma

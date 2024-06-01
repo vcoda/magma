@@ -53,10 +53,10 @@ void AccelerationStructure::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& 
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &descriptor;
     writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding.binding;
+    writeDescriptorSet.dstBinding = binding;
     writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = binding.descriptorCount;
-    writeDescriptorSet.descriptorType = binding.descriptorType;
+    writeDescriptorSet.descriptorCount = descriptorCount;
+    writeDescriptorSet.descriptorType = descriptorType;
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;

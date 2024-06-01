@@ -45,7 +45,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
     const DescriptorList& descriptors = setTable.getReflection();
     std::vector<uint32_t> locations;
     for (auto const& descriptor: descriptors)
-        locations.push_back(descriptor.get().getBinding().binding);
+        locations.push_back(descriptor.get().binding);
     if (std::unique(locations.begin(), locations.end()) != locations.end())
         MAGMA_ERROR("elements of descriptor set layout should have unique binding locations");
     if (shaderReflectionFactory && !shaderFileName.empty())
@@ -57,7 +57,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
     std::vector<VkDescriptorSetLayoutBinding> bindings;
     for (auto const& descriptor: descriptors)
     {
-        bindings.push_back(descriptor.get().getBinding());
+        bindings.push_back(descriptor.get());
         // Set global stage flags if they have not been assigned for descriptor binding
         if (!bindings.back().stageFlags)
             bindings.back().stageFlags = stageFlags;
@@ -113,8 +113,7 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     const DescriptorList& descriptors = setTable.getReflection();
     for (auto const& ref: descriptors)
     {
-        auto const& descriptor = ref.get();
-        const VkDescriptorSetLayoutBinding& binding = descriptor.getBinding();
+        const DescriptorSetLayoutBinding& binding = ref.get();
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
         for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)
         {
@@ -157,13 +156,13 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
             {
                 const SpvReflectImageTraits& imageTraits = reflectedBinding->image;
                 const VkImageType imageType = helpers::spirvDimToImageType(imageTraits.dim);
-                if (descriptor.getImageType() != VK_IMAGE_TYPE_MAX_ENUM &&
-                    descriptor.getImageType() != imageType)
+                if (binding.getImageType() != VK_IMAGE_TYPE_MAX_ENUM &&
+                    binding.getImageType() != imageType)
                 {   // Type of assigned image is different
                     out << "descriptor image type mismatch:" << std::endl
                         << "binding #" << binding.binding << std::endl
                         << "expected: " << imageType << std::endl
-                        << "assigned: " << descriptor.getImageType();
+                        << "assigned: " << binding.getImageType();
                 }
             }
         }

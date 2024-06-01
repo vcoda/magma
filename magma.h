@@ -146,11 +146,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/states/viewportState.h"
 
 #include "src/descriptors/accelerationStructure.h"
-#include "src/descriptors/binding.h"
 #include "src/descriptors/bufferDescriptor.h"
 #include "src/descriptors/bufferDescriptorArray.h"
 #include "src/descriptors/descriptor.h"
 #include "src/descriptors/descriptorPool.h"
+#include "src/descriptors/descriptorSetLayoutBinding.h"
 #include "src/descriptors/descriptorSetTable.h"
 #include "src/descriptors/imageDescriptor.h"
 #include "src/descriptors/imageDescriptorArray.h"

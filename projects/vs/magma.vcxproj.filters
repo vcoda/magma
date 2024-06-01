@@ -516,9 +516,6 @@
     <ClInclude Include="..\..\src\descriptors\accelerationStructure.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\descriptors\binding.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\descriptors\bufferDescriptor.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
@@ -860,6 +857,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\misc\flush.h">
       <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\descriptorSetLayoutBinding.h">
+      <Filter>Header Files\descriptors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1408,9 +1408,6 @@
     <None Include="..\..\src\core\zeroThread.inl">
       <Filter>Header Files\core</Filter>
     </None>
-    <None Include="..\..\src\descriptors\binding.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
     <None Include="..\..\src\descriptors\bufferDescriptor.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
@@ -1590,6 +1587,9 @@
     </None>
     <None Include="..\..\src\objects\image.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\descriptorSetLayoutBinding.inl">
+      <Filter>Header Files\descriptors</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

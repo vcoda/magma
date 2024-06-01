@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "binding.h"
+#include "descriptorSetLayoutBinding.h"
 
 namespace magma
 {
@@ -30,11 +30,11 @@ namespace magma
            acceleration structures, uniform blocks etc. */
 
         template<class Info>
-        class Descriptor : public Binding
+        class Descriptor : public DescriptorSetLayoutBinding
         {
         protected:
             Descriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                Binding(descriptorType, 1, binding) {}
+                DescriptorSetLayoutBinding(descriptorType, 1, binding) {}
 
             Info descriptor = {};
         };
@@ -42,14 +42,14 @@ namespace magma
         /* Base template class of descriptor array. */
 
         template<class Info, uint32_t Size>
-        class DescriptorArray : public Binding
+        class DescriptorArray : public DescriptorSetLayoutBinding
         {
         public:
             constexpr uint32_t getArraySize() const noexcept { return Size; }
 
         protected:
             DescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-                Binding(descriptorType, Size, binding) {}
+                DescriptorSetLayoutBinding(descriptorType, Size, binding) {}
 
             std::array<Info, Size> descriptors = {};
         };
