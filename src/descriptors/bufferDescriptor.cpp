@@ -37,10 +37,10 @@ void BufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& write
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = &descriptor;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    updated = false;
+    dirty = false;
 }
 
-void BufferDescriptor::updateBuffer(std::shared_ptr<const Buffer> buffer, VkBufferUsageFlags requiredUsage) noexcept
+void BufferDescriptor::update(std::shared_ptr<const Buffer> buffer, VkBufferUsageFlags requiredUsage) noexcept
 {
     MAGMA_UNUSED(requiredUsage);
     MAGMA_ASSERT(buffer);
@@ -48,7 +48,7 @@ void BufferDescriptor::updateBuffer(std::shared_ptr<const Buffer> buffer, VkBuff
     if (descriptor.buffer != *buffer)
     {   // TODO: offset, range?
         descriptor = buffer->getDescriptor();
-        updated = true;
+        dirty = true;
     }
 }
 
@@ -65,10 +65,10 @@ void TexelBufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& 
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = &descriptor;
-    updated = false;
+    dirty = false;
 }
 
-void TexelBufferDescriptor::updateBufferView(std::shared_ptr<const BufferView> bufferView, VkBufferUsageFlags requiredUsage) noexcept
+void TexelBufferDescriptor::update(std::shared_ptr<const BufferView> bufferView, VkBufferUsageFlags requiredUsage) noexcept
 {
     MAGMA_UNUSED(requiredUsage);
     MAGMA_ASSERT(bufferView);
@@ -76,7 +76,7 @@ void TexelBufferDescriptor::updateBufferView(std::shared_ptr<const BufferView> b
     if (descriptor != *bufferView)
     {
         descriptor = *bufferView;
-        updated = true;
+        dirty = true;
     }
 }
 } // namespace descriptor

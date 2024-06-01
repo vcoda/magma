@@ -60,7 +60,7 @@ void AccelerationStructure::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& 
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    updated = false;
+    dirty = false;
 }
 
 AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept
@@ -76,13 +76,13 @@ AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const ma
     if (handleKHR != handle)
     {
         handle = handleKHR;
-        updated = true;
+        dirty = true;
     }
 #else
     if (handle != *accelerationStructure)
     {
         handle = *accelerationStructure;
-        updated = true;
+        dirty = true;
     }
 #endif
     return *this;

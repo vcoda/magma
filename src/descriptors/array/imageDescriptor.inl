@@ -37,16 +37,16 @@ inline ImageSamplerDescriptor::ImageSamplerDescriptor(VkDescriptorImageInfo& des
     BaseImageDescriptor(descriptor, imageType, requiredUsage, updated)
 {}
 
-inline void ImageSamplerDescriptor::operator=(const ImageSamplerPair& combinedImageSampler) noexcept
+inline void ImageSamplerDescriptor::operator=(const ImageSampler& imageSampler) noexcept
 {
-    MAGMA_ASSERT(combinedImageSampler.first);
-    MAGMA_ASSERT(combinedImageSampler.second);
-    MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & requiredUsage);
-    if ((descriptor.imageView != *combinedImageSampler.first) ||
-        (descriptor.sampler != *combinedImageSampler.second))
+    MAGMA_ASSERT(imageSampler.first);
+    MAGMA_ASSERT(imageSampler.second);
+    MAGMA_ASSERT(imageSampler.first->getImage()->getUsage() & requiredUsage);
+    if ((descriptor.imageView != *imageSampler.first) ||
+        (descriptor.sampler != *imageSampler.second))
     {
-        setImageType(combinedImageSampler.first);
-        descriptor = combinedImageSampler.first->getDescriptor(combinedImageSampler.second);
+        setImageType(imageSampler.first);
+        descriptor = imageSampler.first->getDescriptor(imageSampler.second);
         updated = true;
     }
 }
@@ -56,20 +56,20 @@ inline ImageImmutableSamplerDescriptor::ImageImmutableSamplerDescriptor(VkDescri
     immutableSampler(immutableSampler)
 {}
 
-inline void ImageImmutableSamplerDescriptor::operator=(const ImageSamplerPair& combinedImageSampler) noexcept
+inline void ImageImmutableSamplerDescriptor::operator=(const ImageSampler& imageSampler) noexcept
 {
     MAGMA_ASSERT(VK_NULL_HANDLE == immutableSampler);
-    MAGMA_ASSERT(combinedImageSampler.second);
-    MAGMA_ASSERT(combinedImageSampler.first->getImage()->getUsage() & requiredUsage);
-    if (descriptor.imageView != *combinedImageSampler.first)
+    MAGMA_ASSERT(imageSampler.second);
+    MAGMA_ASSERT(imageSampler.first->getImage()->getUsage() & requiredUsage);
+    if (descriptor.imageView != *imageSampler.first)
     {
-        setImageType(combinedImageSampler.first);
-        descriptor = combinedImageSampler.first->getDescriptor(nullptr);
+        setImageType(imageSampler.first);
+        descriptor = imageSampler.first->getDescriptor(nullptr);
         updated = true;
     }
     if (VK_NULL_HANDLE == immutableSampler)
     {   // Immutable sampler must be updated only once
-        immutableSampler = *combinedImageSampler.second;
+        immutableSampler = *imageSampler.second;
         updated = true;
     }
 }

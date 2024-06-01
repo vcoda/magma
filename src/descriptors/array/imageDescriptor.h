@@ -26,7 +26,7 @@ namespace magma
     namespace descriptor
     {
         typedef std::pair<std::shared_ptr<const ImageView>,
-            std::shared_ptr<const magma::Sampler>> ImageSamplerPair;
+            std::shared_ptr<const magma::Sampler>> ImageSampler;
 
         namespace array
         {
@@ -56,7 +56,7 @@ namespace magma
             public:
                 explicit ImageSamplerDescriptor(VkDescriptorImageInfo& descriptor,
                     VkImageType& imageType, VkImageUsageFlags requiredUsage, bool& updated) noexcept;
-                void operator=(const ImageSamplerPair&) noexcept;
+                void operator=(const ImageSampler&) noexcept;
             };
 
             /* Descriptor element of combined image/immutable sampler array. */
@@ -66,7 +66,7 @@ namespace magma
             public:
                 explicit ImageImmutableSamplerDescriptor(VkDescriptorImageInfo& descriptor, VkSampler& immutableSampler,
                     VkImageType& imageType, VkImageUsageFlags requiredUsage, bool& updated) noexcept;
-                void operator=(const ImageSamplerPair&) noexcept;
+                void operator=(const ImageSampler&) noexcept;
                 void operator=(std::shared_ptr<const ImageView>) noexcept;
 
             private:

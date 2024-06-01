@@ -25,35 +25,33 @@ namespace magma
         /* Descriptor is coupled with VkDescriptorSetLayoutBinding
            structure. While layout binding stores binding index and
            properties of binded descriptor, descriptor itself manages
-           descriptor structure of type <DescriptorInfo> to store
-           properties of underlying objects like buffers, images,
-           samplers, acceleration structures, uniform blocks etc. */
+           descriptor structure of type <Info> to store properties of
+           underlying objects like buffers, images, samplers,
+           acceleration structures, uniform blocks etc. */
 
-        template<class DescriptorInfo>
+        template<class Info>
         class Descriptor : public Binding
         {
         protected:
-            Descriptor(VkDescriptorType descriptorType,
-                uint32_t binding) noexcept
-            : Binding(descriptorType, 1, binding) {}
+            Descriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                Binding(descriptorType, 1, binding) {}
 
-            DescriptorInfo descriptor = {};
+            Info descriptor = {};
         };
 
         /* Base template class of descriptor array. */
 
-        template<class DescriptorInfo, uint32_t Size>
+        template<class Info, uint32_t Size>
         class DescriptorArray : public Binding
         {
         public:
             constexpr uint32_t getArraySize() const noexcept { return Size; }
 
         protected:
-            DescriptorArray(VkDescriptorType descriptorType,
-                uint32_t binding) noexcept
-            : Binding(descriptorType, Size, binding) {}
+            DescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+                Binding(descriptorType, Size, binding) {}
 
-            std::array<DescriptorInfo, Size> descriptors = {};
+            std::array<Info, Size> descriptors = {};
         };
     } // namespace descriptor
 } // namespace magma

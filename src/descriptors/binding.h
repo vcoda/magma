@@ -32,9 +32,9 @@ namespace magma
         public:
             void setStageFlags(VkShaderStageFlags stageFlags) noexcept { binding.stageFlags = stageFlags; }
             VkShaderStageFlags getStageFlags() const noexcept { return binding.stageFlags; }
-            const VkDescriptorSetLayoutBinding& getLayoutBinding() const noexcept { return binding; }
+            const VkDescriptorSetLayoutBinding& getBinding() const noexcept { return binding; }
             VkImageType getImageType() const noexcept { return imageType; }
-            bool dirty() const noexcept { return updated; }
+            bool modified() const noexcept { return dirty; }
             virtual bool associatedWithResource() const noexcept = 0;
             virtual void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept = 0;
@@ -46,8 +46,8 @@ namespace magma
             void setImageType(VkImageType imageType) noexcept;
 
             VkDescriptorSetLayoutBinding binding;
-            VkImageType imageType = VK_IMAGE_TYPE_MAX_ENUM;
-            mutable bool updated = false;
+            VkImageType imageType;
+            mutable bool dirty;
         };
     } // namespace descriptor
 } // namespace magma

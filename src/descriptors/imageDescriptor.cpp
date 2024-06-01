@@ -38,10 +38,10 @@ void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeD
     writeDescriptorSet.pImageInfo = &descriptor;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    updated = false;
+    dirty = false;
 }
 
-void ImageDescriptor::updateImageView(std::shared_ptr<const ImageView> imageView, std::shared_ptr<const magma::Sampler> sampler,
+void ImageDescriptor::update(std::shared_ptr<const ImageView> imageView, std::shared_ptr<const magma::Sampler> sampler,
     VkImageUsageFlags requiredUsage) noexcept
 {
     MAGMA_UNUSED(requiredUsage);
@@ -62,7 +62,7 @@ void ImageDescriptor::updateImageView(std::shared_ptr<const ImageView> imageView
             else
                 descriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
-        updated = true;
+        dirty = true;
     }
 }
 } // namespace descriptor

@@ -30,30 +30,30 @@ inline Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler
     descriptor.sampler = *sampler;
     descriptor.imageView = VK_NULL_HANDLE;
     descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    updated = true;
+    dirty = true;
     return *this;
 }
 
-inline CombinedImageSampler& CombinedImageSampler::operator=(const ImageSamplerPair& combinedImageSampler) noexcept
+inline CombinedImageSampler& CombinedImageSampler::operator=(const ImageSampler& imageSampler) noexcept
 {
-    std::shared_ptr<const ImageView> imageView = combinedImageSampler.first;
+    std::shared_ptr<const ImageView> imageView = imageSampler.first;
     MAGMA_ASSERT(imageView);
-    MAGMA_ASSERT(combinedImageSampler.second);
-    updateImageView(combinedImageSampler.first, combinedImageSampler.second, VK_IMAGE_USAGE_SAMPLED_BIT);
+    MAGMA_ASSERT(imageSampler.second);
+    update(imageSampler.first, imageSampler.second, VK_IMAGE_USAGE_SAMPLED_BIT);
     return *this;
 }
 
-inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(const ImageSamplerPair& combinedImageSampler) noexcept
+inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(const ImageSampler& imageSampler) noexcept
 {
     MAGMA_ASSERT(!binding.pImmutableSamplers);
-    updateImageView(combinedImageSampler.first, nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
+    update(imageSampler.first, nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
     // Immutable sampler must be updated only once
     if (!binding.pImmutableSamplers)
     {   // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
         // that will be copied into the set layout and used for the corresponding binding.
-        MAGMA_ASSERT(combinedImageSampler.second);
-        binding.pImmutableSamplers = combinedImageSampler.second->getHandleAddress();
-        updated = true;
+        MAGMA_ASSERT(imageSampler.second);
+        binding.pImmutableSamplers = imageSampler.second->getHandleAddress();
+        dirty = true;
     }
     return *this;
 }
@@ -61,25 +61,25 @@ inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(c
 inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {   // Check that sampler is already set and stop carrying around it
     MAGMA_ASSERT(binding.pImmutableSamplers);
-    updateImageView(std::move(imageView), nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
+    update(std::move(imageView), nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
     return *this;
 }
 
 inline SampledImage& SampledImage::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
-    updateImageView(std::move(imageView), nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
+    update(std::move(imageView), nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
     return *this;
 }
 
 inline StorageImage& StorageImage::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
-    updateImageView(std::move(imageView), nullptr, VK_IMAGE_USAGE_STORAGE_BIT);
+    update(std::move(imageView), nullptr, VK_IMAGE_USAGE_STORAGE_BIT);
     return *this;
 }
 
 inline InputAttachment& InputAttachment::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
-    updateImageView(std::move(imageView), nullptr, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
+    update(std::move(imageView), nullptr, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
     return *this;
 }
 } // namespace descriptor

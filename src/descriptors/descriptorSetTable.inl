@@ -16,7 +16,7 @@ inline bool DescriptorSetTable::dirty()
     return std::any_of(list.begin(), list.end(),
         [](auto const& it)
         {
-            return it.get().dirty();
+            return it.get().modified();
         });
 }
 
