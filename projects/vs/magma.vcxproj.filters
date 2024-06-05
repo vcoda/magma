@@ -94,9 +94,6 @@
     <Filter Include="Header Files\packed">
       <UniqueIdentifier>{7bcab66d-191b-4e8f-bf84-bd67a00c41d0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\descriptors\array">
-      <UniqueIdentifier>{803c1669-9455-475a-8a9e-a4f8596b2a11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\renderpass">
       <UniqueIdentifier>{26845abb-c533-45d1-9e7b-a7af13b51e3e}</UniqueIdentifier>
     </Filter>
@@ -540,15 +537,6 @@
     <ClInclude Include="..\..\src\descriptors\inlineUniformBlock.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\descriptors\array\bufferDescriptor.h">
-      <Filter>Header Files\descriptors\array</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\descriptors\array\descriptor.h">
-      <Filter>Header Files\descriptors\array</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\descriptors\array\imageDescriptor.h">
-      <Filter>Header Files\descriptors\array</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\exceptions\compileError.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
@@ -859,6 +847,15 @@
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\descriptors\descriptorSetLayoutBinding.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\arrayElement.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\bufferArrayElement.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\imageArrayElement.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1426,15 +1423,6 @@
     <None Include="..\..\src\descriptors\inlineUniformBlock.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\src\descriptors\array\bufferDescriptor.inl">
-      <Filter>Header Files\descriptors\array</Filter>
-    </None>
-    <None Include="..\..\src\descriptors\array\descriptor.inl">
-      <Filter>Header Files\descriptors\array</Filter>
-    </None>
-    <None Include="..\..\src\descriptors\array\imageDescriptor.inl">
-      <Filter>Header Files\descriptors\array</Filter>
-    </None>
     <None Include="..\..\src\helpers\alignedUniformArray.inl">
       <Filter>Header Files\helpers</Filter>
     </None>
@@ -1589,6 +1577,12 @@
       <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\src\descriptors\descriptorSetLayoutBinding.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\bufferArrayElement.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\imageArrayElement.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
   </ItemGroup>
