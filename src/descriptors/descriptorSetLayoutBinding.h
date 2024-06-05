@@ -19,15 +19,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    namespace descriptor
+    {
+        class ArrayElement;
+    }
+
     /* Each individual descriptor binding is specified by a
-        descriptor type, a count (array size) of the number
-        of descriptors in the binding, a set of shader stages
-        that can access the binding, and (if using immutable
-        samplers) an array of sampler descriptors. */
+       descriptor type, a count (array size) of the number
+       of descriptors in the binding, a set of shader stages
+       that can access the binding, and (if using immutable
+       samplers) an array of sampler descriptors. */
 
     class DescriptorSetLayoutBinding : public VkDescriptorSetLayoutBinding
     {
     public:
+        void setImageType(VkImageType imageType) noexcept;
         VkImageType getImageType() const noexcept { return imageType; }
         bool modified() const noexcept { return dirty; }
         virtual bool associatedWithResource() const noexcept = 0;
@@ -38,10 +44,10 @@ namespace magma
         DescriptorSetLayoutBinding(VkDescriptorType descriptorType,
             uint32_t descriptorCount,
             uint32_t binding) noexcept;
-        void setImageType(VkImageType imageType) noexcept;
 
         VkImageType imageType;
         mutable bool dirty;
+        friend descriptor::ArrayElement;
     };
 } // namespace magma
 

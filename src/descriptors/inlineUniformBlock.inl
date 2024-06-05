@@ -25,7 +25,7 @@ inline void InlineUniformBlock<UniformBlockType>::write(VkDescriptorSet dstSet, 
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &descriptor;
     writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding.binding;
+    writeDescriptorSet.dstBinding = binding;
     writeDescriptorSet.dstArrayElement = 0;
     writeDescriptorSet.descriptorCount = sizeof(UniformBlockType); // The <descriptorCount> provides the total number of bytes a particular binding can hold
     writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT;

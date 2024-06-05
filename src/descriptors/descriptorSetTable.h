@@ -35,8 +35,7 @@ namespace magma
             magma::descriptor::CombinedImageSampler albedo = 1;
             magma::descriptor::CombinedImageSampler normal = 2;
             MAGMA_REFLECT(worldViewProj, albedo, normal)
-       };
-    */
+       }; */
 
     class DescriptorSetTable : NonCopyable
     {

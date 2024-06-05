@@ -42,12 +42,12 @@ void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeD
 }
 
 void ImageDescriptor::update(std::shared_ptr<const ImageView> imageView, std::shared_ptr<const magma::Sampler> sampler,
-    VkImageUsageFlags requiredUsage) noexcept
+    VkImageUsageFlags usage) noexcept
 {
-    MAGMA_UNUSED(requiredUsage);
+    MAGMA_UNUSED(usage);
     MAGMA_ASSERT(imageView);
     const std::shared_ptr<Image>& image = imageView->getImage();
-    MAGMA_ASSERT(image->getUsage() & requiredUsage);
+    MAGMA_ASSERT(image->getUsage() & usage);
     if ((descriptor.imageView != *imageView) ||
         (sampler && descriptor.sampler != *sampler))
     {

@@ -17,13 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "descriptor.h"
-#include "array/imageDescriptor.h"
+#include "imageArrayElement.h"
 
 namespace magma
 {
     namespace descriptor
     {
-        /* Base class of image/sampler descriptor array. */
+        /* Base class of image and/or sampler descriptor array. */
 
         template<uint32_t Size>
         class ImageDescriptorArray : public DescriptorArray<VkDescriptorImageInfo, Size>
@@ -32,12 +32,11 @@ namespace magma
             bool associatedWithResource() const noexcept override;
 
         protected:
-            typedef DescriptorArray<VkDescriptorImageInfo, Size> Super;
             ImageDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
+            ImageArrayElement getElement(uint32_t index,
+                VkImageUsageFlags usage) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
-            array::ImageDescriptor getArrayElement(uint32_t index,
-                VkImageUsageFlags requiredUsage) noexcept;
         };
 
         /* A sampler descriptor is a descriptor type associated with
@@ -50,7 +49,7 @@ namespace magma
         public:
             SamplerArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
-            array::SamplerDescriptor operator[](uint32_t index) noexcept;
+            SamplerArrayElement operator[](uint32_t index) noexcept;
         };
 
         /* A combined image sampler is a single descriptor type associated
@@ -63,7 +62,7 @@ namespace magma
         public:
             CombinedImageSamplerArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-            array::ImageSamplerDescriptor operator[](uint32_t index) noexcept;
+            ImageSamplerArrayElement operator[](uint32_t index) noexcept;
         };
 
         /* Immutable samplers are permanently bound into the set layout;
@@ -79,13 +78,12 @@ namespace magma
             {   // If pImmutableSamplers is not NULL, then it is a pointer
                 // to an array of sampler handles that will be copied
                 // into the set layout and used for the corresponding binding.
-                Binding::binding.pImmutableSamplers = immutableSamplers.data();
+                this->pImmutableSamplers = immutableSamplers.data();
             }
             bool associatedWithResource() const noexcept override;
-            array::ImageImmutableSamplerDescriptor operator[](uint32_t index) noexcept;
+            ImageImmutableSamplerArrayElement operator[](uint32_t index) noexcept;
 
         private:
-            typedef ImageDescriptorArray<Size> Super;
             std::array<VkSampler, Size> immutableSamplers = {};
         };
 
@@ -99,7 +97,7 @@ namespace magma
         public:
             SampledImageArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
-            array::ImageDescriptor operator[](uint32_t index) noexcept;
+            ImageArrayElement operator[](uint32_t index) noexcept;
         };
 
         /* A storage image is a descriptor type associated with
@@ -112,7 +110,7 @@ namespace magma
         public:
             StorageImageArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
-            array::ImageDescriptor operator[](uint32_t index) noexcept;
+            ImageArrayElement operator[](uint32_t index) noexcept;
         };
 
         /* An input attachment is a descriptor type associated with
@@ -125,8 +123,9 @@ namespace magma
         public:
             InputAttachmentArray(uint32_t binding) noexcept:
                 ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
-            array::ImageDescriptor operator[](uint32_t index) noexcept;
+            ImageArrayElement operator[](uint32_t index) noexcept;
         };
+
     } // namespace descriptor
 } // namespace magma
 

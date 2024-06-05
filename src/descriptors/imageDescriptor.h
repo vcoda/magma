@@ -41,7 +41,7 @@ namespace magma
                 uint32_t binding) noexcept;
             void update(std::shared_ptr<const ImageView> imageView,
                 std::shared_ptr<const magma::Sampler> sampler,
-                VkImageUsageFlags requiredUsage) noexcept;
+                VkImageUsageFlags usage) noexcept;
         };
 
         /* A sampler descriptor is a descriptor type associated with
