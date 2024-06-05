@@ -18,7 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 //#define MAGMA_VERIFY_CONSTEXPR
-#if defined(MAGMA_VERIFY_CONSTEXPR)
+//#define MAGMA_VERIFY_DESCRIPTORS
+#if defined(MAGMA_VERIFY_CONSTEXPR) || defined(MAGMA_VERIFY_DESCRIPTORS)
 #include "../magma.h"
 #endif
 
@@ -113,4 +114,46 @@ namespace magma
     static_assert(LargeInt::numeric() == Numeric::SInt, "expected SINT format");
     static_assert(Double::numeric() == Numeric::SFloat, "expected SFLOAT format");
 #endif // MAGMA_VERIFY_CONSTEXPR
+
+#ifdef MAGMA_VERIFY_DESCRIPTORS
+    struct BufferSetTable : DescriptorSetTable
+    {
+        descriptor::UniformTexelBuffer uniformTexelBuffer = 0;
+        descriptor::StorageTexelBuffer storageTexelBuffer = 1;
+        descriptor::UniformBuffer uniformBuffer = 2;
+        descriptor::StorageBuffer storageBuffer = 3;
+        descriptor::DynamicUniformBuffer dynamicUniformBuffer = 4;
+        descriptor::DynamicStorageBuffer dynamicStorageBuffer = 5;
+        descriptor::UniformTexelBufferArray<4> uniformTexelBufferArray = 6;
+        descriptor::StorageTexelBufferArray<4> storageTexelBufferArray = 7;
+        descriptor::UniformBufferArray<4> uniformBufferArray = 8;
+        descriptor::StorageBufferArray<4> storageBufferArray = 9;
+        descriptor::DynamicUniformBufferArray<4> dynamicUniformBufferArray = 10;
+        descriptor::DynamicStorageBufferArray<4> dynamicStorageBufferArray = 11;
+        MAGMA_REFLECT(uniformTexelBuffer, storageTexelBuffer, uniformBuffer,
+            storageBuffer, dynamicUniformBuffer, dynamicStorageBuffer,
+            uniformTexelBufferArray, storageTexelBufferArray, uniformBufferArray,
+            storageBufferArray, dynamicUniformBufferArray, dynamicStorageBufferArray)
+    };
+
+    struct ImageSetTable : DescriptorSetTable
+    {
+        descriptor::Sampler sampler = 0;
+        descriptor::CombinedImageSampler combinedImageSampler = 1;
+        descriptor::CombinedImageImmutableSampler combinedImageImmutableSampler = 2;
+        descriptor::SampledImage sampledImage = 3;
+        descriptor::StorageImage storageImage = 4;
+        descriptor::InputAttachment inputAttachment = 5;
+        descriptor::SamplerArray<4> samplerArray = 6;
+        descriptor::CombinedImageSamplerArray<4> combinedImageSamplerArray = 7;
+        descriptor::CombinedImageImmutableSamplerArray<4> combinedImageImmutableSamplerArray = 8;
+        descriptor::SampledImageArray<4> sampledImageArray = 9;
+        descriptor::StorageImageArray<4> storageImageArray = 10;
+        descriptor::InputAttachmentArray<4> inputAttachmentArray = 11;
+        MAGMA_REFLECT(sampler, combinedImageSampler, combinedImageImmutableSampler,
+            sampledImage, storageImage, inputAttachment, samplerArray,
+            combinedImageSamplerArray, combinedImageImmutableSamplerArray,
+            sampledImageArray, storageImageArray, inputAttachmentArray)
+    };
+#endif // MAGMA_VERIFY_DESCRIPTORS
 } // namespace magma
