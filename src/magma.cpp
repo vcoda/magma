@@ -87,7 +87,7 @@ namespace magma
     {
         float m[16];
     };
-    constexpr pushconstant::VertexFragmentConstantRange<PushConstants> pushConstant;
+    constexpr push::VertexFragmentConstantRange<PushConstants> pushConstant;
     constexpr hash_t pushConstantHash = pushConstant.hash();
 
     // Mipmap filters
