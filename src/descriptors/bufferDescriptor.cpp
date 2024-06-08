@@ -41,11 +41,11 @@ void BufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& write
     dirty = false;
 }
 
-void BufferDescriptor::update(std::shared_ptr<const Buffer> buffer, VkBufferUsageFlags requiredUsage) noexcept
+void BufferDescriptor::update(std::shared_ptr<const Buffer> buffer, VkBufferUsageFlags usage) noexcept
 {
-    MAGMA_UNUSED(requiredUsage);
+    MAGMA_UNUSED(usage);
     MAGMA_ASSERT(buffer);
-    MAGMA_ASSERT(buffer->getUsage() & requiredUsage);
+    MAGMA_ASSERT(buffer->getUsage() & usage);
     if (descriptor.buffer != *buffer)
     {   // TODO: offset, range?
         descriptor = buffer->getDescriptor();
@@ -69,11 +69,11 @@ void TexelBufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& 
     dirty = false;
 }
 
-void TexelBufferDescriptor::update(std::shared_ptr<const BufferView> bufferView, VkBufferUsageFlags requiredUsage) noexcept
+void TexelBufferDescriptor::update(std::shared_ptr<const BufferView> bufferView, VkBufferUsageFlags usage) noexcept
 {
-    MAGMA_UNUSED(requiredUsage);
+    MAGMA_UNUSED(usage);
     MAGMA_ASSERT(bufferView);
-    MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & requiredUsage);
+    MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & usage);
     if (descriptor != *bufferView)
     {
         descriptor = *bufferView;
