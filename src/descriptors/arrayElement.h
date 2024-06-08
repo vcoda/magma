@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,16 +22,21 @@ namespace magma
 {
     namespace descriptor
     {
-        /* Allows to mark array of descriptors as dirty
-           if single element of array is updated. */
+        /* Base element of array of buffer or image descriptors.
+           Allows to mark array of descriptors as dirty if
+           single element of this array has been updated. */
 
+        template<class Type>
         class ArrayElement
         {
         protected:
-            ArrayElement(DescriptorSetLayoutBinding *binding) noexcept:
-                binding(binding) {}
-            void setImageType(VkImageType imageType) { binding->setImageType(imageType); }
+            ArrayElement(DescriptorSetLayoutBinding *binding, Type& element, VkFlags usage) noexcept:
+                element(element), usage(usage), binding(binding) {}
+            void setImageType(VkImageType imageType) noexcept { binding->setImageType(imageType); }
             void setDirty() noexcept { binding->dirty = true; }
+
+            Type& element;
+            const VkFlags usage;
 
         private:
             DescriptorSetLayoutBinding *binding;

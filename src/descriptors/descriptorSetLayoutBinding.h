@@ -21,6 +21,7 @@ namespace magma
 {
     namespace descriptor
     {
+        template<class Type>
         class ArrayElement;
     }
 
@@ -47,7 +48,8 @@ namespace magma
 
         VkImageType imageType;
         mutable bool dirty;
-        friend descriptor::ArrayElement;
+        template<class Type>
+        friend class descriptor::ArrayElement;
     };
 } // namespace magma
 

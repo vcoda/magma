@@ -24,32 +24,24 @@ namespace magma
     {
         /* Element of array of buffer descriptors. */
 
-        class BufferArrayElement final : ArrayElement
+        class BufferArrayElement final : ArrayElement<VkDescriptorBufferInfo>
         {
         public:
             explicit BufferArrayElement(DescriptorSetLayoutBinding *array,
                 VkDescriptorBufferInfo& element,
                 VkBufferUsageFlags usage) noexcept;
-            void operator=(std::shared_ptr<const Buffer> buffer) noexcept;
-
-        private:
-            VkDescriptorBufferInfo& element;
-            const VkBufferUsageFlags usage;
+            void operator=(std::shared_ptr<const Buffer>) noexcept;
         };
 
         /* Element of array of texel buffer descriptors. */
 
-        class TexelBufferArrayElement final : ArrayElement
+        class TexelBufferArrayElement final : ArrayElement<VkBufferView>
         {
         public:
             explicit TexelBufferArrayElement(DescriptorSetLayoutBinding *array,
                 VkBufferView& element,
                 VkBufferUsageFlags usage) noexcept;
-            void operator=(std::shared_ptr<const BufferView> bufferView) noexcept;
-
-        private:
-            VkBufferView& element;
-            const VkBufferUsageFlags usage;
+            void operator=(std::shared_ptr<const BufferView>) noexcept;
         };
     } // namespace descriptor
 } // namespace magma

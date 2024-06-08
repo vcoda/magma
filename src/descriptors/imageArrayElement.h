@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,66 +27,53 @@ namespace magma
     {
         typedef std::pair<std::shared_ptr<const ImageView>,
             std::shared_ptr<const magma::Sampler>> ImageSampler;
-    
+
         /* Element of array of sampler descriptors. */
 
-        class SamplerArrayElement final : ArrayElement
+        class SamplerArrayElement final : ArrayElement<VkDescriptorImageInfo>
         {
         public:
             explicit SamplerArrayElement(DescriptorSetLayoutBinding *array,
                 VkDescriptorImageInfo& element) noexcept;
-            void operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept;
-
-        private:
-            VkDescriptorImageInfo& element;
+            void operator=(std::shared_ptr<const magma::Sampler>) noexcept;
         };
 
         /* Element of array of image descriptors. */
 
-        class ImageArrayElement final : ArrayElement
+        class ImageArrayElement final : ArrayElement<VkDescriptorImageInfo>
         {
         public:
             explicit ImageArrayElement(DescriptorSetLayoutBinding *array,
                 VkDescriptorImageInfo& element,
                 VkImageUsageFlags usage) noexcept;
-            void operator=(std::shared_ptr<const ImageView> imageView) noexcept;
-
-        private:
-            VkDescriptorImageInfo& element;
-            const VkImageUsageFlags usage;
+            void operator=(std::shared_ptr<const ImageView>) noexcept;
         };
 
         /* Element of array of combined image/sampler descriptors. */
 
-        class ImageSamplerArrayElement final : ArrayElement
+        class ImageSamplerArrayElement final : ArrayElement<VkDescriptorImageInfo>
         {
         public:
             explicit ImageSamplerArrayElement(DescriptorSetLayoutBinding *array,
                 VkDescriptorImageInfo& element,
                 VkImageUsageFlags usage) noexcept;
-            void operator=(const ImageSampler& imageSampler) noexcept;
-
-        private:
-            VkDescriptorImageInfo& element;
-            const VkImageUsageFlags usage;
+            void operator=(const ImageSampler&) noexcept;
         };
 
         /* Element of array of combined image and (immutable) sampler descriptors. */
 
-        class ImageImmutableSamplerArrayElement final : ArrayElement
+        class ImageImmutableSamplerArrayElement final : ArrayElement<VkDescriptorImageInfo>
         {
         public:
             explicit ImageImmutableSamplerArrayElement(DescriptorSetLayoutBinding *array,
                 VkDescriptorImageInfo& element,
                 VkSampler& immutableSampler,
                 VkImageUsageFlags usage) noexcept;
-            void operator=(const ImageSampler& imageSampler) noexcept;
-            void operator=(std::shared_ptr<const ImageView> imageView) noexcept;
+            void operator=(const ImageSampler&) noexcept;
+            void operator=(std::shared_ptr<const ImageView>) noexcept;
 
         private:
-            VkDescriptorImageInfo& element;
             VkSampler& immutableSampler;
-            const VkImageUsageFlags usage;
         };
     } // namespace descriptor
 } // namespace magma

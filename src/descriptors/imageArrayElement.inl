@@ -3,81 +3,73 @@ namespace magma
 namespace descriptor
 {
 inline SamplerArrayElement::SamplerArrayElement(DescriptorSetLayoutBinding *array, VkDescriptorImageInfo& element) noexcept:
-    ArrayElement(array),
-    element(element)
+    ArrayElement<VkDescriptorImageInfo>(array, element, 0)
 {}
 
 inline void SamplerArrayElement::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
 {
     MAGMA_ASSERT(sampler);
-    element.sampler = *sampler;
-    element.imageView = VK_NULL_HANDLE;
-    element.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    setDirty();
+    this->element.sampler = *sampler;
+    this->element.imageView = VK_NULL_HANDLE;
+    this->element.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    this->setDirty();
 }
 
 inline ImageArrayElement::ImageArrayElement(DescriptorSetLayoutBinding *array, VkDescriptorImageInfo& element, VkImageUsageFlags usage) noexcept:
-    ArrayElement(array),
-    element(element),
-    usage(usage)
+    ArrayElement<VkDescriptorImageInfo>(array, element, usage)
 {}
 
 inline void ImageArrayElement::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(imageView);
-    MAGMA_ASSERT(imageView->getImage()->getUsage() & usage);
-    if (element.imageView != *imageView)
+    MAGMA_ASSERT(imageView->getImage()->getUsage() & this->usage);
+    if (this->element.imageView != *imageView)
     {
-        element = imageView->getDescriptor(nullptr);
-        setImageType(imageView->getImage()->getType());
-        setDirty();
+        this->element = imageView->getDescriptor(nullptr);
+        this->setImageType(imageView->getImage()->getType());
+        this->setDirty();
     }
 }
 
-inline ImageSamplerArrayElement::ImageSamplerArrayElement(DescriptorSetLayoutBinding *array, VkDescriptorImageInfo& element,
-    VkImageUsageFlags usage) noexcept:
-    ArrayElement(array),
-    element(element),
-    usage(usage)
+inline ImageSamplerArrayElement::ImageSamplerArrayElement(DescriptorSetLayoutBinding *array, VkDescriptorImageInfo& element, VkImageUsageFlags usage) noexcept:
+    ArrayElement<VkDescriptorImageInfo>(array, element, usage)
 {}
 
 inline void ImageSamplerArrayElement::operator=(const ImageSampler& imageSampler) noexcept
 {
     MAGMA_ASSERT(imageSampler.first);
     MAGMA_ASSERT(imageSampler.second);
-    MAGMA_ASSERT(imageSampler.first->getImage()->getUsage() & usage);
-    if ((element.imageView != *imageSampler.first) ||
-        (element.sampler != *imageSampler.second))
+    MAGMA_ASSERT(imageSampler.first->getImage()->getUsage() & this->usage);
+    if ((this->element.imageView != *imageSampler.first) ||
+        (this->element.sampler != *imageSampler.second))
     {
-        element = imageSampler.first->getDescriptor(imageSampler.second);
-        setImageType(imageSampler.first->getImage()->getType());
-        setDirty();
+        this->element = imageSampler.first->getDescriptor(imageSampler.second);
+        this->setImageType(imageSampler.first->getImage()->getType());
+        this->setDirty();
     }
 }
 
 inline ImageImmutableSamplerArrayElement::ImageImmutableSamplerArrayElement(DescriptorSetLayoutBinding *array,
     VkDescriptorImageInfo& element, VkSampler& immutableSampler, VkImageUsageFlags usage) noexcept:
-    ArrayElement(array),
-    element(element),
-    immutableSampler(immutableSampler),
-    usage(usage)
+    ArrayElement<VkDescriptorImageInfo>(array, element, usage),
+    immutableSampler(immutableSampler)
 {}
 
 inline void ImageImmutableSamplerArrayElement::operator=(const ImageSampler& imageSampler) noexcept
 {
     MAGMA_ASSERT(imageSampler.second);
-    MAGMA_ASSERT(imageSampler.first->getImage()->getUsage() & usage);
-    if (element.imageView != *imageSampler.first)
+    MAGMA_ASSERT(imageSampler.first->getImage()->getUsage() & this->usage);
+    if (this->element.imageView != *imageSampler.first)
     {
-        element = imageSampler.first->getDescriptor(nullptr);
-        setImageType(imageSampler.first->getImage()->getType());
-        setDirty();
+        this->element = imageSampler.first->getDescriptor(nullptr);
+        this->setImageType(imageSampler.first->getImage()->getType());
+        this->setDirty();
     }
     MAGMA_ASSERT(VK_NULL_HANDLE == immutableSampler);
     if (VK_NULL_HANDLE == immutableSampler)
     {   // Immutable sampler must be updated only once
         immutableSampler = *imageSampler.second;
-        setDirty();
+        this->setDirty();
     }
 }
 
@@ -85,12 +77,12 @@ inline void ImageImmutableSamplerArrayElement::operator=(std::shared_ptr<const I
 {   // Check that sampler is already set and stop carrying around it
     MAGMA_ASSERT(immutableSampler != VK_NULL_HANDLE);
     MAGMA_ASSERT(imageView);
-    MAGMA_ASSERT(imageView->getImage()->getUsage() & usage);
-    if (element.imageView != *imageView)
+    MAGMA_ASSERT(imageView->getImage()->getUsage() & this->usage);
+    if (this->element.imageView != *imageView)
     {
-        element = imageView->getDescriptor(nullptr);
-        setImageType(imageView->getImage()->getType());
-        setDirty();
+        this->element = imageView->getDescriptor(nullptr);
+        this->setImageType(imageView->getImage()->getType());
+        this->setDirty();
     }
 }
 } // namespace descriptor
