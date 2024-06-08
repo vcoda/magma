@@ -17,11 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "descriptor.h"
-#include "../objects/buffer.h"
-#include "../objects/bufferView.h"
 
 namespace magma
 {
+    class Buffer;
+    class BufferView;
+
     namespace descriptor
     {
         /* Base class of buffer descriptor. */
