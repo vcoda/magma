@@ -25,14 +25,14 @@ inline void InlineUniformBlock<UniformBlockType>::write(VkDescriptorSet dstSet, 
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &descriptor;
     writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
+    writeDescriptorSet.dstBinding = this->binding;
     writeDescriptorSet.dstArrayElement = 0;
     writeDescriptorSet.descriptorCount = sizeof(UniformBlockType); // The <descriptorCount> provides the total number of bytes a particular binding can hold
     writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT;
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    dirty = false;
+    this->dirty = false;
 }
 
 template<class UniformBlockType>
@@ -41,7 +41,7 @@ inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType
     if (descriptor.pData != &inlineUniformBlock)
     {
         descriptor.pData = &inlineUniformBlock;
-        dirty = true;
+        this->dirty = true;
     }
     return *this;
 }
