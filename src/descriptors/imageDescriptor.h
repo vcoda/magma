@@ -18,10 +18,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "descriptor.h"
 #include "../objects/sampler.h"
-#include "../objects/imageView.h"
 
 namespace magma
 {
+    class ImageView;
+
     namespace descriptor
     {
         typedef std::pair<std::shared_ptr<const ImageView>,
