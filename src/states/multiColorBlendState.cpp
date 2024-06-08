@@ -17,30 +17,30 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "colorBlendState.h"
+#include "multiColorBlendState.h"
 
 namespace magma
 {
-ColorMultiBlendState::ColorMultiBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
     VkPipelineColorBlendStateCreateFlags flags /* 0 */,
     const std::initializer_list<float>& blendConstants_ /* {1, 1, 1, 1} */) noexcept
 {
     flags = flags;
     attachmentCount = MAGMA_COUNT(attachments);
     pAttachments = core::copyArray<VkPipelineColorBlendAttachmentState>(attachments.data(), attachments.size());
-    uint32_t i = 0;
     MAGMA_ASSERT(blendConstants_.size() == 4);
-    for (float value: blendConstants_)
-        blendConstants[i++] = value;
+    float *blendConstant = blendConstants;
+    for (auto value: blendConstants_)
+        *blendConstant++ = value;
 }
 
-ColorMultiBlendState::ColorMultiBlendState(const ColorBlendState& other) noexcept:
+MultiColorBlendState::MultiColorBlendState(const ColorBlendState& other) noexcept:
     ColorBlendState(other)
 {
     pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
 }
 
-ColorMultiBlendState& ColorMultiBlendState::operator=(const ColorMultiBlendState& other) noexcept
+MultiColorBlendState& MultiColorBlendState::operator=(const MultiColorBlendState& other) noexcept
 {
     if (this != &other)
     {
@@ -59,12 +59,12 @@ ColorMultiBlendState& ColorMultiBlendState::operator=(const ColorMultiBlendState
     return *this;
 }
 
-ColorMultiBlendState::~ColorMultiBlendState()
+MultiColorBlendState::~MultiColorBlendState()
 {
     delete[] pAttachments;
 }
 
-hash_t ColorMultiBlendState::hash() const noexcept
+hash_t MultiColorBlendState::hash() const noexcept
 {
     hash_t hash = core::hashArgs(
         sType,
@@ -91,7 +91,7 @@ hash_t ColorMultiBlendState::hash() const noexcept
         blendConstants[3]));
 }
 
-bool ColorMultiBlendState::operator==(const ColorMultiBlendState& other) const noexcept
+bool MultiColorBlendState::operator==(const MultiColorBlendState& other) const noexcept
 {
     return (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&

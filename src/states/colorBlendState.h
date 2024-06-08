@@ -39,22 +39,6 @@ namespace magma
         constexpr bool operator==(const ColorBlendState&) const noexcept;
         friend std::ostream& operator<<(std::ostream&, const ColorBlendState&);
     };
-
-    /* Multiple attachment color blend state takes care
-       about array of blend attachment states and thereof
-       is copyable, but not constexpr-constructible. */
-
-    struct ColorMultiBlendState final : ColorBlendState
-    {
-        explicit ColorMultiBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
-            VkPipelineColorBlendStateCreateFlags flags = 0,
-            const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
-        ColorMultiBlendState(const ColorBlendState&) noexcept;
-        ColorMultiBlendState& operator=(const ColorMultiBlendState&) noexcept;
-        ~ColorMultiBlendState();
-        hash_t hash() const noexcept;
-        bool operator==(const ColorMultiBlendState&) const noexcept;
-    };
 } // namespace magma
 
 #include "colorBlendState.inl"

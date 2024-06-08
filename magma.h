@@ -129,6 +129,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/states/inputAssemblyState.h"
 #include "src/states/lineRasterizationState.h"
 #include "src/states/minmaxSamplerState.h"
+#include "src/states/multiColorBlendState.h"
 #include "src/states/multisampleCoverageReductionState.h"
 #include "src/states/multisampleState.h"
 #include "src/states/multiViewportState.h"

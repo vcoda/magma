@@ -858,6 +858,9 @@
     <ClInclude Include="..\..\src\descriptors\imageArrayElement.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\states\multiColorBlendState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1214,9 +1217,6 @@
     <ClCompile Include="..\..\src\third-party\SPIRV-Reflect\spirv_reflect.c">
       <Filter>Source Files\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\states\colorBlendState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\states\colorBlendStateAdvanced.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>
@@ -1351,6 +1351,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\misc\flush.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\states\multiColorBlendState.cpp">
+      <Filter>Source Files\states</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -392,6 +392,7 @@
     <ClInclude Include="..\..\src\states\inputAssemblyState.h" />
     <ClInclude Include="..\..\src\states\lineRasterizationState.h" />
     <ClInclude Include="..\..\src\states\minmaxSamplerState.h" />
+    <ClInclude Include="..\..\src\states\multiColorBlendState.h" />
     <ClInclude Include="..\..\src\states\multisampleCoverageReductionState.h" />
     <ClInclude Include="..\..\src\states\multisampleState.h" />
     <ClInclude Include="..\..\src\states\multiViewportState.h" />
@@ -572,8 +573,8 @@
     <ClCompile Include="..\..\src\shaders\shaderBindingTable.cpp" />
     <ClCompile Include="..\..\src\shaders\shaderReflection.cpp" />
     <ClCompile Include="..\..\src\shaders\specialization.cpp" />
-    <ClCompile Include="..\..\src\states\colorBlendState.cpp" />
     <ClCompile Include="..\..\src\states\colorBlendStateAdvanced.cpp" />
+    <ClCompile Include="..\..\src\states\multiColorBlendState.cpp" />
     <ClCompile Include="..\..\src\states\multisampleState.cpp" />
     <ClCompile Include="..\..\src\states\multiViewportState.cpp" />
     <ClCompile Include="..\..\src\states\rasterizationState.cpp" />

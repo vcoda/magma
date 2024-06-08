@@ -41,7 +41,7 @@ inline void ImmediateRender::setDepthStencilState(const DepthStencilState& state
 inline void ImmediateRender::setColorBlendState(const ColorBlendState& state) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    colorBlendState = ColorMultiBlendState(state); // Make copyable
+    colorBlendState = MultiColorBlendState(state); // Make copyable
 }
 
 inline void ImmediateRender::setLineWidth(float width) noexcept

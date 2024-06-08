@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/rasterizationState.h"
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
-#include "../states/colorBlendState.h"
+#include "../states/multiColorBlendState.h"
 
 namespace magma
 {
@@ -110,7 +110,7 @@ namespace magma
             RasterizationState rasterizationState;
             MultisampleState multisampleState;
             DepthStencilState depthStencilState;
-            ColorMultiBlendState colorBlendState;
+            MultiColorBlendState colorBlendState;
             VkBool32 stippledLineState;
             float lineWidth = 1.f;
             uint32_t lineStippleFactor = 1;
