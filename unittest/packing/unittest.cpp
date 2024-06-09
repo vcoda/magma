@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma message("ARM Neon is used")
 #endif
 
-#include "pch.h"
+#include "core/pch.h"
 #include "packed/color.h"
 
 void testPack16Formats()

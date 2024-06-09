@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-INCLUDE_DIR=-I$(VULKAN_SDK)/include -I../../src -I../../src/core
+INCLUDE_DIR=-I$(VULKAN_SDK)/include -I../../src
 CFLAGS=-std=c++14 -m64 -msse4 -DMAGMA_SSE $(INCLUDE_DIR)
 
 unittest: unittest.cpp
@@ -22,4 +22,3 @@ unittest: unittest.cpp
 
 clean:
 	@rm -rf unittest
-
