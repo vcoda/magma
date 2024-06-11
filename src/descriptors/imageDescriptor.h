@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptor.h"
+#include "descriptorSetLayoutBinding.h"
 #include "../objects/sampler.h"
 
 namespace magma
@@ -30,7 +30,7 @@ namespace magma
 
         /* Base class of image/sampler descriptor. */
 
-        class ImageDescriptor : public Descriptor<VkDescriptorImageInfo>
+        class ImageDescriptor : public DescriptorSetLayoutBinding
         {
         public:
             bool associatedWithResource() const noexcept override;
@@ -43,6 +43,8 @@ namespace magma
             void update(std::shared_ptr<const ImageView> imageView,
                 std::shared_ptr<const magma::Sampler> sampler,
                 VkImageUsageFlags usage) noexcept;
+
+            VkDescriptorImageInfo descriptor;
         };
 
         /* A sampler descriptor is a descriptor type associated with

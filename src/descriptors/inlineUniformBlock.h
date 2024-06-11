@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #ifdef VK_EXT_inline_uniform_block
-#include "descriptor.h"
+#include "descriptorSetLayoutBinding.h"
 
 namespace magma
 {
@@ -35,7 +35,7 @@ namespace magma
            dispatching commands. */
 
         template<class UniformBlockType>
-        class InlineUniformBlock : public Descriptor<VkWriteDescriptorSetInlineUniformBlockEXT>
+        class InlineUniformBlock : public DescriptorSetLayoutBinding
         {
         public:
             InlineUniformBlock(uint32_t binding) noexcept;
@@ -43,6 +43,9 @@ namespace magma
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             InlineUniformBlock<UniformBlockType>& operator=(const UniformBlockType&) noexcept;
+
+        private:
+            VkWriteDescriptorSetInlineUniformBlockEXT descriptor;
         };
     } // namespace descriptor
 } // namespace magma

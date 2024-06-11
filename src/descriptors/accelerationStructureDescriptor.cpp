@@ -27,9 +27,9 @@ namespace descriptor
 #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
 AccelerationStructure::AccelerationStructure(uint32_t binding) noexcept:
 #ifdef VK_KHR_acceleration_structure
-    Descriptor<VkWriteDescriptorSetAccelerationStructureKHR>(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, binding)
+    DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, binding)
 #else
-    Descriptor<VkWriteDescriptorSetAccelerationStructureNV>(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, binding)
+    DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding)
 #endif
 {
 #ifdef VK_KHR_acceleration_structure

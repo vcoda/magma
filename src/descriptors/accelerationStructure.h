@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptor.h"
+#include "descriptorSetLayoutBinding.h"
 
 namespace magma
 {
@@ -32,13 +32,7 @@ namespace magma
            to the memory. */
 
     #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
-
-        class AccelerationStructure : public
-        #ifdef VK_KHR_acceleration_structure
-            Descriptor<VkWriteDescriptorSetAccelerationStructureKHR>
-        #else
-            Descriptor<VkWriteDescriptorSetAccelerationStructureNV>
-        #endif
+        class AccelerationStructure : public DescriptorSetLayoutBinding
         {
         public:
             AccelerationStructure(uint32_t binding) noexcept;
@@ -50,8 +44,10 @@ namespace magma
         private:
         #ifdef VK_KHR_acceleration_structure
             VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
+            VkWriteDescriptorSetAccelerationStructureKHR descriptor;
         #else
             VkAccelerationStructureNV handle = VK_NULL_HANDLE;
+            VkWriteDescriptorSetAccelerationStructureNV descriptor;
         #endif
         };
     #endif // VK_KHR_acceleration_structure || VK_NV_ray_tracing

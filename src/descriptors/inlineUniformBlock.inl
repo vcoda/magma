@@ -4,13 +4,14 @@ namespace descriptor
 {
 template<class UniformBlockType>
 inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding) noexcept:
-    Descriptor(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType), binding)
-{
-    descriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT;
-    descriptor.pNext = nullptr;
-    descriptor.dataSize = sizeof(UniformBlockType);
-    descriptor.pData = nullptr;
-}
+    DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType), binding),
+    descriptor{
+        VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT,
+        nullptr,
+        sizeof(UniformBlockType),
+        nullptr
+    }
+{}
 
 template<class UniformBlockType>
 inline bool InlineUniformBlock<UniformBlockType>::associatedWithResource() const noexcept
@@ -25,14 +26,14 @@ inline void InlineUniformBlock<UniformBlockType>::write(VkDescriptorSet dstSet, 
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = &descriptor;
     writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = this->binding;
+    writeDescriptorSet.dstBinding = binding;
     writeDescriptorSet.dstArrayElement = 0;
     writeDescriptorSet.descriptorCount = sizeof(UniformBlockType); // The <descriptorCount> provides the total number of bytes a particular binding can hold
     writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT;
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    this->dirty = false;
+    dirty = false;
 }
 
 template<class UniformBlockType>
@@ -41,7 +42,7 @@ inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType
     if (descriptor.pData != &inlineUniformBlock)
     {
         descriptor.pData = &inlineUniformBlock;
-        this->dirty = true;
+        dirty = true;
     }
     return *this;
 }

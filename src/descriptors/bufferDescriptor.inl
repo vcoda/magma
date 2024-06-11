@@ -3,7 +3,8 @@ namespace magma
 namespace descriptor
 {
 inline BufferDescriptor::BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-    Descriptor<VkDescriptorBufferInfo>(descriptorType, binding)
+    DescriptorSetLayoutBinding(descriptorType, 1, binding),
+    descriptor{VK_NULL_HANDLE, 0, 0}
 {}
 
 inline bool BufferDescriptor::associatedWithResource() const noexcept
@@ -12,7 +13,8 @@ inline bool BufferDescriptor::associatedWithResource() const noexcept
 }
 
 inline TexelBufferDescriptor::TexelBufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-    Descriptor<VkBufferView>(descriptorType, binding)
+    DescriptorSetLayoutBinding(descriptorType, 1, binding),
+    descriptor(VK_NULL_HANDLE)
 {}
 
 inline bool TexelBufferDescriptor::associatedWithResource() const noexcept

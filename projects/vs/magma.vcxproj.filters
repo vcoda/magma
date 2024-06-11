@@ -519,9 +519,6 @@
     <ClInclude Include="..\..\src\descriptors\bufferDescriptorArray.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\descriptors\descriptor.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\descriptors\descriptorPool.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>

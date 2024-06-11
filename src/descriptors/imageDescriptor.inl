@@ -3,7 +3,8 @@ namespace magma
 namespace descriptor
 {
 inline ImageDescriptor::ImageDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-    Descriptor(descriptorType, binding)
+    DescriptorSetLayoutBinding(descriptorType, 1, binding),
+    descriptor{VK_NULL_HANDLE, VK_NULL_HANDLE, VK_IMAGE_LAYOUT_UNDEFINED}
 {}
 
 inline bool ImageDescriptor::associatedWithResource() const noexcept

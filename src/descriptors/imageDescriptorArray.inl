@@ -4,16 +4,16 @@ namespace descriptor
 {
 template<uint32_t Size>
 inline ImageDescriptorArray<Size>::ImageDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
-    DescriptorArray<VkDescriptorImageInfo, Size>(descriptorType, binding)
+    DescriptorSetLayoutBinding(descriptorType, Size, binding)
 {}
 
 template<uint32_t Size>
 inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
 {
-    switch (this->descriptorType)
+    switch (descriptorType)
     {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
-        return std::all_of(this->descriptors.begin(), this->descriptors.end(),
+        return std::all_of(descriptors.begin(), descriptors.end(),
             [](auto const& it)
             {
                 return (it.sampler != VK_NULL_HANDLE);
@@ -21,7 +21,7 @@ inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
-        return std::all_of(this->descriptors.begin(), this->descriptors.end(),
+        return std::all_of(descriptors.begin(), descriptors.end(),
             [](auto const& it)
             {
                 return (it.imageView != VK_NULL_HANDLE);
@@ -34,9 +34,8 @@ inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
 template<uint32_t Size>
 inline ImageArrayElement ImageDescriptorArray<Size>::getElement(uint32_t index, VkImageUsageFlags usage) noexcept
 {
-    return ImageArrayElement(this, this->descriptors[index], usage);
+    return ImageArrayElement(this, descriptors[index], usage);
 }
-
 
 template<uint32_t Size>
 inline void ImageDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
@@ -45,32 +44,32 @@ inline void ImageDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDes
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = this->binding;
+    writeDescriptorSet.dstBinding = binding;
     writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = this->descriptorCount;
-    writeDescriptorSet.descriptorType = this->descriptorType;
-    writeDescriptorSet.pImageInfo = this->descriptors.data();
+    writeDescriptorSet.descriptorCount = descriptorCount;
+    writeDescriptorSet.descriptorType = descriptorType;
+    writeDescriptorSet.pImageInfo = descriptors.data();
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
-    this->dirty = false;
+    dirty = false;
 }
 
 template<uint32_t Size>
 inline SamplerArrayElement SamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return SamplerArrayElement(this, this->descriptors[index]);
+    return SamplerArrayElement(this, descriptors[index]);
 }
 
 template<uint32_t Size>
 inline ImageSamplerArrayElement CombinedImageSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return ImageSamplerArrayElement(this, this->descriptors[index], VK_IMAGE_USAGE_SAMPLED_BIT);
+    return ImageSamplerArrayElement(this, descriptors[index], VK_IMAGE_USAGE_SAMPLED_BIT);
 }
 
 template<uint32_t Size>
 inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() const noexcept
 {
-    const bool associatedWithSamplers = std::all_of(this->descriptors.begin(), this->descriptors.end(),
+    const bool associatedWithSamplers = std::all_of(descriptors.begin(), descriptors.end(),
         [](auto const& it)
         {
             return (it.sampler != VK_NULL_HANDLE);
@@ -79,7 +78,7 @@ inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() c
         {
             return (it != VK_NULL_HANDLE);
         });
-    return std::all_of(this->descriptors.begin(), this->descriptors.end(),
+    return std::all_of(descriptors.begin(), descriptors.end(),
         [](auto const& it)
         {
             return (it.imageView != VK_NULL_HANDLE);
@@ -87,9 +86,18 @@ inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() c
 }
 
 template<uint32_t Size>
+inline CombinedImageImmutableSamplerArray<Size>::CombinedImageImmutableSamplerArray(uint32_t binding) noexcept:
+    ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
+{   // If pImmutableSamplers is not NULL, then it is a pointer
+    // to an array of sampler handles that will be copied
+    // into the set layout and used for the corresponding binding.
+    pImmutableSamplers = immutableSamplers.data();
+}
+
+template<uint32_t Size>
 inline ImageImmutableSamplerArrayElement CombinedImageImmutableSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return ImageImmutableSamplerArrayElement(this, this->descriptors[index], immutableSamplers[index], VK_IMAGE_USAGE_SAMPLED_BIT);
+    return ImageImmutableSamplerArrayElement(this, descriptors[index], immutableSamplers[index], VK_IMAGE_USAGE_SAMPLED_BIT);
 }
 
 template<uint32_t Size>

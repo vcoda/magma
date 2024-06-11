@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptor.h"
+#include "descriptorSetLayoutBinding.h"
 #include "imageArrayElement.h"
 
 namespace magma
@@ -26,9 +26,10 @@ namespace magma
         /* Base class of image and/or sampler descriptor array. */
 
         template<uint32_t Size>
-        class ImageDescriptorArray : public DescriptorArray<VkDescriptorImageInfo, Size>
+        class ImageDescriptorArray : public DescriptorSetLayoutBinding
         {
         public:
+            constexpr uint32_t getSize() const noexcept { return Size; }
             bool associatedWithResource() const noexcept override;
 
         protected:
@@ -37,6 +38,8 @@ namespace magma
                 VkImageUsageFlags usage) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+
+            std::array<VkDescriptorImageInfo, Size> descriptors = {};
         };
 
         /* A sampler descriptor is a descriptor type associated with
@@ -73,13 +76,7 @@ namespace magma
         class CombinedImageImmutableSamplerArray : public ImageDescriptorArray<Size>
         {
         public:
-            CombinedImageImmutableSamplerArray(uint32_t binding) noexcept:
-                ImageDescriptorArray<Size>(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding)
-            {   // If pImmutableSamplers is not NULL, then it is a pointer
-                // to an array of sampler handles that will be copied
-                // into the set layout and used for the corresponding binding.
-                this->pImmutableSamplers = immutableSamplers.data();
-            }
+            CombinedImageImmutableSamplerArray(uint32_t binding) noexcept;
             bool associatedWithResource() const noexcept override;
             ImageImmutableSamplerArrayElement operator[](uint32_t index) noexcept;
 

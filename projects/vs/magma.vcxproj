@@ -213,7 +213,6 @@
     <ClInclude Include="..\..\src\descriptors\descriptorSetLayoutBinding.h" />
     <ClInclude Include="..\..\src\descriptors\bufferDescriptor.h" />
     <ClInclude Include="..\..\src\descriptors\bufferDescriptorArray.h" />
-    <ClInclude Include="..\..\src\descriptors\descriptor.h" />
     <ClInclude Include="..\..\src\descriptors\descriptorPool.h" />
     <ClInclude Include="..\..\src\descriptors\descriptorSetTable.h" />
     <ClInclude Include="..\..\src\descriptors\imageArrayElement.h" />

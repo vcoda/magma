@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptor.h"
+#include "descriptorSetLayoutBinding.h"
 #include "bufferArrayElement.h"
 
 namespace magma
@@ -26,9 +26,10 @@ namespace magma
         /* Base class of buffer descriptor array. */
 
         template<uint32_t Size>
-        class BufferDescriptorArray : public DescriptorArray<VkDescriptorBufferInfo, Size>
+        class BufferDescriptorArray : public DescriptorSetLayoutBinding
         {
         public:
+            constexpr uint32_t getSize() const noexcept { return Size; }
             bool associatedWithResource() const noexcept override;
 
         protected:
@@ -37,14 +38,18 @@ namespace magma
                 VkBufferUsageFlags usage) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+
+        private:
+            std::array<VkDescriptorBufferInfo, Size> descriptors = {};
         };
 
         /* Base class of texel buffer descriptor array. */
 
         template<uint32_t Size>
-        class TexelBufferDescriptorArray : public DescriptorArray<VkBufferView, Size>
+        class TexelBufferDescriptorArray : public DescriptorSetLayoutBinding
         {
         public:
+            constexpr uint32_t getSize() const noexcept { return Size; }
             bool associatedWithResource() const noexcept override;
 
         protected:
@@ -53,6 +58,9 @@ namespace magma
                 VkBufferUsageFlags usage) noexcept;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+
+        private:
+            std::array<VkBufferView, Size> descriptors = {};
         };
 
         /* A uniform texel buffer is a descriptor type associated with

@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "descriptor.h"
+#include "descriptorSetLayoutBinding.h"
 
 namespace magma
 {
@@ -27,7 +27,7 @@ namespace magma
     {
         /* Base class of buffer descriptor. */
 
-        class BufferDescriptor : public Descriptor<VkDescriptorBufferInfo>
+        class BufferDescriptor : public DescriptorSetLayoutBinding
         {
         public:
             bool associatedWithResource() const noexcept override;
@@ -39,11 +39,14 @@ namespace magma
                 uint32_t binding) noexcept;
             void update(std::shared_ptr<const Buffer> buffer,
                 VkBufferUsageFlags usage) noexcept;
+
+        private:
+            VkDescriptorBufferInfo descriptor;
         };
 
         /* Base class of texel buffer descriptor. */
 
-        class TexelBufferDescriptor : public Descriptor<VkBufferView>
+        class TexelBufferDescriptor : public DescriptorSetLayoutBinding
         {
         public:
             bool associatedWithResource() const noexcept override;
@@ -55,6 +58,9 @@ namespace magma
                 uint32_t binding) noexcept;
             void update(std::shared_ptr<const BufferView> bufferView,
                 VkBufferUsageFlags usage) noexcept;
+
+        private:
+            VkBufferView descriptor;
         };
 
         /* A uniform texel buffer is a descriptor type associated with
