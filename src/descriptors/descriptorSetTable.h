@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    typedef std::vector<std::reference_wrapper<DescriptorSetLayoutBinding>> DescriptorList;
+    typedef std::vector<std::reference_wrapper<DescriptorSetLayoutBinding>> DescriptorSetTableBindings;
 
     /* Provides a reflection mechanism making it possible to
        investigate members of descriptor set layout. Table
@@ -40,7 +40,7 @@ namespace magma
     class DescriptorSetTable : NonCopyable
     {
     public:
-        virtual const DescriptorList& getReflection() = 0;
+        virtual const DescriptorSetTableBindings& getReflection() = 0;
         std::size_t getSize() { return getReflection().size(); }
         bool valid();
         bool dirty();
@@ -49,7 +49,7 @@ namespace magma
         template<class... Descriptor>
         inline void setReflection(Descriptor&&... args);
 
-        DescriptorList reflection;
+        DescriptorSetTableBindings reflection;
     };
 } // namespace magma
 

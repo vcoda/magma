@@ -35,7 +35,7 @@ inline void DescriptorSetTable::setReflection(Descriptor&&... args)
    variadic template method to populate the list of descriptor set bindings. */
 
 #define MAGMA_REFLECT(...)\
-const magma::DescriptorList& getReflection() override\
+const magma::DescriptorSetTableBindings& getReflection() override\
 {\
     if (reflection.empty())\
         setReflection(__VA_ARGS__);\

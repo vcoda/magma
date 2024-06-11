@@ -42,9 +42,9 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
     setTable(setTable),
     descriptorPool(std::move(descriptorPool_))
 {   // Check that all descriptors have unique layout bindings
-    const DescriptorList& descriptors = setTable.getReflection();
+    const DescriptorSetTableBindings& reflection = setTable.getReflection();
     std::vector<uint32_t> locations;
-    for (auto const& descriptor: descriptors)
+    for (auto const& descriptor: reflection)
         locations.push_back(descriptor.get().binding);
     if (std::unique(locations.begin(), locations.end()) != locations.end())
         MAGMA_ERROR("elements of descriptor set layout should have unique binding locations");
@@ -55,7 +55,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
     }
     // Prepare list of native bindings
     std::vector<VkDescriptorSetLayoutBinding> bindings;
-    for (auto const& descriptor: descriptors)
+    for (auto const& descriptor: reflection)
     {
         bindings.push_back(descriptor.get());
         // Set global stage flags if they have not been assigned for descriptor binding
@@ -97,8 +97,9 @@ void DescriptorSet::update()
     uint32_t writeCount = 0;
     for (auto const& descriptor: setTable.getReflection())
     {   // Update dirty descriptors
-        if (descriptor.get().modified())
-            descriptor.get().write(handle, descriptorWrites[writeCount++]);
+        const DescriptorSetLayoutBinding& binding = descriptor.get();
+        if (binding.modified())
+            binding.write(handle, descriptorWrites[writeCount++]);
     }
     if (writeCount)
         device->updateDescriptorSets(writeCount, descriptorWrites, 0, nullptr);
@@ -110,10 +111,9 @@ void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> s
     if (setIndex >= descriptorSets.size())
         MAGMA_ERROR("set index exceeds number of reflected descriptor sets");
     const SpvReflectDescriptorSet *descriptorSet = descriptorSets[setIndex];
-    const DescriptorList& descriptors = setTable.getReflection();
-    for (auto const& ref: descriptors)
+    for (auto const& descriptor: setTable.getReflection())
     {
-        const DescriptorSetLayoutBinding& binding = ref.get();
+        const DescriptorSetLayoutBinding& binding = descriptor.get();
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
         for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)
         {
