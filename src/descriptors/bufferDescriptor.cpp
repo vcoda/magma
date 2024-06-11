@@ -27,14 +27,7 @@ namespace descriptor
 {
 void BufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(associatedWithResource());
-    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeDescriptorSet.pNext = nullptr;
-    writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
-    writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = descriptorCount;
-    writeDescriptorSet.descriptorType = descriptorType;
+    writeDescriptor(dstSet, writeDescriptorSet);
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = &descriptor;
     writeDescriptorSet.pTexelBufferView = nullptr;
@@ -55,14 +48,7 @@ void BufferDescriptor::update(std::shared_ptr<const Buffer> buffer, VkBufferUsag
 
 void TexelBufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(associatedWithResource());
-    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeDescriptorSet.pNext = nullptr;
-    writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
-    writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = descriptorCount;
-    writeDescriptorSet.descriptorType = descriptorType;
+    writeDescriptor(dstSet, writeDescriptorSet);
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = &descriptor;

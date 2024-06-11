@@ -45,6 +45,8 @@ namespace magma
         DescriptorSetLayoutBinding(VkDescriptorType descriptorType,
             uint32_t descriptorCount,
             uint32_t binding) noexcept;
+        void writeDescriptor(VkDescriptorSet dstSet,
+            VkWriteDescriptorSet& writeDescriptorSet) const noexcept;
 
         VkImageType imageType;
         mutable bool dirty;

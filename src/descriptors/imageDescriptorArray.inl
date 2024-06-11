@@ -40,14 +40,7 @@ inline ImageArrayElement ImageDescriptorArray<Size>::getElement(uint32_t index, 
 template<uint32_t Size>
 inline void ImageDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(associatedWithResource());
-    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeDescriptorSet.pNext = nullptr;
-    writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
-    writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = descriptorCount;
-    writeDescriptorSet.descriptorType = descriptorType;
+    writeDescriptor(dstSet, writeDescriptorSet);
     writeDescriptorSet.pImageInfo = descriptors.data();
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
