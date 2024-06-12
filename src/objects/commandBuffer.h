@@ -550,7 +550,7 @@ namespace magma
         void finishedQueueSubmission() noexcept;
         void finishedExecution() noexcept;
 
-        void releaseBoundResources() const noexcept;
+        void releaseResourcesInUse() const noexcept;
 
         // Debug stuff
         bool begin(const char *blockName,
@@ -624,40 +624,6 @@ namespace magma
             std::vector<std::shared_ptr<ImageView>> attachments;
         } renderpass;
 
-    #ifdef MAGMA_DEFERRED_RELEASE
-        struct InUseResources
-        {
-            std::unordered_set<std::shared_ptr<const Buffer>> buffers;
-            std::unordered_set<std::shared_ptr<const Image>> images;
-            std::unordered_set<std::shared_ptr<const DescriptorSet>> descriptorSets;
-            std::unordered_set<std::shared_ptr<const RenderPass>> renderPasses;
-            std::unordered_set<std::shared_ptr<const Framebuffer>> framebuffers;
-            std::unordered_set<std::shared_ptr<const ImageView>> imageViews;
-            std::unordered_set<std::shared_ptr<const Pipeline>> pipelines;
-            std::unordered_set<std::shared_ptr<const PipelineLayout>> layouts;
-            std::unordered_set<std::shared_ptr<const QueryPool>> queryPools;
-            std::unordered_set<std::shared_ptr<const Event>> events;
-        #ifdef VK_NV_ray_tracing
-            std::unordered_set<std::shared_ptr<const AccelerationStructure>> accelerationStructures;
-        #endif
-            std::mutex mtx;
-            // Insertion complexity: Average case: O(1), worst case O(size()).
-            void store(std::shared_ptr<const Buffer> buffer) { buffers.insert(buffer); }
-            void store(std::shared_ptr<const Image> image) { images.insert(image); }
-            void store(std::shared_ptr<const DescriptorSet> descriptorSet) { descriptorSets.insert(descriptorSet); }
-            void store(std::shared_ptr<const RenderPass> renderPass) { renderPasses.insert(renderPass); }
-            void store(std::shared_ptr<const Framebuffer> framebuffer) { framebuffers.insert(framebuffer); }
-            void store(std::shared_ptr<const ImageView> imageView) { imageViews.insert(imageView); }
-            void store(std::shared_ptr<const Pipeline> pipeline) { pipelines.insert(pipeline); }
-            void store(std::shared_ptr<const PipelineLayout> layout) { layouts.insert(layout); }
-            void store(std::shared_ptr<const QueryPool> queryPool) { queryPools.insert(queryPool); }
-            void store(std::shared_ptr<const Event> event) { events.insert(event); }
-        #ifdef VK_NV_ray_tracing
-            void store(std::shared_ptr<const AccelerationStructure> as) { accelerationStructures.insert(as); }
-        #endif
-        } mutable inUse;
-    #endif // MAGMA_DEFERRED_RELEASE
-
         struct PipelineBarrierBatch
         {
             VkPipelineStageFlags srcStageMask;
@@ -667,7 +633,6 @@ namespace magma
             std::vector<BufferMemoryBarrier> bufferMemoryBarriers;
             std::vector<ImageMemoryBarrier> imageMemoryBarriers;
         };
-        mutable std::unordered_map<hash_t, PipelineBarrierBatch> pipelineBarriers;
 
         PipelineBarrierBatch *lookupBarrierBatch(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
@@ -696,6 +661,13 @@ namespace magma
         std::shared_ptr<Buffer> markerBuffer;
         std::atomic<VkDeviceSize> markerBufferOffset;
     #endif
+        mutable std::unordered_map<hash_t, PipelineBarrierBatch> pipelineBarriers;
+    #ifdef MAGMA_DEFERRED_RELEASE
+        // User may optionally compile library with MAGMA_DEFERRED_RELEASE
+        // define to allow deferred release of resources bound to command buffer.
+        mutable std::unordered_set<std::shared_ptr<const DeviceChild>> inUse;
+    #endif
+        mutable std::mutex mtx;
     };
 
     /* See 6.1. Command Buffer Lifecycle
@@ -706,20 +678,5 @@ namespace magma
         Initial, Recording, Executable, Pending, Invalid
     };
 } // namespace magma
-
-/* User may optionally compile library with MAGMA_DEFERRED_RELEASE define
-   to allow deferred release of resources bound to command buffer. */
-
-#ifdef MAGMA_DEFERRED_RELEASE
-    #define MAGMA_DEFER(resource)\
-        if (resource) try\
-        {\
-            std::lock_guard<std::mutex> guard(inUse.mtx);\
-            inUse.store(resource);\
-        }\
-        catch(...) {}
-#else
-    #define MAGMA_DEFER(resource)
-#endif // MAGMA_DEFERRED_RELEASE
 
 #include "commandBuffer.inl"

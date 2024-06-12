@@ -224,7 +224,7 @@ bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
     {
-        releaseBoundResources();
+        releaseResourcesInUse();
         state = State::Initial;
         inRenderPass = VK_FALSE;
         inConditionalRendering = VK_FALSE;
@@ -848,23 +848,11 @@ void CommandBuffer::traceRays(const std::shared_ptr<Buffer>& raygenShaderBinding
 }
 #endif // VK_NV_ray_tracing
 
-void CommandBuffer::releaseBoundResources() const noexcept
+void CommandBuffer::releaseResourcesInUse() const noexcept
 {
 #ifdef MAGMA_DEFERRED_RELEASE
-    inUse.buffers.clear();
-    inUse.images.clear();
-    inUse.descriptorSets.clear();
-    inUse.renderPasses.clear();
-    inUse.framebuffers.clear();
-    inUse.imageViews.clear();
-    inUse.pipelines.clear();
-    inUse.layouts.clear();
-    inUse.queryPools.clear();
-    inUse.events.clear();
-#ifdef VK_NV_ray_tracing
-    inUse.accelerationStructures.clear();
+    inUse.clear();
 #endif
-#endif // MAGMA_DEFERRED_RELEASE
     pipelineBarriers.clear();
 }
 

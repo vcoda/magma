@@ -1,5 +1,16 @@
 namespace magma
 {
+#ifdef MAGMA_DEFERRED_RELEASE
+#define MAGMA_DEFER(child) if (child) try\
+    {\
+        std::lock_guard<std::mutex> guard(mtx);\
+        inUse.insert(child);\
+    }\
+    catch(...) {}
+#else
+#define MAGMA_DEFER(child)
+#endif // MAGMA_DEFERRED_RELEASE
+
 inline void CommandBuffer::bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept
 {
     vkCmdBindPipeline(handle, pipeline->getBindPoint(), *pipeline);
@@ -767,7 +778,7 @@ inline void CommandBuffer::finishedExecution() noexcept
     if (usageFlags & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT)
     {
         state = State::Invalid;
-        releaseBoundResources();
+        releaseResourcesInUse();
     }
     else
     {
