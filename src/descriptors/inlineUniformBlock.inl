@@ -22,14 +22,8 @@ inline bool InlineUniformBlock<UniformBlockType>::associatedWithResource() const
 template<class UniformBlockType>
 inline void InlineUniformBlock<UniformBlockType>::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(associatedWithResource());
-    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeDescriptor(dstSet, writeDescriptorSet);
     writeDescriptorSet.pNext = &descriptor;
-    writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
-    writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = sizeof(UniformBlockType); // The <descriptorCount> provides the total number of bytes a particular binding can hold
-    writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT;
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
