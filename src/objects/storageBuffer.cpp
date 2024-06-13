@@ -29,7 +29,7 @@ StorageBuffer::StorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
         0, // flags
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {}
@@ -73,7 +73,7 @@ DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDev
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(std::move(device), size,
         0, // flags
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
             (stagedPool ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0),
         optional, sharing, std::move(allocator))
