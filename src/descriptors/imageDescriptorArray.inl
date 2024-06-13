@@ -50,19 +50,19 @@ inline void ImageDescriptorArray<Size>::write(VkDescriptorSet dstSet, VkWriteDes
 template<uint32_t Size>
 inline SamplerArrayElement SamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return SamplerArrayElement(this, descriptors[index]);
+    return SamplerArrayElement(this, this->descriptors[index]);
 }
 
 template<uint32_t Size>
 inline ImageSamplerArrayElement CombinedImageSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return ImageSamplerArrayElement(this, descriptors[index], VK_IMAGE_USAGE_SAMPLED_BIT);
+    return ImageSamplerArrayElement(this, this->descriptors[index], VK_IMAGE_USAGE_SAMPLED_BIT);
 }
 
 template<uint32_t Size>
 inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() const noexcept
 {
-    const bool associatedWithSamplers = std::all_of(descriptors.begin(), descriptors.end(),
+    const bool associatedWithSamplers = std::all_of(this->descriptors.begin(), this->descriptors.end(),
         [](auto const& it)
         {
             return (it.sampler != VK_NULL_HANDLE);
@@ -71,7 +71,7 @@ inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() c
         {
             return (it != VK_NULL_HANDLE);
         });
-    return std::all_of(descriptors.begin(), descriptors.end(),
+    return std::all_of(this->descriptors.begin(), this->descriptors.end(),
         [](auto const& it)
         {
             return (it.imageView != VK_NULL_HANDLE);
@@ -84,13 +84,13 @@ inline CombinedImageImmutableSamplerArray<Size>::CombinedImageImmutableSamplerAr
 {   // If pImmutableSamplers is not NULL, then it is a pointer
     // to an array of sampler handles that will be copied
     // into the set layout and used for the corresponding binding.
-    pImmutableSamplers = immutableSamplers.data();
+    this->pImmutableSamplers = immutableSamplers.data();
 }
 
 template<uint32_t Size>
 inline ImageImmutableSamplerArrayElement CombinedImageImmutableSamplerArray<Size>::operator[](uint32_t index) noexcept
 {
-    return ImageImmutableSamplerArrayElement(this, descriptors[index], immutableSamplers[index], VK_IMAGE_USAGE_SAMPLED_BIT);
+    return ImageImmutableSamplerArrayElement(this, this->descriptors[index], immutableSamplers[index], VK_IMAGE_USAGE_SAMPLED_BIT);
 }
 
 template<uint32_t Size>
