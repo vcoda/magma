@@ -229,9 +229,9 @@ bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
         inRenderPass = VK_FALSE;
         inConditionalRendering = VK_FALSE;
         inTransformFeedback = VK_FALSE;
-        renderpass.renderPass.reset();
-        renderpass.framebuffer.reset();
-        renderpass.attachments.clear();
+        renderPassState.renderPass.reset();
+        renderPassState.framebuffer.reset();
+        renderPassState.attachments.clear();
     #ifdef VK_AMD_buffer_marker
         markerBufferOffset = 0ull;
     #endif
@@ -518,8 +518,8 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     MAGMA_INUSE(renderPass);
     MAGMA_INUSE(framebuffer);
     renderPass->begin(framebuffer->getAttachments());
-    renderpass.renderPass = renderPass;
-    renderpass.framebuffer = framebuffer;
+    renderPassState.renderPass = renderPass;
+    renderPassState.framebuffer = framebuffer;
     inRenderPass = VK_TRUE;
 }
 
@@ -558,9 +558,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     MAGMA_INUSE(renderPass);
     MAGMA_INUSE(framebuffer);
     renderPass->begin(attachments);
-    renderpass.renderPass = renderPass;
-    renderpass.framebuffer = framebuffer;
-    renderpass.attachments = attachments;
+    renderPassState = {renderPass, framebuffer, attachments};
     inRenderPass = VK_TRUE;
 }
 #endif // VK_KHR_imageless_framebuffer
@@ -580,13 +578,13 @@ void CommandBuffer::endRenderPass() noexcept
         }
     #endif // VK_EXT_debug_utils
         vkCmdEndRenderPass(handle);
-        if (renderpass.attachments.empty())
-            renderpass.renderPass->end(renderpass.framebuffer->getAttachments());
-        else // Imageless framebuffer
-            renderpass.renderPass->end(renderpass.attachments);
-        renderpass.renderPass.reset();
-        renderpass.framebuffer.reset();
-        renderpass.attachments.clear();
+        if (!renderPassState.attachments.empty())
+            renderPassState.renderPass->end(renderPassState.attachments);
+        else if (renderPassState.framebuffer)
+            renderPassState.renderPass->end(renderPassState.framebuffer->getAttachments());
+        renderPassState.renderPass.reset();
+        renderPassState.framebuffer.reset();
+        renderPassState.attachments.clear();
         inRenderPass = VK_FALSE;
     }
 }
@@ -643,8 +641,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     MAGMA_INUSE(framebuffer);
     renderPass->begin(framebuffer->getAttachments());
     inRenderPass = VK_TRUE;
-    renderPassState.renderPass = renderPass;
-    renderPassState.framebuffer = framebuffer;
+    renderPassState = {renderPass, framebuffer};
 }
 
 #ifdef VK_KHR_imageless_framebuffer
@@ -690,9 +687,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     MAGMA_INUSE(framebuffer);
     renderPass->begin(attachments);
     inRenderPass = VK_TRUE;
-    renderpass.renderPass = renderPass;
-    renderpass.framebuffer = framebuffer;
-    renderpass.attachments = attachments;
+    renderPassState = {renderPass, framebuffer, attachments};
 }
 #endif // VK_KHR_imageless_framebuffer
 #endif // VK_KHR_device_group

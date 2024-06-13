@@ -615,14 +615,12 @@ namespace magma
         friend CommandPool;
 
     private:
-        VkDevice getNativeDevice() const noexcept;
-
         struct RenderPassState
         {
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<Framebuffer> framebuffer;
             std::vector<std::shared_ptr<ImageView>> attachments;
-        } renderpass;
+        };
 
         struct PipelineBarrierBatch
         {
@@ -634,6 +632,7 @@ namespace magma
             std::vector<ImageMemoryBarrier> imageMemoryBarriers;
         };
 
+        VkDevice getNativeDevice() const noexcept;
         PipelineBarrierBatch *lookupBarrierBatch(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
             VkDependencyFlags dependencyFlags) noexcept;
@@ -657,6 +656,7 @@ namespace magma
         VkBool32 labeledRenderPass : 1;
         VkQueryControlFlags queryFlags;
         VkQueryPipelineStatisticFlags pipelineStatistics;
+        RenderPassState renderPassState;
     #ifdef VK_AMD_buffer_marker
         std::shared_ptr<Buffer> markerBuffer;
         std::atomic<VkDeviceSize> markerBufferOffset;
