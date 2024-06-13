@@ -54,16 +54,14 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
     labeledRecording(VK_FALSE),
     labeledRenderPass(VK_FALSE),
     queryFlags(0),
-    pipelineStatistics(0)
+    pipelineStatistics(0),
+    markerOffset(0ull)
 {
 #ifdef VK_EXT_debug_marker
     debugMarkerEnabled = device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
 #endif
 #ifdef VK_EXT_debug_utils
     debugUtilsEnabled = device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-#endif
-#ifdef VK_AMD_buffer_marker
-    markerBufferOffset = 0ull;
 #endif
 }
 
@@ -87,16 +85,14 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     labeledRecording(VK_FALSE),
     labeledRenderPass(VK_FALSE),
     queryFlags(0),
-    pipelineStatistics(0)
+    pipelineStatistics(0),
+    markerOffset(0ull)
 {
 #ifdef VK_EXT_debug_marker
     debugMarkerEnabled = device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
 #endif
 #ifdef VK_EXT_debug_utils
     debugUtilsEnabled = device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-#endif
-#ifdef VK_AMD_buffer_marker
-    markerBufferOffset = 0ull;
 #endif
     VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
     cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -232,9 +228,7 @@ bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
         renderPassState.renderPass.reset();
         renderPassState.framebuffer.reset();
         renderPassState.attachments.clear();
-    #ifdef VK_AMD_buffer_marker
-        markerBufferOffset = 0ull;
-    #endif
+        markerOffset = 0ull;
         return true;
     }
     return false;

@@ -38,8 +38,6 @@ namespace magma
            facilitate the development of debugging tools for tracking which
            pipelined command contributed to device loss. */
 
-    #ifdef VK_AMD_buffer_marker
         std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer);
-    #endif // VK_AMD_buffer_marker
     } // namespace helpers
 } // namespace magma

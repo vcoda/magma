@@ -118,26 +118,31 @@ void CommandBuffer::insertDebugLabel(const char *name, uint32_t color) noexcept
 }
 #endif // VK_EXT_debug_utils
 
-#ifdef VK_AMD_buffer_marker
-void CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, uint32_t marker) noexcept
+// https://asawicki.info/news_1677_debugging_vulkan_driver_crash_-_equivalent_of_nvidia_aftermath.html
+void CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, uint32_t marker)
 {
+    constexpr VkDeviceSize maxBufferMarkers = 1024;
+    if (!markerBuffer)
+    {   // Implementations may only support a limited number of
+        // pipelined marker write operations in flight at a given time,
+        // thus excessive number of marker write operations may degrade
+        // command execution performance.
+        markerBuffer = std::make_shared<StorageBuffer>(device, sizeof(uint32_t) * maxBufferMarkers);
+    }
+    MAGMA_ASSERT(markerOffset <= markerBuffer->getSize() - sizeof(uint32_t));
+#ifdef VK_AMD_buffer_marker
     MAGMA_DEVICE_EXTENSION(vkCmdWriteBufferMarkerAMD);
     if (vkCmdWriteBufferMarkerAMD)
-    {
-        if (!markerBuffer)
-        {   // Implementations may only support a limited number of
-            // pipelined marker write operations in flight at a given time,
-            // thus excessive number of marker write operations may degrade
-            // command execution performance.
-            constexpr VkDeviceSize maxBufferMarkers = 1024;
-            markerBuffer = std::make_shared<StorageBuffer>(device, sizeof(uint32_t) * maxBufferMarkers);
-        }
-        MAGMA_ASSERT(markerBufferOffset <= markerBuffer->getSize() - sizeof(uint32_t));
-        vkCmdWriteBufferMarkerAMD(handle, pipelineStage, *markerBuffer, markerBufferOffset, marker);
-        markerBufferOffset += sizeof(uint32_t);
-    }
-}
+        vkCmdWriteBufferMarkerAMD(handle, pipelineStage, *markerBuffer, markerOffset, marker);
+    else
 #endif // VK_AMD_buffer_marker
+    {
+        MAGMA_UNUSED(pipelineStage); // VkPipelineStageFlagBits used only with VK_AMD_buffer_marker extension
+        MAGMA_ASSERT(!inRenderPass); // vkCmdFillBuffer must be called outside render pass
+        vkCmdFillBuffer(handle, *markerBuffer, markerOffset, sizeof(uint32_t), marker);
+    }
+    markerOffset += sizeof(uint32_t);
+}
 
 #ifdef VK_NV_device_diagnostic_checkpoints
 void CommandBuffer::setCheckpoint(const char *name) noexcept

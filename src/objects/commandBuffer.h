@@ -522,12 +522,10 @@ namespace magma
             uint32_t MAGMA_NOOP(color)) noexcept MAGMA_NOOP_METHOD;
     #endif // VK_EXT_debug_utils
 
-    #ifdef VK_AMD_buffer_marker
         void writeBufferMarker(VkPipelineStageFlagBits MAGMA_NOOP(pipelineStage),
-            uint32_t MAGMA_NOOP(marker)) noexcept MAGMA_NOOP_METHOD;
+            uint32_t MAGMA_NOOP(marker)) MAGMA_NOOP_METHOD;
         const std::shared_ptr<Buffer>& getMarkerBuffer() const noexcept { return markerBuffer; }
-        VkDeviceSize getMarkerBufferOffset() const noexcept { return markerBufferOffset; }
-    #endif
+        VkDeviceSize getMarkerOffset() const noexcept { return markerOffset; }
     #ifdef VK_NV_device_diagnostic_checkpoints
         void setCheckpoint(const char *MAGMA_NOOP(name)) noexcept MAGMA_NOOP_METHOD;
     #endif
@@ -657,10 +655,8 @@ namespace magma
         VkQueryControlFlags queryFlags;
         VkQueryPipelineStatisticFlags pipelineStatistics;
         RenderPassState renderPassState;
-    #ifdef VK_AMD_buffer_marker
         std::shared_ptr<Buffer> markerBuffer;
-        std::atomic<VkDeviceSize> markerBufferOffset;
-    #endif
+        std::atomic<VkDeviceSize> markerOffset;
         mutable std::unordered_map<hash_t, PipelineBarrierBatch> pipelineBarriers;
         // User may optionally compile library with MAGMA_RETAIN_OBJECTS_IN_USE
         // define to allow deferred release of resources bound to command buffer.

@@ -58,11 +58,10 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     flush(std::move(cmdBuffer));
 }
 
-#ifdef VK_AMD_buffer_marker
 std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer)
 {
     std::vector<uint32_t> bufferMarkers;
-    const VkDeviceSize size = cmdBuffer->getMarkerBufferOffset();
+    const VkDeviceSize size = cmdBuffer->getMarkerOffset();
     if (size)
     {
         const std::shared_ptr<Buffer>& srcBuffer = cmdBuffer->getMarkerBuffer();
@@ -83,6 +82,5 @@ std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmd
     }
     return bufferMarkers;
 }
-#endif // VK_AMD_buffer_marker
 } // namespace helpers
 } // namespace magma
