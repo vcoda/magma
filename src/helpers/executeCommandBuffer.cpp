@@ -76,8 +76,8 @@ std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmd
             [&bufferMarkers, size](const uint32_t *srcData)
             {   // Copy from host buffer to output
                 MAGMA_ASSERT(size % sizeof(uint32_t) == 0);
-                bufferMarkers.resize(size / sizeof(uint32_t));
-                memcpy(bufferMarkers.data(), srcData, size);
+                bufferMarkers.resize((size_t)size / sizeof(uint32_t));
+                memcpy(bufferMarkers.data(), srcData, (size_t)size);
             });
     }
     return bufferMarkers;
