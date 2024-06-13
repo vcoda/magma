@@ -155,5 +155,16 @@ namespace magma
             combinedImageSamplerArray, combinedImageImmutableSamplerArray,
             sampledImageArray, storageImageArray, inputAttachmentArray)
     };
+
+    struct ExtSetTable : DescriptorSetTable
+    {
+    #ifdef VK_EXT_inline_uniform_block
+        struct Uniforms
+        {
+            float data[4];
+        };
+        descriptor::InlineUniformBlock<Uniforms> inlineUniformBlock = 0;
+    #endif // VK_EXT_inline_uniform_block
+    };
 #endif // MAGMA_VERIFY_DESCRIPTORS
 } // namespace magma
