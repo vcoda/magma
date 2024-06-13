@@ -186,7 +186,6 @@ SRC_OBJS= \
 	src/shaders/shaderReflection.o \
 	src/shaders/specialization.o \
 	\
-	src/states/colorBlendState.o \
 	src/states/colorBlendStateAdvanced.o \
 	src/states/formattedOutput.o \
 	src/states/multiColorBlendState.o \
