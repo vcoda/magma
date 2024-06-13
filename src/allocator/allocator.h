@@ -51,8 +51,7 @@ namespace magma
        debugging purposes (e.g. putting a guard page after all host
        allocations), or for memory allocation logging. */
 
-    class IAllocator : public AllocationCallbacks,
-        public IDestructible
+    class IAllocator : public IClass, public AllocationCallbacks
     {
     public:
         virtual void *alloc(std::size_t size,
@@ -123,7 +122,7 @@ namespace magma
        allocator that can allocate a bigger memory blocks in different
        heaps and then sub-allocate ranges for your resources. */
 
-    class IDeviceMemoryAllocator : public IDestructible
+    class IDeviceMemoryAllocator : public IClass
     {
     public:
         virtual const std::shared_ptr<Device>& getDevice() const noexcept = 0;

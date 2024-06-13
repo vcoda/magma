@@ -24,10 +24,9 @@ namespace magma
        handle and type. Derived classes should implement virtual
        methods declared here. */
 
-    class IObject
+    class IObject : public IClass
     {
     public:
-        virtual ~IObject() = default;
         virtual VkObjectType getObjectType() const noexcept = 0;
         virtual uint64_t getObjectHandle() const noexcept = 0;
         virtual void setPrivateData(uint64_t data) = 0;

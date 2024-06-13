@@ -27,7 +27,7 @@ namespace magma
        can be linked into other pipelines. */
 
 #ifdef VK_KHR_pipeline_library
-    class PipelineLibrary : public IDestructible
+    class PipelineLibrary : public IClass
     {
     public:
         ~PipelineLibrary();

@@ -23,7 +23,7 @@ namespace magma
 
     /* Interface class of resource object. */
 
-    class IResource : public IDestructible
+    class IResource : public IClass
     {
     public:
         enum class Class : uint8_t;

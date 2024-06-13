@@ -26,7 +26,7 @@ namespace magma
        any filesystem I/O operations. Instead, user have to provide
        an implementation of his loading logic. */
 
-    class IShaderReflectionFactory : public IDestructible
+    class IShaderReflectionFactory : public IClass
     {
     public:
         virtual std::shared_ptr<const ShaderReflection> getReflection(const std::string& shaderFileName) = 0;

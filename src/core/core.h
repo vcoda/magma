@@ -73,10 +73,10 @@ typedef uint64_t NonDispatchableHandle;
 
 /* Base class with virtual destructor. */
 
-class IDestructible
+class IClass
 {
 public:
-    virtual ~IDestructible() = default;
+    virtual ~IClass() = default;
 };
 
 /* Prevents objects of a class from being copy-

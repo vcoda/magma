@@ -21,7 +21,7 @@ namespace magma
 {
     /* Provides allocation functions for new/delete overloads. */
 
-    class ICxxAllocator : public IDestructible
+    class ICxxAllocator : public IClass
     {
     public:
         virtual void *alloc(std::size_t size) = 0;

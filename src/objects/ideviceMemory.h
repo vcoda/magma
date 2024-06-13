@@ -30,7 +30,7 @@ namespace magma
        for example the contents of the image or buffer objects,
        which can be natively used by the device. */
 
-    class IDeviceMemory : public IDestructible
+    class IDeviceMemory : public IClass
     {
     public:
         struct Flags;

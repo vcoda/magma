@@ -32,7 +32,7 @@ namespace magma
        a separate thread (which might be a part of a thread pool)
        and wait for completion using future. */
 
-    class PipelineBatch : public IDestructible
+    class PipelineBatch : public IClass
     {
     public:
     #ifdef VK_AMD_pipeline_compiler_control

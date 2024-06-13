@@ -23,7 +23,7 @@ namespace magma
     {
         /* Base auxiliary object */
 
-        class Base : public IDestructible,
+        class Base : public IClass,
             /* private */ NonCopyable
         {
         };
