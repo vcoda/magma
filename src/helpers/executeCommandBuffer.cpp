@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/queue.h"
 #include "../objects/fence.h"
 #include "../misc/flush.h"
+#include "../helpers/mapScoped.h"
 
 namespace magma
 {
@@ -71,14 +72,13 @@ std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmd
             {   // Copy from device to host
                 cmdBuffer->copyBuffer(srcBuffer, dstBuffer, 0, 0, dstBuffer->getSize());
             }, "magma::helpers::readBufferMarkers", 0x0);
-        const void *data = dstBuffer->getMemory()->map();
-        if (data)
-        {
-            const size_t count = (size_t)size / sizeof(uint32_t);
-            bufferMarkers.resize(count);
-            memcpy(bufferMarkers.data(), data, count * sizeof(uint32_t));
-            dstBuffer->getMemory()->unmap();
-        }
+        helpers::mapScoped<uint32_t>(dstBuffer,
+            [&bufferMarkers, size](const uint32_t *srcData)
+            {   // Copy from host buffer to output
+                MAGMA_ASSERT(size % sizeof(uint32_t) == 0);
+                bufferMarkers.resize(size / sizeof(uint32_t));
+                memcpy(bufferMarkers.data(), srcData, size);
+            });
     }
     return bufferMarkers;
 }
