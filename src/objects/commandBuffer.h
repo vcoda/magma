@@ -662,12 +662,11 @@ namespace magma
         std::atomic<VkDeviceSize> markerBufferOffset;
     #endif
         mutable std::unordered_map<hash_t, PipelineBarrierBatch> pipelineBarriers;
-    #ifdef MAGMA_DEFERRED_RELEASE
-        // User may optionally compile library with MAGMA_DEFERRED_RELEASE
+        // User may optionally compile library with MAGMA_RETAIN_OBJECTS_IN_USE
         // define to allow deferred release of resources bound to command buffer.
+    #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
         mutable std::unordered_set<std::shared_ptr<const DeviceChild>> inUse;
     #endif
-        mutable std::mutex mtx;
     };
 
     /* See 6.1. Command Buffer Lifecycle
