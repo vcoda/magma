@@ -24,6 +24,9 @@ namespace magma
 {
     namespace core
     {
+        /* https://stackoverflow.com/questions/109023/count-the-number-of-set-bits-in-a-32-bit-integer
+           std::popcount() not available until C++20. */
+
         int32_t popCount(uint32_t value) noexcept;
         int64_t popCount(uint64_t value) noexcept;
     } // namespace core
