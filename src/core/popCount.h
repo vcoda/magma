@@ -24,7 +24,7 @@ namespace magma
 {
     namespace core
     {
-        int popCount(uint32_t value) noexcept;
+        int32_t popCount(uint32_t value) noexcept;
     } // namespace core
 } // namespace magma
 
