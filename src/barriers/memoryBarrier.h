@@ -39,9 +39,10 @@ namespace magma
 {
     namespace barrier
     {
-    #ifdef VK_NV_ray_tracing
-        constexpr MemoryBarrier accelerationStructureReadWrite(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_NV, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV);
-    #endif // VK_NV_ray_tracing
+    #ifdef VK_KHR_acceleration_structure
+        constexpr MemoryBarrier accelerationStructureReadWrite(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
+        constexpr MemoryBarrier transferWriteAccelerationStructureRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
+    #endif // VK_KHR_acceleration_structure
     } // namespace barrier
 } // namespace magma
 

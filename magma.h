@@ -25,6 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/allocator/deviceMemoryAllocator.h"
 
 #include "src/objects/accelerationStructure.h"
+#include "src/objects/accelerationStructureInputBuffer.h"
 #include "src/objects/accelerationStructureInstanceBuffer.h"
 #include "src/objects/buffer.h"
 #include "src/objects/bufferView.h"
@@ -82,7 +83,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/privateDataSlot.h"
 #include "src/objects/queryPool.h"
 #include "src/objects/queue.h"
-#include "src/objects/rayTracingBuffer.h"
 #include "src/objects/rayTracingPipeline.h"
 #include "src/objects/rayTracingPipelineBatch.h"
 #include "src/objects/renderPass.h"
@@ -92,6 +92,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/samplerYcbcrConversion.h"
 #include "src/objects/secondaryCommandBuffer.h"
 #include "src/objects/semaphore.h"
+#include "src/objects/shaderBindingTable.h"
 #include "src/objects/shaderModule.h"
 #include "src/objects/srcTransferBuffer.h"
 #include "src/objects/storageBuffer.h"
@@ -108,11 +109,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "src/shaders/pipelineShaderStage.h"
 #include "src/shaders/rayTracingShaderGroup.h"
-#include "src/shaders/shaderBindingTable.h"
 #include "src/shaders/shaderReflection.h"
 #include "src/shaders/shaderReflectionFactory.h"
 #include "src/shaders/shaderStages.h"
 #include "src/shaders/specialization.h"
+
+#include "src/raytracing/address.h"
+#include "src/raytracing/accelerationStructureGeometry.h"
+#include "src/raytracing/accelerationStructureInstance.h"
 
 #include "src/renderpass/attachment.h"
 #include "src/renderpass/loadStoreOp.h"
@@ -173,7 +177,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/misc/flush.h"
 #include "src/misc/format.h"
 #include "src/misc/framebufferAttachmentImage.h"
-#include "src/misc/geometry.h"
 #include "src/misc/imageResolve.h"
 #include "src/misc/imageSubresourceRange.h"
 #include "src/misc/pipelineExecutable.h"
@@ -226,6 +229,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/auxiliary/textShader.h"
 #include "src/auxiliary/typedefs.h"
 
+#include "src/helpers/alignment.h"
 #include "src/helpers/alignedUniformArray.h"
 #include "src/helpers/enumerationCast.h"
 #include "src/helpers/executeCommandBuffer.h"

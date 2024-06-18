@@ -45,12 +45,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_IMAGE_HANDLE(obj) core::reinterpret<VkImage>(obj)
 
-#if defined(VK_KHR_acceleration_structure)
-    #define MAGMA_ACCELERATION_STRUCTURE_HANDLE(obj) core::reinterpret<VkAccelerationStructureKHR>(obj)
-#elif defined(VK_NV_ray_tracing)
-    #define MAGMA_ACCELERATION_STRUCTURE_HANDLE(obj) core::reinterpret<VkAccelerationStructureNV>(obj)
-#endif
-
 #define MAGMA_OPTIONAL_HANDLE(p) core::dereference(p)
 
 #define MAGMA_OPTIONAL_INSTANCE(p) (this->p ? this->p.get() : nullptr)
@@ -96,6 +90,7 @@ static std::shared_ptr<Type> makeShared(Args&& ...args)\
 }
 
 #define MAGMA_TYPEDEF_SHARED_PTR(Type) typedef std::shared_ptr<class Type> Type##Ptr
+#define MAGMA_TYPEDEF_TEMPLATE_SHARED_PTR(Type) template<class T> using Type##Ptr = std::shared_ptr<Type<T>>
 #define MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Type) typedef std::shared_ptr<class I##Type> Type##Ptr
 
 #define MAGMA_TYPEDEF_UNIQUE_PTR(Type) typedef std::unique_ptr<class Type> Type##Ptr

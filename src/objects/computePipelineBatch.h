@@ -35,7 +35,8 @@ namespace magma
         uint32_t batchPipeline(const PipelineShaderStage& shaderStage,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0);
+            VkPipelineCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         void buildPipelines(std::shared_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,

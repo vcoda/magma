@@ -106,6 +106,12 @@
     <Filter Include="Source Files\platform">
       <UniqueIdentifier>{3f3d2ca0-c10b-4e7b-a7b0-bb41047fe765}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\raytracing">
+      <UniqueIdentifier>{6249796a-ebcc-40e0-9c5f-231733443422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\raytracing">
+      <UniqueIdentifier>{b32e0b14-674e-49d5-b1e3-a4de2a1583f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\core\hashing\fnv1.h">
@@ -127,9 +133,6 @@
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\objects\accelerationStructureStorageBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\objects\buffer.h">
@@ -310,9 +313,6 @@
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\objects\queue.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\objects\rayTracingBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\objects\rayTracingPipeline.h">
@@ -618,9 +618,6 @@
     <ClInclude Include="..\..\src\misc\framebufferAttachmentImage.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\misc\geometry.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\misc\imageSubresourceRange.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
@@ -673,9 +670,6 @@
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shaders\rayTracingShaderGroup.h">
-      <Filter>Header Files\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\shaders\shaderBindingTable.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shaders\shaderReflection.h">
@@ -858,18 +852,30 @@
     <ClInclude Include="..\..\src\states\multiColorBlendState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureGeometry.h">
+      <Filter>Header Files\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureInstance.h">
+      <Filter>Header Files\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\helpers\alignment.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\shaderBindingTable.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\accelerationStructureInputBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\raytracing\address.h">
+      <Filter>Header Files\raytracing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\accelerationStructure.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\objects\accelerationStructureInstanceBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\objects\accelerationStructureStorageBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\baseDeviceMemory.cpp">
@@ -1040,9 +1046,6 @@
     <ClCompile Include="..\..\src\objects\queue.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objects\rayTracingBuffer.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\objects\rayTracingPipeline.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -1178,9 +1181,6 @@
     <ClCompile Include="..\..\src\misc\framebufferAttachmentImage.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\misc\geometry.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\misc\pipelineExecutable.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
@@ -1197,12 +1197,6 @@
       <Filter>Source Files\renderpass</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shaders\pipelineShaderStage.cpp">
-      <Filter>Source Files\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shaders\rayTracingShaderGroup.cpp">
-      <Filter>Source Files\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shaders\shaderBindingTable.cpp">
       <Filter>Source Files\shaders</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shaders\shaderReflection.cpp">
@@ -1351,6 +1345,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\states\multiColorBlendState.cpp">
       <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\shaderBindingTable.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1584,6 +1584,21 @@
     </None>
     <None Include="..\..\src\descriptors\imageArrayElement.inl">
       <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\raytracing\accelerationStructureGeometry.inl">
+      <Filter>Header Files\raytracing</Filter>
+    </None>
+    <None Include="..\..\src\objects\accelerationStructure.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\shaders\rayTracingShaderGroup.inl">
+      <Filter>Header Files\shaders</Filter>
+    </None>
+    <None Include="..\..\src\raytracing\accelerationStructureInstance.inl">
+      <Filter>Header Files\raytracing</Filter>
+    </None>
+    <None Include="..\..\src\objects\accelerationStructureInstanceBuffer.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

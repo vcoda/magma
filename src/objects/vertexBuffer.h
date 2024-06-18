@@ -93,25 +93,4 @@ namespace magma
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };
-
-#ifdef VK_NV_ray_tracing
-    class AccelerationStructureVertexBuffer : public BaseVertexBuffer
-    {
-    public:
-        explicit AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            VkDeviceSize size,
-            const void *data,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            const Initializer& optional = Initializer(),
-            const Sharing& sharing = Sharing(),
-            CopyMemoryFunction copyFn = nullptr);
-        explicit AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            VkDeviceSize size = 0,
-            VkDeviceSize srcOffset = 0,
-            const Initializer& optional = Initializer(),
-            const Sharing& sharing = Sharing());
-    };
-#endif // VK_NV_ray_tracing
 } // namespace magma

@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#ifdef VK_KHR_ray_tracing_pipeline
 
 namespace magma
 {
@@ -23,45 +24,46 @@ namespace magma
        that can be bound individually. Each shader group behaves
        as if it was a pipeline using the shader group's state. */
 
-#ifdef VK_NV_ray_tracing
-    class RayTracingShaderGroup : public VkRayTracingShaderGroupCreateInfoNV
+    struct RayTracingShaderGroup : VkRayTracingShaderGroupCreateInfoKHR
     {
+        constexpr hash_t hash() const noexcept;
+
     protected:
-        explicit RayTracingShaderGroup(VkRayTracingShaderGroupTypeNV type,
+        constexpr RayTracingShaderGroup(VkRayTracingShaderGroupTypeKHR type,
             uint32_t generalShader,
             uint32_t closestHitShader,
             uint32_t anyHitShader,
-            uint32_t intersectionShader) noexcept;
-
-    public:
-        hash_t hash() const noexcept;
+            uint32_t intersectionShader,
+            const void *captureReplayHandle) noexcept;
     };
 
     /* General shader is the index of the ray generation, miss, or callable shader. */
 
-    class GeneralRayTracingShaderGroup : public RayTracingShaderGroup
+    struct GeneralRayTracingShaderGroup : RayTracingShaderGroup
     {
-    public:
-        explicit GeneralRayTracingShaderGroup(uint32_t generalShader) noexcept:
-            RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV, generalShader, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV) {}
+        constexpr GeneralRayTracingShaderGroup(uint32_t generalShader,
+            const void *captureReplayHandle = nullptr) noexcept;
     };
 
     /* Triangle hit shader is the optional index of the closest hit or any hit shader(s). */
 
-    class TrianglesHitRayTracingShaderGroup : public RayTracingShaderGroup
+    struct TrianglesHitRayTracingShaderGroup : RayTracingShaderGroup
     {
-    public:
-        explicit TrianglesHitRayTracingShaderGroup(uint32_t closestHitShader, uint32_t anyHitShader = VK_SHADER_UNUSED_NV) noexcept:
-            RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV, VK_SHADER_UNUSED_NV, closestHitShader, anyHitShader, VK_SHADER_UNUSED_NV) {}
+        constexpr TrianglesHitRayTracingShaderGroup(uint32_t closestHitShader,
+            uint32_t anyHitShader = VK_SHADER_UNUSED_KHR,
+            const void *captureReplayHandle = nullptr) noexcept;
     };
 
     /* Procedural hit shader is the optional index of the intersection shader. */
 
-    class ProceduralHitRayTracingShaderGroup : public RayTracingShaderGroup
+    struct ProceduralHitRayTracingShaderGroup : RayTracingShaderGroup
     {
-    public:
-        explicit ProceduralHitRayTracingShaderGroup(uint32_t intersectionShader) noexcept:
-            RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, VK_SHADER_UNUSED_NV, intersectionShader) {}
+        constexpr ProceduralHitRayTracingShaderGroup(uint32_t intersectionShader,
+            uint32_t closestHitShader = VK_SHADER_UNUSED_KHR,
+            uint32_t anyHitShader = VK_SHADER_UNUSED_KHR,
+            const void *captureReplayHandle = nullptr) noexcept;
     };
-#endif // VK_NV_ray_tracing
 } // namespace magma
+
+#include "rayTracingShaderGroup.inl"
+#endif // VK_KHR_ray_tracing_pipeline

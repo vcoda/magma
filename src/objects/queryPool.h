@@ -246,18 +246,29 @@ namespace magma
 
     /* The acceleration structure object may be compacted in order
        to improve performance. Before copying, an application must
-       query the size of the resulting acceleration structure. */
+       query the size of the resulting acceleration structure.
+       The acceleration structure object may be serialized in order 
+       to store memory footprint on disk for faster loading. */
 
-#ifdef VK_NV_ray_tracing
-    class AccelerationStructureCompactedSizeQuery : public IntegerQueryPool
+#ifdef VK_KHR_acceleration_structure
+    class AccelerationStructureQuery : public IntegerQueryPool
     {
     public:
-        explicit AccelerationStructureCompactedSizeQuery(std::shared_ptr<Device> device,
+        enum Type
+        {
+            Size, CompactedSize, SerializationSize, BottomLevelPointers
+        };
+
+        explicit AccelerationStructureQuery(std::shared_ptr<Device> device,
+            Type queryType,
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
+
+    private:
+        static VkQueryType toVkType(Type queryType) noexcept;
     };
-#endif // VK_NV_ray_tracing
+#endif // VK_KHR_acceleration_structure
 } // namespace magma
 
 #include "queryPool.inl"

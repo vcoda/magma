@@ -22,7 +22,6 @@ namespace magma
 {
     class GraphicsPipeline;
     class RenderPass;
-    class StructureChain;
 
     class VertexInputState;
     struct InputAssemblyState;

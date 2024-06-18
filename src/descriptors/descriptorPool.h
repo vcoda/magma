@@ -105,13 +105,13 @@ namespace magma
         };
     #endif // VK_EXT_inline_uniform_block
 
-    #ifdef VK_NV_ray_tracing
+    #ifdef VK_KHR_acceleration_structure
         struct AccelerationStructurePool : DescriptorPool
         {
             constexpr AccelerationStructurePool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, count) {}
+                DescriptorPool(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, count) {}
         };
-    #endif // VK_NV_ray_tracing
+    #endif // VK_KHR_acceleration_structure
 
     #ifdef VK_VALVE_mutable_descriptor_type
         struct MutableDescriptorPool : DescriptorPool

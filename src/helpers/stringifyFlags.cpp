@@ -140,11 +140,8 @@ std::string stringifyBufferUsage(VkBufferUsageFlags flags)
     #ifdef VK_KHR_ray_tracing_pipeline
         VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR,
     #endif
-    #ifdef VK_NV_ray_tracing
-        VK_BUFFER_USAGE_RAY_TRACING_BIT_NV,
-    #endif
-    #ifdef VK_EXT_buffer_device_address
-        VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT,
+    #ifdef VK_KHR_buffer_device_address
+        VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR,
     #endif
     }) stringifyOredBit(flags, bit, out);
     return out.str();

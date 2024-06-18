@@ -162,12 +162,10 @@ constexpr VkDescriptorType spirvToDescriptorType(const SpvReflectDescriptorType 
         return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
     case SPV_REFLECT_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
         return VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
+#ifdef VK_KHR_acceleration_structure
     case SPV_REFLECT_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR:
-    #if defined(VK_KHR_acceleration_structure)
         return VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
-    #elif defined(VK_NV_ray_tracing)
-        return VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV;
-    #endif
+#endif
     default:
         return VK_DESCRIPTOR_TYPE_MAX_ENUM;
     }

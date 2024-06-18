@@ -190,6 +190,7 @@ src\objects\renderPassMultiview.cpp ^
 src\objects\sampler.cpp ^
 src\objects\samplerYcbcrConversion.cpp ^
 src\objects\semaphore.cpp ^
+src\objects\shaderBindingTable.cpp ^
 src\objects\shaderModule.cpp ^
 src\objects\srcTransferBuffer.cpp ^
 src\objects\storageBuffer.cpp ^
@@ -221,8 +222,6 @@ src\platform\xcbSurface.cpp ^
 src\platform\xlibSurface.cpp ^
 src\renderpass\subpass.cpp ^
 src\shaders\pipelineShaderStage.cpp ^
-src\shaders\rayTracingShaderGroup.cpp ^
-src\shaders\shaderBindingTable.cpp ^
 src\shaders\shaderReflection.cpp ^
 src\shaders\specialization.cpp ^
 src\states\colorBlendState.cpp ^
@@ -387,6 +386,7 @@ renderPassMultiview.obj ^
 sampler.obj ^
 samplerYcbcrConversion.obj ^
 semaphore.obj ^
+shaderBindingTable.obj ^
 shaderModule.obj ^
 srcTransferBuffer.obj ^
 storageBuffer.obj ^
@@ -418,8 +418,6 @@ xcbSurface.obj ^
 xlibSurface.obj ^
 subpass.obj ^
 pipelineShaderStage.obj ^
-rayTracingShaderGroup.obj ^
-shaderBindingTable.obj ^
 shaderReflection.obj ^
 specialization.obj ^
 colorBlendState.obj ^

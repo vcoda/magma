@@ -51,6 +51,8 @@ namespace magma
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         std::shared_ptr<DeviceResourcePool> getResourcePool() noexcept;
     #endif
+        bool extensionEnabled(const char *name) const noexcept;
+
         std::shared_ptr<Device> device;
 
     private:

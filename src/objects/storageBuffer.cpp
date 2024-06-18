@@ -81,4 +81,17 @@ DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDev
     if (initialData)
         copyHost(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyFn));
 }
+
+#ifdef VK_KHR_acceleration_structure
+AccelerationStructureStorageBuffer::AccelerationStructureStorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Initializer& optional /* default */,
+    const Sharing& sharing /* default */):
+    Buffer(std::move(device), size,
+        0, // flags
+        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, std::move(allocator))
+{}
+#endif // VK_KHR_acceleration_structure
 } // namespace magma

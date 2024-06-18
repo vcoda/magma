@@ -226,11 +226,30 @@ std::vector<QueryPool::Result<TransformFeedbackQuery::Result, uint64_t>> Transfo
 }
 #endif // VK_EXT_transform_feedback
 
-#ifdef VK_NV_ray_tracing
-AccelerationStructureCompactedSizeQuery::AccelerationStructureCompactedSizeQuery(std::shared_ptr<Device> device, uint32_t queryCount,
+#ifdef VK_KHR_acceleration_structure
+AccelerationStructureQuery::AccelerationStructureQuery(std::shared_ptr<Device> device, Type queryType, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    IntegerQueryPool(VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV, std::move(device), queryCount, 0, std::move(allocator), extendedInfo)
+    IntegerQueryPool(toVkType(queryType), std::move(device), queryCount, 0, std::move(allocator), extendedInfo)
 {}
-#endif // VK_NV_ray_tracing
+
+VkQueryType AccelerationStructureQuery::toVkType(Type queryType) noexcept
+{
+    switch (queryType)
+    {
+    case CompactedSize:
+        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR;
+    case SerializationSize:
+        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR;
+#ifdef VK_KHR_ray_tracing_maintenance1
+    case Size: 
+        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SIZE_KHR;
+    case BottomLevelPointers:
+        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR;
+#endif // VK_KHR_ray_tracing_maintenance1
+    }
+    MAGMA_ASSERT(false);
+    return VK_QUERY_TYPE_MAX_ENUM;
+}
+#endif // VK_KHR_acceleration_structure
 } // namespace magma

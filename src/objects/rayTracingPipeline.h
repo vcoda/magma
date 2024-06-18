@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,60 +17,86 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "pipeline.h"
+#include "../shaders/rayTracingShaderGroup.h"
 
 namespace magma
 {
     class PipelineShaderStage;
-    class RayTracingShaderGroup;
     class PipelineCache;
 #ifdef VK_KHR_pipeline_library
     class PipelineLibrary;
 #endif
+#ifdef VK_KHR_deferred_host_operations
+    class DeferredOperation;
+#endif
 
-    /* Raytracing pipelines consist of multiple shader stages,
-       fixed-function traversal stages, and a pipeline layout. */
+    /* Rasterization has been the dominant method to produce interactive
+       graphics, but increasing performance of graphics hardware has made
+       ray tracing a viable option for interactive rendering. Being able
+       to integrate ray tracing with traditional rasterization makes it
+       easier for applications to incrementally add ray traced effects
+       to existing applications or to do hybrid approaches with rasterization
+       for primary visibility and ray tracing for secondary queries. */
 
-#ifdef VK_NV_ray_tracing
+#ifdef VK_KHR_ray_tracing_pipeline
     class RayTracingPipeline : public Pipeline
     {
     public:
         explicit RayTracingPipeline(std::shared_ptr<Device> device,
             const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
-            uint32_t maxRecursionDepth,
+            uint32_t maxPipelineRayRecursionDepth,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-        #ifdef VK_KHR_pipeline_library
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
-        #endif
+            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr,
+            const std::vector<VkDynamicState>& dynamicStates = {},
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         uint32_t getShaderGroupCount() const noexcept { return shaderGroupCount; }
-        uint32_t getMaxRecursionDepth() const noexcept { return maxRecursionDepth; }
+        const std::vector<VkShaderStageFlagBits> getShaderStageFlags() const noexcept { return shaderStageFlags; }
+        VkDeviceSize getGeneralShaderStackSize(uint32_t group) const noexcept;
+        VkDeviceSize getClosestHitShaderStackSize(uint32_t group) const noexcept;
+        VkDeviceSize getAnyHitShaderStackSize(uint32_t group) const noexcept;
+        VkDeviceSize getIntersectionShaderStackSize(uint32_t group) const noexcept;
         std::vector<uint8_t> getShaderGroupHandles() const;
-        void compileDeferred(uint32_t shaderIndex);
+        std::vector<uint8_t> getCaptureReplayShaderGroupHandles() const;
 
     private:
+        friend class RayTracingPipelineBatch;
         MAGMA_MAKE_SHARED(RayTracingPipeline)
-        RayTracingPipeline(VkPipeline pipeline,
+        RayTracingPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
             uint32_t stageCount,
             uint32_t shaderGroupCount,
-            uint32_t maxRecursionDepth,
+            const std::vector<VkShaderStageFlagBits>& shaderStageFlags,
         #ifdef VK_EXT_pipeline_creation_feedback
             VkPipelineCreationFeedbackEXT creationFeedback,
             const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
         #endif // VK_EXT_pipeline_creation_feedback
             hash_t hash);
+        VkDeviceSize getShaderGroupStackSize(uint32_t group,
+            VkShaderGroupShaderKHR groupShader) const noexcept;
 
         const uint32_t shaderGroupCount;
-        const uint32_t maxRecursionDepth;
-        friend class RayTracingPipelineBatch;
+        std::vector<VkShaderStageFlagBits> shaderStageFlags;
     };
-#endif // VK_NV_ray_tracing
+
+    /* Calculates hash of ray tracing pipeline. This function
+       is shared between classes to make sure that hash computation
+       is consitent across different parts of the library. */
+
+    hash_t psoHash(VkPipelineCreateFlags flags,
+        const std::vector<PipelineShaderStage>& shaderStages,
+        const std::vector<RayTracingShaderGroup>& shaderGroups,
+        const std::vector<VkDynamicState>& dynamicStates,
+        std::shared_ptr<PipelineLayout> layout,
+        uint32_t maxPipelineRayRecursionDepth,
+        const StructureChain& extendedInfo = StructureChain()) noexcept;
+#endif // VK_KHR_ray_tracing_pipeline
 } // namespace magma

@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,38 +23,74 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLibrary.h"
 #include "pipelineCache.h"
 #include "device.h"
+#include "deferredOperation.h"
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
 {
-#ifdef VK_NV_ray_tracing
-RayTracingPipelineBatch::RayTracingPipelineBatch(std::shared_ptr<Device> device) noexcept:
-    BasePipelineBatch<RayTracingPipeline, VkRayTracingPipelineCreateInfoNV>(std::move(device))
+#ifdef VK_KHR_ray_tracing_pipeline
+RayTracingPipelineBatch::RayTracingPipelineBatch(std::shared_ptr<Device> device,
+    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept:
+    BasePipelineBatch<RayTracingPipeline, VkRayTracingPipelineCreateInfoKHR>(std::move(device)),
+    deferredOperation(std::move(deferredOperation))
 {}
 
 uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
-    const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxRecursionDepth, std::shared_ptr<PipelineLayout> layout,
+    const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxPipelineRayRecursionDepth,
+    std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
-    VkPipelineCreateFlags flags /* 0 */)
+    const std::vector<VkDynamicState>& dynamicStates_ /* void */,
+    VkPipelineCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* void */)
 {
+    std::vector<VkShaderStageFlagBits> stageFlags;
+    for (auto const& stage: shaderStages)
+        stageFlags.push_back(stage.stage);
     stages.push_front(shaderStages);
+    shaderStageFlags.push_front(stageFlags);
     groups.push_front(shaderGroups);
+    dynamicStates.push_front(dynamicStates_);
+    if (!layout)
+        layout = std::make_shared<PipelineLayout>(device);
     layouts.push_front(layout);
     basePipelines.push_front(basePipeline);
-    VkRayTracingPipelineCreateInfoNV pipelineInfo;
-    pipelineInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV;
-    pipelineInfo.pNext = nullptr;
+    VkPipelineDynamicStateCreateInfo dynamicStateInfo;
+    dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    dynamicStateInfo.pNext = nullptr;
+    dynamicStateInfo.flags = 0;
+    dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates.front());
+    dynamicStateInfo.pDynamicStates = dynamicStates.front().data();
+    dynamicStateInfos.push_front(dynamicStateInfo);
+    VkRayTracingPipelineCreateInfoKHR pipelineInfo;
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR;
+    pipelineInfo.pNext = extendedInfo.headNode();
     pipelineInfo.flags = flags;
+    if (basePipeline)
+        pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stageCount = MAGMA_COUNT(shaderStages);
     pipelineInfo.pStages = nullptr; // Fixup later
-    pipelineInfo.groupCount = MAGMA_COUNT(shaderGroups);
+    pipelineInfo.groupCount = MAGMA_COUNT(groups.front());
     pipelineInfo.pGroups = groups.front().data();
-    pipelineInfo.maxRecursionDepth = maxRecursionDepth;
-    pipelineInfo.layout = *layouts.front();
-    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.front());
+    pipelineInfo.maxPipelineRayRecursionDepth = maxPipelineRayRecursionDepth;
+    pipelineInfo.pLibraryInfo = nullptr;
+    pipelineInfo.pLibraryInterface = nullptr;
+    pipelineInfo.pDynamicState = &dynamicStateInfos.front();
+    pipelineInfo.layout = *layout;
+    pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
     pipelineInfo.basePipelineIndex = -1;
+#ifdef VK_AMD_pipeline_compiler_control
+    if (device->extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))
+    {
+        VkPipelineCompilerControlCreateInfoAMD pipelineCompilerControlInfo;
+        pipelineCompilerControlInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD;
+        pipelineCompilerControlInfo.pNext = nullptr;
+        pipelineCompilerControlInfo.compilerControlFlags = compilerControlFlags;
+        pipelineCompilerControlInfos.push_front(pipelineCompilerControlInfo);
+        linkNode(pipelineInfo, pipelineCompilerControlInfos.front());
+    }
+#endif // VK_AMD_pipeline_compiler_control
 #ifdef VK_EXT_pipeline_creation_feedback
     if (device->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
@@ -67,49 +103,45 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
         creationFeedbackInfo.pipelineStageCreationFeedbackCount = pipelineInfo.stageCount;
         creationFeedbackInfo.pPipelineStageCreationFeedbacks = stageCreationFeedbacks.front().data();
         creationFeedbackInfos.push_front(creationFeedbackInfo);
-        pipelineInfo.pNext = &creationFeedbackInfos.front();
+        linkNode(pipelineInfo, creationFeedbackInfos.front());
     }
 #endif // VK_EXT_pipeline_creation_feedback
     pipelineInfos.push_back(pipelineInfo);
-    hash_t hash = core::hashArgs(
-        pipelineInfo.sType,
-        pipelineInfo.flags,
-        pipelineInfo.stageCount,
-        pipelineInfo.groupCount,
-        pipelineInfo.maxRecursionDepth);
-    for (auto const& stage: shaderStages)
-        hash = core::hashCombine(hash, stage.getHash());
-    for (auto const& group: shaderGroups)
-        hash = core::hashCombine(hash, group.hash());
-    hash = core::hashCombine(hash, layout->getHash());
+    const hash_t hash = psoHash(
+        flags,
+        shaderStages,
+        shaderGroups,
+        dynamicStates_,
+        layout,
+        maxPipelineRayRecursionDepth,
+        extendedInfo);
     hashes.push_front(hash);
     return MAGMA_COUNT(pipelineInfos) - 1;
 }
 
 void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
-#ifdef VK_KHR_pipeline_library
     std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
-#endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     fixup();
-#ifdef VK_KHR_pipeline_library
     if (device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
         linkPipelineLibrary(std::move(pipelineLibrary));
-#endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
-    MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
-    const VkResult result = vkCreateRayTracingPipelinesNV(getNativeDevice(), MAGMA_OPTIONAL_HANDLE(pipelineCache),
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesKHR, VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
+    const VkResult result = vkCreateRayTracingPipelinesKHR(getNativeDevice(),
+        MAGMA_OPTIONAL_HANDLE(deferredOperation), MAGMA_OPTIONAL_HANDLE(pipelineCache),
         MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
     postCreate();
     groups.clear();
+    dynamicStates.clear();
+    dynamicStateInfos.clear();
     if (VK_SUCCESS == result)
     {
         auto handle = handles.cbegin();
         auto layout = layouts.cbegin();
         auto basePipeline = basePipelines.cbegin();
-        auto info = pipelineInfos.cbegin();
-        auto shaderStages = stages.cbegin();
+        auto pipelineInfo = pipelineInfos.cbegin();
+        auto stageFlags = shaderStageFlags.cbegin();
     #ifdef VK_EXT_pipeline_creation_feedback
         auto creationFeedback = creationFeedbacks.cbegin();
         auto stageFeedbacks = stageCreationFeedbacks.cbegin();
@@ -119,20 +151,17 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipe
         {
             pipelines.emplace_front(RayTracingPipeline::makeShared(
                 *handle++, device, *layout++, *basePipeline++, allocator,
-                info->groupCount, info->maxRecursionDepth,
-                MAGMA_COUNT(*shaderStages++),
+                pipelineInfo->stageCount, pipelineInfo->groupCount, *stageFlags++,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
                 stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
             #endif // VK_EXT_pipeline_creation_feedback
                 *hash++));
-            ++info;
+            ++pipelineInfo;
         }
     }
     postBuild();
-    pipelineInfos.clear();
-    postBuild();
     MAGMA_HANDLE_RESULT(result, "failed to create multiple ray tracing pipelines");
 }
-#endif // VK_NV_ray_tracing
+#endif // VK_KHR_ray_tracing_pipeline
 } // namespace magma

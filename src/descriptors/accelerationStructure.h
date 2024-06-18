@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,9 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
+#ifdef VK_KHR_acceleration_structure
     class AccelerationStructure;
-#endif
 
     namespace descriptor
     {
@@ -31,25 +30,18 @@ namespace magma
            are used for ray traversal. Shaders have read-only access
            to the memory. */
 
-    #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
         class AccelerationStructure : public DescriptorSetLayoutBinding
         {
         public:
             AccelerationStructure(uint32_t binding) noexcept;
-            bool associatedWithResource() const noexcept override;
+            bool associatedWithResource() const noexcept override { return descriptor.pAccelerationStructures != nullptr; }
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             AccelerationStructure& operator=(std::shared_ptr<const magma::AccelerationStructure>) noexcept;
 
         private:
-        #ifdef VK_KHR_acceleration_structure
-            VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
             VkWriteDescriptorSetAccelerationStructureKHR descriptor;
-        #else
-            VkAccelerationStructureNV handle = VK_NULL_HANDLE;
-            VkWriteDescriptorSetAccelerationStructureNV descriptor;
-        #endif
         };
-    #endif // VK_KHR_acceleration_structure || VK_NV_ray_tracing
     } // namespace descriptor
+#endif // VK_KHR_acceleration_structure
 } // namespace magma

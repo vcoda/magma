@@ -119,17 +119,21 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     pipelineInfo.pMultisampleState = &multisampleState;
     pipelineInfo.pDepthStencilState = &depthStencilState;
     pipelineInfo.pColorBlendState = &colorBlendState;
-    pipelineInfo.pDynamicState = dynamicStates.empty() ? nullptr : &pipelineDynamicStateInfo;
+    pipelineInfo.pDynamicState = nullptr;
     pipelineInfo.layout = *layout;
     pipelineInfo.renderPass = *renderPass;
     pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipeline);
     pipelineInfo.basePipelineIndex = -1;
-    pipelineDynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    pipelineDynamicStateInfo.pNext = nullptr;
-    pipelineDynamicStateInfo.flags = 0;
-    pipelineDynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
-    pipelineDynamicStateInfo.pDynamicStates = dynamicStates.data();
+    if (!dynamicStates.empty())
+    {
+        pipelineInfo.pDynamicState = &pipelineDynamicStateInfo;
+        pipelineDynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+        pipelineDynamicStateInfo.pNext = nullptr;
+        pipelineDynamicStateInfo.flags = 0;
+        pipelineDynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
+        pipelineDynamicStateInfo.pDynamicStates = dynamicStates.data();
+    }
 #ifdef VK_AMD_pipeline_compiler_control
     VkPipelineCompilerControlCreateInfoAMD pipelineCompilerControlInfo;
     if (device->extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))

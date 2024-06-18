@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,39 +24,21 @@ namespace magma
 {
 namespace descriptor
 {
-#if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
+#ifdef VK_KHR_acceleration_structure
 AccelerationStructure::AccelerationStructure(uint32_t binding) noexcept:
-#ifdef VK_KHR_acceleration_structure
-    DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, binding)
-#else
-    DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV, 1, binding)
-#endif
-{
-#ifdef VK_KHR_acceleration_structure
-    descriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
-#else
-    descriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV;
-#endif
-    descriptor.pNext = nullptr;
-    descriptor.accelerationStructureCount = 1;
-    descriptor.pAccelerationStructures = &handle;
-}
-
-bool AccelerationStructure::associatedWithResource() const noexcept
-{
-    return (handle != VK_NULL_HANDLE);
-}
+    DescriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, binding),
+    descriptor{
+        VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR,
+        nullptr, // pNext
+        1, // accelerationStructureCount
+        nullptr // pAccelerationStructures
+    }
+{}
 
 void AccelerationStructure::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(handle != VK_NULL_HANDLE);
-    writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeDescriptor(dstSet, writeDescriptorSet);
     writeDescriptorSet.pNext = &descriptor;
-    writeDescriptorSet.dstSet = dstSet;
-    writeDescriptorSet.dstBinding = binding;
-    writeDescriptorSet.dstArrayElement = 0;
-    writeDescriptorSet.descriptorCount = descriptorCount;
-    writeDescriptorSet.descriptorType = descriptorType;
     writeDescriptorSet.pImageInfo = nullptr;
     writeDescriptorSet.pBufferInfo = nullptr;
     writeDescriptorSet.pTexelBufferView = nullptr;
@@ -65,28 +47,14 @@ void AccelerationStructure::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& 
 
 AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept
 {
-#ifdef VK_KHR_acceleration_structure
-    // TODO: refactor this when VK_KHR_acceleration_structure support will be implemented!
-    VkAccelerationStructureKHR handleKHR;
-    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-    handleKHR = reinterpret_cast<VkAccelerationStructureKHR>((VkAccelerationStructureNV)*accelerationStructure);
-    #else
-    handleKHR = static_cast<VkAccelerationStructureKHR>((VkAccelerationStructureNV)*accelerationStructure);
-    #endif
-    if (handleKHR != handle)
+    const VkAccelerationStructureKHR *handleAddress = accelerationStructure->getHandleAddress();
+    if (descriptor.pAccelerationStructures != handleAddress)
     {
-        handle = handleKHR;
+        descriptor.pAccelerationStructures = handleAddress;
         dirty = true;
     }
-#else
-    if (handle != *accelerationStructure)
-    {
-        handle = *accelerationStructure;
-        dirty = true;
-    }
-#endif
     return *this;
 }
-#endif // VK_KHR_acceleration_structure || VK_NV_ray_tracing
+#endif // VK_KHR_acceleration_structure
 } // namespace descriptor
 } // namespace magma

@@ -90,7 +90,7 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
     statistics.descriptorSetCount = MAGMA_COUNT(descriptorSets);
     statistics.framebufferCount = MAGMA_COUNT(framebuffers);
     statistics.commandPoolCount = MAGMA_COUNT(commandPools);
-#if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
+#ifdef VK_KHR_acceleration_structure
     statistics.accelerationStructureCount = MAGMA_COUNT(accelerationStructures);
 #endif
 #ifdef VK_EXT_validation_cache
@@ -175,7 +175,7 @@ VkDeviceSize DeviceResourcePool::countAllocatedAccelerationStructureMemory() con
 {
     std::lock_guard<std::mutex> guard(mtx);
     VkDeviceSize accelerationStructureAllocatedSize = 0;
-#ifdef VK_NV_ray_tracing
+#ifdef VK_KHR_acceleration_structure
     foreach<AccelerationStructure>(accelerationStructures,
         [&accelerationStructureAllocatedSize](const AccelerationStructure *accelerationStructure)
         {
@@ -183,7 +183,7 @@ VkDeviceSize DeviceResourcePool::countAllocatedAccelerationStructureMemory() con
             if (memory)
                 accelerationStructureAllocatedSize += memory->getSize();
         });
-#endif // VK_NV_ray_tracing
+#endif // VK_KHR_acceleration_structure
     return accelerationStructureAllocatedSize;
 }
 
@@ -226,7 +226,7 @@ bool DeviceResourcePool::hasUnreleasedResources() const noexcept
     #ifdef VK_EXT_debug_utils
         debugUtilsMessengers.size() ||
     #endif
-    #if defined(VK_KHR_acceleration_structure) || defined(VK_NV_ray_tracing)
+    #ifdef VK_KHR_acceleration_structure
         accelerationStructures.size() ||
     #endif
     #ifdef VK_EXT_validation_cache

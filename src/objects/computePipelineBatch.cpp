@@ -32,9 +32,9 @@ ComputePipelineBatch::ComputePipelineBatch(std::shared_ptr<Device> device) noexc
     BasePipelineBatch<ComputePipeline, VkComputePipelineCreateInfo>(std::move(device))
 {}
 
-uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderStage, std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
-    VkPipelineCreateFlags flags /* 0 */)
+uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderStage, 
+    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
+    VkPipelineCreateFlags flags /* 0 */, const StructureChain& extendedInfo /* default */)
 {
     stages.emplace_front(1, shaderStage);
     if (!layout)
@@ -43,7 +43,7 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     basePipelines.push_front(basePipeline);
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
-    pipelineInfo.pNext = nullptr;
+    pipelineInfo.pNext = extendedInfo.headNode();
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;

@@ -165,6 +165,9 @@ namespace magma
         };
         descriptor::InlineUniformBlock<Uniforms> inlineUniformBlock = 0;
     #endif // VK_EXT_inline_uniform_block
+    #ifdef VK_KHR_acceleration_structure
+        descriptor::AccelerationStructure accelerationStructure = 1;
+    #endif // VK_KHR_acceleration_structure
     };
 #endif // MAGMA_VERIFY_DESCRIPTORS
 } // namespace magma

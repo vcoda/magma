@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class SrcTransferBuffer;
-
     /* A storage buffer described in a shader as a structure with
        various members that load, store, and atomic operations can
        be performed on. */
@@ -71,4 +69,18 @@ namespace magma
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };
+
+    /* Storage buffer for acceleration structure placement. */
+    
+#ifdef VK_KHR_acceleration_structure
+    class AccelerationStructureStorageBuffer : public Buffer
+    {
+    public:
+        explicit AccelerationStructureStorageBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Initializer& optional = Initializer(),
+            const Sharing& sharing = Sharing());
+    };
+#endif // VK_KHR_acceleration_structure
 } // namespace magma

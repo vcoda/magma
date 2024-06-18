@@ -41,7 +41,6 @@ inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::linkPipelineLib
 template<class PipelineType, class PipelineCreateInfo>
 inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::postCreate()
 {   // Free storage that had to be preserved until vkCreate*Pipelines() call
-    pipelineInfos.clear();
     pipelines.clear();
 #ifdef VK_AMD_pipeline_compiler_control
     pipelineCompilerControlInfos.clear();
@@ -64,5 +63,6 @@ inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::postBuild()
     creationFeedbacks.clear();
 #endif
     hashes.clear();
+    pipelineInfos.clear();
 }
 } // namespace magma

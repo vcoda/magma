@@ -193,5 +193,10 @@ std::shared_ptr<DeviceResourcePool> DeviceChild::getResourcePool() noexcept
     return device ? device->getResourcePool() : nullptr;
 }
 #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
+
+bool DeviceChild::extensionEnabled(const char *name) const noexcept
+{
+    return device->extensionEnabled(name);
+}
 } // namespace magma
 

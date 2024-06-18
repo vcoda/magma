@@ -87,44 +87,4 @@ DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDevic
     if (initialData)
         copyHost(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyFn));
 }
-
-#ifdef VK_NV_ray_tracing
-AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
-    std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Initializer& optional /* default */,
-    const Sharing& sharing /* default */,
-    CopyMemoryFunction copyFn /* nullptr */):
-    BaseVertexBuffer(cmdBuffer->getDevice(), size,
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-#ifdef VK_KHR_acceleration_structure
-        (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ?
-            VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
-#endif
-        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, allocator)
-{
-    stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
-}
-
-AccelerationStructureVertexBuffer::AccelerationStructureVertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
-    std::shared_ptr<Allocator> allocator /* nullptr */,
-    VkDeviceSize size /* 0 */,
-    VkDeviceSize srcOffset /* 0 */,
-    const Initializer& optional /* default */,
-    const Sharing& sharing /* default */):
-    BaseVertexBuffer(cmdBuffer->getDevice(),
-        size > 0 ? size : srcBuffer->getSize(),
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-#ifdef VK_KHR_acceleration_structure
-        (device->extensionEnabled(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) ?
-            VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR : 0) |
-#endif
-        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, std::move(allocator))
-{
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
-}
-#endif // VK_NV_ray_tracing
 } // namespace magma

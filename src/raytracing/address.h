@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,21 +16,23 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "buffer.h"
 
 namespace magma
 {
-    /* Buffer on which the acceleration structure will be stored. */
-
 #ifdef VK_KHR_acceleration_structure
-    class AccelerationStructureStorageBuffer : public Buffer
-    {
-    public:
-        explicit AccelerationStructureStorageBuffer(std::shared_ptr<Device> device,
-            VkDeviceSize size,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            const Initializer& optional = Initializer(),
-            const Sharing& sharing = Sharing());
-    };
+template<class Buffer>
+inline VkDeviceOrHostAddressConstKHR address(const Buffer& buffer, VkDeviceAddress offset = 0ull) noexcept
+{
+    VkDeviceOrHostAddressConstKHR addr;
+    addr.deviceAddress = buffer ? buffer->getDeviceAddress() + offset : NULL;
+    return addr;
+}
+
+inline VkDeviceOrHostAddressConstKHR address(const void *buffer, uintptr_t offset = 0ull) noexcept
+{
+    VkDeviceOrHostAddressConstKHR addr;
+    addr.hostAddress = (const uint8_t *)buffer + offset;
+    return addr;
+}
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

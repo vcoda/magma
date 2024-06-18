@@ -231,6 +231,7 @@
     <ClInclude Include="..\..\src\extensions\instanceLayers.h" />
     <ClInclude Include="..\..\src\extensions\layers.h" />
     <ClInclude Include="..\..\src\extensions\deviceExtensions.h" />
+    <ClInclude Include="..\..\src\helpers\alignment.h" />
     <ClInclude Include="..\..\src\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\src\helpers\enumerationCast.h" />
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
@@ -253,7 +254,6 @@
     <ClInclude Include="..\..\src\misc\extension.h" />
     <ClInclude Include="..\..\src\misc\format.h" />
     <ClInclude Include="..\..\src\misc\framebufferAttachmentImage.h" />
-    <ClInclude Include="..\..\src\misc\geometry.h" />
     <ClInclude Include="..\..\src\misc\imageResolve.h" />
     <ClInclude Include="..\..\src\misc\imageSubresourceRange.h" />
     <ClInclude Include="..\..\src\misc\pipelineExecutable.h" />
@@ -264,8 +264,8 @@
     <ClInclude Include="..\..\src\misc\structureChain.h" />
     <ClInclude Include="..\..\src\misc\viewport.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructure.h" />
+    <ClInclude Include="..\..\src\objects\accelerationStructureInputBuffer.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h" />
-    <ClInclude Include="..\..\src\objects\accelerationStructureStorageBuffer.h" />
     <ClInclude Include="..\..\src\objects\baseDeviceMemory.h" />
     <ClInclude Include="..\..\src\objects\baseUniformBuffer.h" />
     <ClInclude Include="..\..\src\objects\buffer.h" />
@@ -334,7 +334,6 @@
     <ClInclude Include="..\..\src\objects\privateDataSlot.h" />
     <ClInclude Include="..\..\src\objects\queryPool.h" />
     <ClInclude Include="..\..\src\objects\queue.h" />
-    <ClInclude Include="..\..\src\objects\rayTracingBuffer.h" />
     <ClInclude Include="..\..\src\objects\rayTracingPipeline.h" />
     <ClInclude Include="..\..\src\objects\rayTracingPipelineBatch.h" />
     <ClInclude Include="..\..\src\objects\renderPass.h" />
@@ -345,6 +344,7 @@
     <ClInclude Include="..\..\src\objects\samplerYcbcrConversion.h" />
     <ClInclude Include="..\..\src\objects\secondaryCommandBuffer.h" />
     <ClInclude Include="..\..\src\objects\semaphore.h" />
+    <ClInclude Include="..\..\src\objects\shaderBindingTable.h" />
     <ClInclude Include="..\..\src\objects\shaderModule.h" />
     <ClInclude Include="..\..\src\objects\srcTransferBuffer.h" />
     <ClInclude Include="..\..\src\objects\storageBuffer.h" />
@@ -370,12 +370,14 @@
     <ClInclude Include="..\..\src\platform\typedefs.h" />
     <ClInclude Include="..\..\src\platform\win32ExternalSemaphore.h" />
     <ClInclude Include="..\..\src\platform\win32Surface.h" />
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureGeometry.h" />
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureInstance.h" />
+    <ClInclude Include="..\..\src\raytracing\address.h" />
     <ClInclude Include="..\..\src\renderpass\attachment.h" />
     <ClInclude Include="..\..\src\renderpass\loadStoreOp.h" />
     <ClInclude Include="..\..\src\renderpass\subpass.h" />
     <ClInclude Include="..\..\src\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\src\shaders\rayTracingShaderGroup.h" />
-    <ClInclude Include="..\..\src\shaders\shaderBindingTable.h" />
     <ClInclude Include="..\..\src\shaders\shaderReflection.h" />
     <ClInclude Include="..\..\src\shaders\shaderReflectionFactory.h" />
     <ClInclude Include="..\..\src\shaders\shaderStages.h" />
@@ -468,15 +470,13 @@
     <ClCompile Include="..\..\src\misc\flush.cpp" />
     <ClCompile Include="..\..\src\misc\format.cpp" />
     <ClCompile Include="..\..\src\misc\framebufferAttachmentImage.cpp" />
-    <ClCompile Include="..\..\src\misc\geometry.cpp" />
     <ClCompile Include="..\..\src\misc\pipelineExecutable.cpp" />
     <ClCompile Include="..\..\src\misc\scopedDebugMarker.cpp" />
     <ClCompile Include="..\..\src\misc\sharing.cpp" />
     <ClCompile Include="..\..\src\misc\structureChain.cpp" />
     <ClCompile Include="..\..\src\misc\structureSize.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructure.cpp" />
-    <ClCompile Include="..\..\src\objects\accelerationStructureInstanceBuffer.cpp" />
-    <ClCompile Include="..\..\src\objects\accelerationStructureStorageBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\baseDeviceMemory.cpp" />
     <ClCompile Include="..\..\src\objects\baseUniformBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\buffer.cpp" />
@@ -540,7 +540,6 @@
     <ClCompile Include="..\..\src\objects\privateDataSlot.cpp" />
     <ClCompile Include="..\..\src\objects\queryPool.cpp" />
     <ClCompile Include="..\..\src\objects\queue.cpp" />
-    <ClCompile Include="..\..\src\objects\rayTracingBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\rayTracingPipeline.cpp" />
     <ClCompile Include="..\..\src\objects\rayTracingPipelineBatch.cpp" />
     <ClCompile Include="..\..\src\objects\renderPass.cpp" />
@@ -549,6 +548,7 @@
     <ClCompile Include="..\..\src\objects\sampler.cpp" />
     <ClCompile Include="..\..\src\objects\samplerYcbcrConversion.cpp" />
     <ClCompile Include="..\..\src\objects\semaphore.cpp" />
+    <ClCompile Include="..\..\src\objects\shaderBindingTable.cpp" />
     <ClCompile Include="..\..\src\objects\shaderModule.cpp" />
     <ClCompile Include="..\..\src\objects\srcTransferBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\storageBuffer.cpp" />
@@ -568,8 +568,6 @@
     <ClCompile Include="..\..\src\platform\win32Surface.cpp" />
     <ClCompile Include="..\..\src\renderpass\subpass.cpp" />
     <ClCompile Include="..\..\src\shaders\pipelineShaderStage.cpp" />
-    <ClCompile Include="..\..\src\shaders\rayTracingShaderGroup.cpp" />
-    <ClCompile Include="..\..\src\shaders\shaderBindingTable.cpp" />
     <ClCompile Include="..\..\src\shaders\shaderReflection.cpp" />
     <ClCompile Include="..\..\src\shaders\specialization.cpp" />
     <ClCompile Include="..\..\src\states\colorBlendStateAdvanced.cpp" />
@@ -707,6 +705,8 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\misc\structureChain.inl" />
     <None Include="..\..\src\misc\structureChainNode.inl" />
     <None Include="..\..\src\misc\viewport.inl" />
+    <None Include="..\..\src\objects\accelerationStructure.inl" />
+    <None Include="..\..\src\objects\accelerationStructureInstanceBuffer.inl" />
     <None Include="..\..\src\objects\commandBuffer.inl" />
     <None Include="..\..\src\objects\device.inl" />
     <None Include="..\..\src\objects\image.inl" />
@@ -730,7 +730,10 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\packed\x10y10z10w2snorm.inl" />
     <None Include="..\..\src\packed\x10y10z10w2unorm.inl" />
     <None Include="..\..\src\packed\x11y11z10ufloat.inl" />
+    <None Include="..\..\src\raytracing\accelerationStructureGeometry.inl" />
+    <None Include="..\..\src\raytracing\accelerationStructureInstance.inl" />
     <None Include="..\..\src\renderpass\attachment.inl" />
+    <None Include="..\..\src\shaders\rayTracingShaderGroup.inl" />
     <None Include="..\..\src\shaders\specialization.inl" />
     <None Include="..\..\src\states\colorBlendAttachmentState.inl" />
     <None Include="..\..\src\states\colorBlendState.inl" />

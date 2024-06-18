@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,33 +21,44 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef VK_NV_ray_tracing
+#ifdef VK_KHR_ray_tracing_pipeline
     class RayTracingPipeline;
+#ifdef VK_KHR_pipeline_library
+    class PipelineLibrary;
+#endif
+#ifdef VK_KHR_deferred_host_operations
+    class DeferredOperation;
+#endif
 
-    /* With Vulkan it is possible to create multiple ray-tracing
+    /* With Vulkan it is possible to create multiple ray tracing
        pipelines in a single API call. As there are may be
        thousands of such pipelines in the sophisticated rendering
        program, it may be more efficient for graphics driver
        to create all of them at once. */
 
-    class RayTracingPipelineBatch : public BasePipelineBatch<RayTracingPipeline, VkRayTracingPipelineCreateInfoNV>
+    class RayTracingPipelineBatch : public BasePipelineBatch<RayTracingPipeline, VkRayTracingPipelineCreateInfoKHR>
     {
     public:
-        explicit RayTracingPipelineBatch(std::shared_ptr<Device> device) noexcept;
+        explicit RayTracingPipelineBatch(std::shared_ptr<Device> device,
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
         uint32_t batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
-            uint32_t maxRecursionDepth,
+            uint32_t maxPipelineRayRecursionDepth,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
-            VkPipelineCreateFlags flags = 0);
+            const std::vector<VkDynamicState>& dynamicStates = {},
+            VkPipelineCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
         void buildPipelines(std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-        #ifdef VK_KHR_pipeline_library
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
-        #endif
             std::shared_ptr<IAllocator> allocator = nullptr) override;
 
     private:
+        std::shared_ptr<DeferredOperation> deferredOperation;
+        std::forward_list<std::vector<VkShaderStageFlagBits>> shaderStageFlags;
         std::forward_list<std::vector<RayTracingShaderGroup>> groups;
+        std::forward_list<std::vector<VkDynamicState>> dynamicStates;
+        std::forward_list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
     };
-#endif // VK_NV_ray_tracing
+#endif // VK_KHR_ray_tracing_pipeline
 } // namespace magma

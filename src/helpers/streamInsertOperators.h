@@ -117,16 +117,18 @@ MAGMA_STREAM_INSERT_OPERATOR(VkFullScreenExclusiveEXT);
 #ifdef VK_KHR_driver_properties
 MAGMA_STREAM_INSERT_OPERATOR(VkDriverIdKHR);
 #endif
+#ifdef VK_KHR_acceleration_structure
+MAGMA_STREAM_INSERT_OPERATOR(VkRayTracingShaderGroupTypeKHR);
+MAGMA_STREAM_INSERT_OPERATOR(VkGeometryTypeKHR);
+MAGMA_STREAM_INSERT_OPERATOR(VkAccelerationStructureTypeKHR);
+MAGMA_STREAM_INSERT_OPERATOR(VkCopyAccelerationStructureModeKHR);
+MAGMA_STREAM_INSERT_OPERATOR(VkGeometryFlagBitsKHR);
+MAGMA_STREAM_INSERT_OPERATOR(VkGeometryInstanceFlagBitsKHR);
+MAGMA_STREAM_INSERT_OPERATOR(VkBuildAccelerationStructureFlagBitsKHR);
+#endif // VK_KHR_acceleration_structure
 #ifdef VK_NV_ray_tracing
-MAGMA_STREAM_INSERT_OPERATOR(VkRayTracingShaderGroupTypeNV);
-MAGMA_STREAM_INSERT_OPERATOR(VkGeometryTypeNV);
-MAGMA_STREAM_INSERT_OPERATOR(VkAccelerationStructureTypeNV);
-MAGMA_STREAM_INSERT_OPERATOR(VkCopyAccelerationStructureModeNV);
 MAGMA_STREAM_INSERT_OPERATOR(VkAccelerationStructureMemoryRequirementsTypeNV);
-MAGMA_STREAM_INSERT_OPERATOR(VkGeometryFlagBitsNV);
-MAGMA_STREAM_INSERT_OPERATOR(VkGeometryInstanceFlagBitsNV);
-MAGMA_STREAM_INSERT_OPERATOR(VkBuildAccelerationStructureFlagBitsNV);
-#endif // VK_NV_ray_tracing
+#endif
 
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 

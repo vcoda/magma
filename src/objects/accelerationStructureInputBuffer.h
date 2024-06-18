@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,33 +20,34 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class SrcTransferBuffer;
+    /* An array of vertices, indices, AABBs or geometry instances 
+       used as a read-only input to an acceleration structure build. */
 
-    /* Buffer data for ray tracing pipeline. */
-
-#ifdef VK_NV_ray_tracing
-    class RayTracingBuffer : public Buffer
+#ifdef VK_KHR_acceleration_structure
+    class AccelerationStructureInputBuffer : public Buffer
     {
     public:
-        explicit RayTracingBuffer(std::shared_ptr<Device> device,
-            VkDeviceSize size,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            const Initializer& optional = Initializer(),
-            const Sharing& sharing = Sharing());
-        explicit RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit AccelerationStructureInputBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
-        explicit RayTracingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit AccelerationStructureInputBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
+
+    protected:
+        AccelerationStructureInputBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            const Initializer& optional,
+            const Sharing& sharing,
+            std::shared_ptr<Allocator> allocator);
     };
-#endif // VK_NV_ray_tracing
+#endif // VK_KHR_acceleration_structure
 } // namespace magma

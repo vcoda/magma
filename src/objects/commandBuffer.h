@@ -53,9 +53,16 @@ namespace magma
     class Event;
     class Fence;
     class QueryPool;
-    class Geometry;
+#ifdef VK_KHR_acceleration_structure
     class AccelerationStructure;
-    class AccelerationStructureCompactedSizeQuery;
+    class TopLevelAccelerationStructure;
+    class AccelerationStructureQuery;
+    struct AccelerationStructureGeometry;
+    struct AccelerationStructureBuildRange;
+#endif
+#ifdef VK_KHR_ray_tracing_pipeline
+    class ShaderBindingTable;
+#endif
 
     struct MemoryBarrier;
     class BufferMemoryBarrier;
@@ -477,35 +484,49 @@ namespace magma
             const std::initializer_list<VkDeviceSize>& counterBufferOffsets = {}) noexcept;
     #endif // VK_EXT_transform_feedback
 
-    #ifdef VK_NV_ray_tracing
-        void buildAccelerationStructure(const std::shared_ptr<Buffer>& instanceData,
-            VkDeviceSize instanceOffset,
-            bool update,
-            const std::shared_ptr<AccelerationStructure>& dst,
-            const std::shared_ptr<AccelerationStructure>& src,
-            const std::shared_ptr<Buffer>& scratch,
-            VkDeviceSize scratchOffset = 0) noexcept;
-        void copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dst,
-            const std::shared_ptr<AccelerationStructure>& src,
-            bool clone) const noexcept;
-        void writeAccelerationStructureProperties(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-            const std::shared_ptr<AccelerationStructureCompactedSizeQuery>& queryPool,
-            uint32_t firstQuery) noexcept;
-        void traceRays(const std::shared_ptr<Buffer>& raygenShaderBindingTableBuffer,
-            VkDeviceSize raygenShaderBindingOffset,
-            const std::shared_ptr<Buffer>& missShaderBindingTableBuffer,
-            VkDeviceSize missShaderBindingOffset,
-            VkDeviceSize missShaderBindingStride,
-            const std::shared_ptr<Buffer>& hitShaderBindingTableBuffer,
-            VkDeviceSize hitShaderBindingOffset,
-            VkDeviceSize hitShaderBindingStride,
-            const std::shared_ptr<Buffer>& callableShaderBindingTableBuffer,
-            VkDeviceSize callableShaderBindingOffset,
-            VkDeviceSize callableShaderBindingStride,
+    #ifdef VK_KHR_acceleration_structure
+        void buildAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+            const AccelerationStructureGeometry& geometry,
+            const std::shared_ptr<Buffer>& scratchBuffer,
+            uint32_t transformIndex = 0,
+            uint32_t primitiveOffset = 0,
+            uint32_t firstVertex = 0) noexcept;
+        void buildAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::shared_ptr<Buffer>& scratchBuffer,
+            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges) noexcept;
+        void buildAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::shared_ptr<Buffer>& scratchBuffer,
+            const std::shared_ptr<const Buffer>& indirectBuildRanges,
+            uint32_t indirectStride) noexcept;
+        void buildTopLevelAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
+            const AccelerationStructureGeometry& instances,
+            const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
+        void updateAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+            const AccelerationStructureGeometry& geometry,
+            const std::shared_ptr<Buffer>& scratchBuffer,
+            uint32_t transformIndex = 0,
+            uint32_t primitiveOffset = 0,
+            uint32_t firstVertex = 0) noexcept;
+        void updateAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::shared_ptr<Buffer>& scratchBuffer,
+            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges) noexcept;
+    #endif // VK_KHR_acceleration_structure
+
+    #ifdef VK_KHR_ray_tracing_pipeline
+        void setRayTracingPipelineStackSize(uint32_t pipelineStackSize) const noexcept;
+        void traceRays(const std::shared_ptr<const ShaderBindingTable>& shaderBindingTable,
             uint32_t width,
             uint32_t height,
-            uint32_t depth) noexcept;
-    #endif // VK_NV_ray_tracing
+            uint32_t depth) const noexcept;
+        void traceRaysIndirect(const std::shared_ptr<const ShaderBindingTable>& shaderBindingTable,
+            const std::shared_ptr<const Buffer>& indirectBuffer) const noexcept;
+    #endif // VK_KHR_ray_tracing_pipeline
+    #ifdef VK_KHR_ray_tracing_maintenance1
+        void traceRaysIndirect(const std::shared_ptr<Buffer>& indirectTraceRaysBuffer) const noexcept;
+    #endif
 
     #ifdef VK_EXT_debug_marker
         void beginDebugMarker(const char *MAGMA_NOOP(name),

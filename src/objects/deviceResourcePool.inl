@@ -44,10 +44,7 @@ MAGMA_RESOURCE_POOL(VkDebugReportCallbackEXT, debugReportCallbacks)
 MAGMA_RESOURCE_POOL(VkDebugUtilsMessengerEXT, debugUtilsMessengers)
 #endif
 #ifdef VK_KHR_acceleration_structure
-MAGMA_RESOURCE_POOL(VkAccelerationStructureKHR, accelerationStructuresKhr)
-#endif
-#ifdef VK_NV_ray_tracing
-MAGMA_RESOURCE_POOL(VkAccelerationStructureNV, accelerationStructures)
+MAGMA_RESOURCE_POOL(VkAccelerationStructureKHR, accelerationStructures)
 #endif
 #ifdef VK_EXT_validation_cache
 MAGMA_RESOURCE_POOL(VkValidationCacheEXT, validationCaches)

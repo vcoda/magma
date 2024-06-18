@@ -95,27 +95,4 @@ namespace magma
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };
-
-#ifdef VK_NV_ray_tracing
-    class AccelerationStructureIndexBuffer : public BaseIndexBuffer
-    {
-    public:
-        explicit AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            VkIndexType indexType,
-            VkDeviceSize size,
-            const void *data = nullptr,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            const Initializer& optional = Initializer(),
-            const Sharing& sharing = Sharing(),
-            CopyMemoryFunction copyFn = nullptr);
-        explicit AccelerationStructureIndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
-            VkIndexType indexType,
-            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            VkDeviceSize size = 0,
-            VkDeviceSize srcOffset = 0,
-            const Initializer& optional = Initializer(),
-            const Sharing& sharing = Sharing());
-    };
-#endif // VK_NV_ray_tracing
 } // namespace magma

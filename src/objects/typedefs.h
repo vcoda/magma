@@ -129,6 +129,16 @@ namespace magma
 #ifdef VK_EXT_validation_cache
     MAGMA_TYPEDEF_SHARED_PTR(ValidationCache);
 #endif
+#ifdef VK_KHR_acceleration_structure
+    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructure);
+    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureInputBuffer);
+    MAGMA_TYPEDEF_TEMPLATE_SHARED_PTR(AccelerationStructureInstanceBuffer);
+    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureQuery);
+    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureStorageBuffer);
+    MAGMA_TYPEDEF_SHARED_PTR(BottomLevelAccelerationStructure);
+    MAGMA_TYPEDEF_SHARED_PTR(GenericAccelerationStructure);
+    MAGMA_TYPEDEF_SHARED_PTR(TopLevelAccelerationStructure);
+#endif
 #ifdef VK_KHR_deferred_host_operations
     MAGMA_TYPEDEF_SHARED_PTR(DeferredOperation);
 #endif
@@ -170,6 +180,11 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(PipelineLibrary);
     MAGMA_TYPEDEF_SHARED_PTR(ComputePipelineLibrary);
 #endif
+#ifdef VK_KHR_ray_tracing_pipeline
+    MAGMA_TYPEDEF_SHARED_PTR(RayTracingPipeline);
+    MAGMA_TYPEDEF_SHARED_PTR(RayTracingPipelineBatch);
+    MAGMA_TYPEDEF_SHARED_PTR(ShaderBindingTable);
+#endif
 #ifdef VK_KHR_sampler_ycbcr_conversion
     MAGMA_TYPEDEF_SHARED_PTR(SamplerYcbcrConversion);
 #endif
@@ -186,19 +201,6 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(Swapchain);
     MAGMA_TYPEDEF_SHARED_PTR(SwapchainImage);
 #endif
-
-#ifdef VK_NV_ray_tracing
-    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructure);
-    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureCompactedSizeQuery);
-    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureIndexBuffer);
-    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureInstanceBuffer);
-    MAGMA_TYPEDEF_SHARED_PTR(AccelerationStructureVertexBuffer);
-    MAGMA_TYPEDEF_SHARED_PTR(BottomLevelAccelerationStructure);
-    MAGMA_TYPEDEF_SHARED_PTR(RayTracingBuffer);
-    MAGMA_TYPEDEF_SHARED_PTR(RayTracingPipeline);
-    MAGMA_TYPEDEF_SHARED_PTR(RayTracingPipelineBatch);
-    MAGMA_TYPEDEF_SHARED_PTR(TopLevelAccelerationStructure);
-#endif // VK_NV_ray_tracing
 
     MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Object);
     MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Allocator);
