@@ -356,7 +356,7 @@ void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_
 }
 
 void Buffer::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const void *data,
-    std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn)
+    std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn /* nullptr */)
 {
     MAGMA_ASSERT(data);
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,

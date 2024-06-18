@@ -80,7 +80,7 @@ namespace magma
         void stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
             const void *data,
             std::shared_ptr<Allocator> allocator,
-            CopyMemoryFunction copyFn);
+            CopyMemoryFunction copyFn = nullptr);
 
         const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;
