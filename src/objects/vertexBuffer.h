@@ -20,7 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Base vertex buffer class. Holds vertex count as helper for draw calls. */
+    /* Base vertex buffer class. Holds vertex count 
+       as a helper for non-indexed draw calls. */
 
     class BaseVertexBuffer : public Buffer
     {
@@ -44,7 +45,7 @@ namespace magma
         uint32_t vertexCount;
     };
 
-    /* An array of vertex buffer attributes like positions, normals,
+    /* An array of vertex buffer attributes like vertices, normals,
        colors, texture coordinates etc. */
 
     class VertexBuffer : public BaseVertexBuffer

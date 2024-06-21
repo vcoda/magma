@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* Base index buffer class. Holds index type and index count
-       as helper for indexed draw calls. */
+       as a helper for indexed draw calls. */
 
     class BaseIndexBuffer : public Buffer
     {
