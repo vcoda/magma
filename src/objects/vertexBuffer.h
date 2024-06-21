@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class SrcTransferBuffer;
-
     /* Base vertex buffer class. Holds vertex count as helper for draw calls. */
 
     class BaseVertexBuffer : public Buffer

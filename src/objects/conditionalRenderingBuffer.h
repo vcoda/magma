@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class SrcTransferBuffer;
-
     /* A buffer containing the predicate for conditional rendering. */
 
 #ifdef VK_EXT_conditional_rendering

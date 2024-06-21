@@ -20,8 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class SrcTransferBuffer;
-
     /* Base index buffer class. Holds index type and index count
        as helper for indexed draw calls. */
 
