@@ -21,7 +21,7 @@ namespace magma
 {
 namespace helpers
 {
-inline uint32_t align(uint32_t size, uint32_t alignment) noexcept
+inline uint32_t aligned(uint32_t size, uint32_t alignment) noexcept
 {
     return (size + alignment - 1) & ~(alignment - 1);
 }

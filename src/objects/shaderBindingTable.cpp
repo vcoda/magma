@@ -39,7 +39,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<CommandBuffer> cmdBuffer,
 {
     const auto rayTracingPipelineProperties = device->getPhysicalDevice()->getRayTracingPipelineProperties();
     const uint32_t shaderGroupHandleSize = rayTracingPipelineProperties.shaderGroupHandleSize;
-    const uint32_t shaderGroupBaseAlignment = magma::helpers::align(shaderGroupHandleSize, rayTracingPipelineProperties.shaderGroupBaseAlignment);
+    const uint32_t shaderGroupBaseAlignment = helpers::aligned(shaderGroupHandleSize, rayTracingPipelineProperties.shaderGroupBaseAlignment);
     const uint32_t shaderGroupCount = (uint32_t)shaderGroupSize / shaderGroupHandleSize;
     MAGMA_STACK_ARRAY(uint8_t, shaderGroupHandlesWithBaseAlignment, static_cast<size_t>(getSize()));
     const uint8_t *srcHandle = reinterpret_cast<const uint8_t *>(shaderGroupHandles);
