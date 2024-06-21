@@ -793,7 +793,10 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Acceleratio
     const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos[] = {&buildRangeInfo};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
+    {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos);
+        MAGMA_INUSE(accelerationStructure);
+    }
 }
 
 void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
@@ -820,7 +823,10 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Acceleratio
     const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos[] = {buildRanges.data()};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
+    {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos);
+        MAGMA_INUSE(accelerationStructure);
+    }
 }
 
 void CommandBuffer::buildAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
@@ -851,7 +857,10 @@ void CommandBuffer::buildAccelerationStructureIndirect(const std::shared_ptr<Acc
     const uint32_t *maxPrimitiveCounts[] = {primitiveCounts};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresIndirectKHR);
     if (vkCmdBuildAccelerationStructuresIndirectKHR)
+    {
         vkCmdBuildAccelerationStructuresIndirectKHR(handle, 1, &buildGeometryInfo, indirectDeviceAddresses, &indirectStride, maxPrimitiveCounts);
+        MAGMA_INUSE(accelerationStructure);
+    }
 }
 
 void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
@@ -877,7 +886,10 @@ void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<Top
     const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos[] = {&buildRangeInfo};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
+    {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos);
+        MAGMA_INUSE(accelerationStructure);
+    }
 }
 
 void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
@@ -904,7 +916,10 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos[] = {&buildRangeInfo};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
+    {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos);
+        MAGMA_INUSE(accelerationStructure);
+    }
 }
 
 void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
@@ -931,7 +946,10 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos[] = {buildRanges.data()};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
+    {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos);
+        MAGMA_INUSE(accelerationStructure);
+    }
 }
 #endif // VK_KHR_acceleration_structure
 
@@ -955,6 +973,7 @@ void CommandBuffer::traceRays(const std::shared_ptr<const ShaderBindingTable>& s
             shaderBindingTable->getHitStage(),
             shaderBindingTable->getCallableStage(),
             width, height, depth);
+        MAGMA_INUSE(shaderBindingTable);
     }
 }
 
@@ -970,6 +989,8 @@ void CommandBuffer::traceRaysIndirect(const std::shared_ptr<const ShaderBindingT
             shaderBindingTable->getHitStage(),
             shaderBindingTable->getCallableStage(),
             indirectBuffer->getDeviceAddress());
+        MAGMA_INUSE(shaderBindingTable);
+        MAGMA_INUSE(indirectBuffer);
     }
 }
 #endif // VK_KHR_ray_tracing_pipeline
@@ -979,7 +1000,10 @@ void CommandBuffer::traceRaysIndirect(const std::shared_ptr<Buffer>& indirectTra
 {
     MAGMA_DEVICE_EXTENSION(vkCmdTraceRaysIndirect2KHR);
     if (vkCmdTraceRaysIndirect2KHR)
+    {
         vkCmdTraceRaysIndirect2KHR(handle, indirectTraceRaysBuffer->getDeviceAddress());
+        MAGMA_INUSE(indirectBuffer);
+    }
 }
 #endif // VK_KHR_ray_tracing_maintenance1
 
