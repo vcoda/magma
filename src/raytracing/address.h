@@ -16,24 +16,31 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "../objects/buffer.h"
 
 #define MAGMA_NULL (VkDeviceAddress)0ull
 
 namespace magma
 {
 #ifdef VK_KHR_acceleration_structure
-template<class Buffer>
-inline VkDeviceOrHostAddressConstKHR address(const Buffer& buffer, VkDeviceAddress offset = 0ull) noexcept
+inline VkDeviceOrHostAddressConstKHR address(const std::unique_ptr<const Buffer>& buffer) noexcept
 {
     VkDeviceOrHostAddressConstKHR addr;
-    addr.deviceAddress = buffer ? buffer->getDeviceAddress() + offset : NULL;
+    addr.deviceAddress = buffer ? buffer->getDeviceAddress() : MAGMA_NULL;
     return addr;
 }
 
-inline VkDeviceOrHostAddressConstKHR address(const void *buffer, uintptr_t offset = 0ull) noexcept
+inline VkDeviceOrHostAddressConstKHR address(const std::shared_ptr<const Buffer>& buffer) noexcept
 {
     VkDeviceOrHostAddressConstKHR addr;
-    addr.hostAddress = (const uint8_t *)buffer + offset;
+    addr.deviceAddress = buffer ? buffer->getDeviceAddress() : MAGMA_NULL;
+    return addr;
+}
+
+inline VkDeviceOrHostAddressConstKHR address(const void *buffer) noexcept
+{
+    VkDeviceOrHostAddressConstKHR addr;
+    addr.hostAddress = buffer;
     return addr;
 }
 #endif // VK_KHR_acceleration_structure
