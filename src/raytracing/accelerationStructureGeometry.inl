@@ -5,12 +5,12 @@ constexpr AccelerationStructureGeometryTriangles::AccelerationStructureGeometryT
         VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR,
         nullptr, // pNext
         VK_FORMAT_UNDEFINED,
-        NULL, // vertexData
+        MAGMA_NULL, // vertexData
         0, // vertexStride
         0, // maxVertex
         VK_INDEX_TYPE_NONE_KHR,
-        NULL, // indexData
-        NULL // transformData
+        MAGMA_NULL, // indexData
+        MAGMA_NULL // transformData
     },
     primitiveCount(0)
 {}
@@ -28,7 +28,7 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
         VkDeviceSize(Format(vertexFormat).size()), // vertexStride
         uint32_t(vertices->getSize() / vertexStride - 1), // maxVertex
         VK_INDEX_TYPE_NONE_KHR,
-        NULL, // indexData
+        MAGMA_NULL, // indexData
         address(transform, sizeof(VkTransformMatrixKHR) * transformIndex)
     },
     primitiveCount((maxVertex + 1) / 3)
@@ -78,7 +78,7 @@ inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs() 
     VkAccelerationStructureGeometryAabbsDataKHR{
         VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR,
         nullptr, // pNext
-        NULL, // data
+        MAGMA_NULL, // data
         0 // stride
     },
     primitiveCount(0)
@@ -101,7 +101,7 @@ inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInst
         VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR,
         nullptr, // pNext
         VK_FALSE, // arrayOfPointers;
-        NULL // data
+        MAGMA_NULL // data
     },
     primitiveCount(0)
 {}
