@@ -75,7 +75,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     basePipelines.push_front(basePipeline);
     VkPipelineDynamicStateCreateInfo dynamicStateInfo;
     dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    dynamicStateInfo.pNext = 0;
+    dynamicStateInfo.pNext = nullptr;
     dynamicStateInfo.flags = 0;
     dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates.front());
     dynamicStateInfo.pDynamicStates = dynamicStates.front().data();
