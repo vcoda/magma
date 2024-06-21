@@ -74,7 +74,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     imageInfo.initialLayout = layout;
 #ifdef VK_KHR_image_format_list
     VkImageFormatListCreateInfoKHR imageFormatListInfo;
-    if (device->extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME) && !viewFormats.empty())
+    if (extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME) && !viewFormats.empty())
     {
         imageFormatListInfo.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
         imageFormatListInfo.pNext = nullptr;
@@ -89,8 +89,8 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     StructureChain extendedMemoryInfo;
     VkMemoryRequirements memoryRequirements;
 #if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)
-    if (device->extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
-        device->extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
+    if (extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
+        extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
     {
         VkMemoryDedicatedRequirementsKHR dedicatedRequirements = {};
         dedicatedRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS_KHR;
@@ -113,7 +113,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     }
     size = memoryRequirements.size;
 #ifdef VK_KHR_device_group
-    if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    if (extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
     {
         VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo;
         memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
@@ -124,7 +124,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     }
 #endif // VK_KHR_device_group
 #ifdef VK_EXT_memory_priority
-    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    if (extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
     {
         VkMemoryPriorityAllocateInfoEXT memoryPriorityAllocateInfo;
         memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;

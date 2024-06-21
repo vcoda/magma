@@ -80,7 +80,7 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     imageViewInfo.subresourceRange.layerCount = layerCount;
 #ifdef VK_KHR_maintenance2
     VkImageViewUsageCreateInfoKHR imageViewUsageInfo;
-    if (usage && device->extensionEnabled(VK_KHR_MAINTENANCE2_EXTENSION_NAME))
+    if (usage && extensionEnabled(VK_KHR_MAINTENANCE2_EXTENSION_NAME))
     {   // Usage of image view can be restricted compared to the parent image's usage flags
         imageViewUsageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO_KHR;
         imageViewUsageInfo.pNext = nullptr;

@@ -90,7 +90,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 #endif // VK_KHR_win32_surface
 #ifdef VK_EXT_swapchain_maintenance1
     VkSwapchainPresentModesCreateInfoEXT swapchainPresentModesInfo;
-    if (!optional.presentModes.empty() && device->extensionEnabled(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
+    if (!optional.presentModes.empty() && extensionEnabled(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
     {
         swapchainPresentModesInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODES_CREATE_INFO_EXT;
         swapchainPresentModesInfo.pNext = nullptr;
@@ -101,7 +101,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
 #endif // VK_EXT_swapchain_maintenance1
 #ifdef VK_KHR_device_group
     VkDeviceGroupSwapchainCreateInfoKHR swapchainDeviceGroupInfo;
-    if (optional.deviceGroupPresentModes && device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    if (optional.deviceGroupPresentModes && extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
     {
         swapchainDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR;
         swapchainDeviceGroupInfo.pNext = nullptr;
@@ -138,7 +138,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
             out << fullScreenExclusiveWin32Info << std::endl;
     #endif
     #ifdef VK_KHR_device_group
-        if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+        if (extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
             out << swapchainDeviceGroupInfo << std::endl;
     #endif
     #ifdef VK_EXT_debug_report

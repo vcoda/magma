@@ -69,7 +69,7 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device_, uint32_t maxSets
     descriptorPoolInfo.pPoolSizes = descriptorPools.data();
 #ifdef VK_EXT_inline_uniform_block
     VkDescriptorPoolInlineUniformBlockCreateInfoEXT descriptorPoolInlineUniformBlockInfo;
-    if ((maxInlineUniformBlockBindings > 0) && device->extensionEnabled(VK_EXT_INLINE_UNIFORM_BLOCK_EXTENSION_NAME))
+    if ((maxInlineUniformBlockBindings > 0) && extensionEnabled(VK_EXT_INLINE_UNIFORM_BLOCK_EXTENSION_NAME))
     {
         descriptorPoolInfo.pNext = &descriptorPoolInlineUniformBlockInfo;
         descriptorPoolInlineUniformBlockInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT;

@@ -61,8 +61,8 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     StructureChain extendedMemoryInfo;
     VkMemoryRequirements memoryRequirements;
 #if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)
-    if (device->extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
-        device->extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
+    if (extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
+        extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
     {
         VkMemoryDedicatedRequirementsKHR dedicatedRequirements = {};
         dedicatedRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS_KHR;
@@ -86,14 +86,14 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
 #ifdef VK_KHR_device_group
     VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo = {};
     memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
-    if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    if (extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
     {
         memoryAllocateFlagsInfo.flags |= VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
         memoryAllocateFlagsInfo.deviceMask = optional.deviceMask;
     }
 #endif // VK_KHR_device_group
 #ifdef VK_KHR_buffer_device_address
-    if (device->extensionEnabled(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME))
+    if (extensionEnabled(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME))
     {
         if (usage & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR)
             memoryAllocateFlagsInfo.flags |= VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
@@ -106,7 +106,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
         extendedMemoryInfo.linkNode(memoryAllocateFlagsInfo);
 #endif // VK_KHR_device_group
 #ifdef VK_EXT_memory_priority
-    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    if (extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
     {
         VkMemoryPriorityAllocateInfoEXT memoryPriorityAllocateInfo;
         memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;
@@ -228,8 +228,8 @@ void Buffer::realloc(VkDeviceSize newSize)
     StructureChain extendedMemoryInfo;
     VkMemoryRequirements memoryRequirements;
 #if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)
-    if (device->extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
-        device->extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
+    if (extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
+        extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
     {
         VkMemoryDedicatedRequirementsKHR dedicatedRequirements = {};
         dedicatedRequirements.sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS_KHR;
@@ -251,7 +251,7 @@ void Buffer::realloc(VkDeviceSize newSize)
         memoryRequirements = getMemoryRequirements();
     }
 #ifdef VK_KHR_device_group
-    if (device->extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
+    if (extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
     {
         VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo;
         memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
@@ -262,7 +262,7 @@ void Buffer::realloc(VkDeviceSize newSize)
     }
 #endif // VK_KHR_device_group
 #ifdef VK_EXT_memory_priority
-    if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    if (extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
     {
         VkMemoryPriorityAllocateInfoEXT memoryPriorityAllocateInfo;
         memoryPriorityAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT;

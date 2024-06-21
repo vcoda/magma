@@ -136,7 +136,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     }
 #ifdef VK_AMD_pipeline_compiler_control
     VkPipelineCompilerControlCreateInfoAMD pipelineCompilerControlInfo;
-    if (device->extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))
+    if (extensionEnabled(VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME))
     {
         pipelineCompilerControlInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD;
         pipelineCompilerControlInfo.pNext = nullptr;
@@ -146,7 +146,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
 #endif // VK_AMD_pipeline_compiler_control
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackCreateInfoEXT pipelineCreationFeedbackInfo;
-    if (device->extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
+    if (extensionEnabled(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME))
     {
         stageCreationFeedbacks.resize(pipelineInfo.stageCount);
         pipelineCreationFeedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT;
@@ -159,7 +159,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
 #endif // VK_EXT_pipeline_creation_feedback
 #ifdef VK_KHR_pipeline_library
     VkPipelineLibraryCreateInfoKHR pipelineLibraryInfo;
-    if (pipelineLibrary && device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
+    if (pipelineLibrary && extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
     {
         pipelineLibraryInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR;
         pipelineLibraryInfo.pNext = nullptr;
