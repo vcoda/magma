@@ -12,7 +12,7 @@ constexpr TransformMatrix::TransformMatrix() noexcept:
 {}
 
 template<int M, int N>
-constexpr TransformMatrix::TransformMatrix(const float (&mat)[M][N]) noexcept:
+constexpr TransformMatrix::TransformMatrix(const float (&mat)[M][N]) noexcept
 {
     static_assert(M <= 4, "the number of rows in the matrix is greater than 4");
     static_assert(N <= 4, "the number of columns in the matrix is greater than 4");
