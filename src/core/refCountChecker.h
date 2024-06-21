@@ -16,34 +16,30 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifdef MAGMA_DEBUG
 
 namespace magma
 {
     namespace core
     {
-        /* Reference counter to check that there are no circular references
-           that prevents destruction of Vulkan objects. */
+        /* Reference counter to check that there are no circular 
+           references that prevents destruction of Vulkan objects. */
 
+    #ifdef MAGMA_DEBUG
         class RefCountChecker final
         {
         public:
-            RefCountChecker():
-                refCount(0L) {}
+            RefCountChecker() noexcept: refCount(0ll) {}
             ~RefCountChecker()
             {
-                if (refCount != 0L)
-                    std::cout << "invalid reference count (" << refCount << ")" << std::endl;
-                MAGMA_ASSERT(0L == refCount);
+                MAGMA_ASSERT(0ll == refCount);
             }
             void addRef() noexcept { ++refCount; }
             void release() noexcept { --refCount; }
-            long getRefCount() const noexcept { return refCount; }
+            int64_t getRefCount() const noexcept { return refCount; }
 
         private:
-            std::atomic<long> refCount;
+            std::atomic<int64_t> refCount;
         };
+    #endif // MAGMA_DEBUG
     } // namespace core
 } // namespace magma
-
-#endif // MAGMA_DEBUG
