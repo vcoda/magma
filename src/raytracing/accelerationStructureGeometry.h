@@ -32,15 +32,13 @@ namespace magma
         template<class InputBuffer>
         explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
             const InputBuffer& vertices,
-            const InputBuffer& transform = nullptr,
-            uint32_t transformIndex = 0) noexcept;
+            const InputBuffer& transform = nullptr) noexcept;
         template<class InputBuffer>
         explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
             const InputBuffer& vertices,
             VkIndexType indexType,
             const InputBuffer& indices,
-            const InputBuffer& transform = nullptr,
-            uint32_t transformIndex = 0) noexcept;
+            const InputBuffer& transform = nullptr) noexcept;
         size_t getIndexSize() const noexcept;
 
         uint32_t primitiveCount;

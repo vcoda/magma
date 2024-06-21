@@ -18,8 +18,7 @@ constexpr AccelerationStructureGeometryTriangles::AccelerationStructureGeometryT
 template<class InputBuffer>
 inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(
     VkFormat vertexFormat, const InputBuffer& vertices,
-    const InputBuffer& transform /* nullptr */,
-    uint32_t transformIndex /* 0 */) noexcept:
+    const InputBuffer& transform /* nullptr */) noexcept:
     VkAccelerationStructureGeometryTrianglesDataKHR{
         VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR,
         nullptr, // pNext
@@ -29,7 +28,7 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
         uint32_t(vertices->getSize() / vertexStride - 1), // maxVertex
         VK_INDEX_TYPE_NONE_KHR,
         MAGMA_NULL, // indexData
-        address(transform, sizeof(VkTransformMatrixKHR) * transformIndex)
+        address(transform)
     },
     primitiveCount((maxVertex + 1) / 3)
 {}
@@ -38,8 +37,7 @@ template<class InputBuffer>
 inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(
     VkFormat vertexFormat, const InputBuffer& vertices,
     VkIndexType indexType, const InputBuffer& indices,
-    const InputBuffer& transform /* nullptr */,
-    uint32_t transformIndex /* 0 */) noexcept:
+    const InputBuffer& transform /* nullptr */) noexcept:
     VkAccelerationStructureGeometryTrianglesDataKHR{
         VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR,
         nullptr, // pNext
@@ -49,7 +47,7 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
         uint32_t(vertices->getSize() / vertexStride - 1), // maxVertex
         indexType,
         address(indices),
-        address(transform, sizeof(VkTransformMatrixKHR) * transformIndex)
+        address(transform)
     }
 {
     const size_t indexSize = getIndexSize();
