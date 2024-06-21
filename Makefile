@@ -75,7 +75,6 @@ SRC_OBJS= \
 	src/misc/flush.o \
 	src/misc/format.o \
 	src/misc/framebufferAttachmentImage.o \
-	src/misc/geometry.o \
 	src/misc/pipelineExecutable.o \
 	src/misc/scopedDebugMarker.o \
 	src/misc/sharing.o \
@@ -83,8 +82,7 @@ SRC_OBJS= \
 	src/misc/structureSize.o \
 	\
 	src/objects/accelerationStructure.o \
-	src/objects/accelerationStructureInstanceBuffer.o \
-	src/objects/accelerationStructureStorageBuffer.o \
+	src/objects/accelerationStructureInputBuffer.o \
 	src/objects/baseDeviceMemory.o \
 	src/objects/baseUniformBuffer.o \
 	src/objects/buffer.o \
@@ -149,7 +147,6 @@ SRC_OBJS= \
 	src/objects/privateDataSlot.o \
 	src/objects/queryPool.o \
 	src/objects/queue.o \
-	src/objects/rayTracingBuffer.o \
 	src/objects/rayTracingPipeline.o \
 	src/objects/rayTracingPipelineBatch.o \
 	src/objects/renderPass.o \
