@@ -242,7 +242,7 @@ VkQueryType AccelerationStructureQuery::toVkType(Type queryType) noexcept
     case SerializationSize:
         return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR;
 #ifdef VK_KHR_ray_tracing_maintenance1
-    case Size: 
+    case Size:
         return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SIZE_KHR;
     case BottomLevelPointers:
         return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR;

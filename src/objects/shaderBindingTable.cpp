@@ -31,10 +31,10 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<CommandBuffer> cmdBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
-    Buffer(cmdBuffer->getDevice(), 
+    Buffer(cmdBuffer->getDevice(),
         calculateAlignedSize(cmdBuffer->getDevice(), shaderGroupSize), 0, // flags
         VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, allocator)
 {
     const auto rayTracingPipelineProperties = device->getPhysicalDevice()->getRayTracingPipelineProperties();
@@ -56,7 +56,7 @@ ShaderBindingTable::ShaderBindingTable(std::shared_ptr<CommandBuffer> cmdBuffer,
         setStageData(shaderStageFlags[i], i, baseAddress, shaderGroupHandleSize, shaderGroupBaseAlignment);
 }
 
-ShaderBindingTable::ShaderBindingTable(std::shared_ptr<CommandBuffer> cmdBuffer, 
+ShaderBindingTable::ShaderBindingTable(std::shared_ptr<CommandBuffer> cmdBuffer,
     const std::vector<uint8_t>& shaderGroupHandles, const std::vector<VkShaderStageFlagBits>& shaderStageFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
@@ -88,7 +88,7 @@ void ShaderBindingTable::setStageData(VkShaderStageFlagBits stage, uint32_t stag
         MAGMA_ASSERT(false);
         return;
     }
-    region->deviceAddress = baseAddress + shaderGroupBaseAlignment * stageIndex; 
+    region->deviceAddress = baseAddress + shaderGroupBaseAlignment * stageIndex;
     MAGMA_ASSERT(region->deviceAddress % shaderGroupBaseAlignment == 0);
     region->stride = shaderGroupHandleSize;
     region->size = shaderGroupHandleSize;

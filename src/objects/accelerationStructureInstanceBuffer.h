@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* An array of acceleration structure instances, e.g.
-       VkAccelerationStructureInstanceKHR or 
+       VkAccelerationStructureInstanceKHR or
        VkAccelerationStructureMotionInstanceNV. */
 
     template<class Instance>

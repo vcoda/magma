@@ -247,7 +247,7 @@ namespace magma
     /* The acceleration structure object may be compacted in order
        to improve performance. Before copying, an application must
        query the size of the resulting acceleration structure.
-       The acceleration structure object may be serialized in order 
+       The acceleration structure object may be serialized in order
        to store memory footprint on disk for faster loading. */
 
 #ifdef VK_KHR_acceleration_structure

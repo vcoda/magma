@@ -30,7 +30,7 @@ namespace magma
     {
     public:
         explicit ShaderBindingTable(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const void *shaderGroupHandles, 
+            const void *shaderGroupHandles,
             size_t shaderGroupSize,
             const VkShaderStageFlagBits *shaderStageFlags,
             std::shared_ptr<Allocator> allocator = nullptr,
@@ -48,11 +48,11 @@ namespace magma
         const VkStridedDeviceAddressRegionKHR *getCallableStage() const noexcept { return &callable; }
 
     private:
-        static VkDeviceSize calculateAlignedSize(const std::shared_ptr<Device>& device, 
+        static VkDeviceSize calculateAlignedSize(const std::shared_ptr<Device>& device,
             size_t dataSize) noexcept;
-        void setStageData(VkShaderStageFlagBits stage, uint32_t stageIndex, 
+        void setStageData(VkShaderStageFlagBits stage, uint32_t stageIndex,
             VkDeviceAddress baseAddress,
-            uint32_t shaderGroupHandleSize, 
+            uint32_t shaderGroupHandleSize,
             uint32_t shaderGroupBaseAlignment) noexcept;
 
         VkStridedDeviceAddressRegionKHR raygen = {};

@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* An array of vertices, indices, AABBs or geometry instances 
+    /* An array of vertices, indices, AABBs or geometry instances
        used as a read-only input to an acceleration structure build. */
 
 #ifdef VK_KHR_acceleration_structure

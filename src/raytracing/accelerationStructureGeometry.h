@@ -45,7 +45,7 @@ namespace magma
     };
 
     /* Axis-aligned bounding box geometry in a bottom-level acceleration structure. */
-       
+
     struct AccelerationStructureGeometryAabbs : VkAccelerationStructureGeometryAabbsDataKHR
     {
         AccelerationStructureGeometryAabbs() noexcept;

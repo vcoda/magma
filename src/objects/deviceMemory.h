@@ -82,4 +82,3 @@ namespace magma
         static std::atomic<uint32_t> allocationCount;
     };
 } // namespace magma
-
