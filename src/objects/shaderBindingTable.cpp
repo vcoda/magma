@@ -1,5 +1,5 @@
 /*
-Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
+Magma - Abstraction layer over Khronos Vulkan API.
 Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
