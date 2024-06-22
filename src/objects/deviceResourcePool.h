@@ -38,11 +38,12 @@ namespace magma
         Pool<Type>& getPool() noexcept;
         std::mutex& getMutex() const noexcept { return mtx; }
         Resources countResources() const noexcept;
-        VkDeviceSize countAllocatedDeviceLocalMemory() const noexcept;
-        VkDeviceSize countAllocatedHostVisibleMemory() const noexcept;
-        VkDeviceSize countAllocatedBufferMemory() const noexcept;
-        VkDeviceSize countAllocatedImageMemory() const noexcept;
-        VkDeviceSize countAllocatedAccelerationStructureMemory() const noexcept;
+        VkDeviceSize deviceLocalMemoryAllocated() const noexcept;
+        VkDeviceSize hostVisibleMemoryAllocated() const noexcept;
+        VkDeviceSize resizableBarMemoryAllocated() const noexcept;
+        VkDeviceSize bufferMemoryFootprint() const noexcept;
+        VkDeviceSize imageMemoryFootprint() const noexcept;
+        VkDeviceSize accelerationStructureMemoryFootprint() const noexcept;
         bool hasUnreleasedResources() const noexcept;
 
     private:

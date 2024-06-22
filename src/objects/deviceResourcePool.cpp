@@ -117,74 +117,89 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
     return statistics;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedDeviceLocalMemory() const noexcept
+VkDeviceSize DeviceResourcePool::deviceLocalMemoryAllocated() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
-    VkDeviceSize deviceLocalAllocatedSize = 0;
+    VkDeviceSize size = 0ull;
     foreach<DeviceMemory>(deviceMemories,
-        [&deviceLocalAllocatedSize](const BaseDeviceMemory *memory)
+        [&size](const BaseDeviceMemory *memory)
         {
             if (memory->getFlags().deviceLocal)
-                deviceLocalAllocatedSize += memory->getSize();
+                size += memory->getSize();
         });
-    return deviceLocalAllocatedSize;
+    return size;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedHostVisibleMemory() const noexcept
+VkDeviceSize DeviceResourcePool::hostVisibleMemoryAllocated() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
-    VkDeviceSize hostVisibleAllocatedSize = 0;
+    VkDeviceSize size = 0ull;
     foreach<DeviceMemory>(deviceMemories,
-        [&hostVisibleAllocatedSize](const BaseDeviceMemory *memory)
+        [&size](const BaseDeviceMemory *memory)
         {
             if (memory->getFlags().hostVisible)
-                hostVisibleAllocatedSize += memory->getSize();
+                size += memory->getSize();
         });
-    return hostVisibleAllocatedSize;
+    return size;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedBufferMemory() const noexcept
+VkDeviceSize DeviceResourcePool::resizableBarMemoryAllocated() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
-    VkDeviceSize bufferAllocatedSize = 0;
+    VkDeviceSize size = 0ull;
+    foreach<DeviceMemory>(deviceMemories,
+        [&size](const BaseDeviceMemory *memory)
+        {
+            const IDeviceMemory::Flags& flags = memory->getFlags();
+            if (flags.deviceLocal && flags.hostVisible && flags.hostCoherent)
+                size += memory->getSize();
+        });
+    return size;
+}
+
+VkDeviceSize DeviceResourcePool::bufferMemoryFootprint() const noexcept
+{
+    std::lock_guard<std::mutex> guard(mtx);
+    VkDeviceSize size = 0ull;
     foreach<Buffer>(deviceMemories,
-        [&bufferAllocatedSize](const Buffer *buffer)
+        [&size](const Buffer *buffer)
         {
             const IDeviceMemory *memory = buffer->getMemory().get();
             if (memory)
-                bufferAllocatedSize += memory->getSize();
+                size += memory->getSize();
         });
-    return bufferAllocatedSize;
+    return size;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedImageMemory() const noexcept
+VkDeviceSize DeviceResourcePool::imageMemoryFootprint() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
-    VkDeviceSize imageAllocatedSize = 0;
+    VkDeviceSize size = 0ull;
     foreach<Image>(images,
-        [&imageAllocatedSize](const Image *image)
+        [&size](const Image *image)
         {
             const IDeviceMemory *memory = image->getMemory().get();
             if (memory)
-                imageAllocatedSize += memory->getSize();
+                size += memory->getSize();
         });
-    return imageAllocatedSize;
+    return size;
 }
 
-VkDeviceSize DeviceResourcePool::countAllocatedAccelerationStructureMemory() const noexcept
+
+VkDeviceSize DeviceResourcePool::accelerationStructureMemoryFootprint() const noexcept
 {
     std::lock_guard<std::mutex> guard(mtx);
-    VkDeviceSize accelerationStructureAllocatedSize = 0;
+    VkDeviceSize size = 0ull;
 #ifdef VK_KHR_acceleration_structure
     foreach<AccelerationStructure>(accelerationStructures,
-        [&accelerationStructureAllocatedSize](const AccelerationStructure *accelerationStructure)
+        [&size](const AccelerationStructure *accelerationStructure)
         {
             const IDeviceMemory *memory = accelerationStructure->getMemory().get();
             if (memory)
-                accelerationStructureAllocatedSize += memory->getSize();
+                size += memory->getSize();
         });
 #endif // VK_KHR_acceleration_structure
-    return accelerationStructureAllocatedSize;
+    return size;
 }
 
 bool DeviceResourcePool::hasUnreleasedResources() const noexcept
