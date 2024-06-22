@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
-#include "../core/popCount.h"
+#include "../core/popcount.h"
 
 namespace magma
 {
@@ -85,7 +85,7 @@ PipelineStatisticsQuery::PipelineStatisticsQuery(std::shared_ptr<Device> device,
     flags(flags)
 {   // Pipeline statistics queries write one integer value for each bit
     // that is enabled in the pipelineStatistics when the pool is created.
-    const int count = core::popCount(flags);
+    const int count = core::popcount(flags);
     // If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used, the final element
     // of each query's result is an integer indicating whether the query's result
     // is available, with any non-zero value indicating that it is available.
