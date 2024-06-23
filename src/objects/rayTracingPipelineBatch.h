@@ -30,11 +30,9 @@ namespace magma
     class DeferredOperation;
 #endif
 
-    /* With Vulkan it is possible to create multiple ray tracing
-       pipelines in a single API call. As there are may be
-       thousands of such pipelines in the sophisticated rendering
-       program, it may be more efficient for graphics driver
-       to create all of them at once. */
+    /* As there are may be thousands of ray tracing pipelines in the
+       sophisticated rendering program, grouping multiple pipeline
+       compilations into a single command allows for better parallelization. */
 
     class RayTracingPipelineBatch : public BasePipelineBatch<RayTracingPipeline, VkRayTracingPipelineCreateInfoKHR>
     {
