@@ -71,8 +71,11 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
         mipLevels, arrayLayers, samples, flags, usage, tiling, optional, sharing, std::move(allocator))
 {}
 
-Image2D::Image2D(std::shared_ptr<Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent):
-    Image(std::move(device), handle, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1})
+Image2D::Image2D(std::shared_ptr<Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent,
+    uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
+    VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling):
+    Image(std::move(device), handle, VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
+        mipLevels, arrayLayers, samples, flags, usage, tiling)
 {}
 
 LinearTiledImage2D::LinearTiledImage2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,

@@ -65,7 +65,13 @@ namespace magma
         Image2D(std::shared_ptr<Device> device,
             VkImage handle,
             VkFormat format,
-            const VkExtent2D& extent);
+            const VkExtent2D& extent,
+            uint32_t mipLevels,
+            uint32_t arrayLayers,
+            uint32_t samples,
+            VkImageCreateFlags flags,
+            VkImageUsageFlags usage,
+            VkImageTiling tiling);
     };
 
     /* Two-dimensional image with linear tiling. */

@@ -185,8 +185,8 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
             MAGMA_HANDLE_RESULT(result, "failed to get swapchain images");
             uint32_t imageIndex = 0;
             for (VkImage handle: swapchainImages)
-            {   // Image has been created by swapchain internally, so we just assign image handle
-                bindedImages.emplace_back(SwapchainImage::makeShared(device, handle, surfaceFormat.format, extent, imageIndex));
+            {   // Image has been created by swapchain internally, so we just passthrough image handle and properties
+                bindedImages.emplace_back(SwapchainImage::makeShared(device, handle, surfaceFormat.format, extent, arrayLayers, imageUsage, imageIndex));
                 ++imageIndex;
             }
         }

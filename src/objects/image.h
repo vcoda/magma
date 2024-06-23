@@ -114,7 +114,13 @@ namespace magma
             VkImage handle,
             VkImageType imageType,
             VkFormat format,
-            const VkExtent3D& extent);
+            const VkExtent3D& extent,
+            uint32_t mipLevels,
+            uint32_t arrayLayers,
+            uint32_t samples,
+            VkImageCreateFlags flags,
+            VkImageUsageFlags usage,
+            VkImageTiling tiling);
         void copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const std::vector<Mip>& mipMaps,

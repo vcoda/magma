@@ -59,6 +59,8 @@ namespace magma
             VkImage handle,
             VkFormat format,
             const VkExtent2D& extent,
+            uint32_t arrayLayers,
+            VkImageUsageFlags usage,
             uint32_t chainIndex);
         void setChainIndex(uint32_t chainIndex) noexcept;
 
