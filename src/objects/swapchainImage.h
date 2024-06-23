@@ -38,7 +38,7 @@ namespace magma
     {
     public:
     #ifdef VK_VERSION_1_1
-        explicit SwapchainImage(std::shared_ptr<Swapchain> swapchain);
+        explicit SwapchainImage(std::shared_ptr<const Swapchain> swapchain);
     #endif
         ~SwapchainImage();
         VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
