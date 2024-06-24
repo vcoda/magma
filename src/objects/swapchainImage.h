@@ -55,8 +55,8 @@ namespace magma
 
     private:
         MAGMA_MAKE_SHARED(SwapchainImage)
-        SwapchainImage(std::shared_ptr<Device> device,
-            VkImage handle,
+        SwapchainImage(VkImage handle,
+            std::shared_ptr<Device> device,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t arrayLayers,

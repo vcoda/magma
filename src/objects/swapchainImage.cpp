@@ -25,12 +25,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_swapchain
-SwapchainImage::SwapchainImage(std::shared_ptr<Device> device, VkImage handle, VkFormat format, const VkExtent2D& extent,
+SwapchainImage::SwapchainImage(VkImage handle, std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     uint32_t arrayLayers, VkImageUsageFlags usage, uint32_t chainIndex):
-    Image2D(std::move(device), handle, format, extent, /* mipLevels */1, arrayLayers, /* samples */1, 0, usage, VK_IMAGE_TILING_OPTIMAL),
+    Image2D(std::move(device), format, extent, /* mipLevels */1, arrayLayers, /* samples */1, 0, usage, VK_IMAGE_TILING_OPTIMAL),
     implementationControlled(true),
     chainIndex(static_cast<int32_t>(chainIndex))
-{}
+{
+    Image::handle = handle;
+}
 
 // Images can also be created by using vkCreateImage with VkImageSwapchainCreateInfoKHR
 // and bound to swapchain memory using vkBindImageMemory2 with VkBindImageMemorySwapchainInfoKHR.
@@ -40,7 +42,7 @@ SwapchainImage::SwapchainImage(std::shared_ptr<Device> device, VkImage handle, V
 // Unlike images retrieved from vkGetSwapchainImagesKHR, these images must be destroyed with vkDestroyImage.
 #ifdef VK_VERSION_1_1
 SwapchainImage::SwapchainImage(std::shared_ptr<const Swapchain> swapchain):
-    Image2D(swapchain->getDevice(), VK_NULL_HANDLE, swapchain->getSurfaceFormat().format, swapchain->getExtent(),
+    Image2D(swapchain->getDevice(), swapchain->getSurfaceFormat().format, swapchain->getExtent(),
         /* mipLevels */1, swapchain->getArrayLayers(), /* samples */1, 0, swapchain->getImageUsage(), VK_IMAGE_TILING_OPTIMAL),
     implementationControlled(false),
     chainIndex(-1)

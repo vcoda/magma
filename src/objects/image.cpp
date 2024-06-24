@@ -162,7 +162,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     bindMemory(std::move(memory));
 }
 
-Image::Image(std::shared_ptr<Device> device, VkImage handle_, VkImageType imageType, VkFormat format,
+Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling):
     NonDispatchableResource(VK_OBJECT_TYPE_IMAGE, std::move(device), 0, Sharing(), std::shared_ptr<Allocator>() /* FIX IT */),
@@ -176,9 +176,7 @@ Image::Image(std::shared_ptr<Device> device, VkImage handle_, VkImageType imageT
     samples(samples),
     tiling(tiling),
     usage(usage)
-{
-    handle = handle_;
-}
+{}
 
 Image::~Image()
 {

@@ -186,7 +186,8 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
             uint32_t imageIndex = 0;
             for (VkImage handle: swapchainImages)
             {   // Image has been created by swapchain internally, so we just passthrough image handle and properties
-                bindedImages.emplace_back(SwapchainImage::makeShared(device, handle, surfaceFormat.format, extent, arrayLayers, imageUsage, imageIndex));
+                bindedImages.emplace_back(SwapchainImage::makeShared(handle,
+                    device, surfaceFormat.format, extent, arrayLayers, imageUsage, imageIndex));
                 ++imageIndex;
             }
         }

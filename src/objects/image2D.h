@@ -63,7 +63,6 @@ namespace magma
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         Image2D(std::shared_ptr<Device> device,
-            VkImage handle,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t mipLevels,

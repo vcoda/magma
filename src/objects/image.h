@@ -111,7 +111,6 @@ namespace magma
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
         Image(std::shared_ptr<Device> device,
-            VkImage handle,
             VkImageType imageType,
             VkFormat format,
             const VkExtent3D& extent,
