@@ -78,6 +78,9 @@ namespace magma
         uint32_t acquireNextImage(std::shared_ptr<const Semaphore> semaphore = nullptr,
             std::shared_ptr<const Fence> fence = nullptr,
             uint64_t timeout = std::numeric_limits<uint64_t>::max());
+        VkImageLayout layoutTransition(VkImageLayout newLayout,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept;
     #ifdef VK_KHR_device_group
         uint32_t acquireNextDeviceGroupImage(uint32_t deviceMask,
             std::shared_ptr<const Semaphore> semaphore = nullptr,

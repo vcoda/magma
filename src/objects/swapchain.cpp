@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "surface.h"
+#include "commandBuffer.h"
 #include "semaphore.h"
 #include "fence.h"
 #include "debugReportCallback.h"
@@ -29,6 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/deviceFeatures.h"
 #include "../misc/extension.h"
+#include "../misc/flush.h"
 #include "../helpers/stackArray.h"
 #include "../helpers/streamInsertOperators.h"
 #include "../helpers/stringifyFlags.h"
@@ -220,6 +222,21 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore 
         MAGMA_OPTIONAL_HANDLE(semaphore), MAGMA_OPTIONAL_HANDLE(fence), &imageIndex);
     handleError(result, "failed to acquire next image");
     return imageIndex;
+}
+
+VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer,
+    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
+{
+    VkImageLayout oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    cmdBuffer->reset();
+    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+    {
+        for (auto& image: bindedImages)
+            oldLayout = image->layoutTransition(newLayout, cmdBuffer, shaderStageMask);
+    }
+    cmdBuffer->end();
+    flush(std::move(cmdBuffer));
+    return oldLayout;
 }
 
 #ifdef VK_KHR_device_group
