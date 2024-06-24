@@ -42,39 +42,35 @@ SwapchainImage::SwapchainImage(VkImage handle, std::shared_ptr<Device> device, V
 // Unlike images retrieved from vkGetSwapchainImagesKHR, these images must be destroyed with vkDestroyImage.
 #ifdef VK_VERSION_1_1
 SwapchainImage::SwapchainImage(std::shared_ptr<const Swapchain> swapchain):
-    Image2D(swapchain->getDevice(), swapchain->getSurfaceFormat().format, swapchain->getExtent(),
-        /* mipLevels */1, swapchain->getArrayLayers(), /* samples */1, 0, swapchain->getImageUsage(), VK_IMAGE_TILING_OPTIMAL),
+    Image2D(swapchain->getDevice(),
+        swapchain->getSurfaceFormat().format,
+        swapchain->getExtent(),
+        1, // mipLevels
+        swapchain->getArrayLayers(),
+        1, // samples
+        swapchain->getImageFlags(),
+        swapchain->getImageUsage(),
+        VK_IMAGE_TILING_OPTIMAL),
     implementationControlled(false),
     chainIndex(-1)
 {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#swapchain-wsi-image-create-info
-    VkImageCreateFlags flags = 0; // TODO: this should be stored in base Image class
-#ifdef VK_KHR_device_group
-    if (swapchain->getFlags() & VK_SWAPCHAIN_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR)
-        flags |= VK_IMAGE_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR;
-#endif
-    if (swapchain->getFlags() & VK_SWAPCHAIN_CREATE_PROTECTED_BIT_KHR)
-        flags |= VK_IMAGE_CREATE_PROTECTED_BIT;
-#ifdef VK_KHR_swapchain_mutable_format
-    if (swapchain->getFlags() & VK_SWAPCHAIN_CREATE_MUTABLE_FORMAT_BIT_KHR)
-        flags |= (VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT | VK_IMAGE_CREATE_EXTENDED_USAGE_BIT_KHR);
-#endif
     VkImageCreateInfo imageInfo;
     VkImageSwapchainCreateInfoKHR imageSwapchainInfo;
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.pNext = &imageSwapchainInfo;
     imageInfo.flags = flags;
     imageInfo.imageType = VK_IMAGE_TYPE_2D;
-    imageInfo.format = swapchain->getSurfaceFormat().format;
+    imageInfo.format = format;
     imageInfo.extent = extent;
     imageInfo.mipLevels = 1;
-    imageInfo.arrayLayers = swapchain->getArrayLayers();
+    imageInfo.arrayLayers = arrayLayers;
     imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-    imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-    imageInfo.usage = swapchain->getImageUsage();
+    imageInfo.tiling = tiling;
+    imageInfo.usage = usage;
     imageInfo.sharingMode = swapchain->getSharing().getMode();
     imageInfo.queueFamilyIndexCount = swapchain->getSharing().getQueueFamiliesCount();
     imageInfo.pQueueFamilyIndices = swapchain->getSharing().getQueueFamilyIndices().data();
-    imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    imageInfo.initialLayout = layout; // VK_IMAGE_LAYOUT_UNDEFINED
     imageSwapchainInfo.sType = VK_STRUCTURE_TYPE_IMAGE_SWAPCHAIN_CREATE_INFO_KHR;
     imageSwapchainInfo.pNext = nullptr;
     imageSwapchainInfo.swapchain = *swapchain;

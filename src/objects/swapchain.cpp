@@ -164,6 +164,22 @@ Swapchain::~Swapchain()
     vkDestroySwapchainKHR(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
+VkImageCreateFlags Swapchain::getImageFlags() const noexcept
+{   
+    VkImageCreateFlags imageFlags = 0;
+#ifdef VK_KHR_device_group
+    if (flags & VK_SWAPCHAIN_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR)
+        imageFlags |= VK_IMAGE_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR;
+#endif // VK_KHR_device_group
+    if (flags & VK_SWAPCHAIN_CREATE_PROTECTED_BIT_KHR)
+        imageFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
+#ifdef VK_KHR_swapchain_mutable_format
+    if (flags & VK_SWAPCHAIN_CREATE_MUTABLE_FORMAT_BIT_KHR)
+        imageFlags |= (VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT | VK_IMAGE_CREATE_EXTENDED_USAGE_BIT_KHR);
+#endif // VK_KHR_swapchain_mutable_format
+    return imageFlags;
+}
+
 uint32_t Swapchain::getImageCount() const
 {
     uint32_t swapchainImageCount = 0;

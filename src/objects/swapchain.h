@@ -66,6 +66,7 @@ namespace magma
         const VkSurfaceFormatKHR& getSurfaceFormat() const noexcept { return surfaceFormat; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getArrayLayers() const noexcept { return arrayLayers; }
+        VkImageCreateFlags getImageFlags() const noexcept;
         VkImageUsageFlags getImageUsage() const noexcept { return imageUsage; }
         VkSwapchainCreateFlagsKHR getFlags() const noexcept { return flags; }
         VkPresentModeKHR getPresentMode() const noexcept { return presentMode; }
