@@ -39,6 +39,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_DEBUG
 #endif
 
+#if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
+    #define MAGMA_NULL (VkDeviceAddress)0ull
+#endif
+
 #define MAGMA_ALIGNMENT 16
 
 #define MAGMA_MAX_STRING 4096
