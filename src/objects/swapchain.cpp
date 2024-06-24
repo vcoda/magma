@@ -167,7 +167,7 @@ Swapchain::~Swapchain()
 }
 
 VkImageCreateFlags Swapchain::getImageFlags() const noexcept
-{   
+{
     VkImageCreateFlags imageFlags = 0;
 #ifdef VK_KHR_device_group
     if (flags & VK_SWAPCHAIN_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR)
@@ -213,17 +213,6 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
     return bindedImages;
 }
 
-uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore /* nullptr */,
-    std::shared_ptr<const Fence> fence /* nullptr */,
-    uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
-{
-    uint32_t imageIndex = 0;
-    const VkResult result = vkAcquireNextImageKHR(getNativeDevice(), handle, timeout,
-        MAGMA_OPTIONAL_HANDLE(semaphore), MAGMA_OPTIONAL_HANDLE(fence), &imageIndex);
-    handleError(result, "failed to acquire next image");
-    return imageIndex;
-}
-
 VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
 {
@@ -237,6 +226,17 @@ VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, std::shared_p
     cmdBuffer->end();
     flush(std::move(cmdBuffer));
     return oldLayout;
+}
+
+uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore /* nullptr */,
+    std::shared_ptr<const Fence> fence /* nullptr */,
+    uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
+{
+    uint32_t imageIndex = 0;
+    const VkResult result = vkAcquireNextImageKHR(getNativeDevice(), handle, timeout,
+        MAGMA_OPTIONAL_HANDLE(semaphore), MAGMA_OPTIONAL_HANDLE(fence), &imageIndex);
+    handleError(result, "failed to acquire next image");
+    return imageIndex;
 }
 
 #ifdef VK_KHR_device_group
