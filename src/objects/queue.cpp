@@ -138,17 +138,7 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     std::shared_ptr<const Fence> fence /* nullptr */,
     const StructureChain& extendedInfo /* default */)
 {
-    MAGMA_ASSERT(cmdBuffer);
-    MAGMA_ASSERT(cmdBuffer->primary());
-    if (!cmdBuffer || !cmdBuffer->primary())
-        return;
-    std::vector<std::shared_ptr<const Semaphore>> waitSemaphores;
-    if (waitSemaphore)
-        waitSemaphores.push_back(waitSemaphore);
-    std::vector<std::shared_ptr<const Semaphore>> signalSemaphores;
-    if (signalSemaphore)
-        signalSemaphores.push_back(signalSemaphore);
-    return submit({cmdBuffer}, {waitStageMask}, waitSemaphores, signalSemaphores, std::move(fence), extendedInfo);
+    return submit(cmdBuffer, {waitStageMask}, {waitSemaphore}, signalSemaphore, std::move(fence), extendedInfo);
 }
 
 #ifdef VK_KHR_timeline_semaphore
