@@ -30,9 +30,12 @@ namespace magma
         class StackArray final
         {
         public:
-            explicit StackArray(void *const stack, const std::size_t count) noexcept:
+            // Only small arrays could be safely allocated on the stack
+            static constexpr size_t MaxElements = 1024 / sizeof(Type);
+
+            explicit StackArray(void *const stack, size_t size) noexcept:
                 stack(static_cast<Type *>(stack)),
-                count(static_cast<uint32_t>(count)),
+                length(static_cast<uint32_t>(size)),
                 pos(0)
             {
                 if (!std::is_pod<Type>())
@@ -41,9 +44,10 @@ namespace magma
                         new(p) Type();
                 }
             #ifdef MAGMA_DEBUG
-                bytesAllocated = sizeof(Type) * count;
+                bytesAllocated = sizeof(Type) * length;
             #endif
             }
+
             ~StackArray()
             {
                 if (!std::is_pod<Type>())
@@ -51,63 +55,55 @@ namespace magma
                     for (Type *p = begin(); p != end(); ++p)
                         p->~Type();
                 }
-            #ifdef _MSC_VER
-                _freea(stack);
-            #endif
+                MAGMA_FREEA(stack);
             }
+
             // Support range-based loops
             Type *begin() noexcept { return stack; }
             const Type *begin() const noexcept { return stack; }
-            Type *end() noexcept { return stack + count; }
-            const Type *end() const noexcept { return stack + count; }
-            uint32_t size() const noexcept { return count; }
-            // This method allows to avoid additional indexing variable in range-based loops
-            uint32_t put(const Type& elem) noexcept
-            {
-                MAGMA_ASSERT(stack);
-                MAGMA_ASSERT(pos < count);
-                stack[pos++] = elem;
-                return pos;
-            }
+            Type *end() noexcept { return stack + length; }
+            const Type *end() const noexcept { return stack + length; }
+            uint32_t size() const noexcept { return length; }
+            uint32_t count() const noexcept { return pos; }
+            bool empty() const noexcept { return !pos; }
             // Do not store or pass stack pointer anywhere, use inside function scope only
             operator Type *() noexcept { return stack; }
             operator const Type *() const noexcept { return stack; }
+
+            uint32_t put(const Type& elem) noexcept
+            {
+                MAGMA_ASSERT(stack);
+                MAGMA_ASSERT(pos < length);
+                stack[pos++] = elem;
+                return pos;
+            }
+
             Type& operator[](int i) noexcept
             {
                 MAGMA_ASSERT(stack);
-                MAGMA_ASSERT(i < static_cast<int>(count));
+                MAGMA_ASSERT(i < static_cast<int>(length));
                 return stack[i];
             }
+
             const Type& operator[](int i) const noexcept
             {
                 MAGMA_ASSERT(stack);
-                MAGMA_ASSERT(i < static_cast<int>(count));
+                MAGMA_ASSERT(i < static_cast<int>(length));
                 return stack[i];
             }
 
         private:
             Type *const stack;
-            const uint32_t count;
+            const uint32_t length;
             uint32_t pos;
         #ifdef MAGMA_DEBUG
-            std::size_t bytesAllocated;
+            size_t bytesAllocated;
         #endif
         };
     } // namespace helpers
 } // namespace magma
 
-// Only small arrays could be safely allocated on the stack
-#define MAGMA_MAX_STACK_ALLOC 1024
-
-#ifdef _MSC_VER
-    #define MAGMA_ALLOCA(size) _malloca(size)
-#else
-    #define MAGMA_ALLOCA(size) alloca(size)
-#endif // _MSC_VER
-
 // Macro to call alloca() in the stack frame of the variable declaration
 #define MAGMA_STACK_ARRAY(Type, var, count)\
-    MAGMA_ASSERT(sizeof(Type) * (count) < MAGMA_MAX_STACK_ALLOC);\
-    magma::helpers::StackArray<Type> var(\
-        (count) ? MAGMA_ALLOCA(sizeof(Type) * (count)) : nullptr, (count)\
-    )
+    MAGMA_ASSERT(count < magma::helpers::StackArray<Type>::MaxElements);\
+    magma::helpers::StackArray<Type> var(MAGMA_ALLOCA(sizeof(Type) * (count)), (count))
