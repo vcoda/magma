@@ -60,6 +60,12 @@ namespace magma
             std::shared_ptr<const Fence> fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
+            const std::initializer_list<VkPipelineStageFlags>& waitStageMasks,
+            const std::initializer_list<std::shared_ptr<const Semaphore>>& waitSemaphores,
+            std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
+            std::shared_ptr<const Fence> fence = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
+        void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags waitStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,

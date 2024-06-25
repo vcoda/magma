@@ -101,6 +101,37 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
 }
 
 void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
+    const std::initializer_list<VkPipelineStageFlags>& waitStageMasks,
+    const std::initializer_list<std::shared_ptr<const Semaphore>>& waitSemaphores,
+    std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
+    std::shared_ptr<const Fence> fence /* nullptr */,
+    const StructureChain& extendedInfo /* default */)
+{
+    MAGMA_ASSERT(cmdBuffer->primary());
+    if (!cmdBuffer || !cmdBuffer->primary())
+        return;
+    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
+    for (auto const& semaphore: waitSemaphores)
+    {
+        if (semaphore)
+            dereferencedWaitSemaphores.put(*semaphore);
+    }
+    VkSubmitInfo submitInfo;
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.pNext = extendedInfo.headNode();
+    submitInfo.waitSemaphoreCount = dereferencedWaitSemaphores.count();
+    submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
+    submitInfo.pWaitDstStageMask = waitStageMasks.begin();
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = cmdBuffer->getHandleAddress();
+    submitInfo.signalSemaphoreCount = signalSemaphore ? 1 : 0;
+    submitInfo.pSignalSemaphores = signalSemaphore ? signalSemaphore->getHandleAddress() : nullptr;
+    const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
+    MAGMA_HANDLE_RESULT(result, "queue submission failed");
+    cmdBuffer->finishedQueueSubmission();
+}
+
+void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags waitStageMask /* 0 */,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
