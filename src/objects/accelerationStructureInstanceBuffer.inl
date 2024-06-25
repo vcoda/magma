@@ -33,7 +33,7 @@ inline Instance& AccelerationStructureInstanceBuffer<Instance>::getInstance(uint
 }
 
 template<class Instance>
-inline void AccelerationStructureInstanceBuffer<Instance>::update(std::shared_ptr<CommandBuffer> cmdBuffer)
+inline void AccelerationStructureInstanceBuffer<Instance>::updateModified(std::shared_ptr<CommandBuffer> cmdBuffer)
 {
     if (last >= first)
     {
@@ -43,5 +43,11 @@ inline void AccelerationStructureInstanceBuffer<Instance>::update(std::shared_pt
         first = std::numeric_limits<uint32_t>::max();
         last = std::numeric_limits<uint32_t>::min();
     }
+}
+
+template<class Instance>
+inline void AccelerationStructureInstanceBuffer<Instance>::updateWhole(std::shared_ptr<CommandBuffer> cmdBuffer)
+{
+    copyTransfer(std::move(cmdBuffer), srcBuffer, 0, 0, VK_WHOLE_SIZE);
 }
 } // namespace magma
