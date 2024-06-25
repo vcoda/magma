@@ -65,20 +65,26 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
         submitInfo.pWaitDstStageMask = nullptr;
     }
     else
-    {   // Dereference wait semaphores
+    {   // Dereference valid wait semaphores
         for (auto const& semaphore: waitSemaphores)
-            dereferencedWaitSemaphores.put(*semaphore);
-        submitInfo.waitSemaphoreCount = MAGMA_COUNT(dereferencedWaitSemaphores);
+        {
+            if (semaphore)
+                dereferencedWaitSemaphores.put(*semaphore);
+        }
+        submitInfo.waitSemaphoreCount = dereferencedWaitSemaphores.count();
         submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
         submitInfo.pWaitDstStageMask = waitStageMasks.data();
     }
     // Dereference command buffers
     for (auto const& cmdBuffer: cmdBuffers)
     {
-        MAGMA_ASSERT(cmdBuffer->primary());
-        dereferencedCmdBuffers.put(*cmdBuffer);
+        if (cmdBuffer)
+        {
+            MAGMA_ASSERT(cmdBuffer->primary());
+            dereferencedCmdBuffers.put(*cmdBuffer);
+        }
     }
-    submitInfo.commandBufferCount = MAGMA_COUNT(dereferencedCmdBuffers);
+    submitInfo.commandBufferCount = dereferencedCmdBuffers.count();
     submitInfo.pCommandBuffers = dereferencedCmdBuffers;
     if (signalSemaphores.empty())
     {
@@ -86,10 +92,13 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
         submitInfo.pSignalSemaphores = nullptr;
     }
     else
-    {   // Dereference signal semaphores
+    {   // Dereference valid semaphores to be signaled
         for (auto const& semaphore: signalSemaphores)
-            dereferencedSignalSemaphores.put(*semaphore);
-        submitInfo.signalSemaphoreCount = MAGMA_COUNT(dereferencedSignalSemaphores);
+        {
+            if (semaphore)
+                dereferencedSignalSemaphores.put(*semaphore);
+        }
+        submitInfo.signalSemaphoreCount = dereferencedSignalSemaphores.count();
         submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;
     }
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
