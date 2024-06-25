@@ -24,5 +24,6 @@ namespace magma
     /* Submits command buffer to a queue and waits until
        queue submission is finished. */
 
-    void flush(std::shared_ptr<CommandBuffer> cmdBuffer);
+    void flush(std::shared_ptr<CommandBuffer> cmdBuffer,
+        std::shared_ptr<Queue> queue = nullptr);
 } // namespace magma
