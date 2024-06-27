@@ -631,6 +631,7 @@ void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
             dstLayout, dstStageMask);
     }
     cmdBuffer->end();
+    // Block until execution is complete
     finish(std::move(cmdBuffer));
 }
 

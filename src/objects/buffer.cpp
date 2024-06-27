@@ -359,12 +359,13 @@ void Buffer::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const void *
     std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn /* nullptr */)
 {
     MAGMA_ASSERT(data);
+    // Allocate temporary staged buffer
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
         std::move(allocator), Initializer(), Sharing(), std::move(copyFn));
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-    {   // Copy from host to device
+    {   // Copy buffer from host to device
         copyTransfer(cmdBuffer, srcBuffer);
     }
     cmdBuffer->end();
