@@ -48,6 +48,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<Com
     auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator),
         Buffer::Initializer(), Sharing(), std::move(copyFn));
     MAGMA_ASSERT(cmdBuffer->allowsReset());
+    MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {
         for (uint32_t arrayLayer = 0; arrayLayer < arrayLayers; ++arrayLayer)
