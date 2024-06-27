@@ -100,6 +100,7 @@ src\extensions\instanceLayers.cpp ^
 src\extensions\layers.cpp ^
 src\helpers\executeCommandBuffer.cpp ^
 src\helpers\executeDeferredOperation.cpp ^
+src\helpers\layoutTransition.cpp ^
 src\helpers\streamInsertOperators.cpp ^
 src\helpers\stringifyFlags.cpp ^
 src\misc\application.cpp ^
@@ -295,6 +296,7 @@ instanceLayers.obj ^
 layers.obj ^
 executeCommandBuffer.obj ^
 executeDeferredOperation.obj ^
+layoutTransition.obj ^
 streamInsertOperators.obj ^
 stringifyFlags.obj ^
 application.obj ^

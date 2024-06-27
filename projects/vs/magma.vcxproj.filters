@@ -867,6 +867,9 @@
     <ClInclude Include="..\..\src\misc\finish.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\helpers\layoutTransition.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1348,6 +1351,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\misc\finish.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\helpers\layoutTransition.cpp">
+      <Filter>Source Files\helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
