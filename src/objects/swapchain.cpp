@@ -30,7 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/deviceFeatures.h"
 #include "../misc/extension.h"
-#include "../misc/flush.h"
+#include "../misc/finish.h"
 #include "../helpers/stackArray.h"
 #include "../helpers/streamInsertOperators.h"
 #include "../helpers/stringifyFlags.h"
@@ -224,7 +224,7 @@ VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, std::shared_p
             oldLayout = image->layoutTransition(newLayout, cmdBuffer, shaderStageMask);
     }
     cmdBuffer->end();
-    flush(std::move(cmdBuffer));
+    finish(std::move(cmdBuffer));
     return oldLayout;
 }
 

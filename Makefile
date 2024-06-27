@@ -72,7 +72,7 @@ SRC_OBJS= \
 	src/misc/deviceFaultInfo.o \
 	src/misc/deviceFeatures.o \
 	src/misc/deviceQueueDescriptor.o \
-	src/misc/flush.o \
+	src/misc/finish.o \
 	src/misc/format.o \
 	src/misc/framebufferAttachmentImage.o \
 	src/misc/pipelineExecutable.o \

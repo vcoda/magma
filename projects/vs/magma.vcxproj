@@ -245,7 +245,7 @@
     <ClInclude Include="..\..\src\misc\borderColor.h" />
     <ClInclude Include="..\..\src\misc\clearAttachment.h" />
     <ClInclude Include="..\..\src\misc\clearValue.h" />
-    <ClInclude Include="..\..\src\misc\flush.h" />
+    <ClInclude Include="..\..\src\misc\finish.h" />
     <ClInclude Include="..\..\src\misc\compatibility.h" />
     <ClInclude Include="..\..\src\misc\deviceFaultInfo.h" />
     <ClInclude Include="..\..\src\misc\deviceFeatures.h" />
@@ -466,7 +466,7 @@
     <ClCompile Include="..\..\src\misc\deviceFaultInfo.cpp" />
     <ClCompile Include="..\..\src\misc\deviceFeatures.cpp" />
     <ClCompile Include="..\..\src\misc\deviceQueueDescriptor.cpp" />
-    <ClCompile Include="..\..\src\misc\flush.cpp" />
+    <ClCompile Include="..\..\src\misc\finish.cpp" />
     <ClCompile Include="..\..\src\misc\format.cpp" />
     <ClCompile Include="..\..\src\misc\framebufferAttachmentImage.cpp" />
     <ClCompile Include="..\..\src\misc\pipelineExecutable.cpp" />

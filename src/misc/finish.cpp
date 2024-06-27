@@ -25,8 +25,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-void flush(std::shared_ptr<CommandBuffer> cmdBuffer,
-    std::shared_ptr<Queue> queue /* null */)
+void finish(std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Queue> queue /* nullptr */)
 {
     if (!queue)
     {   // If queue not specified, choose appropriate one

@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "commandBuffer.h"
 #include "srcTransferBuffer.h"
-#include "../misc/flush.h"
+#include "../misc/finish.h"
 
 namespace magma
 {
@@ -60,7 +60,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<Com
         }
     }
     cmdBuffer->end();
-    flush(std::move(cmdBuffer));
+    finish(std::move(cmdBuffer));
 }
 
 FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<CommandBuffer> cmdBuffer,

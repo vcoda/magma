@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/dstTransferBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
-#include "../misc/flush.h"
+#include "../misc/finish.h"
 #include "../helpers/mapScoped.h"
 
 namespace magma
@@ -56,7 +56,7 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
         }
         cmdBuffer->end();
     }
-    flush(std::move(cmdBuffer));
+    finish(std::move(cmdBuffer));
 }
 
 std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer)

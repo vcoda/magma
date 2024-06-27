@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "commandBuffer.h"
 #include "commandPool.h"
 #include "../misc/extension.h"
-#include "../misc/flush.h"
+#include "../misc/finish.h"
 #include "../exceptions/errorResult.h"
 #include "../core/copyMemory.h"
 
@@ -367,6 +367,7 @@ void Buffer::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const void *
         copyTransfer(cmdBuffer, srcBuffer);
     }
     cmdBuffer->end();
-    flush(std::move(cmdBuffer));
+    // Block until execution is complete
+    finish(std::move(cmdBuffer));
 }
 } // namespace magma

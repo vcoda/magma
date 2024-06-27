@@ -106,7 +106,7 @@ src\misc\application.cpp ^
 src\misc\deviceFaultInfo.cpp ^
 src\misc\deviceFeatures.cpp ^
 src\misc\deviceQueueDescriptor.cpp ^
-src\misc\flush.cpp ^
+src\misc\finish.cpp ^
 src\misc\format.cpp ^
 src\misc\framebufferAttachmentImage.cpp ^
 src\misc\geometry.cpp ^
@@ -295,14 +295,13 @@ instanceLayers.obj ^
 layers.obj ^
 executeCommandBuffer.obj ^
 executeDeferredOperation.obj ^
-flushCommandBuffer.obj ^
 streamInsertOperators.obj ^
 stringifyFlags.obj ^
 application.obj ^
 deviceFaultInfo.obj ^
 deviceFeatures.obj ^
 deviceQueueDescriptor.obj ^
-flush.obj ^
+finish.obj ^
 format.obj ^
 framebufferAttachmentImage.obj ^
 geometry.obj ^

@@ -828,9 +828,6 @@
     <ClInclude Include="..\..\src\core\typedefs.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\misc\flush.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\descriptors\descriptorSetLayoutBinding.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
@@ -866,6 +863,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\popcount.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\finish.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1337,9 +1337,6 @@
     <ClCompile Include="..\..\src\objects\deviceChild.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\misc\flush.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\states\multiColorBlendState.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>
@@ -1348,6 +1345,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc\finish.cpp">
+      <Filter>Source Files\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

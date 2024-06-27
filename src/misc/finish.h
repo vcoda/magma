@@ -21,9 +21,10 @@ namespace magma
 {
     class CommandBuffer;
 
-    /* Submits command buffer to a queue and waits until
-       queue submission is finished. */
+    /* Submits command buffer to a queue and blocks until
+       all command buffer execution is complete. This is
+       an analogue of glFinish() function. */
 
-    void flush(std::shared_ptr<CommandBuffer> cmdBuffer,
+    void finish(std::shared_ptr<CommandBuffer> cmdBuffer,
         std::shared_ptr<Queue> queue = nullptr);
 } // namespace magma
