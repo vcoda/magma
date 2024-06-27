@@ -53,22 +53,16 @@ namespace magma
         void setPresentMode(VkPresentModeKHR presentMode_) noexcept { presentMode = presentMode_; }
         VkPresentModeKHR getPresentMode() const noexcept { return presentMode; }
     #endif // VK_EXT_swapchain_maintenance1
-        void submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
-            const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
-            const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},
-            const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores = {},
-            std::shared_ptr<const Fence> fence = nullptr,
-            const StructureChain& extendedInfo = StructureChain());
         void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
-            const std::initializer_list<VkPipelineStageFlags>& waitStageMasks,
-            const std::initializer_list<std::shared_ptr<const Semaphore>>& waitSemaphores,
-            std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
-            std::shared_ptr<const Fence> fence = nullptr,
-            const StructureChain& extendedInfo = StructureChain());
-        void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
-            VkPipelineStageFlags waitStageMask = 0,
+            VkPipelineStageFlags waitDstStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
+            std::shared_ptr<const Fence> fence = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
+        void submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
+            const std::initializer_list<VkPipelineStageFlags> waitDstStageMask = {},
+            const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
+            const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores = {},
             std::shared_ptr<const Fence> fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_timeline_semaphore
@@ -87,13 +81,13 @@ namespace magma
         #endif // VK_KHR_timeline_semaphore
     #endif // VK_KHR_external_semaphore_win32
     #ifdef VK_KHR_device_group
-        void submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
-            const std::vector<uint32_t>& cmdBufferDeviceMasks = {},
-            const std::vector<VkPipelineStageFlags>& waitStageMasks = {},
-            const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores = {},
-            const std::vector<uint32_t>& waitSemaphoreDeviceIndices = {},
-            const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores = {},
-            const std::vector<uint32_t>& signalSemaphoreDeviceIndices = {},
+        void submitDeviceGroup(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
+            const std::initializer_list<uint32_t> cmdBufferDeviceMasks = {},
+            const std::initializer_list<VkPipelineStageFlags> waitDstStageMask = {},
+            const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
+            const std::initializer_list<uint32_t> waitSemaphoreDeviceIndices = {},
+            const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores = {},
+            const std::initializer_list<uint32_t> signalSemaphoreDeviceIndices = {},
             std::shared_ptr<const Fence> fence = nullptr);
     #endif // VK_KHR_device_group
         void waitIdle();

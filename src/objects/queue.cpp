@@ -41,15 +41,38 @@ Queue::Queue(VkQueue handle, VkQueueFlagBits flags, uint32_t familyIndex, uint32
 #endif
 }
 
-void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
-    const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
-    const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
-    const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores /* {} */,
+void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
+    VkPipelineStageFlags waitDstStageMask /* 0 */,
+    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
+    std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
     std::shared_ptr<const Fence> fence /* nullptr */,
     const StructureChain& extendedInfo /* default */)
 {
-    MAGMA_ASSERT(!cmdBuffers.empty());
-    if (cmdBuffers.empty())
+    MAGMA_ASSERT(cmdBuffer->primary());
+    VkSubmitInfo submitInfo;
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.pNext = extendedInfo.headNode();
+    submitInfo.waitSemaphoreCount = waitSemaphore ? 1 : 0;
+    submitInfo.pWaitSemaphores = waitSemaphore ? waitSemaphore->getHandleAddress() : nullptr;
+    submitInfo.pWaitDstStageMask = &waitDstStageMask;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = cmdBuffer->getHandleAddress();
+    submitInfo.signalSemaphoreCount = signalSemaphore ? 1 : 0;
+    submitInfo.pSignalSemaphores = signalSemaphore ? signalSemaphore->getHandleAddress() : nullptr;
+    const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
+    MAGMA_HANDLE_RESULT(result, "queue submission failed");
+    cmdBuffer->finishedQueueSubmission();
+}
+
+void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
+    const std::initializer_list<VkPipelineStageFlags> waitDstStageMask /* void */,
+    const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores /* void */,
+    const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores /* void */,
+    std::shared_ptr<const Fence> fence /* nullptr */,
+    const StructureChain& extendedInfo /* default */)
+{
+    MAGMA_ASSERT(cmdBuffers.size());
+    if (0 == cmdBuffers.size())
         return;
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
@@ -58,7 +81,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     VkSubmitInfo submitInfo;
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.pNext = extendedInfo.headNode();
-    if (waitSemaphores.empty())
+    if (0 == waitSemaphores.size())
     {
         submitInfo.waitSemaphoreCount = 0;
         submitInfo.pWaitSemaphores = nullptr;
@@ -73,7 +96,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
         }
         submitInfo.waitSemaphoreCount = dereferencedWaitSemaphores.count();
         submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
-        submitInfo.pWaitDstStageMask = waitStageMasks.data();
+        submitInfo.pWaitDstStageMask = waitDstStageMask.begin();
     }
     // Dereference command buffers
     for (auto const& cmdBuffer: cmdBuffers)
@@ -86,7 +109,7 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     }
     submitInfo.commandBufferCount = dereferencedCmdBuffers.count();
     submitInfo.pCommandBuffers = dereferencedCmdBuffers;
-    if (signalSemaphores.empty())
+    if (0 == signalSemaphores.size())
     {
         submitInfo.signalSemaphoreCount = 0;
         submitInfo.pSignalSemaphores = nullptr;
@@ -107,47 +130,6 @@ void Queue::submit(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers
     {   // Change state of the command buffer
         cmdBuffer->finishedQueueSubmission();
     }
-}
-
-void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
-    const std::initializer_list<VkPipelineStageFlags>& waitStageMasks,
-    const std::initializer_list<std::shared_ptr<const Semaphore>>& waitSemaphores,
-    std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
-    std::shared_ptr<const Fence> fence /* nullptr */,
-    const StructureChain& extendedInfo /* default */)
-{
-    MAGMA_ASSERT(cmdBuffer->primary());
-    if (!cmdBuffer || !cmdBuffer->primary())
-        return;
-    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
-    for (auto const& semaphore: waitSemaphores)
-    {
-        if (semaphore)
-            dereferencedWaitSemaphores.put(*semaphore);
-    }
-    VkSubmitInfo submitInfo;
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext = extendedInfo.headNode();
-    submitInfo.waitSemaphoreCount = dereferencedWaitSemaphores.count();
-    submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
-    submitInfo.pWaitDstStageMask = waitStageMasks.begin();
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = cmdBuffer->getHandleAddress();
-    submitInfo.signalSemaphoreCount = signalSemaphore ? 1 : 0;
-    submitInfo.pSignalSemaphores = signalSemaphore ? signalSemaphore->getHandleAddress() : nullptr;
-    const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
-    MAGMA_HANDLE_RESULT(result, "queue submission failed");
-    cmdBuffer->finishedQueueSubmission();
-}
-
-void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
-    VkPipelineStageFlags waitStageMask /* 0 */,
-    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
-    std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
-    std::shared_ptr<const Fence> fence /* nullptr */,
-    const StructureChain& extendedInfo /* default */)
-{
-    return submit(cmdBuffer, {waitStageMask}, {waitSemaphore}, signalSemaphore, std::move(fence), extendedInfo);
 }
 
 #ifdef VK_KHR_timeline_semaphore
@@ -173,7 +155,7 @@ void Queue::submit(std::shared_ptr<const TimelineSemaphore> semaphore, uint64_t 
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, VK_NULL_HANDLE);
     MAGMA_HANDLE_RESULT(result, "queue submission failed");
 }
-#endif // #ifdef VK_KHR_timeline_semaphore
+#endif // VK_KHR_timeline_semaphore
 
 #ifdef VK_KHR_external_semaphore_win32
 void Queue::submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore, uint64_t waitValue, uint64_t signalValue)
@@ -226,13 +208,13 @@ void Queue::submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semapho
 #endif // VK_KHR_external_semaphore_win32
 
 #ifdef VK_KHR_device_group
-void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers,
-    const std::vector<uint32_t>& cmdBufferDeviceMasks /* {} */,
-    const std::vector<VkPipelineStageFlags>& waitStageMasks /* {} */,
-    const std::vector<std::shared_ptr<const Semaphore>>& waitSemaphores /* {} */,
-    const std::vector<uint32_t>& waitSemaphoreDeviceIndices /* {} */,
-    const std::vector<std::shared_ptr<const Semaphore>>& signalSemaphores /* {} */,
-    const std::vector<uint32_t>& signalSemaphoreDeviceIndices /* {} */,
+void Queue::submitDeviceGroup(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
+    const std::initializer_list<uint32_t> cmdBufferDeviceMasks /* void */,
+    const std::initializer_list<VkPipelineStageFlags> waitDstStageMask /* void */,
+    const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores /* void */,
+    const std::initializer_list<uint32_t> waitSemaphoreDeviceIndices /* void */,
+    const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores /* void */,
+    const std::initializer_list<uint32_t> signalSemaphoreDeviceIndices /* void */,
     std::shared_ptr<const Fence> fence /* nullptr */)
 {
     MAGMA_ASSERT_FOR_EACH(cmdBuffers, cmdBuffer, cmdBuffer->primary());
@@ -240,13 +222,12 @@ void Queue::submitDeviceGroup(const std::vector<std::shared_ptr<CommandBuffer>>&
     deviceGroupSubmitInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO;
     deviceGroupSubmitInfo.pNext = nullptr;
     deviceGroupSubmitInfo.waitSemaphoreCount = MAGMA_COUNT(waitSemaphoreDeviceIndices);
-    deviceGroupSubmitInfo.pWaitSemaphoreDeviceIndices = waitSemaphoreDeviceIndices.data();
+    deviceGroupSubmitInfo.pWaitSemaphoreDeviceIndices = waitSemaphoreDeviceIndices.begin();
     deviceGroupSubmitInfo.commandBufferCount = MAGMA_COUNT(cmdBufferDeviceMasks);
-    deviceGroupSubmitInfo.pCommandBufferDeviceMasks = cmdBufferDeviceMasks.data();
+    deviceGroupSubmitInfo.pCommandBufferDeviceMasks = cmdBufferDeviceMasks.begin();
     deviceGroupSubmitInfo.signalSemaphoreCount = MAGMA_COUNT(signalSemaphoreDeviceIndices);
-    deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.data();
-    submit(cmdBuffers, waitStageMasks, waitSemaphores, signalSemaphores, std::move(fence),
-        StructureChain(deviceGroupSubmitInfo));
+    deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.begin();
+    submit(cmdBuffers, waitDstStageMask, waitSemaphores, signalSemaphores, std::move(fence), StructureChain(deviceGroupSubmitInfo));
 }
 #endif // VK_KHR_device_group
 
