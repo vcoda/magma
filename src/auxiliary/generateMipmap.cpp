@@ -29,22 +29,36 @@ namespace magma
 {
 namespace aux
 {
-bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter filter,
+bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilter filter,
     std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
 {
     MAGMA_ASSERT(image);
+    MAGMA_ASSERT(image->getUsage() & (VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT));
     MAGMA_ASSERT(cmdBuffer);
-    if (!image || !cmdBuffer)
+    MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Recording);
+    if (!image || !(image->getUsage() & (VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT)))
+        return false;
+    if (!cmdBuffer || cmdBuffer->getState() != CommandBuffer::State::Recording)
         return false;
     std::shared_ptr<DeviceFeatures> deviceFeatures = image->getDevice()->getFeatures();
     if (!deviceFeatures->supportsFormatFeatures(image->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT).optimal)
         return false;
-    VkExtent3D prevMipExtent = image->calculateMipExtent(baseLevel);
-    for (uint32_t level = baseLevel + 1; level < image->getMipLevels(); ++level)
+    // Store image layouts of mip chain
+    const bool hadUniformLayout = image->hasUniformLayout();
+    MAGMA_STACK_ARRAY(VkImageLayout, oldLayouts, image->getMipLevels() - baseMipLevel);
+    for (uint32_t level = baseMipLevel; level < image->getMipLevels(); ++level)
+        oldLayouts.put(image->getLayout(level));
+    const VkImageAspectFlags aspectMask = image->getAspectMask();
+    VkExtent3D prevMipExtent = image->calculateMipExtent(baseMipLevel);
+    // Transition of base mip level to transfer src optimal layout
+    const ImageSubresourceRange baseMipRange(image, baseMipLevel, 1);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+        ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, baseMipRange));
+    for (uint32_t level = baseMipLevel + 1; level < image->getMipLevels(); ++level)
     {
         const VkExtent3D nextMipExtent = image->calculateMipExtent(level);
         VkImageBlit blitRegion;
-        blitRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        blitRegion.srcSubresource.aspectMask = aspectMask;
         blitRegion.srcSubresource.mipLevel = level - 1;
         blitRegion.srcSubresource.baseArrayLayer = 0;
         blitRegion.srcSubresource.layerCount = 1;
@@ -52,7 +66,7 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter f
         blitRegion.srcOffsets[1].x = static_cast<int32_t>(prevMipExtent.width);
         blitRegion.srcOffsets[1].y = static_cast<int32_t>(prevMipExtent.height);
         blitRegion.srcOffsets[1].z = 1;
-        blitRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        blitRegion.dstSubresource.aspectMask = aspectMask;
         blitRegion.dstSubresource.mipLevel = level;
         blitRegion.dstSubresource.baseArrayLayer = 0;
         blitRegion.dstSubresource.layerCount = 1;
@@ -62,7 +76,7 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter f
         blitRegion.dstOffsets[1].z = 1;
         const ImageSubresourceRange nextMipRange(image, level, 1);
         // Transition of next mip level to transfer dest optimal layout
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
             ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, nextMipRange));
         // Downsample larger mip to smaller one
         cmdBuffer->blitImage(image, image, blitRegion, filter);
@@ -71,10 +85,24 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseLevel, VkFilter f
             ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, nextMipRange));
         prevMipExtent = nextMipExtent;
     }
-    // Blitted mip levels are transitioned to shader read only optimal layout
-    const ImageSubresourceRange blitMipsRange(image, baseLevel + 1, image->getMipLevels() - baseLevel - 1);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
-        ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, blitMipsRange));
+    if (hadUniformLayout)
+    {   // Restore image layout of mips remaining after <baseMipLevel>
+        image->layoutTransitionMipLayer(oldLayouts[0], baseMipLevel, 0, cmdBuffer);
+    }
+    else
+    {
+        ImageSubresourceRange mipRange(image, baseMipLevel, 1);
+        for (uint32_t level = baseMipLevel; level < image->getMipLevels(); ++level)
+        {
+            const VkImageLayout oldLayout = oldLayouts[level - baseMipLevel];
+            if (oldLayout == image->getLayout(level))
+                continue;
+            // Restore image layout of mip <level>
+            mipRange.baseMipLevel = level;
+            cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
+                ImageMemoryBarrier(image, oldLayout, mipRange));
+        }
+    }
     return true;
 }
 } // namespace aux

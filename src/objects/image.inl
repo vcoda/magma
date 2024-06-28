@@ -21,4 +21,14 @@ inline Image::MipData::MipData(const VkExtent3D& extent, VkDeviceSize size, cons
     size(size),
     texels(texels)
 {}
+
+inline bool Image::hasUniformLayout() const noexcept
+{
+    for (uint32_t level = 1; level < mipLevels; ++level)
+    {
+        if (mipLayouts[level] != mipLayouts[0])
+            return false;
+    }
+    return true;
+}
 } // namespace magma

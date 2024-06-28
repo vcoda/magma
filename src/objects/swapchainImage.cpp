@@ -70,7 +70,7 @@ SwapchainImage::SwapchainImage(std::shared_ptr<const Swapchain> swapchain):
     imageInfo.sharingMode = swapchain->getSharing().getMode();
     imageInfo.queueFamilyIndexCount = swapchain->getSharing().getQueueFamiliesCount();
     imageInfo.pQueueFamilyIndices = swapchain->getSharing().getQueueFamilyIndices().data();
-    imageInfo.initialLayout = layout; // VK_IMAGE_LAYOUT_UNDEFINED
+    imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     imageSwapchainInfo.sType = VK_STRUCTURE_TYPE_IMAGE_SWAPCHAIN_CREATE_INFO_KHR;
     imageSwapchainInfo.pNext = nullptr;
     imageSwapchainInfo.swapchain = *swapchain;

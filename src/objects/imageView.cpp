@@ -132,10 +132,11 @@ VkExtent3D ImageView::getExtent() const noexcept
 
 VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept
 {
+    MAGMA_ASSERT(image->hasUniformLayout());
     VkDescriptorImageInfo imageDescriptorInfo;
     imageDescriptorInfo.sampler = MAGMA_OPTIONAL_HANDLE(sampler); // VK_NULL_HANDLE for storage image
     imageDescriptorInfo.imageView = handle;
-    imageDescriptorInfo.imageLayout = image->getLayout();
+    imageDescriptorInfo.imageLayout = image->getLayout(0);
     return imageDescriptorInfo;
 }
 
@@ -153,7 +154,8 @@ VkImageViewType ImageView::imageToViewType(VkImageType imageType, uint32_t array
             if (arrayLayers > 6)
                 return VK_IMAGE_VIEW_TYPE_CUBE_ARRAY;
             return VK_IMAGE_VIEW_TYPE_CUBE;
-        } else
+        }
+        else
         {
             if (arrayLayers > 1)
                 return VK_IMAGE_VIEW_TYPE_2D_ARRAY;

@@ -367,42 +367,50 @@ inline void CommandBuffer::copyBuffer(const std::shared_ptr<const Buffer>& srcBu
 
 inline void CommandBuffer::copyImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageCopy& region) const noexcept
 {
-    vkCmdCopyImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
+    const VkImageLayout srcLayout = srcImage->getLayout(region.srcSubresource.mipLevel);
+    const VkImageLayout dstLayout = dstImage->getLayout(region.dstSubresource.mipLevel);
+    vkCmdCopyImage(handle, *srcImage, srcLayout, *dstImage, dstLayout, 1, &region);
     MAGMA_INUSE(srcImage);
     MAGMA_INUSE(dstImage);
 }
 
 inline void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageBlit& region, VkFilter filter) const noexcept
 {
-    vkCmdBlitImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region, filter);
+    const VkImageLayout srcLayout = srcImage->getLayout(region.srcSubresource.mipLevel);
+    const VkImageLayout dstLayout = dstImage->getLayout(region.dstSubresource.mipLevel);
+    vkCmdBlitImage(handle, *srcImage, srcLayout, *dstImage, dstLayout, 1, &region, filter);
     MAGMA_INUSE(srcImage);
     MAGMA_INUSE(dstImage);
 }
 
 inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, const VkBufferImageCopy& region) const noexcept
 {
-    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImage->getLayout(), 1, &region);
+    const VkImageLayout dstLayout = dstImage->getLayout(region.imageSubresource.mipLevel);
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstLayout, 1, &region);
     MAGMA_INUSE(srcBuffer);
     MAGMA_INUSE(dstImage);
 }
 
 inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept
 {
-    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstImage->getLayout(), MAGMA_COUNT(regions), regions.data());
+    const VkImageLayout dstLayout = dstImage->getLayout(regions.front().imageSubresource.mipLevel);
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstLayout, MAGMA_COUNT(regions), regions.data());
     MAGMA_INUSE(srcBuffer);
     MAGMA_INUSE(dstImage);
 }
 
 inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const VkBufferImageCopy& region) const noexcept
 {
-    vkCmdCopyImageToBuffer(handle, *srcImage, srcImage->getLayout(), *dstBuffer, 1, &region);
+    const VkImageLayout srcLayout = srcImage->getLayout(region.imageSubresource.mipLevel);
+    vkCmdCopyImageToBuffer(handle, *srcImage, srcLayout, *dstBuffer, 1, &region);
     MAGMA_INUSE(srcImage);
     MAGMA_INUSE(dstBuffer);
 }
 
 inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
 {
-    vkCmdCopyImageToBuffer(handle, *srcImage, srcImage->getLayout(), *dstBuffer, MAGMA_COUNT(regions), regions.data());
+    const VkImageLayout srcLayout = srcImage->getLayout(regions.front().imageSubresource.mipLevel);
+    vkCmdCopyImageToBuffer(handle, *srcImage, srcLayout, *dstBuffer, MAGMA_COUNT(regions), regions.data());
     MAGMA_INUSE(srcImage);
     MAGMA_INUSE(dstBuffer);
 }
@@ -455,7 +463,9 @@ inline void CommandBuffer::resolveImage(const std::shared_ptr<const Image>& srcI
 
 inline void CommandBuffer::resolveImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageResolve& region) const noexcept
 {
-    vkCmdResolveImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &region);
+    const VkImageLayout srcLayout = srcImage->getLayout(region.srcSubresource.mipLevel);
+    const VkImageLayout dstLayout = dstImage->getLayout(region.dstSubresource.mipLevel);
+    vkCmdResolveImage(handle, *srcImage, srcLayout, *dstImage, dstLayout, 1, &region);
     MAGMA_INUSE(srcImage);
     MAGMA_INUSE(dstImage);
 }
@@ -530,7 +540,12 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
         0, nullptr,
         1, &barrier);
     MAGMA_INUSE(barrier.image);
-    barrier.image->setLayout(barrier.newLayout);
+    uint32_t levelCount = barrier.subresourceRange.levelCount;
+    if (VK_REMAINING_MIP_LEVELS == levelCount)
+        levelCount = barrier.image->getMipLevels() - barrier.subresourceRange.baseMipLevel;
+    MAGMA_ASSERT(barrier.subresourceRange.baseMipLevel + levelCount <= barrier.image->getMipLevels());
+    for (uint32_t i = 0; i < levelCount; ++i)
+        barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
 }
 
 inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,

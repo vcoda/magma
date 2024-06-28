@@ -44,8 +44,10 @@ namespace magma
         VkImageCreateFlags getFlags() const noexcept { return flags; }
         VkImageType getType() const noexcept { return imageType; }
         VkFormat getFormat() const noexcept { return format; }
-        VkImageLayout getLayout() const noexcept { return layout; }
-        void setLayout(VkImageLayout layout_) noexcept { layout = layout_; }
+        VkImageLayout getLayout(uint32_t level) const noexcept { return mipLayouts[level]; }
+        void setLayout(uint32_t level, VkImageLayout layout) noexcept { mipLayouts[level] = layout; }
+        void setLayout(VkImageLayout layout) noexcept { mipLayouts.fill(layout); }
+        bool hasUniformLayout() const noexcept;
         uint32_t getWidth() const noexcept { return extent.width; }
         uint32_t getHeight() const noexcept { return extent.height; }
         uint32_t getDepth() const noexcept { return extent.depth; }
@@ -142,13 +144,13 @@ namespace magma
         const VkImageCreateFlags flags;
         const VkImageType imageType;
         const VkFormat format;
-        VkImageLayout layout;
         const VkExtent3D extent;
         const uint32_t mipLevels;
         const uint32_t arrayLayers;
         const uint32_t samples;
         const VkImageTiling tiling;
         const VkImageUsageFlags usage;
+        std::array<VkImageLayout, 15> mipLayouts; // log2(16384) + 1
         std::vector<VkFormat> viewFormats;
     };
 

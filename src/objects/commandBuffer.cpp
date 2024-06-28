@@ -360,13 +360,15 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<const Buffer>& srcBuffer, c
 void CommandBuffer::copyImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage,
     uint32_t mipLevel /* 0 */, const VkOffset3D& srcOffset /* 0, 0, 0 */, const VkOffset3D& dstOffset /* 0, 0, 0 */) const noexcept
 {
+    const VkImageLayout srcLayout = srcImage->getLayout(mipLevel);
+    const VkImageLayout dstLayout = dstImage->getLayout(mipLevel);
     VkImageCopy imageCopy;
     imageCopy.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
     imageCopy.srcOffset = srcOffset;
     imageCopy.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
     imageCopy.dstOffset = dstOffset;
     imageCopy.extent = dstImage->calculateMipExtent(mipLevel);
-    vkCmdCopyImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &imageCopy);
+    vkCmdCopyImage(handle, *srcImage, srcLayout, *dstImage, dstLayout, 1, &imageCopy);
     MAGMA_INUSE(srcImage);
     MAGMA_INUSE(dstImage);
 }
@@ -375,7 +377,9 @@ void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, cons
     uint32_t mipLevel /* 0 */, const VkOffset3D& srcOffset /* 0, 0, 0 */, const VkOffset3D& dstOffset /* 0, 0, 0 */) const noexcept
 {
     const VkExtent3D srcExtent = srcImage->calculateMipExtent(mipLevel);
+    const VkImageLayout srcLayout = srcImage->getLayout(mipLevel);
     const VkExtent3D dstExtent = dstImage->calculateMipExtent(mipLevel);
+    const VkImageLayout dstLayout = dstImage->getLayout(mipLevel);
     VkImageBlit imageBlit;
     imageBlit.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
     imageBlit.srcOffsets[0] = srcOffset;
@@ -387,7 +391,7 @@ void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, cons
     imageBlit.dstOffsets[1].x = dstExtent.width;
     imageBlit.dstOffsets[1].y = dstExtent.height,
     imageBlit.dstOffsets[1].z = 1;
-    vkCmdBlitImage(handle, *srcImage, srcImage->getLayout(), *dstImage, dstImage->getLayout(), 1, &imageBlit, filter);
+    vkCmdBlitImage(handle, *srcImage, srcLayout, *dstImage, dstLayout, 1, &imageBlit, filter);
     MAGMA_INUSE(srcImage);
     MAGMA_INUSE(dstImage);
 }
@@ -477,9 +481,15 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
         dereferencedBufferMemoryBarriers,
         dereferencedImageMemoryBarriers.size(),
         dereferencedImageMemoryBarriers);
-    // TODO: Queue barriers and update image layout on submit?
     for (auto const& barrier: imageMemoryBarriers)
-        barrier.image->setLayout(barrier.newLayout);
+    {
+        uint32_t levelCount = barrier.subresourceRange.levelCount;
+        if (VK_REMAINING_MIP_LEVELS == levelCount)
+            levelCount = barrier.image->getMipLevels() - barrier.subresourceRange.baseMipLevel;
+        MAGMA_ASSERT(barrier.subresourceRange.baseMipLevel + levelCount <= barrier.image->getMipLevels());
+        for (uint32_t i = 0; i < levelCount; ++i)
+            barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
+    }
 }
 
 // inline void CommandBuffer::beginQuery

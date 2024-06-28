@@ -47,7 +47,6 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     flags(flags_| optional.flags),
     imageType(imageType),
     format(format),
-    layout(VK_IMAGE_LAYOUT_UNDEFINED),
     extent(extent),
     mipLevels(mipLevels),
     arrayLayers(arrayLayers),
@@ -56,6 +55,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     usage(usage_| (optional.srcTransfer ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0)),
     viewFormats(optional.viewFormats)
 {
+    setLayout(VK_IMAGE_LAYOUT_UNDEFINED);
     VkImageCreateInfo imageInfo;
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.pNext = nullptr;
@@ -71,7 +71,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     imageInfo.sharingMode = sharing.getMode();
     imageInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    imageInfo.initialLayout = layout;
+    imageInfo.initialLayout = mipLayouts[0];
 #ifdef VK_KHR_image_format_list
     VkImageFormatListCreateInfoKHR imageFormatListInfo;
     if (extensionEnabled(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME) && !viewFormats.empty())
@@ -169,14 +169,15 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     flags(flags),
     imageType(imageType),
     format(format),
-    layout(VK_IMAGE_LAYOUT_UNDEFINED),
     extent(extent),
     mipLevels(mipLevels),
     arrayLayers(arrayLayers),
     samples(samples),
     tiling(tiling),
     usage(usage)
-{}
+{
+    setLayout(VK_IMAGE_LAYOUT_UNDEFINED);
+}
 
 Image::~Image()
 {
@@ -376,7 +377,7 @@ void Image::onDefragment()
     imageInfo.sharingMode = sharing.getMode();
     imageInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    imageInfo.initialLayout = layout;
+    imageInfo.initialLayout = mipLayouts[0];
     vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
     const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to recreate defragmented image");
@@ -393,7 +394,7 @@ VkImageLayout Image::layoutTransitionMipLayer(VkImageLayout newLayout, uint32_t 
     std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
 {
-    const VkImageLayout oldLayout = layout;
+    const VkImageLayout oldLayout = mipLayouts[baseMipLevel];
     VkPipelineStageFlags srcStageMask = 0;
     switch (oldLayout)
     {
@@ -527,7 +528,7 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
     region.bufferOffset = bufferLayout.offset;
     region.bufferRowLength = bufferLayout.rowLength;
     region.bufferImageHeight = bufferLayout.imageHeight;
-    region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    region.imageSubresource.aspectMask = getAspectMask();
     region.imageSubresource.mipLevel = mipLevel;
     region.imageSubresource.baseArrayLayer = arrayLayer;
     region.imageSubresource.layerCount = 1;
@@ -535,22 +536,20 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
     // Note: Vulkan validation layer expects virtual mip extent for block-compressed formats
     region.imageExtent = virtualMipExtent(mipLevel);
     VkImageSubresourceRange subresourceRange;
-    subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresourceRange.aspectMask = getAspectMask();
     subresourceRange.baseMipLevel = mipLevel;
     subresourceRange.levelCount = 1;
     subresourceRange.baseArrayLayer = arrayLayer;
     subresourceRange.layerCount = 1;
     // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
     const std::shared_ptr<Image> self = std::shared_ptr<Image>(this, [](Image *) {});
-    if (VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL == layout)
-        layout = VK_IMAGE_LAYOUT_UNDEFINED; // Hack to select proper srcAccessMask inside ImageMemoryBarrier
     // Image layout transition to destination of a transfer command
     const ImageMemoryBarrier transferDst(self, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
     cmdBuffer->copyBufferToImage(std::move(srcBuffer), self, region);
-    // Image layout transition to read-only access in a shader as a sampled image
+    // Image layout transition to <dstLayout> (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     const ImageMemoryBarrier shaderRead(self, dstLayout, subresourceRange);
-    cmdBuffer->batchPipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
 void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
@@ -567,7 +566,7 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
         region.bufferOffset = bufferLayout.offset + mip.bufferOffset;
         region.bufferRowLength = bufferLayout.rowLength;
         region.bufferImageHeight = bufferLayout.imageHeight;
-        region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.imageSubresource.aspectMask = getAspectMask();
         region.imageSubresource.mipLevel = mipIndex % mipLevels;
         region.imageSubresource.baseArrayLayer = mipIndex / mipLevels;
         region.imageSubresource.layerCount = 1;
@@ -579,7 +578,7 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
     }
     // Define resource range
     VkImageSubresourceRange subresourceRange;
-    subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresourceRange.aspectMask = getAspectMask();
     subresourceRange.baseMipLevel = 0;
     subresourceRange.levelCount = mipLevels;
     subresourceRange.baseArrayLayer = 0;
@@ -590,9 +589,9 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
     const ImageMemoryBarrier transferDst(self, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
     cmdBuffer->copyBufferToImage(srcBuffer, self, regions);
-    // Image layout transition to read-only access in a shader as a sampled image
+    // Image layout transition to <dstLayout> (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     const ImageMemoryBarrier shaderRead(self, dstLayout, subresourceRange);
-    cmdBuffer->batchPipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
 void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,

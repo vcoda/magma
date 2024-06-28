@@ -33,7 +33,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLay
         nullptr, // pNext
         VK_ACCESS_NONE_KHR, // srcAccessMask
         VK_ACCESS_NONE_KHR, // dstAccessMask
-        image_->getLayout(),
+        image_->getLayout(subresourceRange.baseMipLevel),
         newLayout,
         VK_QUEUE_FAMILY_IGNORED,
         VK_QUEUE_FAMILY_IGNORED,
@@ -178,7 +178,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLay
         nullptr, // pNext
         srcAccessMask,
         dstAccessMask,
-        image_->getLayout(),
+        image_->getLayout(0),
         newLayout,
         VK_QUEUE_FAMILY_IGNORED,
         VK_QUEUE_FAMILY_IGNORED,

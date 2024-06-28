@@ -45,7 +45,7 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::s
     std::shared_ptr<DeviceFeatures> deviceFeatures = device->getFeatures();
     const bool srcBlit = deviceFeatures->supportsFormatFeatures(srcImage->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal;
     const bool dstBlit = deviceFeatures->supportsFormatFeatures(dstImage->getFormat(), VK_FORMAT_FEATURE_BLIT_DST_BIT).linear;
-    const VkImageLayout oldLayout = srcImage->getLayout();
+    const VkImageLayout oldLayout = srcImage->getLayout(0);
     MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Recording);
     // Transition of destination image to transfer dest optimal layout
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
