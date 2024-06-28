@@ -134,7 +134,7 @@ namespace magma
             CopyMemoryFunction copyFn,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
-        VkExtent3D virtualMipExtent(uint32_t mipLevel) const noexcept;
+        VkExtent3D calculateValidMipExtent(uint32_t mipLevel) const noexcept;
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples) noexcept;
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
             VkFormat format,

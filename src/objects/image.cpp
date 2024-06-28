@@ -35,7 +35,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../core/copyMemory.h"
 #include "../core/foreach.h"
 
-#define MAGMA_VIRTUAL_MIP_EXTENT 1
+#define MAGMA_ENABLE_VALID_MIP_EXTENTS 1
 
 namespace magma
 {
@@ -533,8 +533,7 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
     region.imageSubresource.baseArrayLayer = arrayLayer;
     region.imageSubresource.layerCount = 1;
     region.imageOffset = imageOffset;
-    // Note: Vulkan validation layer expects virtual mip extent for block-compressed formats
-    region.imageExtent = virtualMipExtent(mipLevel);
+    region.imageExtent = calculateValidMipExtent(mipLevel);
     VkImageSubresourceRange subresourceRange;
     subresourceRange.aspectMask = region.imageSubresource.aspectMask;
     subresourceRange.baseMipLevel = mipLevel;
@@ -572,8 +571,7 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
         region.imageSubresource.baseArrayLayer = mipIndex / mipLevels;
         region.imageSubresource.layerCount = 1;
         region.imageOffset = {0, 0, 0};
-        // Note: Vulkan validation layer expects virtual mip extent for block-compressed formats
-        region.imageExtent = virtualMipExtent(region.imageSubresource.mipLevel);
+        region.imageExtent = calculateValidMipExtent(region.imageSubresource.mipLevel);
         regions.push_back(region);
         ++mipIndex;
     }
@@ -635,11 +633,12 @@ void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
     finish(std::move(cmdBuffer));
 }
 
-VkExtent3D Image::virtualMipExtent(uint32_t level) const noexcept
+VkExtent3D Image::calculateValidMipExtent(uint32_t level) const noexcept
 {
     MAGMA_ASSERT(level < mipLevels);
     if (!level)
         return extent;
+#if MAGMA_ENABLE_VALID_MIP_EXTENTS
     /* Vulkan validation layers may complain about image regions for
        block-compressed formats. See:
        https://vulkan.lunarg.com/doc/view/1.3.224.1/windows/1.3-extensions/vkspec.html#VUID-vkCmdCopyBufferToImage-pRegions-06218
@@ -647,15 +646,14 @@ VkExtent3D Image::virtualMipExtent(uint32_t level) const noexcept
        (imageExtent.width + imageOffset.x) must both be greater than
        or equal to 0 and less than or equal to the width of the
        specified imageSubresource of dstImage". */
-#if MAGMA_VIRTUAL_MIP_EXTENT
     return VkExtent3D{
         std::max(1u, extent.width >> level),
         std::max(1u, extent.height >> level),
         std::max(1u, extent.depth >> level)
     };
 #else
-    return calculateMipExtent(level); // Real extent
-#endif // MAGMA_VIRTUAL_MIP_EXTENT
+    return calculateMipExtent(level);
+#endif // MAGMA_ENABLE_VALID_MIP_EXTENTS
 }
 
 VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples) noexcept
