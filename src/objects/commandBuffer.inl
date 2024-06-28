@@ -507,38 +507,26 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        0, nullptr,
-        0, nullptr,
-        0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 0, nullptr, 0, nullptr);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        1, &barrier,
-        0, nullptr,
-        0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 1, &barrier, 0, nullptr, 0, nullptr);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        0, nullptr,
-        1, &barrier,
-        0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 1, &barrier, 0, nullptr);
     MAGMA_INUSE(barrier.buffer);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        0, nullptr,
-        0, nullptr,
-        1, &barrier);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 0, nullptr, 1, &barrier);
     MAGMA_INUSE(barrier.image);
     uint32_t levelCount = barrier.subresourceRange.levelCount;
     if (VK_REMAINING_MIP_LEVELS == levelCount)
