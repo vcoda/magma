@@ -536,7 +536,7 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
     // Note: Vulkan validation layer expects virtual mip extent for block-compressed formats
     region.imageExtent = virtualMipExtent(mipLevel);
     VkImageSubresourceRange subresourceRange;
-    subresourceRange.aspectMask = getAspectMask();
+    subresourceRange.aspectMask = region.imageSubresource.aspectMask;
     subresourceRange.baseMipLevel = mipLevel;
     subresourceRange.levelCount = 1;
     subresourceRange.baseArrayLayer = arrayLayer;
@@ -557,6 +557,7 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
     const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {
+    const VkImageAspectFlags aspectMask = getAspectMask();
     std::vector<VkBufferImageCopy> regions;
     regions.reserve(mipMaps.size());
     uint32_t mipIndex = 0;
@@ -566,7 +567,7 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
         region.bufferOffset = bufferLayout.offset + mip.bufferOffset;
         region.bufferRowLength = bufferLayout.rowLength;
         region.bufferImageHeight = bufferLayout.imageHeight;
-        region.imageSubresource.aspectMask = getAspectMask();
+        region.imageSubresource.aspectMask = aspectMask;
         region.imageSubresource.mipLevel = mipIndex % mipLevels;
         region.imageSubresource.baseArrayLayer = mipIndex / mipLevels;
         region.imageSubresource.layerCount = 1;
@@ -578,7 +579,7 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
     }
     // Define resource range
     VkImageSubresourceRange subresourceRange;
-    subresourceRange.aspectMask = getAspectMask();
+    subresourceRange.aspectMask = aspectMask;
     subresourceRange.baseMipLevel = 0;
     subresourceRange.levelCount = mipLevels;
     subresourceRange.baseArrayLayer = 0;
