@@ -86,7 +86,7 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilte
         prevMipExtent = nextMipExtent;
     }
     if (hadUniformLayout) // Restore image layout of mips remaining after <baseMipLevel>
-        image->layoutTransitionMipLayer(oldLayouts[0], baseMipLevel, 0, cmdBuffer);
+        image->layoutTransitionBaseMipLayer(oldLayouts[0], baseMipLevel, 0, cmdBuffer);
     else
     {   // Restore image layouts for each mip level
         ImageSubresourceRange mipRange(image, baseMipLevel, 1);

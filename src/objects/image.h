@@ -84,7 +84,7 @@ namespace magma
         VkImageLayout layoutTransition(VkImageLayout newLayout,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT) noexcept;
-        VkImageLayout layoutTransitionMipLayer(VkImageLayout newLayout,
+        VkImageLayout layoutTransitionBaseMipLayer(VkImageLayout newLayout,
             uint32_t baseMipLevel,
             uint32_t baseArrayLayer,
             std::shared_ptr<CommandBuffer> cmdBuffer,
