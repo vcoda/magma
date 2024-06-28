@@ -85,19 +85,16 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilte
             ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, nextMipRange));
         prevMipExtent = nextMipExtent;
     }
-    if (hadUniformLayout)
-    {   // Restore image layout of mips remaining after <baseMipLevel>
+    if (hadUniformLayout) // Restore image layout of mips remaining after <baseMipLevel>
         image->layoutTransitionMipLayer(oldLayouts[0], baseMipLevel, 0, cmdBuffer);
-    }
     else
-    {
+    {   // Restore image layouts for each mip level
         ImageSubresourceRange mipRange(image, baseMipLevel, 1);
         for (uint32_t level = baseMipLevel; level < image->getMipLevels(); ++level)
         {
             const VkImageLayout oldLayout = oldLayouts[level - baseMipLevel];
             if (oldLayout == image->getLayout(level))
                 continue;
-            // Restore image layout of mip <level>
             mipRange.baseMipLevel = level;
             cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
                 ImageMemoryBarrier(image, oldLayout, mipRange));
