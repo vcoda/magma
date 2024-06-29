@@ -557,7 +557,7 @@ namespace magma
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
         State getState() const noexcept { return state; }
-        VkCommandBufferUsageFlags getUsageFlags() const noexcept { return usageFlags; }
+        VkCommandBufferUsageFlags getUsage() const noexcept { return usage; }
         bool allowsReset() const noexcept { return VK_TRUE == resetCommandBuffer; }
         bool insideRenderPass() const noexcept { return inRenderPass; }
         bool insideConditionalRendering() const noexcept { return inConditionalRendering; }
@@ -660,7 +660,7 @@ namespace magma
         std::shared_ptr<Device> device;
         std::shared_ptr<Fence> fence;
         const VkCommandBufferLevel level;
-        VkCommandBufferUsageFlags usageFlags;
+        VkCommandBufferUsageFlags usage;
         std::atomic<State> state;
         const VkBool32 resetCommandBuffer : 1;
         VkBool32 debugMarkerEnabled : 1;

@@ -42,7 +42,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
     device(cmdPool_->getDevice()),
     fence(std::make_shared<Fence>(device)),
     level(level),
-    usageFlags(0),
+    usage(0),
     state(State::Initial),
     resetCommandBuffer((cmdPool_->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
     debugMarkerEnabled(VK_FALSE),
@@ -73,7 +73,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     device(cmdPool_->getDevice()),
     fence(std::make_shared<Fence>(device)),
     level(level),
-    usageFlags(0),
+    usage(0),
     state(State::Initial),
     resetCommandBuffer((cmdPool_->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
     debugMarkerEnabled(VK_FALSE),
@@ -127,7 +127,7 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
         state = State::Recording;
-    usageFlags = flags;
+    usage = flags;
     return (VK_SUCCESS == result);
 }
 
@@ -162,7 +162,7 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
         state = State::Recording;
-    usageFlags = flags;
+    usage = flags;
     return (VK_SUCCESS == result);
 }
 

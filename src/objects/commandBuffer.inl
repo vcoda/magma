@@ -776,7 +776,7 @@ inline void CommandBuffer::finishedQueueSubmission() noexcept
 
 inline void CommandBuffer::finishedExecution() noexcept
 {
-    if (usageFlags & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT)
+    if (usage & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT)
     {
         state = State::Invalid;
         releaseResourcesInUse();
