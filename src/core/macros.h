@@ -35,7 +35,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_STRINGIZE_ENUMERATION(identifier) case identifier: return MAGMA_STRINGIZE(identifier); // comma-ended
 
-#define MAGMA_BITWISE_AND(flags, bits) ((flags & (bits)) == (bits))
+#define MAGMA_BITWISE_AND(usage, flags) ((usage & (flags)) == (flags))
 
 #define MAGMA_ALIGN(size) (((size) + 0xF) & ~(0xF))
 

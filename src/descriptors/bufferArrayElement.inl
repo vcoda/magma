@@ -10,7 +10,7 @@ inline BufferArrayElement::BufferArrayElement(DescriptorSetLayoutBinding *array,
 inline void BufferArrayElement::operator=(std::shared_ptr<const Buffer> buffer) noexcept
 {
     MAGMA_ASSERT(buffer);
-    MAGMA_ASSERT(buffer->getUsage() & this->usage);
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(buffer->getUsage(), this->usage));
     if (this->element.buffer != *buffer)
     {   // TODO: offset, range?
         this->element = buffer->getDescriptor();
@@ -26,7 +26,7 @@ inline TexelBufferArrayElement::TexelBufferArrayElement(DescriptorSetLayoutBindi
 inline void TexelBufferArrayElement::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
 {
     MAGMA_ASSERT(bufferView);
-    MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & this->usage);
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(bufferView->getBuffer()->getUsage(), this->usage));
     if (this->element != *bufferView)
     {
         this->element = *bufferView;

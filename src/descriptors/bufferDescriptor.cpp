@@ -38,7 +38,7 @@ void BufferDescriptor::update(std::shared_ptr<const Buffer> buffer, VkBufferUsag
 {
     MAGMA_UNUSED(usage);
     MAGMA_ASSERT(buffer);
-    MAGMA_ASSERT(buffer->getUsage() & usage);
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(buffer->getUsage(), usage));
     if (descriptor.buffer != *buffer)
     {   // TODO: offset, range?
         descriptor = buffer->getDescriptor();
@@ -59,7 +59,7 @@ void TexelBufferDescriptor::update(std::shared_ptr<const BufferView> bufferView,
 {
     MAGMA_UNUSED(usage);
     MAGMA_ASSERT(bufferView);
-    MAGMA_ASSERT(bufferView->getBuffer()->getUsage() & usage);
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(bufferView->getBuffer()->getUsage(), usage));
     if (descriptor != *bufferView)
     {
         descriptor = *bufferView;

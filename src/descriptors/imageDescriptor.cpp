@@ -41,7 +41,7 @@ void ImageDescriptor::update(std::shared_ptr<const ImageView> imageView, std::sh
     MAGMA_UNUSED(usage);
     MAGMA_ASSERT(imageView);
     const std::shared_ptr<Image>& image = imageView->getImage();
-    MAGMA_ASSERT(image->getUsage() & usage);
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(image->getUsage(), usage));
     if ((descriptor.imageView != *imageView) ||
         (sampler && descriptor.sampler != *sampler))
     {

@@ -33,10 +33,12 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilte
     std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
 {
     MAGMA_ASSERT(image);
-    MAGMA_ASSERT(image->getUsage() & (VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT));
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(image->getUsage(), VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT));
     MAGMA_ASSERT(cmdBuffer);
     MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Recording);
-    if (!image || !(image->getUsage() & (VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT)))
+    if (!image)
+        return false;
+    if (!MAGMA_BITWISE_AND(image->getUsage(), VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT))
         return false;
     if (!cmdBuffer || cmdBuffer->getState() != CommandBuffer::State::Recording)
         return false;

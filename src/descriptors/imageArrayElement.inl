@@ -22,7 +22,7 @@ inline ImageArrayElement::ImageArrayElement(DescriptorSetLayoutBinding *array, V
 inline void ImageArrayElement::operator=(std::shared_ptr<const ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(imageView);
-    MAGMA_ASSERT(imageView->getImage()->getUsage() & this->usage);
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(imageView->getImage()->getUsage(), this->usage));
     if (this->element.imageView != *imageView)
     {
         this->element = imageView->getDescriptor(nullptr);
@@ -39,7 +39,7 @@ inline void ImageSamplerArrayElement::operator=(const ImageSampler& imageSampler
 {
     MAGMA_ASSERT(imageSampler.first);
     MAGMA_ASSERT(imageSampler.second);
-    MAGMA_ASSERT(imageSampler.first->getImage()->getUsage() & this->usage);
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(imageSampler.first->getImage()->getUsage(), this->usage));
     if ((this->element.imageView != *imageSampler.first) ||
         (this->element.sampler != *imageSampler.second))
     {
@@ -58,7 +58,7 @@ inline ImageImmutableSamplerArrayElement::ImageImmutableSamplerArrayElement(Desc
 inline void ImageImmutableSamplerArrayElement::operator=(const ImageSampler& imageSampler) noexcept
 {
     MAGMA_ASSERT(imageSampler.second);
-    MAGMA_ASSERT(imageSampler.first->getImage()->getUsage() & this->usage);
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(imageSampler.first->getImage()->getUsage(), this->usage));
     if (this->element.imageView != *imageSampler.first)
     {
         this->element = imageSampler.first->getDescriptor(nullptr);
@@ -77,7 +77,7 @@ inline void ImageImmutableSamplerArrayElement::operator=(std::shared_ptr<const I
 {   // Check that sampler is already set and stop carrying around it
     MAGMA_ASSERT(immutableSampler != VK_NULL_HANDLE);
     MAGMA_ASSERT(imageView);
-    MAGMA_ASSERT(imageView->getImage()->getUsage() & this->usage);
+    MAGMA_ASSERT(MAGMA_BITWISE_AND(imageView->getImage()->getUsage(), this->usage));
     if (this->element.imageView != *imageView)
     {
         this->element = imageView->getDescriptor(nullptr);
