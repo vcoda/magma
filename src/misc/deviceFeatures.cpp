@@ -31,16 +31,16 @@ DeviceFeatures::DeviceFeatures(std::shared_ptr<const Device> device) noexcept:
 
 DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat format, VkFormatFeatureFlags flags) const noexcept
 {
-    FormatFeatures support = {};
+    FormatFeatures features = {};
     if (auto device = owner.lock())
     {
         const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkFormatProperties formatProperties = physicalDevice->getFormatProperties(format);
-        support.linear = MAGMA_BITWISE_AND(formatProperties.linearTilingFeatures, flags);
-        support.optimal= MAGMA_BITWISE_AND(formatProperties.optimalTilingFeatures, flags);
-        support.buffer = MAGMA_BITWISE_AND(formatProperties.bufferFeatures, flags);
+        features.linear = MAGMA_BITWISE_AND(formatProperties.linearTilingFeatures, flags);
+        features.optimal= MAGMA_BITWISE_AND(formatProperties.optimalTilingFeatures, flags);
+        features.buffer = MAGMA_BITWISE_AND(formatProperties.bufferFeatures, flags);
     }
-    return support;
+    return features;
 }
 
 #ifdef VK_KHR_external_memory_capabilities
