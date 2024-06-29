@@ -107,11 +107,14 @@ VkDeviceAddress AccelerationStructure::getDeviceAddress() const noexcept
 
 VkDeviceSize AccelerationStructure::getProperty(VkQueryType queryType) const noexcept
 {
+#ifdef VK_KHR_ray_tracing_maintenance1
+    MAGMA_ASSERT((VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR == queryType) ||
+        (VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR == queryType) ||
+        (VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SIZE_KHR == queryType) ||
+        (VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR == queryType));
+#else
     MAGMA_ASSERT((VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR == queryType) ||
         (VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR == queryType));
-#ifdef VK_KHR_ray_tracing_maintenance1
-    MAGMA_ASSERT((VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SIZE_KHR == queryType) ||
-        (VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR == queryType));
 #endif // VK_KHR_ray_tracing_maintenance1
     VkDeviceSize property = 0;
     MAGMA_DEVICE_EXTENSION(vkWriteAccelerationStructuresPropertiesKHR);
