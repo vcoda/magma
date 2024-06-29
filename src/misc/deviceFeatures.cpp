@@ -167,14 +167,16 @@ bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept
 {
     MAGMA_ASSERT((index > 0) && (index < 10));
-    if ((index < 1) || (index > 9) || owner.expired())
+    if ((index < 1) || (index > 9))
         return false;
-    const char extensionName[] = {
-        'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
-        char('0' + index), '\0'
-    };
     if (auto device = owner.lock())
+    {
+        const char extensionName[] = {
+            'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
+            char('0' + index), '\0'
+        };
         return device->extensionEnabled(extensionName);
+    }
     return false;
 }
 
