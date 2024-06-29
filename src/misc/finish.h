@@ -23,7 +23,7 @@ namespace magma
 
     /* Submits command buffer to a queue and blocks until
        all command buffer execution is complete. This is
-       an analogue of glFinish() function. */
+       an analogue of glFinish() function in OpenGL. */
 
     void finish(std::shared_ptr<CommandBuffer> cmdBuffer,
         std::shared_ptr<Queue> queue = nullptr);

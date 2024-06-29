@@ -22,8 +22,10 @@ namespace magma
     class Device;
     class Surface;
 
-    /*  Utility class that allows to determine whether some
-        extended device features have been enabled or not. */
+    /*  Allows to hide boilerplate code when it is needed to determine
+        whether some format or memory features are supported by device
+        or not. Or whether some supported device features have been
+        enabled or not. */
 
     class DeviceFeatures : NonCopyable
     {
