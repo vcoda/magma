@@ -258,4 +258,30 @@ bool DeviceFeatures::stippledLinesEnabled() const noexcept
 #endif // VK_EXT_line_rasterization
     return false;
 }
+
+DeviceFeatures::Vendor DeviceFeatures::getVendor() const noexcept
+{
+    if (auto device = owner.lock())
+    {
+        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+        const VkPhysicalDeviceProperties properties = physicalDevice->getProperties();
+        // https://pcisig.com/membership/member-companies
+        switch (properties.vendorID)
+        {
+        case 0x1002: return Vendor::AMD;
+        case 0x1010: return Vendor::ImaginationTechnologies;
+        case 0x102B: return Vendor::Matrox;
+        case 0x106B: return Vendor::Apple;
+        case 0x10DE: return Vendor::Nvidia;
+        case 0x1106: return Vendor::VIA;
+        case 0x13B5: return Vendor::ARM;
+        case 0x14E4: return Vendor::Broadcom;
+        case 0x1EB1: return Vendor::VeriSilicon;
+        case 0x5143: return Vendor::Qualcomm;
+        case 0x5333: return Vendor::S3Graphics;
+        case 0x8086: return Vendor::Intel;
+        }
+    }
+    return Vendor::Unknown;
+}
 } // namespace magma

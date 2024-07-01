@@ -33,7 +33,7 @@ namespace magma
         struct FormatFeatures;
         struct ExternalFeatures;
         struct ExternalMemoryFeatures;
-
+        enum class Vendor : uint32_t;
         FormatFeatures supportsFormatFeatures(VkFormat format,
             VkFormatFeatureFlags flags) const noexcept;
     #ifdef VK_KHR_external_memory_capabilities
@@ -61,6 +61,7 @@ namespace magma
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool extendedLinesEnabled() const noexcept;
         bool stippledLinesEnabled() const noexcept;
+        Vendor getVendor() const noexcept;
 
     private:
         MAGMA_MAKE_SHARED(DeviceFeatures)
@@ -88,5 +89,12 @@ namespace magma
         VkBool32 dedicatedOnly: 1;
         VkBool32 exportable: 1;
         VkBool32 importable: 1;
+    };
+
+    enum class DeviceFeatures::Vendor : uint32_t
+    {
+        AMD, Apple, ARM, Broadcom, ImaginationTechnologies,
+        Intel, Matrox, Nvidia, S3Graphics, Qualcomm,
+        VeriSilicon, VIA, Unknown
     };
 } // namespace magma
