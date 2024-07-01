@@ -52,7 +52,8 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(Vk
     {
         const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
-        if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME))
+        if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
+            instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
         {
             const VkExternalMemoryPropertiesKHR externalMemoryProperties =
                 physicalDevice->getExternalBufferProperties(handleType, usage, flags);
@@ -99,7 +100,8 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExterna
     {
         const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
-        if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME))
+        if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME) &&
+            instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
         {
             const VkExternalFencePropertiesKHR externalFenceProperties = physicalDevice->getExternalFenceProperties(handleType);
             const VkExternalFenceFeatureFlagsKHR& externalFenceFeatures = externalFenceProperties.externalFenceFeatures;
@@ -119,7 +121,8 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExt
     {
         const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
-        if (instance->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME))
+        if (instance->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME) &&
+            instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
         {
             const VkExternalSemaphorePropertiesKHR externalSemaphoreProperties = physicalDevice->getExternalSemaphoreProperties(handleType);
             const VkExternalSemaphoreFeatureFlagsKHR& externalSemaphoreFeatures = externalSemaphoreProperties.externalSemaphoreFeatures;
