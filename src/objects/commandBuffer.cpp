@@ -401,15 +401,7 @@ void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, cons
 // inline void CommandBuffer::copyBufferToImage
 // inline void CommandBuffer::copyImageToBuffer
 // inline void CommandBuffer::updateBuffer
-
-void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, uint32_t value,
-    VkDeviceSize size /* VK_WHOLE_SIZE */,
-    VkDeviceSize offset /* 0 */) const noexcept
-{
-    vkCmdFillBuffer(handle, *buffer, offset, size, value);
-    MAGMA_INUSE(buffer);
-}
-
+// inline void CommandBuffer::fillBuffer
 // inline void CommandBuffer::clearColorImage
 // inline void CommandBuffer::clearDepthStencilImage
 // inline void CommandBuffer::clearAttachments

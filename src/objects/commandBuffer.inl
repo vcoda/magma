@@ -436,6 +436,14 @@ inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, c
     udpateBuffer(buffer, dataSize, data.data(), offset);
 }
 
+inline void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, uint32_t value,
+    VkDeviceSize size /* VK_WHOLE_SIZE */,
+    VkDeviceSize offset /* 0 */) const noexcept
+{
+    vkCmdFillBuffer(handle, *buffer, offset, size, value);
+    MAGMA_INUSE(buffer);
+}
+
 inline void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, const ClearColor& color, const VkImageSubresourceRange& range) const noexcept
 {
     const VkClearValue& clearValue = color;
