@@ -17,15 +17,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "atomicCounter.h"
+#include "countBuffer.h"
 
 namespace magma
 {
-AtomicCounter::AtomicCounter(std::shared_ptr<Device> device,
+CountBuffer::CountBuffer(std::shared_ptr<Device> device,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */):
-    Buffer(std::move(device), sizeof(uint32_t), 0, // flags
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+    Buffer(std::move(device), sizeof(uint32_t), 0,
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         Initializer(), sharing, std::move(allocator))
 {}

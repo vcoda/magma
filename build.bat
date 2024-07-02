@@ -130,6 +130,7 @@ src\objects\computePipeline.cpp ^
 src\objects\computePipelineBatch.cpp ^
 src\objects\computePipelineLibrary.cpp ^
 src\objects\conditionalRenderingBuffer.cpp ^
+src\objects\countBuffer.cpp ^
 src\objects\debugReportCallback.cpp ^
 src\objects\debugUtilsMessenger.cpp ^
 src\objects\deferredOperation.cpp ^
@@ -326,6 +327,7 @@ computePipeline.obj ^
 computePipelineBatch.obj ^
 computePipelineLibrary.obj ^
 conditionalRenderingBuffer.obj ^
+countBuffer.cpp ^
 debugReportCallback.obj ^
 debugUtilsMessenger.obj ^
 deferredOperation.obj ^

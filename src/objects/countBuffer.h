@@ -20,12 +20,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* 32-bit unsigned integer atomic counter.  */
+    /* 32-bit unsigned int counter.  */
 
-    class AtomicCounter : public Buffer
+    class CountBuffer : public Buffer
     {
     public:
-        explicit AtomicCounter(std::shared_ptr<Device> device,
+        explicit CountBuffer(std::shared_ptr<Device> device,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing());
     };

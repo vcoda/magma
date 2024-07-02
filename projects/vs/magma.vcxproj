@@ -266,7 +266,7 @@
     <ClInclude Include="..\..\src\objects\accelerationStructure.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInputBuffer.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h" />
-    <ClInclude Include="..\..\src\objects\atomicCounter.h" />
+    <ClInclude Include="..\..\src\objects\countBuffer.h" />
     <ClInclude Include="..\..\src\objects\baseDeviceMemory.h" />
     <ClInclude Include="..\..\src\objects\baseUniformBuffer.h" />
     <ClInclude Include="..\..\src\objects\buffer.h" />
@@ -479,7 +479,7 @@
     <ClCompile Include="..\..\src\misc\structureSize.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp" />
-    <ClCompile Include="..\..\src\objects\atomicCounter.cpp" />
+    <ClCompile Include="..\..\src\objects\countBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\baseDeviceMemory.cpp" />
     <ClCompile Include="..\..\src\objects\baseUniformBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\buffer.cpp" />

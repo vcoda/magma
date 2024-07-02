@@ -870,7 +870,7 @@
     <ClInclude Include="..\..\src\helpers\layoutTransition.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\atomicCounter.h">
+    <ClInclude Include="..\..\src\objects\countBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1358,7 +1358,7 @@
     <ClCompile Include="..\..\src\helpers\layoutTransition.cpp">
       <Filter>Source Files\helpers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objects\atomicCounter.cpp">
+    <ClCompile Include="..\..\src\objects\countBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

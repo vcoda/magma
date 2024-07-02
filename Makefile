@@ -95,6 +95,7 @@ SRC_OBJS= \
 	src/objects/computePipelineBatch.o \
 	src/objects/computePipelineLibrary.o \
 	src/objects/conditionalRenderingBuffer.o \
+	src/objects/countBuffer.o \
 	src/objects/debugReportCallback.o \
 	src/objects/debugUtilsMessenger.o \
 	src/objects/deferredOperation.o \

@@ -27,6 +27,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(CommandPool);
     MAGMA_TYPEDEF_SHARED_PTR(ComputePipeline);
     MAGMA_TYPEDEF_SHARED_PTR(ComputePipelineBatch);
+    MAGMA_TYPEDEF_SHARED_PTR(CountBuffer);
     MAGMA_TYPEDEF_SHARED_PTR(DeferredOperation);
     MAGMA_TYPEDEF_SHARED_PTR(DepthStencilAttachment);
     MAGMA_TYPEDEF_SHARED_PTR(DescriptorPool);
