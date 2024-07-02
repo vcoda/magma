@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    MAGMA_TYPEDEF_SHARED_PTR(AtomicCounter);
     MAGMA_TYPEDEF_SHARED_PTR(Buffer);
     MAGMA_TYPEDEF_SHARED_PTR(BufferView);
     MAGMA_TYPEDEF_SHARED_PTR(ColorAttachment);

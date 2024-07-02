@@ -266,6 +266,7 @@
     <ClInclude Include="..\..\src\objects\accelerationStructure.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInputBuffer.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h" />
+    <ClInclude Include="..\..\src\objects\atomicCounter.h" />
     <ClInclude Include="..\..\src\objects\baseDeviceMemory.h" />
     <ClInclude Include="..\..\src\objects\baseUniformBuffer.h" />
     <ClInclude Include="..\..\src\objects\buffer.h" />
@@ -478,6 +479,7 @@
     <ClCompile Include="..\..\src\misc\structureSize.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\atomicCounter.cpp" />
     <ClCompile Include="..\..\src\objects\baseDeviceMemory.cpp" />
     <ClCompile Include="..\..\src\objects\baseUniformBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\buffer.cpp" />
@@ -678,7 +680,6 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../src/auxiliary/spirv/output/immv</Outputs>
     </CustomBuild>
-    <None Include="..\..\src\barriers\memoryBarrier.inl" />
     <None Include="..\..\src\barriers\subpassDependency.inl" />
     <None Include="..\..\src\barriers\subpassDependency2.inl" />
     <None Include="..\..\src\core\copyThread.inl" />

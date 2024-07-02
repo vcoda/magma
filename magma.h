@@ -27,6 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/accelerationStructure.h"
 #include "src/objects/accelerationStructureInputBuffer.h"
 #include "src/objects/accelerationStructureInstanceBuffer.h"
+#include "src/objects/atomicCounter.h"
 #include "src/objects/buffer.h"
 #include "src/objects/bufferView.h"
 #include "src/objects/commandBuffer.h"
