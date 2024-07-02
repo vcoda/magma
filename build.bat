@@ -110,15 +110,13 @@ src\misc\deviceQueueDescriptor.cpp ^
 src\misc\finish.cpp ^
 src\misc\format.cpp ^
 src\misc\framebufferAttachmentImage.cpp ^
-src\misc\geometry.cpp ^
 src\misc\pipelineExecutable.cpp ^
 src\misc\scopedDebugMarker.cpp ^
 src\misc\sharing.cpp ^
 src\misc\structureChain.cpp ^
 src\misc\structureSize.cpp ^
 src\objects\accelerationStructure.cpp ^
-src\objects\accelerationStructureInstanceBuffer.cpp ^
-src\objects\accelerationStructureStorageBuffer.cpp ^
+src\objects\accelerationStructureInputBuffer.cpp ^
 src\objects\baseDeviceMemory.cpp ^
 src\objects\baseUniformBuffer.cpp ^
 src\objects\buffer.cpp ^
@@ -184,7 +182,6 @@ src\objects\primaryCommandBuffer.cpp ^
 src\objects\privateDataSlot.cpp ^
 src\objects\queryPool.cpp ^
 src\objects\queue.cpp ^
-src\objects\rayTracingBuffer.cpp ^
 src\objects\rayTracingPipeline.cpp ^
 src\objects\rayTracingPipelineBatch.cpp ^
 src\objects\renderPass.cpp ^
@@ -226,7 +223,6 @@ src\renderpass\subpass.cpp ^
 src\shaders\pipelineShaderStage.cpp ^
 src\shaders\shaderReflection.cpp ^
 src\shaders\specialization.cpp ^
-src\states\colorBlendState.cpp ^
 src\states\colorBlendStateAdvanced.cpp ^
 src\states\formattedOutput.cpp ^
 src\states\multiColorBlendState.cpp ^
@@ -307,15 +303,13 @@ deviceQueueDescriptor.obj ^
 finish.obj ^
 format.obj ^
 framebufferAttachmentImage.obj ^
-geometry.obj ^
 pipelineExecutable.obj ^
 scopedDebugMarker.obj ^
 sharing.obj ^
 structureChain.obj ^
 structureSize.obj ^
 accelerationStructure.obj ^
-accelerationStructureInstanceBuffer.obj ^
-accelerationStructureStorageBuffer.obj ^
+accelerationStructureInputBuffer.obj ^
 baseDeviceMemory.obj ^
 baseUniformBuffer.obj ^
 buffer.obj ^
@@ -327,7 +321,7 @@ computePipeline.obj ^
 computePipelineBatch.obj ^
 computePipelineLibrary.obj ^
 conditionalRenderingBuffer.obj ^
-countBuffer.cpp ^
+countBuffer.obj ^
 debugReportCallback.obj ^
 debugUtilsMessenger.obj ^
 deferredOperation.obj ^
@@ -381,7 +375,6 @@ primaryCommandBuffer.obj ^
 privateDataSlot.obj ^
 queryPool.obj ^
 queue.obj ^
-rayTracingBuffer.obj ^
 rayTracingPipeline.obj ^
 rayTracingPipelineBatch.obj ^
 renderPass.obj ^
@@ -423,7 +416,6 @@ subpass.obj ^
 pipelineShaderStage.obj ^
 shaderReflection.obj ^
 specialization.obj ^
-colorBlendState.obj ^
 colorBlendStateAdvanced.obj ^
 formattedOutput.obj ^
 multiColorBlendState.obj ^
