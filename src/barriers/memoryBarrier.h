@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,20 +29,26 @@ namespace magma
     struct MemoryBarrier : VkMemoryBarrier
     {
         constexpr MemoryBarrier(VkAccessFlags srcAccessMask,
-            VkAccessFlags dstAccessMask) noexcept;
+            VkAccessFlags dstAccessMask) noexcept:
+            VkMemoryBarrier{
+                VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+                nullptr, // pNext
+                srcAccessMask, dstAccessMask
+            }
+        {}
     };
-} // namespace magma
 
-#include "memoryBarrier.inl"
-
-namespace magma
-{
     namespace barrier
     {
-    #ifdef VK_KHR_acceleration_structure
-        constexpr MemoryBarrier accelerationStructureReadWrite(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
-        constexpr MemoryBarrier transferWriteAccelerationStructureRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
-    #endif // VK_KHR_acceleration_structure
+        namespace memory
+        {
+            constexpr MemoryBarrier transferWriteShaderRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
+            constexpr MemoryBarrier shaderWriteTransferRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
+            constexpr MemoryBarrier shaderWriteIndirectRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+        #ifdef VK_KHR_acceleration_structure
+            constexpr MemoryBarrier accelerationStructureWriteRead(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
+            constexpr MemoryBarrier transferWriteAccelerationStructureRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
+        #endif // VK_KHR_acceleration_structure
+        } // namespace memory
     } // namespace barrier
 } // namespace magma
-

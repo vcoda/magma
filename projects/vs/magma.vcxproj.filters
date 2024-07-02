@@ -1393,9 +1393,6 @@
     <None Include="..\..\src\allocator\cxxAllocator.inl">
       <Filter>Header Files\allocator</Filter>
     </None>
-    <None Include="..\..\src\barriers\memoryBarrier.inl">
-      <Filter>Header Files\barriers</Filter>
-    </None>
     <None Include="..\..\src\barriers\subpassDependency.inl">
       <Filter>Header Files\barriers</Filter>
     </None>
