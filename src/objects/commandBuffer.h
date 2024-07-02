@@ -65,8 +65,8 @@ namespace magma
 #endif
 
     struct MemoryBarrier;
-    class BufferMemoryBarrier;
-    class ImageMemoryBarrier;
+    struct BufferMemoryBarrier;
+    struct ImageMemoryBarrier;
 
     /* Command buffers are objects used to record commands which
        can be subsequently submitted to a device queue for execution.

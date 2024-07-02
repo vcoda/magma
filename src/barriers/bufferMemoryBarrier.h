@@ -28,9 +28,8 @@ namespace magma
        barriers can also be used to define a queue family
        ownership transfer for the specified buffer range. */
 
-    class BufferMemoryBarrier : public VkBufferMemoryBarrier
+    struct BufferMemoryBarrier : VkBufferMemoryBarrier
     {
-    public:
         BufferMemoryBarrier(VkAccessFlags srcAccessMask,
             VkAccessFlags dstAccessMask,
             VkDeviceSize offset = 0,

@@ -29,9 +29,8 @@ namespace magma
        image layout transitions or a queue family ownership
        transfer for the specified image subresource range. */
 
-    class ImageMemoryBarrier : public VkImageMemoryBarrier
+    struct ImageMemoryBarrier : VkImageMemoryBarrier
     {
-    public:
         ImageMemoryBarrier(std::shared_ptr<Image> image,
             VkImageLayout newLayout) noexcept;
         ImageMemoryBarrier(std::shared_ptr<Image> image,
