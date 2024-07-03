@@ -42,7 +42,7 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::s
 {   // Allocate linear tiled image to copy pixels to
     dstImage = std::make_shared<LinearTiledImage2D>(device, VK_FORMAT_R8G8B8A8_UNORM,
         srcImage->getExtent(), allocator);
-    std::shared_ptr<DeviceFeatures> deviceFeatures = device->getFeatures();
+    const std::unique_ptr<DeviceFeatures>& deviceFeatures = device->getFeatures();
     const bool srcBlit = deviceFeatures->supportsFormatFeatures(srcImage->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal;
     const bool dstBlit = deviceFeatures->supportsFormatFeatures(dstImage->getFormat(), VK_FORMAT_FEATURE_BLIT_DST_BIT).linear;
     const VkImageLayout oldLayout = srcImage->getLayout(0);

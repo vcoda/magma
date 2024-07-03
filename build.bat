@@ -107,6 +107,7 @@ src\misc\application.cpp ^
 src\misc\deviceFaultInfo.cpp ^
 src\misc\deviceFeatures.cpp ^
 src\misc\deviceQueueDescriptor.cpp ^
+src\misc\featureQuery.cpp ^
 src\misc\finish.cpp ^
 src\misc\format.cpp ^
 src\misc\framebufferAttachmentImage.cpp ^
@@ -300,6 +301,7 @@ application.obj ^
 deviceFaultInfo.obj ^
 deviceFeatures.obj ^
 deviceQueueDescriptor.obj ^
+featureQuery.obj ^
 finish.obj ^
 format.obj ^
 framebufferAttachmentImage.obj ^

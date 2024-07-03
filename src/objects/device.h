@@ -34,6 +34,7 @@ namespace magma
     class TimelineSemaphore;
 #endif
     class DeviceFeatures;
+    class FeatureQuery;
     class DeviceResourcePool;
 
     /* Device objects represent logical connections to physical
@@ -52,7 +53,8 @@ namespace magma
         const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
         const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
-        const std::shared_ptr<DeviceFeatures>& getFeatures() const;
+        const std::unique_ptr<DeviceFeatures>& getFeatures() const;
+        const std::unique_ptr<FeatureQuery>& checkFeatures() const;
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         std::shared_ptr<Queue> getQueueByFamily(uint32_t queueFamilyIndex) const;
         void updateDescriptorSets(uint32_t descriptorWriteCount,
@@ -135,7 +137,6 @@ namespace magma
         VkInstance getNativeInstance() const noexcept;
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
-        mutable std::shared_ptr<DeviceFeatures> features;
         mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
         std::set<std::string> enabledLayers;
         std::set<std::string> enabledExtensions;
@@ -146,6 +147,8 @@ namespace magma
     #ifdef VK_EXT_private_data
         std::weak_ptr<PrivateDataSlot> privateDataSlot;
     #endif
+        mutable std::unique_ptr<DeviceFeatures> features;
+        mutable std::unique_ptr<FeatureQuery> featureQuery;
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         std::shared_ptr<DeviceResourcePool> resourcePool;
     #endif

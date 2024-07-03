@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "physicalDevice.h"
 #include "../allocator/allocator.h"
 #include "../helpers/stackArray.h"
-#include "../misc/deviceFeatures.h"
+#include "../misc/featureQuery.h"
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/streamInsertOperators.h"
@@ -186,7 +186,7 @@ bool RenderPass::usesMultisampling() const noexcept
 VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (device->getFeatures()->separateDepthStencilLayoutsEnabled())
+    if (device->checkFeatures()->separateDepthStencilLayoutsEnabled())
     {
         if (format.depth())
             return VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR;

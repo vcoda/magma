@@ -27,6 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "timelineSemaphore.h"
 #include "deviceResourcePool.h"
 #include "../misc/deviceFeatures.h"
+#include "../misc/featureQuery.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
@@ -108,11 +109,18 @@ Device::~Device()
     vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-const std::shared_ptr<DeviceFeatures>& Device::getFeatures() const
+const std::unique_ptr<DeviceFeatures>& Device::getFeatures() const
 {
     if (!features)
-        features = DeviceFeatures::makeShared((shared_from_this()));
+        features = DeviceFeatures::makeUnique(physicalDevice);
     return features;
+}
+
+const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
+{
+    if (!featureQuery)
+        featureQuery = std::make_unique<FeatureQuery>(shared_from_this());
+    return featureQuery;
 }
 
 std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const

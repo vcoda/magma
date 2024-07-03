@@ -19,22 +19,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "deviceFeatures.h"
 #include "../objects/instance.h"
-#include "../objects/device.h"
 #include "../objects/physicalDevice.h"
 #include "../objects/surface.h"
 
 namespace magma
 {
-DeviceFeatures::DeviceFeatures(std::shared_ptr<const Device> device) noexcept:
-    owner(std::move(device))
+DeviceFeatures::DeviceFeatures(std::shared_ptr<const PhysicalDevice> physicalDevice) noexcept:
+    owner(std::move(physicalDevice))
 {}
 
 DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat format, VkFormatFeatureFlags flags) const noexcept
 {
     FormatFeatures features = {};
-    if (auto device = owner.lock())
+    if (auto physicalDevice = owner.lock())
     {
-        const std::shared_ptr<const PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkFormatProperties formatProperties = physicalDevice->getFormatProperties(format);
         features.linear = MAGMA_BITWISE_AND(formatProperties.linearTilingFeatures, flags);
         features.optimal= MAGMA_BITWISE_AND(formatProperties.optimalTilingFeatures, flags);
@@ -48,9 +46,8 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(Vk
     VkBufferUsageFlags usage, VkBufferCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    if (auto device = owner.lock())
+    if (auto physicalDevice = owner.lock())
     {
-        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
             instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
@@ -73,9 +70,8 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
     VkImageCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    if (auto device = owner.lock())
+    if (auto physicalDevice = owner.lock())
     {
-        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
             instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
@@ -96,9 +92,8 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    if (auto device = owner.lock())
+    if (auto physicalDevice = owner.lock())
     {
-        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME) &&
             instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
@@ -117,9 +112,8 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExterna
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    if (auto device = owner.lock())
+    if (auto physicalDevice = owner.lock())
     {
-        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME) &&
             instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
@@ -136,9 +130,8 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExt
 
 bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, VkImageUsageFlags flags) const
 {
-    if (auto device = owner.lock())
+    if (auto physicalDevice = owner.lock())
     {
-        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkSurfaceCapabilitiesKHR surfaceCapabilities = physicalDevice->getSurfaceCapabilities(std::move(surface));
         return MAGMA_BITWISE_AND(surfaceCapabilities.supportedUsageFlags, flags);
     }
@@ -150,9 +143,8 @@ bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, 
    access the GPU's entire framebuffer. */
 bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 {
-    if (auto device = owner.lock())
+    if (auto physicalDevice = owner.lock())
     {
-        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
         for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
         {
@@ -167,103 +159,10 @@ bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
     return false;
 }
 
-bool DeviceFeatures::maintenanceEnabled(uint8_t index) const noexcept
-{
-    MAGMA_ASSERT((index > 0) && (index < 10));
-    if ((index < 1) || (index > 9))
-        return false;
-    if (auto device = owner.lock())
-    {
-        const char extensionName[] = {
-            'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
-            char('0' + index), '\0'
-        };
-        return device->extensionEnabled(extensionName);
-    }
-    return false;
-}
-
-bool DeviceFeatures::negativeViewportHeightEnabled() const noexcept
-{
-    if (auto device = owner.lock())
-    {
-    #ifdef VK_KHR_maintenance1
-        if (device->extensionEnabled(VK_KHR_MAINTENANCE1_EXTENSION_NAME))
-            return true;
-    #endif
-    #ifdef VK_AMD_negative_viewport_height
-        if (device->extensionEnabled(VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME))
-            return true;
-    #endif
-        MAGMA_UNUSED(device);
-    }
-    return false;
-}
-
-bool DeviceFeatures::separateDepthStencilLayoutsEnabled() const noexcept
-{
-#ifdef VK_KHR_separate_depth_stencil_layouts
-    if (auto device = owner.lock())
-    {
-        if (device->extensionEnabled(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME))
-        {
-            const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *separateDepthStencilFeatures =
-                device->getEnabledExtendedFeatures<VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR>();
-            if (separateDepthStencilFeatures)
-                return separateDepthStencilFeatures->separateDepthStencilLayouts;
-        }
-    }
-#endif // VK_KHR_separate_depth_stencil_layouts
-    return false;
-}
-
-bool DeviceFeatures::extendedLinesEnabled() const noexcept
-{
-#ifdef VK_EXT_line_rasterization
-    if (auto device = owner.lock())
-    {
-        if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
-        {
-            const VkPhysicalDeviceLineRasterizationFeaturesEXT *lineRasterizationFeatures =
-                device->getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
-            if (lineRasterizationFeatures)
-            {
-                return lineRasterizationFeatures->rectangularLines ||
-                    lineRasterizationFeatures->bresenhamLines ||
-                    lineRasterizationFeatures->smoothLines;
-            }
-        }
-    }
-#endif // VK_EXT_line_rasterization
-    return false;
-}
-
-bool DeviceFeatures::stippledLinesEnabled() const noexcept
-{
-#ifdef VK_EXT_line_rasterization
-    if (auto device = owner.lock())
-    {
-        if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
-        {
-            const VkPhysicalDeviceLineRasterizationFeaturesEXT *lineRasterizationFeatures =
-                device->getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
-            if (lineRasterizationFeatures)
-            {
-                return lineRasterizationFeatures->stippledRectangularLines ||
-                    lineRasterizationFeatures->stippledBresenhamLines ||
-                    lineRasterizationFeatures->stippledSmoothLines;
-            }
-        }
-    }
-#endif // VK_EXT_line_rasterization
-    return false;
-}
-
 DeviceFeatures::Vendor DeviceFeatures::getVendor() const noexcept
 {
-    if (auto device = owner.lock())
+    if (auto physicalDevice = owner.lock())
     {
-        const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
         const VkPhysicalDeviceProperties properties = physicalDevice->getProperties();
         // https://pcisig.com/membership/member-companies
         switch (properties.vendorID)

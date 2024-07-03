@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/physicalDevice.h"
 #include "../objects/framebuffer.h"
 #include "../states/multisampleState.h"
-#include "../misc/deviceFeatures.h"
+#include "../misc/featureQuery.h"
 
 namespace magma
 {
@@ -73,7 +73,7 @@ VkImageLayout Framebuffer::optimalDepthStencilLayout(std::shared_ptr<Device> dev
     const VkFormat depthStencilFormat, const bool sampled) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (device->getFeatures()->separateDepthStencilLayoutsEnabled())
+    if (device->checkFeatures()->separateDepthStencilLayoutsEnabled())
     {
         const Format format(depthStencilFormat);
         if (format.depth())

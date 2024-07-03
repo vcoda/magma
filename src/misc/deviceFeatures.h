@@ -19,13 +19,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
+    class PhysicalDevice;
     class Surface;
 
-    /*  Allows to hide boilerplate code when it is needed to determine
-        whether some format or memory features are supported by device
-        or not. Or whether some supported device features have been
-        enabled or not. */
+    /*  Allows to hide boilerplate code when it is needed
+        to determine whether some format or memory features
+        are supported by physical device or not. */
 
     class DeviceFeatures : NonCopyable
     {
@@ -56,19 +55,14 @@ namespace magma
         bool supportsImageUsage(std::shared_ptr<const Surface> surface,
             VkImageUsageFlags flags) const;
         bool supportsDeviceLocalHostVisibleMemory() const noexcept;
-        bool maintenanceEnabled(uint8_t index) const noexcept;
-        bool negativeViewportHeightEnabled() const noexcept;
-        bool separateDepthStencilLayoutsEnabled() const noexcept;
-        bool extendedLinesEnabled() const noexcept;
-        bool stippledLinesEnabled() const noexcept;
         Vendor getVendor() const noexcept;
 
     private:
-        MAGMA_MAKE_SHARED(DeviceFeatures)
-        DeviceFeatures(std::shared_ptr<const Device> device) noexcept;
+        MAGMA_MAKE_UNIQUE(DeviceFeatures)
+        DeviceFeatures(std::shared_ptr<const PhysicalDevice> physicalDevice) noexcept;
         friend Device;
 
-        std::weak_ptr<const Device> owner;
+        std::weak_ptr<const PhysicalDevice> owner;
     };
 
     struct DeviceFeatures::FormatFeatures

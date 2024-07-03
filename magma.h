@@ -175,6 +175,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/misc/deviceFeatures.h"
 #include "src/misc/deviceQueueDescriptor.h"
 #include "src/misc/extension.h"
+#include "src/misc/featureQuery.h"
 #include "src/misc/finish.h"
 #include "src/misc/format.h"
 #include "src/misc/framebufferAttachmentImage.h"
