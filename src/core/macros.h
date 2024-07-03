@@ -85,17 +85,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_ASSERT_FOR_EACH(arr, it, expr)
 #endif // MAGMA_DEBUG
 
-#define MAGMA_MAKE_SHARED(Type)\
+#define MAGMA_MAKE(Type, kind, method)\
 template<typename ...Args>\
-static std::shared_ptr<Type> makeShared(Args&& ...args)\
+static std::kind##_ptr<Type> method(Args&& ...args)\
 {\
     struct Type##_ : Type\
     {\
         Type##_(Args&& ...args):\
             Type(std::forward<Args>(args)...) {}\
     };\
-    return std::make_shared<Type##_>(std::forward<Args>(args)...);\
+    return std::make_##kind<Type##_>(std::forward<Args>(args)...);\
 }
+
+#define MAGMA_MAKE_SHARED(Type) MAGMA_MAKE(Type, shared, makeShared)
+#define MAGMA_MAKE_UNIQUE(Type) MAGMA_MAKE(Type, unique, makeUnique)
 
 #define MAGMA_TYPEDEF_SHARED_PTR(Type) typedef std::shared_ptr<class Type> Type##Ptr
 #define MAGMA_TYPEDEF_TEMPLATE_SHARED_PTR(Type) template<class T> using Type##Ptr = std::shared_ptr<Type<T>>
