@@ -188,9 +188,9 @@ VkInstance DeviceChild::getNativeInstance() const noexcept
 }
 
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-std::shared_ptr<DeviceResourcePool> DeviceChild::getResourcePool() noexcept
+const std::unique_ptr<DeviceResourcePool>& DeviceChild::getResourcePool() noexcept
 {
-    return device ? device->getResourcePool() : nullptr;
+    return device->getResourcePool();
 }
 #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
 

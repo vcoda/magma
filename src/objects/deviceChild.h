@@ -49,7 +49,7 @@ namespace magma
         virtual VkPhysicalDevice getNativePhysicalDevice() const noexcept;
         virtual VkInstance getNativeInstance() const noexcept;
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        std::shared_ptr<DeviceResourcePool> getResourcePool() noexcept;
+        const std::unique_ptr<DeviceResourcePool>& getResourcePool() noexcept;
     #endif
         bool extensionEnabled(const char *name) const noexcept;
 
