@@ -27,7 +27,6 @@ namespace magma
     class FeatureQuery : NonCopyable
     {
     public:
-        explicit FeatureQuery(std::shared_ptr<const Device> device) noexcept;
         bool maintenanceEnabled(uint8_t index) const noexcept;
         bool negativeViewportHeightEnabled() const noexcept;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
@@ -35,6 +34,10 @@ namespace magma
         bool stippledLinesEnabled() const noexcept;
 
     private:
-        std::weak_ptr<const Device> owner;
+        MAGMA_MAKE_UNIQUE(FeatureQuery)
+        FeatureQuery(std::shared_ptr<const Device>) noexcept;
+        friend Device;
+
+        std::weak_ptr<const Device> parent;
     };
 } // namespace magma

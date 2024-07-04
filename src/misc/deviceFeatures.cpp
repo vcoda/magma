@@ -24,14 +24,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DeviceFeatures::DeviceFeatures(std::shared_ptr<const PhysicalDevice> physicalDevice) noexcept:
-    owner(std::move(physicalDevice))
+DeviceFeatures::DeviceFeatures(std::shared_ptr<const PhysicalDevice> parent) noexcept:
+    parent(std::move(parent))
 {}
 
 DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat format, VkFormatFeatureFlags flags) const noexcept
 {
     FormatFeatures features = {};
-    if (auto physicalDevice = owner.lock())
+    if (auto physicalDevice = parent.lock())
     {
         const VkFormatProperties formatProperties = physicalDevice->getFormatProperties(format);
         features.linear = MAGMA_BITWISE_AND(formatProperties.linearTilingFeatures, flags);
@@ -46,7 +46,7 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(Vk
     VkBufferUsageFlags usage, VkBufferCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    if (auto physicalDevice = owner.lock())
+    if (auto physicalDevice = parent.lock())
     {
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
@@ -70,7 +70,7 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
     VkImageCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    if (auto physicalDevice = owner.lock())
+    if (auto physicalDevice = parent.lock())
     {
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
@@ -92,7 +92,7 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    if (auto physicalDevice = owner.lock())
+    if (auto physicalDevice = parent.lock())
     {
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME) &&
@@ -112,7 +112,7 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExterna
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    if (auto physicalDevice = owner.lock())
+    if (auto physicalDevice = parent.lock())
     {
         const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
         if (instance->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME) &&
@@ -130,7 +130,7 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExt
 
 bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, VkImageUsageFlags flags) const
 {
-    if (auto physicalDevice = owner.lock())
+    if (auto physicalDevice = parent.lock())
     {
         const VkSurfaceCapabilitiesKHR surfaceCapabilities = physicalDevice->getSurfaceCapabilities(std::move(surface));
         return MAGMA_BITWISE_AND(surfaceCapabilities.supportedUsageFlags, flags);
@@ -143,7 +143,7 @@ bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, 
    access the GPU's entire framebuffer. */
 bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 {
-    if (auto physicalDevice = owner.lock())
+    if (auto physicalDevice = parent.lock())
     {
         const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
         for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
@@ -161,7 +161,7 @@ bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 
 DeviceFeatures::Vendor DeviceFeatures::getVendor() const noexcept
 {
-    if (auto physicalDevice = owner.lock())
+    if (auto physicalDevice = parent.lock())
     {
         const VkPhysicalDeviceProperties properties = physicalDevice->getProperties();
         // https://pcisig.com/membership/member-companies

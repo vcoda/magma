@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 FeatureQuery::FeatureQuery(std::shared_ptr<const Device> device) noexcept:
-    owner(std::move(device))
+    parent(std::move(device))
 {}
 
 bool FeatureQuery::maintenanceEnabled(uint8_t index) const noexcept
@@ -31,7 +31,7 @@ bool FeatureQuery::maintenanceEnabled(uint8_t index) const noexcept
     MAGMA_ASSERT((index > 0) && (index < 10));
     if ((index < 1) || (index > 9))
         return false;
-    if (auto device = owner.lock())
+    if (auto device = parent.lock())
     {
         const char extensionName[] = {
             'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
@@ -44,7 +44,7 @@ bool FeatureQuery::maintenanceEnabled(uint8_t index) const noexcept
 
 bool FeatureQuery::negativeViewportHeightEnabled() const noexcept
 {
-    if (auto device = owner.lock())
+    if (auto device = parent.lock())
     {
     #ifdef VK_KHR_maintenance1
         if (device->extensionEnabled(VK_KHR_MAINTENANCE1_EXTENSION_NAME))
@@ -62,7 +62,7 @@ bool FeatureQuery::negativeViewportHeightEnabled() const noexcept
 bool FeatureQuery::separateDepthStencilLayoutsEnabled() const noexcept
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (auto device = owner.lock())
+    if (auto device = parent.lock())
     {
         if (device->extensionEnabled(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME))
         {
@@ -79,7 +79,7 @@ bool FeatureQuery::separateDepthStencilLayoutsEnabled() const noexcept
 bool FeatureQuery::extendedLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization
-    if (auto device = owner.lock())
+    if (auto device = parent.lock())
     {
         if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
         {
@@ -100,7 +100,7 @@ bool FeatureQuery::extendedLinesEnabled() const noexcept
 bool FeatureQuery::stippledLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization
-    if (auto device = owner.lock())
+    if (auto device = parent.lock())
     {
         if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
         {
