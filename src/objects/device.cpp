@@ -48,7 +48,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     enabledFeatures(enabledFeatures_),
     enabledExtendedFeatures(enabledExtendedFeatures_)
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-   ,resourcePool(std::make_shared<DeviceResourcePool>())
+   ,resourcePool(std::make_unique<DeviceResourcePool>())
 #endif
 {
     VkDeviceCreateInfo deviceInfo;

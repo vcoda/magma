@@ -120,7 +120,7 @@ namespace magma
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        const std::shared_ptr<DeviceResourcePool>& getResourcePool() const noexcept { return resourcePool; }
+        const std::unique_ptr<DeviceResourcePool>& getResourcePool() const noexcept { return resourcePool; }
     #endif
 
     private:
@@ -150,7 +150,7 @@ namespace magma
         mutable std::unique_ptr<DeviceFeatures> features;
         mutable std::unique_ptr<FeatureQuery> featureQuery;
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        std::shared_ptr<DeviceResourcePool> resourcePool;
+        std::unique_ptr<DeviceResourcePool> resourcePool;
     #endif
         friend PhysicalDevice;
     };
