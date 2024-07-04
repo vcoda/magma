@@ -34,7 +34,7 @@ void finish(std::shared_ptr<CommandBuffer> cmdBuffer,
         const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
         queue = cmdPool->getDevice()->getQueueByFamily(queueFamilyIndex);
     }
-    const std::shared_ptr<Fence>& fence = cmdBuffer->getFence();
+    const std::unique_ptr<Fence>& fence = cmdBuffer->getFence();
     if (Fence::State::Signaled == fence->getStatus())
         fence->reset();
     queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);

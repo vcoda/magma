@@ -45,7 +45,7 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags waitDstStageMask /* 0 */,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     std::shared_ptr<const Semaphore> signalSemaphore /* nullptr */,
-    std::shared_ptr<const Fence> fence /* nullptr */,
+    const std::unique_ptr<Fence>& fence /* nullptr */,
     const StructureChain& extendedInfo /* default */)
 {
     MAGMA_ASSERT(cmdBuffer->primary());
@@ -68,7 +68,7 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
     const std::initializer_list<VkPipelineStageFlags> waitDstStageMask /* void */,
     const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores /* void */,
     const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores /* void */,
-    std::shared_ptr<const Fence> fence /* nullptr */,
+    const std::unique_ptr<Fence>& fence  /* nullptr */,
     const StructureChain& extendedInfo /* default */)
 {
     MAGMA_ASSERT(cmdBuffers.size());
@@ -215,7 +215,7 @@ void Queue::submitDeviceGroup(const std::initializer_list<std::shared_ptr<Comman
     const std::initializer_list<uint32_t> waitSemaphoreDeviceIndices /* void */,
     const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores /* void */,
     const std::initializer_list<uint32_t> signalSemaphoreDeviceIndices /* void */,
-    std::shared_ptr<const Fence> fence /* nullptr */)
+    const std::unique_ptr<Fence>& fence  /* nullptr */)
 {
     MAGMA_ASSERT_FOR_EACH(cmdBuffers, cmdBuffer, cmdBuffer->primary());
     VkDeviceGroupSubmitInfo deviceGroupSubmitInfo;
@@ -239,7 +239,7 @@ void Queue::waitIdle()
 
 void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
-    std::shared_ptr<Fence> presentFence /* nullptr */,
+    const std::unique_ptr<Fence>& presentFence /* nullptr */,
     const StructureChain& extendedInfo /* default */)
 {
     VkPresentInfoKHR presentInfo;
@@ -309,7 +309,7 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
 void Queue::presentDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
     const VkRect2D& srcRect, const VkRect2D& dstRect, bool persistent,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
-    std::shared_ptr<Fence> presentFence /* nullptr */)
+    const std::unique_ptr<Fence>& presentFence /* nullptr */)
 {
     VkDisplayPresentInfoKHR displayPresentInfo;
     displayPresentInfo.sType = VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR;

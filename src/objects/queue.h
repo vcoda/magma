@@ -57,13 +57,13 @@ namespace magma
             VkPipelineStageFlags waitDstStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
-            std::shared_ptr<const Fence> fence = nullptr,
+            const std::unique_ptr<Fence>& fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         void submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
             const std::initializer_list<VkPipelineStageFlags> waitDstStageMask = {},
             const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
             const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores = {},
-            std::shared_ptr<const Fence> fence = nullptr,
+            const std::unique_ptr<Fence>& fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_timeline_semaphore
         void submit(std::shared_ptr<const TimelineSemaphore> semaphore,
@@ -88,13 +88,13 @@ namespace magma
             const std::initializer_list<uint32_t> waitSemaphoreDeviceIndices = {},
             const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores = {},
             const std::initializer_list<uint32_t> signalSemaphoreDeviceIndices = {},
-            std::shared_ptr<const Fence> fence = nullptr);
+            const std::unique_ptr<Fence>& fence = nullptr);
     #endif // VK_KHR_device_group
         void waitIdle();
         void present(std::shared_ptr<const Swapchain> swapchain,
             uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
-            std::shared_ptr<Fence> presentFence = nullptr,
+            const std::unique_ptr<Fence>& presentFence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_display_swapchain
         void presentDisplay(std::shared_ptr<const Swapchain> swapchain,
@@ -103,7 +103,7 @@ namespace magma
             const VkRect2D& dstRect,
             bool persistent,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
-            std::shared_ptr<Fence> presentFence = nullptr);
+            const std::unique_ptr<Fence>& presentFence = nullptr);
     #endif // VK_KHR_display_swapchain
     #ifdef VK_NV_device_diagnostic_checkpoints
         std::vector<VkCheckpointDataNV> getCheckpoints(std::shared_ptr<const Device> device) const;

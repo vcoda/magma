@@ -553,7 +553,7 @@ namespace magma
 
         std::shared_ptr<CommandPool> getCommandPool() const noexcept { return cmdPool.lock(); }
         const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
-        const std::shared_ptr<Fence>& getFence() const noexcept { return fence; }
+        const std::unique_ptr<Fence>& getFence() const noexcept { return fence; }
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
         State getState() const noexcept { return state; }
@@ -658,7 +658,7 @@ namespace magma
 
         std::weak_ptr<CommandPool> cmdPool;
         std::shared_ptr<Device> device;
-        std::shared_ptr<Fence> fence;
+        std::unique_ptr<Fence> fence;
         const VkCommandBufferLevel level;
         VkCommandBufferUsageFlags usage;
         std::atomic<State> state;
