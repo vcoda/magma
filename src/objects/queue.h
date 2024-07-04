@@ -91,13 +91,13 @@ namespace magma
             const std::unique_ptr<Fence>& fence = nullptr);
     #endif // VK_KHR_device_group
         void waitIdle();
-        void present(std::shared_ptr<const Swapchain> swapchain,
+        void present(const std::unique_ptr<Swapchain>& swapchain,
             uint32_t imageIndex,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             const std::unique_ptr<Fence>& presentFence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_display_swapchain
-        void presentDisplay(std::shared_ptr<const Swapchain> swapchain,
+        void presentDisplay(const std::unique_ptr<Swapchain>& swapchain,
             uint32_t imageIndex,
             const VkRect2D& srcRect,
             const VkRect2D& dstRect,

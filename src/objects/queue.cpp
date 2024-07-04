@@ -237,7 +237,7 @@ void Queue::waitIdle()
     MAGMA_HANDLE_RESULT(result, "failed to wait for a queue to become idle");
 }
 
-void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
+void Queue::present(const std::unique_ptr<Swapchain>& swapchain, uint32_t imageIndex,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     const std::unique_ptr<Fence>& presentFence /* nullptr */,
     const StructureChain& extendedInfo /* default */)
@@ -306,7 +306,7 @@ void Queue::present(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIn
 }
 
 #ifdef VK_KHR_display_swapchain
-void Queue::presentDisplay(std::shared_ptr<const Swapchain> swapchain, uint32_t imageIndex,
+void Queue::presentDisplay(const std::unique_ptr<Swapchain>& swapchain, uint32_t imageIndex,
     const VkRect2D& srcRect, const VkRect2D& dstRect, bool persistent,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     const std::unique_ptr<Fence>& presentFence /* nullptr */)
