@@ -56,13 +56,13 @@ namespace magma
         void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags waitDstStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
-            std::shared_ptr<const Semaphore> signalSemaphore = nullptr,
+            std::shared_ptr<Semaphore> signalSemaphore = nullptr,
             const std::unique_ptr<Fence>& fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         void submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
             const std::initializer_list<VkPipelineStageFlags> waitDstStageMask = {},
             const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
-            const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores = {},
+            const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores = {},
             const std::unique_ptr<Fence>& fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_timeline_semaphore
@@ -86,7 +86,7 @@ namespace magma
             const std::initializer_list<VkPipelineStageFlags> waitDstStageMask = {},
             const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
             const std::initializer_list<uint32_t> waitSemaphoreDeviceIndices = {},
-            const std::initializer_list<std::shared_ptr<const Semaphore>> signalSemaphores = {},
+            const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores = {},
             const std::initializer_list<uint32_t> signalSemaphoreDeviceIndices = {},
             const std::unique_ptr<Fence>& fence = nullptr);
     #endif // VK_KHR_device_group
