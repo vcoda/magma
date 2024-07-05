@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    MAGMA_TYPEDEF_SHARED_PTR(AtomicCounter);
     MAGMA_TYPEDEF_SHARED_PTR(Buffer);
     MAGMA_TYPEDEF_SHARED_PTR(BufferView);
     MAGMA_TYPEDEF_SHARED_PTR(ColorAttachment);
@@ -36,6 +35,7 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(Device);
     MAGMA_TYPEDEF_SHARED_PTR(DeviceChild);
     MAGMA_TYPEDEF_SHARED_PTR(DeviceMemory);
+    MAGMA_TYPEDEF_SHARED_PTR(DispatchCountBuffer);
     MAGMA_TYPEDEF_SHARED_PTR(DispatchIndirectBuffer);
     MAGMA_TYPEDEF_SHARED_PTR(DrawIndexedIndirectBuffer);
     MAGMA_TYPEDEF_SHARED_PTR(DrawIndirectBuffer);
