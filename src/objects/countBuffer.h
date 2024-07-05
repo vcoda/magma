@@ -41,4 +41,25 @@ namespace magma
         const VkPipelineStageFlags stageMask;
         mutable std::shared_ptr<DstTransferBuffer> hostBuffer;
     };
+
+    /* Three 32-bit unsigned integer counters that can be used
+       with vkCmdDispatchIndirect(X, Y, Z) call. */
+
+    class DispatchCountBuffer : public Buffer
+    {
+    public:
+        explicit DispatchCountBuffer(std::shared_ptr<Device> device,
+            VkPipelineStageFlags stageMask,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing());
+        VkPipelineStageFlags getStageMask() const noexcept { return stageMask; }
+        void setValues(uint32_t X, uint32_t Y, uint32_t Z,
+            std::shared_ptr<CommandBuffer> cmdBuffer) noexcept;
+        void readback(std::shared_ptr<CommandBuffer> cmdBuffer) const;
+        std::array<uint32_t, 3> getValues() const noexcept;
+
+    private:
+        const VkPipelineStageFlags stageMask;
+        mutable std::shared_ptr<DstTransferBuffer> hostBuffer;
+    };
 } // namespace magma

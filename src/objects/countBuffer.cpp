@@ -64,4 +64,50 @@ uint32_t CountBuffer::getValue() const noexcept
     }
     return value;
 }
+
+DispatchCountBuffer::DispatchCountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Sharing& sharing /* default */):
+    Buffer(std::move(device), sizeof(uint32_t) * 3, // X, Y, Z
+        0, // flags
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT |
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        Initializer(), sharing, std::move(allocator)),
+    stageMask(stageMask)
+{}
+
+void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
+    std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
+{
+    cmdBuffer->fillBuffer(shared_from_this(), x, sizeof(uint32_t), 0);
+    cmdBuffer->fillBuffer(shared_from_this(), y, sizeof(uint32_t), sizeof(uint32_t));
+    cmdBuffer->fillBuffer(shared_from_this(), z, sizeof(uint32_t), sizeof(uint32_t) * 2);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, stageMask,
+        BufferMemoryBarrier(shared_from_this(), barrier::transferWriteShaderRead));
+}
+
+void DispatchCountBuffer::readback(std::shared_ptr<CommandBuffer> cmdBuffer) const
+{
+    if (!hostBuffer)
+        hostBuffer = std::make_shared<DstTransferBuffer>(device, size);
+    cmdBuffer->pipelineBarrier(stageMask, VK_PIPELINE_STAGE_TRANSFER_BIT,
+        BufferMemoryBarrier(shared_from_this(), barrier::shaderWriteTransferRead));
+    cmdBuffer->copyBuffer(shared_from_this(), hostBuffer);
+}
+
+std::array<uint32_t, 3> DispatchCountBuffer::getValues() const noexcept
+{
+    const uint32_t *data = reinterpret_cast<const uint32_t *>(hostBuffer->getMemory()->map());
+    MAGMA_ASSERT(data);
+    std::array<uint32_t, 3> values = {};
+    if (data)
+    {
+        values[0] = data[0];
+        values[1] = data[1];
+        values[2] = data[2];
+        hostBuffer->getMemory()->unmap();
+    }
+    return values;
+}
 } // namespace magma
