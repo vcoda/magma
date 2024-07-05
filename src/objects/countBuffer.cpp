@@ -29,7 +29,8 @@ CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags st
     const Sharing& sharing /* default */):
     Buffer(std::move(device), sizeof(uint32_t) * 3, // Make it usable with vkCmdDispatchIndirect
         0, // flags
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT |
+            VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         Initializer(), sharing, std::move(allocator)),
     stageMask(stageMask)
