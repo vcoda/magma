@@ -32,6 +32,7 @@ namespace magma
             VkPipelineStageFlags stageMask,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing());
+        VkPipelineStageFlags getStageMask() const noexcept { return stageMask; }
         void setValue(uint32_t value, std::shared_ptr<CommandBuffer> cmdBuffer) noexcept;
         void readback(std::shared_ptr<CommandBuffer> cmdBuffer) const;
         uint32_t getValue() const noexcept;
