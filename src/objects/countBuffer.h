@@ -22,44 +22,51 @@ namespace magma
 {
     class DstTransferBuffer;
 
+    /* Base class of count buffer. */
+
+    class BaseCountBuffer : public Buffer
+    {
+    public:
+        VkPipelineStageFlags getStageMask() const noexcept { return stageMask; }
+        void readback(std::shared_ptr<CommandBuffer> cmdBuffer) const;
+
+    protected:
+        BaseCountBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            VkPipelineStageFlags stageMask,
+            std::shared_ptr<Allocator> allocator,
+            const Sharing& sharing);
+        const VkPipelineStageFlags stageMask;
+        mutable std::shared_ptr<DstTransferBuffer> hostBuffer;
+    };
+
     /* 32-bit unsigned integer atomic counter. Allows to inspect
        counter value by host for debugging purposes. */
 
-    class CountBuffer : public Buffer
+    class CountBuffer : public BaseCountBuffer
     {
     public:
         explicit CountBuffer(std::shared_ptr<Device> device,
             VkPipelineStageFlags stageMask,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing());
-        VkPipelineStageFlags getStageMask() const noexcept { return stageMask; }
-        void setValue(uint32_t value, std::shared_ptr<CommandBuffer> cmdBuffer) noexcept;
-        void readback(std::shared_ptr<CommandBuffer> cmdBuffer) const;
+        void setValue(uint32_t value,
+            std::shared_ptr<CommandBuffer> cmdBuffer) noexcept;
         uint32_t getValue() const noexcept;
-
-    private:
-        const VkPipelineStageFlags stageMask;
-        mutable std::shared_ptr<DstTransferBuffer> hostBuffer;
     };
 
     /* Three 32-bit unsigned integer counters that can be used
        with vkCmdDispatchIndirect(X, Y, Z) call. */
 
-    class DispatchCountBuffer : public Buffer
+    class DispatchCountBuffer : public BaseCountBuffer
     {
     public:
         explicit DispatchCountBuffer(std::shared_ptr<Device> device,
             VkPipelineStageFlags stageMask,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing());
-        VkPipelineStageFlags getStageMask() const noexcept { return stageMask; }
         void setValues(uint32_t x, uint32_t y, uint32_t z,
             std::shared_ptr<CommandBuffer> cmdBuffer) noexcept;
-        void readback(std::shared_ptr<CommandBuffer> cmdBuffer) const;
         std::array<uint32_t, 3> getValues() const noexcept;
-
-    private:
-        const VkPipelineStageFlags stageMask;
-        mutable std::shared_ptr<DstTransferBuffer> hostBuffer;
     };
 } // namespace magma

@@ -24,16 +24,29 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,
-    std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Sharing& sharing /* default */):
-    Buffer(std::move(device), sizeof(uint32_t),
-        0, // flags
+BaseCountBuffer::BaseCountBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkPipelineStageFlags stageMask,
+    std::shared_ptr<Allocator> allocator /* nullptr */, const Sharing& sharing /* default */):
+    Buffer(std::move(device), size, 0, // flags
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT |
             VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         Initializer(), sharing, std::move(allocator)),
     stageMask(stageMask)
+{}
+
+void BaseCountBuffer::readback(std::shared_ptr<CommandBuffer> cmdBuffer) const
+{
+    if (!hostBuffer)
+        hostBuffer = std::make_shared<DstTransferBuffer>(device, size);
+    cmdBuffer->pipelineBarrier(stageMask, VK_PIPELINE_STAGE_TRANSFER_BIT,
+        BufferMemoryBarrier(shared_from_this(), barrier::shaderWriteTransferRead));
+    cmdBuffer->copyBuffer(shared_from_this(), hostBuffer);
+}
+
+CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Sharing& sharing /* default */):
+    BaseCountBuffer(std::move(device), sizeof(uint32_t), stageMask, std::move(allocator), sharing)
 {}
 
 void CountBuffer::setValue(uint32_t value, std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
@@ -43,23 +56,12 @@ void CountBuffer::setValue(uint32_t value, std::shared_ptr<CommandBuffer> cmdBuf
         BufferMemoryBarrier(shared_from_this(), barrier::transferWriteShaderRead));
 }
 
-void CountBuffer::readback(std::shared_ptr<CommandBuffer> cmdBuffer) const
-{
-    if (!hostBuffer)
-        hostBuffer = std::make_shared<DstTransferBuffer>(device, size);
-    cmdBuffer->pipelineBarrier(stageMask, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        BufferMemoryBarrier(shared_from_this(), barrier::shaderWriteTransferRead));
-    cmdBuffer->copyBuffer(shared_from_this(), hostBuffer);
-}
-
 uint32_t CountBuffer::getValue() const noexcept
 {
-    void *data = hostBuffer->getMemory()->map();
-    MAGMA_ASSERT(data);
     uint32_t value = 0;
-    if (data)
+    if (auto data = hostBuffer->getMemory()->map())
     {
-        value = *reinterpret_cast<uint32_t *>(data);
+        value = *reinterpret_cast<const uint32_t *>(data);
         hostBuffer->getMemory()->unmap();
     }
     return value;
@@ -67,14 +69,8 @@ uint32_t CountBuffer::getValue() const noexcept
 
 DispatchCountBuffer::DispatchCountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Sharing& sharing /* default */):
-    Buffer(std::move(device), sizeof(uint32_t) * 3, // X, Y, Z
-        0, // flags
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT |
-            VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        Initializer(), sharing, std::move(allocator)),
-    stageMask(stageMask)
+    const Sharing& sharing /* default */) :
+    BaseCountBuffer(std::move(device), sizeof(uint32_t) * 3, stageMask, std::move(allocator), sharing)
 {}
 
 void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
@@ -87,25 +83,14 @@ void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
         BufferMemoryBarrier(shared_from_this(), barrier::transferWriteShaderRead));
 }
 
-void DispatchCountBuffer::readback(std::shared_ptr<CommandBuffer> cmdBuffer) const
-{
-    if (!hostBuffer)
-        hostBuffer = std::make_shared<DstTransferBuffer>(device, size);
-    cmdBuffer->pipelineBarrier(stageMask, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        BufferMemoryBarrier(shared_from_this(), barrier::shaderWriteTransferRead));
-    cmdBuffer->copyBuffer(shared_from_this(), hostBuffer);
-}
-
 std::array<uint32_t, 3> DispatchCountBuffer::getValues() const noexcept
 {
-    const uint32_t *data = reinterpret_cast<const uint32_t *>(hostBuffer->getMemory()->map());
-    MAGMA_ASSERT(data);
     std::array<uint32_t, 3> values = {};
-    if (data)
+    if (auto counts = reinterpret_cast<const uint32_t *>(hostBuffer->getMemory()->map()))
     {
-        values[0] = data[0];
-        values[1] = data[1];
-        values[2] = data[2];
+        values[0] = counts[0];
+        values[1] = counts[1];
+        values[2] = counts[2];
         hostBuffer->getMemory()->unmap();
     }
     return values;
