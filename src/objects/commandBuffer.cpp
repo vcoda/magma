@@ -351,7 +351,13 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<const Buffer>& srcBuffer, c
     VkBufferCopy bufferCopy;
     bufferCopy.srcOffset = srcOffset;
     bufferCopy.dstOffset = dstOffset;
-    bufferCopy.size = (VK_WHOLE_SIZE == size) ? dstBuffer->getSize() : size;
+    if (size < VK_WHOLE_SIZE)
+        bufferCopy.size = size;
+    else
+    {
+        MAGMA_ASSERT(srcBuffer->getSize() >= dstBuffer->getSize());
+        bufferCopy.size = dstBuffer->getSize();
+    }
     vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &bufferCopy);
     MAGMA_INUSE(srcBuffer);
     MAGMA_INUSE(dstBuffer);
