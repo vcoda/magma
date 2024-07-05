@@ -27,7 +27,7 @@ namespace magma
 CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */):
-    Buffer(std::move(device), sizeof(uint32_t) * 3, // Make it usable with vkCmdDispatchIndirect
+    Buffer(std::move(device), sizeof(uint32_t),
         0, // flags
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT |
             VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
