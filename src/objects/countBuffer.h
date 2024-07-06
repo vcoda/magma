@@ -22,7 +22,8 @@ namespace magma
 {
     class DstTransferBuffer;
 
-    /* Base class of count buffer. */
+    /* Base class of count buffer. Allows to read back
+       counter value from device to host for debugging. */
 
     class BaseCountBuffer : public Buffer
     {
@@ -40,8 +41,7 @@ namespace magma
         mutable std::shared_ptr<DstTransferBuffer> hostBuffer;
     };
 
-    /* 32-bit unsigned integer atomic counter. Allows to inspect
-       counter value by host for debugging purposes. */
+    /* 32-bit unsigned integer atomic counter. */
 
     class CountBuffer : public BaseCountBuffer
     {
