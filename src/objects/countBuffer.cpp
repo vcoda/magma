@@ -60,7 +60,7 @@ void CountBuffer::setValue(uint32_t value, std::shared_ptr<CommandBuffer> cmdBuf
 uint32_t CountBuffer::getValue() const noexcept
 {
     uint32_t value = 0;
-    if (auto data = hostBuffer->getMemory()->map())
+    if (void *data = hostBuffer->getMemory()->map())
     {
         value = *reinterpret_cast<const uint32_t *>(data);
         hostBuffer->getMemory()->unmap();
@@ -88,7 +88,7 @@ void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
 std::array<uint32_t, 3> DispatchCountBuffer::getValues() const noexcept
 {
     std::array<uint32_t, 3> values = {};
-    if (auto counts = reinterpret_cast<const uint32_t *>(hostBuffer->getMemory()->map()))
+    if (const uint32_t *counts = reinterpret_cast<const uint32_t *>(hostBuffer->getMemory()->map()))
     {
         values[0] = counts[0];
         values[1] = counts[1];
