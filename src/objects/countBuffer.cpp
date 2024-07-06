@@ -51,9 +51,10 @@ CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags st
 
 void CountBuffer::setValue(uint32_t value, std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
 {
-    cmdBuffer->fillBuffer(shared_from_this(), value);
+    auto self = shared_from_this();
+    cmdBuffer->fillBuffer(self, value);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, stageMask,
-        BufferMemoryBarrier(shared_from_this(), barrier::transferWriteShaderRead));
+        BufferMemoryBarrier(std::move(self), barrier::transferWriteShaderRead));
 }
 
 uint32_t CountBuffer::getValue() const noexcept
@@ -76,11 +77,12 @@ DispatchCountBuffer::DispatchCountBuffer(std::shared_ptr<Device> device, VkPipel
 void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
     std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
 {
-    cmdBuffer->fillBuffer(shared_from_this(), x, sizeof(uint32_t), 0);
-    cmdBuffer->fillBuffer(shared_from_this(), y, sizeof(uint32_t), sizeof(uint32_t));
-    cmdBuffer->fillBuffer(shared_from_this(), z, sizeof(uint32_t), sizeof(uint32_t) * 2);
+    auto self = shared_from_this();
+    cmdBuffer->fillBuffer(self, x, sizeof(uint32_t), 0);
+    cmdBuffer->fillBuffer(self, y, sizeof(uint32_t), sizeof(uint32_t));
+    cmdBuffer->fillBuffer(self, z, sizeof(uint32_t), sizeof(uint32_t) * 2);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, stageMask,
-        BufferMemoryBarrier(shared_from_this(), barrier::transferWriteShaderRead));
+        BufferMemoryBarrier(std::move(self), barrier::transferWriteShaderRead));
 }
 
 std::array<uint32_t, 3> DispatchCountBuffer::getValues() const noexcept
