@@ -31,7 +31,7 @@ namespace magma
         uint32_t getIndexCount() const noexcept;
 
     protected:
-        explicit BaseIndexBuffer(std::shared_ptr<Device> device,
+        BaseIndexBuffer(std::shared_ptr<Device> device,
             VkIndexType indexType,
             VkDeviceSize size,
             VkBufferUsageFlags usage,
