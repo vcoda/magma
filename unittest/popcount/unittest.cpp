@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "core/pch.h"
-#include "core/popCount.h"
+#include "core/popcount.h"
 
 int main()
 {
@@ -26,11 +26,11 @@ int main()
     constexpr uint64_t d = 0b0000000000000000000000000000000000000000000000000000000000000000;
     constexpr uint64_t e = 0b0101010101010101010101010101010101010101010101010101010101010101;
     constexpr uint64_t f = 0b1111111111111111111111111111111111111111111111111111111111111111;
-    std::cout << "Bit count: " << magma::core::popCount(a) << std::endl;
-    std::cout << "Bit count: " << magma::core::popCount(b) << std::endl;
-    std::cout << "Bit count: " << magma::core::popCount(c) << std::endl;
-    std::cout << "Bit count: " << magma::core::popCount(d) << std::endl;
-    std::cout << "Bit count: " << magma::core::popCount(e) << std::endl;
-    std::cout << "Bit count: " << magma::core::popCount(f) << std::endl;
+    std::cout << "Bit count: " << magma::core::popcount(a) << std::endl;
+    std::cout << "Bit count: " << magma::core::popcount(b) << std::endl;
+    std::cout << "Bit count: " << magma::core::popcount(c) << std::endl;
+    std::cout << "Bit count: " << magma::core::popcount(d) << std::endl;
+    std::cout << "Bit count: " << magma::core::popcount(e) << std::endl;
+    std::cout << "Bit count: " << magma::core::popcount(f) << std::endl;
     return 0;
 }
