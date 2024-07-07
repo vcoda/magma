@@ -52,7 +52,8 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     arrayLayers(arrayLayers),
     samples(samples),
     tiling(tiling),
-    usage(usage_| (optional.srcTransfer ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0)),
+    usage(usage_| (optional.srcTransfer ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0) |
+        (optional.storage ? VK_IMAGE_USAGE_STORAGE_BIT : 0)),
     viewFormats(optional.viewFormats)
 {
     setLayout(VK_IMAGE_LAYOUT_UNDEFINED);

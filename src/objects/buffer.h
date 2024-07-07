@@ -88,15 +88,23 @@ namespace magma
 
     struct Buffer::Initializer
     {
-        VkBufferCreateFlags flags = 0;
-        bool srcTransfer = false;
-        bool lazilyAllocated = false;
-        // VK_KHR_device_group
-        uint32_t deviceMask = 0;
-        // VK_KHR/EXT_buffer_device_address
-        bool deviceAddress = false;
-        bool deviceAddressCaptureReplay = false;
-        // VK_EXT_memory_priority
-        float memoryPriority = MAGMA_MEMORY_PRIORITY_DEFAULT;
+        VkBufferCreateFlags flags;
+        VkBool32 srcTransfer: 1;
+        VkBool32 storage: 1;
+        VkBool32 deviceAddress: 1; // VK_KHR_buffer_device_address
+        VkBool32 deviceAddressCaptureReplay: 1;
+        VkBool32 lazilyAllocated: 1;
+        uint32_t deviceMask; // VK_KHR_device_group
+        float memoryPriority; // VK_EXT_memory_priority
+        Initializer() noexcept:
+            flags(0),
+            srcTransfer(VK_FALSE),
+            storage(VK_FALSE),
+            deviceAddress(VK_FALSE),
+            deviceAddressCaptureReplay(VK_FALSE),
+            lazilyAllocated(VK_FALSE),
+            deviceMask(0),
+            memoryPriority(MAGMA_MEMORY_PRIORITY_DEFAULT)
+        {}
     };
 } // namespace magma

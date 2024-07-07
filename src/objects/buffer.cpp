@@ -38,13 +38,13 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     NonDispatchableResource(VK_OBJECT_TYPE_BUFFER, std::move(device_), size, sharing, allocator),
     flags(flags_| optional.flags),
-    usage(usage_|
+    usage(usage_| (optional.srcTransfer ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0) |
     #if defined(VK_KHR_buffer_device_address)
         (optional.deviceAddress ? VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR : 0) |
     #elif defined(VK_EXT_buffer_device_address)
         (optional.deviceAddress ? VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT : 0) |
     #endif
-        (optional.srcTransfer ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0))
+        (optional.storage ? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT : 0))
 {
     VkBufferCreateInfo bufferInfo;
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
