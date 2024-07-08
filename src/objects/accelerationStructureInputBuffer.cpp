@@ -28,7 +28,7 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_p
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Buffer(std::move(device), size, 0,
         VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
-            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {}
@@ -40,7 +40,7 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_p
     CopyMemoryFunction copyFn /* nullptr */):
     Buffer(cmdBuffer->getDevice(), size, 0,
         VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
-            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, allocator)
 {
@@ -55,7 +55,7 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_p
     const Sharing& sharing /* default */):
     Buffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), 0,
         VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
-            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {
