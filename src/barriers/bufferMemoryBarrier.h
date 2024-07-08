@@ -49,9 +49,12 @@ namespace magma
 
     namespace barrier
     {
-        extern const BufferMemoryBarrier hostWriteTransferRead;
-        extern const BufferMemoryBarrier transferWriteHostRead;
-        extern const BufferMemoryBarrier transferWriteShaderRead;
-        extern const BufferMemoryBarrier shaderWriteTransferRead;
+        namespace buffer
+        {
+            extern const BufferMemoryBarrier hostWriteTransferRead;
+            extern const BufferMemoryBarrier transferWriteHostRead;
+            extern const BufferMemoryBarrier transferWriteShaderRead;
+            extern const BufferMemoryBarrier shaderWriteTransferRead;
+        } // namespace buffer
     } // namespace barrier
 } // namespace magma

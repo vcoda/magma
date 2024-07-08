@@ -45,4 +45,12 @@ namespace magma
         std::shared_ptr<Image> image; // Image layout will be updated by CommandBuffer::pipelineBarrier()
         friend class CommandBuffer;
     };
+
+    namespace barrier
+    {
+        namespace image
+        {
+            // TODO
+        } // namespace image
+    } // namespace barrier
 } // namespace magma

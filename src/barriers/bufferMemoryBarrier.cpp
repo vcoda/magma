@@ -71,9 +71,12 @@ BufferMemoryBarrier::BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer_, 
 
 namespace barrier
 {
+namespace buffer
+{
 const BufferMemoryBarrier hostWriteTransferRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
 const BufferMemoryBarrier transferWriteHostRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_HOST_READ_BIT);
 const BufferMemoryBarrier transferWriteShaderRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
 const BufferMemoryBarrier shaderWriteTransferRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
+} // namespace buffer
 } // namespace barrier
 } // namespace magma
