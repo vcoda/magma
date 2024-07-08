@@ -39,7 +39,7 @@ constexpr AccelerationStructureInstance::AccelerationStructureInstance() noexcep
         0xFF, // mask
         0, // instanceShaderBindingTableRecordOffset
         0, // flags
-        0 // accelerationStructureReference
+        0ull // accelerationStructureReference
     }
 {}
 #endif // VK_KHR_acceleration_structure
@@ -74,7 +74,7 @@ constexpr AccelerationStructureMatrixMotionInstance::AccelerationStructureMatrix
         0xFF, // mask
         0, // instanceShaderBindingTableRecordOffset
         0, // flags
-        0 // accelerationStructureReference
+        0ull // accelerationStructureReference
     }
 {}
 
@@ -86,7 +86,7 @@ constexpr AccelerationStructureSRTMotionInstance::AccelerationStructureSRTMotion
         0xFF, // mask
         0, // instanceShaderBindingTableRecordOffset
         0, // flags
-        0 // accelerationStructureReference
+        0ull // accelerationStructureReference
     }
 {}
 
