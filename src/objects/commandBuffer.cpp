@@ -875,7 +875,6 @@ void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<Top
     const AccelerationStructureGeometry& instances, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
 {
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
-    VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
     buildGeometryInfo.pNext = nullptr;
     buildGeometryInfo.type = accelerationStructure->getType();
@@ -883,15 +882,12 @@ void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<Top
     buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
     buildGeometryInfo.dstAccelerationStructure = accelerationStructure->getHandle();
-    buildGeometryInfo.geometryCount = 1;
+    buildGeometryInfo.geometryCount = 1; // If type is VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR, geometryCount must be 1
     buildGeometryInfo.pGeometries = &instances;
     buildGeometryInfo.ppGeometries = nullptr;
     buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
-    buildRangeInfo.primitiveCount = 1; // For VK_GEOMETRY_TYPE_INSTANCES this is the number of acceleration structures
-    buildRangeInfo.primitiveOffset = 0;
-    buildRangeInfo.firstVertex = 0;
-    buildRangeInfo.transformOffset = 0;
-    const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos[] = {&buildRangeInfo};
+    VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo = {};
+    buildRangeInfo.primitiveCount = instances.primitiveCount; // This is the number of instances
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
     {
