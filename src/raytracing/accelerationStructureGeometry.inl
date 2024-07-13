@@ -1,55 +1,38 @@
 namespace magma
 {
-constexpr AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles() noexcept:
-    VkAccelerationStructureGeometryTrianglesDataKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR,
-        nullptr, // pNext
-        VK_FORMAT_UNDEFINED,
-        MAGMA_NULL, // vertexData
-        0, // vertexStride
-        0, // maxVertex
-        VK_INDEX_TYPE_NONE_KHR,
-        MAGMA_NULL, // indexData
-        MAGMA_NULL // transformData
-    },
-    primitiveCount(0)
-{}
-
-template<class InputBuffer>
-inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(
-    VkFormat vertexFormat, const InputBuffer& vertices,
-    const InputBuffer& transform /* nullptr */) noexcept:
-    VkAccelerationStructureGeometryTrianglesDataKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR,
-        nullptr, // pNext
-        vertexFormat,
-        address(vertices),
-        VkDeviceSize(Format(vertexFormat).size()), // vertexStride
-        uint32_t(vertices->getSize() / vertexStride - 1), // maxVertex
-        VK_INDEX_TYPE_NONE_KHR,
-        MAGMA_NULL, // indexData
-        address(transform)
-    },
-    primitiveCount((maxVertex + 1) / 3)
-{}
-
-template<class InputBuffer>
-inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(
-    VkFormat vertexFormat, const InputBuffer& vertices,
-    VkIndexType indexType, const InputBuffer& indices,
-    const InputBuffer& transform /* nullptr */) noexcept:
-    VkAccelerationStructureGeometryTrianglesDataKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR,
-        nullptr, // pNext
-        vertexFormat,
-        address(vertices),
-        VkDeviceSize(Format(vertexFormat).size()), // vertexStride
-        uint32_t(vertices->getSize() / vertexStride - 1), // maxVertex
-        indexType,
-        address(indices),
-        address(transform)
-    }
+inline AccelerationStructureGeometry::AccelerationStructureGeometry(VkGeometryTypeKHR geometryType_) noexcept
 {
+    sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+    pNext = nullptr;
+    geometryType = geometryType_;
+    flags = 0;
+}
+
+template<class Buffer>
+inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(VkFormat vertexFormat, const Buffer& vertices,
+    const Buffer& transform /* nullptr */) noexcept:
+    AccelerationStructureGeometryTriangles()
+{
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.vertexData.deviceAddress = vertices->getDeviceAddress();
+    geometry.triangles.vertexStride = (VkDeviceSize)Format(vertexFormat).size(),
+    geometry.triangles.maxVertex = uint32_t(vertices->getSize() / geometry.triangles.vertexStride - 1),
+    geometry.triangles.transformData = address(transform);
+    primitiveCount = (geometry.triangles.maxVertex + 1) / 3;
+}
+
+template<class Buffer>
+inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(VkFormat vertexFormat, const Buffer& vertices,
+    VkIndexType indexType, const Buffer& indices, const Buffer& transform /* nullptr */) noexcept:
+    AccelerationStructureGeometryTriangles()
+{
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.vertexData.deviceAddress = vertices->getDeviceAddress();
+    geometry.triangles.vertexStride = (VkDeviceSize)Format(vertexFormat).size(),
+    geometry.triangles.maxVertex = uint32_t(vertices->getSize() / geometry.triangles.vertexStride - 1),
+    geometry.triangles.transformData = address(transform);
+    geometry.triangles.indexType = indexType;
+    geometry.triangles.indexData.deviceAddress = indices->getDeviceAddress();
     const size_t indexSize = getIndexSize();
     MAGMA_ASSERT(indices->getSize() % indexSize == 0);
     const VkDeviceSize indexCount = indices->getSize() / indexSize;
@@ -57,117 +40,38 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
     primitiveCount = static_cast<uint32_t>(indexCount / 3);
 }
 
-inline size_t AccelerationStructureGeometryTriangles::getIndexSize() const noexcept
+inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs() noexcept:
+    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR)
 {
-    switch (indexType)
-    {
-    case VK_INDEX_TYPE_UINT16: return sizeof(uint16_t);
-    case VK_INDEX_TYPE_UINT32: return sizeof(uint32_t);
-#ifdef VK_KHR_index_type_uint8
-    case VK_INDEX_TYPE_UINT8_KHR: return sizeof(uint8_t);
-#endif
-    case VK_INDEX_TYPE_NONE_KHR: return 0;
-    }
-    MAGMA_ASSERT(false);
-    return 0;
+    geometry.aabbs.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR;
+    geometry.aabbs.pNext = nullptr;
+    geometry.aabbs.data.deviceAddress = MAGMA_NULL;
+    geometry.aabbs.stride = 0;
 }
 
-inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs() noexcept:
-    VkAccelerationStructureGeometryAabbsDataKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR,
-        nullptr, // pNext
-        MAGMA_NULL, // data
-        0 // stride
-    },
-    primitiveCount(0)
-{}
-
-template<class InputBuffer>
-inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(const InputBuffer& aabbsData,
-    VkDeviceSize stride /* sizeof(VkAabbPositionsKHR) */) noexcept:
-    VkAccelerationStructureGeometryAabbsDataKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR,
-        nullptr, // pNext
-        address(aabbsData),
-        stride // The stride must be a multiple of 8
-    },
-    primitiveCount(uint32_t(aabbsData->getSize() / sizeof(VkAabbPositionsKHR)))
-{}
+template<class Buffer>
+inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(const Buffer& aabbs, VkDeviceSize stride /* sizeof(VkAabbPositionsKHR) */) noexcept:
+    AccelerationStructureGeometryAabbs()
+{
+    geometry.aabbs.data.deviceAddress = aabbs->getDeviceAddress();
+    geometry.aabbs.stride = stride;
+    primitiveCount = aabbsData->getSize() / stride;
+}
 
 inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInstances() noexcept:
-    VkAccelerationStructureGeometryInstancesDataKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR,
-        nullptr, // pNext
-        VK_FALSE, // arrayOfPointers;
-        MAGMA_NULL // data
-    },
-    primitiveCount(0)
-{}
-
-template<class InputBuffer>
-inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInstances(const InputBuffer& instances) noexcept:
-    VkAccelerationStructureGeometryInstancesDataKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR,
-        nullptr, // pNext
-        VK_FALSE,
-        address(instances)
-    },
-    primitiveCount(instances->getInstanceCount())
-{}
-
-inline AccelerationStructureGeometry::AccelerationStructureGeometry() noexcept:
-    VkAccelerationStructureGeometryKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
-        nullptr, // pNext
-        VK_GEOMETRY_TYPE_MAX_ENUM_KHR,
-        VkAccelerationStructureGeometryDataKHR{},
-        0 // flags
-    },
-    primitiveCount(0)
-{}
-
-inline AccelerationStructureGeometry::AccelerationStructureGeometry(const AccelerationStructureGeometryTriangles& triangles,
-    VkGeometryFlagsKHR flags /* VK_GEOMETRY_OPAQUE_BIT_KHR */,
-    const StructureChain& extendedInfo /* default */) noexcept:
-    VkAccelerationStructureGeometryKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
-        extendedInfo.headNode(),
-        VK_GEOMETRY_TYPE_TRIANGLES_KHR,
-        VkAccelerationStructureGeometryDataKHR{},
-        flags
-    },
-    primitiveCount(triangles.primitiveCount)
+    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_INSTANCES_KHR)
 {
-    geometry.triangles = triangles;
+    geometry.instances.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
+    geometry.instances.pNext = nullptr;
+    geometry.instances.arrayOfPointers = VK_FALSE;
+    geometry.instances.data.deviceAddress = MAGMA_NULL;
 }
 
-inline AccelerationStructureGeometry::AccelerationStructureGeometry(const AccelerationStructureGeometryAabbs& aabbs,
-    VkGeometryFlagsKHR flags /* VK_GEOMETRY_OPAQUE_BIT_KHR */,
-    const StructureChain& extendedInfo /* default */) noexcept:
-    VkAccelerationStructureGeometryKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
-        extendedInfo.headNode(),
-        VK_GEOMETRY_TYPE_AABBS_KHR,
-        VkAccelerationStructureGeometryDataKHR{},
-        flags
-    },
-    primitiveCount(aabbs.primitiveCount)
+template<class Buffer>
+inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInstances(const Buffer& instances) noexcept:
+    AccelerationStructureGeometryInstances()
 {
-    geometry.aabbs = aabbs;
+    geometry.instances.data.deviceAddress = instances->getDeviceAddress();
+    primitiveCount = instances->getInstanceCount();
 }
-
-inline AccelerationStructureGeometry::AccelerationStructureGeometry(const AccelerationStructureGeometryInstances& instances,
-    VkGeometryFlagsKHR flags /* VK_GEOMETRY_OPAQUE_BIT_KHR */,
-    const StructureChain& extendedInfo /* default */) noexcept:
-    VkAccelerationStructureGeometryKHR{
-        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
-        extendedInfo.headNode(),
-        VK_GEOMETRY_TYPE_INSTANCES_KHR,
-        VkAccelerationStructureGeometryDataKHR{},
-        flags
-    },
-    primitiveCount(instances.primitiveCount)
-{
-    geometry.instances = instances;
-}
-} // namespace magma
+}// namespace magma

@@ -179,6 +179,8 @@ SRC_OBJS= \
 	src/platform/xcbSurface.o \
 	src/platform/xlibSurface.o \
 	\
+	src/raytracing/accelerationStructureGeometry.o \
+	\
 	src/renderpass/subpass.o \
 	\
 	src/shaders/pipelineShaderStage.o \

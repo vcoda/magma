@@ -571,6 +571,7 @@
     <ClCompile Include="..\..\src\platform\externalSemaphore.cpp" />
     <ClCompile Include="..\..\src\platform\win32ExternalSemaphore.cpp" />
     <ClCompile Include="..\..\src\platform\win32Surface.cpp" />
+    <ClCompile Include="..\..\src\raytracing\accelerationStructureGeometry.cpp" />
     <ClCompile Include="..\..\src\renderpass\subpass.cpp" />
     <ClCompile Include="..\..\src\shaders\pipelineShaderStage.cpp" />
     <ClCompile Include="..\..\src\shaders\shaderReflection.cpp" />

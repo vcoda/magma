@@ -24,65 +24,49 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* Structure specifying geometries to be built into an acceleration structure. */
+
+    struct AccelerationStructureGeometry : VkAccelerationStructureGeometryKHR
+    {
+        AccelerationStructureGeometry(VkGeometryTypeKHR geometryType) noexcept;
+        uint32_t primitiveCount = 0;
+    };
+
     /* Triangle geometry in a bottom-level acceleration structure. */
 
-    struct AccelerationStructureGeometryTriangles : VkAccelerationStructureGeometryTrianglesDataKHR
+    struct AccelerationStructureGeometryTriangles : AccelerationStructureGeometry
     {
-        constexpr AccelerationStructureGeometryTriangles() noexcept;
-        template<class InputBuffer>
+        AccelerationStructureGeometryTriangles() noexcept;
+        template<class Buffer>
         explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
-            const InputBuffer& vertices,
-            const InputBuffer& transform = nullptr) noexcept;
-        template<class InputBuffer>
+            const Buffer& vertices,
+            const Buffer& transform = nullptr) noexcept;
+        template<class Buffer>
         explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
-            const InputBuffer& vertices,
+            const Buffer& vertices,
             VkIndexType indexType,
-            const InputBuffer& indices,
-            const InputBuffer& transform = nullptr) noexcept;
+            const Buffer& indices,
+            const Buffer& transform = nullptr) noexcept;
         size_t getIndexSize() const noexcept;
-
-        uint32_t primitiveCount;
     };
 
     /* Axis-aligned bounding box geometry in a bottom-level acceleration structure. */
 
-    struct AccelerationStructureGeometryAabbs : VkAccelerationStructureGeometryAabbsDataKHR
+    struct AccelerationStructureGeometryAabbs : AccelerationStructureGeometry
     {
         AccelerationStructureGeometryAabbs() noexcept;
-        template<class InputBuffer>
-        explicit AccelerationStructureGeometryAabbs(const InputBuffer& aabbsData,
+        template<class Buffer>
+        explicit AccelerationStructureGeometryAabbs(const Buffer& aabbs,
             VkDeviceSize stride = sizeof(VkAabbPositionsKHR)) noexcept;
-
-        uint32_t primitiveCount;
     };
 
     /* Geometry consisting of instances of other acceleration structures. */
 
-    struct AccelerationStructureGeometryInstances : VkAccelerationStructureGeometryInstancesDataKHR
+    struct AccelerationStructureGeometryInstances : AccelerationStructureGeometry
     {
         AccelerationStructureGeometryInstances() noexcept;
-        template<class InputBuffer>
-        explicit AccelerationStructureGeometryInstances(const InputBuffer& instances) noexcept;
-
-        uint32_t primitiveCount;
-    };
-
-    /* Geometries to be built into an acceleration structure. */
-
-    struct AccelerationStructureGeometry : VkAccelerationStructureGeometryKHR
-    {
-        AccelerationStructureGeometry() noexcept;
-        explicit AccelerationStructureGeometry(const AccelerationStructureGeometryTriangles& triangles,
-            VkGeometryFlagsKHR flags = VK_GEOMETRY_OPAQUE_BIT_KHR,
-            const StructureChain& extendedInfo = StructureChain()) noexcept;
-        explicit AccelerationStructureGeometry(const AccelerationStructureGeometryAabbs& aabbs,
-            VkGeometryFlagsKHR flags = 0,
-            const StructureChain& extendedInfo = StructureChain()) noexcept;
-        explicit AccelerationStructureGeometry(const AccelerationStructureGeometryInstances& instances,
-            VkGeometryFlagsKHR flags = 0,
-            const StructureChain& extendedInfo = StructureChain()) noexcept;
-
-        uint32_t primitiveCount;
+        template<class Buffer>
+        explicit AccelerationStructureGeometryInstances(const Buffer& instances) noexcept;
     };
 } // namespace magma
 
