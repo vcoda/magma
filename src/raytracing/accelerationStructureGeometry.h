@@ -40,13 +40,15 @@ namespace magma
         template<class Buffer>
         explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
             const Buffer& vertices,
-            const Buffer& transform = nullptr) noexcept;
+            const Buffer& transform = nullptr,
+            VkGeometryFlagsKHR flags = 0) noexcept;
         template<class Buffer>
         explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
             const Buffer& vertices,
             VkIndexType indexType,
             const Buffer& indices,
-            const Buffer& transform = nullptr) noexcept;
+            const Buffer& transform = nullptr,
+            VkGeometryFlagsKHR flags = 0) noexcept;
         size_t getIndexSize() const noexcept;
     };
 
@@ -57,6 +59,7 @@ namespace magma
         AccelerationStructureGeometryAabbs() noexcept;
         template<class Buffer>
         explicit AccelerationStructureGeometryAabbs(const Buffer& aabbs,
+            VkGeometryFlagsKHR flags = 0,
             VkDeviceSize stride = sizeof(VkAabbPositionsKHR)) noexcept;
     };
 
@@ -66,7 +69,8 @@ namespace magma
     {
         AccelerationStructureGeometryInstances() noexcept;
         template<class Buffer>
-        explicit AccelerationStructureGeometryInstances(const Buffer& instances) noexcept;
+        explicit AccelerationStructureGeometryInstances(const Buffer& instances,
+            VkGeometryFlagsKHR flags = 0) noexcept;
     };
 } // namespace magma
 
