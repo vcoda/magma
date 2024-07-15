@@ -109,6 +109,9 @@
     <Filter Include="Header Files\raytracing">
       <UniqueIdentifier>{6249796a-ebcc-40e0-9c5f-231733443422}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\raytracing">
+      <UniqueIdentifier>{9a5ffc34-27ad-476c-a069-8d038fb4ab58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\core\hashing\fnv1.h">
@@ -1365,7 +1368,7 @@
       <Filter>Source Files\misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\raytracing\accelerationStructureGeometry.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\raytracing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
