@@ -51,10 +51,6 @@ namespace magma
         VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
         VkDeviceAddress getDeviceAddress() const noexcept;
         VkDeviceSize getProperty(VkQueryType queryType) const noexcept;
-        bool topLevel() const noexcept { return (VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR == structureType); }
-        bool bottomLevel() const noexcept { return (VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR == structureType); }
-        bool hostBuild() const noexcept { return (VK_ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_KHR == buildType); }
-        bool deviceBuild() const noexcept { return (VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR == buildType); }
         void build(const std::forward_list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
             void *scratchBuffer,
