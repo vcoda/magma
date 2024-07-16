@@ -93,7 +93,6 @@ AccelerationStructure::~AccelerationStructure()
     vkDestroyAccelerationStructureKHR(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-#if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
 VkDeviceAddress AccelerationStructure::getDeviceAddress() const noexcept
 {
     VkAccelerationStructureDeviceAddressInfoKHR deviceAddressInfo;
@@ -103,7 +102,6 @@ VkDeviceAddress AccelerationStructure::getDeviceAddress() const noexcept
     MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureDeviceAddressKHR);
     return vkGetAccelerationStructureDeviceAddressKHR(getNativeDevice(), &deviceAddressInfo);
 }
-#endif // VK_KHR_buffer_device_address || VK_EXT_buffer_device_address
 
 VkDeviceSize AccelerationStructure::getProperty(VkQueryType queryType) const noexcept
 {

@@ -49,9 +49,7 @@ namespace magma
         VkBuildAccelerationStructureFlagsKHR getBuildFlags() const noexcept { return buildFlags; }
         VkDeviceSize getBuildScratchSize() const noexcept { return buildScratchSize; }
         VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
-    #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
         VkDeviceAddress getDeviceAddress() const noexcept;
-    #endif
         VkDeviceSize getProperty(VkQueryType queryType) const noexcept;
         bool topLevel() const noexcept { return (VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR == structureType); }
         bool bottomLevel() const noexcept { return (VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR == structureType); }
