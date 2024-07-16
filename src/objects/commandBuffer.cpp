@@ -793,10 +793,11 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Acceleratio
     buildGeometryInfo.pGeometries = &geometry;
     buildGeometryInfo.ppGeometries = nullptr;
     buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
+    VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo;
     buildRangeInfo.primitiveCount = geometry.primitiveCount;
     buildRangeInfo.primitiveOffset = primitiveOffset;
     buildRangeInfo.firstVertex = firstVertex;
-    buildRangeInfo.transformOffset = sizeof(VkTransformMatrixKHR) * transformIndex;
+    buildRangeInfo.transformOffset = transformIndex * sizeof(VkTransformMatrixKHR);
     const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos[] = {&buildRangeInfo};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
@@ -880,7 +881,7 @@ void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<Top
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
     buildGeometryInfo.pNext = nullptr;
-    buildGeometryInfo.type = accelerationStructure->getType();
+    buildGeometryInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
     buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
     buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;

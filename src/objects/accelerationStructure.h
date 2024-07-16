@@ -97,9 +97,9 @@ namespace magma
     protected:
         AccelerationStructure(std::shared_ptr<Device> device,
             VkAccelerationStructureTypeKHR structureType,
+            VkAccelerationStructureCreateFlagsKHR flags,
             VkAccelerationStructureBuildTypeKHR buildType,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
-            VkAccelerationStructureCreateFlagsKHR flags,
             const std::forward_list<AccelerationStructureGeometry>& geometries,
             std::shared_ptr<Allocator> allocator,
             const StructureChain& extendedInfo);
@@ -107,9 +107,9 @@ namespace magma
         VkAccelerationStructureTypeKHR structureType;
 
     private:
+        const VkAccelerationStructureCreateFlagsKHR flags;
         const VkAccelerationStructureBuildTypeKHR buildType;
         const VkBuildAccelerationStructureFlagsKHR buildFlags;
-        const VkAccelerationStructureCreateFlagsKHR flags;
         VkDeviceSize buildScratchSize;
         VkDeviceSize updateScratchSize;
         std::unique_ptr<Buffer> buffer;
