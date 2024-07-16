@@ -803,6 +803,7 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Acceleratio
     {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos);
         MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
     }
 }
 
@@ -833,6 +834,7 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Acceleratio
     {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos.data());
         MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
     }
 }
 
@@ -867,6 +869,8 @@ void CommandBuffer::buildAccelerationStructureIndirect(const std::shared_ptr<Acc
     {
         vkCmdBuildAccelerationStructuresIndirectKHR(handle, 1, &buildGeometryInfo, indirectDeviceAddresses, &indirectStride, maxPrimitiveCounts);
         MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
+        MAGMA_INUSE(indirectBuildRanges);
     }
 }
 
@@ -893,6 +897,7 @@ void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<Top
     {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos.data());
         MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
     }
 }
 
@@ -923,6 +928,7 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos.data());
         MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
     }
 }
 
@@ -953,6 +959,7 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos.data());
         MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
     }
 }
 #endif // VK_KHR_acceleration_structure
