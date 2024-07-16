@@ -788,7 +788,7 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Acceleratio
     buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
     buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
-    buildGeometryInfo.dstAccelerationStructure = accelerationStructure->getHandle();
+    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
     buildGeometryInfo.geometryCount = 1;
     buildGeometryInfo.pGeometries = &geometry;
     buildGeometryInfo.ppGeometries = nullptr;
@@ -824,7 +824,7 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Acceleratio
     buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
     buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
-    buildGeometryInfo.dstAccelerationStructure = accelerationStructure->getHandle();
+    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
     buildGeometryInfo.geometryCount = geometryPointers.size();
     buildGeometryInfo.pGeometries = nullptr;
     buildGeometryInfo.ppGeometries = geometryPointers;
@@ -858,7 +858,7 @@ void CommandBuffer::buildAccelerationStructureIndirect(const std::shared_ptr<Acc
     buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
     buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
-    buildGeometryInfo.dstAccelerationStructure = accelerationStructure->getHandle();
+    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
     buildGeometryInfo.geometryCount = geometryPointers.size();
     buildGeometryInfo.pGeometries = nullptr;
     buildGeometryInfo.ppGeometries = geometryPointers;
@@ -885,7 +885,7 @@ void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<Top
     buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
     buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
-    buildGeometryInfo.dstAccelerationStructure = accelerationStructure->getHandle();
+    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
     buildGeometryInfo.geometryCount = 1; // If type is VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR, geometryCount must be 1
     buildGeometryInfo.pGeometries = &instances;
     buildGeometryInfo.ppGeometries = nullptr;
@@ -912,8 +912,8 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     buildGeometryInfo.type = accelerationStructure->getType();
     buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
     buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR;
-    buildGeometryInfo.srcAccelerationStructure = accelerationStructure->getHandle();
-    buildGeometryInfo.dstAccelerationStructure = accelerationStructure->getHandle();
+    buildGeometryInfo.srcAccelerationStructure = *accelerationStructure;
+    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
     buildGeometryInfo.geometryCount = 1;
     buildGeometryInfo.pGeometries = &geometry;
     buildGeometryInfo.ppGeometries = nullptr;
@@ -948,8 +948,8 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     buildGeometryInfo.type = accelerationStructure->getType();
     buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
     buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR;
-    buildGeometryInfo.srcAccelerationStructure = accelerationStructure->getHandle();
-    buildGeometryInfo.dstAccelerationStructure = accelerationStructure->getHandle();
+    buildGeometryInfo.srcAccelerationStructure = *accelerationStructure;
+    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
     buildGeometryInfo.geometryCount = geometryPointers.size();
     buildGeometryInfo.pGeometries = nullptr;
     buildGeometryInfo.ppGeometries = geometryPointers;
