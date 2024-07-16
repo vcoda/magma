@@ -779,10 +779,9 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
 #ifdef VK_KHR_acceleration_structure
 void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
     const AccelerationStructureGeometry& geometry, const std::shared_ptr<Buffer>& scratchBuffer,
-    uint32_t transformIndex /* 0 */, uint32_t primitiveOffset /* 0 */, uint32_t firstVertex /* 0 */) noexcept
+    uint32_t primitiveOffset /* 0 */, uint32_t firstVertex /* 0 */, uint32_t transformIndex /* 0 */) noexcept
 {
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
-    VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
     buildGeometryInfo.pNext = nullptr;
     buildGeometryInfo.type = accelerationStructure->getType();

@@ -488,9 +488,9 @@ namespace magma
         void buildAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
             const AccelerationStructureGeometry& geometry,
             const std::shared_ptr<Buffer>& scratchBuffer,
-            uint32_t transformIndex = 0,
             uint32_t primitiveOffset = 0,
-            uint32_t firstVertex = 0) noexcept;
+            uint32_t firstVertex = 0,
+            uint32_t transformIndex = 0) noexcept;
         void buildAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
             const std::forward_list<AccelerationStructureGeometry>& geometries,
             const std::shared_ptr<Buffer>& scratchBuffer,
