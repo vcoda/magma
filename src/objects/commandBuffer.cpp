@@ -904,10 +904,9 @@ void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<Top
 
 void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
     const AccelerationStructureGeometry& geometry, const std::shared_ptr<Buffer>& scratchBuffer,
-    uint32_t transformIndex /* 0 */, uint32_t primitiveOffset /* 0 */, uint32_t firstVertex /* 0 */) noexcept
+    uint32_t primitiveOffset /* 0 */, uint32_t firstVertex /* 0 */, uint32_t transformIndex /* 0 */) noexcept
 {
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
-    VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
     buildGeometryInfo.pNext = nullptr;
     buildGeometryInfo.type = accelerationStructure->getType();
@@ -919,10 +918,11 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     buildGeometryInfo.pGeometries = &geometry;
     buildGeometryInfo.ppGeometries = nullptr;
     buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
+    VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo;
     buildRangeInfo.primitiveCount = geometry.primitiveCount;
     buildRangeInfo.primitiveOffset = primitiveOffset;
     buildRangeInfo.firstVertex = firstVertex;
-    buildRangeInfo.transformOffset = sizeof(VkTransformMatrixKHR) * transformIndex;
+    buildRangeInfo.transformOffset = transformIndex * sizeof(VkTransformMatrixKHR);
     std::array<const VkAccelerationStructureBuildRangeInfoKHR *, 1> buildRangeInfos = {&buildRangeInfo};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
