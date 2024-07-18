@@ -798,11 +798,11 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Acceleratio
     buildRangeInfo.primitiveOffset = primitiveOffset;
     buildRangeInfo.firstVertex = firstVertex;
     buildRangeInfo.transformOffset = transformIndex * sizeof(VkTransformMatrixKHR);
-    const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos[] = {&buildRangeInfo};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
     {
-        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos);
+        const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = &buildRangeInfo;
+        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
     }
@@ -829,11 +829,11 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<Acceleratio
     buildGeometryInfo.pGeometries = nullptr;
     buildGeometryInfo.ppGeometries = geometryPointers;
     buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
-    std::array<const VkAccelerationStructureBuildRangeInfoKHR *, 1> buildRangeInfos = {buildRanges.data()};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
     {
-        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos.data());
+        const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = buildRanges.data();
+        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
     }
@@ -864,11 +864,11 @@ void CommandBuffer::buildAccelerationStructureIndirect(const std::shared_ptr<Acc
     buildGeometryInfo.ppGeometries = geometryPointers;
     buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
     const VkDeviceAddress indirectDeviceAddresses[] = {indirectBuildRanges->getDeviceAddress()};
-    const uint32_t *maxPrimitiveCounts[] = {primitiveCounts};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresIndirectKHR);
     if (vkCmdBuildAccelerationStructuresIndirectKHR)
     {
-        vkCmdBuildAccelerationStructuresIndirectKHR(handle, 1, &buildGeometryInfo, indirectDeviceAddresses, &indirectStride, maxPrimitiveCounts);
+        const uint32_t *maxPrimitiveCounts = primitiveCounts;
+        vkCmdBuildAccelerationStructuresIndirectKHR(handle, 1, &buildGeometryInfo, indirectDeviceAddresses, &indirectStride, &maxPrimitiveCounts);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
         MAGMA_INUSE(indirectBuildRanges);
@@ -890,13 +890,16 @@ void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<Top
     buildGeometryInfo.pGeometries = &instances;
     buildGeometryInfo.ppGeometries = nullptr;
     buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
-    VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo = {};
+    VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo;
     buildRangeInfo.primitiveCount = instances.primitiveCount; // This is the number of instances
-    std::array<const VkAccelerationStructureBuildRangeInfoKHR *, 1> buildRangeInfos = {&buildRangeInfo};
+    buildRangeInfo.primitiveOffset = 0;
+    buildRangeInfo.firstVertex = 0;
+    buildRangeInfo.transformOffset = 0;
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
     {
-        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos.data());
+        const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = &buildRangeInfo;
+        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
     }
@@ -923,11 +926,11 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     buildRangeInfo.primitiveOffset = primitiveOffset;
     buildRangeInfo.firstVertex = firstVertex;
     buildRangeInfo.transformOffset = transformIndex * sizeof(VkTransformMatrixKHR);
-    std::array<const VkAccelerationStructureBuildRangeInfoKHR *, 1> buildRangeInfos = {&buildRangeInfo};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
     {
-        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos.data());
+        const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = &buildRangeInfo;
+        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
     }
@@ -954,11 +957,11 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     buildGeometryInfo.pGeometries = nullptr;
     buildGeometryInfo.ppGeometries = geometryPointers;
     buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
-    std::array<const VkAccelerationStructureBuildRangeInfoKHR *, 1> buildRangeInfos = {buildRanges.data()};
     MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
     if (vkCmdBuildAccelerationStructuresKHR)
     {
-        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, buildRangeInfos.data());
+        const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = buildRanges.data();
+        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
     }
