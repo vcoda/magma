@@ -876,7 +876,7 @@ void CommandBuffer::buildAccelerationStructureIndirect(const std::shared_ptr<Acc
 }
 
 void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
-    const AccelerationStructureGeometry& instances, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
+    const AccelerationStructureGeometryInstances& instances, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
 {
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;

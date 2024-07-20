@@ -58,6 +58,7 @@ namespace magma
     class TopLevelAccelerationStructure;
     class AccelerationStructureQuery;
     struct AccelerationStructureGeometry;
+    struct AccelerationStructureGeometryInstances;
     struct AccelerationStructureBuildRange;
 #endif
 #ifdef VK_KHR_ray_tracing_pipeline
@@ -501,7 +502,7 @@ namespace magma
             const std::shared_ptr<const Buffer>& indirectBuildRanges,
             uint32_t indirectStride) noexcept;
         void buildTopLevelAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
-            const AccelerationStructureGeometry& instances,
+            const AccelerationStructureGeometryInstances& instances,
             const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
         void updateAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
             const AccelerationStructureGeometry& geometry,
