@@ -78,9 +78,13 @@ namespace magma
     public:
         explicit AccelerationStructureStorageBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
+            VkAccelerationStructureBuildTypeKHR buildType,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
+
+    private:
+        static VkMemoryPropertyFlags getMemoryFlags(VkAccelerationStructureBuildTypeKHR buildType);
     };
 #endif // VK_KHR_acceleration_structure
 } // namespace magma
