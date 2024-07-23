@@ -8,6 +8,36 @@ inline AccelerationStructureGeometry::AccelerationStructureGeometry(VkGeometryTy
     flags = 0;
 }
 
+inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(VkFormat vertexFormat, const void *vertices,
+    uint32_t maxVertex, const void *transform /* nullptr */, VkGeometryFlagsKHR flags_ /* 0 */) noexcept:
+    AccelerationStructureGeometryTriangles()
+{
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.vertexData.hostAddress = vertices;
+    geometry.triangles.vertexStride = (VkDeviceSize)Format(vertexFormat).size(),
+    geometry.triangles.maxVertex = maxVertex;
+    geometry.triangles.transformData.hostAddress = transform;
+    flags = flags_;
+    primitiveCount = (geometry.triangles.maxVertex + 1) / 3;
+}
+
+inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(VkFormat vertexFormat, const void *vertices,
+    uint32_t maxVertex, VkIndexType indexType, const void *indices, uint32_t indexCount,
+    const void *transform /* nullptr */, VkGeometryFlagsKHR flags_ /* 0 */) noexcept:
+    AccelerationStructureGeometryTriangles()
+{
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.vertexData.hostAddress = vertices;
+    geometry.triangles.vertexStride = (VkDeviceSize)Format(vertexFormat).size(),
+    geometry.triangles.maxVertex = maxVertex;
+    geometry.triangles.indexType = indexType;
+    geometry.triangles.indexData.hostAddress = indices;
+    geometry.triangles.transformData.hostAddress = transform;
+    flags = flags_;
+    MAGMA_ASSERT(indexCount % 3 == 0);
+    primitiveCount = indexCount / 3;
+}
+
 template<class Buffer>
 inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(VkFormat vertexFormat, const Buffer& vertices,
     const Buffer& transform /* nullptr */, VkGeometryFlagsKHR flags_ /* 0 */) noexcept:

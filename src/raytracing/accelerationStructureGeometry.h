@@ -37,6 +37,19 @@ namespace magma
     struct AccelerationStructureGeometryTriangles : AccelerationStructureGeometry
     {
         AccelerationStructureGeometryTriangles() noexcept;
+        explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
+            const void *vertices,
+            uint32_t maxVertex,
+            const void *transform = nullptr,
+            VkGeometryFlagsKHR flags = 0) noexcept;
+        explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
+            const void *vertices,
+            uint32_t maxVertex,
+            VkIndexType indexType,
+            const void *indices,
+            uint32_t indexCount,
+            const void *transform = nullptr,
+            VkGeometryFlagsKHR flags = 0) noexcept;
         template<class Buffer>
         explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
             const Buffer& vertices,
@@ -68,6 +81,9 @@ namespace magma
     struct AccelerationStructureGeometryInstances : AccelerationStructureGeometry
     {
         AccelerationStructureGeometryInstances() noexcept;
+        explicit AccelerationStructureGeometryInstances(const void *instances,
+            uint32_t instanceCount,
+            VkGeometryFlagsKHR flags = 0) noexcept;
         template<class Buffer>
         explicit AccelerationStructureGeometryInstances(const Buffer& instances,
             VkGeometryFlagsKHR flags = 0) noexcept;
