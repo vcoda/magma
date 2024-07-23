@@ -37,13 +37,13 @@ namespace magma
         ~Buffer();
         VkBufferCreateFlags getFlags() const noexcept { return flags; }
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
+        Family getFamily() const noexcept override final { return Family::Buffer; }
         VkMemoryRequirements getMemoryRequirements() const noexcept;
     #ifdef VK_KHR_get_memory_requirements2
         VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const;
     #endif
         virtual VkDescriptorBufferInfo getDescriptor() const noexcept;
         void realloc(VkDeviceSize newSize);
-        Class getResourceClass() const noexcept override final { return Class::Buffer; }
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group

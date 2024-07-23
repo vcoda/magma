@@ -26,8 +26,8 @@ namespace magma
     class IResource : public IClass
     {
     public:
-        enum class Class : uint8_t;
-        virtual Class getResourceClass() const noexcept = 0;
+        enum class Family : uint8_t;
+        virtual Family getFamily() const noexcept = 0;
         virtual const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept = 0;
         virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
@@ -45,7 +45,7 @@ namespace magma
 
     /* Types of resources that occupy device memory. */
 
-    enum class IResource::Class : uint8_t
+    enum class IResource::Family : uint8_t
     {
         Buffer, Image, AccelerationStructure
     };

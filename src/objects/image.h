@@ -44,6 +44,7 @@ namespace magma
         VkImageCreateFlags getFlags() const noexcept { return flags; }
         VkImageType getType() const noexcept { return imageType; }
         VkFormat getFormat() const noexcept { return format; }
+        Family getFamily() const noexcept override final { return Family::Image; }
         VkImageLayout getLayout(uint32_t level) const noexcept { return mipLayouts[level]; }
         void setLayout(uint32_t level, VkImageLayout layout) noexcept { mipLayouts[level] = layout; }
         void setLayout(VkImageLayout layout) noexcept { mipLayouts.fill(layout); }
@@ -71,7 +72,6 @@ namespace magma
         VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const;
         std::vector<VkSparseImageMemoryRequirements2KHR> getSparseMemoryRequirements2(void *memoryRequirements) const;
     #endif // VK_KHR_get_memory_requirements2
-        Class getResourceClass() const noexcept override final { return Class::Image; }
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group

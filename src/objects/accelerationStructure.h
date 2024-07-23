@@ -47,6 +47,7 @@ namespace magma
         VkAccelerationStructureCreateFlagsKHR getFlags() const noexcept { return flags; }
         VkAccelerationStructureBuildTypeKHR getBuildType() const noexcept { return buildType; }
         VkBuildAccelerationStructureFlagsKHR getBuildFlags() const noexcept { return buildFlags; }
+        Family getFamily() const noexcept override final { return Family::AccelerationStructure; }
         VkDeviceSize getBuildScratchSize() const noexcept { return buildScratchSize; }
         VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
         VkDeviceSize getProperty(VkQueryType queryType) const noexcept;
@@ -85,7 +86,6 @@ namespace magma
             VkCopyAccelerationStructureModeKHR mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR) noexcept;
         bool serialize(void *data) const noexcept;
         bool deserialize(const void *data) noexcept;
-        Class getResourceClass() const noexcept override final { return Class::AccelerationStructure; }
         void onDefragment() override;
 
     protected:
