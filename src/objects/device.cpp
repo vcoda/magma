@@ -28,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "deviceResourcePool.h"
 #include "../misc/deviceFeatures.h"
 #include "../misc/featureQuery.h"
+#include "../raytracing/accelerationStructureHeader.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/stackArray.h"
@@ -364,6 +365,20 @@ VkPeerMemoryFeatureFlags Device::getDeviceGroupPeerMemoryFeatures(uint32_t heapI
     return peerMemoryFeatures;
 }
 #endif // VK_KHR_device_group
+
+#ifdef VK_KHR_acceleration_structure
+VkAccelerationStructureCompatibilityKHR Device::getAccelerationStructureCompatibility(const AccelerationStructureHeader *header) const
+{
+    VkAccelerationStructureVersionInfoKHR versionInfo;
+    versionInfo.sType =  VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_VERSION_INFO_KHR;
+    versionInfo.pNext = nullptr;
+    versionInfo.pVersionData = header->driverUUID;
+    VkAccelerationStructureCompatibilityKHR compatibility = VK_ACCELERATION_STRUCTURE_COMPATIBILITY_MAX_ENUM_KHR;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceAccelerationStructureCompatibilityKHR, VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
+    vkGetDeviceAccelerationStructureCompatibilityKHR(handle, &versionInfo, &compatibility);
+    return compatibility;
+}
+#endif // VK_KHR_acceleration_structure
 
 #ifdef VK_EXT_calibrated_timestamps
 std::vector<uint64_t> Device::getCalibratedTimestamps(const std::vector<VkTimeDomainEXT>& timeDomains,
