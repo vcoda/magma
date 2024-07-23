@@ -21,7 +21,7 @@ namespace magma
 {
     class IDeviceMemory;
 
-    /* Interface class of resource object. */
+    /* Base interface of resource object. */
 
     class IResource : public IClass
     {
@@ -43,7 +43,8 @@ namespace magma
         virtual void onDefragment() = 0;
     };
 
-    /* Types of resources that occupy device memory. */
+    /* Historically GPU had only buffers and images.
+       With RTX, acceleration structure has beed added. */
 
     enum class IResource::Family : uint8_t
     {
