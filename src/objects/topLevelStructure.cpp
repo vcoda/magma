@@ -67,7 +67,7 @@ VkResult TopLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureMode
     buildGeometryInfo.pGeometries = &instances;
     buildGeometryInfo.ppGeometries = nullptr;
     buildGeometryInfo.scratchData.hostAddress = scratchBuffer;
-    const VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo = {instances.primitiveCount, 0, 0, 0};
+    const VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo = {instances.primitiveCount};
     const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = &buildRangeInfo;
     MAGMA_DEVICE_EXTENSION(vkBuildAccelerationStructuresKHR);
     return vkBuildAccelerationStructuresKHR(getNativeDevice(),
