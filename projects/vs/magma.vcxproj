@@ -265,6 +265,7 @@
     <ClInclude Include="..\..\src\misc\structureChain.h" />
     <ClInclude Include="..\..\src\misc\viewport.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructure.h" />
+    <ClInclude Include="..\..\src\objects\bottomLevelStructure.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInputBuffer.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h" />
     <ClInclude Include="..\..\src\objects\countBuffer.h" />
@@ -355,6 +356,7 @@
     <ClInclude Include="..\..\src\objects\swapchain.h" />
     <ClInclude Include="..\..\src\objects\swapchainImage.h" />
     <ClInclude Include="..\..\src\objects\timelineSemaphore.h" />
+    <ClInclude Include="..\..\src\objects\topLevelStructure.h" />
     <ClInclude Include="..\..\src\objects\transformFeedbackBuffer.h" />
     <ClInclude Include="..\..\src\objects\typedefs.h" />
     <ClInclude Include="..\..\src\objects\uniformBuffer.h" />
@@ -481,6 +483,7 @@
     <ClCompile Include="..\..\src\misc\structureSize.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp" />
+    <ClCompile Include="..\..\src\objects\bottomLevelStructure.cpp" />
     <ClCompile Include="..\..\src\objects\countBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\baseDeviceMemory.cpp" />
     <ClCompile Include="..\..\src\objects\baseUniformBuffer.cpp" />
@@ -562,6 +565,7 @@
     <ClCompile Include="..\..\src\objects\swapchain.cpp" />
     <ClCompile Include="..\..\src\objects\swapchainImage.cpp" />
     <ClCompile Include="..\..\src\objects\timelineSemaphore.cpp" />
+    <ClCompile Include="..\..\src\objects\topLevelStructure.cpp" />
     <ClCompile Include="..\..\src\objects\transformFeedbackBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\validationCache.cpp" />

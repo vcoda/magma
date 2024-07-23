@@ -62,14 +62,13 @@ namespace magma
             VkDeviceSize offset = 0) override;
     #endif // VK_KHR_device_group
         VkDeviceAddress getDeviceAddress() const noexcept override;
-        void build(const std::forward_list<AccelerationStructureGeometry>& geometries,
-            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
+        void build(const AccelerationStructureGeometry& geometry,
             void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
-        bool update(const std::forward_list<AccelerationStructureGeometry>& geometries,
-            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
-            void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr,
+            uint32_t primitiveOffset = 0,
+            uint32_t firstVertex = 0, 
+            uint32_t transformIndex = 0);
+
         bool clone(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool compact(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
@@ -138,53 +137,6 @@ namespace magma
         VkDeviceAddress bottomLevelAccelerationStructurePointers[1]; // Array of D3D12_GPU_VIRTUAL_ADDRESS in Direct3D 12
     };
 
-    /* Each instance in the top-level acceleration structure
-       contains a reference to a bottom-level acceleration
-       structure as well as an instance transform plus information
-       required to index into the shader bindings. The top-level
-       acceleration structure is what is bound to the acceleration
-       descriptor, for example to trace inside the shader in the
-       ray tracing pipeline. */
-
-    class TopLevelAccelerationStructure : public AccelerationStructure
-    {
-    public:
-        explicit TopLevelAccelerationStructure(std::shared_ptr<Device> device,
-            const AccelerationStructureGeometryInstances& instances,
-            VkAccelerationStructureBuildTypeKHR buildType,
-            VkBuildAccelerationStructureFlagsKHR buildFlags,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            VkAccelerationStructureCreateFlagsKHR flags = 0,
-            const StructureChain& extendedInfo = StructureChain());
-        void build(const AccelerationStructureGeometryInstances& instances,
-            void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
-        void update(const AccelerationStructureGeometryInstances& instances,
-            void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
-
-    private:
-        VkResult rebuild(VkBuildAccelerationStructureModeKHR mode,
-            const AccelerationStructureGeometryInstances& instances,
-            void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation);
-    };
-
-    /* Bottom-level acceleration structure containing the AABBs
-       or geometry to be intersected. */
-
-    class BottomLevelAccelerationStructure : public AccelerationStructure
-    {
-    public:
-        explicit BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
-            const std::forward_list<AccelerationStructureGeometry>& geometries,
-            VkAccelerationStructureBuildTypeKHR buildType,
-            VkBuildAccelerationStructureFlagsKHR buildFlags,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            VkAccelerationStructureCreateFlagsKHR flags = 0,
-            const StructureChain& extendedInfo = StructureChain());
-    };
-
     /* Generic acceleration structure is intended to be used
        by API translation layers. In these cases, the acceleration
        structure type is not known at creation time, but must be
@@ -200,11 +152,6 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkAccelerationStructureCreateFlagsKHR createFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        void build(VkAccelerationStructureTypeKHR structureType,
-            const std::forward_list<AccelerationStructureGeometry>& geometries,
-            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
-            void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */);
     };
 } // namespace magma
 

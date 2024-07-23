@@ -87,6 +87,7 @@ SRC_OBJS= \
 	src/objects/accelerationStructureInputBuffer.o \
 	src/objects/baseDeviceMemory.o \
 	src/objects/baseUniformBuffer.o \
+	src/objects/bottomLevelStructure.o \
 	src/objects/buffer.o \
 	src/objects/bufferView.o \
 	src/objects/commandBuffer.o \
@@ -166,6 +167,7 @@ SRC_OBJS= \
 	src/objects/swapchain.o \
 	src/objects/swapchainImage.o \
 	src/objects/timelineSemaphore.o \
+	src/objects/topLevelStructure.o \
 	src/objects/transformFeedbackBuffer.o \
 	src/objects/uniformTexelBuffer.o \
 	src/objects/validationCache.o \

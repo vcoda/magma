@@ -120,6 +120,7 @@ src\objects\accelerationStructure.cpp ^
 src\objects\accelerationStructureInputBuffer.cpp ^
 src\objects\baseDeviceMemory.cpp ^
 src\objects\baseUniformBuffer.cpp ^
+src\objects\bottomLevelStructure.cpp ^
 src\objects\buffer.cpp ^
 src\objects\bufferView.cpp ^
 src\objects\commandBuffer.cpp ^
@@ -199,6 +200,7 @@ src\objects\surface.cpp ^
 src\objects\swapchain.cpp ^
 src\objects\swapchainImage.cpp ^
 src\objects\timelineSemaphore.cpp ^
+src\objects\topLevelStructure.cpp ^
 src\objects\transformFeedbackBuffer.cpp ^
 src\objects\uniformTexelBuffer.cpp ^
 src\objects\validationCache.cpp ^
@@ -315,6 +317,7 @@ accelerationStructure.obj ^
 accelerationStructureInputBuffer.obj ^
 baseDeviceMemory.obj ^
 baseUniformBuffer.obj ^
+bottomLevelStructure.obj ^
 buffer.obj ^
 bufferView.obj ^
 commandBuffer.obj ^
@@ -394,6 +397,7 @@ surface.obj ^
 swapchain.obj ^
 swapchainImage.obj ^
 timelineSemaphore.obj ^
+topLevelStructure.obj ^
 transformFeedbackBuffer.obj ^
 uniformTexelBuffer.obj ^
 validationCache.obj ^
