@@ -61,9 +61,9 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
     geometry.triangles.vertexData.deviceAddress = vertices->getDeviceAddress();
     geometry.triangles.vertexStride = (VkDeviceSize)Format(vertexFormat).size(),
     geometry.triangles.maxVertex = uint32_t(vertices->getSize() / geometry.triangles.vertexStride - 1),
-    geometry.triangles.transformData = address(transform);
     geometry.triangles.indexType = indexType;
     geometry.triangles.indexData.deviceAddress = indices->getDeviceAddress();
+    geometry.triangles.transformData = address(transform);
     flags = flags_;
     const size_t indexSize = getIndexSize();
     MAGMA_ASSERT(indices->getSize() % indexSize == 0);
@@ -99,6 +99,14 @@ inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInst
     geometry.instances.pNext = nullptr;
     geometry.instances.arrayOfPointers = VK_FALSE;
     geometry.instances.data.deviceAddress = MAGMA_NULL;
+}
+
+inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInstances(uint32_t instanceCount, const void *instances, VkGeometryFlagsKHR flags_ /* 0 */) noexcept:
+    AccelerationStructureGeometryInstances()
+{
+    geometry.instances.data.hostAddress = instances;
+    flags = flags_;
+    primitiveCount = instanceCount;
 }
 
 template<class Buffer>

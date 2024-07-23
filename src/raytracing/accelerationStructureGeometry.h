@@ -81,8 +81,8 @@ namespace magma
     struct AccelerationStructureGeometryInstances : AccelerationStructureGeometry
     {
         AccelerationStructureGeometryInstances() noexcept;
-        explicit AccelerationStructureGeometryInstances(const void *instances,
-            uint32_t instanceCount,
+        explicit AccelerationStructureGeometryInstances(uint32_t instanceCount,
+            const void *instances,
             VkGeometryFlagsKHR flags = 0) noexcept;
         template<class Buffer>
         explicit AccelerationStructureGeometryInstances(const Buffer& instances,
