@@ -304,7 +304,7 @@ void AccelerationStructure::onDefragment()
 }
 
 TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Device> device,
-    const AccelerationStructureGeometry& instances,
+    const AccelerationStructureGeometryInstances& instances,
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
