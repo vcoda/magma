@@ -36,12 +36,30 @@ BottomLevelAccelerationStructure::BottomLevelAccelerationStructure(std::shared_p
 {}
 
 void BottomLevelAccelerationStructure::build(const std::forward_list<AccelerationStructureGeometry>& geometries,
+    void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+{
+    std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
+    for (auto const& geometry: geometries)
+        buildRanges.push_back({geometry.primitiveCount});
+    build(geometries, buildRanges, scratchBuffer, std::move(deferredOperation));
+}
+
+void BottomLevelAccelerationStructure::build(const std::forward_list<AccelerationStructureGeometry>& geometries,
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, void *scratchBuffer,
     std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     const VkResult result = rebuild(VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR,
         geometries, buildRanges, scratchBuffer, std::move(deferredOperation));
     MAGMA_HANDLE_RESULT(result, "failed to build bottom-level acceleration structure");
+}
+
+void BottomLevelAccelerationStructure::update(const std::forward_list<AccelerationStructureGeometry>& geometries,
+    void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+{
+    std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
+    for (auto const& geometry: geometries)
+        buildRanges.push_back({geometry.primitiveCount});
+    update(geometries, buildRanges, scratchBuffer, std::move(deferredOperation));
 }
 
 void BottomLevelAccelerationStructure::update(const std::forward_list<AccelerationStructureGeometry>& geometries,

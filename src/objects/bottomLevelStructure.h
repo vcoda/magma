@@ -35,7 +35,13 @@ namespace magma
             VkAccelerationStructureCreateFlagsKHR flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         void build(const std::forward_list<AccelerationStructureGeometry>& geometries,
+            void *scratchBuffer,
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+        void build(const std::forward_list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
+            void *scratchBuffer,
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+        void update(const std::forward_list<AccelerationStructureGeometry>& geometries,
             void *scratchBuffer,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
         void update(const std::forward_list<AccelerationStructureGeometry>& geometries,
