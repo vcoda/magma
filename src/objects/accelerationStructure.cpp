@@ -112,6 +112,13 @@ VkDeviceSize AccelerationStructure::getProperty(VkQueryType queryType) const noe
     return property;
 }
 
+uint64_t AccelerationStructure::getReference() const noexcept
+{
+    if (VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR == buildType)
+        return getDeviceAddress();
+    return getObjectHandle();    
+}
+
 void AccelerationStructure::build(const std::forward_list<AccelerationStructureGeometry>& geometries,
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, void *scratchBuffer,
     std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
