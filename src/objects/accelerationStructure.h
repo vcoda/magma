@@ -49,8 +49,16 @@ namespace magma
         VkBuildAccelerationStructureFlagsKHR getBuildFlags() const noexcept { return buildFlags; }
         VkDeviceSize getBuildScratchSize() const noexcept { return buildScratchSize; }
         VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
-        VkDeviceAddress getDeviceAddress() const noexcept;
         VkDeviceSize getProperty(VkQueryType queryType) const noexcept;
+        void bindMemory(std::shared_ptr<IDeviceMemory> memory,
+            VkDeviceSize offset = 0) override;
+    #ifdef VK_KHR_device_group
+        void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
+            const std::vector<uint32_t>& deviceIndices,
+            const std::vector<VkRect2D>& splitInstanceBindRegions = {},
+            VkDeviceSize offset = 0) override;
+    #endif // VK_KHR_device_group
+        VkDeviceAddress getDeviceAddress() const noexcept override;
         void build(const std::forward_list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
             void *scratchBuffer,
@@ -78,14 +86,6 @@ namespace magma
         bool serialize(void *data) const noexcept;
         bool deserialize(const void *data) noexcept;
         Class getResourceClass() const noexcept override final { return Class::AccelerationStructure; }
-        void bindMemory(std::shared_ptr<IDeviceMemory> memory,
-            VkDeviceSize offset = 0) override;
-    #ifdef VK_KHR_device_group
-        void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
-            const std::vector<uint32_t>& deviceIndices,
-            const std::vector<VkRect2D>& splitInstanceBindRegions = {},
-            VkDeviceSize offset = 0) override;
-    #endif // VK_KHR_device_group
         void onDefragment() override;
 
     protected:

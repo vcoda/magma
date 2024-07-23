@@ -80,6 +80,9 @@ namespace magma
             const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) override;
     #endif // VK_KHR_device_group
+    #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
+        VkDeviceAddress getDeviceAddress() const noexcept override { return MAGMA_NULL; }
+    #endif
         void onDefragment() override;
         VkImageLayout layoutTransition(VkImageLayout newLayout,
             std::shared_ptr<CommandBuffer> cmdBuffer,

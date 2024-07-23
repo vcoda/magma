@@ -93,16 +93,6 @@ AccelerationStructure::~AccelerationStructure()
     vkDestroyAccelerationStructureKHR(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-VkDeviceAddress AccelerationStructure::getDeviceAddress() const noexcept
-{
-    VkAccelerationStructureDeviceAddressInfoKHR deviceAddressInfo;
-    deviceAddressInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
-    deviceAddressInfo.pNext = nullptr;
-    deviceAddressInfo.accelerationStructure = handle;
-    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureDeviceAddressKHR);
-    return vkGetAccelerationStructureDeviceAddressKHR(getNativeDevice(), &deviceAddressInfo);
-}
-
 VkDeviceSize AccelerationStructure::getProperty(VkQueryType queryType) const noexcept
 {
 #ifdef VK_KHR_ray_tracing_maintenance1
@@ -290,6 +280,16 @@ void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory>
     buffer->bindMemoryDeviceGroup(std::move(deviceMemory), deviceIndices, splitInstanceBindRegions, offset);
 }
 #endif // VK_KHR_device_group
+
+VkDeviceAddress AccelerationStructure::getDeviceAddress() const noexcept
+{
+    VkAccelerationStructureDeviceAddressInfoKHR deviceAddressInfo;
+    deviceAddressInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
+    deviceAddressInfo.pNext = nullptr;
+    deviceAddressInfo.accelerationStructure = handle;
+    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureDeviceAddressKHR);
+    return vkGetAccelerationStructureDeviceAddressKHR(getNativeDevice(), &deviceAddressInfo);
+}
 
 void AccelerationStructure::onDefragment()
 {

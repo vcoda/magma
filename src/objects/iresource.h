@@ -37,6 +37,9 @@ namespace magma
             const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) = 0;
     #endif // VK_KHR_device_group
+    #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
+        virtual VkDeviceAddress getDeviceAddress() const noexcept = 0;
+    #endif
         virtual void onDefragment() = 0;
     };
 

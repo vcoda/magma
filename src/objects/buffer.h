@@ -42,9 +42,6 @@ namespace magma
         VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const;
     #endif
         virtual VkDescriptorBufferInfo getDescriptor() const noexcept;
-    #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
-        VkDeviceAddress getDeviceAddress() const noexcept;
-    #endif
         void realloc(VkDeviceSize newSize);
         Class getResourceClass() const noexcept override final { return Class::Buffer; }
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
@@ -55,6 +52,9 @@ namespace magma
             const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) override;
     #endif // VK_KHR_device_group
+    #if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
+        VkDeviceAddress getDeviceAddress() const noexcept override;
+    #endif
         void onDefragment() override;
         void copyHost(const void *srcBuffer,
             VkDeviceSize srcBufferSize,
