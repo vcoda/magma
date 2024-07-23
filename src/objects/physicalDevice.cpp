@@ -579,9 +579,8 @@ bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcep
     return it != extensions.end();
 }
 
-bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) const noexcept
+bool PhysicalDevice::getPipelineCacheCompatibility(const VkPipelineCacheHeaderVersionOne *header) const noexcept
 {
-    MAGMA_ASSERT(cacheData);
     VkPhysicalDeviceProperties properties;
     vkGetPhysicalDeviceProperties(handle, &properties);
     VkPipelineCacheHeaderVersionOne requiredHeader;
@@ -590,8 +589,7 @@ bool PhysicalDevice::checkPipelineCacheDataCompatibility(const void *cacheData) 
     requiredHeader.vendorID = properties.vendorID;
     requiredHeader.deviceID = properties.deviceID;
     memcpy(requiredHeader.pipelineCacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
-    const VkPipelineCacheHeaderVersionOne *cacheHeader = reinterpret_cast<const VkPipelineCacheHeaderVersionOne *>(cacheData);
-    return core::compare(cacheHeader, &requiredHeader);
+    return core::compare(header, &requiredHeader);
 }
 
 inline VkInstance PhysicalDevice::getNativeInstance() const noexcept
