@@ -313,6 +313,46 @@ TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Dev
         flags, buildType, buildFlags, {instances}, std::move(allocator), extendedInfo)
 {}
 
+void TopLevelAccelerationStructure::build(const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
+    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+{
+    const VkResult result = rebuild(VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR, 
+        instances, scratchBuffer, std::move(deferredOperation));
+    MAGMA_HANDLE_RESULT(result, "failed to build top-level acceleration structure");
+}
+
+void TopLevelAccelerationStructure::update(const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
+    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+{
+    const VkResult result = rebuild(VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR, 
+        instances, scratchBuffer, std::move(deferredOperation));
+    MAGMA_HANDLE_RESULT(result, "failed to update top-level acceleration structure");
+}
+
+VkResult TopLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureModeKHR mode,
+    const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
+    std::shared_ptr<DeferredOperation> deferredOperation)
+{
+    VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
+    buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+    buildGeometryInfo.pNext = nullptr;
+    buildGeometryInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
+    buildGeometryInfo.flags = getBuildFlags();
+    buildGeometryInfo.mode = mode;
+    buildGeometryInfo.srcAccelerationStructure = (VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR == mode) ? handle : VK_NULL_HANDLE;
+    buildGeometryInfo.dstAccelerationStructure = handle;
+    buildGeometryInfo.geometryCount = 1; // If type is VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR, geometryCount must be 1
+    buildGeometryInfo.pGeometries = &instances;
+    buildGeometryInfo.ppGeometries = nullptr;
+    buildGeometryInfo.scratchData.hostAddress = scratchBuffer;
+    const VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo = {instances.primitiveCount, 0, 0, 0};
+    const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = &buildRangeInfo;
+    MAGMA_DEVICE_EXTENSION(vkBuildAccelerationStructuresKHR);
+    const VkResult result = vkBuildAccelerationStructuresKHR(getNativeDevice(),
+        MAGMA_OPTIONAL_HANDLE(deferredOperation), 1, &buildGeometryInfo, &buildRangeInfos);
+    return result;
+}
+
 BottomLevelAccelerationStructure::BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
     const std::forward_list<AccelerationStructureGeometry>& geometries,
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,

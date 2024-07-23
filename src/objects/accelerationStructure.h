@@ -23,6 +23,7 @@ namespace magma
 {
     class Buffer;
     struct AccelerationStructureGeometry;
+    struct AccelerationStructureGeometryInstances;
     struct AccelerationStructureBuildRange;
 #ifdef VK_KHR_deferred_host_operations
     class DeferredOperation;
@@ -155,6 +156,18 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             VkAccelerationStructureCreateFlagsKHR flags = 0,
             const StructureChain& extendedInfo = StructureChain());
+        void build(const AccelerationStructureGeometryInstances& instances,
+            void *scratchBuffer,
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+        void update(const AccelerationStructureGeometryInstances& instances,
+            void *scratchBuffer,
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+
+    private:
+        VkResult rebuild(VkBuildAccelerationStructureModeKHR mode,
+            const AccelerationStructureGeometryInstances& instances,
+            void *scratchBuffer,
+            std::shared_ptr<DeferredOperation> deferredOperation);
     };
 
     /* Bottom-level acceleration structure containing the AABBs
