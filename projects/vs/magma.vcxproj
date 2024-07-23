@@ -375,6 +375,7 @@
     <ClInclude Include="..\..\src\platform\win32ExternalSemaphore.h" />
     <ClInclude Include="..\..\src\platform\win32Surface.h" />
     <ClInclude Include="..\..\src\raytracing\accelerationStructureGeometry.h" />
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureHeader.h" />
     <ClInclude Include="..\..\src\raytracing\accelerationStructureInstance.h" />
     <ClInclude Include="..\..\src\raytracing\address.h" />
     <ClInclude Include="..\..\src\renderpass\attachment.h" />

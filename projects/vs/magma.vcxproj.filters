@@ -882,6 +882,9 @@
     <ClInclude Include="..\..\src\objects\topLevelStructure.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureHeader.h">
+      <Filter>Header Files\raytracing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
