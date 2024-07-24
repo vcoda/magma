@@ -1618,9 +1618,6 @@
     <None Include="..\..\src\raytracing\accelerationStructureGeometry.inl">
       <Filter>Header Files\raytracing</Filter>
     </None>
-    <None Include="..\..\src\objects\accelerationStructure.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
     <None Include="..\..\src\shaders\rayTracingShaderGroup.inl">
       <Filter>Header Files\shaders</Filter>
     </None>

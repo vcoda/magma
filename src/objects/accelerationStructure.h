@@ -16,15 +16,16 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifdef VK_KHR_acceleration_structure
 #include "resource.h"
 
 namespace magma
 {
     class Buffer;
+#ifdef VK_KHR_acceleration_structure
     struct AccelerationStructureGeometry;
     struct AccelerationStructureGeometryInstances;
     struct AccelerationStructureBuildRange;
+#endif
 #ifdef VK_KHR_deferred_host_operations
     class DeferredOperation;
 #endif
@@ -39,6 +40,7 @@ namespace magma
        aligned bounding boxes for custom geometry or a set of
        triangles. */
 
+#ifdef VK_KHR_acceleration_structure
     class AccelerationStructure : public NonDispatchableResource<AccelerationStructure, VkAccelerationStructureKHR>
     {
     public:
@@ -61,31 +63,22 @@ namespace magma
             VkDeviceSize offset = 0) override;
     #endif // VK_KHR_device_group
         VkDeviceAddress getDeviceAddress() const noexcept override;
-        void build(const AccelerationStructureGeometry& geometry,
-            void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr,
-            uint32_t primitiveOffset = 0,
-            uint32_t firstVertex = 0, 
-            uint32_t transformIndex = 0);
-
-        bool clone(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
+        bool copy(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool compact(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool copyToBuffer(std::shared_ptr<Buffer> dstBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr,
-            VkCopyAccelerationStructureModeKHR mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR) const noexcept;
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool copyToMemory(void *dstBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr,
-            VkCopyAccelerationStructureModeKHR mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR) const noexcept;
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool copyFromBuffer(std::shared_ptr<const Buffer> srcBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr,
-            VkCopyAccelerationStructureModeKHR mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR) noexcept;
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
         bool copyFromMemory(const void *srcBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr,
-            VkCopyAccelerationStructureModeKHR mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR) noexcept;
-        bool serialize(void *data) const noexcept;
-        bool deserialize(const void *data) noexcept;
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
+        bool serialize(void *dstBuffer,
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
+        bool deserialize(const void *srcBuffer,
+            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
         void onDefragment() override;
 
     protected:
@@ -125,7 +118,5 @@ namespace magma
             VkAccelerationStructureCreateFlagsKHR createFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
     };
-} // namespace magma
-
-#include "accelerationStructure.inl"
 #endif // VK_KHR_acceleration_structure
+} // namespace magma

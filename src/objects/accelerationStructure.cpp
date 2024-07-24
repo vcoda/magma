@@ -42,8 +42,8 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     updateScratchSize(0ull),
     buildScratchSize(0ull)
 {
-    const size_t geometryCount = std::distance(geometries.begin(), geometries.end());
-    MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+    const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
+    MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);
     MAGMA_STACK_ARRAY(uint32_t, maxPrimitiveCounts, geometryCount);
     for (auto const& geometry: geometries)
     {
@@ -58,7 +58,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
     buildGeometryInfo.dstAccelerationStructure = VK_NULL_HANDLE;
-    buildGeometryInfo.geometryCount = geometryPointers.size();
+    buildGeometryInfo.geometryCount = geometryCount;
     buildGeometryInfo.pGeometries = nullptr;
     buildGeometryInfo.ppGeometries = geometryPointers;
     buildGeometryInfo.scratchData.hostAddress = nullptr;
@@ -77,7 +77,6 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     accelerationStructureInfo.size = buildSizesInfo.accelerationStructureSize;
     accelerationStructureInfo.type = structureType;
     accelerationStructureInfo.deviceAddress = MAGMA_NULL;
-    // Create the acceleration structure
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureKHR, VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
     const VkResult result = vkCreateAccelerationStructureKHR(getNativeDevice(), &accelerationStructureInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -119,7 +118,33 @@ uint64_t AccelerationStructure::getReference() const noexcept
     return getObjectHandle();    
 }
 
-bool AccelerationStructure::clone(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
+void AccelerationStructure::bindMemory(std::shared_ptr<IDeviceMemory> deviceMemory,
+    VkDeviceSize offset /* 0 */)
+{
+    buffer->bindMemory(std::move(deviceMemory), offset);
+}
+
+#ifdef VK_KHR_device_group
+void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> deviceMemory,
+    const std::vector<uint32_t>& deviceIndices,
+    const std::vector<VkRect2D>& splitInstanceBindRegions,
+    VkDeviceSize offset /* 0 */)
+{
+    buffer->bindMemoryDeviceGroup(std::move(deviceMemory), deviceIndices, splitInstanceBindRegions, offset);
+}
+#endif // VK_KHR_device_group
+
+VkDeviceAddress AccelerationStructure::getDeviceAddress() const noexcept
+{
+    VkAccelerationStructureDeviceAddressInfoKHR deviceAddressInfo;
+    deviceAddressInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
+    deviceAddressInfo.pNext = nullptr;
+    deviceAddressInfo.accelerationStructure = handle;
+    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureDeviceAddressKHR);
+    return vkGetAccelerationStructureDeviceAddressKHR(getNativeDevice(), &deviceAddressInfo);
+}
+
+bool AccelerationStructure::copy(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
     std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureInfoKHR copyInfo;
@@ -150,15 +175,14 @@ bool AccelerationStructure::compact(std::shared_ptr<AccelerationStructure> dstAc
 }
 
 bool AccelerationStructure::copyToBuffer(std::shared_ptr<Buffer> dstBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */,
-    VkCopyAccelerationStructureModeKHR mode /* VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR */) const noexcept
+    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
     copyMemoryInfo.pNext = nullptr;
     copyMemoryInfo.src = handle;
     copyMemoryInfo.dst.deviceAddress = dstBuffer->getDeviceAddress();
-    copyMemoryInfo.mode = mode;
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCopyAccelerationStructureToMemoryKHR);
     const VkResult result = vkCopyAccelerationStructureToMemoryKHR(getNativeDevice(),
         MAGMA_OPTIONAL_HANDLE(deferredOperation), &copyMemoryInfo);
@@ -166,15 +190,14 @@ bool AccelerationStructure::copyToBuffer(std::shared_ptr<Buffer> dstBuffer,
 }
 
 bool AccelerationStructure::copyToMemory(void *dstBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */,
-    VkCopyAccelerationStructureModeKHR mode /* VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR */) const noexcept
+    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
     copyMemoryInfo.pNext = nullptr;
     copyMemoryInfo.src = handle;
     copyMemoryInfo.dst.hostAddress = dstBuffer;
-    copyMemoryInfo.mode = mode;
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCopyAccelerationStructureToMemoryKHR);
     const VkResult result = vkCopyAccelerationStructureToMemoryKHR(getNativeDevice(),
         MAGMA_OPTIONAL_HANDLE(deferredOperation), &copyMemoryInfo);
@@ -182,15 +205,14 @@ bool AccelerationStructure::copyToMemory(void *dstBuffer,
 }
 
 bool AccelerationStructure::copyFromBuffer(std::shared_ptr<const Buffer> srcBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */,
-    VkCopyAccelerationStructureModeKHR mode /* VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR */) noexcept
+    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept
 {
     VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
     copyMemoryInfo.pNext = nullptr;
     copyMemoryInfo.src.deviceAddress = srcBuffer->getDeviceAddress();
     copyMemoryInfo.dst = handle;
-    copyMemoryInfo.mode = mode;
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCopyMemoryToAccelerationStructureKHR);
     const VkResult result = vkCopyMemoryToAccelerationStructureKHR(getNativeDevice(),
         MAGMA_OPTIONAL_HANDLE(deferredOperation), &copyMemoryInfo);
@@ -198,45 +220,48 @@ bool AccelerationStructure::copyFromBuffer(std::shared_ptr<const Buffer> srcBuff
 }
 
 bool AccelerationStructure::copyFromMemory(const void *srcBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */,
-    VkCopyAccelerationStructureModeKHR mode /* VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR */) noexcept
+    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept
 {
     VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
     copyMemoryInfo.pNext = nullptr;
     copyMemoryInfo.src.hostAddress = srcBuffer;
     copyMemoryInfo.dst = handle;
-    copyMemoryInfo.mode = mode;
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCopyMemoryToAccelerationStructureKHR);
     const VkResult result = vkCopyMemoryToAccelerationStructureKHR(getNativeDevice(),
         MAGMA_OPTIONAL_HANDLE(deferredOperation), &copyMemoryInfo);
     return MAGMA_SUCCEEDED(result);
 }
 
-void AccelerationStructure::bindMemory(std::shared_ptr<IDeviceMemory> deviceMemory,
-    VkDeviceSize offset /* 0 */)
+bool AccelerationStructure::serialize(void *dstBuffer,
+    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
-    buffer->bindMemory(std::move(deviceMemory), offset);
+    VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
+    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
+    copyMemoryInfo.pNext = nullptr;
+    copyMemoryInfo.src = handle;
+    copyMemoryInfo.dst.hostAddress = dstBuffer;
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_SERIALIZE_KHR;
+    MAGMA_DEVICE_EXTENSION(vkCopyAccelerationStructureToMemoryKHR);
+    const VkResult result = vkCopyAccelerationStructureToMemoryKHR(getNativeDevice(),
+        MAGMA_OPTIONAL_HANDLE(deferredOperation), &copyMemoryInfo);
+    return MAGMA_SUCCEEDED(result);
 }
 
-#ifdef VK_KHR_device_group
-void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> deviceMemory,
-    const std::vector<uint32_t>& deviceIndices,
-    const std::vector<VkRect2D>& splitInstanceBindRegions,
-    VkDeviceSize offset /* 0 */)
+bool AccelerationStructure::deserialize(const void *srcBuffer,
+    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept
 {
-    buffer->bindMemoryDeviceGroup(std::move(deviceMemory), deviceIndices, splitInstanceBindRegions, offset);
-}
-#endif // VK_KHR_device_group
-
-VkDeviceAddress AccelerationStructure::getDeviceAddress() const noexcept
-{
-    VkAccelerationStructureDeviceAddressInfoKHR deviceAddressInfo;
-    deviceAddressInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
-    deviceAddressInfo.pNext = nullptr;
-    deviceAddressInfo.accelerationStructure = handle;
-    MAGMA_DEVICE_EXTENSION(vkGetAccelerationStructureDeviceAddressKHR);
-    return vkGetAccelerationStructureDeviceAddressKHR(getNativeDevice(), &deviceAddressInfo);
+    VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
+    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
+    copyMemoryInfo.pNext = nullptr;
+    copyMemoryInfo.src.hostAddress = srcBuffer;
+    copyMemoryInfo.dst = handle;
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_DESERIALIZE_KHR;
+    MAGMA_DEVICE_EXTENSION(vkCopyMemoryToAccelerationStructureKHR);
+    const VkResult result = vkCopyMemoryToAccelerationStructureKHR(getNativeDevice(),
+        MAGMA_OPTIONAL_HANDLE(deferredOperation), &copyMemoryInfo);
+    return MAGMA_SUCCEEDED(result);
 }
 
 void AccelerationStructure::onDefragment()
