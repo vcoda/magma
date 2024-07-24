@@ -55,7 +55,7 @@ hash_t StructureChain::hash() const noexcept
         VkBaseOutStructure *next = node->pNext;
         node->pNext = nullptr; // Should not affect hash
         hash = core::hashCombine(hash, core::hashArray(
-            (uint8_t *)node, sizeOf(node->sType)));
+            (uint8_t *)node, getNodeSize(node->sType)));
         node->pNext = next;
     }
     return hash;
@@ -84,7 +84,7 @@ const VkBaseInStructure *StructureChain::getNode(VkStructureType sType) const no
 VkBaseOutStructure *StructureChain::copyNode(const VkBaseOutStructure *src) noexcept
 {
     MAGMA_ASSERT(src);
-    const size_t size = sizeOf(src->sType);
+    const size_t size = getNodeSize(src->sType);
     MAGMA_ASSERT(size >= sizeof(VkBaseOutStructure));
     if (size < sizeof(VkBaseOutStructure))
         return nullptr; // Unknown structure
@@ -96,5 +96,17 @@ VkBaseOutStructure *StructureChain::copyNode(const VkBaseOutStructure *src) noex
         dst->pNext = nullptr;
     }
     return dst;
+}
+
+size_t StructureChain::getNodeSize(VkStructureType sType) noexcept
+{
+    switch (sType)
+    {
+#if VK_USE_64_BIT_PTR_DEFINES
+    #include "sizeof64.inl"
+#else
+    #include "sizeof86.inl"
+#endif
+    }
 }
 } // namespace magma

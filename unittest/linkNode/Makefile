@@ -18,8 +18,7 @@ INCLUDE_DIR=-I$(VULKAN_SDK)/include -I../../src -I../../src/core
 CFLAGS=-std=c++14 -m64 $(INCLUDE_DIR)
 SRC_OBJS=\
 	unittest.cpp \
-	../../src/misc/structureChain.cpp \
-	../../src/misc/structureSize.cpp
+	../../src/misc/structureChain.cpp
 
 unittest: unittest.cpp
 	g++ $(CFLAGS) $(SRC_OBJS) -o unittest

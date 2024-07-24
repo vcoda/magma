@@ -1346,9 +1346,6 @@
     <ClCompile Include="..\..\src\objects\baseUniformBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\misc\structureSize.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\objects\deviceResourcePool.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
