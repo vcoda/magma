@@ -94,9 +94,9 @@ VkResult BottomLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureM
     buildGeometryInfo.scratchData.hostAddress = scratchBuffer;
     MAGMA_ASSERT(buildRanges.size() >= geometryCount);
     const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = buildRanges.data();
-    MAGMA_DEVICE_EXTENSION(vkBuildAccelerationStructuresKHR);
-    return vkBuildAccelerationStructuresKHR(getNativeDevice(),
-        MAGMA_OPTIONAL_HANDLE(deferredOperation), 1, &buildGeometryInfo, &buildRangeInfos);
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkBuildAccelerationStructuresKHR, VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
+    return vkBuildAccelerationStructuresKHR(getNativeDevice(), MAGMA_OPTIONAL_HANDLE(deferredOperation),
+        1, &buildGeometryInfo, &buildRangeInfos);
 }
 #endif // VK_KHR_acceleration_structure
 } // namespace magma
