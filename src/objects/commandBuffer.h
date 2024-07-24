@@ -55,6 +55,7 @@ namespace magma
     class QueryPool;
 #ifdef VK_KHR_acceleration_structure
     class AccelerationStructure;
+    class BottomLevelAccelerationStructure;
     class TopLevelAccelerationStructure;
     class AccelerationStructureQuery;
     struct AccelerationStructureGeometry;
@@ -486,34 +487,21 @@ namespace magma
     #endif // VK_EXT_transform_feedback
 
     #ifdef VK_KHR_acceleration_structure
-        void buildAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-            const AccelerationStructureGeometry& geometry,
-            const std::shared_ptr<Buffer>& scratchBuffer,
-            uint32_t primitiveOffset = 0,
-            uint32_t firstVertex = 0,
-            uint32_t transformIndex = 0) noexcept;
-        void buildAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+        // BLAS
+        void buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
             const std::forward_list<AccelerationStructureGeometry>& geometries,
-            const std::shared_ptr<Buffer>& scratchBuffer,
-            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges) noexcept;
-        void buildAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-            const std::forward_list<AccelerationStructureGeometry>& geometries,
-            const std::shared_ptr<Buffer>& scratchBuffer,
-            const std::shared_ptr<const Buffer>& indirectBuildRanges,
-            uint32_t indirectStride) noexcept;
-        void buildTopLevelAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
-            const AccelerationStructureGeometryInstances& instances,
             const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
-        void updateAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-            const AccelerationStructureGeometry& geometry,
-            const std::shared_ptr<Buffer>& scratchBuffer,
-            uint32_t primitiveOffset = 0,
-            uint32_t firstVertex = 0,
-            uint32_t transformIndex = 0) noexcept;
-        void updateAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+        void buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
             const std::forward_list<AccelerationStructureGeometry>& geometries,
-            const std::shared_ptr<Buffer>& scratchBuffer,
-            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges) noexcept;
+            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
+            const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
+        void updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
+            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
+        void updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
+            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
+            const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
         // TLAS
         void buildAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
             const AccelerationStructureGeometryInstances& instances,
@@ -521,6 +509,12 @@ namespace magma
         void updateAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
             const AccelerationStructureGeometryInstances& instances,
             const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
+        // Indirect
+        void updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::shared_ptr<const Buffer>& indirectBuildRanges,
+            const std::shared_ptr<Buffer>& scratchBuffer,
+            uint32_t indirectStride = sizeof(VkAccelerationStructureBuildRangeInfoKHR)) noexcept;
     #endif // VK_KHR_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline
@@ -664,6 +658,11 @@ namespace magma
             VkPipelineStageFlags dstStageMask,
             VkDependencyFlags dependencyFlags) noexcept;
     #ifdef VK_KHR_acceleration_structure
+        void rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
+            const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
+            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
+            const std::shared_ptr<Buffer>& scratchBuffer);
         void rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
             const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
             const AccelerationStructureGeometryInstances& instances,
