@@ -583,13 +583,13 @@ bool PhysicalDevice::getPipelineCacheCompatibility(const VkPipelineCacheHeaderVe
 {
     VkPhysicalDeviceProperties properties;
     vkGetPhysicalDeviceProperties(handle, &properties);
-    VkPipelineCacheHeaderVersionOne requiredHeader;
-    requiredHeader.headerSize = sizeof(VkPipelineCacheHeaderVersionOne);
-    requiredHeader.headerVersion = VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
-    requiredHeader.vendorID = properties.vendorID;
-    requiredHeader.deviceID = properties.deviceID;
-    memcpy(requiredHeader.pipelineCacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
-    return core::compare(header, &requiredHeader);
+    VkPipelineCacheHeaderVersionOne compatibleHeader;
+    compatibleHeader.headerSize = sizeof(VkPipelineCacheHeaderVersionOne);
+    compatibleHeader.headerVersion = VK_PIPELINE_CACHE_HEADER_VERSION_ONE;
+    compatibleHeader.vendorID = properties.vendorID;
+    compatibleHeader.deviceID = properties.deviceID;
+    memcpy(compatibleHeader.pipelineCacheUUID, properties.pipelineCacheUUID, VK_UUID_SIZE);
+    return core::compare(header, &compatibleHeader);
 }
 
 inline VkInstance PhysicalDevice::getNativeInstance() const noexcept
