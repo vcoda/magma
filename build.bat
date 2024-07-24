@@ -222,7 +222,7 @@ src\platform\win32ExternalSemaphore.cpp ^
 src\platform\win32Surface.cpp ^
 src\platform\xcbSurface.cpp ^
 src\platform\xlibSurface.cpp ^
-src\raytracing\accelerationStructureGeometrys.cpp ^
+src\raytracing\accelerationStructureGeometry.cpp ^
 src\renderpass\subpass.cpp ^
 src\shaders\pipelineShaderStage.cpp ^
 src\shaders\shaderReflection.cpp ^
