@@ -28,16 +28,6 @@ int main(int argc, char *argv[])
     writeGeneratedByUtilityToolWarning(source);
 
 #ifdef OBFUSCATE
-    source << "#include \"pch.h\"" << std::endl;
-    source << "#pragma hdrstop" << std::endl;
-    source << "#include \"structureChain.h\"" << std::endl << std::endl;
-    source << "#ifdef _MSC_VER" << std::endl;
-    source << "#pragma warning(disable: 4063)" << std::endl;
-    source << "#endif" << std::endl << std::endl;
-    source << "namespace magma" << std::endl << "{" << std::endl;
-    source << "size_t StructureChain::sizeOf(VkStructureType sType) noexcept" << std::endl << "{" << std::endl;
-    source << "    switch (sType)" << std::endl;
-    source << "    {" << std::endl;
     #include "coreStructs.inl"
     for (uint32_t i = VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO + 1; i <= VK_STRUCTURE_TYPE_AMIGO_PROFILING_SUBMIT_INFO_SEC; ++i)
     {
@@ -48,13 +38,9 @@ int main(int argc, char *argv[])
         const size_t size = sizeOf(sType);
         const char *name = nameOf(sType);
         if (size)
-            source << "    case " << i << ": return " << size << "; // " << name << std::endl;
+            source << "case " << i << ": return " << size << "; // " << name << std::endl;
     }
-    source << "    default: MAGMA_ASSERT(false);" << std::endl;
-    source << "    }" << std::endl;
-    source << "    return 0;" << std::endl;
-    source << "}" << std::endl;
-    source << "} // namespace magma" << std::endl;
+    source << "default: return 0;" << std::endl;
 #else
     // Find Vulkan SDK header
     const char *vulkanSdkPath = getenv(VK_SDK_PATH);
@@ -135,6 +121,17 @@ int main(int argc, char *argv[])
     source << "}" << std::endl;
     source2 << "    return nullptr;" << std::endl;
     source2 << "}" << std::endl;
+
+    /* // Uncomment to output source code for unit test
+    std::ofstream unittest("unittest.h");
+    if (!unittest.is_open())
+    {
+        std::cout << "Couldn't write to file unittest.h" << std::endl;
+        return -1;
+    }
+    for (auto [structureEnum, structureType]: structureTypes)
+        unittest << "    linkNode<" << structureType << ">(" << structureEnum << ");" << std::endl;
+    */
 #endif // OBFUSCATE
 
     std::cout << "End of source generation" << std::endl;
