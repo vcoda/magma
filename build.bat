@@ -115,7 +115,6 @@ src\misc\pipelineExecutable.cpp ^
 src\misc\scopedDebugMarker.cpp ^
 src\misc\sharing.cpp ^
 src\misc\structureChain.cpp ^
-src\misc\structureSize.cpp ^
 src\objects\accelerationStructure.cpp ^
 src\objects\accelerationStructureInputBuffer.cpp ^
 src\objects\baseDeviceMemory.cpp ^
@@ -312,7 +311,6 @@ pipelineExecutable.obj ^
 scopedDebugMarker.obj ^
 sharing.obj ^
 structureChain.obj ^
-structureSize.obj ^
 accelerationStructure.obj ^
 accelerationStructureInputBuffer.obj ^
 baseDeviceMemory.obj ^

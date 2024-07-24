@@ -481,7 +481,6 @@
     <ClCompile Include="..\..\src\misc\scopedDebugMarker.cpp" />
     <ClCompile Include="..\..\src\misc\sharing.cpp" />
     <ClCompile Include="..\..\src\misc\structureChain.cpp" />
-    <ClCompile Include="..\..\src\misc\structureSize.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\bottomLevelStructure.cpp" />
