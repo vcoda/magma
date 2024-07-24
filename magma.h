@@ -117,9 +117,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/shaders/shaderStages.h"
 #include "src/shaders/specialization.h"
 
-#include "src/raytracing/address.h"
 #include "src/raytracing/accelerationStructureGeometry.h"
+#include "src/raytracing/accelerationStructureHeader.h"
 #include "src/raytracing/accelerationStructureInstance.h"
+#include "src/raytracing/address.h"
 
 #include "src/renderpass/attachment.h"
 #include "src/renderpass/loadStoreOp.h"
