@@ -876,35 +876,7 @@ void CommandBuffer::buildAccelerationStructureIndirect(const std::shared_ptr<Acc
     }
 }
 
-void CommandBuffer::buildTopLevelAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
-    const AccelerationStructureGeometryInstances& instances, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
-{
-    VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
-    buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
-    buildGeometryInfo.pNext = nullptr;
-    buildGeometryInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
-    buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
-    buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
-    buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
-    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
-    buildGeometryInfo.geometryCount = 1; // If type is VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR, geometryCount must be 1
-    buildGeometryInfo.pGeometries = &instances;
-    buildGeometryInfo.ppGeometries = nullptr;
-    buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
-    VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo;
-    buildRangeInfo.primitiveCount = instances.primitiveCount; // This is the number of instances
-    buildRangeInfo.primitiveOffset = 0;
-    buildRangeInfo.firstVertex = 0;
-    buildRangeInfo.transformOffset = 0;
-    MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
-    if (vkCmdBuildAccelerationStructuresKHR)
-    {
-        const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = &buildRangeInfo;
-        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
-        MAGMA_INUSE(accelerationStructure);
-        MAGMA_INUSE(scratchBuffer);
-    }
-}
+
 
 void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
     const AccelerationStructureGeometry& geometry, const std::shared_ptr<Buffer>& scratchBuffer,
@@ -962,6 +934,36 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Accelerati
     if (vkCmdBuildAccelerationStructuresKHR)
     {
         const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = buildRanges.data();
+        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
+        MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+// inline void CommandBuffer::buildAccelerationStructure()
+// inline void CommandBuffer::updateAccelerationStructure()
+
+void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode, 
+    const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
+    const AccelerationStructureGeometryInstances& instances, const std::shared_ptr<Buffer>& scratchBuffer)
+{
+    VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
+    buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+    buildGeometryInfo.pNext = nullptr;
+    buildGeometryInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
+    buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
+    buildGeometryInfo.mode = mode;
+    buildGeometryInfo.srcAccelerationStructure = (VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR == mode) ? *accelerationStructure : VK_NULL_HANDLE;
+    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
+    buildGeometryInfo.geometryCount = 1; // If type is VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR, geometryCount must be 1
+    buildGeometryInfo.pGeometries = &instances;
+    buildGeometryInfo.ppGeometries = nullptr;
+    buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
+    const VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo = {instances.primitiveCount};
+    const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = &buildRangeInfo;
+    MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
+    if (vkCmdBuildAccelerationStructuresKHR)
+    {
         vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);

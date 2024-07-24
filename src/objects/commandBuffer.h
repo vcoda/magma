@@ -514,6 +514,13 @@ namespace magma
             const std::forward_list<AccelerationStructureGeometry>& geometries,
             const std::shared_ptr<Buffer>& scratchBuffer,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges) noexcept;
+        // TLAS
+        void buildAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
+            const AccelerationStructureGeometryInstances& instances,
+            const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
+        void updateAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
+            const AccelerationStructureGeometryInstances& instances,
+            const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
     #endif // VK_KHR_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline
@@ -656,6 +663,12 @@ namespace magma
         PipelineBarrierBatch *lookupBarrierBatch(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
             VkDependencyFlags dependencyFlags) noexcept;
+    #ifdef VK_KHR_acceleration_structure
+        void rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
+            const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
+            const AccelerationStructureGeometryInstances& instances,
+            const std::shared_ptr<Buffer>& scratchBuffer);
+    #endif // VK_KHR_acceleration_structure
 
         std::weak_ptr<CommandPool> cmdPool;
         std::shared_ptr<Device> device;

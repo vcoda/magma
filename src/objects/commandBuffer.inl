@@ -761,6 +761,20 @@ inline void CommandBuffer::endTransformFeedback() noexcept
 }
 #endif // VK_EXT_transform_feedback
 
+#ifdef VK_KHR_acceleration_structure
+inline void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
+    const AccelerationStructureGeometryInstances& instances, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
+{
+    rebuildAccelerationStructure(VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR, accelerationStructure, instances, scratchBuffer);
+}
+
+inline void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
+    const AccelerationStructureGeometryInstances& instances, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
+{
+    rebuildAccelerationStructure(VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR, accelerationStructure, instances, scratchBuffer);
+}
+#endif // VK_KHR_acceleration_structure
+
 inline void CommandBuffer::enableOcclusionQuery(bool enable, VkQueryControlFlags queryFlags_) noexcept
 {
     occlusionQueryEnable = MAGMA_BOOLEAN(enable);
