@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Base vertex buffer class. Holds vertex count 
+    /* Base vertex buffer class. Holds vertex count
        as a helper for non-indexed draw calls. */
 
     class BaseVertexBuffer : public Buffer

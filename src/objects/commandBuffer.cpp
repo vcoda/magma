@@ -993,7 +993,7 @@ void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureMod
     }
 }
 
-void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode, 
+void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
     const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
     const AccelerationStructureGeometryInstances& instances, const std::shared_ptr<Buffer>& scratchBuffer)
 {

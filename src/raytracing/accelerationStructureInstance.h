@@ -38,7 +38,6 @@ namespace magma
        structure at a transformed location. Multiple instances
        can point to the same bottom level acceleration structure. */
 
-
     struct AccelerationStructureInstance : VkAccelerationStructureInstanceKHR
     {
         constexpr AccelerationStructureInstance() noexcept;
