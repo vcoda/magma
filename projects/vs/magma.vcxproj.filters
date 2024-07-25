@@ -1136,9 +1136,6 @@
     <ClCompile Include="..\..\src\allocator\vmaImplementation.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\barriers\bufferMemoryBarrier.cpp">
-      <Filter>Source Files\barriers</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\barriers\imageMemoryBarrier.cpp">
       <Filter>Source Files\barriers</Filter>
     </ClCompile>
@@ -1623,6 +1620,9 @@
     </None>
     <None Include="..\..\src\objects\accelerationStructureInstanceBuffer.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\barriers\bufferMemoryBarrier.inl">
+      <Filter>Header Files\barriers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

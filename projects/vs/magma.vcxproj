@@ -440,7 +440,6 @@
     <ClCompile Include="..\..\src\auxiliary\sprite.cpp" />
     <ClCompile Include="..\..\src\auxiliary\swapchainFramebuffer.cpp" />
     <ClCompile Include="..\..\src\auxiliary\textShader.cpp" />
-    <ClCompile Include="..\..\src\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\src\barriers\imageMemoryBarrier.cpp" />
     <ClCompile Include="..\..\src\core\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -687,6 +686,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling vertex shader</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../../src/auxiliary/spirv/output/immv</Outputs>
     </CustomBuild>
+    <None Include="..\..\src\barriers\bufferMemoryBarrier.inl" />
     <None Include="..\..\src\barriers\subpassDependency.inl" />
     <None Include="..\..\src\barriers\subpassDependency2.inl" />
     <None Include="..\..\src\core\copyThread.inl" />

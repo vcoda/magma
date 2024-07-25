@@ -85,7 +85,6 @@ src\auxiliary\profiler.cpp ^
 src\auxiliary\sprite.cpp ^
 src\auxiliary\swapchainFramebuffer.cpp ^
 src\auxiliary\textShader.cpp ^
-src\barriers\bufferMemoryBarrier.cpp ^
 src\barriers\imageMemoryBarrier.cpp ^
 src\descriptors\accelerationStructureDescriptor.cpp ^
 src\descriptors\bufferDescriptor.cpp ^
@@ -280,7 +279,6 @@ profiler.obj ^
 sprite.obj ^
 swapchainFramebuffer.obj ^
 textShader.obj ^
-bufferMemoryBarrier.obj ^
 imageMemoryBarrier.obj ^
 pch.obj ^
 accelerationStructureDescriptor.obj ^
