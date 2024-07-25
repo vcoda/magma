@@ -61,7 +61,10 @@ VkResult TopLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureMode
     buildGeometryInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
     buildGeometryInfo.flags = getBuildFlags();
     buildGeometryInfo.mode = mode;
-    buildGeometryInfo.srcAccelerationStructure = (VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR == mode) ? handle : VK_NULL_HANDLE;
+    if (VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR == mode)
+        buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
+    else // VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR
+        buildGeometryInfo.srcAccelerationStructure = handle;
     buildGeometryInfo.dstAccelerationStructure = handle;
     buildGeometryInfo.geometryCount = 1; // If type is VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR, geometryCount must be 1
     buildGeometryInfo.pGeometries = &instances;
