@@ -511,7 +511,7 @@ namespace magma
             const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
         void updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
             const std::forward_list<AccelerationStructureGeometry>& geometries,
-            const std::shared_ptr<const Buffer>& indirectBuildRanges,
+            const std::shared_ptr<Buffer>& indirectBuildRanges,
             const std::shared_ptr<Buffer>& scratchBuffer,
             uint32_t indirectStride = sizeof(VkAccelerationStructureBuildRangeInfoKHR)) noexcept;
         void copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,

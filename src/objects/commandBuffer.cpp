@@ -802,7 +802,7 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
 // inline void CommandBuffer::updateAccelerationStructure
 
 void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-    const std::forward_list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<const Buffer>& indirectBuildRanges, 
+    const std::forward_list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& indirectBuildRanges,
     const std::shared_ptr<Buffer>& scratchBuffer, uint32_t indirectStride /* sizeof(VkAccelerationStructureBuildRangeInfoKHR) */) noexcept
 {
     const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
