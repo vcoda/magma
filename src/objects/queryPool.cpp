@@ -230,21 +230,21 @@ std::vector<QueryPool::Result<TransformFeedbackQuery::Result, uint64_t>> Transfo
 AccelerationStructureQuery::AccelerationStructureQuery(std::shared_ptr<Device> device, Type queryType, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    IntegerQueryPool(toVkType(queryType), std::move(device), queryCount, 0, std::move(allocator), extendedInfo)
+    IntegerQueryPool(castType(queryType), std::move(device), queryCount, 0, std::move(allocator), extendedInfo)
 {}
 
-VkQueryType AccelerationStructureQuery::toVkType(Type queryType) noexcept
+VkQueryType AccelerationStructureQuery::castType(Type queryType) noexcept
 {
     switch (queryType)
     {
-    case CompactedSize:
+    case Type::CompactedSize:
         return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR;
-    case SerializationSize:
+    case Type::SerializationSize:
         return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR;
 #ifdef VK_KHR_ray_tracing_maintenance1
-    case Size:
+    case Type::Size:
         return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SIZE_KHR;
-    case BottomLevelPointers:
+    case Type::BottomLevelPointers:
         return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR;
 #endif // VK_KHR_ray_tracing_maintenance1
     }

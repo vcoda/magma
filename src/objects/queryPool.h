@@ -254,11 +254,7 @@ namespace magma
     class AccelerationStructureQuery : public IntegerQueryPool
     {
     public:
-        enum Type
-        {
-            Size, CompactedSize, SerializationSize, BottomLevelPointers
-        };
-
+        enum class Type : uint8_t;
         explicit AccelerationStructureQuery(std::shared_ptr<Device> device,
             Type queryType,
             uint32_t queryCount,
@@ -266,7 +262,28 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
 
     private:
-        static VkQueryType toVkType(Type queryType) noexcept;
+        static VkQueryType castType(Type queryType) noexcept;
+    };
+
+    /* The following values are used when writing acceleration structure
+       properties:
+
+        * CompactedSize: Number of bytes required by a compacted
+          acceleration structure.
+        * SerializationSize: Number of bytes required by a serialized
+          acceleration structure.
+        * Size: The acceleration structure size on the device timeline.
+        * BottomLevelPointers: A 64-bit integer of the count of the
+          number of acceleration structure handles. This will be zero
+          for a bottom-level acceleration structure. For top-level
+          acceleration structures this number is implementation-dependent. */
+
+    enum class AccelerationStructureQuery::Type : uint8_t
+    {
+        CompactedSize, SerializationSize,
+    #ifdef VK_KHR_ray_tracing_maintenance1
+        Size, BottomLevelPointers
+    #endif
     };
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

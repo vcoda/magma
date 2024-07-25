@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "resource.h"
+#include "queryPool.h"
 
 namespace magma
 {
@@ -52,7 +53,7 @@ namespace magma
         Family getFamily() const noexcept override final { return Family::AccelerationStructure; }
         VkDeviceSize getBuildScratchSize() const noexcept { return buildScratchSize; }
         VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
-        VkDeviceSize getProperty(VkQueryType queryType) const noexcept;
+        VkDeviceSize getProperty(AccelerationStructureQuery::Type queryType) const noexcept;
         uint64_t getReference() const noexcept;
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
@@ -90,6 +91,7 @@ namespace magma
             const std::forward_list<AccelerationStructureGeometry>& geometries,
             std::shared_ptr<Allocator> allocator,
             const StructureChain& extendedInfo);
+        static VkQueryType castType(AccelerationStructureQuery::Type queryType) noexcept;
 
         VkAccelerationStructureTypeKHR structureType;
 
