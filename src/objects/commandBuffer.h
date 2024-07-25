@@ -530,6 +530,9 @@ namespace magma
             const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
         void deserializeAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
             const std::shared_ptr<Buffer>& srcBuffer);
+        void writeAccelerationStructureProperties(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+            const std::shared_ptr<QueryPool>& queryPool,
+            uint32_t firstQuery = 0);
     #endif // VK_KHR_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline

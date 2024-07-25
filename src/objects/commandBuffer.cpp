@@ -949,6 +949,14 @@ void CommandBuffer::deserializeAccelerationStructure(const std::shared_ptr<Accel
         vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
 }
 
+void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+    const std::shared_ptr<QueryPool>& queryPool, uint32_t firstQuery /* 0 */)
+{
+    MAGMA_DEVICE_EXTENSION(vkCmdWriteAccelerationStructuresPropertiesKHR);
+    if (vkCmdWriteAccelerationStructuresPropertiesKHR)
+        vkCmdWriteAccelerationStructuresPropertiesKHR(handle, 1, accelerationStructure->getHandleAddress(), queryPool->getType(), *queryPool, firstQuery);
+}
+
 void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
     const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
     const std::forward_list<AccelerationStructureGeometry>& geometries,
