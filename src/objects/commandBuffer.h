@@ -509,7 +509,6 @@ namespace magma
         void updateAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
             const AccelerationStructureGeometryInstances& instances,
             const std::shared_ptr<Buffer>& scratchBuffer) noexcept;
-        // Indirect
         void updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
             const std::forward_list<AccelerationStructureGeometry>& geometries,
             const std::shared_ptr<const Buffer>& indirectBuildRanges,
@@ -527,6 +526,10 @@ namespace magma
             const std::shared_ptr<Buffer>& srcBuffer);
         void copyMemoryToAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
             const void *srcBuffer);
+        void serializeAccelerationStructure(const std::shared_ptr<Buffer>& dstBuffer,
+            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
+        void deserializeAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
+            const std::shared_ptr<Buffer>& srcBuffer);
     #endif // VK_KHR_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline
