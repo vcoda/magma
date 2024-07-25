@@ -837,6 +837,90 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
     }
 }
 
+void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
+    const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure)
+{
+    VkCopyAccelerationStructureInfoKHR copyInfo;
+    copyInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR;
+    copyInfo.pNext = nullptr;
+    copyInfo.src = *srcAccelerationStructure;
+    copyInfo.dst = *dstAccelerationStructure;
+    copyInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
+    MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureKHR);
+    if (vkCmdCopyAccelerationStructureKHR)
+        vkCmdCopyAccelerationStructureKHR(handle, &copyInfo);
+}
+
+void CommandBuffer::compactAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
+    const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure)
+{
+    VkCopyAccelerationStructureInfoKHR copyInfo;
+    copyInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR;
+    copyInfo.pNext = nullptr;
+    copyInfo.src = *srcAccelerationStructure;
+    copyInfo.dst = *dstAccelerationStructure;
+    copyInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_KHR;
+    MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureKHR);
+    if (vkCmdCopyAccelerationStructureKHR)
+        vkCmdCopyAccelerationStructureKHR(handle, &copyInfo);
+}
+
+void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_ptr<Buffer>& dstBuffer,
+    const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure)
+{
+    VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
+    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
+    copyMemoryInfo.pNext = nullptr;
+    copyMemoryInfo.src = *srcAccelerationStructure;
+    copyMemoryInfo.dst.deviceAddress = dstBuffer->getDeviceAddress();
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
+    MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
+    if (vkCmdCopyAccelerationStructureToMemoryKHR)
+        vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
+}
+
+void CommandBuffer::copyAccelerationStructureToMemory(void *dstBuffer,
+    const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure)
+{
+    VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
+    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
+    copyMemoryInfo.pNext = nullptr;
+    copyMemoryInfo.src = *srcAccelerationStructure;
+    copyMemoryInfo.dst.hostAddress = dstBuffer;
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
+    MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
+    if (vkCmdCopyAccelerationStructureToMemoryKHR)
+        vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
+}
+
+void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
+    const std::shared_ptr<Buffer>& srcBuffer)
+{
+    VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
+    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
+    copyMemoryInfo.pNext = nullptr;
+    copyMemoryInfo.src.deviceAddress = srcBuffer->getDeviceAddress();
+    copyMemoryInfo.dst = *dstAccelerationStructure;
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
+    MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
+    if (vkCmdCopyMemoryToAccelerationStructureKHR)
+        vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
+}
+
+void CommandBuffer::copyMemoryToAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
+    const void *srcBuffer)
+{
+    VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
+    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
+    copyMemoryInfo.pNext = nullptr;
+    copyMemoryInfo.src.hostAddress = srcBuffer;
+    copyMemoryInfo.dst = *dstAccelerationStructure;
+    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
+    MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
+    if (vkCmdCopyMemoryToAccelerationStructureKHR)
+        vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
+}
+
 void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
     const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
     const std::forward_list<AccelerationStructureGeometry>& geometries,

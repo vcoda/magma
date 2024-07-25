@@ -515,6 +515,18 @@ namespace magma
             const std::shared_ptr<const Buffer>& indirectBuildRanges,
             const std::shared_ptr<Buffer>& scratchBuffer,
             uint32_t indirectStride = sizeof(VkAccelerationStructureBuildRangeInfoKHR)) noexcept;
+        void copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
+            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
+        void compactAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
+            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
+        void copyAccelerationStructureToBuffer(const std::shared_ptr<Buffer>& dstBuffer,
+            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
+        void copyAccelerationStructureToMemory(void *dstBuffer,
+            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
+        void copyBufferToAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
+            const std::shared_ptr<Buffer>& srcBuffer);
+        void copyMemoryToAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
+            const void *srcBuffer);
     #endif // VK_KHR_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline
