@@ -28,7 +28,6 @@ int main(int argc, char *argv[])
     writeGeneratedByUtilityToolWarning(source);
 
 #ifdef OBFUSCATE
-    #include "coreStructs.inl"
     for (uint32_t i = VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO + 1; i <= VK_STRUCTURE_TYPE_AMIGO_PROFILING_SUBMIT_INFO_SEC; ++i)
     {
         if (i == 100) // Jump to extended enums
