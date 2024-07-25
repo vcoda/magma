@@ -68,12 +68,15 @@ namespace magma
             constexpr BufferMemoryBarrier transformFeedbackWriteVertexAttribRead(VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
             constexpr BufferMemoryBarrier transformFeedbackCntWriteIndirectCmdRead(VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
             constexpr BufferMemoryBarrier transformFeedbackCntWriteRead(VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT, VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT);
-        #endif
+        #endif // VK_EXT_transform_feedback
         #ifdef VK_EXT_conditional_rendering
             constexpr BufferMemoryBarrier shaderWriteConditionalRenderingRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT);
         #endif
+        #ifdef VK_KHR_acceleration_structure
+            constexpr BufferMemoryBarrier transferWriteAccelerationStructureRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
+            constexpr BufferMemoryBarrier accelerationStructureWriteRead(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
+            constexpr BufferMemoryBarrier accelerationStructureWriteShaderRead(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR, VK_ACCESS_SHADER_READ_BIT);
+        #endif // VK_KHR_acceleration_structure
         } // namespace buffer
     } // namespace barrier
 } // namespace magma
-
-
