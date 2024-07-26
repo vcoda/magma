@@ -504,11 +504,32 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
 }
 
 inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const MemoryBarrier& memoryBarrier, const BufferMemoryBarrier& bufferMemoryBarrier, const ImageMemoryBarrier& imageMemoryBarrier) const noexcept
+    const BufferMemoryBarrier& barrier) const noexcept
 {
-    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 1, &memoryBarrier, 0, &bufferMemoryBarrier, 0, &imageMemoryBarrier);
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 0, nullptr, 1, &barrier, 0, nullptr);
     MAGMA_INUSE(event);
-    MAGMA_INUSE(imageMemoryBarrier.image);
+}
+
+inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+    const ImageMemoryBarrier& barrier) const noexcept
+{
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 0, nullptr, 0, nullptr, 1, &barrier);
+    MAGMA_INUSE(barrier.image);
+    changeImageMipLayouts(barrier);
+}
+
+inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+    const std::initializer_list<MemoryBarrier>& barriers) const noexcept
+{
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, MAGMA_COUNT(barriers), barriers.begin(), 0, nullptr, 0, nullptr);
+    MAGMA_INUSE(event);
+}
+
+inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+    const std::initializer_list<BufferMemoryBarrier>& barriers) const noexcept
+{
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 0, nullptr, MAGMA_COUNT(barriers), barriers.begin(), 0, nullptr);
+    MAGMA_INUSE(event);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,

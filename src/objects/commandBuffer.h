@@ -328,9 +328,23 @@ namespace magma
         void waitEvent(const std::shared_ptr<Event>& event,
             VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
-            const MemoryBarrier& memoryBarrier,
-            const BufferMemoryBarrier& bufferMemoryBarrier,
-            const ImageMemoryBarrier& imageMemoryBarrier) const noexcept;
+            const BufferMemoryBarrier& barrier) const noexcept;
+        void waitEvent(const std::shared_ptr<Event>& event,
+            VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const ImageMemoryBarrier& barrier) const noexcept;
+        void waitEvent(const std::shared_ptr<Event>& event,
+            VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const std::initializer_list<MemoryBarrier>& barriers) const noexcept;
+        void waitEvent(const std::shared_ptr<Event>& event,
+            VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const std::initializer_list<BufferMemoryBarrier>& barriers) const noexcept;
+        void waitEvent(const std::shared_ptr<Event>& event,
+            VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const std::initializer_list<ImageMemoryBarrier>& barriers) const noexcept;
         void waitEvents(const std::vector<std::shared_ptr<Event>>& events,
             VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,

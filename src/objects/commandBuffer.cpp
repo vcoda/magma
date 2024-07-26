@@ -413,39 +413,56 @@ void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, cons
 // inline void CommandBuffer::clearDepthStencilImage
 // inline void CommandBuffer::clearAttachments
 // inline void CommandBuffer::resolveImage
+
 // inline void CommandBuffer::setEvent
 // inline void CommandBuffer::resetEvent
 // inline void CommandBuffer::waitEvent
+// inline void CommandBuffer::waitEvent
+// inline void CommandBuffer::waitEvent
+// inline void CommandBuffer::waitEvent
+// inline void CommandBuffer::waitEvent
+// inline void CommandBuffer::waitEvent
+
+void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+    const std::initializer_list<ImageMemoryBarrier>& barriers) const noexcept
+{
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedBarriers, barriers.size());
+    for (auto const& barrier: barriers)
+        dereferencedBarriers.put(barrier);
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 0, nullptr, 0, nullptr, dereferencedBarriers.size(), dereferencedBarriers);
+    for (auto const& barrier: barriers)
+    {
+        MAGMA_INUSE(barrier.image);
+        changeImageMipLayouts(barrier);
+    }
+}
 
 void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::vector<MemoryBarrier>& memoryBarriers /* empty */,
     const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* empty */) const noexcept
 {
-    MAGMA_ASSERT(srcStageMask);
-    MAGMA_ASSERT(dstStageMask);
     MAGMA_STACK_ARRAY(VkEvent, dereferencedEvents, events.size());
-    MAGMA_STACK_ARRAY(VkBufferMemoryBarrier, dereferencedBufferMemoryBarriers, bufferMemoryBarriers.size());
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
     for (auto const& event: events)
     {
         dereferencedEvents.put(*event);
         MAGMA_INUSE(event);
     }
-    for (auto const& barrier: bufferMemoryBarriers)
-        dereferencedBufferMemoryBarriers.put(barrier);
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
     for (auto const& barrier: imageMemoryBarriers)
-    {
         dereferencedImageMemoryBarriers.put(barrier);
-        MAGMA_INUSE(barrier.image);
-    }
     vkCmdWaitEvents(handle, dereferencedEvents.size(), dereferencedEvents, srcStageMask, dstStageMask,
         MAGMA_COUNT(memoryBarriers),
         memoryBarriers.data(),
-        dereferencedBufferMemoryBarriers.size(),
-        dereferencedBufferMemoryBarriers,
+        MAGMA_COUNT(bufferMemoryBarriers),
+        bufferMemoryBarriers.data(),
         dereferencedImageMemoryBarriers.size(),
         dereferencedImageMemoryBarriers);
+    for (auto const& barrier: imageMemoryBarriers)
+    {
+        MAGMA_INUSE(barrier.image);
+        changeImageMipLayouts(barrier);
+    }
 }
 
 // inline void CommandBuffer::pipelineBarrier
