@@ -355,6 +355,18 @@ namespace magma
             VkDependencyFlags dependencyFlags = 0) noexcept;
         void pipelineBarrier(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
+            const std::initializer_list<MemoryBarrier>& barriers,
+            VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const std::initializer_list<BufferMemoryBarrier>& barriers,
+            VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
+            const std::initializer_list<ImageMemoryBarrier>& barriers,
+            VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask,
+            VkPipelineStageFlags dstStageMask,
             const std::vector<MemoryBarrier>& memoryBarriers = {},
             const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers = {},
             const std::vector<ImageMemoryBarrier>& imageMemoryBarriers = {},

@@ -465,6 +465,28 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
         barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
 }
 
+// inline void CommandBuffer::pipelineBarrier
+// inline void CommandBuffer::pipelineBarrier
+
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& barriers,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedBarriers, barriers.size());
+    for (auto const& barrier: barriers)
+        dereferencedBarriers.put(barrier);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 0, nullptr, dereferencedBarriers.size(), dereferencedBarriers);
+    for (auto const& barrier: barriers)
+    {
+        MAGMA_INUSE(barrier.image);
+        uint32_t levelCount = barrier.subresourceRange.levelCount;
+        if (VK_REMAINING_MIP_LEVELS == levelCount)
+            levelCount = barrier.image->getMipLevels() - barrier.subresourceRange.baseMipLevel;
+        MAGMA_ASSERT(barrier.subresourceRange.baseMipLevel + levelCount <= barrier.image->getMipLevels());
+        for (uint32_t i = 0; i < levelCount; ++i)
+            barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
+    }
+}
+
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::vector<MemoryBarrier>& memoryBarriers /* empty */,
     const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,

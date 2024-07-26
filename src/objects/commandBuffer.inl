@@ -529,6 +529,18 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
     vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 1, &barrier, 0, nullptr);
 }
 
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& barriers,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, MAGMA_COUNT(barriers), barriers.begin(), 0, nullptr, 0, nullptr);
+}
+
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& barriers,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, MAGMA_COUNT(barriers), barriers.begin(), 0, nullptr);
+}
+
 inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
