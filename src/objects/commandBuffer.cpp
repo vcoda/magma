@@ -494,10 +494,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
 {
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
     for (auto const& barrier: imageMemoryBarriers)
-    {
         dereferencedImageMemoryBarriers.put(barrier);
-        MAGMA_INUSE(barrier.image);
-    }
     vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
         MAGMA_COUNT(memoryBarriers),
         memoryBarriers.data(),
