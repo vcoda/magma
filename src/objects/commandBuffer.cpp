@@ -468,20 +468,7 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
 // inline void CommandBuffer::pipelineBarrier
 // inline void CommandBuffer::pipelineBarrier
 // inline void CommandBuffer::pipelineBarrier
-
-void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
-    VkDependencyFlags dependencyFlags /* 0 */) noexcept
-{
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 0, nullptr, 1, &barrier);
-    MAGMA_INUSE(barrier.image);
-    uint32_t levelCount = barrier.subresourceRange.levelCount;
-    if (VK_REMAINING_MIP_LEVELS == levelCount)
-        levelCount = barrier.image->getMipLevels() - barrier.subresourceRange.baseMipLevel;
-    MAGMA_ASSERT(barrier.subresourceRange.baseMipLevel + levelCount <= barrier.image->getMipLevels());
-    for (uint32_t i = 0; i < levelCount; ++i)
-        barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
-}
-
+// inline void CommandBuffer::pipelineBarrier
 // inline void CommandBuffer::pipelineBarrier
 // inline void CommandBuffer::pipelineBarrier
 
