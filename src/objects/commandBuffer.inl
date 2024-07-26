@@ -508,7 +508,6 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
 {
     vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 1, &memoryBarrier, 0, &bufferMemoryBarrier, 0, &imageMemoryBarrier);
     MAGMA_INUSE(event);
-    MAGMA_INUSE(bufferMemoryBarrier.buffer);
     MAGMA_INUSE(imageMemoryBarrier.image);
 }
 
@@ -528,7 +527,6 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 1, &barrier, 0, nullptr);
-    MAGMA_INUSE(barrier.buffer);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier,
