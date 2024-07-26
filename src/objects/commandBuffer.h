@@ -684,6 +684,7 @@ namespace magma
         };
 
         VkDevice getNativeDevice() const noexcept;
+        void changeImageMipLayouts(const ImageMemoryBarrier& barrier) const noexcept;
         PipelineBarrierBatch *lookupBarrierBatch(VkPipelineStageFlags srcStageMask,
             VkPipelineStageFlags dstStageMask,
             VkDependencyFlags dependencyFlags) noexcept;

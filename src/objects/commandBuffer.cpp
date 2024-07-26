@@ -478,12 +478,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     for (auto const& barrier: barriers)
     {
         MAGMA_INUSE(barrier.image);
-        uint32_t levelCount = barrier.subresourceRange.levelCount;
-        if (VK_REMAINING_MIP_LEVELS == levelCount)
-            levelCount = barrier.image->getMipLevels() - barrier.subresourceRange.baseMipLevel;
-        MAGMA_ASSERT(barrier.subresourceRange.baseMipLevel + levelCount <= barrier.image->getMipLevels());
-        for (uint32_t i = 0; i < levelCount; ++i)
-            barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
+        changeImageMipLayouts(barrier);
     }
 }
 
@@ -508,12 +503,8 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
         dereferencedImageMemoryBarriers);
     for (auto const& barrier: imageMemoryBarriers)
     {
-        uint32_t levelCount = barrier.subresourceRange.levelCount;
-        if (VK_REMAINING_MIP_LEVELS == levelCount)
-            levelCount = barrier.image->getMipLevels() - barrier.subresourceRange.baseMipLevel;
-        MAGMA_ASSERT(barrier.subresourceRange.baseMipLevel + levelCount <= barrier.image->getMipLevels());
-        for (uint32_t i = 0; i < levelCount; ++i)
-            barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
+        MAGMA_INUSE(barrier.image);
+        changeImageMipLayouts(barrier);
     }
 }
 
@@ -1115,6 +1106,16 @@ void CommandBuffer::releaseResourcesInUse() const noexcept
 inline VkDevice CommandBuffer::getNativeDevice() const noexcept
 {
     return device->getHandle();
+}
+
+void CommandBuffer::changeImageMipLayouts(const ImageMemoryBarrier& barrier) const noexcept
+{
+    uint32_t levelCount = barrier.subresourceRange.levelCount;
+    if (VK_REMAINING_MIP_LEVELS == levelCount)
+        levelCount = barrier.image->getMipLevels() - barrier.subresourceRange.baseMipLevel;
+    MAGMA_ASSERT(barrier.subresourceRange.baseMipLevel + levelCount <= barrier.image->getMipLevels());
+    for (uint32_t i = 0; i < levelCount; ++i)
+        barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
 }
 
 CommandBuffer::PipelineBarrierBatch *CommandBuffer::lookupBarrierBatch(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags) noexcept
