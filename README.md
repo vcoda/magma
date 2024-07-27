@@ -176,6 +176,15 @@ make DEBUG=1 -j<N>
 where N is the number of CPU threads you want to assign to compilation.
 By default, debug version of static library is builded, so DEBUG flag can be omitted. If you want to build a release one, explicitly specify DEBUG=0.
 
+You may also use Qt Creator to build the library. Qt project is located in the `magma/projects/qt` directory.
+To successfully compile the project, you need to setup path to Vulkan SDK as environment variable. 
+Go to `Edit/Preferences` (or `Tools/Options`), open property page `Build and Run`, then select `Kits` tab.
+Find `Environment` property, click "Change" button and add path to Vulkan SDK directory:
+
+<p align="center">
+    <img src="docs/images/vulkan_sdk_path.png" width="329px" height="109px">
+</p>
+
 Vulkan supports different windowing system. By default, XCB is used. If you want to switch to Xlib, open Makefile and replace
 ```
 PLATFORM=VK_USE_PLATFORM_XCB_KHR
