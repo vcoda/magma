@@ -574,9 +574,9 @@ constexpr bool Format::astcLdr() const noexcept
 
 constexpr bool Format::astcHdr() const noexcept
 {
-#ifdef VK_EXT_texture_compression_astc_hdr
     switch (format)
     {
+#ifdef VK_EXT_texture_compression_astc_hdr
     case VK_FORMAT_ASTC_4x4_SFLOAT_BLOCK_EXT:
     case VK_FORMAT_ASTC_5x4_SFLOAT_BLOCK_EXT:
     case VK_FORMAT_ASTC_5x5_SFLOAT_BLOCK_EXT:
@@ -592,16 +592,17 @@ constexpr bool Format::astcHdr() const noexcept
     case VK_FORMAT_ASTC_12x10_SFLOAT_BLOCK_EXT:
     case VK_FORMAT_ASTC_12x12_SFLOAT_BLOCK_EXT:
         return true;
-    };
 #endif // VK_EXT_texture_compression_astc_hdr
-    return false;
+    default:
+        return false;
+    };
 }
 
 constexpr bool Format::pvrtc() const noexcept
 {
-#ifdef VK_IMG_format_pvrtc
     switch (format)
     {
+#ifdef VK_IMG_format_pvrtc
     case VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG:
     case VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG:
     case VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG:
@@ -611,16 +612,17 @@ constexpr bool Format::pvrtc() const noexcept
     case VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG:
     case VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG:
         return true;
-    }
 #endif // VK_IMG_format_pvrtc
-    return false;
+    default:
+        return false;
+    }
 }
 
 constexpr bool Format::ycbcr() const noexcept
 {
-#ifdef VK_KHR_sampler_ycbcr_conversion
     switch (format)
     {
+#ifdef VK_KHR_sampler_ycbcr_conversion
     case VK_FORMAT_B10X6G10X6R10X6G10X6_422_UNORM_4PACK16_KHR:
     case VK_FORMAT_B12X4G12X4R12X4G12X4_422_UNORM_4PACK16_KHR:
     case VK_FORMAT_B16G16R16G16_422_UNORM_KHR:
@@ -656,19 +658,17 @@ constexpr bool Format::ycbcr() const noexcept
     case VK_FORMAT_R12X4G12X4_UNORM_2PACK16_KHR:
     case VK_FORMAT_R12X4_UNORM_PACK16_KHR:
         return true;
-    }
 #endif // VK_KHR_sampler_ycbcr_conversion
 #ifdef VK_EXT_ycbcr_2plane_444_formats
-    switch (format)
-    {
     case VK_FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT:
     case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
         return true;
-    }
 #endif // VK_EXT_ycbcr_2plane_444_formats
-    return false;
+    default:
+        return false;
+    }
 }
 
 constexpr bool Format::packed() const noexcept
@@ -740,9 +740,9 @@ constexpr bool Format::packed() const noexcept
 
 constexpr bool Format::multiPlanar() const noexcept
 {
-#ifdef VK_KHR_sampler_ycbcr_conversion
     switch (format)
     {
+#ifdef VK_KHR_sampler_ycbcr_conversion
     case VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM_KHR:
     case VK_FORMAT_G8_B8R8_2PLANE_420_UNORM_KHR:
     case VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM_KHR:
@@ -764,19 +764,17 @@ constexpr bool Format::multiPlanar() const noexcept
     case VK_FORMAT_G16_B16R16_2PLANE_422_UNORM_KHR:
     case VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR:
         return true;
-    }
 #endif // VK_KHR_sampler_ycbcr_conversion
 #ifdef VK_EXT_ycbcr_2plane_444_formats
-    switch (format)
-    {
     case VK_FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT:
     case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
         return true;
-    }
 #endif // VK_EXT_ycbcr_2plane_444_formats
-    return false;
+    default:
+        return false;
+    }
 }
 
 constexpr std::size_t Format::depthStencilSize() const noexcept
@@ -970,12 +968,12 @@ constexpr std::size_t Format::astcSize() const noexcept
 
 constexpr std::size_t Format::pvrtcSize() const noexcept
 {
-#ifdef VK_IMG_format_pvrtc
     switch (format)
     {
     // Specifies a four-component, PVRTC compressed format
     // where each 64-bit compressed texel block encodes an
     // 8(4)x4 rectangle.
+#ifdef VK_IMG_format_pvrtc
     case VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG:
     case VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG:
     case VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG:
@@ -985,8 +983,9 @@ constexpr std::size_t Format::pvrtcSize() const noexcept
     case VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG:
     case VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG:
         return 64/8;
-    }
 #endif // VK_IMG_format_pvrtc
-    return 0;
+    default:
+        return 0;
+    }
 }
 } // namespace magma
