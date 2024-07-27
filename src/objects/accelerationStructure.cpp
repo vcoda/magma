@@ -39,8 +39,8 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     flags(flags),
     buildType(buildType),
     buildFlags(buildFlags),
-    updateScratchSize(0ull),
-    buildScratchSize(0ull)
+    buildScratchSize(0ull),
+    updateScratchSize(0ull)
 {
     const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
     MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);

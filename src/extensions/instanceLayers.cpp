@@ -54,8 +54,8 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(EOS_Overlay),
     MAGMA_CHECK_LAYER(FCAT_DT_overlay64),
     MAGMA_CHECK_LAYER(FLIMES),
-    MAGMA_CHECK_LAYER(fossilize),
     MAGMA_CHECK_LAYER(force_priority),
+    MAGMA_CHECK_LAYER(fossilize),
     MAGMA_CHECK_LAYER(fpsmon),
     MAGMA_CHECK_LAYER(FPSMonitor),
 
