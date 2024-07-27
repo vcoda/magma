@@ -82,6 +82,11 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
                 ++statistics.rayTracingPipelineCount;
                 break;
             #endif
+            #ifdef VK_HUAWEI_subpass_shading
+            case VK_PIPELINE_BIND_POINT_SUBPASS_SHADING_HUAWEI:
+                ++statistics.subpassShadingPipelineCount;
+                break;
+            #endif
             }
         });
     statistics.descriptorSetLayoutCount = MAGMA_COUNT(descriptorSetLayouts);

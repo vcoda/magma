@@ -138,6 +138,7 @@ namespace magma
         uint32_t graphicsPipelineCount = 0;
         uint32_t computePipelineCount = 0;
         uint32_t rayTracingPipelineCount = 0;
+        uint32_t subpassShadingPipelineCount = 0;
         uint32_t descriptorSetLayoutCount = 0;
         uint32_t samplerCount = 0;
         uint32_t descriptorPoolCount = 0;
