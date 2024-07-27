@@ -98,6 +98,11 @@ VkBaseOutStructure *StructureChain::copyNode(const VkBaseOutStructure *src) noex
     return dst;
 }
 
+// warning: case value not in enumerated type 'VkStructureType'
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wswitch"
+#endif
+
 size_t StructureChain::getNodeSize(VkStructureType sType) noexcept
 {
     switch (sType)
