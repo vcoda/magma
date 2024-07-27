@@ -73,19 +73,10 @@ AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColor
     pAttachments = core::copyVector<VkPipelineColorBlendAttachmentState>(attachments);
 }
 
-AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other) noexcept
+AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other) noexcept:
+    ColorBlendState(other)
 {
-    sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pNext = core::copy((VkPipelineColorBlendAdvancedStateCreateInfoEXT *)other.pNext);
-    flags = other.flags;
-    logicOpEnable = other.logicOpEnable;
-    logicOp = other.logicOp;
-    attachmentCount = other.attachmentCount;
-    pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
-    blendConstants[0] = other.blendConstants[0];
-    blendConstants[1] = other.blendConstants[1];
-    blendConstants[2] = other.blendConstants[2];
-    blendConstants[3] = other.blendConstants[3];
 }
 
 AdvancedColorBlendState& AdvancedColorBlendState::operator=(const AdvancedColorBlendState& other)  noexcept

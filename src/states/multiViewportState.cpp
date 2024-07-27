@@ -53,15 +53,11 @@ MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_
 }
 
 MultiViewportState::MultiViewportState(const MultiViewportState& other):
+    ViewportState(other),
     viewports(other.viewports),
     scissors(other.scissors)
 {
-    sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    pNext = nullptr; // TODO
-    flags = other.flags;
-    viewportCount = other.viewportCount;
     pViewports = viewports.data();
-    scissorCount = other.scissorCount;
     pScissors = scissors.data();
 }
 
