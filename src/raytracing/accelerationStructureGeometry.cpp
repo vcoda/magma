@@ -50,9 +50,14 @@ size_t AccelerationStructureGeometryTriangles::getIndexSize() const noexcept
     case VK_INDEX_TYPE_UINT8_KHR:
         return sizeof(uint8_t);
 #endif // VK_KHR_index_type_uint8
+#ifdef VK_EXT_index_type_uint8
+    case VK_INDEX_TYPE_UINT8_EXT:
+        return sizeof(uint8_t);
+#endif // VK_EXT_index_type_uint8
+    default:
+        MAGMA_ASSERT(false);
+        return 0;
     }
-    MAGMA_ASSERT(false);
-    return 0;
 }
 #endif // VK_KHR_acceleration_structure
 } // namesapce magma
