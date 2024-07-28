@@ -31,7 +31,7 @@ namespace magma
         std::string strinfigyRenderPassFlags(VkRenderPassCreateFlags flags);
         std::string strinfigyAttachmentDescriptionFlags(VkAttachmentDescriptionFlags flags);
         std::string stringifyColorMask(VkColorComponentFlags flags);
-    #ifdef VK_KHR_swapchain
+    #if defined(VK_KHR_swapchain) && (VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70)
         std::string stringifySwapchainFlags(VkSwapchainCreateFlagsKHR flags);
     #endif
     #ifdef VK_KHR_device_group

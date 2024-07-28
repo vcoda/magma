@@ -228,7 +228,7 @@ std::string stringifyColorMask(VkColorComponentFlags flags)
     return out.str();
 }
 
-#ifdef VK_KHR_swapchain
+#if defined(VK_KHR_swapchain) && (VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70)
 std::string stringifySwapchainFlags(VkSwapchainCreateFlagsKHR flags)
 {
     if (!flags)
@@ -241,7 +241,7 @@ std::string stringifySwapchainFlags(VkSwapchainCreateFlagsKHR flags)
     }) stringifyOredBit(flags, bit, out);
     return out.str();
 }
-#endif // VK_KHR_swapchain
+#endif // VK_KHR_swapchain && (VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70)
 
 #ifdef VK_KHR_device_group
 std::string stringifyDeviceGroupPresentMode(VkDeviceGroupPresentModeFlagsKHR flags)

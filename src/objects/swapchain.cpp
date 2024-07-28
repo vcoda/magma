@@ -173,8 +173,10 @@ VkImageCreateFlags Swapchain::getImageFlags() const noexcept
     if (flags & VK_SWAPCHAIN_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR)
         imageFlags |= VK_IMAGE_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR;
 #endif // VK_KHR_device_group
+#if VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70
     if (flags & VK_SWAPCHAIN_CREATE_PROTECTED_BIT_KHR)
         imageFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
+#endif
 #ifdef VK_KHR_swapchain_mutable_format
     if (flags & VK_SWAPCHAIN_CREATE_MUTABLE_FORMAT_BIT_KHR)
         imageFlags |= (VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT | VK_IMAGE_CREATE_EXTENDED_USAGE_BIT_KHR);
@@ -368,7 +370,9 @@ void Swapchain::handleError(VkResult result, const char *message) const
 std::ostream& operator<<(std::ostream& out, const VkSwapchainCreateInfoKHR& info)
 {
     out << "VkSwapchainCreateInfoKHR [" << std::endl
+    #if VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70
         << "\tflags: " << magma::helpers::stringifySwapchainFlags(info.flags) << std::endl
+    #endif
         << "\tsurface: 0x" << std::hex << info.surface << std::dec << std::endl
         << "\tminImageCount: " << info.minImageCount << std::endl
         << "\timageFormat: " << info.imageFormat << std::endl

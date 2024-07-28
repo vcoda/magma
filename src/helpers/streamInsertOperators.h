@@ -106,7 +106,9 @@ MAGMA_STREAM_INSERT_OPERATOR(VkSurfaceTransformFlagBitsKHR);
 MAGMA_STREAM_INSERT_OPERATOR(VkCompositeAlphaFlagBitsKHR);
 #endif // VK_KHR_surface
 #ifdef VK_KHR_swapchain
+#if VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70
 MAGMA_STREAM_INSERT_OPERATOR(VkSwapchainCreateFlagBitsKHR);
+#endif
 #ifdef VK_KHR_device_group
 MAGMA_STREAM_INSERT_OPERATOR(VkDeviceGroupPresentModeFlagBitsKHR);
 #endif

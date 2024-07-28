@@ -1571,6 +1571,7 @@ std::ostream& operator<<(std::ostream& out, VkCompositeAlphaFlagBitsKHR bit)
 #endif // VK_KHR_surface
 
 #ifdef VK_KHR_swapchain
+#if VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70
 std::ostream& operator<<(std::ostream& out, VkSwapchainCreateFlagBitsKHR bit)
 {
     switch (bit)
@@ -1582,6 +1583,7 @@ std::ostream& operator<<(std::ostream& out, VkSwapchainCreateFlagBitsKHR bit)
     MAGMA_OUTPUT_UNKNOWN
     }
 }
+#endif // VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70
 
 #ifdef VK_KHR_device_group
 std::ostream& operator<<(std::ostream& out, VkDeviceGroupPresentModeFlagBitsKHR bit)
