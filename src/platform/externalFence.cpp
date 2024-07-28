@@ -74,7 +74,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
 #endif
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFenceCreateFlags flags /* 0 */,
-    VkFenceImportFlags importFlags /* 0 */,
+    VkFenceImportFlagsKHR importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     Fence(std::move(allocator), std::move(device)),
 #if defined(VK_KHR_external_fence_win32)

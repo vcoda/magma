@@ -51,7 +51,7 @@ namespace magma
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkSemaphoreCreateFlags flags = 0,
-            VkSemaphoreImportFlags importFlags = 0,
+            VkSemaphoreImportFlagsKHR importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~ExternalSemaphore();
     #ifdef VK_KHR_external_semaphore_win32

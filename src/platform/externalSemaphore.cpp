@@ -37,7 +37,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
     const StructureChain& extendedInfo /* default */):
     Semaphore(std::move(allocator), std::move(device)),
 #ifdef VK_KHR_external_semaphore_win32
-    Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT)
+    Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR)
 #elif defined(VK_FUCHSIA_external_semaphore)
     zirconHandle(0)
 #elif defined(VK_KHR_external_semaphore_fd)
@@ -82,11 +82,11 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
 #endif
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkSemaphoreCreateFlags flags /* 0 */,
-    VkSemaphoreImportFlags importFlags /* 0 */,
+    VkSemaphoreImportFlagsKHR importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     Semaphore(std::move(device), std::move(allocator), flags, extendedInfo),
 #ifdef VK_KHR_external_semaphore_win32
-    Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT)
+    Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR)
 #elif defined(VK_FUCHSIA_external_semaphore)
     zirconHandle(0)
 #elif defined(VK_KHR_external_semaphore_fd)

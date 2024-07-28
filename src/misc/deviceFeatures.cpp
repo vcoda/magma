@@ -42,7 +42,7 @@ DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat f
 }
 
 #ifdef VK_KHR_external_memory_capabilities
-DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(VkExternalMemoryHandleTypeFlagBits handleType,
+DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(VkExternalMemoryHandleTypeFlagBitsKHR handleType,
     VkBufferUsageFlags usage, VkBufferCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
@@ -63,10 +63,8 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(Vk
     return features;
 }
 
-DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkExternalMemoryHandleTypeFlagBits handleType,
-    VkFormat format, VkImageUsageFlags usage,
-    VkImageType imageType /* VK_IMAGE_TYPE_2D */,
-    bool optimalTiling /* true */,
+DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkExternalMemoryHandleTypeFlagBitsKHR handleType,
+    VkFormat format, VkImageUsageFlags usage, VkImageType imageType /* VK_IMAGE_TYPE_2D */, bool optimalTiling /* true */,
     VkImageCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};

@@ -29,7 +29,7 @@ namespace magma
 #define getNativeDevice() self->getDevice()->getHandle()
 
 Win32ExternalSemaphore::Win32ExternalSemaphore(const Semaphore *self,
-    VkExternalSemaphoreHandleTypeFlagBits handleType) noexcept:
+    VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) noexcept:
     handleType(handleType),
     self(self),
     hSemaphore(NULL)
@@ -63,7 +63,7 @@ HANDLE Win32ExternalSemaphore::getNtHandle() const
     return hSemaphore;
 }
 
-void Win32ExternalSemaphore::importNtHandle(HANDLE hSemaphore, LPCWSTR name, VkSemaphoreImportFlags flags)
+void Win32ExternalSemaphore::importNtHandle(HANDLE hSemaphore, LPCWSTR name, VkSemaphoreImportFlagsKHR flags)
 {
     VkImportSemaphoreWin32HandleInfoKHR importWin32HandleInfo;
     importWin32HandleInfo.sType = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR;

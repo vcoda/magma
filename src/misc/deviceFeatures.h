@@ -37,10 +37,10 @@ namespace magma
         FormatFeatures supportsFormatFeatures(VkFormat format,
             VkFormatFeatureFlags flags) const noexcept;
     #ifdef VK_KHR_external_memory_capabilities
-        ExternalMemoryFeatures supportsExternalBuffer(VkExternalMemoryHandleTypeFlagBits handleType,
+        ExternalMemoryFeatures supportsExternalBuffer(VkExternalMemoryHandleTypeFlagBitsKHR handleType,
             VkBufferUsageFlags usage,
             VkBufferCreateFlags flags = 0) const;
-        ExternalMemoryFeatures supportsExternalImage(VkExternalMemoryHandleTypeFlagBits handleType,
+        ExternalMemoryFeatures supportsExternalImage(VkExternalMemoryHandleTypeFlagBitsKHR handleType,
             VkFormat format,
             VkImageUsageFlags usage,
             VkImageType imageType = VK_IMAGE_TYPE_2D,

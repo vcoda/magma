@@ -452,7 +452,7 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
 #endif // VK_KHR_display
 
 #ifdef VK_KHR_external_memory_capabilities
-VkExternalMemoryPropertiesKHR PhysicalDevice::getExternalBufferProperties(VkExternalMemoryHandleTypeFlagBits handleType,
+VkExternalMemoryPropertiesKHR PhysicalDevice::getExternalBufferProperties(VkExternalMemoryHandleTypeFlagBitsKHR handleType,
     VkBufferUsageFlags usage, VkBufferCreateFlags flags /* 0 */) const
 {
     VkPhysicalDeviceExternalBufferInfoKHR externalBufferInfo;
@@ -470,7 +470,7 @@ VkExternalMemoryPropertiesKHR PhysicalDevice::getExternalBufferProperties(VkExte
 }
 
 #ifdef VK_KHR_get_physical_device_properties2
-VkExternalMemoryPropertiesKHR PhysicalDevice::getExternalImageFormatProperties(VkExternalMemoryHandleTypeFlagBits handleType,
+VkExternalMemoryPropertiesKHR PhysicalDevice::getExternalImageFormatProperties(VkExternalMemoryHandleTypeFlagBitsKHR handleType,
     VkFormat format, VkImageType type, bool optimalTiling, VkImageUsageFlags usage, VkImageCreateFlags flags /* 0 */) const
 {
     VkPhysicalDeviceImageFormatInfo2KHR imageFormatInfo;

@@ -43,7 +43,7 @@ namespace magma
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkFenceCreateFlags flags = 0,
-            VkFenceImportFlags importFlags = 0,
+            VkFenceImportFlagsKHR importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~ExternalFence();
     #if defined(VK_KHR_external_fence_win32)

@@ -51,7 +51,7 @@ D3d12ExternalSemaphore::D3d12ExternalSemaphore(std::shared_ptr<Device> device,
     LPCWSTR name /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkSemaphoreCreateFlags flags /* 0 */,
-    VkSemaphoreImportFlags importFlags /* 0 */,
+    VkSemaphoreImportFlagsKHR importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     Semaphore(std::move(device), std::move(allocator), flags, extendedInfo),
     Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR)
@@ -90,8 +90,8 @@ D3d12ExternalTimelineSemaphore::D3d12ExternalTimelineSemaphore(std::shared_ptr<D
     uint64_t initialValue, HANDLE hFence,
     LPCWSTR name /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkSemaphoreCreateFlags flags /* 0 */,
-    VkSemaphoreImportFlags importFlags /* 0 */,
+    VkSemaphoreCreateFlagsKHR flags /* 0 */,
+    VkSemaphoreImportFlagsKHR importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     TimelineSemaphore(std::move(device), initialValue, std::move(allocator), flags, extendedInfo),
     Win32ExternalSemaphore(this, VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR)

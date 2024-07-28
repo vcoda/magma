@@ -99,11 +99,11 @@ namespace magma
         std::vector<std::shared_ptr<Display>> getSupportedDisplays(uint32_t planeIndex) const;
     #endif // VK_KHR_display
     #ifdef VK_KHR_external_memory_capabilities
-        VkExternalMemoryPropertiesKHR getExternalBufferProperties(VkExternalMemoryHandleTypeFlagBits handleType,
+        VkExternalMemoryPropertiesKHR getExternalBufferProperties(VkExternalMemoryHandleTypeFlagBitsKHR handleType,
             VkBufferUsageFlags usage,
             VkBufferCreateFlags flags = 0) const;
         #ifdef VK_KHR_get_physical_device_properties2
-        VkExternalMemoryPropertiesKHR getExternalImageFormatProperties(VkExternalMemoryHandleTypeFlagBits handleType,
+        VkExternalMemoryPropertiesKHR getExternalImageFormatProperties(VkExternalMemoryHandleTypeFlagBitsKHR handleType,
             VkFormat format, VkImageType type, bool optimalTiling, VkImageUsageFlags usage,
             VkImageCreateFlags flags = 0) const;
         #endif // VK_KHR_get_physical_device_properties2

@@ -42,7 +42,7 @@ namespace magma
             LPCWSTR name = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkSemaphoreCreateFlags flags = 0,
-            VkSemaphoreImportFlags importFlags = 0,
+            VkSemaphoreImportFlagsKHR importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
     };
 
@@ -72,7 +72,7 @@ namespace magma
             LPCWSTR name = nullptr,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkSemaphoreCreateFlags flags = 0,
-            VkSemaphoreImportFlags importFlags = 0,
+            VkSemaphoreImportFlagsKHR importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
     };
 

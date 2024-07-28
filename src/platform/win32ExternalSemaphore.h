@@ -36,12 +36,12 @@ namespace magma
 
     protected:
         Win32ExternalSemaphore(const Semaphore *self,
-            VkExternalSemaphoreHandleTypeFlagBits handleType) noexcept;
+            VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) noexcept;
         void importNtHandle(HANDLE hSemaphore,
             LPCWSTR name,
-            VkSemaphoreImportFlags flags);
+            VkSemaphoreImportFlagsKHR flags);
 
-        const VkExternalSemaphoreHandleTypeFlagBits handleType;
+        const VkExternalSemaphoreHandleTypeFlagBitsKHR handleType;
 
     private:
         const Semaphore *self;
