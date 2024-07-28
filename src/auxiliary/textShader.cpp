@@ -176,7 +176,7 @@ bool TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *forma
     str->b = ((color >> 8) & 0xFF) / 255.f; // B
     str->a = (color & 0xFF) / 255.f; // A
     for (uint32_t i = 0; (i < length) && (charCount < maxChars); ++i, ++charCount)
-        *chars++ = glyphs[sz[i]];
+        *chars++ = glyphs[(unsigned char)sz[i]];
     offset += length;
     ++stringCount;
     return true;
