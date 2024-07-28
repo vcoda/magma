@@ -90,7 +90,7 @@ D3d12ExternalTimelineSemaphore::D3d12ExternalTimelineSemaphore(std::shared_ptr<D
     uint64_t initialValue, HANDLE hFence,
     LPCWSTR name /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkSemaphoreCreateFlagsKHR flags /* 0 */,
+    VkSemaphoreCreateFlags flags /* 0 */,
     VkSemaphoreImportFlagsKHR importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     TimelineSemaphore(std::move(device), initialValue, std::move(allocator), flags, extendedInfo),
