@@ -98,9 +98,10 @@ VkBaseOutStructure *StructureChain::copyNode(const VkBaseOutStructure *src) noex
     return dst;
 }
 
-// warning: case value not in enumerated type 'VkStructureType'
-#ifdef __GNUC__
-#pragma GCC diagnostic ignored "-Wswitch"
+#if defined(_MSC_VER)
+    #pragma warning(disable: 4063) // case is not a valid value for switch of enum 'VkStructureType'
+#elif defined(__GNUC__)
+    #pragma GCC diagnostic ignored "-Wswitch" // warning: case value not in enumerated type 'VkStructureType'
 #endif
 
 size_t StructureChain::getNodeSize(VkStructureType sType) noexcept
