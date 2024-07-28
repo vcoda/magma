@@ -125,6 +125,11 @@ typedef struct VkPipelineCacheHeaderVersionOne {
 } VkPipelineCacheHeaderVersionOne;
 #endif // VK_HEADER_VERSION < 184
 
+#if defined(VK_KHR_variable_pointers) && (VK_HEADER_VERSION < 108) // TODO: exact version
+typedef VkPhysicalDeviceVariablePointerFeaturesKHR VkPhysicalDeviceVariablePointersFeaturesKHR;
+constexpr VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES_KHR;
+#endif // VK_KHR_variable_pointers && VK_HEADER_VERSION < 108
+
 #if VK_HEADER_VERSION < 131
 constexpr VkResult VK_ERROR_UNKNOWN = VkResult(-13);
 #endif
