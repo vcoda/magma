@@ -3,6 +3,7 @@ QT       -= core gui
 TARGET = magma
 TEMPLATE = lib
 CONFIG += staticlib
+CONFIG += precompile_header
 
 INCLUDEPATH += $(VULKAN_SDK)/include
 INCLUDEPATH += ../../src/core/
@@ -10,6 +11,8 @@ INCLUDEPATH += ../../src/core/
 QMAKE_CXXFLAGS += -msse4 -ftemplate-depth=2048 -fconstexpr-depth=2048
 QMAKE_CXXFLAGS += -Wno-unused-variable -Wno-unused-value -Wno-unused-parameter
 QMAKE_CXXFLAGS += -Wno-unknown-pragmas -Wno-switch -Wno-missing-field-initializers
+
+PRECOMPILED_HEADER = ../../src/core/pch.h
 
 SOURCES += \
     ../../src/allocator/alignedAllocator.cpp \
@@ -187,7 +190,7 @@ SOURCES += \
     ../../src/states/vertexInputStructure.cpp \
     ../../src/states/viewportState.cpp \
     ../../src/magma.cpp \
-    ../../src/third-party/SPIRV-Reflect/spirv_reflect.c
+    ../../src/third-party/SPIRV-Reflect/spirv_reflect.cpp
 
 HEADERS += \
     ../../src/allocator/alignedAllocator.h \
