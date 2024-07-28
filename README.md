@@ -144,7 +144,7 @@ printenv | grep Vulkan
 
 ### Windows
 
-Visual Studio solution is located in the `magma/projects/vs` directory.
+**Visual Studio** project is located in the `magma/projects/vs` directory.
 If you are using Visual Studio older or newer than 2017 version, open project property page `Configuration Properties/General` 
 and configure `Platform Toolset` property. It may be neccessary to adjust `Windows SDK Version` property too in the case if you get an error like this:
 ```
@@ -154,7 +154,7 @@ error MSB8036: The Windows SDK version 10.0 was not found. Install the required 
 Also there is a command-line build option:
 
 * Open **x64 Native Tools Command Prompt** (e.g. through Taskbar's Search box).
-* cd magma directory.
+* Go to magma directory.
 * Set DEBUG variable to choose between Debug or Release build, run **build** script.
 ```
 set DEBUG=1
@@ -165,18 +165,7 @@ Build files are located in the `magma/projects/vs/x64/Debug(Release)` directory
 
 ### Linux
 
-For building library under Linux systems, **GNU Make** is used:
-
-* Open terminal.
-* cd magma directory.
-* Run **make**.
-```
-make DEBUG=1 -j<N>
-```
-where N is the number of CPU threads you want to assign for compilation.
-By default, debug version of static library is builded, so DEBUG flag can be omitted. If you want to build a release one, explicitly specify DEBUG=0.
-
-You may also use Qt Creator to build the library. Qt project is located in the `magma/projects/qt` directory.
+**Qt Creator** project is located in the `magma/projects/qt` directory.
 To successfully compile the library, you need to setup path to Vulkan SDK as environment variable. 
 Go to `Edit/Preferences` (or `Tools/Options`), open property page `Build and Run`, then select `Kits` tab.
 Find `Environment` property, click "Change" button and add path to Vulkan SDK directory:
@@ -187,8 +176,21 @@ Find `Environment` property, click "Change" button and add path to Vulkan SDK di
 
 By default, Qt Creator uses only single CPU core, which slows down compilation significantly.
 To enable multi-core compilation, select `Projects`, open `Build Settings` page, navigate to `Build Steps`
-and set `Parallel jobs` value to the number of CPU threads you want to assign for compilation. For older versions of Qt IDE,
-navigate to `Build Environment` section and add new variable `MAKEFLAGS -j<N>`.
+and set `Parallel jobs` value to the number of CPU threads you want to assign for compilation. For older
+versions of Qt IDE, navigate to `Build Environment` section and add new variable `MAKEFLAGS -j<N>`, 
+where N is the number of CPU threads you want to assign for compilation.
+
+Also there is a command-line build option:
+
+* Open terminal.
+* Go to magma directory.
+* Run **GNU Make**.
+```
+make DEBUG=1 -j<N>
+```
+where N is the number of CPU threads you want to assign for compilation.
+By default, debug version of static library is builded, so DEBUG flag can be omitted. If you want to build 
+a release one, explicitly specify DEBUG=0.
 
 Vulkan supports different windowing system. By default, XCB is used. If you want to switch to Xlib, open Makefile and replace
 ```
