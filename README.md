@@ -103,8 +103,9 @@ Code is written in modern C++11/14 and takes advantage of new language features.
 
 Supported compilers:
 
-* MSC
+* MSVC
 * GCC
+* MinGW
 
 ## Build tools and SDK
 
