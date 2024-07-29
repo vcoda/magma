@@ -95,6 +95,49 @@ void Queue::bindSparse(std::shared_ptr<const Buffer> buffer, const std::vector<V
     MAGMA_HANDLE_RESULT(result, "failed to submit sparse binding operation");
 }
 
+void Queue::bindSparse(const std::vector<VkSparseBufferMemoryBindInfo>& bufferBinds,
+    const std::vector<VkSparseImageOpaqueMemoryBindInfo>& imageOpaqueBinds,
+    const std::vector<VkSparseImageMemoryBindInfo>& imageBinds,
+    const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores /* void */,
+    const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores /* void */,
+    const std::unique_ptr<Fence>& fence /* nullptr */,
+    const StructureChain& extendedInfo /* default */)
+{
+    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
+    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
+    VkBindSparseInfo bindSparseInfo = {};
+    bindSparseInfo.sType = VK_STRUCTURE_TYPE_BIND_SPARSE_INFO;
+    bindSparseInfo.pNext = extendedInfo.headNode();
+    if (waitSemaphores.size() > 0)
+    {
+        for (auto const& semaphore: waitSemaphores)
+        {
+            if (semaphore)
+                dereferencedWaitSemaphores.put(*semaphore);
+        }
+        bindSparseInfo.waitSemaphoreCount = dereferencedWaitSemaphores.count();
+        bindSparseInfo.pWaitSemaphores = dereferencedWaitSemaphores;
+    }
+    bindSparseInfo.bufferBindCount = MAGMA_COUNT(bufferBinds);
+    bindSparseInfo.pBufferBinds = bufferBinds.data();
+    bindSparseInfo.imageOpaqueBindCount = MAGMA_COUNT(imageOpaqueBinds);
+    bindSparseInfo.pImageOpaqueBinds = imageOpaqueBinds.data();
+    bindSparseInfo.imageBindCount = MAGMA_COUNT(imageBinds);
+    bindSparseInfo.pImageBinds = imageBinds.data();
+    if (signalSemaphores.size() > 0)
+    {
+        for (auto const& semaphore: signalSemaphores)
+        {
+            if (semaphore)
+                dereferencedSignalSemaphores.put(*semaphore);
+        }
+        bindSparseInfo.signalSemaphoreCount = dereferencedSignalSemaphores.count();
+        bindSparseInfo.pSignalSemaphores = dereferencedSignalSemaphores;
+    }
+    const VkResult result = vkQueueBindSparse(handle, 1, &bindSparseInfo, MAGMA_OPTIONAL_HANDLE(fence));
+    MAGMA_HANDLE_RESULT(result, "failed to submit sparse binding operations");
+}
+
 void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags waitDstStageMask /* 0 */,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,

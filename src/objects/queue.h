@@ -65,6 +65,13 @@ namespace magma
             std::shared_ptr<Semaphore> signalSemaphore = nullptr,
             const std::unique_ptr<Fence>& fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
+        void bindSparse(const std::vector<VkSparseBufferMemoryBindInfo>& bufferBinds,
+            const std::vector<VkSparseImageOpaqueMemoryBindInfo>& imageOpaqueBinds,
+            const std::vector<VkSparseImageMemoryBindInfo>& imageBinds,
+            const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
+            const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores = {},
+            const std::unique_ptr<Fence>& fence = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
         void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags waitDstStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
