@@ -86,16 +86,10 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     }
     // Describe render pass
     SubpassDescription subpassDescription;
-    subpassDescription.flags = 0;
-    subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    subpassDescription.inputAttachmentCount = 0;
-    subpassDescription.pInputAttachments = nullptr;
     subpassDescription.colorAttachmentCount = colorAttachmentCount;
     subpassDescription.pColorAttachments = colorAttachments;
     subpassDescription.pResolveAttachments = resolveAttachments;
     subpassDescription.pDepthStencilAttachment = hasDepthStencilAttachment ? &depthStencilAttachment : nullptr;
-    subpassDescription.preserveAttachmentCount = 0;
-    subpassDescription.pPreserveAttachments = nullptr;
     SubpassDependency dependencies[] = {
         // Dependency at the beginning of the render pass
         subpassBeginDependency(colorAttachmentCount > 0, hasDepthStencilAttachment),
