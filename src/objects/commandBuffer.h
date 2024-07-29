@@ -540,23 +540,23 @@ namespace magma
             const std::shared_ptr<Buffer>& indirectBuildRanges,
             const std::shared_ptr<Buffer>& scratchBuffer,
             uint32_t indirectStride = sizeof(VkAccelerationStructureBuildRangeInfoKHR)) noexcept;
-        void copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
-        void compactAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
-        void copyAccelerationStructureToBuffer(const std::shared_ptr<Buffer>& dstBuffer,
-            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
-        void copyAccelerationStructureToMemory(void *dstBuffer,
-            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
-        void copyBufferToAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-            const std::shared_ptr<Buffer>& srcBuffer);
-        void copyMemoryToAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-            const void *srcBuffer);
-        void serializeAccelerationStructure(const std::shared_ptr<Buffer>& dstBuffer,
-            const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure);
-        void deserializeAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-            const std::shared_ptr<Buffer>& srcBuffer);
-        void writeAccelerationStructureProperties(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+        void copyAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
+            const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure);
+        void compactAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
+            const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure);
+        void copyAccelerationStructureToBuffer(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
+            const std::shared_ptr<Buffer>& dstBuffer);
+        void copyAccelerationStructureToMemory(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
+            void *dstBuffer);
+        void copyBufferToAccelerationStructure(const std::shared_ptr<const Buffer>& srcBuffer,
+            const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure);
+        void copyMemoryToAccelerationStructure(const void *srcBuffer,
+            const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure);
+        void serializeAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& accelerationStructure,
+            const std::shared_ptr<Buffer>& buffer);
+        void deserializeAccelerationStructure(const std::shared_ptr<const Buffer>& buffer,
+            const std::shared_ptr<AccelerationStructure>& accelerationStructure);
+        void writeAccelerationStructureProperties(const std::shared_ptr<const AccelerationStructure>& accelerationStructure,
             const std::shared_ptr<QueryPool>& queryPool,
             uint32_t firstQuery = 0);
     #endif // VK_KHR_acceleration_structure

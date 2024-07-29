@@ -855,8 +855,8 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
     }
 }
 
-void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-    const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure)
+void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
+    const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
 {
     VkCopyAccelerationStructureInfoKHR copyInfo;
     copyInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR;
@@ -869,8 +869,8 @@ void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<Acceleration
         vkCmdCopyAccelerationStructureKHR(handle, &copyInfo);
 }
 
-void CommandBuffer::compactAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-    const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure)
+void CommandBuffer::compactAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
+    const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
 {
     VkCopyAccelerationStructureInfoKHR copyInfo;
     copyInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR;
@@ -883,8 +883,7 @@ void CommandBuffer::compactAccelerationStructure(const std::shared_ptr<Accelerat
         vkCmdCopyAccelerationStructureKHR(handle, &copyInfo);
 }
 
-void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_ptr<Buffer>& dstBuffer,
-    const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure)
+void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure, const std::shared_ptr<Buffer>& dstBuffer)
 {
     VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
@@ -897,8 +896,7 @@ void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_ptr<Buff
         vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
 }
 
-void CommandBuffer::copyAccelerationStructureToMemory(void *dstBuffer,
-    const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure)
+void CommandBuffer::copyAccelerationStructureToMemory(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure, void *dstBuffer)
 {
     VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
@@ -911,8 +909,7 @@ void CommandBuffer::copyAccelerationStructureToMemory(void *dstBuffer,
         vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
 }
 
-void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-    const std::shared_ptr<Buffer>& srcBuffer)
+void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
 {
     VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
@@ -925,8 +922,7 @@ void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<Acce
         vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
 }
 
-void CommandBuffer::copyMemoryToAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-    const void *srcBuffer)
+void CommandBuffer::copyMemoryToAccelerationStructure(const void *srcBuffer, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
 {
     VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
@@ -939,35 +935,33 @@ void CommandBuffer::copyMemoryToAccelerationStructure(const std::shared_ptr<Acce
         vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
 }
 
-void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<Buffer>& dstBuffer,
-    const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure)
+void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& accelerationStructure, const std::shared_ptr<Buffer>& buffer)
 {
     VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
     copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src = *srcAccelerationStructure;
-    copyMemoryInfo.dst.deviceAddress = dstBuffer->getDeviceAddress();
+    copyMemoryInfo.src = *accelerationStructure;
+    copyMemoryInfo.dst.deviceAddress = buffer->getDeviceAddress();
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_SERIALIZE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
     if (vkCmdCopyAccelerationStructureToMemoryKHR)
         vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
 }
 
-void CommandBuffer::deserializeAccelerationStructure(const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure,
-    const std::shared_ptr<Buffer>& srcBuffer)
+void CommandBuffer::deserializeAccelerationStructure(const std::shared_ptr<const Buffer>& buffer, const std::shared_ptr<AccelerationStructure>& accelerationStructure)
 {
     VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
     copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src.deviceAddress = srcBuffer->getDeviceAddress();
-    copyMemoryInfo.dst = *dstAccelerationStructure;
+    copyMemoryInfo.src.deviceAddress = buffer->getDeviceAddress();
+    copyMemoryInfo.dst = *accelerationStructure;
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_DESERIALIZE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
     if (vkCmdCopyMemoryToAccelerationStructureKHR)
         vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
 }
 
-void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<const AccelerationStructure>& accelerationStructure,
     const std::shared_ptr<QueryPool>& queryPool, uint32_t firstQuery /* 0 */)
 {
     MAGMA_DEVICE_EXTENSION(vkCmdWriteAccelerationStructuresPropertiesKHR);
