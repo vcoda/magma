@@ -175,6 +175,12 @@ Find `Environment` property, click "Change" button and add path to Vulkan SDK di
     <img src="docs/images/vulkan_sdk_path.png" width="329px" height="109px">
 </p>
 
+To compile for specific platform, open magma.pro file, and add definition of the target platform, e.g.:
+
+```
+QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_XCB_KHR
+```
+
 By default, Qt Creator uses only single CPU core, which slows down compilation significantly.
 To enable multi-core compilation, select `Projects`, open `Build Settings` page, navigate to `Build Steps`
 and set `Parallel jobs` value to the number of CPU threads you want to assign for compilation. For older
