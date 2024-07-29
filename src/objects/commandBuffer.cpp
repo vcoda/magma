@@ -380,24 +380,30 @@ void CommandBuffer::copyImage(const std::shared_ptr<const Image>& srcImage, cons
     MAGMA_INUSE(dstImage);
 }
 
+// blitImage
+
 void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, VkFilter filter,
-    uint32_t mipLevel /* 0 */, const VkOffset3D& srcOffset /* 0, 0, 0 */, const VkOffset3D& dstOffset /* 0, 0, 0 */) const noexcept
+    uint32_t mipLevel /* 0 */, const VkOffset2D& srcOffset /* 0, 0 */, const VkOffset2D& dstOffset /* 0, 0 */) const noexcept
 {
     const VkExtent3D srcExtent = srcImage->calculateMipExtent(mipLevel);
-    const VkImageLayout srcLayout = srcImage->getLayout(mipLevel);
     const VkExtent3D dstExtent = dstImage->calculateMipExtent(mipLevel);
-    const VkImageLayout dstLayout = dstImage->getLayout(mipLevel);
     VkImageBlit imageBlit;
     imageBlit.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
-    imageBlit.srcOffsets[0] = srcOffset;
+    imageBlit.srcOffsets[0].x = srcOffset.x;
+    imageBlit.srcOffsets[0].y = srcOffset.y;
+    imageBlit.srcOffsets[0].z = 0;
     imageBlit.srcOffsets[1].x = srcExtent.width;
     imageBlit.srcOffsets[1].y = srcExtent.height,
     imageBlit.srcOffsets[1].z = 1;
     imageBlit.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
-    imageBlit.dstOffsets[0] = dstOffset;
+    imageBlit.dstOffsets[0].x = dstOffset.x;
+    imageBlit.dstOffsets[0].y = dstOffset.y;
+    imageBlit.dstOffsets[0].z = 0;
     imageBlit.dstOffsets[1].x = dstExtent.width;
     imageBlit.dstOffsets[1].y = dstExtent.height,
     imageBlit.dstOffsets[1].z = 1;
+    const VkImageLayout srcLayout = srcImage->getLayout(mipLevel);
+    const VkImageLayout dstLayout = dstImage->getLayout(mipLevel);
     vkCmdBlitImage(handle, *srcImage, srcLayout, *dstImage, dstLayout, 1, &imageBlit, filter);
     MAGMA_INUSE(srcImage);
     MAGMA_INUSE(dstImage);
