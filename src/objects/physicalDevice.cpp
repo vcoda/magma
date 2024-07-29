@@ -66,14 +66,12 @@ VkFormatProperties PhysicalDevice::getFormatProperties(VkFormat format) const no
     return formatProperties;
 }
 
-VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format,
-    VkImageType imageType, bool optimalTiling, VkImageUsageFlags usage,
-    VkImageCreateFlags flags /* 0 */) const
+VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format, VkImageType type,
+    VkImageUsageFlags usage, bool optimalTiling, VkImageCreateFlags flags /* 0 */) const
 {
+    const VkImageTiling tiling = optimalTiling ? VK_IMAGE_TILING_OPTIMAL : VK_IMAGE_TILING_LINEAR;
     VkImageFormatProperties imageFormatProperties;
-    const VkResult result = vkGetPhysicalDeviceImageFormatProperties(handle, format, imageType,
-        optimalTiling ? VK_IMAGE_TILING_OPTIMAL : VK_IMAGE_TILING_LINEAR,
-        usage, flags, &imageFormatProperties);
+    const VkResult result = vkGetPhysicalDeviceImageFormatProperties(handle, format, type, tiling, usage, flags, &imageFormatProperties);
     MAGMA_HANDLE_RESULT(result, "failed to get image format properties of physical device");
     return imageFormatProperties;
 }

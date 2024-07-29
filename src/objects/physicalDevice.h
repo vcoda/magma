@@ -44,7 +44,9 @@ namespace magma
         VkPhysicalDeviceFeatures getFeatures() const noexcept;
         VkFormatProperties getFormatProperties(VkFormat format) const noexcept;
         VkImageFormatProperties getImageFormatProperties(VkFormat format,
-            VkImageType, bool optimalTiling, VkImageUsageFlags usage,
+            VkImageType type,
+            VkImageUsageFlags usage,
+            bool optimalTiling,
             VkImageCreateFlags flags = 0) const;
         VkPhysicalDeviceProperties getProperties() const noexcept;
         std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const;
