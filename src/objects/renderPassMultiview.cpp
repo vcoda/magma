@@ -132,7 +132,6 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     for (auto const& attachment: attachments)
         hash = core::hashCombine(hash, attachment.hash());
     hash = core::hashCombine(hash, subpassDescription.getHash());
-    core::zeroMemory(subpassDescription); // Aware destructor
     for (auto const& dependency: dependencies)
         hash = core::hashCombine(hash, dependency.hash());
     for (uint32_t i = 0; i < renderPassMultiviewInfo.subpassCount; ++i)
@@ -141,6 +140,9 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
         hash = core::hashCombine(hash, renderPassMultiviewInfo.pViewOffsets[i]);
     for (uint32_t i = 0; i < renderPassMultiviewInfo.correlationMaskCount; ++i)
         hash = core::hashCombine(hash, renderPassMultiviewInfo.pCorrelationMasks[i]);
+    subpassDescription.pColorAttachments = nullptr;
+    subpassDescription.pResolveAttachments = nullptr;
+    subpassDescription.pDepthStencilAttachment = nullptr;
 }
 #endif // VK_KHR_multiview
 } // namespace magma
