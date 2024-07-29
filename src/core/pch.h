@@ -59,10 +59,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
  * Vulkan SDK
  */
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(WIN32)
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
+#ifndef NOMINMAX
+#define NOMINMAX 1
 #endif
+#endif // _WIN32 || WIN32
 
 #include <vulkan/vulkan.h>
 
