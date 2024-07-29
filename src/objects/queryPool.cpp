@@ -128,7 +128,6 @@ QueryPool::Result<PipelineStatisticsQuery::Result, uint64_t> PipelineStatisticsQ
 
 uint32_t PipelineStatisticsQuery::spreadResults(const std::vector<uint64_t>& data, Result& result) const noexcept
 {
-    memset(&result, 0, sizeof(Result));
     uint32_t i = 0;
     if (flags & VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT)
         result.inputAssemblyVertices = data[i++];
