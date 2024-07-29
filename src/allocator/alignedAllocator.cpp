@@ -24,7 +24,7 @@ namespace magma
 void *AlignedAllocator::alloc(std::size_t size, std::size_t alignment,
     VkSystemAllocationScope /* allocationScope */)
 {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     void *ptr = _aligned_malloc(size, alignment);
     if (!ptr)
 #else
@@ -45,7 +45,7 @@ void *AlignedAllocator::alloc(std::size_t size, std::size_t alignment,
 void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t alignment,
     VkSystemAllocationScope /* allocationScope */)
 {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     void *ptr = _aligned_realloc(original, size, alignment);
 #else
     MAGMA_UNUSED(alignment);
@@ -61,7 +61,7 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
 
 void AlignedAllocator::free(void *ptr) noexcept
 {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     _aligned_free(ptr);
 #else
     ::free(ptr);

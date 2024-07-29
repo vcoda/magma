@@ -159,7 +159,7 @@ bool TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *forma
     va_list args;
     va_start(args, format);
     int written;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     written = vsprintf_s(sz, format, args);
 #else
     written = sprintf(sz, format, args);

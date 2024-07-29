@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 #include <intrin.h>
 #endif
 
@@ -29,7 +29,7 @@ namespace core
 {
 inline uint32_t popcount(uint32_t x) noexcept
 {
-#if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
+#if (defined(_MSC_VER) || defined(__MINGW32__)) && (defined(_M_IX86) || defined(_M_X64))
     return __popcnt(x);
 #elif defined(__GNUC__) || defined(__clang__) || defined(__INTEL_COMPILER)
     return (uint32_t)__builtin_popcount(x);
@@ -47,7 +47,7 @@ inline uint32_t popcount(uint32_t x) noexcept
 
 inline uint64_t popcount(uint64_t x) noexcept
 {
-#if defined(_MSC_VER) && defined(_M_X64)
+#if (defined(_MSC_VER) || defined(__MINGW32__)) && defined(_M_X64)
     return __popcnt64(x);
 #elif defined(__GNUC__) || defined(__clang__) || defined(__INTEL_COMPILER)
     return (uint64_t)__builtin_popcountll(x);

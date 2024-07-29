@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <cassert>
 #include <cstring>
 #include <cmath>
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 #include <malloc.h>
 #else
 #include <mm_malloc.h>

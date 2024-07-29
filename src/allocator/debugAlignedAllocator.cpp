@@ -48,14 +48,14 @@ void *DebugAlignedAllocator::alloc(std::size_t size,
     std::size_t alignment,
     VkSystemAllocationScope allocationScope)
 {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     void *ptr = _aligned_malloc(size, alignment);
     if (!ptr)
 #else
     void *ptr = nullptr;
     const int result = posix_memalign(&ptr, alignment, size);
     if (result != 0)
-#endif // _MSC_VER
+#endif // _MSC_VER || __MINGW32__
     {
     #ifndef MAGMA_NO_EXCEPTIONS
         throw std::bad_alloc();
@@ -74,13 +74,13 @@ void *DebugAlignedAllocator::alloc(std::size_t size,
 void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size_t alignment,
     VkSystemAllocationScope allocationScope)
 {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     void *ptr = _aligned_realloc(original, size, alignment);
 #else
     MAGMA_UNUSED(alignment);
     void *ptr = ::realloc(original, size);
     // TODO: check alignment, use posix_memalign/memcpy if not aligned!
-#endif // _MSC_VER
+#endif // _MSC_VER || __MINGW32__
     if (!ptr)
     {
     #ifndef MAGMA_NO_EXCEPTIONS
@@ -103,11 +103,11 @@ void DebugAlignedAllocator::free(void *ptr) noexcept
 {
     if (ptr)
     {
-    #ifdef _MSC_VER
+    #if defined(_MSC_VER) || defined(__MINGW32__)
         _aligned_free(ptr);
     #else
         ::free(ptr);
-    #endif
+    #endif // _MSC_VER || __MINGW32__
         std::lock_guard<std::mutex> lock(mtx);
         // Delete allocation
         auto entry = allocations.at(ptr);

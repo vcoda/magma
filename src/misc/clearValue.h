@@ -44,12 +44,20 @@ namespace magma
         constexpr explicit ClearColor(uint32_t hexValue) noexcept;
     };
 
+    /* Specifies the depth clear values to use when clearing
+       a depth image or attachment. */
+
+    struct ClearDepth : ClearValue
+    {
+        constexpr explicit ClearDepth(float depth) noexcept;
+    };
+
     /* Specifies the depth and stencil clear values to use
        when clearing a depth/stencil image or attachment. */
 
     struct ClearDepthStencil : ClearValue
     {
-        constexpr explicit ClearDepthStencil(float depth, uint8_t stencil = 0) noexcept;
+        explicit ClearDepthStencil(float depth, uint32_t stencil) noexcept;
     };
 } // namespace magma
 
@@ -199,7 +207,7 @@ namespace magma
         constexpr ClearColor whiteSmoke(0xF5F5F5);
         constexpr ClearColor white(0xFFFFFF);
 
-        constexpr ClearDepthStencil depthZero(0.f, 0);
-        constexpr ClearDepthStencil depthOne(1.f, 0);
+        constexpr ClearDepth depthZero(0.f);
+        constexpr ClearDepth depthOne(1.f);
     } // namespace clear
 } // namespace magma

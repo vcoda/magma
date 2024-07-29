@@ -35,7 +35,7 @@ namespace magma
     } // namespace exception
 } // namespace magma
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 #define MAGMA_FUNCTION_SIGNATURE __FUNCSIG__
 #else
 #define MAGMA_FUNCTION_SIGNATURE __PRETTY_FUNCTION__

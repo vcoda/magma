@@ -64,7 +64,15 @@ constexpr ClearColor::ClearColor(const uint32_t hexValue) noexcept
     value.color.float32[3] = 1.f;
 }
 
-constexpr ClearDepthStencil::ClearDepthStencil(const float depth, const uint8_t stencil /* 0 */) noexcept
+constexpr ClearDepth::ClearDepth(const float depth) noexcept
+{   // assignment to member 'depthStencil' of union with active member 'color' is not allowed in a constant expression
+    value.color.float32[0] = depth;
+    value.color.float32[1] = 0.f;
+    value.color.float32[2] = 0.f;
+    value.color.float32[3] = 0.f;
+}
+
+inline ClearDepthStencil::ClearDepthStencil(float depth, uint32_t stencil) noexcept
 {
     value.depthStencil.depth = depth;
     value.depthStencil.stencil = stencil;

@@ -67,13 +67,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_THROW throw
 #endif
 
-#ifdef _MSC_VER
-    #define MAGMA_ALLOCA(size) (size) ? _malloca(size) : nullptr
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    #define MAGMA_ALLOCA(size) (size > 0) ? _malloca(size) : nullptr
     #define MAGMA_FREEA(p) _freea(p)
 #else
-    #define MAGMA_ALLOCA(size) (size) ? alloca(size) : nullptr
+    #define MAGMA_ALLOCA(size) (size > 0) ? alloca(size) : nullptr
     #define MAGMA_FREEA(p)
-#endif // _MSC_VER
+#endif // _MSC_VER || __MINGW32__
 
 #ifdef MAGMA_DEBUG
     #define MAGMA_NOOP(param) param

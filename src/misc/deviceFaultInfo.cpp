@@ -96,7 +96,7 @@ DeviceFaultInfo& DeviceFaultInfo::operator=(const DeviceFaultInfo& other) noexce
         pAddressInfos = core::copyArray(other.pAddressInfos, other.addressInfoCount);
         delete[] pVendorInfos;
         pVendorInfos = core::copyArray(other.pVendorInfos, other.vendorInfoCount);
-        delete[] pVendorBinaryData;
+        delete[] (uint8_t *)pVendorBinaryData;
         pVendorBinaryData = core::copyBinaryData(other.pVendorBinaryData, static_cast<std::size_t>(other.vendorBinarySize));
         addressInfoCount = other.addressInfoCount;
         vendorInfoCount = other.vendorInfoCount;
@@ -109,7 +109,7 @@ DeviceFaultInfo::~DeviceFaultInfo()
 {
     delete[] pAddressInfos;
     delete[] pVendorInfos;
-    delete[] pVendorBinaryData;
+    delete[] (uint8_t *)pVendorBinaryData;
 }
 #endif // VK_EXT_device_fault
 } // namespace magma

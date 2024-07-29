@@ -128,12 +128,12 @@ inline char *copyString(const char *src) noexcept
     char *dst = MAGMA_NEW char[count];
     if (dst)
     {
-    #ifdef _MSC_VER
+    #if defined(_MSC_VER) || defined(__MINGW32__)
         const errno_t err = strcpy_s(dst, count, src);
         MAGMA_ASSERT(0 == err);
     #else
         strcpy(dst, src);
-    #endif // _MSC_VER
+    #endif // _MSC_VER || __MINGW32__
     }
     return dst;
 }
