@@ -42,10 +42,13 @@ std::size_t BaseIndexBuffer::getIndexSize() const noexcept
         return sizeof(uint16_t);
     case VK_INDEX_TYPE_UINT32:
         return sizeof(uint32_t);
-#ifdef VK_EXT_index_type_uint8
+#if defined(VK_KHR_index_type_uint8)
+    case VK_INDEX_TYPE_UINT8_KHR:
+        return sizeof(uint8_t);
+#elif defined(VK_EXT_index_type_uint8)
     case VK_INDEX_TYPE_UINT8_EXT:
         return sizeof(uint8_t);
-#endif
+#endif // VK_EXT_index_type_uint8
     default:
         MAGMA_ASSERT(false);
         return 0;
