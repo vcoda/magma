@@ -19,6 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "queue.h"
 #include "device.h"
+#include "buffer.h"
+#include "image.h"
 #include "commandBuffer.h"
 #include "semaphore.h"
 #include "timelineSemaphore.h"
@@ -39,6 +41,58 @@ Queue::Queue(VkQueue handle, VkQueueFlagBits flags, uint32_t familyIndex, uint32
 #ifdef VK_EXT_swapchain_maintenance1
     presentMode = VK_PRESENT_MODE_MAX_ENUM_KHR;
 #endif
+}
+
+void Queue::bindSparse(std::shared_ptr<const Buffer> buffer, const std::vector<VkSparseMemoryBind>& bufferBinds,
+    std::shared_ptr<const Image> imageOpaque, const std::vector<VkSparseMemoryBind>& imageOpaqueBinds,
+    std::shared_ptr<const Image> image, const std::vector<VkSparseImageMemoryBind>& imageBinds,
+    std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
+    std::shared_ptr<Semaphore> signalSemaphore /* nullptr */,
+    const std::unique_ptr<Fence>& fence /* nullptr */,
+    const StructureChain& extendedInfo /* default */)
+{
+    VkSparseBufferMemoryBindInfo bufferMemoryBindInfo;
+    bufferMemoryBindInfo.buffer = MAGMA_OPTIONAL_HANDLE(buffer);
+    bufferMemoryBindInfo.bindCount = MAGMA_COUNT(bufferBinds);
+    bufferMemoryBindInfo.pBinds = bufferBinds.data();
+    VkSparseImageOpaqueMemoryBindInfo imageOpaqueMemoryBindInfo;
+    imageOpaqueMemoryBindInfo.image = MAGMA_OPTIONAL_HANDLE(imageOpaque);
+    imageOpaqueMemoryBindInfo.bindCount = MAGMA_COUNT(imageOpaqueBinds);
+    imageOpaqueMemoryBindInfo.pBinds = imageOpaqueBinds.data();
+    VkSparseImageMemoryBindInfo imageMemoryBindInfo;
+    imageMemoryBindInfo.image = MAGMA_OPTIONAL_HANDLE(image);
+    imageMemoryBindInfo.bindCount = MAGMA_COUNT(imageBinds);
+    imageMemoryBindInfo.pBinds = imageBinds.data();
+    VkBindSparseInfo bindSparseInfo = {};
+    bindSparseInfo.sType = VK_STRUCTURE_TYPE_BIND_SPARSE_INFO;
+    bindSparseInfo.pNext = extendedInfo.headNode();
+    if (waitSemaphore)
+    {
+        bindSparseInfo.waitSemaphoreCount = 1;
+        bindSparseInfo.pWaitSemaphores = waitSemaphore->getHandleAddress();
+    }
+    if (buffer)
+    {
+        bindSparseInfo.bufferBindCount = 1;
+        bindSparseInfo.pBufferBinds = &bufferMemoryBindInfo;
+    }
+    if (imageOpaque)
+    {
+        bindSparseInfo.imageOpaqueBindCount = 1;
+        bindSparseInfo.pImageOpaqueBinds = &imageOpaqueMemoryBindInfo;
+    }
+    if (image)
+    {
+        bindSparseInfo.imageBindCount = 1;
+        bindSparseInfo.pImageBinds = &imageMemoryBindInfo;
+    }
+    if (signalSemaphore)
+    {
+        bindSparseInfo.signalSemaphoreCount = 1;
+        bindSparseInfo.pSignalSemaphores = signalSemaphore->getHandleAddress();
+    }
+    const VkResult result = vkQueueBindSparse(handle, 1, &bindSparseInfo, MAGMA_OPTIONAL_HANDLE(fence));
+    MAGMA_HANDLE_RESULT(result, "failed to submit sparse binding operation");
 }
 
 void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,

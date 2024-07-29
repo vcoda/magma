@@ -21,6 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class Device;
+    class Buffer;
+    class Image;
     class CommandBuffer;
     class Semaphore;
 #ifdef VK_KHR_timeline_semaphore
@@ -53,6 +55,16 @@ namespace magma
         void setPresentMode(VkPresentModeKHR presentMode_) noexcept { presentMode = presentMode_; }
         VkPresentModeKHR getPresentMode() const noexcept { return presentMode; }
     #endif // VK_EXT_swapchain_maintenance1
+        void bindSparse(std::shared_ptr<const Buffer> buffer,
+            const std::vector<VkSparseMemoryBind>& bufferBinds,
+            std::shared_ptr<const Image> imageOpaque,
+            const std::vector<VkSparseMemoryBind>& imageOpaqueBinds,
+            std::shared_ptr<const Image> image,
+            const std::vector<VkSparseImageMemoryBind>& imageBinds,
+            std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
+            std::shared_ptr<Semaphore> signalSemaphore = nullptr,
+            const std::unique_ptr<Fence>& fence = nullptr,
+            const StructureChain& extendedInfo = StructureChain());
         void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags waitDstStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
