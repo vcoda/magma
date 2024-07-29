@@ -103,8 +103,9 @@ Code is written in modern C++11/14 and takes advantage of new language features.
 
 Supported compilers:
 
-* MSC
+* MSVC
 * GCC
+* MinGW
 
 ## Build tools and SDK
 
@@ -173,6 +174,12 @@ Find `Environment` property, click "Change" button and add path to Vulkan SDK di
 <p align="center">
     <img src="docs/images/vulkan_sdk_path.png" width="329px" height="109px">
 </p>
+
+To compile for specific platform, open magma.pro file, and add definition of the target platform, e.g.:
+
+```
+QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_XCB_KHR
+```
 
 By default, Qt Creator uses only single CPU core, which slows down compilation significantly.
 To enable multi-core compilation, select `Projects`, open `Build Settings` page, navigate to `Build Steps`
