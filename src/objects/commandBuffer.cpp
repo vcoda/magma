@@ -850,8 +850,8 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
     {
         vkCmdBuildAccelerationStructuresIndirectKHR(handle, 1, &buildGeometryInfo, &indirectDeviceAddress, &indirectStride, &maxPrimitiveCounts);
         MAGMA_INUSE(accelerationStructure);
-        MAGMA_INUSE(scratchBuffer);
         MAGMA_INUSE(indirectBuildRanges);
+        MAGMA_INUSE(scratchBuffer);
     }
 }
 
@@ -866,7 +866,11 @@ void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<const Accele
     copyInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureKHR);
     if (vkCmdCopyAccelerationStructureKHR)
+    {
         vkCmdCopyAccelerationStructureKHR(handle, &copyInfo);
+        MAGMA_INUSE(srcAccelerationStructure);
+        MAGMA_INUSE(dstAccelerationStructure);
+    }
 }
 
 void CommandBuffer::compactAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
@@ -880,7 +884,11 @@ void CommandBuffer::compactAccelerationStructure(const std::shared_ptr<const Acc
     copyInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureKHR);
     if (vkCmdCopyAccelerationStructureKHR)
+    {
         vkCmdCopyAccelerationStructureKHR(handle, &copyInfo);
+        MAGMA_INUSE(srcAccelerationStructure);
+        MAGMA_INUSE(dstAccelerationStructure);
+    }
 }
 
 void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure, const std::shared_ptr<Buffer>& dstBuffer)
@@ -893,7 +901,11 @@ void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_ptr<cons
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
     if (vkCmdCopyAccelerationStructureToMemoryKHR)
+    {
         vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
+        MAGMA_INUSE(srcAccelerationStructure);
+        MAGMA_INUSE(dstBuffer);
+    }
 }
 
 void CommandBuffer::copyAccelerationStructureToMemory(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure, void *dstBuffer)
@@ -906,7 +918,10 @@ void CommandBuffer::copyAccelerationStructureToMemory(const std::shared_ptr<cons
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
     if (vkCmdCopyAccelerationStructureToMemoryKHR)
+    {
         vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
+        MAGMA_INUSE(srcAccelerationStructure);
+    }
 }
 
 void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
@@ -919,7 +934,11 @@ void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<cons
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
     if (vkCmdCopyMemoryToAccelerationStructureKHR)
+    {
         vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
+        MAGMA_INUSE(srcBuffer);
+        MAGMA_INUSE(dstAccelerationStructure);
+    }
 }
 
 void CommandBuffer::copyMemoryToAccelerationStructure(const void *srcBuffer, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
@@ -932,7 +951,10 @@ void CommandBuffer::copyMemoryToAccelerationStructure(const void *srcBuffer, con
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
     if (vkCmdCopyMemoryToAccelerationStructureKHR)
+    {
         vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
+        MAGMA_INUSE(dstAccelerationStructure);
+    }
 }
 
 void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& accelerationStructure, const std::shared_ptr<Buffer>& buffer)
@@ -945,7 +967,11 @@ void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<const A
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_SERIALIZE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
     if (vkCmdCopyAccelerationStructureToMemoryKHR)
+    {
         vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
+        MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(buffer);
+    }
 }
 
 void CommandBuffer::deserializeAccelerationStructure(const std::shared_ptr<const Buffer>& buffer, const std::shared_ptr<AccelerationStructure>& accelerationStructure)
@@ -958,7 +984,11 @@ void CommandBuffer::deserializeAccelerationStructure(const std::shared_ptr<const
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_DESERIALIZE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
     if (vkCmdCopyMemoryToAccelerationStructureKHR)
+    {
         vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
+        MAGMA_INUSE(buffer);
+        MAGMA_INUSE(accelerationStructure);
+    }
 }
 
 void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<const AccelerationStructure>& accelerationStructure,
@@ -966,7 +996,11 @@ void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<c
 {
     MAGMA_DEVICE_EXTENSION(vkCmdWriteAccelerationStructuresPropertiesKHR);
     if (vkCmdWriteAccelerationStructuresPropertiesKHR)
+    {
         vkCmdWriteAccelerationStructuresPropertiesKHR(handle, 1, accelerationStructure->getHandleAddress(), queryPool->getType(), *queryPool, firstQuery);
+        MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(queryPool);
+    }
 }
 
 void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
