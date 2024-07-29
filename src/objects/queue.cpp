@@ -103,16 +103,22 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     const StructureChain& extendedInfo /* default */)
 {
     MAGMA_ASSERT(cmdBuffer->primary());
-    VkSubmitInfo submitInfo;
+    VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.pNext = extendedInfo.headNode();
-    submitInfo.waitSemaphoreCount = waitSemaphore ? 1 : 0;
-    submitInfo.pWaitSemaphores = waitSemaphore ? waitSemaphore->getHandleAddress() : nullptr;
+    if (waitSemaphore)
+    {
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = waitSemaphore->getHandleAddress();
+    }
     submitInfo.pWaitDstStageMask = &waitDstStageMask;
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = cmdBuffer->getHandleAddress();
-    submitInfo.signalSemaphoreCount = signalSemaphore ? 1 : 0;
-    submitInfo.pSignalSemaphores = signalSemaphore ? signalSemaphore->getHandleAddress() : nullptr;
+    if (signalSemaphore)
+    {
+        submitInfo.signalSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = signalSemaphore->getHandleAddress();
+    }
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
     MAGMA_HANDLE_RESULT(result, "queue submission failed");
     cmdBuffer->finishedQueueSubmission();
@@ -132,17 +138,11 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
     MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
     // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkSubmitInfo.html
-    VkSubmitInfo submitInfo;
+    VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.pNext = extendedInfo.headNode();
-    if (0 == waitSemaphores.size())
+    if (waitSemaphores.size() > 0)
     {
-        submitInfo.waitSemaphoreCount = 0;
-        submitInfo.pWaitSemaphores = nullptr;
-        submitInfo.pWaitDstStageMask = nullptr;
-    }
-    else
-    {   // Dereference valid wait semaphores
         for (auto const& semaphore: waitSemaphores)
         {
             if (semaphore)
@@ -152,7 +152,6 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
         submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
         submitInfo.pWaitDstStageMask = waitDstStageMask.begin();
     }
-    // Dereference command buffers
     for (auto const& cmdBuffer: cmdBuffers)
     {
         if (cmdBuffer)
@@ -163,13 +162,8 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
     }
     submitInfo.commandBufferCount = dereferencedCmdBuffers.count();
     submitInfo.pCommandBuffers = dereferencedCmdBuffers;
-    if (0 == signalSemaphores.size())
+    if (signalSemaphores.size() > 0)
     {
-        submitInfo.signalSemaphoreCount = 0;
-        submitInfo.pSignalSemaphores = nullptr;
-    }
-    else
-    {   // Dereference valid semaphores to be signaled
         for (auto const& semaphore: signalSemaphores)
         {
             if (semaphore)
