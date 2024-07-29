@@ -76,6 +76,34 @@ VkImageFormatProperties PhysicalDevice::getImageFormatProperties(VkFormat format
     return imageFormatProperties;
 }
 
+std::vector<VkSparseImageFormatProperties> PhysicalDevice::getSparseImageFormatProperties(VkFormat format,
+    VkImageType type, VkImageUsageFlags usage, bool optimalTiling, uint32_t samples /* 1 */) const
+{
+    VkSampleCountFlagBits sampleCountBit;
+    switch (samples)
+    {
+    case 1: sampleCountBit = VK_SAMPLE_COUNT_1_BIT; break;
+    case 2: sampleCountBit = VK_SAMPLE_COUNT_2_BIT; break;
+    case 4: sampleCountBit = VK_SAMPLE_COUNT_4_BIT; break;
+    case 8: sampleCountBit = VK_SAMPLE_COUNT_8_BIT; break;
+    case 16: sampleCountBit = VK_SAMPLE_COUNT_16_BIT; break;
+    case 32: sampleCountBit = VK_SAMPLE_COUNT_32_BIT; break;
+    case 64: sampleCountBit = VK_SAMPLE_COUNT_64_BIT; break;
+    default: sampleCountBit = VK_SAMPLE_COUNT_1_BIT; break;
+    }
+    const VkImageTiling tiling = optimalTiling ? VK_IMAGE_TILING_OPTIMAL : VK_IMAGE_TILING_LINEAR;
+    uint32_t propertyCount = 0;
+    vkGetPhysicalDeviceSparseImageFormatProperties(handle, format, type, sampleCountBit, usage, tiling, &propertyCount, nullptr);
+    std::vector<VkSparseImageFormatProperties> sparseImageFormatProperties;
+    if (propertyCount)
+    {
+        sparseImageFormatProperties.resize(propertyCount);
+        vkGetPhysicalDeviceSparseImageFormatProperties(handle, format, type, sampleCountBit, usage, tiling, &propertyCount,
+            sparseImageFormatProperties.data());
+    }
+    return sparseImageFormatProperties;
+}
+
 VkPhysicalDeviceProperties PhysicalDevice::getProperties() const noexcept
 {
     VkPhysicalDeviceProperties properties;

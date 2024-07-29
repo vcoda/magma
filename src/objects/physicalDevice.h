@@ -48,6 +48,11 @@ namespace magma
             VkImageUsageFlags usage,
             bool optimalTiling,
             VkImageCreateFlags flags = 0) const;
+        std::vector<VkSparseImageFormatProperties> getSparseImageFormatProperties(VkFormat format,
+            VkImageType type,
+            VkImageUsageFlags usage,
+            bool optimalTiling,
+            uint32_t samples = 1) const;
         VkPhysicalDeviceProperties getProperties() const noexcept;
         std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const;
         VkPhysicalDeviceMemoryProperties getMemoryProperties() const noexcept;
