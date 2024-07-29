@@ -23,7 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
-#include "../exceptions/notImplemented.h"
 
 namespace magma
 {
@@ -108,7 +107,7 @@ void ManagedDeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObject
     MAGMA_UNUSED(deviceIndices);
     MAGMA_UNUSED(splitInstanceBindRegions);
     MAGMA_UNUSED(offset);
-    MAGMA_THROW_NOT_IMPLEMENTED;
+    MAGMA_ERROR("VMA allocator can't allocate memory across the subdevices");
 }
 #endif // VK_KHR_device_group
 

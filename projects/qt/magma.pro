@@ -257,7 +257,6 @@ HEADERS += \
     ../../src/exceptions/compileError.h \
     ../../src/exceptions/errorResult.h \
     ../../src/exceptions/exception.h \
-    ../../src/exceptions/notImplemented.h \
     ../../src/exceptions/reflectionErrorResult.h \
     ../../src/exceptions/sourcelocation.h \
     ../../src/exceptions/unsupportedExtension.h \

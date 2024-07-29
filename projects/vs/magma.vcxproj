@@ -221,7 +221,6 @@
     <ClInclude Include="..\..\src\exceptions\compileError.h" />
     <ClInclude Include="..\..\src\exceptions\errorResult.h" />
     <ClInclude Include="..\..\src\exceptions\exception.h" />
-    <ClInclude Include="..\..\src\exceptions\notImplemented.h" />
     <ClInclude Include="..\..\src\exceptions\reflectionErrorResult.h" />
     <ClInclude Include="..\..\src\exceptions\sourcelocation.h" />
     <ClInclude Include="..\..\src\exceptions\unsupportedExtension.h" />

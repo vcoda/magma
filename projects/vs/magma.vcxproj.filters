@@ -543,9 +543,6 @@
     <ClInclude Include="..\..\src\exceptions\exception.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\exceptions\notImplemented.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\exceptions\reflectionErrorResult.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
