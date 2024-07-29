@@ -258,7 +258,7 @@ uint32_t Swapchain::acquireNextDeviceGroupImage(uint32_t deviceMask,
     uint32_t imageIndex = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkAcquireNextImage2KHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
     const VkResult result = vkAcquireNextImage2KHR(getNativeDevice(), &aquireNextImageInfo, &imageIndex);
-    handleError(result, "failed to acquire next image within device group");
+    handleError(result, "failed to acquire next image across the subdevices");
     return imageIndex;
 }
 #endif // VK_KHR_device_group
@@ -308,7 +308,7 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     bindImageMemorySwapchainInfo.imageIndex = imageIndex;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult result = vkBindImageMemory2KHR(getNativeDevice(), 1, &bindImageMemoryInfo);
-    MAGMA_HANDLE_RESULT(result, "failed to bind image to swapchain within device group");
+    MAGMA_HANDLE_RESULT(result, "failed to bind image to swapchain across the subdevices");
     addImage(std::move(image), imageIndex);
 }
 #endif // VK_KHR_device_group

@@ -229,7 +229,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
     {
         MAGMA_FAILURE("unknown type of binded object");
     }
-    MAGMA_HANDLE_RESULT(result, "failed to bind device memory within device group");
+    MAGMA_HANDLE_RESULT(result, "failed to bind device memory across the subdevices");
     if (VK_SUCCESS == result)
         binding = object;
 }
