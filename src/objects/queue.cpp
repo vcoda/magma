@@ -290,18 +290,13 @@ void Queue::present(const std::unique_ptr<Swapchain>& swapchain, uint32_t imageI
     const std::unique_ptr<Fence>& presentFence /* nullptr */,
     const StructureChain& extendedInfo /* default */)
 {
-    VkPresentInfoKHR presentInfo;
+    VkPresentInfoKHR presentInfo = {};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     presentInfo.pNext = extendedInfo.headNode();
     if (waitSemaphore)
     {
         presentInfo.waitSemaphoreCount = 1;
         presentInfo.pWaitSemaphores = waitSemaphore->getHandleAddress();
-    }
-    else
-    {
-        presentInfo.waitSemaphoreCount = 0;
-        presentInfo.pWaitSemaphores = nullptr;
     }
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapchain->getHandleAddress();
