@@ -276,6 +276,24 @@ VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32
     return subresourceRange;
 }
 
+VkSparseImageMemoryBind Image::getSparseMemoryBind(uint32_t mipLevel, uint32_t arrayLayer,
+    const VkOffset3D& offset, const VkExtent3D& extent, VkDeviceSize memoryOffset) const noexcept
+{
+    VkSparseImageMemoryBind sparseImageMemoryBind;
+    sparseImageMemoryBind.subresource.aspectMask = getAspectMask();
+    sparseImageMemoryBind.subresource.mipLevel = mipLevel;
+    sparseImageMemoryBind.subresource.arrayLayer = arrayLayers > 0 ? std::min(arrayLayer, arrayLayers - 1) : 0;
+    sparseImageMemoryBind.offset = offset;
+    sparseImageMemoryBind.extent = extent;
+    sparseImageMemoryBind.memory = memory->getNativeHandle();
+    sparseImageMemoryBind.memoryOffset = memoryOffset;
+    if (VK_IMAGE_ASPECT_METADATA_BIT == sparseImageMemoryBind.subresource.aspectMask)
+        sparseImageMemoryBind.flags = VK_SPARSE_MEMORY_BIND_METADATA_BIT;
+    else
+        sparseImageMemoryBind.flags = 0;
+    return sparseImageMemoryBind;
+}
+
 VkMemoryRequirements Image::getMemoryRequirements() const noexcept
 {
     VkMemoryRequirements memoryRequirements = {};
