@@ -161,6 +161,14 @@ bool ManagedDeviceMemory::invalidateMappedRange(
     return (VK_SUCCESS == result);
 }
 
+VkDeviceSize ManagedDeviceMemory::getCommitment() noexcept
+{
+    VkDeviceSize commitedMemoryInBytes = 0ull;
+    MAGMA_ASSERT(getPropertyFlags() & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT);
+    vkGetDeviceMemoryCommitment(getNativeDevice(), handle, &commitedMemoryInBytes);
+    return commitedMemoryInBytes;
+}
+
 void ManagedDeviceMemory::onDefragment() noexcept
 {
     const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(allocation);

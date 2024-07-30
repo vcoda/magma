@@ -298,6 +298,14 @@ bool DeviceMemory::invalidateMappedRange(
     return (VK_SUCCESS == result);
 }
 
+VkDeviceSize DeviceMemory::getCommitment() noexcept
+{
+    VkDeviceSize commitedMemoryInBytes = 0ull;
+    MAGMA_ASSERT(getPropertyFlags() & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT);
+    vkGetDeviceMemoryCommitment(getNativeDevice(), handle, &commitedMemoryInBytes);
+    return commitedMemoryInBytes;
+}
+
 void DeviceMemory::onDefragment() noexcept
 {
     // Do nothing with direct memory allocation

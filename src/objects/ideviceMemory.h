@@ -72,6 +72,7 @@ namespace magma
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept = 0;
         virtual bool invalidateMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept = 0;
+        virtual VkDeviceSize getCommitment() noexcept = 0;
         virtual void onDefragment() noexcept = 0;
     };
 
