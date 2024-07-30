@@ -42,6 +42,9 @@ namespace magma
     #ifdef VK_KHR_get_memory_requirements2
         VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const;
     #endif
+        VkSparseMemoryBind getSparseMemoryBind(VkDeviceSize bufferOffset,
+            VkDeviceSize size,
+            VkDeviceSize memoryOffset) const noexcept;
         virtual VkDescriptorBufferInfo getDescriptor() const noexcept;
         void realloc(VkDeviceSize newSize);
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,

@@ -170,6 +170,17 @@ VkMemoryRequirements Buffer::getMemoryRequirements2(void *memoryRequirements) co
 }
 #endif // VK_KHR_get_memory_requirements2
 
+VkSparseMemoryBind Buffer::getSparseMemoryBind(VkDeviceSize bufferOffset, VkDeviceSize size, VkDeviceSize memoryOffset) const noexcept
+{
+    VkSparseMemoryBind sparseMemoryBind;
+    sparseMemoryBind.resourceOffset = bufferOffset;
+    sparseMemoryBind.size = size;
+    sparseMemoryBind.memory = memory->getNativeHandle();
+    sparseMemoryBind.memoryOffset = memoryOffset;
+    sparseMemoryBind.flags = 0;
+    return sparseMemoryBind;
+}
+
 VkDescriptorBufferInfo Buffer::getDescriptor() const noexcept
 {
     VkDescriptorBufferInfo bufferDescriptorInfo;
