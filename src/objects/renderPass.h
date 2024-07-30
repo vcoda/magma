@@ -67,22 +67,19 @@ namespace magma
             std::shared_ptr<IAllocator> allocator,
             const std::vector<AttachmentDescription>& attachments,
             VkRenderPassCreateFlags flags);
-
-    protected:
         VkImageLayout optimalDepthStencilLayout(const Format& format) const;
         SubpassDependency subpassBeginDependency(bool colorAttachment,
             bool depthStencilAttachment) const noexcept;
         SubpassDependency subpassEndDependency(bool colorAttachment,
             bool depthStencilAttachment) const noexcept;
 
-    private:
-        void begin(const FramebufferAttachments& attachments) const noexcept;
-        void end(const FramebufferAttachments& attachments) const noexcept;
-
-    protected:
         const VkRenderPassCreateFlags flags;
         std::vector<AttachmentDescription> attachments;
         hash_t hash;
+
+    private:
+        void begin(const FramebufferAttachments& attachments) const noexcept;
+        void end(const FramebufferAttachments& attachments) const noexcept;
         friend class CommandBuffer;
     };
 } // namespace magma
