@@ -57,6 +57,7 @@ namespace magma
         VkRenderPassCreateFlags getFlags() const noexcept { return flags; }
         const std::vector<AttachmentDescription>& getAttachments() const noexcept { return attachments; }
         hash_t getHash() const noexcept { return hash; }
+        VkExtent2D getRenderAreaGranularity() const noexcept;
         bool usesClear() const noexcept;
         bool usesMultisampling() const noexcept;
         friend std::ostream& operator<<(std::ostream&, const RenderPass&);

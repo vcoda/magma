@@ -159,6 +159,13 @@ RenderPass::~RenderPass()
     vkDestroyRenderPass(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
+VkExtent2D RenderPass::getRenderAreaGranularity() const noexcept
+{
+    VkExtent2D granularity;
+    vkGetRenderAreaGranularity(getNativeDevice(), handle, &granularity);
+    return granularity;
+}
+
 bool RenderPass::usesClear() const noexcept
 {
     auto it = std::find_if(attachments.begin(), attachments.end(),
