@@ -22,9 +22,12 @@ namespace magma
     class CommandBuffer;
 
     /* Submits command buffer to a queue and blocks until
-       all command buffer execution is complete. This is
-       an analogue of glFinish() function in OpenGL. */
+       submitted command buffer have completed execution.
+       If <waitIdle> is true, it blocks until all queue
+       operations are finished. This is an analogue of
+       glFinish() function in OpenGL. */
 
     void finish(std::shared_ptr<CommandBuffer> cmdBuffer,
-        std::shared_ptr<Queue> queue = nullptr);
+        std::shared_ptr<Queue> queue = nullptr,
+        bool waitIdle = false);
 } // namespace magma

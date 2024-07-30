@@ -26,7 +26,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 void finish(std::shared_ptr<CommandBuffer> cmdBuffer,
-    std::shared_ptr<Queue> queue /* nullptr */)
+    std::shared_ptr<Queue> queue /* nullptr */,
+    bool waitIdle /* false */)
 {
     if (!queue)
     {   // If queue not specified, choose appropriate one
@@ -34,12 +35,20 @@ void finish(std::shared_ptr<CommandBuffer> cmdBuffer,
         const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
         queue = cmdPool->getDevice()->getQueueByFamily(queueFamilyIndex);
     }
-    const std::unique_ptr<Fence>& fence = cmdBuffer->getFence();
-    if (Fence::State::Signaled == fence->getStatus())
+    if (waitIdle)
+    {   // Wait for queue operations to finish
+        queue->submit(cmdBuffer);
+        queue->waitIdle();
+    }
+    else
+    {   // Wait for command buffer operations to finish
+        auto& fence = cmdBuffer->getFence();
+        if (Fence::State::Signaled == fence->getStatus())
+            fence->reset();
+        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
+        fence->wait();
         fence->reset();
-    queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
-    fence->wait();
+    }
     cmdBuffer->finishedExecution();
-    fence->reset();
 }
 } // namespace magma
