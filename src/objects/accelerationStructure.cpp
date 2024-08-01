@@ -102,13 +102,6 @@ VkDeviceSize AccelerationStructure::getProperty(AccelerationStructureQuery::Type
     return property;
 }
 
-uint64_t AccelerationStructure::getReference() const noexcept
-{
-    if (VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR == buildType)
-        return getDeviceAddress();
-    return getObjectHandle();
-}
-
 void AccelerationStructure::bindMemory(std::shared_ptr<IDeviceMemory> deviceMemory,
     VkDeviceSize offset /* 0 */)
 {

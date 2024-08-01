@@ -54,7 +54,6 @@ namespace magma
         VkDeviceSize getBuildScratchSize() const noexcept { return buildScratchSize; }
         VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
         VkDeviceSize getProperty(AccelerationStructureQuery::Type queryType) const noexcept;
-        uint64_t getReference() const noexcept;
         void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group

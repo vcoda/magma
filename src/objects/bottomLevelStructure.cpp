@@ -35,6 +35,13 @@ BottomLevelAccelerationStructure::BottomLevelAccelerationStructure(std::shared_p
         flags, buildType, buildFlags, geometries, std::move(allocator), extendedInfo)
 {}
 
+uint64_t BottomLevelAccelerationStructure::getReference() const noexcept
+{
+    if (VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR == buildType)
+        return getDeviceAddress();
+    return getObjectHandle();
+}
+
 void BottomLevelAccelerationStructure::build(const std::forward_list<AccelerationStructureGeometry>& geometries,
     void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
