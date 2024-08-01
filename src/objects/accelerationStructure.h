@@ -90,11 +90,17 @@ namespace magma
             const std::forward_list<AccelerationStructureGeometry>& geometries,
             std::shared_ptr<Allocator> allocator,
             const StructureChain& extendedInfo);
+        AccelerationStructure(std::shared_ptr<Device> device,
+            VkAccelerationStructureTypeKHR structureType,
+            VkAccelerationStructureCreateFlagsKHR flags,
+            VkAccelerationStructureBuildTypeKHR buildType,
+            VkBuildAccelerationStructureFlagsKHR buildFlags,
+            VkDeviceSize deserializedSize,
+            std::shared_ptr<Allocator> allocator,
+            const StructureChain& extendedInfo);
         static VkQueryType castType(AccelerationStructureQuery::Type queryType) noexcept;
 
         VkAccelerationStructureTypeKHR structureType;
-
-    private:
         const VkAccelerationStructureCreateFlagsKHR flags;
         const VkAccelerationStructureBuildTypeKHR buildType;
         const VkBuildAccelerationStructureFlagsKHR buildFlags;

@@ -86,6 +86,35 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     updateScratchSize = buildSizesInfo.updateScratchSize;
 }
 
+AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkAccelerationStructureTypeKHR structureType,
+    VkAccelerationStructureCreateFlagsKHR flags, VkAccelerationStructureBuildTypeKHR buildType,
+    VkBuildAccelerationStructureFlagsKHR buildFlags, VkDeviceSize deserializedSize,
+    std::shared_ptr<Allocator> allocator, const StructureChain& extendedInfo):
+    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR, device, 0, sharing, allocator),
+    structureType(structureType),
+    flags(flags),
+    buildType(buildType),
+    buildFlags(buildFlags),
+    buildScratchSize(deserializedSize),
+    updateScratchSize(deserializedSize)
+{
+    buffer = std::make_unique<AccelerationStructureStorageBuffer>(std::move(device),
+        deserializedSize, buildType, std::move(allocator));
+    VkAccelerationStructureCreateInfoKHR accelerationStructureInfo;
+    accelerationStructureInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
+    accelerationStructureInfo.pNext = extendedInfo.headNode();
+    accelerationStructureInfo.createFlags = flags;
+    accelerationStructureInfo.buffer = buffer->getHandle();
+    accelerationStructureInfo.offset = 0ull;
+    accelerationStructureInfo.size = deserializedSize;
+    accelerationStructureInfo.type = structureType;
+    accelerationStructureInfo.deviceAddress = MAGMA_NULL;
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureKHR, VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
+    const VkResult result = vkCreateAccelerationStructureKHR(getNativeDevice(), &accelerationStructureInfo,
+        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_HANDLE_RESULT(result, "failed to create acceleration structure");
+}
+
 AccelerationStructure::~AccelerationStructure()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureKHR);

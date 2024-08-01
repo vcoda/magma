@@ -35,6 +35,15 @@ TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Dev
         flags, buildType, buildFlags, {instances}, std::move(allocator), extendedInfo)
 {}
 
+TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Device> device, VkDeviceSize deserializedSize,
+    VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
+    AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR,
+        flags, buildType, buildFlags, deserializedSize, std::move(allocator), extendedInfo)
+{}
+
 void TopLevelAccelerationStructure::build(const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
     std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
@@ -59,7 +68,7 @@ VkResult TopLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureMode
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
     buildGeometryInfo.pNext = nullptr;
     buildGeometryInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
-    buildGeometryInfo.flags = getBuildFlags();
+    buildGeometryInfo.flags = buildFlags;
     buildGeometryInfo.mode = mode;
     if (VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR == mode)
         buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;

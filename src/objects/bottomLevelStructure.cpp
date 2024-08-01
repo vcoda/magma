@@ -35,6 +35,15 @@ BottomLevelAccelerationStructure::BottomLevelAccelerationStructure(std::shared_p
         flags, buildType, buildFlags, geometries, std::move(allocator), extendedInfo)
 {}
 
+BottomLevelAccelerationStructure::BottomLevelAccelerationStructure(std::shared_ptr<Device> device, VkDeviceSize deserializedSize,
+    VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
+    AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR,
+        flags, buildType, buildFlags, deserializedSize, std::move(allocator), extendedInfo)
+{}
+
 uint64_t BottomLevelAccelerationStructure::getReference() const noexcept
 {
     if (VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR == buildType)
@@ -91,7 +100,7 @@ VkResult BottomLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureM
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
     buildGeometryInfo.pNext = nullptr;
     buildGeometryInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR,
-    buildGeometryInfo.flags = getBuildFlags();
+    buildGeometryInfo.flags = buildFlags;
     buildGeometryInfo.mode = mode;
     if (VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR == mode)
         buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
