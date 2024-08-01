@@ -963,13 +963,14 @@ void CommandBuffer::copyMemoryToAccelerationStructure(const void *srcBuffer, con
     }
 }
 
-void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& accelerationStructure, const std::shared_ptr<Buffer>& buffer)
+void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& accelerationStructure, const std::shared_ptr<Buffer>& buffer,
+    VkDeviceAddress bufferOffset /* 0 */)
 {
     VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
     copyMemoryInfo.pNext = nullptr;
     copyMemoryInfo.src = *accelerationStructure;
-    copyMemoryInfo.dst.deviceAddress = buffer->getDeviceAddress();
+    copyMemoryInfo.dst.deviceAddress = buffer->getDeviceAddress() + bufferOffset;
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_SERIALIZE_KHR;
     MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
     if (vkCmdCopyAccelerationStructureToMemoryKHR)

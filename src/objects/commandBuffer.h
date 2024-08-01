@@ -553,7 +553,8 @@ namespace magma
         void copyMemoryToAccelerationStructure(const void *srcBuffer,
             const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure);
         void serializeAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& accelerationStructure,
-            const std::shared_ptr<Buffer>& buffer);
+            const std::shared_ptr<Buffer>& buffer,
+            VkDeviceAddress bufferOffset = 0);
         void deserializeAccelerationStructure(const std::shared_ptr<const Buffer>& buffer,
             const std::shared_ptr<AccelerationStructure>& accelerationStructure);
         void writeAccelerationStructureProperties(const std::shared_ptr<const AccelerationStructure>& accelerationStructure,
