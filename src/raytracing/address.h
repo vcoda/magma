@@ -42,13 +42,15 @@ inline VkDeviceOrHostAddressConstKHR address(const void *buffer) noexcept
     return addr;
 }
 
-inline VkDeviceAddress align(std::size_t alignment, std::size_t sizeOfBufferToBeAligned, VkDeviceAddress address, std::size_t& sizeOfBufferLeftToOperate) noexcept
+inline VkDeviceAddress align(std::size_t alignment, std::size_t sizeOfBufferToBeAligned,
+    VkDeviceAddress address, std::size_t& sizeOfBufferLeftToOperate) noexcept
 {
     void *ptr = reinterpret_cast<void *>(address);
     void *aligned = std::align(alignment, sizeOfBufferToBeAligned, ptr, sizeOfBufferLeftToOperate);
     MAGMA_ASSERT(aligned);
-    MAGMA_ASSERT(reinterpret_cast<uintptr_t>(aligned) % alignment == 0);
-    return reinterpret_cast<VkDeviceAddress>(aligned);
+    VkDeviceAddress alignedAddress = reinterpret_cast<VkDeviceAddress>(aligned);
+    MAGMA_ASSERT(alignedAddress % alignment == 0);
+    return alignedAddress;
 }
 #endif // VK_KHR_acceleration_structure
 } // namespace magma
