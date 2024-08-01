@@ -42,7 +42,7 @@ inline VkDeviceOrHostAddressConstKHR address(const void *buffer) noexcept
     return addr;
 }
 
-inline VkDeviceAddress align(std::size_t alignment, std::size_t sizeOfBufferToBeAligned, VkDeviceAddress address, std::size_t sizeOfBufferLeftToOperate) noexcept
+inline VkDeviceAddress align(std::size_t alignment, std::size_t sizeOfBufferToBeAligned, VkDeviceAddress address, std::size_t& sizeOfBufferLeftToOperate) noexcept
 {
     void *ptr = reinterpret_cast<void *>(address);
     void *aligned = std::align(alignment, sizeOfBufferToBeAligned, ptr, sizeOfBufferLeftToOperate);
