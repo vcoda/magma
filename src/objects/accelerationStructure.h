@@ -67,13 +67,9 @@ namespace magma
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool compact(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
-        bool copyToBuffer(std::shared_ptr<Buffer> dstBuffer,
+        bool copyTo(void *dstBuffer,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
-        bool copyToMemory(void *dstBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
-        bool copyFromBuffer(std::shared_ptr<const Buffer> srcBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
-        bool copyFromMemory(const void *srcBuffer,
+        bool copyFrom(const void *srcBuffer,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
         bool serialize(void *dstBuffer,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;

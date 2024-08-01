@@ -187,22 +187,7 @@ bool AccelerationStructure::compact(std::shared_ptr<AccelerationStructure> dstAc
     return MAGMA_SUCCEEDED(result);
 }
 
-bool AccelerationStructure::copyToBuffer(std::shared_ptr<Buffer> dstBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
-{
-    VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
-    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
-    copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src = handle;
-    copyMemoryInfo.dst.deviceAddress = dstBuffer->getDeviceAddress();
-    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
-    MAGMA_DEVICE_EXTENSION(vkCopyAccelerationStructureToMemoryKHR);
-    const VkResult result = vkCopyAccelerationStructureToMemoryKHR(getNativeDevice(),
-        MAGMA_OPTIONAL_HANDLE(deferredOperation), &copyMemoryInfo);
-    return MAGMA_SUCCEEDED(result);
-}
-
-bool AccelerationStructure::copyToMemory(void *dstBuffer,
+bool AccelerationStructure::copyTo(void *dstBuffer,
     std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
@@ -217,22 +202,7 @@ bool AccelerationStructure::copyToMemory(void *dstBuffer,
     return MAGMA_SUCCEEDED(result);
 }
 
-bool AccelerationStructure::copyFromBuffer(std::shared_ptr<const Buffer> srcBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept
-{
-    VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
-    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
-    copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src.deviceAddress = srcBuffer->getDeviceAddress();
-    copyMemoryInfo.dst = handle;
-    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
-    MAGMA_DEVICE_EXTENSION(vkCopyMemoryToAccelerationStructureKHR);
-    const VkResult result = vkCopyMemoryToAccelerationStructureKHR(getNativeDevice(),
-        MAGMA_OPTIONAL_HANDLE(deferredOperation), &copyMemoryInfo);
-    return MAGMA_SUCCEEDED(result);
-}
-
-bool AccelerationStructure::copyFromMemory(const void *srcBuffer,
+bool AccelerationStructure::copyFrom(const void *srcBuffer,
     std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept
 {
     VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
