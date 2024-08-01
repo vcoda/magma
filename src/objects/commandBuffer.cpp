@@ -914,22 +914,6 @@ void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_ptr<cons
     }
 }
 
-void CommandBuffer::copyAccelerationStructureToMemory(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure, void *dstBuffer)
-{
-    VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
-    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
-    copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src = *srcAccelerationStructure;
-    copyMemoryInfo.dst.hostAddress = dstBuffer;
-    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
-    MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
-    if (vkCmdCopyAccelerationStructureToMemoryKHR)
-    {
-        vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
-        MAGMA_INUSE(srcAccelerationStructure);
-    }
-}
-
 void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
 {
     VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
@@ -943,22 +927,6 @@ void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<cons
     {
         vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
         MAGMA_INUSE(srcBuffer);
-        MAGMA_INUSE(dstAccelerationStructure);
-    }
-}
-
-void CommandBuffer::copyMemoryToAccelerationStructure(const void *srcBuffer, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
-{
-    VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
-    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
-    copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src.hostAddress = srcBuffer;
-    copyMemoryInfo.dst = *dstAccelerationStructure;
-    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
-    MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
-    if (vkCmdCopyMemoryToAccelerationStructureKHR)
-    {
-        vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
         MAGMA_INUSE(dstAccelerationStructure);
     }
 }

@@ -546,11 +546,7 @@ namespace magma
             const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure);
         void copyAccelerationStructureToBuffer(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
             const std::shared_ptr<Buffer>& dstBuffer);
-        void copyAccelerationStructureToMemory(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
-            void *dstBuffer);
         void copyBufferToAccelerationStructure(const std::shared_ptr<const Buffer>& srcBuffer,
-            const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure);
-        void copyMemoryToAccelerationStructure(const void *srcBuffer,
             const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure);
         void serializeAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& accelerationStructure,
             const std::shared_ptr<Buffer>& buffer,
