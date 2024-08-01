@@ -108,7 +108,7 @@ namespace magma
             uint32_t remoteDeviceIndex) const;
     #endif // VK_KHR_device_group
     #ifdef VK_KHR_acceleration_structure
-        VkAccelerationStructureCompatibilityKHR getAccelerationStructureCompatibility(const AccelerationStructureHeader *header) const;
+        bool getAccelerationStructureCompatibility(const AccelerationStructureHeader *header) const;
     #endif
     #ifdef VK_EXT_calibrated_timestamps
         std::vector<uint64_t> getCalibratedTimestamps(const std::vector<VkTimeDomainEXT>& timeDomains,

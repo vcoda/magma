@@ -367,16 +367,16 @@ VkPeerMemoryFeatureFlags Device::getDeviceGroupPeerMemoryFeatures(uint32_t heapI
 #endif // VK_KHR_device_group
 
 #ifdef VK_KHR_acceleration_structure
-VkAccelerationStructureCompatibilityKHR Device::getAccelerationStructureCompatibility(const AccelerationStructureHeader *header) const
+bool Device::getAccelerationStructureCompatibility(const AccelerationStructureHeader *header) const
 {
     VkAccelerationStructureVersionInfoKHR versionInfo;
     versionInfo.sType =  VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_VERSION_INFO_KHR;
     versionInfo.pNext = nullptr;
     versionInfo.pVersionData = header->driverUUID;
-    VkAccelerationStructureCompatibilityKHR compatibility = VK_ACCELERATION_STRUCTURE_COMPATIBILITY_MAX_ENUM_KHR;
+    VkAccelerationStructureCompatibilityKHR compatibility = VK_ACCELERATION_STRUCTURE_COMPATIBILITY_INCOMPATIBLE_KHR;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceAccelerationStructureCompatibilityKHR, VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
     vkGetDeviceAccelerationStructureCompatibilityKHR(handle, &versionInfo, &compatibility);
-    return compatibility;
+    return (VK_ACCELERATION_STRUCTURE_COMPATIBILITY_COMPATIBLE_KHR == compatibility);
 }
 #endif // VK_KHR_acceleration_structure
 
