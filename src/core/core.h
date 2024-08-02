@@ -44,6 +44,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 #define MAGMA_ALIGNMENT 16
+#define MAGMA_DEVICE_ADDRESS_ALIGNMENT 256
 
 #define MAGMA_MAX_STRING 4096
 
