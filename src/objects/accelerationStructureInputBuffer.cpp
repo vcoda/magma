@@ -26,9 +26,11 @@ namespace magma
 #ifdef VK_KHR_acceleration_structure
 AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Buffer(std::move(device), size, 0,
-        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
-            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+    Buffer(std::move(device), size, 0, // flags
+        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | 
+        VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | 
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | 
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {}
