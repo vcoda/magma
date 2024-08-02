@@ -940,6 +940,7 @@ void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<const A
     copyMemoryInfo.src = *accelerationStructure;
     copyMemoryInfo.dst.deviceAddress = buffer->getDeviceAddress() + bufferOffset;
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_SERIALIZE_KHR;
+    MAGMA_ASSERT(MAGMA_DEVICE_ADDRESS_ALIGNED(copyMemoryInfo.dst.deviceAddress));
     MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
     if (vkCmdCopyAccelerationStructureToMemoryKHR)
     {
@@ -958,6 +959,7 @@ void CommandBuffer::deserializeAccelerationStructure(const std::shared_ptr<const
     copyMemoryInfo.src.deviceAddress = buffer->getDeviceAddress() + bufferOffset;
     copyMemoryInfo.dst = *accelerationStructure;
     copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_DESERIALIZE_KHR;
+    MAGMA_ASSERT(MAGMA_DEVICE_ADDRESS_ALIGNED(copyMemoryInfo.src.deviceAddress));
     MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
     if (vkCmdCopyMemoryToAccelerationStructureKHR)
     {
