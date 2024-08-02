@@ -35,16 +35,12 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_p
         optional, sharing, std::move(allocator))
 {}
 
-AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void* data,
+AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(cmdBuffer->getDevice(), size, 0,
-        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
-            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, allocator)
+    AccelerationStructureInputBuffer(cmdBuffer->getDevice(), size, optional, sharing, allocator)
 {
     stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
@@ -55,10 +51,8 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_p
     VkDeviceSize srcOffset /* 0 */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
-    Buffer(cmdBuffer->getDevice(), size > 0 ? size : srcBuffer->getSize(), 0,
-        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
-            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+    AccelerationStructureInputBuffer(cmdBuffer->getDevice(),
+        size > 0 ? size : srcBuffer->getSize(), 
         optional, sharing, std::move(allocator))
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
