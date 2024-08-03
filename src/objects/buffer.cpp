@@ -375,6 +375,7 @@ void Buffer::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer, const void *
         std::move(allocator), Initializer(), Sharing(), std::move(copyFn));
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
+    cmdBuffer->reset();
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {   // Copy buffer from host to device
         copyTransfer(cmdBuffer, srcBuffer);

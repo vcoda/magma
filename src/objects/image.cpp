@@ -641,6 +641,7 @@ void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
         });
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
+    cmdBuffer->reset();
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {   // Copy buffer to image
         copyMipmap(cmdBuffer, srcBuffer, mipChain,
