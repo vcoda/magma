@@ -219,6 +219,8 @@ VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, std::shared_p
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
 {
     VkImageLayout oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     cmdBuffer->reset();
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {
