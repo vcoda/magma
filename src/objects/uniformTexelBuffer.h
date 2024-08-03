@@ -26,6 +26,11 @@ namespace magma
     class UniformTexelBuffer : public Buffer
     {
     public:
+        explicit UniformTexelBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Initializer& optional = Initializer(),
+            const Sharing& sharing = Sharing());
         explicit UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,

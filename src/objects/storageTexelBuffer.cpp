@@ -23,16 +23,23 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Initializer& optional /* default */,
+    const Sharing& sharing /* default */):
+    Buffer(std::move(device), size,
+        0, // flags
+        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        optional, sharing, std::move(allocator))
+{}
+
 StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(cmdBuffer->getDevice(), size,
-        0, // flags
-        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, allocator)
+    StorageTexelBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
     stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
@@ -43,12 +50,9 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
     VkDeviceSize srcOffset /* 0 */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
-    Buffer(srcBuffer->getDevice(),
-        size > 0 ? size : srcBuffer->getSize(),
-        0, // flags
-        VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, std::move(allocator))
+    StorageTexelBuffer(cmdBuffer->getDevice(),
+        size ? size : srcBuffer->getSize(),
+        std::move(allocator), optional, sharing)
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }

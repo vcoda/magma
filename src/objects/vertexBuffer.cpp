@@ -49,10 +49,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSiz
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    BaseVertexBuffer(cmdBuffer->getDevice(), size,
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, allocator)
+    VertexBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
     stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
@@ -63,11 +60,9 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared
     VkDeviceSize srcOffset /* 0 */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
-    BaseVertexBuffer(cmdBuffer->getDevice(),
-        size > 0 ? size : srcBuffer->getSize(),
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, std::move(allocator))
+    VertexBuffer(cmdBuffer->getDevice(),
+        size ? size : srcBuffer->getSize(),
+        std::move(allocator), optional, sharing)
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }

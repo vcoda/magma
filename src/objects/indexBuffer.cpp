@@ -77,10 +77,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    BaseIndexBuffer(cmdBuffer->getDevice(), indexType, size,
-        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, allocator)
+    IndexBuffer(cmdBuffer->getDevice(), indexType, size, allocator, optional, sharing)
 {
     stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
@@ -91,11 +88,9 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
     VkDeviceSize srcOffset /* 0 */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
-    BaseIndexBuffer(srcBuffer->getDevice(), indexType,
-        size > 0 ? size : srcBuffer->getSize(),
-        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, std::move(allocator))
+    IndexBuffer(cmdBuffer->getDevice(), indexType,
+        size ? size : srcBuffer->getSize(),
+        std::move(allocator), optional, sharing)
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }

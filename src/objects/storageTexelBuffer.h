@@ -25,6 +25,11 @@ namespace magma
     class StorageTexelBuffer : public Buffer
     {
     public:
+        explicit StorageTexelBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Initializer& optional = Initializer(),
+            const Sharing& sharing = Sharing());
         explicit StorageTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
             VkDeviceSize size,
             const void *data,

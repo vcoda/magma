@@ -39,11 +39,7 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceS
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(cmdBuffer->getDevice(), size,
-        0, // flags
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, allocator)
+    StorageBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
     stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
@@ -55,12 +51,9 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shar
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Buffer(cmdBuffer->getDevice(),
-        size > 0 ? size : srcBuffer->getSize(),
-        0, // flags
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        optional, sharing, std::move(allocator))
+    StorageBuffer(cmdBuffer->getDevice(),
+        size ? size : srcBuffer->getSize(),
+        std::move(allocator), optional, sharing)
 {
     copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
