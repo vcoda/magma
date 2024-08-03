@@ -71,7 +71,7 @@ namespace magma
     };
 
     /* Storage buffer for acceleration structure placement. */
-    
+
 #ifdef VK_KHR_acceleration_structure
     class AccelerationStructureStorageBuffer : public Buffer
     {

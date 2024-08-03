@@ -98,9 +98,9 @@ VkMemoryPropertyFlags AccelerationStructureStorageBuffer::getMemoryFlags(VkAccel
         return VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     case VK_ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_OR_DEVICE_KHR:
         return VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    default:
+        return VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     }
-    MAGMA_ASSERT(false);
-    return 0;
 }
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

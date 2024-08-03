@@ -64,14 +64,14 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const st
     Framebuffer(std::move(renderPass_), attachments.front()->getExtent(), attachments.front()->getArrayLayerCount(), std::move(allocator))
 {
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
-    for (auto& attachment : attachments)
+    for (auto& attachment: attachments)
         dereferencedAttachments.put(*attachment);
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.pNext = extendedInfo.headNode();
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = *renderPass;
-    framebufferInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
+    framebufferInfo.attachmentCount = dereferencedAttachments.count();
     framebufferInfo.pAttachments = dereferencedAttachments;
     framebufferInfo.width = extent.width;
     framebufferInfo.height = extent.height;

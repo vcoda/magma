@@ -65,7 +65,6 @@ bool Fence::wait(uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) co
     constexpr VkBool32 waitAll = VK_TRUE;
     const VkResult result = vkWaitForFences(getNativeDevice(), 1, &handle, waitAll, timeout);
     MAGMA_HANDLE_RESULT(result, "failed to wait fence");
-    // VK_SUCCESS or VK_TIMEOUT
-    return (result != VK_TIMEOUT);
+    return (result != VK_TIMEOUT); // VK_SUCCESS or VK_TIMEOUT
 }
 } // namespace magma

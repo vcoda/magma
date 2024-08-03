@@ -51,7 +51,8 @@ VkDescriptorBufferInfo BaseDynamicUniformBuffer::getDescriptor() const noexcept
     return descriptorBufferInfo;
 }
 
-uint32_t BaseDynamicUniformBuffer::calculateAlignedArraySize(std::shared_ptr<Device> device, std::size_t typeSize, uint32_t arraySize) noexcept
+uint32_t BaseDynamicUniformBuffer::calculateAlignedArraySize(std::shared_ptr<Device> device,
+    std::size_t typeSize, uint32_t arraySize) noexcept
 {
     const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
     const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
