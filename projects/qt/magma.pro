@@ -56,6 +56,7 @@ SOURCES += \
     ../../src/helpers/executeCommandBuffer.cpp \
     ../../src/helpers/executeDeferredOperation.cpp \
     ../../src/helpers/layoutTransition.cpp \
+    ../../src/helpers/readbackBufferMarkers.cpp \
     ../../src/helpers/streamInsertOperators.cpp \
     ../../src/helpers/stringifyFlags.cpp \
     ../../src/misc/application.cpp \
@@ -273,6 +274,7 @@ HEADERS += \
     ../../src/helpers/layoutTransition.h \
     ../../src/helpers/mapScoped.h \
     ../../src/helpers/mapTyped.h \
+    ../../src/helpers/readbackBufferMarkers.h \
     ../../src/helpers/stackArray.h \
     ../../src/helpers/streamInsertOperators.h \
     ../../src/helpers/stringifyFlags.h \

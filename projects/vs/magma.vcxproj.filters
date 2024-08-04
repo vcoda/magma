@@ -882,6 +882,9 @@
     <ClInclude Include="..\..\src\raytracing\accelerationStructureHeader.h">
       <Filter>Header Files\raytracing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\helpers\readbackBufferMarkers.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1375,6 +1378,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\objects\topLevelStructure.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\helpers\readbackBufferMarkers.cpp">
+      <Filter>Source Files\helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,14 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "../objects/device.h"
 #include "../objects/commandPool.h"
 #include "../objects/primaryCommandBuffer.h"
-#include "../objects/dstTransferBuffer.h"
-#include "../objects/queue.h"
-#include "../objects/fence.h"
 #include "../misc/finish.h"
-#include "../helpers/mapScoped.h"
 
 namespace magma
 {
@@ -55,32 +50,9 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
             MAGMA_THROW;
         }
         cmdBuffer->end();
+        // Block until execution is complete
+        finish(std::move(cmdBuffer));
     }
-    finish(std::move(cmdBuffer));
-}
-
-std::vector<uint32_t> readBufferMarkers(std::shared_ptr<const CommandBuffer> cmdBuffer)
-{
-    std::vector<uint32_t> bufferMarkers;
-    const VkDeviceSize size = cmdBuffer->getMarkerOffset();
-    if (size)
-    {
-        const std::shared_ptr<Buffer>& srcBuffer = cmdBuffer->getMarkerBuffer();
-        std::shared_ptr<Buffer> dstBuffer = std::make_shared<DstTransferBuffer>(cmdBuffer->getDevice(), size);
-        executeCommandBuffer(cmdBuffer->getCommandPool(),
-            [&srcBuffer, &dstBuffer](std::shared_ptr<CommandBuffer> cmdBuffer)
-            {   // Copy from device to host
-                cmdBuffer->copyBuffer(srcBuffer, dstBuffer, 0, 0, dstBuffer->getSize());
-            }, "magma::helpers::readBufferMarkers", 0x0);
-        helpers::mapScoped<uint32_t>(dstBuffer,
-            [&bufferMarkers, size](const uint32_t *srcData)
-            {   // Copy from host buffer to output
-                MAGMA_ASSERT(size % sizeof(uint32_t) == 0);
-                bufferMarkers.resize((size_t)size / sizeof(uint32_t));
-                memcpy(bufferMarkers.data(), srcData, (size_t)size);
-            });
-    }
-    return bufferMarkers;
 }
 } // namespace helpers
 } // namespace magma

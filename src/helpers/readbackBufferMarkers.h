@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,18 +19,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class CommandPool;
     class CommandBuffer;
 
     namespace helpers
     {
-        /* Helper function to execute a number of calls to command buffer.
-           It allocates command buffer, calls begin/end() and submits it
-           to the graphics queue. */
+        /* Helper function to read pipelined writes of marker values into
+           a buffer object. The primary purpose of these markers is to
+           facilitate the development of debugging tools for tracking which
+           pipelined command contributed to device loss. */
 
-        void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
-            std::function<void(std::shared_ptr<CommandBuffer>)> cmdFn,
-            const char *blockName = "magma::helpers::executeCommandBuffer",
+        std::vector<uint32_t> readbackBufferMarkers(std::shared_ptr<CommandBuffer> cmdBuffer,
+            const char *blockName = "magma::helpers::readbackBufferMarkers",
             uint32_t blockColor = 0x0);
     } // namespace helpers
 } // namespace magma
