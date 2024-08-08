@@ -46,6 +46,7 @@ constexpr VkFormat VertexAttributeFormat<Format>::format() noexcept
     static_assert(!attribFormat.srgb(), "sRGB formats not allowed");
     static_assert(!attribFormat.ycbcr(), "YCbCr formats not allowed");
     static_assert(!attribFormat.packed(), "packed formats not allowed");
+    static_assert(!attribFormat.multiPlanar(), "multi-planar formats not allowed");
     return Format;
 }
 } // namespace magma
