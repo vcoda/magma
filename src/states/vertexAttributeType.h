@@ -35,17 +35,17 @@ namespace magma
         UNorm, SNorm, UScaled, SScaled, UInt, SInt, UFloat, SFloat
     };
 
-    /* Scalar or vector GPU type. <normalized> and <scaled>
+    /* Scalar or vector GPU type. <Normalized> and <Scaled>
        parameters are used to distinguish numeric formats such as
        UNORM/SNORM, USCALED/SSCALED, UINT/SINT and SFLOAT. */
 
-    template<class PodType, int components,
-        bool normalized = false,
-        bool scaled = false>
+    template<class PodType, int N,
+        bool Normalized = false,
+        bool Scaled = false>
     struct VertexAttributeType
     {
-        PodType v[components];
-        constexpr static std::size_t size() noexcept { return sizeof(PodType) * components; }
+        PodType v[N];
+        constexpr static std::size_t size() noexcept { return sizeof(PodType) * N; }
         constexpr static Numeric numeric() noexcept;
     };
 
