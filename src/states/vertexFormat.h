@@ -24,62 +24,62 @@ namespace magma
        Note that vertex attributes should be 4-byte aligned,
        so (u)short3 and half3 types are omitted. */
 
-    namespace vtx
+    namespace vt
     {
         /* Vertex as single 2D, 3D or 4D position. */
 
-        template<class Pos>
+        template<class V>
         struct Vertex
         {
-            Pos pos;
+            V pos;
         };
 
         /* Vertex with position and color (r,g,b,a) values to
            draw triangles with per-vertex color interpolation. */
 
-        template<class Pos, class Color>
-        struct ColorVertex : Vertex<Pos>
+        template<class V, class C>
+        struct ColorVertex : Vertex<V>
         {
-            Color color;
+            C color;
         };
 
         /* Vertex with position and texture (u,v) coordinates. */
 
-        template<class Pos, class TexCoord>
-        struct TexVertex : Vertex<Pos>
+        template<class V, class T>
+        struct TexVertex : Vertex<V>
         {
-            TexCoord uv;
+            T uv;
         };
 
         /* Vertex with position and normal (x,y,z) vector
            to implement simple diffuse and specular lighting. */
 
-        template<class Pos, class Normal>
-        struct LitVertex : Vertex<Pos>
+        template<class V, class N>
+        struct LitVertex : Vertex<V>
         {
-            Normal normal;
+            N normal;
         };
 
         /* Vertex with position, normal and texture coordinates
            to implement simple diffuse and specular lighting
            multiplied with diffuse texture. */
 
-        template<class Pos, class Normal, class TexCoord>
-        struct LitTexVertex : LitVertex<Pos, Normal>
+        template<class V, class N, class T>
+        struct LitTexVertex : LitVertex<V, N>
         {
-            TexCoord uv;
+            T uv;
         };
 
         /* Vertex with position, normal, tangent, bitangent
            vectors and texture coordinates to implement per-
            pixel bump mapping. */
 
-        template<class Pos, class Vector, class TexCoord>
-        struct BumpVertex : LitVertex<Pos, Vector>
+        template<class V, class N, class T>
+        struct BumpVertex : LitVertex<V, N>
         {
-            Vector tangent;
-            Vector bitangent;
-            TexCoord uv;
+            N tangent;
+            N bitangent;
+            T uv;
         };
 
         typedef Vertex<Half2> Pos2h;
@@ -246,5 +246,5 @@ namespace magma
         typedef BumpVertex<Double3, Float3, UShortNorm2> Pos3dTbn3fTex2us;
         typedef BumpVertex<Double3, Float3, Half2> Pos3dTbn3fTex2h;
         typedef BumpVertex<Double3, Float3, Float2> Pos3dTbn3fTex2f;
-    } // namespace vtx
+    } // namespace vt
 } // namespace magma

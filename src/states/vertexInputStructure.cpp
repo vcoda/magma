@@ -21,13 +21,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-using namespace vtx;
-
 namespace renderstate
 {
 const VertexInputStructure<int> nullVertexInput;
 
 #ifndef MAGMA_NO_VERTEX_INPUTS
+using namespace vt;
 const VertexInputStructure<Pos2h> pos2h(0,
     {0, 0, VK_FORMAT_R16G16_SFLOAT, 0});
 const VertexInputStructure<Pos2f> pos2f(0,
