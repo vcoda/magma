@@ -849,9 +849,6 @@
     <ClInclude Include="..\..\src\helpers\alignment.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\shaderBindingTable.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\objects\accelerationStructureInputBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -886,6 +883,9 @@
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shaders\shaderGroup.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shaders\shaderBindingTable.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1355,9 +1355,6 @@
     <ClCompile Include="..\..\src\states\multiColorBlendState.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objects\shaderBindingTable.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -1386,6 +1383,9 @@
       <Filter>Source Files\helpers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shaders\shaderGroup.cpp">
+      <Filter>Source Files\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shaders\shaderBindingTable.cpp">
       <Filter>Source Files\shaders</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1632,6 +1632,9 @@
     </None>
     <None Include="..\..\src\barriers\bufferMemoryBarrier.inl">
       <Filter>Header Files\barriers</Filter>
+    </None>
+    <None Include="..\..\src\shaders\shaderBindingTable.inl">
+      <Filter>Header Files\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

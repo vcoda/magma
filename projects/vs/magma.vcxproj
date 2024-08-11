@@ -350,7 +350,6 @@
     <ClInclude Include="..\..\src\objects\samplerYcbcrConversion.h" />
     <ClInclude Include="..\..\src\objects\secondaryCommandBuffer.h" />
     <ClInclude Include="..\..\src\objects\semaphore.h" />
-    <ClInclude Include="..\..\src\objects\shaderBindingTable.h" />
     <ClInclude Include="..\..\src\objects\shaderModule.h" />
     <ClInclude Include="..\..\src\objects\srcTransferBuffer.h" />
     <ClInclude Include="..\..\src\objects\storageBuffer.h" />
@@ -386,6 +385,7 @@
     <ClInclude Include="..\..\src\renderpass\subpass.h" />
     <ClInclude Include="..\..\src\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\src\shaders\rayTracingShaderGroup.h" />
+    <ClInclude Include="..\..\src\shaders\shaderBindingTable.h" />
     <ClInclude Include="..\..\src\shaders\shaderGroup.h" />
     <ClInclude Include="..\..\src\shaders\shaderReflection.h" />
     <ClInclude Include="..\..\src\shaders\shaderReflectionFactory.h" />
@@ -560,7 +560,6 @@
     <ClCompile Include="..\..\src\objects\sampler.cpp" />
     <ClCompile Include="..\..\src\objects\samplerYcbcrConversion.cpp" />
     <ClCompile Include="..\..\src\objects\semaphore.cpp" />
-    <ClCompile Include="..\..\src\objects\shaderBindingTable.cpp" />
     <ClCompile Include="..\..\src\objects\shaderModule.cpp" />
     <ClCompile Include="..\..\src\objects\srcTransferBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\storageBuffer.cpp" />
@@ -582,6 +581,7 @@
     <ClCompile Include="..\..\src\raytracing\accelerationStructureGeometry.cpp" />
     <ClCompile Include="..\..\src\renderpass\subpass.cpp" />
     <ClCompile Include="..\..\src\shaders\pipelineShaderStage.cpp" />
+    <ClCompile Include="..\..\src\shaders\shaderBindingTable.cpp" />
     <ClCompile Include="..\..\src\shaders\shaderGroup.cpp" />
     <ClCompile Include="..\..\src\shaders\shaderReflection.cpp" />
     <ClCompile Include="..\..\src\shaders\specialization.cpp" />
@@ -748,6 +748,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\raytracing\accelerationStructureInstance.inl" />
     <None Include="..\..\src\renderpass\attachment.inl" />
     <None Include="..\..\src\shaders\rayTracingShaderGroup.inl" />
+    <None Include="..\..\src\shaders\shaderBindingTable.inl" />
     <None Include="..\..\src\shaders\specialization.inl" />
     <None Include="..\..\src\states\colorBlendAttachmentState.inl" />
     <None Include="..\..\src\states\colorBlendState.inl" />

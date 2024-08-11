@@ -157,7 +157,6 @@ SRC_OBJS= \
 	src/objects/sampler.o \
 	src/objects/samplerYcbcrConversion.o \
 	src/objects/semaphore.o \
-	src/objects/shaderBindingTable.o \
 	src/objects/shaderModule.o \
 	src/objects/srcTransferBuffer.o \
 	src/objects/storageBuffer.o \
@@ -185,6 +184,7 @@ SRC_OBJS= \
 	src/renderpass/subpass.o \
 	\
 	src/shaders/pipelineShaderStage.o \
+	src/shaders/shaderBindingTable.o \
 	src/shaders/shaderGroup.o \
 	src/shaders/shaderReflection.o \
 	src/shaders/specialization.o \

@@ -81,7 +81,7 @@ namespace magma
     private:
         std::vector<uint32_t> indices;
         std::unordered_map<uint32_t, ShaderRecord> shaderRecords;
-        std::shared_ptr<Buffer> shaderBindingTable;
+        std::unique_ptr<Buffer> shaderBindingTable;
         uint32_t stride;
         bool raygen;
         friend ShaderBindingTable;

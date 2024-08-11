@@ -94,7 +94,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/samplerYcbcrConversion.h"
 #include "src/objects/secondaryCommandBuffer.h"
 #include "src/objects/semaphore.h"
-#include "src/objects/shaderBindingTable.h"
 #include "src/objects/shaderModule.h"
 #include "src/objects/srcTransferBuffer.h"
 #include "src/objects/storageBuffer.h"
@@ -112,6 +111,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "src/shaders/pipelineShaderStage.h"
 #include "src/shaders/rayTracingShaderGroup.h"
+#include "src/shaders/shaderBindingTable.h"
 #include "src/shaders/shaderGroup.h"
 #include "src/shaders/shaderReflection.h"
 #include "src/shaders/shaderReflectionFactory.h"

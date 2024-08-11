@@ -146,7 +146,6 @@ SOURCES += \
     ../../src/objects/sampler.cpp \
     ../../src/objects/samplerYcbcrConversion.cpp \
     ../../src/objects/semaphore.cpp \
-    ../../src/objects/shaderBindingTable.cpp \
     ../../src/objects/shaderModule.cpp \
     ../../src/objects/srcTransferBuffer.cpp \
     ../../src/objects/storageBuffer.cpp \
@@ -180,6 +179,7 @@ SOURCES += \
     ../../src/raytracing/accelerationStructureGeometry.cpp \
     ../../src/renderpass/subpass.cpp \
     ../../src/shaders/pipelineShaderStage.cpp \
+    ../../src/shaders/shaderBindingTable.cpp \
     ../../src/shaders/shaderGroup.cpp \
     ../../src/shaders/shaderReflection.cpp \
     ../../src/shaders/specialization.cpp \
@@ -385,7 +385,6 @@ HEADERS += \
     ../../src/objects/samplerYcbcrConversion.h \
     ../../src/objects/secondaryCommandBuffer.h \
     ../../src/objects/semaphore.h \
-    ../../src/objects/shaderBindingTable.h \
     ../../src/objects/shaderModule.h \
     ../../src/objects/srcTransferBuffer.h \
     ../../src/objects/storageBuffer.h \
@@ -433,6 +432,7 @@ HEADERS += \
     ../../src/renderpass/subpass.h \
     ../../src/shaders/pipelineShaderStage.h \
     ../../src/shaders/rayTracingShaderGroup.h \
+    ../../src/shaders/shaderBindingTable.h \
     ../../src/shaders/shaderGroup.h \
     ../../src/shaders/shaderReflection.h \
     ../../src/shaders/shaderReflectionFactory.h \
