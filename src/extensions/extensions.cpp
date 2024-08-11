@@ -39,8 +39,8 @@ bool Extensions::hasExtension(const char *name) const noexcept
 
 void Extensions::forEach(std::function<void(const std::string&, uint32_t)> fn) const noexcept
 {
-    for (auto const& ext: extensions)
-        fn(ext.first, ext.second);
+    for (auto& [extensionName, specVersion]: extensions)
+        fn(extensionName, specVersion);
 }
 
 bool Extensions::hasExtension(hash_t hash) const noexcept

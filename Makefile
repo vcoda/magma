@@ -210,7 +210,7 @@ GLSL_DIR=src/auxiliary/spirv
 SPIRV_DIR=$(GLSL_DIR)/output
 
 CONSTEXPR_DEPTH_FLAGS=-ftemplate-depth=2048 -fconstexpr-depth=2048
-BASE_CFLAGS=-std=c++14 -m64 -msse4 -pthread $(CONSTEXPR_DEPTH_FLAGS) -Wno-enum-compare -D$(PLATFORM) $(INCLUDE_DIR)
+BASE_CFLAGS=-std=c++17 -m64 -msse4 -pthread $(CONSTEXPR_DEPTH_FLAGS) -Wno-enum-compare -D$(PLATFORM) $(INCLUDE_DIR)
 
 DEBUG ?= 1
 ifeq ($(DEBUG), 1)

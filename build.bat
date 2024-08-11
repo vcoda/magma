@@ -38,7 +38,7 @@ set PCH_FILE=%BUILD_DIR%\%LIBRARY%.pch
 set PDB_FILE=%BUILD_DIR%\%LIBRARY%.pdb
 set TARGET=%LIBRARY%.lib
 
-set BASE_CFLAGS=/c /std:c++14 /EHsc /GS /Gd /permissive- /MP /nologo ^
+set BASE_CFLAGS=/c /std:c++17 /EHsc /GS /Gd /permissive- /MP /nologo ^
   /W4 /WX /wd"4307" /wd"4324" /wd"4458" ^
   /constexpr:depth2048 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /errorReport:prompt ^
   /I%VK_SDK_PATH%\Include /Icore ^

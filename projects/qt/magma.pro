@@ -8,7 +8,7 @@ CONFIG += precompile_header
 INCLUDEPATH += $(VULKAN_SDK)/include
 INCLUDEPATH += ../../src/core/
 
-QMAKE_CXXFLAGS += -msse4 -ftemplate-depth=2048 -fconstexpr-depth=2048
+QMAKE_CXXFLAGS += -std=c++17 -msse4 -ftemplate-depth=2048 -fconstexpr-depth=2048
 QMAKE_CXXFLAGS += -Wno-unused-variable -Wno-unused-value -Wno-unused-parameter
 QMAKE_CXXFLAGS += -Wno-unknown-pragmas -Wno-switch -Wno-missing-field-initializers
 QMAKE_CXXFLAGS += -Wno-implicit-fallthrough -Wno-deprecated-copy
