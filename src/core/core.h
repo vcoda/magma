@@ -141,6 +141,18 @@ inline Int roundUp(Int value, Int multiple) noexcept
         return value;
     return ((value + multiple - Int(1)) / multiple) * multiple;
 }
+
+template<class T>
+constexpr T alignUp(T value, T alignment) noexcept
+{
+    return (value + alignment - 1) & ~(alignment - 1);
+}
+
+template<class T>
+constexpr T alignDown(T value, T alignment) noexcept
+{
+    return value & ~(alignment - 1);
+}
 } // namespace core
 } // namespace magma
 
