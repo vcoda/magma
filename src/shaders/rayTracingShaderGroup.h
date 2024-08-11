@@ -37,7 +37,8 @@ namespace magma
             const void *captureReplayHandle) noexcept;
     };
 
-    /* General shader is the index of the ray generation, miss, or callable shader. */
+    /* General shader group indicates a shader group with a single
+       ray generation, miss, or callable shader in it. */
 
     struct GeneralRayTracingShaderGroup : RayTracingShaderGroup
     {
@@ -45,7 +46,9 @@ namespace magma
             const void *captureReplayHandle = nullptr) noexcept;
     };
 
-    /* Triangle hit shader is the optional index of the closest hit or any hit shader(s). */
+    /* Triangles hit group specifies a shader group that only hits triangles
+       and must not contain an intersection shader, only closest hit and
+       any-hit shaders. */
 
     struct TrianglesHitRayTracingShaderGroup : RayTracingShaderGroup
     {
@@ -54,12 +57,14 @@ namespace magma
             const void *captureReplayHandle = nullptr) noexcept;
     };
 
-    /* Procedural hit shader is the optional index of the intersection shader. */
+    /* Procedural hit group specifies a shader group that only intersects
+       with custom geometry and must contain an intersection shader and may
+       contain closest hit and any-hit shaders. */
 
     struct ProceduralHitRayTracingShaderGroup : RayTracingShaderGroup
     {
         constexpr ProceduralHitRayTracingShaderGroup(uint32_t intersectionShader,
-            uint32_t closestHitShader,
+            uint32_t closestHitShader = VK_SHADER_UNUSED_KHR,
             uint32_t anyHitShader = VK_SHADER_UNUSED_KHR,
             const void *captureReplayHandle = nullptr) noexcept;
     };
