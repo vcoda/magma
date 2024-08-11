@@ -59,7 +59,7 @@ namespace magma
     struct ProceduralHitRayTracingShaderGroup : RayTracingShaderGroup
     {
         constexpr ProceduralHitRayTracingShaderGroup(uint32_t intersectionShader,
-            uint32_t closestHitShader = VK_SHADER_UNUSED_KHR,
+            uint32_t closestHitShader,
             uint32_t anyHitShader = VK_SHADER_UNUSED_KHR,
             const void *captureReplayHandle = nullptr) noexcept;
     };

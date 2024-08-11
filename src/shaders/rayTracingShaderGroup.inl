@@ -43,8 +43,7 @@ constexpr TrianglesHitRayTracingShaderGroup::TrianglesHitRayTracingShaderGroup(u
 {}
 
 constexpr ProceduralHitRayTracingShaderGroup::ProceduralHitRayTracingShaderGroup(uint32_t intersectionShader,
-    uint32_t closestHitShader /* VK_SHADER_UNUSED_KHR */,
-    uint32_t anyHitShader /* VK_SHADER_UNUSED_KHR */,
+    uint32_t closestHitShader, uint32_t anyHitShader /* VK_SHADER_UNUSED_KHR */,
     const void *captureReplayHandle /* nullptr */) noexcept:
     RayTracingShaderGroup(VK_RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_KHR,
         VK_SHADER_UNUSED_KHR, closestHitShader, anyHitShader, intersectionShader,
