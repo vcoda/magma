@@ -141,7 +141,8 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipe
         auto layout = layouts.cbegin();
         auto basePipeline = basePipelines.cbegin();
         auto pipelineInfo = pipelineInfos.cbegin();
-        auto stageFlags = shaderStageFlags.cbegin();
+        auto shaderStages = stages.cbegin();
+        auto shaderGroups = groups.cbegin();
     #ifdef VK_EXT_pipeline_creation_feedback
         auto creationFeedback = creationFeedbacks.cbegin();
         auto stageFeedbacks = stageCreationFeedbacks.cbegin();
@@ -151,7 +152,7 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipe
         {
             pipelines.emplace_front(RayTracingPipeline::makeShared(
                 *handle++, device, *layout++, *basePipeline++, allocator,
-                pipelineInfo->stageCount, pipelineInfo->groupCount, *stageFlags++,
+                *shaderStages++, *shaderGroups++,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
                 stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,

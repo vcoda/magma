@@ -34,8 +34,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_ray_tracing_pipeline
-RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const std::vector<PipelineShaderStage>& shaderStages,
-    const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxPipelineRayRecursionDepth, std::shared_ptr<PipelineLayout> layout_,
+RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const std::vector<PipelineShaderStage>& shaderStages_,
+    const std::vector<RayTracingShaderGroup>& shaderGroups_, uint32_t maxPipelineRayRecursionDepth, std::shared_ptr<PipelineLayout> layout_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
@@ -45,14 +45,12 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages)),
-    shaderGroupCount(MAGMA_COUNT(shaderGroups))
+    shaderStages(shaderStages_),
+    shaderGroups(shaderGroups_)
 {
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
     for (auto const& stage: shaderStages)
-    {
         dereferencedStages.put(stage);
-        shaderStageFlags.push_back(stage.stage);
-    }
     VkRayTracingPipelineCreateInfoKHR pipelineInfo;
     VkRayTracingPipelineInterfaceCreateInfoKHR pipelineInterfaceInfo = {};
     VkPipelineLibraryCreateInfoKHR pipelineLibraryInfo = {};
@@ -64,7 +62,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
     pipelineInfo.pStages = dereferencedStages;
-    pipelineInfo.groupCount = shaderGroupCount;
+    pipelineInfo.groupCount = MAGMA_COUNT(shaderGroups);
     pipelineInfo.pGroups = shaderGroups.data();
     pipelineInfo.maxPipelineRayRecursionDepth = maxPipelineRayRecursionDepth;
     pipelineInfo.pLibraryInfo = nullptr;
@@ -142,8 +140,8 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
 }
 
 RayTracingPipeline::RayTracingPipeline(VkPipeline handle_, std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, uint32_t stageCount, uint32_t shaderGroupCount,
-    const std::vector<VkShaderStageFlagBits>& shaderStageFlags,
+    std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, 
+    const std::vector<PipelineShaderStage>& shaderStages, const std::vector<RayTracingShaderGroup>& shaderGroups,
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackEXT creationFeedback,
     const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
@@ -155,8 +153,8 @@ RayTracingPipeline::RayTracingPipeline(VkPipeline handle_, std::shared_ptr<Devic
         creationFeedback, stageCreationFeedbacks,
     #endif
         hash),
-    shaderGroupCount(shaderGroupCount),
-    shaderStageFlags(shaderStageFlags)
+    shaderStages(shaderStages),
+    shaderGroups(shaderGroups)
 {
     handle = handle_;
 }
@@ -184,6 +182,7 @@ VkDeviceSize RayTracingPipeline::getIntersectionShaderStackSize(uint32_t group) 
 std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles() const
 {
     const auto rayTracingPipelineProperties = device->getPhysicalDevice()->getRayTracingPipelineProperties();
+    const uint32_t shaderGroupCount = MAGMA_COUNT(shaderGroups);
     std::vector<uint8_t> shaderGroupHandles(shaderGroupCount * rayTracingPipelineProperties.shaderGroupHandleSize);
     MAGMA_DEVICE_EXTENSION(vkGetRayTracingShaderGroupHandlesKHR);
     const VkResult result = vkGetRayTracingShaderGroupHandlesKHR(getNativeDevice(),
@@ -195,6 +194,7 @@ std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles() const
 std::vector<uint8_t> RayTracingPipeline::getCaptureReplayShaderGroupHandles() const
 {
     const auto rayTracingPipelineProperties = device->getPhysicalDevice()->getRayTracingPipelineProperties();
+    const uint32_t shaderGroupCount = MAGMA_COUNT(shaderGroups);
     std::vector<uint8_t> shaderGroupHandles(shaderGroupCount * rayTracingPipelineProperties.shaderGroupHandleSize);
     MAGMA_DEVICE_EXTENSION(vkGetRayTracingCaptureReplayShaderGroupHandlesKHR);
     const VkResult result = vkGetRayTracingCaptureReplayShaderGroupHandlesKHR(getNativeDevice(),

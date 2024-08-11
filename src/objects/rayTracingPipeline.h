@@ -17,11 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "pipeline.h"
+#include "../shaders/pipelineShaderStage.h"
 #include "../shaders/rayTracingShaderGroup.h"
 
 namespace magma
 {
-    class PipelineShaderStage;
     class PipelineCache;
 #ifdef VK_KHR_pipeline_library
     class PipelineLibrary;
@@ -55,8 +55,8 @@ namespace magma
             const std::vector<VkDynamicState>& dynamicStates = {},
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        uint32_t getShaderGroupCount() const noexcept { return shaderGroupCount; }
-        const std::vector<VkShaderStageFlagBits> getShaderStageFlags() const noexcept { return shaderStageFlags; }
+        const std::vector<PipelineShaderStage>& getShaderStages() const noexcept { return shaderStages; }
+        const std::vector<RayTracingShaderGroup>& getShaderGroups() const noexcept { return shaderGroups; }
         VkDeviceSize getGeneralShaderStackSize(uint32_t group) const noexcept;
         VkDeviceSize getClosestHitShaderStackSize(uint32_t group) const noexcept;
         VkDeviceSize getAnyHitShaderStackSize(uint32_t group) const noexcept;
@@ -72,9 +72,8 @@ namespace magma
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
-            uint32_t stageCount,
-            uint32_t shaderGroupCount,
-            const std::vector<VkShaderStageFlagBits>& shaderStageFlags,
+            const std::vector<PipelineShaderStage>& shaderStages,
+            const std::vector<RayTracingShaderGroup>& shaderGroups,
         #ifdef VK_EXT_pipeline_creation_feedback
             VkPipelineCreationFeedbackEXT creationFeedback,
             const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
@@ -83,8 +82,8 @@ namespace magma
         VkDeviceSize getShaderGroupStackSize(uint32_t group,
             VkShaderGroupShaderKHR groupShader) const noexcept;
 
-        const uint32_t shaderGroupCount;
-        std::vector<VkShaderStageFlagBits> shaderStageFlags;
+        const std::vector<PipelineShaderStage> shaderStages;
+        const std::vector<RayTracingShaderGroup> shaderGroups;
     };
 
     /* Calculates hash of ray tracing pipeline. This function
