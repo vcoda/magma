@@ -112,6 +112,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "src/shaders/pipelineShaderStage.h"
 #include "src/shaders/rayTracingShaderGroup.h"
+#include "src/shaders/shaderGroup.h"
 #include "src/shaders/shaderReflection.h"
 #include "src/shaders/shaderReflectionFactory.h"
 #include "src/shaders/shaderStages.h"

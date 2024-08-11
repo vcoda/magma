@@ -885,6 +885,9 @@
     <ClInclude Include="..\..\src\helpers\readbackBufferMarkers.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\shaders\shaderGroup.h">
+      <Filter>Header Files\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1381,6 +1384,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\helpers\readbackBufferMarkers.cpp">
       <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shaders\shaderGroup.cpp">
+      <Filter>Source Files\shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

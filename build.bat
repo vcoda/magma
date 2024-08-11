@@ -224,6 +224,7 @@ src\platform\xlibSurface.cpp ^
 src\raytracing\accelerationStructureGeometry.cpp ^
 src\renderpass\subpass.cpp ^
 src\shaders\pipelineShaderStage.cpp ^
+src\shaders\shaderGroup.cpp ^
 src\shaders\shaderReflection.cpp ^
 src\shaders\specialization.cpp ^
 src\states\colorBlendStateAdvanced.cpp ^
@@ -420,6 +421,7 @@ xlibSurface.obj ^
 accelerationStructureGeometry.obj ^
 subpass.obj ^
 pipelineShaderStage.obj ^
+shaderGroup.obj ^
 shaderReflection.obj ^
 specialization.obj ^
 colorBlendStateAdvanced.obj ^

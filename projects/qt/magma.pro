@@ -180,6 +180,7 @@ SOURCES += \
     ../../src/raytracing/accelerationStructureGeometry.cpp \
     ../../src/renderpass/subpass.cpp \
     ../../src/shaders/pipelineShaderStage.cpp \
+    ../../src/shaders/shaderGroup.cpp \
     ../../src/shaders/shaderReflection.cpp \
     ../../src/shaders/specialization.cpp \
     ../../src/states/colorBlendStateAdvanced.cpp \
@@ -432,6 +433,7 @@ HEADERS += \
     ../../src/renderpass/subpass.h \
     ../../src/shaders/pipelineShaderStage.h \
     ../../src/shaders/rayTracingShaderGroup.h \
+    ../../src/shaders/shaderGroup.h \
     ../../src/shaders/shaderReflection.h \
     ../../src/shaders/shaderReflectionFactory.h \
     ../../src/shaders/shaderStages.h \

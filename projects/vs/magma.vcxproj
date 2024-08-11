@@ -386,6 +386,7 @@
     <ClInclude Include="..\..\src\renderpass\subpass.h" />
     <ClInclude Include="..\..\src\shaders\pipelineShaderStage.h" />
     <ClInclude Include="..\..\src\shaders\rayTracingShaderGroup.h" />
+    <ClInclude Include="..\..\src\shaders\shaderGroup.h" />
     <ClInclude Include="..\..\src\shaders\shaderReflection.h" />
     <ClInclude Include="..\..\src\shaders\shaderReflectionFactory.h" />
     <ClInclude Include="..\..\src\shaders\shaderStages.h" />
@@ -581,6 +582,7 @@
     <ClCompile Include="..\..\src\raytracing\accelerationStructureGeometry.cpp" />
     <ClCompile Include="..\..\src\renderpass\subpass.cpp" />
     <ClCompile Include="..\..\src\shaders\pipelineShaderStage.cpp" />
+    <ClCompile Include="..\..\src\shaders\shaderGroup.cpp" />
     <ClCompile Include="..\..\src\shaders\shaderReflection.cpp" />
     <ClCompile Include="..\..\src\shaders\specialization.cpp" />
     <ClCompile Include="..\..\src\states\colorBlendStateAdvanced.cpp" />

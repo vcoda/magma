@@ -185,6 +185,7 @@ SRC_OBJS= \
 	src/renderpass/subpass.o \
 	\
 	src/shaders/pipelineShaderStage.o \
+	src/shaders/shaderGroup.o \
 	src/shaders/shaderReflection.o \
 	src/shaders/specialization.o \
 	\
