@@ -74,6 +74,7 @@ void ShaderBindingTable::build(std::shared_ptr<RayTracingPipeline> pipeline,
     const std::vector<uint8_t> shaderGroupHandles = pipeline->getShaderGroupHandles();
     for (auto& [stage, group]: groups)
     {
+        MAGMA_UNUSED(stage);
         group.calculateStride(rayTracingPipelineProperties);
         const std::vector<uint8_t> bindingTableData = group.getBindingTableData(shaderGroupHandles, rayTracingPipelineProperties);
         group.shaderBindingTable = std::make_unique<SBTBuffer>(cmdBuffer, bindingTableData, allocator);

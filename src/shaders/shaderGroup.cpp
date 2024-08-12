@@ -33,6 +33,7 @@ void ShaderGroup::calculateStride(const VkPhysicalDeviceRayTracingPipelineProper
     stride = core::alignUp(properties.shaderGroupHandleSize, properties.shaderGroupHandleAlignment);
     for (auto& [groupIndex, shaderRecord]: shaderRecords)
     {   // Find the largest aligned size of group handle + embedded data
+        MAGMA_UNUSED(groupIndex);
         uint32_t dataSize = core::alignUp(
             properties.shaderGroupHandleSize + (uint32_t)shaderRecord.embedded.size(),
             properties.shaderGroupHandleAlignment);
