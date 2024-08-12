@@ -27,7 +27,7 @@ BaseDynamicUniformBuffer::BaseDynamicUniformBuffer(std::shared_ptr<Device> devic
     std::size_t typeSize, uint32_t arraySize, VkMemoryPropertyFlags memoryFlags,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator,
     bool mappedPersistently):
-    BaseUniformBuffer(std::move(device), typeSize,
+    BaseUniformBuffer(device, typeSize,
         calculateAlignedArraySize(device, typeSize, arraySize),
         VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, memoryFlags,
         optional, sharing, std::move(allocator),
