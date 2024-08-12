@@ -25,16 +25,33 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-void finish(std::shared_ptr<CommandBuffer> cmdBuffer,
-    std::shared_ptr<Queue> queue /* nullptr */,
+void finish(std::shared_ptr<CommandBuffer> cmdBuffer, bool waitIdle /* false */)
+{   // Try to get queue this command buffer associated with
+    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
+    MAGMA_ASSERT(cmdPool);
+    const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
+    std::shared_ptr<Queue> queue = cmdPool->getDevice()->getQueueByFamily(queueFamilyIndex);
+    MAGMA_ASSERT(queue);
+    if (waitIdle)
+    {   // Wait for queue operations to finish
+        queue->submit(cmdBuffer);
+        queue->waitIdle();
+    }
+    else
+    {   // Wait for command buffer operations to finish
+        auto& fence = cmdBuffer->getFence();
+        if (Fence::State::Signaled == fence->getStatus())
+            fence->reset();
+        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
+        fence->wait();
+        fence->reset();
+    }
+    cmdBuffer->finishedExecution();
+}
+
+void finish(std::shared_ptr<CommandBuffer> cmdBuffer, const std::unique_ptr<Queue>& queue,
     bool waitIdle /* false */)
 {
-    if (!queue)
-    {   // If queue not specified, choose appropriate one
-        std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
-        const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
-        queue = cmdPool->getDevice()->getQueueByFamily(queueFamilyIndex);
-    }
     if (waitIdle)
     {   // Wait for queue operations to finish
         queue->submit(cmdBuffer);
