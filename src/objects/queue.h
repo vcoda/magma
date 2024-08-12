@@ -129,6 +129,7 @@ namespace magma
     #endif
 
     private:
+        MAGMA_MAKE_UNIQUE(Queue)
         MAGMA_MAKE_SHARED(Queue)
         Queue(VkQueue handle, VkQueueFlagBits flags,
             uint32_t familyIndex, uint32_t index) noexcept;

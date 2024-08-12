@@ -37,7 +37,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
-    const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+    const std::vector<DeviceQueueDescriptor>& queueDescriptors_,
     const NullTerminatedStringArray& enabledLayers_,
     const NullTerminatedStringArray& enabledExtensions_,
     const VkPhysicalDeviceFeatures& enabledFeatures_,
@@ -46,6 +46,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkDevice>(VK_OBJECT_TYPE_DEVICE, std::move(allocator)),
     physicalDevice(std::move(physicalDevice_)),
+    queueDescriptors(queueDescriptors_),
     enabledFeatures(enabledFeatures_),
     enabledExtendedFeatures(enabledExtendedFeatures_)
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
@@ -85,9 +86,6 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
         throw exception::InitializationFailed("failed to create logical device");
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create logical device");
-    queues.reserve(queueDescriptors.size());
-    for (auto const& desc: queueDescriptors)
-        queues.emplace_back(desc, std::weak_ptr<Queue>());
     // Store enabled layers and extensions
     for (auto const& layer: enabledLayers_)
         enabledLayers.emplace(layer);
@@ -124,50 +122,55 @@ const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
     return featureQuery;
 }
 
-std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const
+std::unique_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const
 {
-    const DeviceQueueDescriptor queueDesc(physicalDevice, flags);
-    for (auto& pair : queues)
-    {   // Check if queue family is present, otherwise vkGetDeviceQueue() throws an exception
-        if (pair.first.queueFamilyIndex == queueDesc.queueFamilyIndex)
+    const DeviceQueueDescriptor queueDescriptor(physicalDevice, flags);
+    for (auto const& descriptor: queueDescriptors)
+    {   // Call vkGetDeviceQueue() only if logical device has been created
+        // with this queue family, otherwise call will throw an exception.
+        if (descriptor.queueFamilyIndex == queueDescriptor.queueFamilyIndex)
         {
-            if (!pair.second.expired())
-                return pair.second.lock();
-            // Get queue that supports specified flags
-            VkQueue queueHandle = VK_NULL_HANDLE;
-            vkGetDeviceQueue(handle, queueDesc.queueFamilyIndex, queueIndex, &queueHandle);
-            if (VK_NULL_HANDLE == queueHandle)
+            VkQueue queue = VK_NULL_HANDLE;
+            vkGetDeviceQueue(handle, queueDescriptor.queueFamilyIndex, queueIndex, &queue);
+            if (VK_NULL_HANDLE == queue)
                 MAGMA_ERROR("failed to get device queue");
-            auto queue = Queue::makeShared(queueHandle, flags, queueDesc.queueFamilyIndex, queueIndex);
-            // Cache using weak_ptr to break circular references
-            pair.second = queue;
-            return queue;
+            return Queue::makeUnique(queue, flags, queueDescriptor.queueFamilyIndex, queueIndex);
         }
     }
     return nullptr;
 }
 
 std::shared_ptr<Queue> Device::getQueueByFamily(uint32_t queueFamilyIndex) const
-{
-    auto it = std::find_if(queues.begin(), queues.end(),
-        [queueFamilyIndex](auto const& pair)
-        {
-            return (pair.first.queueFamilyIndex == queueFamilyIndex) &&
-                !pair.second.expired();
-        });
+{   // Try to get cached queue
+    auto it = queues.find(queueFamilyIndex);
     if (it != queues.end())
-        return it->second.lock();
-    for (auto flag: {
+    {
+        if (!it->second.expired())
+            return it->second.lock();
+    }
+    for (const VkQueueFlagBits flag: {
         VK_QUEUE_GRAPHICS_BIT,
         VK_QUEUE_COMPUTE_BIT,
         VK_QUEUE_TRANSFER_BIT})
     {   // Try to get new instance
-        try
+        const DeviceQueueDescriptor queueDescriptor(physicalDevice, flag);
+        if (queueDescriptor.queueFamilyIndex == queueFamilyIndex)
         {
-            auto queue = getQueue(flag, 0);
-            if (queue->getFamilyIndex() == queueFamilyIndex)
-                return queue;
-        } catch (...) {}
+            for (auto const& descriptor: queueDescriptors)
+            {   // Call vkGetDeviceQueue() only if logical device has been created
+                // with this queue family, otherwise call will throw an exception.
+                if (descriptor.queueFamilyIndex == queueFamilyIndex)
+                {
+                    VkQueue queue = VK_NULL_HANDLE;
+                    vkGetDeviceQueue(handle, queueFamilyIndex, 0, &queue);
+                    if (VK_NULL_HANDLE == queue)
+                        MAGMA_ERROR("failed to get device queue");
+                    std::shared_ptr<Queue> deviceQueue = Queue::makeShared(queue, flag, queueFamilyIndex, 0);
+                    queues[queueFamilyIndex] = deviceQueue; // Cache it
+                    return deviceQueue;
+                }
+            }
+        }
     }
     return nullptr;
 }

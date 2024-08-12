@@ -58,7 +58,7 @@ namespace magma
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
         const std::unique_ptr<DeviceFeatures>& getFeatures() const;
         const std::unique_ptr<FeatureQuery>& checkFeatures() const;
-        std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
+        std::unique_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
         std::shared_ptr<Queue> getQueueByFamily(uint32_t queueFamilyIndex) const;
         void updateDescriptorSets(uint32_t descriptorWriteCount,
             const VkWriteDescriptorSet *descriptorWrites,
@@ -143,7 +143,8 @@ namespace magma
         VkInstance getNativeInstance() const noexcept;
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
-        mutable std::vector<std::pair<DeviceQueueDescriptor, std::weak_ptr<Queue>>> queues;
+        const std::vector<DeviceQueueDescriptor> queueDescriptors;
+        mutable std::map<uint32_t, std::weak_ptr<Queue>> queues;
         std::set<std::string> enabledLayers;
         std::set<std::string> enabledExtensions;
         const VkPhysicalDeviceFeatures enabledFeatures;
