@@ -140,20 +140,20 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
 }
 
 RayTracingPipeline::RayTracingPipeline(VkPipeline handle_, std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, 
-    const std::vector<PipelineShaderStage>& shaderStages, const std::vector<RayTracingShaderGroup>& shaderGroups,
+    std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator,
+    const std::vector<PipelineShaderStage>& shaderStages_, const std::vector<RayTracingShaderGroup>& shaderGroups,
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackEXT creationFeedback,
     const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
 #endif // VK_EXT_pipeline_creation_feedback
     hash_t hash):
     Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator),
-        stageCount,
+        MAGMA_COUNT(shaderStages_),
     #ifdef VK_EXT_pipeline_creation_feedback
         creationFeedback, stageCreationFeedbacks,
     #endif
         hash),
-    shaderStages(shaderStages),
+    shaderStages(shaderStages_),
     shaderGroups(shaderGroups)
 {
     handle = handle_;
