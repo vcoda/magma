@@ -89,7 +89,8 @@ inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(co
     geometry.aabbs.data.deviceAddress = aabbs->getDeviceAddress();
     geometry.aabbs.stride = stride;
     flags = flags_;
-    primitiveCount = aabbs->getSize() / stride;
+    MAGMA_ASSERT(aabbs->getSize() % stride == 0);
+    primitiveCount = static_cast<uint32_t>(aabbs->getSize() / stride);
 }
 
 inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInstances() noexcept:
