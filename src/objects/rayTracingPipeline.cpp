@@ -44,7 +44,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     const std::vector<VkDynamicState>& dynamicStates /* empty */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages)),
+    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages_)),
     shaderStages(shaderStages_),
     shaderGroups(shaderGroups_)
 {
