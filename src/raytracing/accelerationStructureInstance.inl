@@ -16,10 +16,15 @@ constexpr TransformMatrix::TransformMatrix(const float (&mat)[M][N]) noexcept
 {
     static_assert(M <= 4, "the number of rows in the matrix is greater than 4");
     static_assert(N <= 4, "the number of columns in the matrix is greater than 4");
-    matrix[0][3] = matrix[1][3] = matrix[2][3] = 0.f; // Fill by 0 in case of 3x3 matrix
     for (int i = 0; i < std::min(M, 3); ++i)
         for (int j = 0; j < N; ++j)
             matrix[i][j] = mat[i][j];
+    if constexpr (N < 4)
+    {   // Zero translation in case of 3x3 matrix
+        matrix[0][3] = 0.f;
+        matrix[1][3] = 0.f;
+        matrix[2][3] = 0.f;
+    }
 }
 
 template<class Matrix>
