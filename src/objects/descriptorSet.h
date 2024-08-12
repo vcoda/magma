@@ -54,7 +54,7 @@ namespace magma
         void update();
 
     private:
-        void validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection,
+        void validateReflection(const std::unique_ptr<const ShaderReflection>& shaderReflection,
             uint32_t setIndex) const;
 
         DescriptorSetTable& setTable; // TODO: Can we avoid that dangerous reference?

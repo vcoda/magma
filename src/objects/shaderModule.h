@@ -72,12 +72,12 @@ namespace magma
         #endif
             const StructureChain& extendedInfo = StructureChain());
         ~ShaderModule();
-        const std::shared_ptr<ShaderReflection>& getReflection() const noexcept { return reflection; }
+        const std::unique_ptr<const ShaderReflection>& getReflection() const noexcept { return reflection; }
         hash_t getHash() const noexcept;
         hash_t getBytecodeHash() const noexcept;
 
     private:
-        std::shared_ptr<ShaderReflection> reflection;
+        std::unique_ptr<const ShaderReflection> reflection;
         hash_t hash;
         mutable hash_t bytecodeHash;
         mutable std::vector<SpirvWord> bytecode;

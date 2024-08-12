@@ -29,7 +29,7 @@ namespace magma
     class IShaderReflectionFactory : public IClass
     {
     public:
-        virtual std::shared_ptr<const ShaderReflection> getReflection(const std::string& shaderFileName) = 0;
+        virtual const std::unique_ptr<const ShaderReflection>& getReflection(const std::string& fileName) = 0;
     };
 
     MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(ShaderReflectionFactory);

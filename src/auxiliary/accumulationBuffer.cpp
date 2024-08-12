@@ -58,7 +58,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     count(0),
     maxCount(std::numeric_limits<uint32_t>::max())
 {
-    std::shared_ptr<const ShaderReflection> reflection = fragmentShader->getReflection();
+    auto& reflection = fragmentShader->getReflection();
     if (!reflection)
         MAGMA_ERROR("shader reflection not found");
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);

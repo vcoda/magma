@@ -44,7 +44,7 @@ struct ImageDescriptorSet::StorageImageTable : DescriptorSetTable
 };
 
 ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
-    std::shared_ptr<const ShaderReflection> reflection,
+    const std::unique_ptr<const ShaderReflection>& reflection,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     imageTable(std::make_unique<ImageTable>()),
     storageImageTable(std::make_unique<StorageImageTable>()),

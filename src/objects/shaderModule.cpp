@@ -59,7 +59,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     const VkResult result = vkCreateShaderModule(getNativeDevice(), &shaderModuleInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create shader module");
     if (reflect)
-        reflection = std::make_shared<ShaderReflection>(shaderModuleInfo.pCode, shaderModuleInfo.codeSize);
+        reflection = std::make_unique<const ShaderReflection>(shaderModuleInfo.pCode, shaderModuleInfo.codeSize);
     hash = core::hashArgs(
         shaderModuleInfo.sType,
         shaderModuleInfo.flags,

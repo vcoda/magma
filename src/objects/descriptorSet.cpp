@@ -50,8 +50,8 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
         MAGMA_ERROR("elements of descriptor set layout should have unique binding locations");
     if (shaderReflectionFactory && !shaderFileName.empty())
     {   // Validate descriptors through shader reflection
-        std::shared_ptr<const ShaderReflection> shaderReflection = shaderReflectionFactory->getReflection(shaderFileName);
-        validateReflection(std::move(shaderReflection), setIndex);
+        auto& shaderReflection = shaderReflectionFactory->getReflection(shaderFileName);
+        validateReflection(shaderReflection, setIndex);
     }
     // Prepare list of native bindings
     std::vector<VkDescriptorSetLayoutBinding> bindings;
@@ -105,7 +105,7 @@ void DescriptorSet::update()
         device->updateDescriptorSets(writeCount, descriptorWrites, 0, nullptr);
 }
 
-void DescriptorSet::validateReflection(std::shared_ptr<const ShaderReflection> shaderReflection, uint32_t setIndex) const
+void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflection>& shaderReflection, uint32_t setIndex) const
 {
     std::vector<const SpvReflectDescriptorSet *> descriptorSets = shaderReflection->enumerateDescriptorSets();
     if (setIndex >= descriptorSets.size())
