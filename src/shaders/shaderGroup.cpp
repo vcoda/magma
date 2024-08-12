@@ -46,7 +46,7 @@ void ShaderGroup::calculateStride(const VkPhysicalDeviceRayTracingPipelineProper
     MAGMA_ASSERT(stride < properties.maxShaderGroupStride);
 }
 
-std::vector<uint8_t> ShaderGroup::getBindingTableData(const std::vector<uint8_t>& shaderGroupHandles, 
+std::vector<uint8_t> ShaderGroup::getBindingTableData(const std::vector<uint8_t>& shaderGroupHandles,
     const VkPhysicalDeviceRayTracingPipelinePropertiesKHR properties)
 {
     std::vector<uint8_t> tableData(indices.size() * stride);

@@ -19,9 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Buffer;
-    class CommandBuffer;
-
     /* The embedded parameters are accessed in the shader through
        a special buffer type declared with the shaderRecordEXT layout.
        The "shaderRecordEXT" qualifier is used to declare a buffer
@@ -51,6 +48,7 @@ namespace magma
         std::vector<uint8_t> embedded;
     };
 
+    class Buffer;
     class ShaderBindingTable;
 
     /* Ray tracing pipelines can contain multiple shader groups
