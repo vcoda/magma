@@ -1056,39 +1056,39 @@ void CommandBuffer::setRayTracingPipelineStackSize(uint32_t pipelineStackSize) c
         vkCmdSetRayTracingPipelineStackSizeKHR(handle, pipelineStackSize);
 }
 
-void CommandBuffer::traceRays(const std::shared_ptr<const ShaderBindingTable>& shaderBindingTable,
+void CommandBuffer::traceRays(const ShaderBindingTable& shaderBindingTable,
     uint32_t width, uint32_t height, uint32_t depth) const noexcept
 {
-    VkStridedDeviceAddressRegionKHR raygenShaderBindingTable = shaderBindingTable->getDeviceAddressRegion(VK_SHADER_STAGE_RAYGEN_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR missShaderBindingTable = shaderBindingTable->getDeviceAddressRegion(VK_SHADER_STAGE_MISS_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR hitShaderBindingTable = shaderBindingTable->getDeviceAddressRegion(VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR callableShaderBindingTable = shaderBindingTable->getDeviceAddressRegion(VK_SHADER_STAGE_CALLABLE_BIT_KHR);    
+    VkStridedDeviceAddressRegionKHR raygenShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_RAYGEN_BIT_KHR);
+    VkStridedDeviceAddressRegionKHR missShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_MISS_BIT_KHR);
+    VkStridedDeviceAddressRegionKHR hitShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
+    VkStridedDeviceAddressRegionKHR callableShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_CALLABLE_BIT_KHR);
     MAGMA_DEVICE_EXTENSION(vkCmdTraceRaysKHR);
     if (vkCmdTraceRaysKHR)
     {
-        vkCmdTraceRaysKHR(handle, 
-            &raygenShaderBindingTable, 
-            &missShaderBindingTable, 
-            &hitShaderBindingTable, 
+        vkCmdTraceRaysKHR(handle,
+            &raygenShaderBindingTable,
+            &missShaderBindingTable,
+            &hitShaderBindingTable,
             &callableShaderBindingTable,
             width, height, depth);
     }
 }
 
-void CommandBuffer::traceRaysIndirect(const std::shared_ptr<const ShaderBindingTable>& shaderBindingTable,
+void CommandBuffer::traceRaysIndirect(const ShaderBindingTable& shaderBindingTable,
     const std::shared_ptr<const Buffer>& indirectBuffer) const noexcept
 {
-    VkStridedDeviceAddressRegionKHR raygenShaderBindingTable = shaderBindingTable->getDeviceAddressRegion(VK_SHADER_STAGE_RAYGEN_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR missShaderBindingTable = shaderBindingTable->getDeviceAddressRegion(VK_SHADER_STAGE_MISS_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR hitShaderBindingTable = shaderBindingTable->getDeviceAddressRegion(VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR callableShaderBindingTable = shaderBindingTable->getDeviceAddressRegion(VK_SHADER_STAGE_CALLABLE_BIT_KHR);    
+    VkStridedDeviceAddressRegionKHR raygenShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_RAYGEN_BIT_KHR);
+    VkStridedDeviceAddressRegionKHR missShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_MISS_BIT_KHR);
+    VkStridedDeviceAddressRegionKHR hitShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
+    VkStridedDeviceAddressRegionKHR callableShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_CALLABLE_BIT_KHR);
     MAGMA_DEVICE_EXTENSION(vkCmdTraceRaysIndirectKHR);
     if (vkCmdTraceRaysIndirectKHR)
     {
         vkCmdTraceRaysIndirectKHR(handle,
-            &raygenShaderBindingTable, 
-            &missShaderBindingTable, 
-            &hitShaderBindingTable, 
+            &raygenShaderBindingTable,
+            &missShaderBindingTable,
+            &hitShaderBindingTable,
             &callableShaderBindingTable,
             indirectBuffer->getDeviceAddress());
         MAGMA_INUSE(indirectBuffer);

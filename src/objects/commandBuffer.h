@@ -561,11 +561,11 @@ namespace magma
 
     #ifdef VK_KHR_ray_tracing_pipeline
         void setRayTracingPipelineStackSize(uint32_t pipelineStackSize) const noexcept;
-        void traceRays(const std::shared_ptr<const ShaderBindingTable>& shaderBindingTable,
+        void traceRays(const ShaderBindingTable& shaderBindingTable,
             uint32_t width,
             uint32_t height,
             uint32_t depth) const noexcept;
-        void traceRaysIndirect(const std::shared_ptr<const ShaderBindingTable>& shaderBindingTable,
+        void traceRaysIndirect(const ShaderBindingTable& shaderBindingTable,
             const std::shared_ptr<const Buffer>& indirectBuffer) const noexcept;
     #endif // VK_KHR_ray_tracing_pipeline
     #ifdef VK_KHR_ray_tracing_maintenance1
