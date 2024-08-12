@@ -101,19 +101,21 @@ void ShaderBindingTable::setupIndices(const std::vector<PipelineShaderStage>& sh
     uint32_t groupIndex = 0;
     for (auto const& group: shaderGroups)
     {
+        VkShaderStageFlagBits stage;
         if (VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR == group.type)
         {
             const uint32_t generalShader = group.generalShader;
             MAGMA_ASSERT(generalShader < shaderStages.size());
-            const VkShaderStageFlagBits stage = shaderStages[generalShader].stage;
-            groups[stage].addGroupIndex(groupIndex + groupOffset);
-            if (VK_SHADER_STAGE_RAYGEN_BIT_KHR == stage)
-                groups[stage].raygen = true;
+            stage = shaderStages[generalShader].stage;
         }
         else // *HIT_GROUP_KHR
         {
-            groups[VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR].addGroupIndex(groupIndex + groupOffset);
+            stage = VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
         }
+        auto& shaderGroup = groups[stage];
+        shaderGroup.addGroupIndex(groupIndex + groupOffset);
+        if (VK_SHADER_STAGE_RAYGEN_BIT_KHR == stage)
+            shaderGroup.raygen = true;
         ++groupIndex;
     }
     groupOffset += MAGMA_COUNT(shaderGroups);
