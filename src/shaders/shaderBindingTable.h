@@ -46,7 +46,7 @@ namespace magma
     {
     public:
         ShaderBindingTable() noexcept = default;
-        explicit ShaderBindingTable(std::shared_ptr<RayTracingPipeline> pipeline,
+        explicit ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
         uint32_t getShaderGroupCount() const noexcept { return MAGMA_COUNT(groups); }
@@ -54,7 +54,7 @@ namespace magma
         void addShaderRecord(VkShaderStageFlagBits stage,
             uint32_t groupIndex,
             const Block& block);
-        void build(std::shared_ptr<RayTracingPipeline> pipeline,
+        void build(std::shared_ptr<const RayTracingPipeline> pipeline,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
             const std::vector<VkRayTracingPipelineCreateInfoKHR>& librariesInfo = {});

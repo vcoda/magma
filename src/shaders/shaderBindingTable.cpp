@@ -39,13 +39,13 @@ public:
     }
 };
 
-ShaderBindingTable::ShaderBindingTable(std::shared_ptr<RayTracingPipeline> pipeline,
+ShaderBindingTable::ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Allocator> allocator /* nullptr */)
 {
     build(std::move(pipeline), std::move(cmdBuffer), std::move(allocator));
 }
 
-void ShaderBindingTable::build(std::shared_ptr<RayTracingPipeline> pipeline,
+void ShaderBindingTable::build(std::shared_ptr<const RayTracingPipeline> pipeline,
     std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Allocator> allocator /* nullptr */,
     const std::vector<VkRayTracingPipelineCreateInfoKHR>& librariesInfo /*= {} */)
 {
