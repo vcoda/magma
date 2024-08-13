@@ -154,7 +154,7 @@ const std::unique_ptr<Queue>& Device::getQueueByFamily(uint32_t queueFamilyIndex
             if (queueDescriptor.queueFamilyIndex == queueFamilyIndex)
             {
                 VkQueue queue = VK_NULL_HANDLE;
-                vkGetDeviceQueue(handle, queueFamilyIndex, 0, &queue);
+                vkGetDeviceQueue(handle, queueFamilyIndex, queueIndex, &queue);
                 if (VK_NULL_HANDLE == queue)
                     MAGMA_ERROR("failed to get device queue");
                 return queues[key] = Queue::makeUnique(queue, flag, queueFamilyIndex, queueIndex);
