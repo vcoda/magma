@@ -30,28 +30,23 @@ namespace magma
        dimensionality. Buffers and images are created with a sharing mode
        controlling how they can be accessed from queues. */
 
-    class Resource : public IResource,
-        /* private */ NonCopyable
+    class Resource : public IResource, /* private */ NonCopyable
     {
     public:
+        ~Resource();
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
         const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept override { return memory; }
-        const std::shared_ptr<IDeviceMemoryAllocator>& getDeviceAllocator() const noexcept { return deviceAllocator; }
 
     protected:
-        Resource(VkDeviceSize size, const Sharing& sharing,
-            std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator) noexcept:
-            size(size), offset(0ull), sharing(sharing),
-            deviceAllocator(std::move(deviceAllocator)) {}
+        Resource(VkDeviceSize size,
+            const Sharing& sharing) noexcept;
 
-    protected:
+        const Sharing sharing;
         VkDeviceSize size;
         VkDeviceSize offset;
-        const Sharing sharing;
         std::shared_ptr<IDeviceMemory> memory;
-        std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
     };
 
     /* Non-dispatchable resource object (buffer, image,
@@ -71,7 +66,7 @@ namespace magma
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator) noexcept:
             NonDispatchable<Type>(objectType, std::move(device), MAGMA_HOST_ALLOCATOR(allocator)),
-            Resource(size, sharing, MAGMA_DEVICE_ALLOCATOR(allocator))
+            Resource(size, sharing)
         {}
     };
 } // namespace magma

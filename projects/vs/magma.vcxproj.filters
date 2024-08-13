@@ -1388,6 +1388,9 @@
     <ClCompile Include="..\..\src\shaders\shaderBindingTable.cpp">
       <Filter>Source Files\shaders</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\objects\resource.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\objects\commandBuffer.inl">
