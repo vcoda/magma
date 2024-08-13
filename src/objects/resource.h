@@ -37,7 +37,7 @@ namespace magma
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
-        const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept override { return memory; }
+        const std::unique_ptr<IDeviceMemory>& getMemory() const noexcept override { return memory; }
 
     protected:
         Resource(VkDeviceSize size,
@@ -46,7 +46,7 @@ namespace magma
         const Sharing sharing;
         VkDeviceSize size;
         VkDeviceSize offset;
-        std::shared_ptr<IDeviceMemory> memory;
+        std::unique_ptr<IDeviceMemory> memory;
     };
 
     /* Non-dispatchable resource object (buffer, image,

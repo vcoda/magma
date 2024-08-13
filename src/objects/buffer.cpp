@@ -121,10 +121,10 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
         if (!(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT))
             memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     }
-    std::shared_ptr<IDeviceMemory> memory;
+    std::unique_ptr<IDeviceMemory> memory;
     if (MAGMA_DEVICE_ALLOCATOR(allocator))
     {
-        memory = std::make_shared<ManagedDeviceMemory>(device,
+        memory = std::make_unique<ManagedDeviceMemory>(device,
             VK_OBJECT_TYPE_BUFFER, handle,
             memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
@@ -133,7 +133,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     }
     else
     {
-        memory = std::make_shared<DeviceMemory>(device,
+        memory = std::make_unique<DeviceMemory>(device,
             memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
             extendedMemoryInfo);
@@ -257,7 +257,7 @@ void Buffer::realloc(VkDeviceSize newSize)
     bindMemory(std::move(memory), offset);
 }
 
-void Buffer::bindMemory(std::shared_ptr<IDeviceMemory> deviceMemory,
+void Buffer::bindMemory(std::unique_ptr<IDeviceMemory> deviceMemory,
     VkDeviceSize offset_ /* 0 */)
 {
     MAGMA_ASSERT(deviceMemory->getSize() >= getSize());
@@ -267,7 +267,7 @@ void Buffer::bindMemory(std::shared_ptr<IDeviceMemory> deviceMemory,
 }
 
 #ifdef VK_KHR_device_group
-void Buffer::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> deviceMemory,
+void Buffer::bindMemoryDeviceGroup(std::unique_ptr<IDeviceMemory> deviceMemory,
     const std::vector<uint32_t>& deviceIndices,
     const std::vector<VkRect2D>& /* splitInstanceBindRegions */,
     VkDeviceSize offset_ /* 0 */)

@@ -34,7 +34,7 @@ inline void mapScopedRange(std::shared_ptr<Buffer> buffer,
     MAGMA_ASSERT(buffer);
     MAGMA_ASSERT(mapFn);
     MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= buffer->getSize());
-    const std::shared_ptr<IDeviceMemory>& bufferMemory = buffer->getMemory();
+    auto& bufferMemory = buffer->getMemory();
     if (bufferMemory)
     {
         if (void *const data = bufferMemory->map(offset, size))
@@ -133,7 +133,7 @@ inline void mapScoped(std::shared_ptr<NonCoherentUniformBuffer<Type>> uniformBuf
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(mapFn);
-    const std::shared_ptr<IDeviceMemory>& memory = uniformBuffer->getMemory();
+    auto& memory = uniformBuffer->getMemory();
     const uint32_t arraySize = uniformBuffer->getArraySize();
     const VkDeviceSize alignment = uniformBuffer->getAlignment();
     VkDeviceSize offset = 0, size = 0;
@@ -181,7 +181,7 @@ inline void mapScoped(std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>> uni
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(mapFn);
-    const std::shared_ptr<IDeviceMemory>& memory = uniformBuffer->getMemory();
+    auto& memory = uniformBuffer->getMemory();
     const uint32_t arraySize = uniformBuffer->getArraySize();
     const VkDeviceSize alignment = uniformBuffer->getAlignment();
     VkDeviceSize offset = 0, size = 0;
@@ -225,7 +225,7 @@ inline void mapScopedRange(std::shared_ptr<Image> image,
     MAGMA_ASSERT(image);
     MAGMA_ASSERT(mapFn);
     MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= image->getSize());
-    const std::shared_ptr<IDeviceMemory>& imageMemory = image->getMemory();
+    auto& imageMemory = image->getMemory();
     if (imageMemory)
     {
         if (void *const data = imageMemory->map(offset, size))

@@ -28,11 +28,11 @@ namespace magma
     public:
         enum class Family : uint8_t;
         virtual Family getFamily() const noexcept = 0;
-        virtual const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept = 0;
-        virtual void bindMemory(std::shared_ptr<IDeviceMemory> memory,
+        virtual const std::unique_ptr<IDeviceMemory>& getMemory() const noexcept = 0;
+        virtual void bindMemory(std::unique_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
     #ifdef VK_KHR_device_group
-        virtual void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
+        virtual void bindMemoryDeviceGroup(std::unique_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) = 0;

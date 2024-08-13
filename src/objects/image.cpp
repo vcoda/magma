@@ -143,10 +143,10 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
         if (optional.lazilyAllocated)
             memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     }
-    std::shared_ptr<IDeviceMemory> memory;
+    std::unique_ptr<IDeviceMemory> memory;
     if (MAGMA_DEVICE_ALLOCATOR(allocator))
     {
-        memory = std::make_shared<ManagedDeviceMemory>(device,
+        memory = std::make_unique<ManagedDeviceMemory>(device,
             VK_OBJECT_TYPE_IMAGE, handle,
             memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
@@ -155,7 +155,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     }
     else
     {
-        memory = std::make_shared<DeviceMemory>(device,
+        memory = std::make_unique<DeviceMemory>(device,
             memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
             extendedMemoryInfo);
@@ -357,7 +357,7 @@ std::vector<VkSparseImageMemoryRequirements2KHR> Image::getSparseMemoryRequireme
 }
 #endif // VK_KHR_get_memory_requirements2
 
-void Image::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
+void Image::bindMemory(std::unique_ptr<IDeviceMemory> memory_,
     VkDeviceSize offset_ /* 0 */)
 {
     memory_->bind(handle, VK_OBJECT_TYPE_IMAGE, offset_);
@@ -367,7 +367,7 @@ void Image::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
 }
 
 #ifdef VK_KHR_device_group
-void Image::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
+void Image::bindMemoryDeviceGroup(std::unique_ptr<IDeviceMemory> memory_,
     const std::vector<uint32_t>& deviceIndices,
     const std::vector<VkRect2D>& splitInstanceBindRegions /* empty */,
     VkDeviceSize offset_ /* 0 */)

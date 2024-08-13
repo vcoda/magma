@@ -302,18 +302,14 @@ std::vector<VmaAllocation> DeviceMemoryAllocator::gatherSuballocations(const std
     defragmentationResources.reserve(objects.size());
     for (auto& resource : objects)
     {
-        std::shared_ptr<IDeviceMemory> deviceMemory = resource->getMemory();
-        if (deviceMemory)
+        const ManagedDeviceMemory *managedDeviceMemory = dynamic_cast<const ManagedDeviceMemory *>(resource->getMemory().get());
+        if (managedDeviceMemory)
         {
-            std::shared_ptr<ManagedDeviceMemory> managedDeviceMemory = std::dynamic_pointer_cast<ManagedDeviceMemory>(deviceMemory);
-            if (managedDeviceMemory)
+            DeviceMemoryBlock suballocation = managedDeviceMemory->getAllocation();
+            if (suballocation)
             {
-                DeviceMemoryBlock suballocation = managedDeviceMemory->getAllocation();
-                if (suballocation)
-                {
-                    allocations.push_back(reinterpret_cast<VmaAllocation>(suballocation));
-                    defragmentationResources.push_back(resource);
-                }
+                allocations.push_back(reinterpret_cast<VmaAllocation>(suballocation));
+                defragmentationResources.push_back(resource);
             }
         }
     }
