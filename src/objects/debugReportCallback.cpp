@@ -81,7 +81,7 @@ void DebugReportCallback::messageFormat(VkDebugReportFlagsEXT flags, VkObjectTyp
 #else
     MAGMA_ASSERT(strlen(format) < MAGMA_MAX_STRING);
     vsprintf(buffer, format, args);
-#endif
+#endif // _MSC_VER || __MINGW32__
     va_end(args);
     message(flags, objectType, object, location, messageCode, layerPrefix, buffer);
 }
