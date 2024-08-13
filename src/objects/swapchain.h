@@ -140,10 +140,10 @@ namespace magma
         VkDeviceGroupPresentModeFlagsKHR deviceGroupPresentModes = 0;
     #endif
     #ifdef VK_EXT_debug_report
-        std::shared_ptr<DebugReportCallback> debugReportCallback;
+        const DebugReportCallback *debugReportCallback = nullptr;
     #endif
     #ifdef VK_EXT_debug_utils
-        std::shared_ptr<DebugUtilsMessenger> debugUtilsMessenger;
+        const DebugUtilsMessenger *debugUtilsMessenger = nullptr;
     #endif
     };
 #endif // VK_KHR_swapchain
