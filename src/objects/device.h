@@ -141,6 +141,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator);
         VkDevice getNativeDevice() const noexcept { return handle; }
         VkInstance getNativeInstance() const noexcept;
+        bool supportsQueueFamily(uint32_t queueFamilyIndex) const noexcept;
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
         const std::vector<DeviceQueueDescriptor> queueDescriptors;

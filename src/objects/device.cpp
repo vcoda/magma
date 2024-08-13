@@ -440,4 +440,14 @@ VkInstance Device::getNativeInstance() const noexcept
 {
     return physicalDevice->getInstance()->getHandle();
 }
+
+bool Device::supportsQueueFamily(uint32_t queueFamilyIndex) const noexcept
+{
+    auto it = std::find_if(queueDescriptors.begin(), queueDescriptors.end(),
+        [queueFamilyIndex](const DeviceQueueDescriptor& descriptor)
+        {
+            return descriptor.queueFamilyIndex == queueFamilyIndex;
+        });
+    return (it != queueDescriptors.end());
+}
 } // namespace magma
