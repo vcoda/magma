@@ -125,17 +125,14 @@ const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
 std::unique_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const
 {
     const DeviceQueueDescriptor queueDescriptor(physicalDevice, flags);
-    for (auto const& descriptor: queueDescriptors)
+    if (supportsQueueFamily(queueDescriptor.queueFamilyIndex))
     {   // Call vkGetDeviceQueue() only if logical device has been created
         // with this queue family, otherwise call will throw an exception.
-        if (descriptor.queueFamilyIndex == queueDescriptor.queueFamilyIndex)
-        {
-            VkQueue queue = VK_NULL_HANDLE;
-            vkGetDeviceQueue(handle, queueDescriptor.queueFamilyIndex, queueIndex, &queue);
-            if (VK_NULL_HANDLE == queue)
-                MAGMA_ERROR("failed to get device queue");
-            return Queue::makeUnique(queue, flags, queueDescriptor.queueFamilyIndex, queueIndex);
-        }
+        VkQueue queue = VK_NULL_HANDLE;
+        vkGetDeviceQueue(handle, queueDescriptor.queueFamilyIndex, queueIndex, &queue);
+        if (VK_NULL_HANDLE == queue)
+            MAGMA_ERROR("failed to get device queue");
+        return Queue::makeUnique(queue, flags, queueDescriptor.queueFamilyIndex, queueIndex);
     }
     return nullptr;
 }
