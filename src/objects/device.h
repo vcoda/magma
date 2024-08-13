@@ -59,7 +59,7 @@ namespace magma
         const std::unique_ptr<DeviceFeatures>& getFeatures() const;
         const std::unique_ptr<FeatureQuery>& checkFeatures() const;
         std::unique_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
-        std::shared_ptr<Queue> getQueueByFamily(uint32_t queueFamilyIndex) const;
+        const std::unique_ptr<Queue>& getQueueByFamily(uint32_t queueFamilyIndex) const;
         void updateDescriptorSets(uint32_t descriptorWriteCount,
             const VkWriteDescriptorSet *descriptorWrites,
             uint32_t descriptorCopyCount,
@@ -145,12 +145,12 @@ namespace magma
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
         const std::vector<DeviceQueueDescriptor> queueDescriptors;
-        mutable std::map<uint32_t, std::weak_ptr<Queue>> queues;
         std::set<std::string> enabledLayers;
         std::set<std::string> enabledExtensions;
         const VkPhysicalDeviceFeatures enabledFeatures;
         const StructureChain enabledExtendedFeatures;
         std::map<VkStructureType, const VkBaseInStructure *> extendedFeatures;
+        mutable std::map<uint32_t, std::unique_ptr<Queue>> queues;
         std::unordered_map<uint64_t, uint64_t> privateData;
     #ifdef VK_EXT_private_data
         std::weak_ptr<PrivateDataSlot> privateDataSlot;

@@ -140,39 +140,30 @@ std::unique_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
     return nullptr;
 }
 
-std::shared_ptr<Queue> Device::getQueueByFamily(uint32_t queueFamilyIndex) const
-{   // Try to get cached queue
-    auto it = queues.find(queueFamilyIndex);
-    if (it != queues.end())
-    {
-        if (!it->second.expired())
-            return it->second.lock();
-    }
-    for (const VkQueueFlagBits flag: {
-        VK_QUEUE_GRAPHICS_BIT,
-        VK_QUEUE_COMPUTE_BIT,
-        VK_QUEUE_TRANSFER_BIT})
-    {   // Try to get new instance
-        const DeviceQueueDescriptor queueDescriptor(physicalDevice, flag);
-        if (queueDescriptor.queueFamilyIndex == queueFamilyIndex)
-        {
-            for (auto const& descriptor: queueDescriptors)
-            {   // Call vkGetDeviceQueue() only if logical device has been created
-                // with this queue family, otherwise call will throw an exception.
-                if (descriptor.queueFamilyIndex == queueFamilyIndex)
-                {
-                    VkQueue queue = VK_NULL_HANDLE;
-                    vkGetDeviceQueue(handle, queueFamilyIndex, 0, &queue);
-                    if (VK_NULL_HANDLE == queue)
-                        MAGMA_ERROR("failed to get device queue");
-                    std::shared_ptr<Queue> deviceQueue = Queue::makeShared(queue, flag, queueFamilyIndex, 0);
-                    queues[queueFamilyIndex] = deviceQueue; // Cache it
-                    return deviceQueue;
-                }
+const std::unique_ptr<Queue>& Device::getQueueByFamily(uint32_t queueFamilyIndex) const
+{
+    if (supportsQueueFamily(queueFamilyIndex))
+    {   // Try to get cached queue
+        auto it = queues.find(queueFamilyIndex);
+        if (it != queues.end())
+            return it->second;
+        for (const VkQueueFlagBits flag: {
+            VK_QUEUE_GRAPHICS_BIT,
+            VK_QUEUE_COMPUTE_BIT,
+            VK_QUEUE_TRANSFER_BIT})
+        {   // Try to get new instance
+            const DeviceQueueDescriptor queueDescriptor(physicalDevice, flag);
+            if (queueDescriptor.queueFamilyIndex == queueFamilyIndex)
+            {
+                VkQueue queue = VK_NULL_HANDLE;
+                vkGetDeviceQueue(handle, queueFamilyIndex, 0, &queue);
+                if (VK_NULL_HANDLE == queue)
+                    MAGMA_ERROR("failed to get device queue");
+                return queues[queueFamilyIndex] = Queue::makeUnique(queue, flag, queueFamilyIndex, 0);
             }
         }
     }
-    return nullptr;
+    return core::null<Queue>();
 }
 
 void Device::updateDescriptorSets(uint32_t descriptorWriteCount, const VkWriteDescriptorSet *descriptorWrites,
