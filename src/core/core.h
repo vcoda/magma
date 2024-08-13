@@ -132,6 +132,13 @@ inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
     return VK_NULL_HANDLE;
 }
 
+template<class Type>
+inline const std::unique_ptr<Type>& null() noexcept
+{
+    static std::unique_ptr<Type> ptr;
+    return ptr;
+}
+
 template<class Int>
 inline Int roundUp(Int value, Int multiple) noexcept
 {
