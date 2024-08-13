@@ -58,8 +58,10 @@ namespace magma
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
         const std::unique_ptr<DeviceFeatures>& getFeatures() const;
         const std::unique_ptr<FeatureQuery>& checkFeatures() const;
-        std::unique_ptr<Queue> getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const;
-        const std::unique_ptr<Queue>& getQueueByFamily(uint32_t queueFamilyIndex) const;
+        std::unique_ptr<Queue> getQueue(VkQueueFlagBits flags,
+            uint32_t queueIndex = 0) const;
+        const std::unique_ptr<Queue>& getQueueByFamily(uint32_t queueFamilyIndex,
+            uint32_t queueIndex = 0) const;
         void updateDescriptorSets(uint32_t descriptorWriteCount,
             const VkWriteDescriptorSet *descriptorWrites,
             uint32_t descriptorCopyCount,
@@ -141,7 +143,8 @@ namespace magma
             std::shared_ptr<IAllocator> allocator);
         VkDevice getNativeDevice() const noexcept { return handle; }
         VkInstance getNativeInstance() const noexcept;
-        bool supportsQueueFamily(uint32_t queueFamilyIndex) const noexcept;
+        bool supportsQueueFamily(uint32_t queueFamilyIndex,
+            uint32_t queueIndex) const noexcept;
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
         const std::vector<DeviceQueueDescriptor> queueDescriptors;

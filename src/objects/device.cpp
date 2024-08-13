@@ -122,10 +122,10 @@ const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
     return featureQuery;
 }
 
-std::unique_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex) const
+std::unique_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex /* 0 */) const
 {
     const DeviceQueueDescriptor queueDescriptor(physicalDevice, flags);
-    if (supportsQueueFamily(queueDescriptor.queueFamilyIndex))
+    if (supportsQueueFamily(queueDescriptor.queueFamilyIndex, queueIndex))
     {   // Call vkGetDeviceQueue() only if logical device has been created
         // with this queue family, otherwise call will throw an exception.
         VkQueue queue = VK_NULL_HANDLE;
@@ -137,9 +137,9 @@ std::unique_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueInd
     return nullptr;
 }
 
-const std::unique_ptr<Queue>& Device::getQueueByFamily(uint32_t queueFamilyIndex) const
+const std::unique_ptr<Queue>& Device::getQueueByFamily(uint32_t queueFamilyIndex, uint32_t queueIndex /* 0 */) const
 {
-    if (supportsQueueFamily(queueFamilyIndex))
+    if (supportsQueueFamily(queueFamilyIndex, queueIndex))
     {   // Try to get cached queue
         auto it = queues.find(queueFamilyIndex);
         if (it != queues.end())
@@ -429,13 +429,16 @@ VkInstance Device::getNativeInstance() const noexcept
     return physicalDevice->getInstance()->getHandle();
 }
 
-bool Device::supportsQueueFamily(uint32_t queueFamilyIndex) const noexcept
+bool Device::supportsQueueFamily(uint32_t queueFamilyIndex, uint32_t queueIndex) const noexcept
 {
     auto it = std::find_if(queueDescriptors.begin(), queueDescriptors.end(),
         [queueFamilyIndex](const DeviceQueueDescriptor& descriptor)
         {
             return descriptor.queueFamilyIndex == queueFamilyIndex;
         });
-    return (it != queueDescriptors.end());
+        queueIndex;
+    if (it != queueDescriptors.end())
+        return queueIndex < it->queueCount;
+    return false;
 }
 } // namespace magma
