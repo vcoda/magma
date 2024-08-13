@@ -153,7 +153,7 @@ namespace magma
         const VkPhysicalDeviceFeatures enabledFeatures;
         const StructureChain enabledExtendedFeatures;
         std::map<VkStructureType, const VkBaseInStructure *> extendedFeatures;
-        mutable std::map<uint32_t, std::unique_ptr<Queue>> queues;
+        mutable std::map<std::pair<uint32_t, uint32_t>, std::unique_ptr<Queue>> queues;
         std::unordered_map<uint64_t, uint64_t> privateData;
     #ifdef VK_EXT_private_data
         std::weak_ptr<PrivateDataSlot> privateDataSlot;

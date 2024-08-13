@@ -141,7 +141,8 @@ const std::unique_ptr<Queue>& Device::getQueueByFamily(uint32_t queueFamilyIndex
 {
     if (supportsQueueFamily(queueFamilyIndex, queueIndex))
     {   // Try to get cached queue
-        auto it = queues.find(queueFamilyIndex);
+        auto const key = std::make_pair(queueFamilyIndex, queueIndex);
+        auto it = queues.find(key);
         if (it != queues.end())
             return it->second;
         for (const VkQueueFlagBits flag: {
@@ -156,7 +157,7 @@ const std::unique_ptr<Queue>& Device::getQueueByFamily(uint32_t queueFamilyIndex
                 vkGetDeviceQueue(handle, queueFamilyIndex, 0, &queue);
                 if (VK_NULL_HANDLE == queue)
                     MAGMA_ERROR("failed to get device queue");
-                return queues[queueFamilyIndex] = Queue::makeUnique(queue, flag, queueFamilyIndex, 0);
+                return queues[key] = Queue::makeUnique(queue, flag, queueFamilyIndex, queueIndex);
             }
         }
     }
