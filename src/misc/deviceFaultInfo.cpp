@@ -60,7 +60,7 @@ DeviceFaultInfo::DeviceFaultInfo(const DeviceFaultInfo& other) noexcept:
     vendorInfoCount(other.vendorInfoCount),
     vendorBinarySize(other.vendorBinarySize)
 {
-    strcpy_s(description, VK_MAX_DESCRIPTION_SIZE, other.description);
+    core::copyString(description, VK_MAX_DESCRIPTION_SIZE, other.description);
 }
 
 DeviceFaultInfo::DeviceFaultInfo(DeviceFaultInfo&& other) noexcept:
@@ -76,7 +76,7 @@ DeviceFaultInfo::DeviceFaultInfo(DeviceFaultInfo&& other) noexcept:
     vendorInfoCount(other.vendorInfoCount),
     vendorBinarySize(other.vendorBinarySize)
 {
-    strcpy_s(description, VK_MAX_DESCRIPTION_SIZE, other.description);
+    core::copyString(description, VK_MAX_DESCRIPTION_SIZE, other.description);
     other.pNext = nullptr;
     other.pAddressInfos = nullptr;
     other.pVendorInfos = nullptr;
@@ -91,7 +91,7 @@ DeviceFaultInfo& DeviceFaultInfo::operator=(const DeviceFaultInfo& other) noexce
     if (this != &other)
     {
         pNext = other.pNext;
-        strcpy_s(description, VK_MAX_DESCRIPTION_SIZE, other.description);
+        core::copyString(description, VK_MAX_DESCRIPTION_SIZE, other.description);
         delete[] pAddressInfos;
         pAddressInfos = core::copyArray(other.pAddressInfos, other.addressInfoCount);
         delete[] pVendorInfos;

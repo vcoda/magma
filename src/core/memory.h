@@ -138,6 +138,18 @@ inline char *copyString(const char *src) noexcept
     return dst;
 }
 
+inline char *copyString(char *dst, size_t size, const char *src) noexcept
+{
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    const errno_t err = strcpy_s(dst, size, src);
+    MAGMA_ASSERT(0 == err);
+#else
+    MAGMA_UNUSED(size);
+    strcpy(dst, src);
+#endif // _MSC_VER || __MINGW32__
+    return dst;
+}
+
 inline uint8_t *copyBinaryData(const void *src, std::size_t size) noexcept
 {
     uint8_t *dst = nullptr;
