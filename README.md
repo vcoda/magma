@@ -140,6 +140,10 @@ Check that Vulkan environment variables are present:
 ```
 printenv | grep Vulkan
 ```
+If you have error `glslangValidator': Permission denied` after running Make, go to `bin` directory of Vulkan SDK, and add executable permission to this file:
+```
+chmod +x glslangValidator
+```
 
 ## Build instructions
 
