@@ -39,8 +39,11 @@ bool Layers::hasLayer(const char *name) const noexcept
 
 void Layers::forEach(std::function<void(const VkLayerProperties&)> fn) const noexcept
 {
-    for (auto const& layer: layers)
-        fn(layer.second);
+    for (auto const& [layerName, property]: layers)
+    {
+        MAGMA_UNUSED(layerName);
+        fn(property);
+    }
 }
 
 bool Layers::hasLayer(hash_t hash) const noexcept

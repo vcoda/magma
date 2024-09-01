@@ -177,15 +177,15 @@ void CommandBuffer::end()
     {
         if (!pipelineBarriers.empty())
         {   // Flush deferred memory barriers
-            for (auto const& it: pipelineBarriers)
+            for (auto const& [hash, batch]: pipelineBarriers)
             {
-                const PipelineBarrierBatch& batch = it.second;
                 pipelineBarrier(batch.srcStageMask,
                     batch.dstStageMask,
                     batch.memoryBarriers,
                     batch.bufferMemoryBarriers,
                     batch.imageMemoryBarriers,
                     batch.dependencyFlags);
+                MAGMA_UNUSED(hash);
             }
             pipelineBarriers.clear();
         }
