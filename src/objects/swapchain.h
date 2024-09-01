@@ -23,6 +23,7 @@ namespace magma
 {
     class Surface;
     class SwapchainImage;
+    class CommandBuffer;
     class Queue;
     class Fence;
     class Semaphore;
