@@ -17,9 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#if defined(__linux__)
-#include <unistd.h>
-#endif
 #include "externalFence.h"
 #include "../objects/device.h"
 #include "../allocator/allocator.h"

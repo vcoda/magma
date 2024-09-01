@@ -56,15 +56,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 
 /*
- * Vulkan SDK
+ * Platform
  */
 
-#if defined(_WIN32) || defined(WIN32)
-#define WIN32_LEAN_AND_MEAN
-#ifndef NOMINMAX
-#define NOMINMAX 1
-#endif
-#endif // _WIN32 || WIN32
+#if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
+    #define WIN32_LEAN_AND_MEAN
+    #ifndef NOMINMAX
+        #define NOMINMAX 1
+    #endif
+#elif defined(__unix__) || defined(__unix)
+    #include <unistd.h>
+#endif // __unix__ || __unix
+
+/*
+ * Vulkan SDK
+ */
 
 #include <vulkan/vulkan.h>
 
