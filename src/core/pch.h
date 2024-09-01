@@ -24,9 +24,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <cstring>
 #include <cmath>
 #if defined(_MSC_VER) || defined(__MINGW32__)
-#include <malloc.h>
+    #include <malloc.h>
 #else
-#include <mm_malloc.h>
+    #include <mm_malloc.h>
 #endif
 
 /*
@@ -79,10 +79,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifdef MAGMA_SSE
-#include <xmmintrin.h>
-#include <smmintrin.h>
+    #include <xmmintrin.h>
+    #include <smmintrin.h>
 #elif defined(MAGMA_NEON)
-#include <arm_neon.h>
+    #include <arm_neon.h>
 #endif
 
 /*
