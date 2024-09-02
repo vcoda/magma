@@ -22,7 +22,7 @@ inline NonDispatchable<Type>::NonDispatchable(VkObjectType objectType, std::shar
     if (device)
     {
         auto& pool = DeviceChild::getResourcePool();
-        std::lock_guard<std::mutex> lock(pool->getMutex());
+        std::lock_guard<std::mutex> lock(DeviceChild::mtx);
         pool->template getPool<Type>().insert(this);
     }
 #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
@@ -35,7 +35,7 @@ inline NonDispatchable<Type>::~NonDispatchable()
     if (device)
     {
         auto& pool = DeviceChild::getResourcePool();
-        std::lock_guard<std::mutex> lock(pool->getMutex());
+        std::lock_guard<std::mutex> lock(DeviceChild::mtx);
         pool->template getPool<Type>().erase(this);
     }
 #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)

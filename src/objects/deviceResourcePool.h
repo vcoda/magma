@@ -36,7 +36,6 @@ namespace magma
         struct Resources;
         template<class Type>
         Pool<Type>& getPool() noexcept;
-        std::mutex& getMutex() const noexcept { return mtx; }
         Resources countResources() const noexcept;
         VkDeviceSize deviceLocalMemoryAllocated() const noexcept;
         VkDeviceSize hostVisibleMemoryAllocated() const noexcept;
@@ -113,7 +112,6 @@ namespace magma
     #ifdef VK_EXT_private_data
         Pool<VkPrivateDataSlotEXT> privateDataSlots;
     #endif
-        mutable std::mutex mtx;
     };
 
     struct DeviceResourcePool::Resources
