@@ -21,8 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include <cassert>
-#include <cstring>
 #include <cmath>
+#include <cstring>
 #if defined(_MSC_VER) || defined(__MINGW32__)
     #include <malloc.h>
 #else
@@ -33,25 +33,25 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
  * Standard Template Library
  */
 
-#include <vector>
-#include <deque>
-#include <list>
-#include <forward_list>
-#include <map>
-#include <unordered_map>
-#include <set>
-#include <unordered_set>
-#include <array>
-#include <initializer_list>
-#include <string>
-#include <memory>
-#include <future>
-#include <atomic>
-#include <mutex>
 #include <algorithm>
+#include <array>
+#include <atomic>
+#include <deque>
+#include <forward_list>
 #include <functional>
-#include <limits>
+#include <future>
+#include <initializer_list>
 #include <iostream>
+#include <limits>
+#include <list>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <set>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 /*
  * Platform
