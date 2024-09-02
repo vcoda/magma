@@ -19,7 +19,7 @@ inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, uint32_t w 
     iv = _mm_or_si128(iv, _mm_castps_si128(v));
     this->v = ((w & 0x3) << 30) | _mm_cvtsi128_si32(iv);
 #elif defined(MAGMA_NEON)
-    // TODO:
+    #error NEON codepath not implemented
 #else
     x = std::min(std::max(0.f, x), 1.f);
     y = std::min(std::max(0.f, y), 1.f);
