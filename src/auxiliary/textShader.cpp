@@ -74,17 +74,17 @@ struct TextShader::PushConstants
 
 TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     const uint32_t maxChars /* 1024 */,
-    std::shared_ptr<Allocator> allocator /* nullptr */,
+    std::shared_ptr<Allocator> allocator_ /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
     maxStrings(16),
     maxChars(maxChars),
-    allocator(std::move(allocator))
+    allocator(std::move(allocator_))
 {
     std::shared_ptr<Device> device = renderPass->getDevice();
-    std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(this->allocator);
+    std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
     // Create storage buffers
-    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, maxStrings * sizeof(String), false, this->allocator);
-    charBuffer = std::make_shared<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, this->allocator);
+    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, maxStrings * sizeof(String), false, allocator);
+    charBuffer = std::make_shared<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, allocator);
     // Define descriptor set layout
     setTable = std::make_unique<DescriptorSetTable>();
     setTable->stringBuffer = stringBuffer;
