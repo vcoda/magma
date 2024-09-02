@@ -171,11 +171,11 @@ int ExternalSemaphore::getFd() const
     #endif
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetSemaphoreFdKHR, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
     const VkResult result = vkGetSemaphoreFdKHR(getNativeDevice(), &fdInfo, &fd);
-    #ifdef VK_USE_PLATFORM_ANDROID_KHR
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
     MAGMA_HANDLE_RESULT(result, "failed to get Android fence descriptor");
-    #else
+#else
     MAGMA_HANDLE_RESULT(result, "failed to get POSIX file descriptor");
-    #endif
+#endif
     return fd;
 }
 #endif // VK_KHR_external_semaphore_fd

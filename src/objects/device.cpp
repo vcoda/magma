@@ -437,7 +437,6 @@ bool Device::supportsQueueFamily(uint32_t queueFamilyIndex, uint32_t queueIndex)
         {
             return descriptor.queueFamilyIndex == queueFamilyIndex;
         });
-        queueIndex;
     if (it != queueDescriptors.end())
         return queueIndex < it->queueCount;
     return false;

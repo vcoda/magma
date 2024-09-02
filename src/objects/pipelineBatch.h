@@ -95,7 +95,7 @@ namespace magma
         void postCreate();
         void postBuild();
 
-        std::vector<PipelineCreateInfo> pipelineInfos; // Use vector to preserve order
+        std::vector<PipelineCreateInfo> pipelineInfos;
         std::deque<std::shared_ptr<PipelineType>> pipelines;
     };
 } // namespace magma
