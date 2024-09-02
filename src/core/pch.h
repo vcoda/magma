@@ -52,7 +52,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <functional>
 #include <limits>
 #include <iostream>
-#include <sstream>
 
 /*
  * Platform

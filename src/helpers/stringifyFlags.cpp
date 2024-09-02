@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include <sstream>
 #include "stringifyFlags.h"
 #include "streamInsertOperators.h"
 
