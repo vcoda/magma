@@ -480,9 +480,6 @@
     <ClInclude Include="..\..\src\barriers\subpassDependency2.h">
       <Filter>Header Files\barriers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\copyMemory.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\core.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -505,9 +502,6 @@
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\refCountChecker.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\zeroMemory.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\descriptors\accelerationStructure.h">
@@ -1434,12 +1428,6 @@
     </None>
     <None Include="..\..\src\barriers\subpassDependency2.inl">
       <Filter>Header Files\barriers</Filter>
-    </None>
-    <None Include="..\..\src\core\copyThread.inl">
-      <Filter>Header Files\core</Filter>
-    </None>
-    <None Include="..\..\src\core\zeroThread.inl">
-      <Filter>Header Files\core</Filter>
     </None>
     <None Include="..\..\src\descriptors\bufferDescriptor.inl">
       <Filter>Header Files\descriptors</Filter>

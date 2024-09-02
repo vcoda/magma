@@ -32,7 +32,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/finish.h"
 #include "../helpers/mapScoped.h"
 #include "../exceptions/errorResult.h"
-#include "../core/copyMemory.h"
 #include "../core/foreach.h"
 
 #define MAGMA_ENABLE_VALID_MIP_EXTENTS 1
@@ -632,7 +631,7 @@ void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
         [&](uint8_t *buffer)
         {
             if (!copyFn)
-                copyFn = core::copyMemory;
+                copyFn = std::memcpy;
             core::forConstEach(mipChain, mipMaps,
                 [buffer, copyFn](auto dstMip, auto srcMip)
                 {   // Copy mip texels to buffer

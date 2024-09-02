@@ -23,7 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandBuffer.h"
 #include "../misc/deviceFeatures.h"
 #include "../misc/format.h"
-#include "../core/copyMemory.h"
 #include "../helpers/mapScoped.h"
 
 namespace magma

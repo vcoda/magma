@@ -29,7 +29,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/extension.h"
 #include "../misc/finish.h"
 #include "../exceptions/errorResult.h"
-#include "../core/copyMemory.h"
 
 namespace magma
 {
@@ -340,7 +339,7 @@ void Buffer::copyHost(const void *srcBuffer, VkDeviceSize srcBufferSize,
     if (dstBuffer)
     {
         if (!copyFn)
-            copyFn = core::copyMemory;
+            copyFn = std::memcpy;
         const VkDeviceSize copySize = (VK_WHOLE_SIZE == size) ? wholeSize : size;
         copyFn(dstBuffer, (uint8_t *)srcBuffer + srcOffset, static_cast<std::size_t>(copySize));
         memory->unmap();
