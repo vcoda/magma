@@ -25,16 +25,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #endif
 #endif
 
-#if defined(_MSC_VER)
-  #if _HAS_CXX17
-    #define MAGMA_CXX17
-  #endif
-#elif defined(__MINGW32__) || defined(__GNUC__)
-  #if __cplusplus >= 201703L
-    #define MAGMA_CXX17
-  #endif
-#endif
-
 #if defined(_DEBUG) || defined(DEBUG)
     #define MAGMA_DEBUG
 #endif
