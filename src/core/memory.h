@@ -144,6 +144,7 @@ inline char *copyString(char *dst, size_t size, const char *src) noexcept
     const errno_t err = strcpy_s(dst, size, src);
     MAGMA_ASSERT(0 == err);
 #else
+    MAGMA_ASSERT(strlen(src) < size);
     MAGMA_UNUSED(size);
     strcpy(dst, src);
 #endif // _MSC_VER || __MINGW32__
