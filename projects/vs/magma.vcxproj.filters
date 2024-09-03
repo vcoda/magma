@@ -1630,6 +1630,9 @@
     <None Include="..\..\src\core\memory.inl">
       <Filter>Header Files\core</Filter>
     </None>
+    <None Include="..\..\src\core\hash.inl">
+      <Filter>Header Files\core</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">

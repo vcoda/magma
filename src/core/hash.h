@@ -16,82 +16,24 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-
 #include "hashing/constexpr.h"
 #include "hashing/fnv1.h"
 #include "hashing/fnv1string.h"
 
 namespace magma
 {
-namespace core
-{
-template<class Type>
-constexpr hash_t hash(Type x) noexcept
-{
-    ConstexprHash<Type> hasher;
-    return hasher(x);
-}
-
-template<class Type>
-constexpr hash_t hash(Type *p) noexcept
-{
-    ConstexprHash<uintptr_t> hasher;
-    return hasher(reinterpret_cast<uintptr_t>(p));
-}
-
-template<class Type>
-constexpr hash_t hashArg(hash_t seed, const Type& arg) noexcept
-{
-    return hashCombine(seed, hash(arg));
-}
-
-template<class Type, typename... Args>
-constexpr hash_t hashArg(hash_t seed, const Type& arg, Args... args) noexcept
-{
-    return hashArg(hashCombine(seed, hash(arg)), args...);
-}
-
-template<class Type, typename... Args>
-constexpr hash_t hashArgs(const Type& arg, Args... args) noexcept
-{
-    return hashArg(hash(arg), args...);
-}
-
-template<class Type, std::size_t N>
-constexpr hash_t hashArray(const Type (&arr)[N]) noexcept
-{
-    return hashing::Fnv1a<Type, N, N>().hash(arr);
-}
-
-template<class Type>
-inline hash_t hashArray(const Type arr[], std::size_t count) noexcept
-{
-    std::hash<Type> hasher;
-    hash_t value = 0ull;
-    for (std::size_t i = 0; i < count; ++i)
-        value = hashCombine(value, hasher(arr[i]));
-    return value;
-}
-
-template<class Type>
-constexpr hash_t hashString(const Type *str) noexcept
-{
-    return hashing::string::Fnv1a<Type, 0ull>().hash(str);
-}
-
-template<class Type>
-inline hash_t hashString(const std::basic_string<Type>& str) noexcept
-{
-    std::hash<std::basic_string<Type>> hasher;
-    return hasher(str);
-}
-
-inline hash_t combineHashList(const std::initializer_list<hash_t>& hashes) noexcept
-{
-    hash_t value = 0ull;
-    for (auto hash: hashes)
-        value = hashCombine(value, hash);
-    return value;
-}
-} // namespace core
+    namespace core
+    {
+        template<class T> constexpr hash_t hash(T x) noexcept;
+        template<class T> constexpr hash_t hash(T *p) noexcept;
+        template<class T> constexpr hash_t hashArg(hash_t seed, const T& arg) noexcept;
+        template<class T, typename... Args> constexpr hash_t hashArgs(const T& arg, Args... args) noexcept;
+        template<class T, std::size_t N> constexpr hash_t hashArray(const T (&arr)[N]) noexcept;
+        template<class T> hash_t hashArray(const T arr[], std::size_t count) noexcept;
+        template<class T> constexpr hash_t hashString(const T *str) noexcept;
+        template<class T> hash_t hashString(const std::basic_string<T>& str) noexcept;
+        hash_t combineHashList(const std::initializer_list<hash_t>& hashes) noexcept;
+    } // namespace core
 } // namespace magma
+
+#include "hash.inl"
