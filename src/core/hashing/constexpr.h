@@ -36,10 +36,10 @@ namespace magma
             return seed ^ (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
         }
 
-        template<class Int>
+        template<class T>
         struct ConstexprHash
         {
-            constexpr hash_t operator()(const Int x) const noexcept;
+            constexpr hash_t operator()(T x) const noexcept;
         };
 
         template<>
