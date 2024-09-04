@@ -34,7 +34,7 @@ namespace magma
     class Resource : public IResource, /* private */ NonCopyable
     {
     public:
-        ~Resource();
+        virtual ~Resource() = default;
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }

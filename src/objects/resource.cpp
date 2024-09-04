@@ -27,6 +27,4 @@ Resource::Resource(VkDeviceSize size, const Sharing& sharing) noexcept:
     size(size),
     offset(0ull)
 {}
-
-Resource::~Resource() {}
 } // namespace magma
