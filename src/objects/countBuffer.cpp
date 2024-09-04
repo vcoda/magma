@@ -37,10 +37,11 @@ BaseCountBuffer::BaseCountBuffer(std::shared_ptr<Device> device, VkDeviceSize si
 void BaseCountBuffer::readback(std::shared_ptr<CommandBuffer> cmdBuffer) const
 {
     if (!hostBuffer)
-        hostBuffer = std::make_shared<DstTransferBuffer>(device, size);
+        hostBuffer = std::make_unique<DstTransferBuffer>(device, size);
     cmdBuffer->pipelineBarrier(stageMask, VK_PIPELINE_STAGE_TRANSFER_BIT,
         BufferMemoryBarrier(shared_from_this(), barrier::buffer::shaderWriteTransferRead));
-    cmdBuffer->copyBuffer(shared_from_this(), hostBuffer);
+    const VkBufferCopy bufferCopy{0, 0, size};
+    vkCmdCopyBuffer(*cmdBuffer, handle, *hostBuffer, 1, &bufferCopy);
 }
 
 CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,

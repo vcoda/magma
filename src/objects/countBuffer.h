@@ -38,7 +38,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator,
             const Sharing& sharing);
         const VkPipelineStageFlags stageMask;
-        mutable std::shared_ptr<DstTransferBuffer> hostBuffer;
+        mutable std::unique_ptr<DstTransferBuffer> hostBuffer;
     };
 
     /* 32-bit unsigned integer atomic counter. */
