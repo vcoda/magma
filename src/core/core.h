@@ -108,6 +108,12 @@ inline typename Type::NativeHandle dereference(const std::unique_ptr<Type>& obj)
     return obj ? obj->getHandle() : VK_NULL_HANDLE;
 }
 
+template<class Type>
+inline typename Type::NativeHandle dereference(const std::weak_ptr<Type>& obj) noexcept
+{
+    return obj.expired() ? VK_NULL_HANDLE : obj.lock()->getHandle();
+}
+
 template<class VkObject>
 inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
 {
