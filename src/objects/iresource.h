@@ -23,7 +23,7 @@ namespace magma
 
     /* Base interface of resource object. */
 
-    class IResource : public IClass
+    class IResource
     {
     public:
         enum class Family : uint8_t;
