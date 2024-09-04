@@ -35,6 +35,7 @@ namespace magma
 DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
     DescriptorSetTable& setTable, VkShaderStageFlags stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */,
     uint32_t setIndex /* 0 */,
@@ -64,7 +65,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
             bindings.back().stageFlags = stageFlags;
     }
     // Create descriptor set layout
-    setLayout = std::make_shared<DescriptorSetLayout>(device, bindings, hostAllocator, 0);
+    setLayout = std::make_shared<DescriptorSetLayout>(device, bindings, hostAllocator, flags);
     // Allocate descriptor set
     VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
     descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
@@ -110,6 +111,21 @@ void DescriptorSet::update()
     if (writeCount)
         device->updateDescriptorSets(writeCount, descriptorWrites, 0, nullptr);
 }
+
+#ifdef VK_KHR_push_descriptor
+uint32_t DescriptorSet::writeDescriptors(VkWriteDescriptorSet *descriptorWrites) const
+{
+    MAGMA_ASSERT(dirty());
+    uint32_t descriptorWriteCount = 0;
+    for (auto const& descriptor: setTable.getReflection())
+    {   // Write dirty descriptors
+        const DescriptorSetLayoutBinding& binding = descriptor.get();
+        if (binding.modified())
+            binding.write(handle, descriptorWrites[descriptorWriteCount++]);
+    }
+    return descriptorWriteCount;
+}
+#endif // VK_KHR_push_descriptor
 
 void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflection>& shaderReflection, uint32_t setIndex) const
 {

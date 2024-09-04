@@ -124,6 +124,13 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     bindDescriptorSet(pipeline->getBindPoint(), pipeline->getLayout(), setIndex, descriptorSet, dynamicOffsets);
 }
 
+#ifdef VK_KHR_push_descriptor
+inline void CommandBuffer::pushDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, uint32_t setIndex, const std::shared_ptr<DescriptorSet>& descriptorSet)
+{
+    pushDescriptorSet(pipeline->getBindPoint(), pipeline->getLayout(), setIndex, descriptorSet);
+}
+#endif // VK_KHR_push_descriptor
+
 inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
 {
     vkCmdBindIndexBuffer(handle, *indexBuffer, offset, indexBuffer->getIndexType());

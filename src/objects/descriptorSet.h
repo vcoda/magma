@@ -43,6 +43,7 @@ namespace magma
             DescriptorSetTable& setTable,
             VkShaderStageFlags stageFlags,
             std::shared_ptr<IAllocator> allocator = nullptr,
+            VkDescriptorSetLayoutCreateFlags flags = 0,
             std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
             const std::string& shaderFileName = std::string(),
             uint32_t setIndex = 0,
@@ -53,6 +54,9 @@ namespace magma
         std::size_t getDescriptorCount() const;
         bool dirty() const;
         void update();
+    #ifdef VK_KHR_push_descriptor
+        uint32_t writeDescriptors(VkWriteDescriptorSet *descriptorWrites) const;
+    #endif // VK_KHR_push_descriptor
 
     private:
         void validateReflection(const std::unique_ptr<const ShaderReflection>& shaderReflection,

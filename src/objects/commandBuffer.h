@@ -160,6 +160,15 @@ namespace magma
             uint32_t firstSet,
             const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
             const std::initializer_list<uint32_t>& dynamicOffsets = {}) noexcept;
+    #ifdef VK_KHR_push_descriptor
+        void pushDescriptorSet(VkPipelineBindPoint bindPoint,
+            const std::shared_ptr<PipelineLayout>& layout,
+            uint32_t setIndex,
+            const std::shared_ptr<DescriptorSet>& descriptorSet);
+        void pushDescriptorSet(const std::shared_ptr<Pipeline>& pipeline,
+            uint32_t setIndex,
+            const std::shared_ptr<DescriptorSet>& descriptorSet);
+    #endif // VK_KHR_push_descriptor
 
         void bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer>& indexBuffer,
             VkDeviceSize offset = 0) noexcept;
