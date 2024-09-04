@@ -86,6 +86,11 @@ DescriptorSet::~DescriptorSet()
         vkFreeDescriptorSets(getNativeDevice(), *descriptorPool, 1, &handle);
 }
 
+std::size_t DescriptorSet::getDescriptorCount() const
+{
+    return setTable.getSize();
+}
+
 bool DescriptorSet::dirty() const
 {
     return setTable.dirty();

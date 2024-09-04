@@ -50,6 +50,7 @@ namespace magma
         ~DescriptorSet();
         const std::shared_ptr<DescriptorPool>& getPool() const noexcept { return descriptorPool; }
         const std::shared_ptr<DescriptorSetLayout>& getLayout() const noexcept { return setLayout; }
+        std::size_t getDescriptorCount() const;
         bool dirty() const;
         void update();
 
