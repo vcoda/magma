@@ -1633,6 +1633,12 @@
     <None Include="..\..\src\core\hash.inl">
       <Filter>Header Files\core</Filter>
     </None>
+    <None Include="..\..\src\helpers\mapScoped.inl">
+      <Filter>Header Files\helpers</Filter>
+    </None>
+    <None Include="..\..\src\raytracing\address.inl">
+      <Filter>Header Files\raytracing</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">

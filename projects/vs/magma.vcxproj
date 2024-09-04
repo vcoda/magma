@@ -706,6 +706,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\descriptors\imageDescriptorArray.inl" />
     <None Include="..\..\src\descriptors\inlineUniformBlock.inl" />
     <None Include="..\..\src\helpers\alignedUniformArray.inl" />
+    <None Include="..\..\src\helpers\mapScoped.inl" />
     <None Include="..\..\src\helpers\uniformArray.inl" />
     <None Include="..\..\src\misc\borderColor.inl" />
     <None Include="..\..\src\misc\clearAttachment.inl" />
@@ -745,6 +746,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\packed\x11y11z10ufloat.inl" />
     <None Include="..\..\src\raytracing\accelerationStructureGeometry.inl" />
     <None Include="..\..\src\raytracing\accelerationStructureInstance.inl" />
+    <None Include="..\..\src\raytracing\address.inl" />
     <None Include="..\..\src\renderpass\attachment.inl" />
     <None Include="..\..\src\shaders\rayTracingShaderGroup.inl" />
     <None Include="..\..\src\shaders\shaderBindingTable.inl" />
