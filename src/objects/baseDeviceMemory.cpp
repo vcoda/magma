@@ -31,7 +31,7 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
     memoryRequirements(memoryRequirements),
     memoryType(findMemoryType(propertyFlags)),
     deviceMask(0),
-    priority(MAGMA_MEMORY_PRIORITY_DEFAULT),
+    priority(MemoryPriorityDefault),
     binding(VK_NULL_HANDLE),
     mapPointer(nullptr),
     mapOffset(0),
@@ -108,8 +108,8 @@ uint32_t BaseDeviceMemory::findTypeIndex(VkMemoryPropertyFlags propertyFlags) co
 
 float BaseDeviceMemory::clampPriority(float value) noexcept
 {
-    priority = std::max(MAGMA_MEMORY_PRIORITY_LOWEST, value);
-    priority = std::min(MAGMA_MEMORY_PRIORITY_HIGHEST, priority);
+    priority = std::max(MemoryPriorityLowest, value);
+    priority = std::min(MemoryPriorityHighest, priority);
     return priority;
 }
 } // namespace magma

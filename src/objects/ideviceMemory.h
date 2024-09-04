@@ -17,15 +17,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-// The granularity of the priorities is implementation-dependent.
-#define MAGMA_MEMORY_PRIORITY_LOWEST 0.f
-#define MAGMA_MEMORY_PRIORITY_LOW 0.25f
-#define MAGMA_MEMORY_PRIORITY_DEFAULT 0.5f
-#define MAGMA_MEMORY_PRIORITY_HIGH 0.75f
-#define MAGMA_MEMORY_PRIORITY_HIGHEST 1.f
-
 namespace magma
 {
+    // The granularity of the priorities is implementation-dependent.
+    constexpr float MemoryPriorityLowest = 0.f;
+    constexpr float MemoryPriorityLow = 0.25f;
+    constexpr float MemoryPriorityDefault = 0.5f;
+    constexpr float MemoryPriorityHigh = 0.75f;
+    constexpr float MemoryPriorityHighest = 1.f;
+
     /* Device memory is memory that is visible to the device -
        for example the contents of the image or buffer objects,
        which can be natively used by the device. */

@@ -201,7 +201,7 @@ namespace magma
             storage(VK_FALSE),
             lazilyAllocated(VK_FALSE),
             deviceMask(0),
-            memoryPriority(MAGMA_MEMORY_PRIORITY_DEFAULT)
+            memoryPriority(MemoryPriorityDefault)
         {}
     };
 } // namespace magma
