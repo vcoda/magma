@@ -28,11 +28,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_display
-DisplayMode::DisplayMode(std::shared_ptr<const Display> display_, const VkExtent2D& visibleRegion, uint32_t refreshRate,
+DisplayMode::DisplayMode(std::shared_ptr<const Display> display, const VkExtent2D& visibleRegion, uint32_t refreshRate,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_DISPLAY_MODE_KHR, std::move(allocator)),
-    display(std::move(display_)),
+    NonDispatchable(VK_OBJECT_TYPE_DISPLAY_MODE_KHR, display->getDevice(), std::move(allocator)),
     visibleRegion(visibleRegion),
     refreshRate(refreshRate)
 {
@@ -56,16 +55,6 @@ VkDisplayPlaneCapabilitiesKHR DisplayMode::getDisplayPlaneCapabilities(uint32_t 
         planeIndex, &displayPlaneCapabilities);
     MAGMA_HANDLE_RESULT(result, "failed to get display plane capabilities");
     return displayPlaneCapabilities;
-}
-
-VkInstance DisplayMode::getNativeInstance() const noexcept
-{
-    return display->getPhysicalDevice()->getInstance()->getHandle();
-}
-
-VkPhysicalDevice DisplayMode::getNativePhysicalDevice() const noexcept
-{
-    return display->getPhysicalDevice()->getHandle();
 }
 #endif // VK_KHR_display
 } // namespace magma

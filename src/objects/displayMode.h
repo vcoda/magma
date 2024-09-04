@@ -34,16 +34,11 @@ namespace magma
             uint32_t refreshRate,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-        const std::shared_ptr<const Display>& getDisplay() const noexcept { return display; }
         VkDisplayPlaneCapabilitiesKHR getDisplayPlaneCapabilities(uint32_t planeIndex) const;
         const VkExtent2D& getVisibleRegion() const noexcept { return visibleRegion; }
         uint32_t getRefreshRate() const noexcept { return refreshRate; }
 
     private:
-        VkInstance getNativeInstance() const noexcept override;
-        VkPhysicalDevice getNativePhysicalDevice() const noexcept override;
-
-        std::shared_ptr<const Display> display;
         const VkExtent2D visibleRegion;
         const uint32_t refreshRate;
     };
