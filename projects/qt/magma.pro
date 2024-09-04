@@ -143,7 +143,6 @@ SOURCES += \
     ../../src/objects/rayTracingPipelineBatch.cpp \
     ../../src/objects/renderPass.cpp \
     ../../src/objects/renderPassMultiview.cpp \
-    ../../src/objects/resource.cpp \
     ../../src/objects/sampler.cpp \
     ../../src/objects/samplerYcbcrConversion.cpp \
     ../../src/objects/semaphore.cpp \

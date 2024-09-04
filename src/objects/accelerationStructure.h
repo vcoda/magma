@@ -42,7 +42,7 @@ namespace magma
        triangles. */
 
 #ifdef VK_KHR_acceleration_structure
-    class AccelerationStructure : public NonDispatchableResource<AccelerationStructure, VkAccelerationStructureKHR>
+    class AccelerationStructure : public Resource<AccelerationStructure, VkAccelerationStructureKHR>
     {
     public:
         ~AccelerationStructure();

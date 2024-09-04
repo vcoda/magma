@@ -555,7 +555,6 @@
     <ClCompile Include="..\..\src\objects\renderPass.cpp" />
     <ClCompile Include="..\..\src\objects\renderPassMultiview.cpp" />
     <ClCompile Include="..\..\src\objects\deviceResourcePool.cpp" />
-    <ClCompile Include="..\..\src\objects\resource.cpp" />
     <ClCompile Include="..\..\src\objects\sampler.cpp" />
     <ClCompile Include="..\..\src\objects\samplerYcbcrConversion.cpp" />
     <ClCompile Include="..\..\src\objects\semaphore.cpp" />

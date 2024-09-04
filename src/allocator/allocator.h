@@ -102,7 +102,7 @@ namespace magma
     class Device;
     class ManagedDeviceMemory;
     class CommandBuffer;
-    class Resource;
+    class IResource;
     class StructureChain;
 
     /* Opaque handle to memory sub-allocation.

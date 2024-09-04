@@ -70,7 +70,7 @@ namespace magma
         virtual VkResult invalidateMappedRange(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             VkDeviceSize size) noexcept override;
-        std::vector<VmaAllocation> gatherSuballocations(const std::list<std::shared_ptr<Resource>>& resources);
+        std::vector<VmaAllocation> gatherSuballocations(const std::list<std::shared_ptr<IResource>>& resources);
         static int chooseMemoryUsage(VkMemoryPropertyFlags flags) noexcept;
 
     private:
@@ -79,7 +79,7 @@ namespace magma
         VmaAllocator allocator;
         VmaDefragmentationContext defragmentationContext;
         VmaDefragmentationPassMoveInfo passInfo;// = {};
-        std::vector<std::shared_ptr<Resource>> defragmentationResources;
+        std::vector<std::shared_ptr<IResource>> defragmentationResources;
         std::vector<VkBool32> allocationsChanged;
     };
 } // namespace magma

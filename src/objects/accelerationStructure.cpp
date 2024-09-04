@@ -34,7 +34,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     VkAccelerationStructureCreateFlagsKHR flags, VkAccelerationStructureBuildTypeKHR buildType,
     VkBuildAccelerationStructureFlagsKHR buildFlags, const std::forward_list<AccelerationStructureGeometry>& geometries,
     std::shared_ptr<Allocator> allocator, const StructureChain& extendedInfo):
-    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR, device, 0, sharing, allocator),
+    Resource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR, device, 0, sharing, allocator),
     structureType(structureType),
     flags(flags),
     buildType(buildType),
@@ -90,7 +90,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     VkAccelerationStructureCreateFlagsKHR flags, VkAccelerationStructureBuildTypeKHR buildType,
     VkBuildAccelerationStructureFlagsKHR buildFlags, VkDeviceSize deserializedSize,
     std::shared_ptr<Allocator> allocator, const StructureChain& extendedInfo):
-    NonDispatchableResource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR, device, 0, sharing, allocator),
+    Resource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR, device, 0, sharing, allocator),
     structureType(structureType),
     flags(flags),
     buildType(buildType),

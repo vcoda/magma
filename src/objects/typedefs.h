@@ -76,7 +76,6 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(QueryPool);
     MAGMA_TYPEDEF_SHARED_PTR(Queue);
     MAGMA_TYPEDEF_SHARED_PTR(RenderPass);
-    MAGMA_TYPEDEF_SHARED_PTR(Resource);
     MAGMA_TYPEDEF_SHARED_PTR(Sampler);
     MAGMA_TYPEDEF_SHARED_PTR(SecondaryCommandBuffer);
     MAGMA_TYPEDEF_SHARED_PTR(Semaphore);
@@ -204,9 +203,10 @@ namespace magma
     MAGMA_TYPEDEF_SHARED_PTR(SwapchainImage);
 #endif
 
-    MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Object);
     MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Allocator);
     MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(DeviceMemoryAllocator);
+    MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Object);
+    MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Resource);
 
     // Declare explicitly because of Xlib's Diplay
 #ifdef VK_KHR_display

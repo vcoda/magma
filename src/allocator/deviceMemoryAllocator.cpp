@@ -294,7 +294,7 @@ VkResult DeviceMemoryAllocator::invalidateMappedRange(DeviceMemoryBlock allocati
     return VK_SUCCESS;
 }
 
-std::vector<VmaAllocation> DeviceMemoryAllocator::gatherSuballocations(const std::list<std::shared_ptr<Resource>>& objects)
+std::vector<VmaAllocation> DeviceMemoryAllocator::gatherSuballocations(const std::list<std::shared_ptr<IResource>>& objects)
 {
     std::vector<VmaAllocation> allocations;
     allocations.reserve(objects.size());

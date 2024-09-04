@@ -23,51 +23,38 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class PhysicalDevice;
-    class CommandBuffer;
+    /* Non-dispatchable resource object (buffer, image,
+       acceleration structure etc.) that has template declaration
+       to handle different resource types. Buffers and images are
+       created with a sharing mode controlling how they can be
+       accessed from queues. */
 
-    /* Vulkan supports two primary resource types: buffers and images.
-       Resources are views of memory with associated formatting and
-       dimensionality. Buffers and images are created with a sharing mode
-       controlling how they can be accessed from queues. */
-
-    class Resource : public IResource, /* private */ NonCopyable
+    template<class Self, class Type>
+    class Resource : public IResource,
+        public NonDispatchable<Type>,
+        public std::enable_shared_from_this<Self>
     {
     public:
-        virtual ~Resource() = default;
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
         const std::unique_ptr<IDeviceMemory>& getMemory() const noexcept override { return memory; }
 
     protected:
-        Resource(VkDeviceSize size,
-            const Sharing& sharing) noexcept;
-
-        const Sharing sharing;
-        VkDeviceSize size;
-        VkDeviceSize offset;
-        std::unique_ptr<IDeviceMemory> memory;
-    };
-
-    /* Non-dispatchable resource object (buffer, image,
-       acceleration structure etc.) that has template
-       declaration to handle different resource types. */
-
-    template<class Self, class Type>
-    class NonDispatchableResource :
-        public NonDispatchable<Type>,
-        public Resource,
-        public std::enable_shared_from_this<Self>
-    {
-    protected:
-        explicit NonDispatchableResource(VkObjectType objectType,
+        Resource(VkObjectType objectType,
             std::shared_ptr<Device> device,
             VkDeviceSize size,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator) noexcept:
             NonDispatchable<Type>(objectType, std::move(device), MAGMA_HOST_ALLOCATOR(allocator)),
-            Resource(size, sharing)
+            sharing(sharing),
+            size(size),
+            offset(0ull)
         {}
+
+        const Sharing sharing;
+        VkDeviceSize size;
+        VkDeviceSize offset;
+        std::unique_ptr<IDeviceMemory> memory;
     };
 } // namespace magma

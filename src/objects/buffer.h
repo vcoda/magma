@@ -30,7 +30,7 @@ namespace magma
        commands, or by directly specifying them as parameters
        to certain commands. */
 
-    class Buffer : public NonDispatchableResource<Buffer, VkBuffer>
+    class Buffer : public Resource<Buffer, VkBuffer>
     {
     public:
         struct Initializer;
