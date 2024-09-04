@@ -45,7 +45,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = extendedInfo.headNode();
     pipelineInfo.flags = flags;
-    if (basePipeline)
+    if (!basePipeline.expired())
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stage = shaderStage;
     pipelineInfo.layout = *layout;

@@ -58,7 +58,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     pipelineInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR;
     pipelineInfo.pNext = extendedInfo.headNode();
     pipelineInfo.flags = flags;
-    if (basePipeline)
+    if (!basePipeline.expired())
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
     pipelineInfo.pStages = dereferencedStages;

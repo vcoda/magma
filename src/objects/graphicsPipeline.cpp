@@ -107,7 +107,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = extendedInfo.headNode();
     pipelineInfo.flags = flags;
-    if (basePipeline)
+    if (!basePipeline.expired())
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
     pipelineInfo.pStages = dereferencedStages;
