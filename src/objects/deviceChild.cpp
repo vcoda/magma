@@ -35,16 +35,17 @@ void DeviceChild::setPrivateData(uint64_t data)
     if (!device)
         return;
 #ifdef VK_EXT_private_data
-    std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
-    if (privateDataSlot)
+    std::shared_ptr<PrivateDataSlot> dataSlot = device->getPrivateDataSlot();
+    if (dataSlot)
     {
-        privateDataSlot->setPrivateData(this, data);
+        dataSlot->setPrivateData(this, data);
         return;
     }
 #endif // VK_EXT_private_data
     std::lock_guard<std::mutex> lock(mtx);
-    std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
-    privateData[getObjectHandle()] = data;
+    std::unordered_map<uint64_t, uint64_t>& dataMap = device->getPrivateDataMap();
+    const uint64_t handle = getObjectHandle();
+    dataMap[handle] = data;
 }
 
 uint64_t DeviceChild::getPrivateData() const noexcept
@@ -52,14 +53,15 @@ uint64_t DeviceChild::getPrivateData() const noexcept
     if (!device)
         return 0ull;
 #ifdef VK_EXT_private_data
-    std::shared_ptr<PrivateDataSlot> privateDataSlot = device->getPrivateDataSlot();
-    if (privateDataSlot)
-        return privateDataSlot->getPrivateData(this);
+    std::shared_ptr<PrivateDataSlot> dataSlot = device->getPrivateDataSlot();
+    if (dataSlot)
+        return dataSlot->getPrivateData(this);
 #endif // VK_EXT_private_data
     std::lock_guard<std::mutex> lock(mtx);
-    std::unordered_map<uint64_t, uint64_t>& privateData = device->getPrivateDataMap();
-    auto it = privateData.find(getObjectHandle());
-    if (it != privateData.end())
+    std::unordered_map<uint64_t, uint64_t>& dataMap = device->getPrivateDataMap();
+    const uint64_t handle = getObjectHandle();
+    auto it = dataMap.find(handle);
+    if (it != dataMap.end())
         return it->second;
     return 0ull;
 }
