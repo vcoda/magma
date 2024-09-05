@@ -33,10 +33,11 @@ namespace magma
 
     protected:
         BaseCountBuffer(std::shared_ptr<Device> device,
-            VkDeviceSize size,
+            uint32_t count,
             VkPipelineStageFlags stageMask,
             std::shared_ptr<Allocator> allocator,
             const Sharing& sharing);
+
         const VkPipelineStageFlags stageMask;
         mutable std::unique_ptr<DstTransferBuffer> hostBuffer;
     };

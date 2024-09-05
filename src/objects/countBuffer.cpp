@@ -24,9 +24,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-BaseCountBuffer::BaseCountBuffer(std::shared_ptr<Device> device, VkDeviceSize size, VkPipelineStageFlags stageMask,
+BaseCountBuffer::BaseCountBuffer(std::shared_ptr<Device> device, uint32_t count, VkPipelineStageFlags stageMask,
     std::shared_ptr<Allocator> allocator /* nullptr */, const Sharing& sharing /* default */):
-    Buffer(std::move(device), size, 0, // flags
+    Buffer(std::move(device), count * sizeof(uint32_t), 0, // flags
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT |
             VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
@@ -47,7 +47,7 @@ void BaseCountBuffer::readback(std::shared_ptr<CommandBuffer> cmdBuffer) const
 CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */):
-    BaseCountBuffer(std::move(device), sizeof(uint32_t), stageMask, std::move(allocator), sharing)
+    BaseCountBuffer(std::move(device), 1, stageMask, std::move(allocator), sharing)
 {}
 
 void CountBuffer::setValue(uint32_t value, std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
@@ -72,7 +72,7 @@ uint32_t CountBuffer::getValue() const noexcept
 DispatchCountBuffer::DispatchCountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */) :
-    BaseCountBuffer(std::move(device), sizeof(uint32_t) * 3, stageMask, std::move(allocator), sharing)
+    BaseCountBuffer(std::move(device), 3, stageMask, std::move(allocator), sharing)
 {}
 
 void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
