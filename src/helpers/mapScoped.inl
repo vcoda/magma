@@ -11,18 +11,16 @@ inline void mapScopedRange(std::shared_ptr<Buffer> buffer,
     auto& bufferMemory = buffer->getMemory();
     if (bufferMemory)
     {
-        if (void *const data = bufferMemory->map(offset, size))
+        void *data = bufferMemory->map(offset, size);
+        if (data) try
         {
-            try
-            {
-                mapFn(reinterpret_cast<Type *>(data));
-                bufferMemory->unmap();
-            }
-            catch (...)
-            {
-                bufferMemory->unmap();
-                MAGMA_THROW;
-            }
+            mapFn(reinterpret_cast<Type *>(data));
+            bufferMemory->unmap();
+        }
+        catch (...)
+        {
+            bufferMemory->unmap();
+            MAGMA_THROW;
         }
     }
 }
@@ -40,18 +38,16 @@ inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(mapFn);
-    if (void *const data = uniformBuffer->map())
+    void *data = uniformBuffer->map();
+    if (data) try
     {
-        try
-        {
-            mapFn(reinterpret_cast<Type *>(data));
-            uniformBuffer->unmap();
-        }
-        catch (...)
-        {
-            uniformBuffer->unmap();
-            MAGMA_THROW;
-        }
+        mapFn(reinterpret_cast<Type *>(data));
+        uniformBuffer->unmap();
+    }
+    catch (...)
+    {
+        uniformBuffer->unmap();
+        MAGMA_THROW;
     }
 }
 
@@ -61,19 +57,17 @@ inline void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(mapFn);
-    if (void *const data = uniformBuffer->map())
+    void *data = uniformBuffer->map();
+    if (data) try
     {
-        try
-        {
-            UniformArray<Type> array(data, uniformBuffer->getArraySize());
-            mapFn(array);
-            uniformBuffer->unmap();
-        }
-        catch (...)
-        {
-            uniformBuffer->unmap();
-            MAGMA_THROW;
-        }
+        UniformArray<Type> array(data, uniformBuffer->getArraySize());
+        mapFn(array);
+        uniformBuffer->unmap();
+    }
+    catch (...)
+    {
+        uniformBuffer->unmap();
+        MAGMA_THROW;
     }
 }
 
@@ -83,21 +77,19 @@ inline void mapScoped(std::shared_ptr<DynamicUniformBuffer<Type>> uniformBuffer,
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(mapFn);
-    if (void *const data = uniformBuffer->map())
+    void *data = uniformBuffer->map();
+    if (data) try
     {
-        try
-        {
-            AlignedUniformArray<Type> array(data,
-                uniformBuffer->getArraySize(),
-                uniformBuffer->getAlignment());
-            mapFn(array);
-            uniformBuffer->unmap();
-        }
-        catch (...)
-        {
-            uniformBuffer->unmap();
-            MAGMA_THROW;
-        }
+        AlignedUniformArray<Type> array(data,
+            uniformBuffer->getArraySize(),
+            uniformBuffer->getAlignment());
+        mapFn(array);
+        uniformBuffer->unmap();
+    }
+    catch (...)
+    {
+        uniformBuffer->unmap();
+        MAGMA_THROW;
     }
 }
 
@@ -118,17 +110,21 @@ inline void mapScoped(std::shared_ptr<NonCoherentUniformBuffer<Type>> uniformBuf
         offset = array.getFirstIndex() * alignment;
         size = array.getUpdatedRange() * alignment;
     }
-    else if (void *data = uniformBuffer->map()) try
+    else
     {
-        UniformArray<Type> array(data, arraySize, alignment);
-        mapFn(array);
-        offset = array.getFirstIndex() * alignment;
-        size = array.getUpdatedRange() * alignment;
-    }
-    catch (...)
-    {
-        uniformBuffer->unmap();
-        MAGMA_THROW;
+        void *data = uniformBuffer->map();
+        if (data) try
+        {
+            UniformArray<Type> array(data, arraySize, alignment);
+            mapFn(array);
+            offset = array.getFirstIndex() * alignment;
+            size = array.getUpdatedRange() * alignment;
+        }
+        catch (...)
+        {
+            uniformBuffer->unmap();
+            MAGMA_THROW;
+        }
     }
     if (size)
     {
@@ -166,17 +162,21 @@ inline void mapScoped(std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>> uni
         offset = array.getFirstIndex() * alignment;
         size = array.getUpdatedRange() * alignment;
     }
-    else if (void *data = uniformBuffer->map()) try
+    else
     {
-        AlignedUniformArray<Type> array(data, arraySize, alignment);
-        mapFn(array);
-        offset = array.getFirstIndex() * alignment;
-        size = array.getUpdatedRange() * alignment;
-    }
-    catch (...)
-    {
-        uniformBuffer->unmap();
-        MAGMA_THROW;
+        void *data = uniformBuffer->map();
+        if (data) try
+        {
+            AlignedUniformArray<Type> array(data, arraySize, alignment);
+            mapFn(array);
+            offset = array.getFirstIndex() * alignment;
+            size = array.getUpdatedRange() * alignment;
+        }
+        catch (...)
+        {
+            uniformBuffer->unmap();
+            MAGMA_THROW;
+        }
     }
     if (size)
     {
@@ -202,18 +202,16 @@ inline void mapScopedRange(std::shared_ptr<Image> image,
     auto& imageMemory = image->getMemory();
     if (imageMemory)
     {
-        if (void *const data = imageMemory->map(offset, size))
+        void *data = imageMemory->map(offset, size);
+        if (data) try
         {
-            try
-            {
-                mapFn(static_cast<Type *>(data));
-                imageMemory->unmap();
-            }
-            catch (...)
-            {
-                imageMemory->unmap();
-                MAGMA_THROW;
-            }
+            mapFn(static_cast<Type *>(data));
+            imageMemory->unmap();
+        }
+        catch (...)
+        {
+            imageMemory->unmap();
+            MAGMA_THROW;
         }
     }
 }
