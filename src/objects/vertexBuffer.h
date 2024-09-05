@@ -27,11 +27,7 @@ namespace magma
     {
     public:
         void setVertexCount(uint32_t count) noexcept { vertexCount = count; }
-        uint32_t getVertexCount() const noexcept
-        {
-            MAGMA_ASSERT(vertexCount > 0);
-            return vertexCount;
-        }
+        uint32_t getVertexCount() const noexcept { return vertexCount; }
 
     protected:
         BaseVertexBuffer(std::shared_ptr<Device> device,
