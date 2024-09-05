@@ -93,4 +93,9 @@ namespace magma
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
     };
+
+    template<class T>
+    constexpr VkIndexType getIndexType() noexcept;
 } // namespace magma
+
+#include "indexBuffer.inl"

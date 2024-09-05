@@ -723,6 +723,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\objects\commandBuffer.inl" />
     <None Include="..\..\src\objects\device.inl" />
     <None Include="..\..\src\objects\image.inl" />
+    <None Include="..\..\src\objects\indexBuffer.inl" />
     <None Include="..\..\src\objects\indirectBuffer.inl" />
     <None Include="..\..\src\objects\nondispatchable.inl" />
     <None Include="..\..\src\objects\object.inl" />

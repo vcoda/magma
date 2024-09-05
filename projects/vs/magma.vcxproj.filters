@@ -1636,6 +1636,9 @@
     <None Include="..\..\src\raytracing\address.inl">
       <Filter>Header Files\raytracing</Filter>
     </None>
+    <None Include="..\..\src\objects\indexBuffer.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
