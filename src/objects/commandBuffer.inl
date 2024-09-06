@@ -1,14 +1,5 @@
 namespace magma
 {
-#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-#define MAGMA_INUSE(child)\
-if (child) try {\
-    CommandBuffer::inUse.insert(child);\
-} catch(...) {}
-#else
-#define MAGMA_INUSE(child)
-#endif // MAGMA_TRACK_INUSE
-
 inline void CommandBuffer::bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept
 {
     vkCmdBindPipeline(handle, pipeline->getBindPoint(), *pipeline);

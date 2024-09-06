@@ -87,6 +87,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_ASSERT_FOR_EACH(arr, it, expr)
 #endif // MAGMA_DEBUG
 
+#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
+    #define MAGMA_INUSE(obj) if (obj) try { inUse.insert(obj); } catch(...) {}
+#else
+    #define MAGMA_INUSE(obj)
+#endif // MAGMA_RETAIN_OBJECTS_IN_USE
+
 #define MAGMA_MAKE(Type, kind, method)\
 template<typename ...Args>\
 static std::kind##_ptr<Type> method(Args&& ...args)\
