@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "iresource.h"
 #include "ideviceMemory.h"
-#include "nondispatchable.h"
+#include "model/nondispatchable.h"
 #include "../misc/sharing.h"
 #include "../allocator/allocator.h"
 

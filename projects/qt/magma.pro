@@ -71,6 +71,7 @@ SOURCES += \
     ../../src/misc/scopedDebugMarker.cpp \
     ../../src/misc/sharing.cpp \
     ../../src/misc/structureChain.cpp \
+    ../../src/objects/model/deviceChild.cpp \
     ../../src/objects/accelerationStructure.cpp \
     ../../src/objects/accelerationStructureInputBuffer.cpp \
     ../../src/objects/baseDeviceMemory.cpp \
@@ -93,7 +94,6 @@ SOURCES += \
     ../../src/objects/descriptorSet.cpp \
     ../../src/objects/descriptorSetLayout.cpp \
     ../../src/objects/device.cpp \
-    ../../src/objects/deviceChild.cpp \
     ../../src/objects/deviceMemory.cpp \
     ../../src/objects/deviceResourcePool.cpp \
     ../../src/objects/display.cpp \
@@ -302,6 +302,12 @@ HEADERS += \
     ../../src/misc/sharing.h \
     ../../src/misc/structureChain.h \
     ../../src/misc/viewport.h \
+    ../../src/objects/model/deviceChild.h \
+    ../../src/objects/model/dispatchable.h \
+    ../../src/objects/model/iobject.h \
+    ../../src/objects/model/nondispatchable.h \
+    ../../src/objects/model/object.h \
+    ../../src/objects/model/objectType.h \
     ../../src/objects/accelerationStructure.h \
     ../../src/objects/accelerationStructureInputBuffer.h \
     ../../src/objects/accelerationStructureInstanceBuffer.h \
@@ -324,10 +330,8 @@ HEADERS += \
     ../../src/objects/descriptorSet.h \
     ../../src/objects/descriptorSetLayout.h \
     ../../src/objects/device.h \
-    ../../src/objects/deviceChild.h \
     ../../src/objects/deviceMemory.h \
     ../../src/objects/deviceResourcePool.h \
-    ../../src/objects/dispatchable.h \
     ../../src/objects/display.h \
     ../../src/objects/displayMode.h \
     ../../src/objects/dstTransferBuffer.h \
@@ -357,14 +361,10 @@ HEADERS += \
     ../../src/objects/indexBuffer.h \
     ../../src/objects/indirectBuffer.h \
     ../../src/objects/instance.h \
-    ../../src/objects/iobject.h \
     ../../src/objects/iresource.h \
     ../../src/objects/managedDeviceMemory.h \
     ../../src/objects/mutableImage.h \
     ../../src/objects/mutableImageView.h \
-    ../../src/objects/nondispatchable.h \
-    ../../src/objects/object.h \
-    ../../src/objects/objectType.h \
     ../../src/objects/physicalDevice.h \
     ../../src/objects/physicalDeviceGroup.h \
     ../../src/objects/pipeline.h \

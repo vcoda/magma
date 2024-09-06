@@ -18,13 +18,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "deviceChild.h"
-#include "instance.h"
-#include "device.h"
-#include "physicalDevice.h"
-#include "privateDataSlot.h"
-#include "../exceptions/errorResult.h"
-#include "../helpers/enumerationCast.h"
-#include "../misc/extension.h"
+#include "../instance.h"
+#include "../device.h"
+#include "../physicalDevice.h"
+#include "../privateDataSlot.h"
+#include "../../exceptions/errorResult.h"
+#include "../../helpers/enumerationCast.h"
+#include "../../misc/extension.h"
 
 namespace magma
 {

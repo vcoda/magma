@@ -82,6 +82,7 @@ SRC_OBJS= \
 	src/misc/sharing.o \
 	src/misc/structureChain.o \
 	\
+	src/objects/model/deviceChild.o \
 	src/objects/accelerationStructure.o \
 	src/objects/accelerationStructureInputBuffer.o \
 	src/objects/baseDeviceMemory.o \
@@ -104,7 +105,6 @@ SRC_OBJS= \
 	src/objects/descriptorSet.o \
 	src/objects/descriptorSetLayout.o \
 	src/objects/device.o \
-	src/objects/deviceChild.o \
 	src/objects/deviceMemory.o \
 	src/objects/deviceResourcePool.o \
 	src/objects/display.o \

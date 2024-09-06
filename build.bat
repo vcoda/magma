@@ -115,6 +115,7 @@ src\misc\pipelineExecutable.cpp ^
 src\misc\scopedDebugMarker.cpp ^
 src\misc\sharing.cpp ^
 src\misc\structureChain.cpp ^
+src\objects\model\deviceChild.cpp ^
 src\objects\accelerationStructure.cpp ^
 src\objects\accelerationStructureInputBuffer.cpp ^
 src\objects\baseDeviceMemory.cpp ^
@@ -137,7 +138,6 @@ src\objects\descriptorPool.cpp ^
 src\objects\descriptorSet.cpp ^
 src\objects\descriptorSetLayout.cpp ^
 src\objects\device.cpp ^
-src\objects\deviceChild.cpp ^
 src\objects\deviceMemory.cpp ^
 src\objects\deviceResourcePool.cpp ^
 src\objects\display.cpp ^
@@ -312,6 +312,7 @@ pipelineExecutable.obj ^
 scopedDebugMarker.obj ^
 sharing.obj ^
 structureChain.obj ^
+deviceChild.obj ^
 accelerationStructure.obj ^
 accelerationStructureInputBuffer.obj ^
 baseDeviceMemory.obj ^
@@ -334,7 +335,6 @@ descriptorPool.obj ^
 descriptorSet.obj ^
 descriptorSetLayout.obj ^
 device.obj ^
-deviceChild.obj ^
 deviceMemory.obj ^
 deviceResourcePool.obj ^
 display.obj ^

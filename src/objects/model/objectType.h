@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../misc/compatibility.h"
+#include "../../misc/compatibility.h"
 
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
 namespace magma

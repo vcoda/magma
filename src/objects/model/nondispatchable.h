@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "object.h"
 #include "deviceChild.h"
-#include "deviceResourcePool.h"
+#include "../deviceResourcePool.h"
 
 namespace magma
 {

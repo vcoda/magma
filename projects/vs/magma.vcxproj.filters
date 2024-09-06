@@ -112,6 +112,12 @@
     <Filter Include="Source Files\raytracing">
       <UniqueIdentifier>{9a5ffc34-27ad-476c-a069-8d038fb4ab58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\objects\model">
+      <UniqueIdentifier>{04b8236f-38c5-4f3b-bc8e-963c12d1cabf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\objects\model">
+      <UniqueIdentifier>{c815a3f0-8bcf-465b-802b-0439b54a0abf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\core\hashing\fnv1.h">
@@ -274,15 +280,6 @@
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\objects\mutableImageView.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\objects\nondispatchable.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\objects\object.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\objects\objectType.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\objects\physicalDevice.h">
@@ -813,9 +810,6 @@
     <ClInclude Include="..\..\src\objects\deviceResourcePool.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\deviceChild.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\typedefs.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -884,6 +878,24 @@
     </ClInclude>
     <ClInclude Include="..\..\src\helpers\bufferInitializers.h">
       <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\model\deviceChild.h">
+      <Filter>Header Files\objects\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\model\dispatchable.h">
+      <Filter>Header Files\objects\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\model\iobject.h">
+      <Filter>Header Files\objects\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\model\nondispatchable.h">
+      <Filter>Header Files\objects\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\model\object.h">
+      <Filter>Header Files\objects\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\model\objectType.h">
+      <Filter>Header Files\objects\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1346,9 +1358,6 @@
     <ClCompile Include="..\..\src\objects\deviceResourcePool.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objects\deviceChild.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\states\multiColorBlendState.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>
@@ -1385,6 +1394,9 @@
     <ClCompile Include="..\..\src\shaders\shaderBindingTable.cpp">
       <Filter>Source Files\shaders</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\objects\model\deviceChild.cpp">
+      <Filter>Source Files\objects\model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\objects\commandBuffer.inl">
@@ -1394,9 +1406,6 @@
       <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\src\objects\indirectBuffer.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\src\objects\object.inl">
       <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\src\objects\pipeline.inl">
@@ -1591,9 +1600,6 @@
     <None Include="..\..\src\misc\structureChain.inl">
       <Filter>Header Files\misc</Filter>
     </None>
-    <None Include="..\..\src\objects\nondispatchable.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
     <None Include="..\..\src\objects\deviceResourcePool.inl">
       <Filter>Header Files\objects</Filter>
     </None>
@@ -1647,6 +1653,15 @@
     </None>
     <None Include="..\..\src\objects\dispatchable.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\objects\model\dispatchable.inl">
+      <Filter>Header Files\objects\model</Filter>
+    </None>
+    <None Include="..\..\src\objects\model\nondispatchable.inl">
+      <Filter>Header Files\objects\model</Filter>
+    </None>
+    <None Include="..\..\src\objects\model\object.inl">
+      <Filter>Header Files\objects\model</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

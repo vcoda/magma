@@ -18,7 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "iobject.h"
 #include "objectType.h"
-#include "../misc/structureChain.h"
+#include "../../misc/structureChain.h"
 
 namespace magma
 {

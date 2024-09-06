@@ -281,7 +281,6 @@
     <ClInclude Include="..\..\src\objects\computePipelineBatch.h" />
     <ClInclude Include="..\..\src\objects\computePipelineLibrary.h" />
     <ClInclude Include="..\..\src\objects\conditionalRenderingBuffer.h" />
-    <ClInclude Include="..\..\src\objects\deviceChild.h" />
     <ClInclude Include="..\..\src\objects\debugReportCallback.h" />
     <ClInclude Include="..\..\src\objects\debugUtilsMessenger.h" />
     <ClInclude Include="..\..\src\objects\deferredOperation.h" />
@@ -323,11 +322,14 @@
     <ClInclude Include="..\..\src\objects\iobject.h" />
     <ClInclude Include="..\..\src\objects\iresource.h" />
     <ClInclude Include="..\..\src\objects\managedDeviceMemory.h" />
+    <ClInclude Include="..\..\src\objects\model\deviceChild.h" />
+    <ClInclude Include="..\..\src\objects\model\dispatchable.h" />
+    <ClInclude Include="..\..\src\objects\model\iobject.h" />
+    <ClInclude Include="..\..\src\objects\model\nondispatchable.h" />
+    <ClInclude Include="..\..\src\objects\model\object.h" />
+    <ClInclude Include="..\..\src\objects\model\objectType.h" />
     <ClInclude Include="..\..\src\objects\mutableImage.h" />
     <ClInclude Include="..\..\src\objects\mutableImageView.h" />
-    <ClInclude Include="..\..\src\objects\nondispatchable.h" />
-    <ClInclude Include="..\..\src\objects\object.h" />
-    <ClInclude Include="..\..\src\objects\objectType.h" />
     <ClInclude Include="..\..\src\objects\physicalDevice.h" />
     <ClInclude Include="..\..\src\objects\physicalDeviceGroup.h" />
     <ClInclude Include="..\..\src\objects\pipeline.h" />
@@ -499,7 +501,6 @@
     <ClCompile Include="..\..\src\objects\computePipelineBatch.cpp" />
     <ClCompile Include="..\..\src\objects\computePipelineLibrary.cpp" />
     <ClCompile Include="..\..\src\objects\conditionalRenderingBuffer.cpp" />
-    <ClCompile Include="..\..\src\objects\deviceChild.cpp" />
     <ClCompile Include="..\..\src\objects\debugReportCallback.cpp" />
     <ClCompile Include="..\..\src\objects\debugUtilsMessenger.cpp" />
     <ClCompile Include="..\..\src\objects\deferredOperation.cpp" />
@@ -537,6 +538,7 @@
     <ClCompile Include="..\..\src\objects\indirectBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\instance.cpp" />
     <ClCompile Include="..\..\src\objects\managedDeviceMemory.cpp" />
+    <ClCompile Include="..\..\src\objects\model\deviceChild.cpp" />
     <ClCompile Include="..\..\src\objects\mutableImage.cpp" />
     <ClCompile Include="..\..\src\objects\mutableImageView.cpp" />
     <ClCompile Include="..\..\src\objects\physicalDevice.cpp" />
@@ -728,8 +730,9 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\objects\image.inl" />
     <None Include="..\..\src\objects\indexBuffer.inl" />
     <None Include="..\..\src\objects\indirectBuffer.inl" />
-    <None Include="..\..\src\objects\nondispatchable.inl" />
-    <None Include="..\..\src\objects\object.inl" />
+    <None Include="..\..\src\objects\model\dispatchable.inl" />
+    <None Include="..\..\src\objects\model\nondispatchable.inl" />
+    <None Include="..\..\src\objects\model\object.inl" />
     <None Include="..\..\src\objects\pipeline.inl" />
     <None Include="..\..\src\objects\pipelineBatch.inl" />
     <None Include="..\..\src\objects\pipelineLayout.inl" />

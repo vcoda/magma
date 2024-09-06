@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../objects/objectType.h"
+#include "../objects/model/objectType.h"
 
 #define MAGMA_STREAM_INSERT_OPERATOR(Type) std::ostream& operator<<(std::ostream&, Type)
 
