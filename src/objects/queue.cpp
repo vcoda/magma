@@ -164,7 +164,10 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     }
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
     MAGMA_HANDLE_RESULT(result, "queue submission failed");
-    cmdBuffer->finishedQueueSubmission();
+    MAGMA_INUSE(waitSemaphore);
+    MAGMA_INUSE(signalSemaphore);
+    cmdBuffer->finishedQueueSubmission(); // Change state of the command buffer
+    submitted.emplace_front(std::move(cmdBuffer));
 }
 
 void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
@@ -189,7 +192,10 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
         for (auto const& semaphore: waitSemaphores)
         {
             if (semaphore)
+            {
                 dereferencedWaitSemaphores.put(*semaphore);
+                MAGMA_INUSE(semaphore);
+            }
         }
         submitInfo.waitSemaphoreCount = dereferencedWaitSemaphores.count();
         submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
@@ -201,6 +207,7 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
         {
             MAGMA_ASSERT(cmdBuffer->primary());
             dereferencedCmdBuffers.put(*cmdBuffer);
+            submitted.push_front(cmdBuffer);
         }
     }
     submitInfo.commandBufferCount = dereferencedCmdBuffers.count();
@@ -210,7 +217,10 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
         for (auto const& semaphore: signalSemaphores)
         {
             if (semaphore)
+            {
                 dereferencedSignalSemaphores.put(*semaphore);
+                MAGMA_INUSE(semaphore);
+            }
         }
         submitInfo.signalSemaphoreCount = dereferencedSignalSemaphores.count();
         submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;
@@ -424,4 +434,22 @@ std::vector<VkCheckpointDataNV> Queue::getCheckpoints(std::shared_ptr<const Devi
     return checkpoints;
 }
 #endif // VK_NV_device_diagnostic_checkpoints
+
+/* 3.3.1. Object Lifetime
+   The following Vulkan objects must not be destroyed while any queue is executing commands that use the object:
+
+    * VkFence
+    * VkSemaphore
+    * VkCommandBuffer
+    * VkCommandPool */
+
+void Queue::completedExecution()
+{
+    for (auto& cmdBuffer: submitted)
+        cmdBuffer->finishedExecution();
+    submitted.clear();
+#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
+    inUse.clear();
+#endif
+}
 } // namespace magma

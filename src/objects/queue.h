@@ -127,6 +127,7 @@ namespace magma
     #ifdef VK_NV_device_diagnostic_checkpoints
         std::vector<VkCheckpointDataNV> getCheckpoints(std::shared_ptr<const Device> device) const;
     #endif
+        void completedExecution();
 
     private:
         MAGMA_MAKE_UNIQUE(Queue)
@@ -139,6 +140,10 @@ namespace magma
         const uint32_t index;
     #ifdef VK_EXT_swapchain_maintenance1
         VkPresentModeKHR presentMode;
+    #endif
+        std::list<std::shared_ptr<CommandBuffer>> submitted;
+    #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
+        std::unordered_set<std::shared_ptr<const IObject>> inUse;
     #endif
         friend Device;
     };

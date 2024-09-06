@@ -42,7 +42,7 @@ void finish(std::shared_ptr<CommandBuffer> cmdBuffer, const std::unique_ptr<Queu
         fence->wait();
         fence->reset();
     }
-    cmdBuffer->finishedExecution();
+    queue->completedExecution();
 }
 
 void finish(std::shared_ptr<CommandBuffer> cmdBuffer, bool waitIdle /* false */)
