@@ -40,9 +40,9 @@ void finish(std::shared_ptr<CommandBuffer> cmdBuffer, const std::unique_ptr<Queu
             fence->reset();
         queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
         fence->wait();
+        queue->completedExecution();
         fence->reset();
     }
-    queue->completedExecution();
 }
 
 void finish(std::shared_ptr<CommandBuffer> cmdBuffer, bool waitIdle /* false */)

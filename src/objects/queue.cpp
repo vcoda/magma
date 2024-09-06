@@ -336,6 +336,7 @@ void Queue::waitIdle()
 {
     const VkResult result = vkQueueWaitIdle(handle);
     MAGMA_HANDLE_RESULT(result, "failed to wait for a queue to become idle");
+    completedExecution();
 }
 
 void Queue::present(const std::unique_ptr<Swapchain>& swapchain, uint32_t imageIndex,
