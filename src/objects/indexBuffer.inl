@@ -7,12 +7,11 @@ constexpr VkIndexType getIndexType() noexcept
     #if defined(VK_KHR_index_type_uint8) || defined(VK_EXT_index_type_uint8)
         std::is_same<T, uint8_t>::value ||
     #endif
-        std::is_same<T, uint16_t>::value ||
-        std::is_same<T, uint32_t>::value,
+        std::is_same<T, uint16_t>::value || std::is_same<T, uint32_t>::value,
     #if defined(VK_KHR_index_type_uint8) || defined(VK_EXT_index_type_uint8)
-        "elements of index buffer should be of unsigned char, short or int types");
+        "index should be of unsigned char, short or int type");
     #else
-        "elements of index buffer should be of unsigned short or int types");
+        "index should be of unsigned short or int type");
     #endif
 #if defined(VK_KHR_index_type_uint8) || defined(VK_EXT_index_type_uint8)
     if constexpr (std::is_same<T, uint8_t>::value)
