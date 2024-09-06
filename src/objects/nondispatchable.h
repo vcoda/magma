@@ -23,9 +23,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* Non-dispatchable handle types are a 64-bit integer type
-       whose meaning is implementation-dependent, and may encode
-       object information directly in the handle rather than acting
-       as a reference to an underlying object. */
+       whose meaning is implementation-dependent. If the privateData
+       feature is enabled for a VkDevice, each object of a non-
+       dispatchable type created on that device must have a handle
+       value that is unique among objects created on that device,
+       for the duration of the object's lifetime. Otherwise, non-
+       dispatchable handles may encode object information directly
+       in the handle rather than acting as a reference to an underlying
+       object, and thus may not have unique handle values. */
 
     template<class Type>
     class NonDispatchable : public DeviceChild,
@@ -37,11 +42,11 @@ namespace magma
         static_assert(sizeof(Type) == sizeof(uint64_t),
     #endif
             "invalid size of non-dispatchable handle type");
-
     public:
+        ~NonDispatchable();
+        Class getClass() const noexcept { return Class::NonDispatchable; }
         VkObjectType getObjectType() const noexcept override;
         uint64_t getObjectHandle() const noexcept override;
-        bool nonDispatchable() const noexcept override { return true; }
 
     protected:
         NonDispatchable(VkObjectType objectType,
@@ -51,7 +56,6 @@ namespace magma
         NonDispatchable(VkObjectType objectType,
             std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator) noexcept;
-        ~NonDispatchable();
     };
 } // namespace magma
 

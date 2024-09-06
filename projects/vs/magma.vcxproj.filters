@@ -1645,6 +1645,9 @@
     <None Include="..\..\src\objects\indexBuffer.inl">
       <Filter>Header Files\objects</Filter>
     </None>
+    <None Include="..\..\src\objects\dispatchable.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">

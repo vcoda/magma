@@ -32,21 +32,20 @@ namespace magma
     {
         static_assert(sizeof(Type) == sizeof(intptr_t),
             "invalid size of dispatchable handle type");
+    public:
+        Class getClass() const noexcept { return Class::Dispatchable; }
+        VkObjectType getObjectType() const noexcept override;
+        uint64_t getObjectHandle() const noexcept override;
+        void setPrivateData(uint64_t) override {}
+        uint64_t getPrivateData() const noexcept override { return 0ull; }
 
     protected:
         Dispatchable(VkObjectType objectType,
-            Type handle = VK_NULL_HANDLE) noexcept:
-            Object<Type>(objectType, handle, nullptr) {}
+            Type handle = VK_NULL_HANDLE) noexcept;
         Dispatchable(VkObjectType objectType,
             std::shared_ptr<IAllocator> allocator,
-            Type handle = VK_NULL_HANDLE) noexcept:
-            Object<Type>(objectType, handle, std::move(allocator)) {}
-        VkObjectType getObjectType() const noexcept override
-            { return Object<Type>::getType(); }
-        uint64_t getObjectHandle() const noexcept override
-            { return reinterpret_cast<uint64_t>(Object<Type>::handle); }
-        void setPrivateData(uint64_t) override {}
-        uint64_t getPrivateData() const noexcept override { return 0ull; }
-        bool nonDispatchable() const noexcept override { return false; }
+            Type handle = VK_NULL_HANDLE) noexcept;
     };
 } // namespace magma
+
+#include "dispatchable.inl"

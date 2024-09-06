@@ -20,17 +20,27 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Base interface class of Vulkan object that has associated
-       handle and type. Derived classes should implement virtual
-       methods declared here. */
+    /* Base interface class of Vulkan object. At the API level,
+       all objects are referred to by handles. There are two
+       classes of handles, dispatchable and non-dispatchable. */
 
     class IObject : public IClass
     {
     public:
+        enum class Class : uint8_t;
+        virtual Class getClass() const noexcept = 0;
         virtual VkObjectType getObjectType() const noexcept = 0;
         virtual uint64_t getObjectHandle() const noexcept = 0;
         virtual void setPrivateData(uint64_t data) = 0;
         virtual uint64_t getPrivateData() const noexcept = 0;
-        virtual bool nonDispatchable() const noexcept = 0;
+    };
+
+    /* Dispatchable handle types are a pointer to an opaque type.
+       Non-dispatchable handle types are a 64-bit integer type
+       whose meaning is implementation-dependent. */
+
+    enum class IObject::Class : uint8_t
+    {
+        Dispatchable, NonDispatchable
     };
 } // namespace magma
