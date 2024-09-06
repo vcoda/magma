@@ -36,8 +36,6 @@ namespace magma
         Class getClass() const noexcept { return Class::Dispatchable; }
         VkObjectType getObjectType() const noexcept override;
         uint64_t getObjectHandle() const noexcept override;
-        void setPrivateData(uint64_t) override {}
-        uint64_t getPrivateData() const noexcept override { return 0ull; }
 
     protected:
         Dispatchable(VkObjectType objectType,

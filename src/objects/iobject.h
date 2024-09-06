@@ -31,8 +31,6 @@ namespace magma
         virtual Class getClass() const noexcept = 0;
         virtual VkObjectType getObjectType() const noexcept = 0;
         virtual uint64_t getObjectHandle() const noexcept = 0;
-        virtual void setPrivateData(uint64_t data) = 0;
-        virtual uint64_t getPrivateData() const noexcept = 0;
     };
 
     /* Dispatchable handle types are a pointer to an opaque type.

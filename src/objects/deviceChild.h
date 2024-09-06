@@ -31,9 +31,9 @@ namespace magma
     class DeviceChild : public IObject
     {
     public:
-        void setPrivateData(uint64_t data) override;
-        uint64_t getPrivateData() const noexcept override;
         const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
+        void setPrivateData(uint64_t data);
+        uint64_t getPrivateData() const noexcept;
         void setDebugName(const char *MAGMA_NOOP(name)) MAGMA_NOOP_METHOD;
         void setDebugTag(uint64_t MAGMA_NOOP(tagName),
             size_t MAGMA_NOOP(tagSize),
