@@ -846,4 +846,20 @@ inline void CommandBuffer::finishedExecution() noexcept
         state = State::Executable;
     }
 }
+
+inline uint32_t CommandBuffer::inUseResourceCount() const noexcept
+{
+#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
+    return MAGMA_COUNT(inUse);
+#endif
+    return 0;
+}
+
+inline void CommandBuffer::releaseResourcesInUse() noexcept
+{
+#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
+    inUse.clear();
+#endif
+    pipelineBarriers.clear();
+}
 } // namespace magma

@@ -444,13 +444,27 @@ std::vector<VkCheckpointDataNV> Queue::getCheckpoints(std::shared_ptr<const Devi
     * VkCommandBuffer
     * VkCommandPool */
 
-void Queue::completedExecution()
+uint32_t Queue::inUseResourceCount() const noexcept
 {
-    for (auto& cmdBuffer: submitted)
-        cmdBuffer->finishedExecution();
+    uint32_t count = MAGMA_COUNT(submitted);
+#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
+    count += MAGMA_COUNT(inUse);
+#endif
+    return count;
+}
+
+void Queue::releaseResourcesInUse() noexcept
+{
     submitted.clear();
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
     inUse.clear();
 #endif
+}
+
+void Queue::completedExecution()
+{
+    for (auto& cmdBuffer: submitted)
+        cmdBuffer->finishedExecution();
+    releaseResourcesInUse();
 }
 } // namespace magma
