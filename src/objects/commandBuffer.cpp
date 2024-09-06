@@ -1131,6 +1131,31 @@ void CommandBuffer::traceRaysIndirect(const std::shared_ptr<Buffer>& indirectBuf
 }
 #endif // VK_KHR_ray_tracing_maintenance1
 
+/* 3.3.1. Object Lifetime
+   The following Vulkan objects must not be destroyed while any command buffers using the object are in the pending state:
+
+    * VkEvent
+    * VkQueryPool
+    * VkBuffer
+    * VkBufferView
+    * VkImage
+    * VkImageView
+    * VkPipeline
+    * VkSampler
+    * VkSamplerYcbcrConversion
+    * VkDescriptorPool
+    * VkFramebuffer
+    * VkRenderPass
+    * VkCommandBuffer
+    * VkCommandPool
+    * VkDeviceMemory
+    * VkDescriptorSet
+    * VkIndirectCommandsLayoutNV
+    * VkAccelerationStructureNV
+    * VkAccelerationStructureKHR
+    * VkVideoSessionKHR
+    * VkVideoSessionParametersKHR */
+
 void CommandBuffer::releaseResourcesInUse() const noexcept
 {
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
