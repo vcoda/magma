@@ -31,7 +31,7 @@ ShaderGroup::ShaderGroup() noexcept:
 void ShaderGroup::calculateStride(const VkPhysicalDeviceRayTracingPipelinePropertiesKHR properties) noexcept
 {   // Minimal stride
     stride = core::alignUp(properties.shaderGroupHandleSize, properties.shaderGroupHandleAlignment);
-    for (auto& [groupIndex, shaderRecord]: shaderRecords)
+    for (auto const& [groupIndex, shaderRecord]: shaderRecords)
     {   // Find the largest aligned size of group handle + embedded data
         MAGMA_UNUSED(groupIndex);
         uint32_t dataSize = core::alignUp(
