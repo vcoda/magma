@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 inline ImageDescriptor::ImageDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
     DescriptorSetLayoutBinding(descriptorType, 1, binding),
@@ -83,5 +81,4 @@ inline InputAttachment& InputAttachment::operator=(std::shared_ptr<const ImageVi
     update(std::move(imageView), nullptr, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
     return *this;
 }
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor

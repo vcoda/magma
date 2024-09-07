@@ -25,9 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/framebuffer.h"
 #include "../allocator/allocator.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> device,
     const std::initializer_list<VkFormat>& colorAttachmentFormats,
@@ -111,5 +109,4 @@ const std::shared_ptr<RenderPass>& MultiAttachmentFramebuffer::lazyDepthRenderPa
     }
     return depthRenderPass;
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

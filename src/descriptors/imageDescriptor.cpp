@@ -22,9 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/imageView.h"
 #include "../misc/format.h"
 
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
@@ -59,5 +57,4 @@ void ImageDescriptor::update(std::shared_ptr<const ImageView> imageView, std::sh
         dirty = true;
     }
 }
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor

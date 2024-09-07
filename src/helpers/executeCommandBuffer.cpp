@@ -21,9 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/primaryCommandBuffer.h"
 #include "../misc/finish.h"
 
-namespace magma
-{
-namespace helpers
+namespace magma::helpers
 {
 void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
     std::function<void(std::shared_ptr<CommandBuffer>)> cmdFn,
@@ -54,5 +52,4 @@ void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
         finish(std::move(cmdBuffer));
     }
 }
-} // namespace helpers
-} // namespace magma
+} // namespace magma::helpers

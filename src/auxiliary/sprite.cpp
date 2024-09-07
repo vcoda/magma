@@ -25,9 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/format.h"
 #include "../helpers/mapScoped.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkDeviceSize offset,
@@ -169,5 +167,4 @@ void Sprite::clip(VkOffset3D srcOffsets[2], VkOffset3D dstOffsets[2], int32_t ds
         srcOffsets[1].y += isFlippedVertically() ? cy : -cy;
     }
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

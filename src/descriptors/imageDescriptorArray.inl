@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 template<uint32_t Size>
 inline ImageDescriptorArray<Size>::ImageDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
@@ -110,5 +108,4 @@ inline ImageArrayElement InputAttachmentArray<Size>::operator[](uint32_t index) 
 {
     return ImageDescriptorArray<Size>::getElement(index, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
 }
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor

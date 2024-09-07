@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace packed
+namespace magma::packed
 {
 inline X11y11z10Ufloat::X11y11z10Ufloat(float x, float y, float z) noexcept
 {
@@ -70,5 +68,4 @@ inline X11y11z10Ufloat::X11y11z10Ufloat(float x, float y, float z) noexcept
     // Pack result into memory
     v = ((res[2] & 0x3FF) << 22) | ((res[1] & 0x7FF) << 11) | (res[0] & 0x7FF);
 }
-} // namespace packed
-} // namespace magma
+} // namespace magma::packed

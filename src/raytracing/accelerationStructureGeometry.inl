@@ -118,4 +118,4 @@ inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInst
     flags = flags_;
     primitiveCount = instances->getInstanceCount();
 }
-}// namespace magma
+} // namespace magma

@@ -21,9 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/buffer.h"
 #include "../objects/bufferView.h"
 
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 void BufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
@@ -66,5 +64,4 @@ void TexelBufferDescriptor::update(std::shared_ptr<const BufferView> bufferView,
         dirty = true;
     }
 }
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor

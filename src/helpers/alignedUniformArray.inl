@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace helpers
+namespace magma::helpers
 {
 template<class Type>
 inline AlignedUniformArray<Type>::AlignedUniformArray(void *const buffer, const uint32_t arraySize, const VkDeviceSize alignment) noexcept:
@@ -74,5 +72,4 @@ private:
     char *ptr;
     const VkDeviceSize alignment;
 };
-} // namespace helpers
-} // namespace magma
+} // namespace magma::helpers

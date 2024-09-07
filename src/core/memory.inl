@@ -188,4 +188,4 @@ inline void zeroMemory(T (&array)[N]) noexcept
 {
     memset(array, 0, sizeof(T) * N);
 }
-} // magma::core
+} // namespace magma::core

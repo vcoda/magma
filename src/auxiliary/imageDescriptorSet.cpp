@@ -27,9 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../descriptors/descriptorSetTable.h"
 #include "../exceptions/exception.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 struct ImageDescriptorSet::ImageTable : DescriptorSetTable
 {
@@ -82,5 +80,4 @@ void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageV
     else
         imageTable->image = {imageView, sampler};
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

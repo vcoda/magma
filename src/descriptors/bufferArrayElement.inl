@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 inline BufferArrayElement::BufferArrayElement(DescriptorSetLayoutBinding *array,
     VkDescriptorBufferInfo& element, VkBufferUsageFlags usage) noexcept:
@@ -33,5 +31,4 @@ inline void TexelBufferArrayElement::operator=(std::shared_ptr<const BufferView>
         this->setDirty();
     }
 }
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor

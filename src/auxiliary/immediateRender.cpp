@@ -34,9 +34,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/featureQuery.h"
 #include "../misc/pushConstantRange.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<PipelineLayout> layout, std::shared_ptr<PipelineCache> pipelineCache,
@@ -221,5 +219,4 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         depthStencilState, colorBlendState, dynamicStates,
         layout, renderPass, 0);
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

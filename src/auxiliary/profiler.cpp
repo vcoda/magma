@@ -28,9 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 constexpr uint32_t MAGMA_PROFILER_MAX_TIMESTAMP_QUERIES = 256;
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 Profiler *Profiler::profilers[2];
 
@@ -226,5 +224,4 @@ uint32_t Profiler::getResetQueryCount() const noexcept
     // Reset all queries before first use
     return queryPool->getQueryCount();
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

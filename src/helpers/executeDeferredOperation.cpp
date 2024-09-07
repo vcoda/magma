@@ -19,9 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "../objects/deferredOperation.h"
 
-namespace magma
-{
-namespace helpers
+namespace magma::helpers
 {
 #ifdef VK_KHR_deferred_host_operations
 VkResult executeDeferredOperation(std::shared_ptr<DeferredOperation> deferredOperation,
@@ -60,5 +58,4 @@ VkResult executeDeferredOperation(std::shared_ptr<DeferredOperation> deferredOpe
     return deferredOperation->getResult();
 }
 #endif // VK_KHR_deferred_host_operations
-} // namespace helpers
-} // namespace magma
+} // namespace magma::helpers

@@ -23,9 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflection.h"
 #include "../states/rasterizationState.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 FillRectangleVertexShader::FillRectangleVertexShader(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
@@ -66,5 +64,4 @@ const RasterizationState& FillRectangleVertexShader::getRasterizationState() con
 #endif
     return renderstate::fillCullNoneCcw;
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

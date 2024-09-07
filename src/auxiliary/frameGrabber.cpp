@@ -28,9 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../barriers/imageMemoryBarrier.h"
 #include "../helpers/mapScoped.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 FrameGrabber::FrameGrabber(std::shared_ptr<Device> device,
     std::shared_ptr<Allocator> allocator /* nullptr */):
@@ -175,5 +173,4 @@ VkExtent2D FrameGrabber::getImageExtent() const
         return VkExtent2D{dstImage->getWidth(), dstImage->getHeight()};
     return VkExtent2D{0, 0};
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

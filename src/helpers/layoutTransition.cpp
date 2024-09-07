@@ -21,9 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandBuffer.h"
 #include "../misc/finish.h"
 
-namespace magma
-{
-namespace helpers
+namespace magma::helpers
 {
 void layoutTransition(std::shared_ptr<Image> image, VkImageLayout newLayout,
     std::shared_ptr<CommandBuffer> cmdBuffer)
@@ -39,5 +37,4 @@ void layoutTransition(std::shared_ptr<Image> image, VkImageLayout newLayout,
     // Block until execution is complete
     finish(std::move(cmdBuffer));
 }
-} // namespace helpers
-} // namespace magma
+} // namespace magma::helpers

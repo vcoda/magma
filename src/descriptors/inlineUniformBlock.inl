@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 template<class UniformBlockType>
 inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding) noexcept:
@@ -40,5 +38,4 @@ inline InlineUniformBlock<UniformBlockType>& InlineUniformBlock<UniformBlockType
     }
     return *this;
 }
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor

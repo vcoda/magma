@@ -43,9 +43,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../helpers/mapScoped.h"
 #include "../helpers/mapTyped.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 struct alignas(16) TextShader::String
 {
@@ -180,5 +178,4 @@ bool TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *forma
     ++stringCount;
     return true;
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

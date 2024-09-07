@@ -43,9 +43,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/colorBlendState.h"
 #include "../states/samplerState.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 constexpr
 #include "spirv/output/blitf"
@@ -161,5 +159,4 @@ void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_p
     cmdBuffer->bindPipeline(pipeline);
     cmdBuffer->draw(3);
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

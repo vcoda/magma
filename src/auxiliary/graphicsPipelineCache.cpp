@@ -32,9 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device_,
     std::shared_ptr<PipelineCache> pipelineCache_,
@@ -161,5 +159,4 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     }
     return pipeline;
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

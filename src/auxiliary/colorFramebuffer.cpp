@@ -26,9 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/format.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkFormat colorFormat, const VkExtent2D& extent,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -92,5 +90,4 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

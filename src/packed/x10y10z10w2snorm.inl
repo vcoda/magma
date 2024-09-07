@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace packed
+namespace magma::packed
 {
 inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, uint32_t w /* 0 */) noexcept
 {
@@ -33,5 +31,4 @@ inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, uint32_t w 
         ((int32_t)x & 0x3FF);
 #endif // MAGMA_NEON
 }
-} // namespace packed
-} // namespace magma
+} // namespace magma::packed

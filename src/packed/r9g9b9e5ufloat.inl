@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace packed
+namespace magma::packed
 {
 inline int floorLog2(float x)
 {
@@ -81,5 +79,4 @@ inline void R9g9b9e5Ufloat::unpack(float v[3]) const noexcept
     v[1] = gm * scale;
     v[2] = bm * scale;
 }
-} // namespace packed
-} // namespace magma
+} // namespace magma::packed

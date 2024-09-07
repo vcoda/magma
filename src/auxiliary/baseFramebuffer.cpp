@@ -24,9 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/multisampleState.h"
 #include "../misc/featureQuery.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 Framebuffer::Framebuffer(const VkFormat colorFormat, const VkFormat depthStencilFormat, const uint32_t sampleCount) noexcept:
     colorFormat(colorFormat),
@@ -94,5 +92,4 @@ VkImageLayout Framebuffer::optimalDepthStencilLayout(std::shared_ptr<Device> dev
     return sampled ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL :
         VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

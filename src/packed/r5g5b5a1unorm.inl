@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace packed
+namespace magma::packed
 {
 inline R5g5b5a1Unorm::R5g5b5a1Unorm(float r, float g, float b, float a) noexcept
 {
@@ -43,5 +41,4 @@ inline R5g5b5a1Unorm::R5g5b5a1Unorm(const float v[4]) noexcept:
 inline R5g5b5a1Unorm::R5g5b5a1Unorm(const uint8_t v[4]) noexcept:
     R5g5b5a1Unorm(v[0]/255.f, v[1]/255.f, v[2]/255.f, v[3]/255.f)
 {}
-} // namespace packed
-} // namespace magma
+} // namespace magma::packed

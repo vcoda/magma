@@ -22,9 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/finish.h"
 #include "mapScoped.h"
 
-namespace magma
-{
-namespace helpers
+namespace magma::helpers
 {
 std::vector<uint32_t> readbackBufferMarkers(std::shared_ptr<CommandBuffer> cmdBuffer,
     const char *blockName /* magma::helpers::readbackBufferMarkers */,
@@ -56,5 +54,4 @@ std::vector<uint32_t> readbackBufferMarkers(std::shared_ptr<CommandBuffer> cmdBu
     }
     return bufferMarkers;
 }
-} // namespace helpers
-} // namespace magma
+} // namespace magma::helpers

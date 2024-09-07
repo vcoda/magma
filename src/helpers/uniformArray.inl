@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace helpers
+namespace magma::helpers
 {
 template<class Type>
 inline UniformArray<Type>::UniformArray(void *const buffer, const uint32_t arraySize) noexcept:
@@ -69,5 +67,4 @@ public:
 private:
     Type *ptr;
 };
-} // namespace helpers
-} // namespace magma
+} // namespace magma::helpers

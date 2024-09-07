@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 inline BufferDescriptor::BufferDescriptor(VkDescriptorType descriptorType, uint32_t binding) noexcept:
     DescriptorSetLayoutBinding(descriptorType, 1, binding),
@@ -57,5 +55,4 @@ inline DynamicStorageBuffer& DynamicStorageBuffer::operator=(std::shared_ptr<con
     update(std::move(buffer), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
     return *this;
 }
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor

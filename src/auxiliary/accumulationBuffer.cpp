@@ -47,9 +47,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../exceptions/exception.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<ShaderModule> fragmentShader,
@@ -131,5 +129,4 @@ void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, st
         ++count;
     }
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

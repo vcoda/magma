@@ -23,9 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../exceptions/errorResult.h"
 #include "../exceptions/compileError.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device, std::shared_ptr<IShaderInclude> handler):
     device(std::move(device)),
@@ -49,7 +47,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     MAGMA_ASSERT(source.length() > 0);
     MAGMA_ASSERT(strlen(entrypoint) > 0);
     shaderc_compile_options_t options = shaderc_compile_options_initialize();
-    for (auto& [name, value]: macroDefinitions)
+    for (auto const& [name, value]: macroDefinitions)
     {   // Add preprocessor definitions
         shaderc_compile_options_add_macro_definition(options,
             name.c_str(), name.length(),
@@ -112,5 +110,4 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     shaderc_result_release(result);
     return shaderModule;
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

@@ -26,9 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/framebuffer.h"
 #include "../allocator/allocator.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkFormat depthFormat, const VkExtent2D& extent,
     std::shared_ptr<Allocator> allocator /* nullptr */):
@@ -52,5 +50,4 @@ DepthFramebuffer::DepthFramebuffer(std::shared_ptr<Device> device, const VkForma
     renderPass = std::make_shared<RenderPass>(std::move(device), depthAttachment, MAGMA_HOST_ALLOCATOR(allocator));
     framebuffer = std::make_shared<magma::Framebuffer>(renderPass, depthView, MAGMA_HOST_ALLOCATOR(allocator), 0);
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

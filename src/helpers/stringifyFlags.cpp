@@ -21,9 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "stringifyFlags.h"
 #include "streamInsertOperators.h"
 
-namespace magma
-{
-namespace helpers
+namespace magma::helpers
 {
 std::string stringifyMask(uint32_t mask)
 {
@@ -259,5 +257,4 @@ std::string stringifyDeviceGroupPresentMode(VkDeviceGroupPresentModeFlagsKHR fla
     return out.str();
 }
 #endif // VK_KHR_device_group
-} // namespace helpers
-} // namespace magma
+} // namespace magma::helpers

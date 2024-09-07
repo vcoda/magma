@@ -27,9 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/format.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainImage> color,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -75,5 +73,4 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainImage> color
         framebuffer = std::make_shared<magma::Framebuffer>(renderPass, colorView, MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

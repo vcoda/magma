@@ -26,9 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../allocator/allocator.h"
 #include "../misc/format.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device> device,
     const VkFormat colorFormat, const VkExtent2D& extent, const uint32_t sampleCount,
@@ -127,5 +125,4 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
             MAGMA_HOST_ALLOCATOR(allocator), 0);
     }
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 inline SamplerArrayElement::SamplerArrayElement(DescriptorSetLayoutBinding *array, VkDescriptorImageInfo& element) noexcept:
     ArrayElement<VkDescriptorImageInfo>(array, element, 0)
@@ -85,5 +83,4 @@ inline void ImageImmutableSamplerArrayElement::operator=(std::shared_ptr<const I
         this->setDirty();
     }
 }
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor

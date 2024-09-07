@@ -19,9 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "errorResult.h"
 
-namespace magma
-{
-namespace exception
+namespace magma::exception
 {
 #ifdef MAGMA_NO_EXCEPTIONS
 static ErrorHandler errorHandler =
@@ -70,5 +68,4 @@ void handleResult(VkResult result, const char *message, const source_location& l
 #endif // !MAGMA_NO_EXCEPTIONS
     }
 }
-} // namespace exception
-} // namespace magma
+} // namespace magma::exception

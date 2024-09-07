@@ -1,6 +1,4 @@
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 template<uint32_t Size>
 inline BufferDescriptorArray<Size>::BufferDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept:
@@ -99,5 +97,4 @@ inline BufferArrayElement DynamicStorageBufferArray<Size>::operator[](uint32_t i
 {
     return BufferDescriptorArray<Size>::getElement(index, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 }
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor

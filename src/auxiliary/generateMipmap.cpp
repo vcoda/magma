@@ -25,9 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/deviceFeatures.h"
 #include "../misc/imageSubresourceRange.h"
 
-namespace magma
-{
-namespace aux
+namespace magma::aux
 {
 bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilter filter,
     std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
@@ -105,5 +103,4 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilte
     }
     return true;
 }
-} // namespace aux
-} // namespace magma
+} // namespace magma::aux

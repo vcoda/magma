@@ -19,9 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "reflectionErrorResult.h"
 
-namespace magma
-{
-namespace exception
+namespace magma::exception
 {
 #ifdef MAGMA_NO_EXCEPTIONS
 static ReflectionErrorHandler errorHandler =
@@ -52,5 +50,4 @@ void handleReflectionResult(SpvReflectResult result, const char *message, const 
     #endif // MAGMA_NO_EXCEPTIONS
     }
 }
-} // namespace exception
-} // namespace magma
+} // namespace magma::exception

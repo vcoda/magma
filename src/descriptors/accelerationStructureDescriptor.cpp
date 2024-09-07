@@ -20,9 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "accelerationStructure.h"
 #include "../objects/accelerationStructure.h"
 
-namespace magma
-{
-namespace descriptor
+namespace magma::descriptor
 {
 #ifdef VK_KHR_acceleration_structure
 AccelerationStructure::AccelerationStructure(uint32_t binding) noexcept:
@@ -56,5 +54,4 @@ AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const ma
     return *this;
 }
 #endif // VK_KHR_acceleration_structure
-} // namespace descriptor
-} // namespace magma
+} // namespace magma::descriptor
