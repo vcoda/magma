@@ -444,10 +444,10 @@ namespace magma
             VkShaderStageFlags stageFlags,
             const Type& constant,
             uint32_t offset = 0) noexcept;
-        template<class Type, uint32_t pushConstantCount>
+        template<class Type, uint32_t PushConstantCount>
         void pushConstants(const std::shared_ptr<PipelineLayout>& layout,
             VkShaderStageFlags stageFlags,
-            const Type(&constants)[pushConstantCount],
+            const Type(&constants)[PushConstantCount],
             uint32_t offset = 0) noexcept;
         template<class Type>
         void pushConstants(const std::shared_ptr<PipelineLayout>& layout,

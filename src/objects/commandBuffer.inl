@@ -716,11 +716,11 @@ inline void CommandBuffer::pushConstant(const std::shared_ptr<PipelineLayout>& l
     MAGMA_INUSE(layout);
 }
 
-template<class Type, uint32_t pushConstantCount>
-inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&constants)[pushConstantCount],
+template<class Type, uint32_t PushConstantCount>
+inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&constants)[PushConstantCount],
     uint32_t offset /* 0 */) noexcept
 {
-    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * pushConstantCount), constants);
+    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * PushConstantCount), constants);
     MAGMA_INUSE(layout);
 }
 
