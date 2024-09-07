@@ -841,6 +841,11 @@ inline void CommandBuffer::finishedQueueSubmission() noexcept
 
 inline void CommandBuffer::finishedExecution() noexcept
 {
+    /* Once execution of all submissions of a command buffer complete,
+       it moves from the pending state, back to the executable state.
+       If a command buffer was recorded with the VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT
+       flag, it instead moves to the invalid state. */
+    MAGMA_ASSERT(State::Pending == state);
     if (usage & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT)
     {
         state = State::Invalid;
