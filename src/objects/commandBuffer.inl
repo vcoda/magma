@@ -857,7 +857,7 @@ inline void CommandBuffer::finishedExecution() noexcept
     }
 }
 
-inline uint32_t CommandBuffer::inUseResourceCount() const noexcept
+inline uint32_t CommandBuffer::inUseObjectCount() const noexcept
 {
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
     return MAGMA_COUNT(inUse);

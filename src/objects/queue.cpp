@@ -439,7 +439,7 @@ std::vector<VkCheckpointDataNV> Queue::getCheckpoints(std::shared_ptr<const Devi
 }
 #endif // VK_NV_device_diagnostic_checkpoints
 
-uint32_t Queue::inUseResourceCount() const noexcept
+uint32_t Queue::inUseObjectCount() const noexcept
 {
     uint32_t count = MAGMA_COUNT(submitted);
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE

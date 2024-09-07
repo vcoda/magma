@@ -127,7 +127,7 @@ namespace magma
     #ifdef VK_NV_device_diagnostic_checkpoints
         std::vector<VkCheckpointDataNV> getCheckpoints(std::shared_ptr<const Device> device) const;
     #endif
-        uint32_t inUseResourceCount() const noexcept;
+        uint32_t inUseObjectCount() const noexcept;
         void onIdle();
 
     private:
