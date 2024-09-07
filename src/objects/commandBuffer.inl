@@ -829,7 +829,23 @@ inline void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags
     pipelineStatistics = pipelineStatistics_;
 }
 
-inline void CommandBuffer::finishedQueueSubmission() noexcept
+inline uint32_t CommandBuffer::inUseObjectCount() const noexcept
+{
+#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
+    return MAGMA_COUNT(inUse);
+#endif
+    return 0;
+}
+
+inline void CommandBuffer::releaseObjectsInUse() noexcept
+{
+#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
+    inUse.clear();
+#endif
+    pipelineBarriers.clear();
+}
+
+inline void CommandBuffer::queueSubmissionFinished() noexcept
 {
     MAGMA_ASSERT(State::Executable == state);
     if (State::Executable == state)
@@ -839,7 +855,7 @@ inline void CommandBuffer::finishedQueueSubmission() noexcept
     }
 }
 
-inline void CommandBuffer::finishedExecution() noexcept
+inline void CommandBuffer::executionFinished() noexcept
 {
     /* Once execution of all submissions of a command buffer complete,
        it moves from the pending state, back to the executable state.
@@ -855,21 +871,5 @@ inline void CommandBuffer::finishedExecution() noexcept
     {
         state = State::Executable;
     }
-}
-
-inline uint32_t CommandBuffer::inUseObjectCount() const noexcept
-{
-#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-    return MAGMA_COUNT(inUse);
-#endif
-    return 0;
-}
-
-inline void CommandBuffer::releaseObjectsInUse() noexcept
-{
-#ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-    inUse.clear();
-#endif
-    pipelineBarriers.clear();
 }
 } // namespace magma

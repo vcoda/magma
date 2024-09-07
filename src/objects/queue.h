@@ -142,7 +142,7 @@ namespace magma
     #ifdef VK_EXT_swapchain_maintenance1
         VkPresentModeKHR presentMode;
     #endif
-        std::list<std::shared_ptr<CommandBuffer>> submitted;
+        std::list<std::shared_ptr<CommandBuffer>> submittedCmdBuffers;
     #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
         std::unordered_set<std::shared_ptr<const IObject>> inUse;
     #endif

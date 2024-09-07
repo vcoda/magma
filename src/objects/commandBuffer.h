@@ -619,8 +619,6 @@ namespace magma
             VkQueryControlFlags queryFlags) noexcept;
         void enableConditionalRendering(bool enable) noexcept;
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
-        void finishedQueueSubmission() noexcept;
-        void finishedExecution() noexcept;
         uint32_t inUseObjectCount() const noexcept;
         void releaseObjectsInUse() noexcept;
 
@@ -684,7 +682,10 @@ namespace magma
             std::shared_ptr<CommandPool> cmdPool);
         CommandBuffer(VkCommandBufferLevel level,
             std::shared_ptr<CommandPool> cmdPool);
+        void queueSubmissionFinished() noexcept;
+        void executionFinished() noexcept;
         friend CommandPool;
+        friend Queue;
 
     private:
         struct RenderPassState

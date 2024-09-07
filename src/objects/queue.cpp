@@ -167,8 +167,8 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     MAGMA_HANDLE_RESULT(result, "queue submission failed");
     MAGMA_INUSE(waitSemaphore);
     MAGMA_INUSE(signalSemaphore);
-    cmdBuffer->finishedQueueSubmission(); // Change state of the command buffer
-    submitted.emplace_front(std::move(cmdBuffer));
+    cmdBuffer->queueSubmissionFinished();
+    submittedCmdBuffers.emplace_front(std::move(cmdBuffer));
 }
 
 void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
@@ -209,7 +209,7 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
             MAGMA_ASSERT(cmdBuffer->primary());
             MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Executable);
             dereferencedCmdBuffers.put(*cmdBuffer);
-            submitted.push_front(cmdBuffer);
+            submittedCmdBuffers.emplace_front(cmdBuffer);
         }
     }
     submitInfo.commandBufferCount = dereferencedCmdBuffers.count();
@@ -230,9 +230,7 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
     MAGMA_HANDLE_RESULT(result, "queue submission failed");
     for (auto& cmdBuffer: cmdBuffers)
-    {   // Change state of the command buffer
-        cmdBuffer->finishedQueueSubmission();
-    }
+        cmdBuffer->queueSubmissionFinished();
 }
 
 #ifdef VK_KHR_timeline_semaphore
@@ -441,7 +439,7 @@ std::vector<VkCheckpointDataNV> Queue::getCheckpoints(std::shared_ptr<const Devi
 
 uint32_t Queue::inUseObjectCount() const noexcept
 {
-    uint32_t count = MAGMA_COUNT(submitted);
+    uint32_t count = MAGMA_COUNT(submittedCmdBuffers);
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
     count += MAGMA_COUNT(inUse);
 #endif
@@ -458,9 +456,9 @@ uint32_t Queue::inUseObjectCount() const noexcept
 
 void Queue::onIdle()
 {
-    for (auto& cmdBuffer: submitted)
-        cmdBuffer->finishedExecution();
-    submitted.clear();
+    for (auto& cmdBuffer: submittedCmdBuffers)
+        cmdBuffer->executionFinished();
+    submittedCmdBuffers.clear();
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
     inUse.clear();
 #endif
