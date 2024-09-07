@@ -146,6 +146,7 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     const StructureChain& extendedInfo /* default */)
 {
     MAGMA_ASSERT(cmdBuffer->primary());
+    MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Executable);
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.pNext = extendedInfo.headNode();
@@ -206,6 +207,7 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
         if (cmdBuffer)
         {
             MAGMA_ASSERT(cmdBuffer->primary());
+            MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Executable);
             dereferencedCmdBuffers.put(*cmdBuffer);
             submitted.push_front(cmdBuffer);
         }
