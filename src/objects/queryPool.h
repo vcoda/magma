@@ -47,7 +47,7 @@ namespace magma
         struct Result
         {
             static_assert(std::is_same<Int, uint32_t>::value || std::is_same<Int, uint64_t>::value,
-                "Query result should be of uint32_t or uint64_t type");
+                "query result should be of unsigned int or long long type");
             Type result = {BadQueryResult<Int>::value};
             // If VK_QUERY_RESULT_WITH_AVAILABILITY_BIT is used,
             // the final element of each query's result is an integer
