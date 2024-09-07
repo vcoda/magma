@@ -1516,9 +1516,6 @@
     <None Include="..\..\src\packed\x10y10z10w2unorm.inl">
       <Filter>Header Files\packed</Filter>
     </None>
-    <None Include="..\..\src\packed\x11y11z10ufloat.inl">
-      <Filter>Header Files\packed</Filter>
-    </None>
     <None Include="..\..\src\renderpass\attachment.inl">
       <Filter>Header Files\renderpass</Filter>
     </None>
@@ -1662,6 +1659,9 @@
     </None>
     <None Include="..\..\src\objects\model\object.inl">
       <Filter>Header Files\objects\model</Filter>
+    </None>
+    <None Include="..\..\src\packed\x11y11z10ufloat.inl">
+      <Filter>Header Files\packed</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
