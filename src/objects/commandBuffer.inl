@@ -831,7 +831,12 @@ inline void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags
 
 inline void CommandBuffer::finishedQueueSubmission() noexcept
 {
-    state = State::Pending;
+    MAGMA_ASSERT(State::Executable == state);
+    if (State::Executable == state)
+    {   // If any command buffer submitted to the queue is in the
+        // executable state, it is moved to the pending state.
+        state = State::Pending;
+    }
 }
 
 inline void CommandBuffer::finishedExecution() noexcept
