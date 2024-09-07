@@ -164,7 +164,6 @@ namespace magma
         extern const VertexInputStructure<vt::Pos2h> pos2h;
         extern const VertexInputStructure<vt::Pos2f> pos2f;
         extern const VertexInputStructure<vt::Pos2d> pos2d;
-        //extern const VertexInputStructure<vt::Pos3h> pos3h;
         extern const VertexInputStructure<vt::Pos3f> pos3f;
         extern const VertexInputStructure<vt::Pos3d> pos3d;
         extern const VertexInputStructure<vt::Pos4h> pos4h;

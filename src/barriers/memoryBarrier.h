@@ -33,7 +33,8 @@ namespace magma
             VkMemoryBarrier{
                 VK_STRUCTURE_TYPE_MEMORY_BARRIER,
                 nullptr, // pNext
-                srcAccessMask, dstAccessMask
+                srcAccessMask,
+                dstAccessMask
             }
         {}
     };

@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-
 #include "../misc/compatibility.h"
 
 #ifdef _MSC_VER
@@ -25,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma warning(disable: 4127) // conditional expression is constant
 #pragma warning(disable: 4189) // local variable is initialized but not referenced
 #pragma warning(disable: 4505) // unreferenced local function has been removed
-#endif
+#endif // _MSC_VER
 
 #define VMA_IMPLEMENTATION
 #include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"

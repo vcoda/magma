@@ -210,9 +210,9 @@ bool ViewportState::operator==(const ViewportState& other) const noexcept
         (scissor.offset.y == other.scissor.offset.y) &&
         (scissor.extent.width == other.scissor.extent.width) &&
         (scissor.extent.height == other.scissor.extent.height &&
-#ifdef VK_EXT_depth_clip_control
+    #ifdef VK_EXT_depth_clip_control
         (depthClipControlInfo.negativeOneToOne == other.depthClipControlInfo.negativeOneToOne) &&
-#endif
+    #endif
         true);
 }
 } // namespace magma

@@ -28,7 +28,7 @@ namespace magma
     {
     public:
         bool hasExtension(const char *name) const noexcept;
-        void forEach(std::function<void(const std::string& /* extensionName */, uint32_t /* specVersion */)> fn) const noexcept;
+        void forEach(std::function<void(const std::string&, uint32_t)> fn) const noexcept;
 
     protected:
         Extensions(const std::vector<VkExtensionProperties>&);

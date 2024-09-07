@@ -85,7 +85,6 @@ namespace magma
         typedef Vertex<Half2> Pos2h;
         typedef Vertex<Float2> Pos2f;
         typedef Vertex<Double2> Pos2d;
-        //typedef Vertex<Half3> Pos3h;
         typedef Vertex<Float3> Pos3f;
         typedef Vertex<Double3> Pos3d;
         typedef Vertex<Half4> Pos4h;

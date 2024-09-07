@@ -18,11 +18,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../../misc/compatibility.h"
 
-#if (VK_USE_64_BIT_PTR_DEFINES == 1)
 namespace magma
 {
-/* This class should be specialized for concrete Vulkan type. */
-
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
 template<class Type>
 struct ObjectType
 {
@@ -111,5 +109,5 @@ MAGMA_SPECIALIZE_OBJECT_TYPE(VkSamplerYcbcrConversionKHR, VK_OBJECT_TYPE_SAMPLER
 #ifdef VK_EXT_private_data
 MAGMA_SPECIALIZE_OBJECT_TYPE(VkPrivateDataSlotEXT, VK_OBJECT_TYPE_PRIVATE_DATA_SLOT_EXT)
 #endif
-} // namespace magma
 #endif // (VK_USE_64_BIT_PTR_DEFINES == 1)
+} // namespace magma

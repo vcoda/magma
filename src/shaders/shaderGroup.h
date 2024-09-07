@@ -29,7 +29,7 @@ namespace magma
 
        layout(shaderRecordEXT) buffer block
        {
-           uvec2 blendWeight;
+           vec2 blendWeight;
        }; */
 
 #ifdef VK_KHR_ray_tracing_pipeline
