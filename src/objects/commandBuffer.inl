@@ -849,7 +849,7 @@ inline void CommandBuffer::finishedExecution() noexcept
     if (usage & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT)
     {
         state = State::Invalid;
-        releaseResourcesInUse();
+        releaseObjectsInUse();
     }
     else
     {
@@ -865,7 +865,7 @@ inline uint32_t CommandBuffer::inUseObjectCount() const noexcept
     return 0;
 }
 
-inline void CommandBuffer::releaseResourcesInUse() noexcept
+inline void CommandBuffer::releaseObjectsInUse() noexcept
 {
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
     inUse.clear();

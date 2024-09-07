@@ -87,7 +87,7 @@ void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>
     for (auto& cmdBuffer: cmdBuffers)
     {
         commandBuffers.put(*cmdBuffer);
-        cmdBuffer->releaseResourcesInUse();
+        cmdBuffer->releaseObjectsInUse();
         cmdBuffer->handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in destructor
     }
     vkFreeCommandBuffers(getNativeDevice(), handle, commandBuffers.size(), commandBuffers);

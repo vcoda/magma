@@ -621,8 +621,8 @@ namespace magma
         void queryPipelineStatistics(VkQueryPipelineStatisticFlags pipelineStatistics) noexcept;
         void finishedQueueSubmission() noexcept;
         void finishedExecution() noexcept;
-        void releaseResourcesInUse() noexcept;
         uint32_t inUseObjectCount() const noexcept;
+        void releaseObjectsInUse() noexcept;
 
         // Debug stuff
         bool begin(const char *blockName,
