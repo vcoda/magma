@@ -3,11 +3,11 @@ namespace magma
 template<class PodType, int N, bool Normalized, bool Scaled>
 constexpr Numeric VertexAttributeType<PodType, N, Normalized, Scaled>::numeric() noexcept
 {
-    if (std::is_integral<PodType>::value)
+    if constexpr (std::is_integral<PodType>::value)
     {
-        if (std::is_unsigned<PodType>::value)
+        if constexpr (std::is_unsigned<PodType>::value)
         {
-            if (Scaled)
+            if constexpr (Scaled)
                 return Numeric::UScaled;
             else if (Normalized)
                 return Numeric::UNorm;
@@ -16,9 +16,9 @@ constexpr Numeric VertexAttributeType<PodType, N, Normalized, Scaled>::numeric()
         }
         else
         {
-            if (Scaled)
+            if constexpr (Scaled)
                 return Numeric::SScaled;
-            else if (Normalized)
+            else if constexpr (Normalized)
                 return Numeric::SNorm;
             else
                 return Numeric::SInt;
