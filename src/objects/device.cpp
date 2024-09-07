@@ -122,23 +122,15 @@ const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
     return featureQuery;
 }
 
-std::unique_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex /* 0 */) const
+std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex /* 0 */) const
 {
     const DeviceQueueDescriptor queueDescriptor(physicalDevice, flags);
-    if (supportsQueueFamily(queueDescriptor.queueFamilyIndex, queueIndex))
-    {   // Call vkGetDeviceQueue() only if logical device has been created
-        // with this queue family, otherwise call will throw an exception.
-        VkQueue queue = VK_NULL_HANDLE;
-        vkGetDeviceQueue(handle, queueDescriptor.queueFamilyIndex, queueIndex, &queue);
-        if (VK_NULL_HANDLE == queue)
-            MAGMA_ERROR("failed to get device queue");
-        return Queue::makeUnique(queue, flags, queueDescriptor.queueFamilyIndex, queueIndex);
-    }
-    return nullptr;
+    return getQueueByFamily(queueDescriptor.queueFamilyIndex, queueIndex);
 }
 
-const std::unique_ptr<Queue>& Device::getQueueByFamily(uint32_t queueFamilyIndex, uint32_t queueIndex /* 0 */) const
-{
+std::shared_ptr<Queue> Device::getQueueByFamily(uint32_t queueFamilyIndex, uint32_t queueIndex /* 0 */) const
+{   // Call vkGetDeviceQueue() only if logical device has been created
+    // with this queue family, otherwise call will throw an exception.
     if (supportsQueueFamily(queueFamilyIndex, queueIndex))
     {   // Try to get cached queue
         auto const key = std::make_pair(queueFamilyIndex, queueIndex);
@@ -157,11 +149,11 @@ const std::unique_ptr<Queue>& Device::getQueueByFamily(uint32_t queueFamilyIndex
                 vkGetDeviceQueue(handle, queueFamilyIndex, queueIndex, &queue);
                 if (VK_NULL_HANDLE == queue)
                     MAGMA_ERROR("failed to get device queue");
-                return queues[key] = Queue::makeUnique(queue, flag, queueFamilyIndex, queueIndex);
+                return queues[key] = Queue::makeShared(queue, flag, queueFamilyIndex, queueIndex);
             }
         }
     }
-    return core::null<Queue>();
+    return nullptr;
 }
 
 void Device::updateDescriptorSets(uint32_t descriptorWriteCount, const VkWriteDescriptorSet *descriptorWrites,
