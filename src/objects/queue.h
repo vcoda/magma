@@ -128,8 +128,7 @@ namespace magma
         std::vector<VkCheckpointDataNV> getCheckpoints(std::shared_ptr<const Device> device) const;
     #endif
         uint32_t inUseResourceCount() const noexcept;
-        void releaseResourcesInUse() noexcept;
-        void completedExecution();
+        void onIdle();
 
     private:
         MAGMA_MAKE_UNIQUE(Queue)

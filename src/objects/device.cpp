@@ -179,6 +179,11 @@ void Device::updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descr
 bool Device::waitIdle() const
 {
     const VkResult result = vkDeviceWaitIdle(handle);
+    if (VK_SUCCESS == result)
+    {
+        for (auto& [key, queue]: queues)
+            key, queue->onIdle();
+    }
     MAGMA_HANDLE_RESULT(result, "failed to wait for device to become idle");
     return true;
 }

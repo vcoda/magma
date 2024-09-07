@@ -335,8 +335,9 @@ void Queue::submitDeviceGroup(const std::initializer_list<std::shared_ptr<Comman
 void Queue::waitIdle()
 {
     const VkResult result = vkQueueWaitIdle(handle);
+    if (VK_SUCCESS == result)
+        onIdle();
     MAGMA_HANDLE_RESULT(result, "failed to wait for a queue to become idle");
-    completedExecution();
 }
 
 void Queue::present(const std::unique_ptr<Swapchain>& swapchain, uint32_t imageIndex,
@@ -436,14 +437,6 @@ std::vector<VkCheckpointDataNV> Queue::getCheckpoints(std::shared_ptr<const Devi
 }
 #endif // VK_NV_device_diagnostic_checkpoints
 
-/* 3.3.1. Object Lifetime
-   The following Vulkan objects must not be destroyed while any queue is executing commands that use the object:
-
-    * VkFence
-    * VkSemaphore
-    * VkCommandBuffer
-    * VkCommandPool */
-
 uint32_t Queue::inUseResourceCount() const noexcept
 {
     uint32_t count = MAGMA_COUNT(submitted);
@@ -453,18 +446,21 @@ uint32_t Queue::inUseResourceCount() const noexcept
     return count;
 }
 
-void Queue::releaseResourcesInUse() noexcept
+/* 3.3.1. Object Lifetime
+   The following Vulkan objects must not be destroyed while any queue is executing commands that use the object:
+
+    * VkFence
+    * VkSemaphore
+    * VkCommandBuffer
+    * VkCommandPool */
+
+void Queue::onIdle()
 {
+    for (auto& cmdBuffer: submitted)
+        cmdBuffer->finishedExecution();
     submitted.clear();
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
     inUse.clear();
 #endif
-}
-
-void Queue::completedExecution()
-{
-    for (auto& cmdBuffer: submitted)
-        cmdBuffer->finishedExecution();
-    releaseResourcesInUse();
 }
 } // namespace magma
