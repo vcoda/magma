@@ -45,8 +45,8 @@ namespace magma
     struct VertexAttributeType
     {
         PodType v[N];
-        constexpr static std::size_t size() noexcept { return sizeof(PodType) * N; }
-        constexpr static Numeric numeric() noexcept;
+        constexpr static std::size_t getSize() noexcept { return sizeof(PodType) * N; }
+        constexpr static Numeric getNumeric() noexcept;
     };
 
     /* Each vertex attribute type should be associated
@@ -55,7 +55,7 @@ namespace magma
     template<VkFormat Format>
     struct VertexAttributeFormat
     {
-        constexpr static VkFormat format() noexcept;
+        constexpr static VkFormat getFormat() noexcept;
     };
 
     /* Scalar vertex input types. */

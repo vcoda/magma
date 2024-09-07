@@ -103,7 +103,7 @@ inline VertexInputAttribute::VertexInputAttribute(uint32_t location, Type Vertex
     VkVertexInputAttributeDescription{
         location,
         0, // binding
-        specialization::VertexAttribute<Type>::format(),
+        specialization::VertexAttribute<Type>::getFormat(),
         static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attrib)))
     }
 {
