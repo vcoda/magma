@@ -34,7 +34,7 @@ namespace magma
     class PhysicalDeviceGroup : NonCopyable
     {
     public:
-        std::shared_ptr<Device> createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+        std::shared_ptr<Device> createDevice(const std::set<DeviceQueueDescriptor>& queueDescriptors,
             const NullTerminatedStringArray& enabledLayers,
             const NullTerminatedStringArray& enabledExtensions,
             const VkPhysicalDeviceFeatures& enabledFeatures,

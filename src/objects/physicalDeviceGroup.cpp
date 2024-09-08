@@ -29,7 +29,7 @@ PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<Physi
     groupId(groupId)
 {}
 
-std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::set<DeviceQueueDescriptor>& queueDescriptors,
     const NullTerminatedStringArray& enabledLayers, const NullTerminatedStringArray& enabledExtensions,
     const VkPhysicalDeviceFeatures& enabledFeatures,
     const StructureChain& enabledExtendedFeatures /* default */,

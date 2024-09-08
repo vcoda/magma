@@ -40,12 +40,15 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDev
         extensions.emplace(properties.extensionName);
 }
 
-std::shared_ptr<Device> PhysicalDevice::createDevice(const std::vector<DeviceQueueDescriptor>& queueDescriptors,
+std::shared_ptr<Device> PhysicalDevice::createDevice(const std::set<DeviceQueueDescriptor>& queueDescriptors_,
     const NullTerminatedStringArray& enabledLayers, const NullTerminatedStringArray& enabledExtensions,
     const VkPhysicalDeviceFeatures& enabledFeatures,
     const StructureChain& enabledExtendedFeatures /* default */,
     const StructureChain& extendedInfo /* default */) const
-{
+{   // std::set guarantees that queueFamilyIndex member of each element of queueDescriptors is unique
+    std::vector<DeviceQueueDescriptor> queueDescriptors;
+    for (auto const& desc: queueDescriptors_)
+        queueDescriptors.push_back(desc);
     return Device::makeShared(std::const_pointer_cast<PhysicalDevice>(shared_from_this()),
         queueDescriptors, enabledLayers, enabledExtensions,
         enabledFeatures, enabledExtendedFeatures, extendedInfo,
@@ -583,7 +586,7 @@ uint64_t PhysicalDevice::getAndroidHardwareBufferUsage(VkFormat format, VkImageU
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
     const std::vector<float> defaultQueuePriorities = {1.0f};
-    const std::vector<DeviceQueueDescriptor> queueDescriptors = {
+    const std::set<DeviceQueueDescriptor> queueDescriptors = {
         DeviceQueueDescriptor(shared_from_this(), VK_QUEUE_GRAPHICS_BIT, defaultQueuePriorities)
     };
     const NullTerminatedStringArray noLayers;
