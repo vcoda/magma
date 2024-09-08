@@ -40,7 +40,7 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevic
         familyIndex = findDedicatedQueueFamily(properties, VK_QUEUE_GRAPHICS_BIT);
     else if (VK_QUEUE_COMPUTE_BIT == capabilities)
         familyIndex = findDedicatedQueueFamily(properties, VK_QUEUE_COMPUTE_BIT, VK_QUEUE_GRAPHICS_BIT);
-    else if ((VK_QUEUE_TRANSFER_BIT == capabilities) || (VK_QUEUE_SPARSE_BINDING_BIT == capabilities))
+    else if (capabilities & (VK_QUEUE_TRANSFER_BIT | VK_QUEUE_SPARSE_BINDING_BIT))
         familyIndex = findDedicatedQueueFamily(properties, capabilities, VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT);
     if (familyIndex)
         queueFamilyIndex = familyIndex.value();
