@@ -54,9 +54,7 @@ namespace magma
         std::size_t getDescriptorCount() const;
         bool dirty() const;
         void update();
-    #ifdef VK_KHR_push_descriptor
         uint32_t writeDescriptors(VkWriteDescriptorSet *descriptorWrites) const;
-    #endif // VK_KHR_push_descriptor
 
     private:
         void validateReflection(const std::unique_ptr<const ShaderReflection>& shaderReflection,

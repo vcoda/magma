@@ -105,7 +105,6 @@ void DescriptorSet::update()
         device->updateDescriptorSets(descriptorWriteCount, descriptorWrites, 0, nullptr);
 }
 
-#ifdef VK_KHR_push_descriptor
 uint32_t DescriptorSet::writeDescriptors(VkWriteDescriptorSet *descriptorWrites) const
 {
     MAGMA_ASSERT(dirty());
@@ -118,7 +117,6 @@ uint32_t DescriptorSet::writeDescriptors(VkWriteDescriptorSet *descriptorWrites)
     }
     return descriptorWriteCount;
 }
-#endif // VK_KHR_push_descriptor
 
 void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflection>& shaderReflection, uint32_t setIndex) const
 {
