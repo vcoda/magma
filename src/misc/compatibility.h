@@ -134,6 +134,13 @@ constexpr VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FE
 constexpr VkStructureType VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
 #endif
 
+#if !defined(VK_VERSION_1_3) && defined(VK_KHR_maintenance4)
+#define VkDeviceBufferMemoryRequirements VkDeviceBufferMemoryRequirementsKHR
+#define VkDeviceImageMemoryRequirements VkDeviceImageMemoryRequirementsKHR
+constexpr VkStructureType VK_STRUCTURE_TYPE_DEVICE_BUFFER_MEMORY_REQUIREMENTS = VK_STRUCTURE_TYPE_DEVICE_BUFFER_MEMORY_REQUIREMENTS_KHR;
+constexpr VkStructureType VK_STRUCTURE_TYPE_DEVICE_IMAGE_MEMORY_REQUIREMENTS = VK_STRUCTURE_TYPE_DEVICE_IMAGE_MEMORY_REQUIREMENTS_KHR;
+#endif // !VK_VERSION_1_3 && VK_KHR_maintenance4
+
 #if VK_HEADER_VERSION < 131
 constexpr VkResult VK_ERROR_UNKNOWN = VkResult(-13);
 #endif
