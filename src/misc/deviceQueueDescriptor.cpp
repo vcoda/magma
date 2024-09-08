@@ -24,16 +24,35 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> device,
-    VkQueueFlagBits queueType, const std::vector<float>& queuePriorities /* 1 */):
+    VkQueueFlagBits capabilities, const std::vector<float>& queuePriorities /* 1 */):
     VkDeviceQueueCreateInfo{
         VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
         nullptr, // pNext,
         0, // flags
-        chooseFamilyIndex(queueType, device->getQueueFamilyProperties()),
+        0, // queueFamilyIndex
         MAGMA_COUNT(queuePriorities),
         core::copyVector(queuePriorities)
     }
-{}
+{
+    const std::vector<VkQueueFamilyProperties> properties = device->getQueueFamilyProperties();
+    std::optional<uint32_t> familyIndex;
+    if (VK_QUEUE_GRAPHICS_BIT == capabilities)
+        familyIndex = findDedicatedQueueFamily(properties, VK_QUEUE_GRAPHICS_BIT);
+    else if (VK_QUEUE_COMPUTE_BIT == capabilities)
+        familyIndex = findDedicatedQueueFamily(properties, VK_QUEUE_COMPUTE_BIT, VK_QUEUE_GRAPHICS_BIT);
+    else if ((VK_QUEUE_TRANSFER_BIT == capabilities) || (VK_QUEUE_SPARSE_BINDING_BIT == capabilities))
+        familyIndex = findDedicatedQueueFamily(properties, capabilities, VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT);
+    if (familyIndex)
+        queueFamilyIndex = familyIndex.value();
+    else
+    {
+        familyIndex = findAnySuitableQueueFamily(properties, capabilities);
+        if (familyIndex)
+            queueFamilyIndex = familyIndex.value();
+        else
+            MAGMA_ERROR("could not find suitable queue family");
+    }
+}
 
 DeviceQueueDescriptor::DeviceQueueDescriptor(const DeviceQueueDescriptor& other):
     VkDeviceQueueCreateInfo{
@@ -65,44 +84,39 @@ DeviceQueueDescriptor::~DeviceQueueDescriptor()
     delete[] pQueuePriorities;
 }
 
-uint32_t DeviceQueueDescriptor::chooseFamilyIndex(VkQueueFlagBits queueType,
-    const std::vector<VkQueueFamilyProperties>& queueFamilyProperties) const
+std::optional<uint32_t> DeviceQueueDescriptor::findDedicatedQueueFamily(const std::vector<VkQueueFamilyProperties>& properties,
+    VkQueueFlags capability, VkQueueFlags excludeCapabilities /* 0 */) const noexcept
 {
     uint32_t queueFamilyIndex = 0;
-    if (VK_QUEUE_COMPUTE_BIT == queueType)
-    {   // Try to find dedicated compute queue
-        for (auto const& property: queueFamilyProperties)
-        {
-            if (property.queueFlags & queueType)
-            {   // Compute queue would be better separated from graphics
-                const VkFlags hasGraphics = property.queueFlags & VK_QUEUE_GRAPHICS_BIT;
-                if (!hasGraphics)
-                    return queueFamilyIndex;
-            }
-            ++queueFamilyIndex;
-        }
-    } else if ((VK_QUEUE_TRANSFER_BIT == queueType) || (VK_QUEUE_SPARSE_BINDING_BIT == queueType))
-    {   // Try to find dedicated transfer/sparse queue
-        for (auto const& property: queueFamilyProperties)
-        {
-            if (property.queueFlags & queueType)
-            {   // Transfer queue would be better separated from graphics or compute
-                const VkFlags hasGraphicsOrCompute = property.queueFlags & (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT);
-                if (!hasGraphicsOrCompute)
-                    return queueFamilyIndex;
-            }
-            ++queueFamilyIndex;
-        }
-    }
-    // Some hardware is limited to have only single queue family with one queue in it
-    queueFamilyIndex = 0;
-    for (auto const& property: queueFamilyProperties)
-    {   // Try to find any suitable family
-        if (property.queueFlags & queueType)
+    for (auto const& property: properties)
+    {   // Best if queue has only dedicated capability
+        if (property.queueFlags == capability)
             return queueFamilyIndex;
         ++queueFamilyIndex;
     }
-    MAGMA_ERROR("could not find suitable queue family");
-    return 0;
+    queueFamilyIndex = 0;
+    for (auto const& property: properties)
+    {
+        if (property.queueFlags & capability)
+        {   // Check if queue doesn't support mixed capabilities
+            if (!(property.queueFlags & excludeCapabilities))
+                return queueFamilyIndex;
+        }
+        ++queueFamilyIndex;
+    }
+    return std::nullopt;
+}
+
+std::optional<uint32_t> DeviceQueueDescriptor::findAnySuitableQueueFamily(const std::vector<VkQueueFamilyProperties>& properties,
+    VkQueueFlags capabilities) const noexcept
+{
+    uint32_t queueFamilyIndex = 0;
+    for (auto const& property: properties)
+    {   // Check if queue supports requested capabilities
+        if (property.queueFlags & capabilities)
+            return queueFamilyIndex;
+        ++queueFamilyIndex;
+    }
+    return std::nullopt;
 }
 } // namespace magma
