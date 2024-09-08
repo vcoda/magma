@@ -19,7 +19,7 @@ inline std::shared_ptr<VertexBuffer> makeVertexBuffer(const std::vector<Vertex>&
 {
     MAGMA_ASSERT(!vertices.empty());
     auto vertexBuffer = std::make_shared<VertexBuffer>(std::move(cmdBuffer),
-        vertices.size() * sizeof(Vertex), vertices.data, std::move(allocator));
+        vertices.size() * sizeof(Vertex), vertices.data(), std::move(allocator));
     vertexBuffer->setVertexCount(MAGMA_COUNT(vertices));
     return vertexBuffer;
 }
