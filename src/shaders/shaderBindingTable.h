@@ -45,7 +45,7 @@ namespace magma
     class ShaderBindingTable : NonCopyable
     {
     public:
-        ShaderBindingTable() noexcept = default;
+        ShaderBindingTable() = default;
         explicit ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
