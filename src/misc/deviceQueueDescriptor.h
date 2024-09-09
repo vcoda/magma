@@ -21,15 +21,29 @@ namespace magma
 {
     class PhysicalDevice;
 
+    /* The priority of each queue is a normalized floating-point
+       value between 0.0 and 1.0, which is then translated to a
+       discrete priority level by the implementation. Higher values
+       indicate a higher priority, with 0.0 being the lowest priority
+       and 1.0 being the highest. */
+
+    constexpr float QueuePriorityLowest = 0.f;
+    constexpr float QueuePriorityLow = 0.25f;
+    constexpr float QueuePriorityDefault = 0.5f;
+    constexpr float QueuePriorityHigh = 0.75f;
+    constexpr float QueuePriorityHighest = 1.f;
+
     /* Describes the queue that is requested to be created
        along with the logical device. */
 
     class DeviceQueueDescriptor final : public VkDeviceQueueCreateInfo
     {
     public:
-        explicit DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> device,
+        explicit DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> physicalDevice,
             VkQueueFlagBits capabilities,
-            const std::vector<float>& queuePriorities = {1.f});
+            VkDeviceQueueCreateFlags flags = 0,
+            const std::initializer_list<float>& queuePriorities = {QueuePriorityHighest},
+            const StructureChain& extendedInfo = StructureChain());
         DeviceQueueDescriptor(const DeviceQueueDescriptor&);
         ~DeviceQueueDescriptor();
         DeviceQueueDescriptor& operator=(const DeviceQueueDescriptor&);

@@ -23,18 +23,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> device,
-    VkQueueFlagBits capabilities, const std::vector<float>& queuePriorities /* 1 */):
+DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> physicalDevice,
+    VkQueueFlagBits capabilities, VkDeviceQueueCreateFlags flags /* 0 */,
+    const std::initializer_list<float>& queuePriorities /* {QueuePriorityHighest} */,
+    const StructureChain& extendedInfo /* default */):
     VkDeviceQueueCreateInfo{
         VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-        nullptr, // pNext,
-        0, // flags
+        extendedInfo.headNode(),
+        flags,
         0, // queueFamilyIndex
         MAGMA_COUNT(queuePriorities),
-        core::copyVector(queuePriorities)
+        core::copyInitializerList(queuePriorities)
     }
 {
-    const std::vector<VkQueueFamilyProperties> properties = device->getQueueFamilyProperties();
+    const std::vector<VkQueueFamilyProperties> properties = physicalDevice->getQueueFamilyProperties();
     std::optional<uint32_t> familyIndex;
     if (VK_QUEUE_GRAPHICS_BIT == capabilities)
         familyIndex = findDedicatedQueueFamily(properties, VK_QUEUE_GRAPHICS_BIT);

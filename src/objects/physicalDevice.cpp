@@ -585,9 +585,8 @@ uint64_t PhysicalDevice::getAndroidHardwareBufferUsage(VkFormat format, VkImageU
 
 std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
 {
-    const std::vector<float> defaultQueuePriorities = {1.0f};
     const std::set<DeviceQueueDescriptor> queueDescriptors = {
-        DeviceQueueDescriptor(shared_from_this(), VK_QUEUE_GRAPHICS_BIT, defaultQueuePriorities)
+        DeviceQueueDescriptor(shared_from_this(), VK_QUEUE_GRAPHICS_BIT, 0, {QueuePriorityHighest})
     };
     const NullTerminatedStringArray noLayers;
     const NullTerminatedStringArray swapchainExtension = {
