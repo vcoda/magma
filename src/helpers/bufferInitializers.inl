@@ -2,8 +2,8 @@ namespace magma::helpers
 {
 template<class Vertex, std::size_t Size>
 inline std::shared_ptr<VertexBuffer> makeVertexBuffer(const Vertex (&vertices)[Size],
-    std::shared_ptr<magma::CommandBuffer> cmdBuffer,
-    std::shared_ptr<magma::Allocator> allocator /* nullptr */)
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
 {
     static_assert(Size > 0, "invalid vertex array size");
     auto vertexBuffer = std::make_shared<VertexBuffer>(std::move(cmdBuffer),
@@ -14,8 +14,8 @@ inline std::shared_ptr<VertexBuffer> makeVertexBuffer(const Vertex (&vertices)[S
 
 template<class Vertex>
 inline std::shared_ptr<VertexBuffer> makeVertexBuffer(const std::vector<Vertex>& vertices,
-    std::shared_ptr<magma::CommandBuffer> cmdBuffer,
-    std::shared_ptr<magma::Allocator> allocator /* nullptr */)
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
 {
     MAGMA_ASSERT(!vertices.empty());
     auto vertexBuffer = std::make_shared<VertexBuffer>(std::move(cmdBuffer),
@@ -26,8 +26,8 @@ inline std::shared_ptr<VertexBuffer> makeVertexBuffer(const std::vector<Vertex>&
 
 template<class Index, std::size_t Size>
 inline std::shared_ptr<IndexBuffer> makeIndexBuffer(const Index (&indices)[Size],
-    std::shared_ptr<magma::CommandBuffer> cmdBuffer,
-    std::shared_ptr<magma::Allocator> allocator /* nullptr */)
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
 {
     static_assert(Size > 0, "invalid index array size");
     auto indexBuffer = std::make_shared<IndexBuffer>(std::move(cmdBuffer),
@@ -38,8 +38,8 @@ inline std::shared_ptr<IndexBuffer> makeIndexBuffer(const Index (&indices)[Size]
 
 template<class Index>
 inline std::shared_ptr<IndexBuffer> makeIndexBuffer(const std::vector<Index>& indices,
-    std::shared_ptr<magma::CommandBuffer> cmdBuffer,
-    std::shared_ptr<magma::Allocator> allocator /* nullptr */)
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
 {
     MAGMA_ASSERT(!indices.empty());
     auto indexBuffer = std::make_shared<IndexBuffer>(std::move(cmdBuffer),
@@ -51,8 +51,8 @@ inline std::shared_ptr<IndexBuffer> makeIndexBuffer(const std::vector<Index>& in
 #ifdef VK_KHR_acceleration_structure
 template<class Type, std::size_t Size>
 inline std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type (&elements)[Size],
-    std::unique_ptr<magma::CommandBuffer> cmdBuffer,
-    std::shared_ptr<magma::Allocator> allocator /* nullptr */)
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
 {
     static_assert(Size > 0, "invalid array size");
     return std::make_unique<AccelerationStructureInputBuffer>(std::move(cmdBuffer),
@@ -61,8 +61,8 @@ inline std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const T
 
 template<class Type>
 inline std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const std::vector<Type>& elements,
-    std::shared_ptr<magma::CommandBuffer> cmdBuffer,
-    std::shared_ptr<magma::Allocator> allocator /* nullptr */)
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
 {
     MAGMA_ASSERT(!elements.empty());
     return std::make_unique<AccelerationStructureInputBuffer>(std::move(cmdBuffer),
