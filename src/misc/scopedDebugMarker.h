@@ -41,24 +41,26 @@ namespace magma
     };
 #endif // VK_EXT_debug_marker || VK_EXT_debug_utils
 
-    enum class marker : uint32_t
-    {   // Alpha is 1
-        blackColor = 0x000000FF,
-        whiteColor = 0xFFFFFFFF,
-        redColor = 0xFF0000FF,
-        limeColor = 0x00FF00FF,
-        blueColor = 0x0000FFFF,
-        yellowColor = 0xFFFF00FF,
-        cyanColor = 0x00FFFFFF,
-        magentaColor = 0xFF00FFFF,
-        silverColor = 0xC0C0C0FF,
-        grayColor = 0x808080FF,
-        maroonColor = 0x800000FF,
-        oliveColor = 0x808000FF,
-        greenColor = 0x008000FF,
-        purpleColor = 0x800080FF,
-        tealColor = 0x008080FF,
-        navyColor = 0x000080FF
+    // Alpha is 1
+    namespace Color
+    {
+        enum {
+        Black = 0x000000FFU,
+        White = 0xFFFFFFFFU,
+        Red = 0xFF0000FFU,
+        Lime = 0x00FF00FFU,
+        Blue = 0x0000FFFFU,
+        Yellow = 0xFFFF00FFU,
+        Cyan = 0x00FFFFFFU,
+        Magenta = 0xFF00FFFFU,
+        Silver = 0xC0C0C0FFU,
+        Gray = 0x808080FFU,
+        Maroon = 0x800000FFU,
+        Olive = 0x808000FFU,
+        Green = 0x008000FFU,
+        Purple = 0x800080FFU,
+        Teal = 0x008080FFU,
+        Navy = 0x000080FFU};
     };
 } // namespace magma
 
