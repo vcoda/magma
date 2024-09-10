@@ -24,8 +24,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> physicalDevice,
+    VkQueueFlagBits capabilities, float queuePriority,
+    VkDeviceQueueCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
+    DeviceQueueDescriptor(std::move(physicalDevice), capabilities, {queuePriority}, flags, extendedInfo)
+{}
+
+DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> physicalDevice,
     VkQueueFlagBits capabilities,
-    const std::initializer_list<float>& queuePriorities /* {QueuePriorityHighest} */,
+    const std::initializer_list<float>& queuePriorities /* {QueuePriorityDefault} */,
     VkDeviceQueueCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     VkDeviceQueueCreateInfo{

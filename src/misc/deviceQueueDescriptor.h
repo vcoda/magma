@@ -41,7 +41,12 @@ namespace magma
     public:
         explicit DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> physicalDevice,
             VkQueueFlagBits capabilities,
-            const std::initializer_list<float>& queuePriorities = {QueuePriorityHighest},
+            float queuePriority,
+            VkDeviceQueueCreateFlags flags = 0,
+            const StructureChain& extendedInfo = StructureChain());
+        explicit DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevice> physicalDevice,
+            VkQueueFlagBits capabilities,
+            const std::initializer_list<float>& queuePriorities = {QueuePriorityDefault},
             VkDeviceQueueCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         DeviceQueueDescriptor(const DeviceQueueDescriptor&);

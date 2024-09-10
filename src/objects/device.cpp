@@ -124,7 +124,7 @@ const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
 
 std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex /* 0 */) const
 {
-    const DeviceQueueDescriptor queueDescriptor(physicalDevice, flags);
+    const DeviceQueueDescriptor queueDescriptor(physicalDevice, flags, QueuePriorityDefault);
     return getQueueByFamily(queueDescriptor.queueFamilyIndex, queueIndex);
 }
 
