@@ -42,11 +42,11 @@ namespace magma
             std::shared_ptr<magma::Allocator> allocator = nullptr);
     #ifdef VK_KHR_acceleration_structure
         template<class Type, std::size_t Size>
-        std::shared_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type (&elements)[Size],
+        std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type (&elements)[Size],
             std::shared_ptr<magma::CommandBuffer> cmdBuffer,
             std::shared_ptr<magma::Allocator> allocator = nullptr);
         template<class Type>
-        std::shared_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const std::vector<Type>& elements,
+        std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const std::vector<Type>& elements,
             std::shared_ptr<magma::CommandBuffer> cmdBuffer,
             std::shared_ptr<magma::Allocator> allocator = nullptr);
     #endif //  VK_KHR_acceleration_structure

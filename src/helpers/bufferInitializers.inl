@@ -50,25 +50,23 @@ inline std::shared_ptr<IndexBuffer> makeIndexBuffer(const std::vector<Index>& in
 
 #ifdef VK_KHR_acceleration_structure
 template<class Type, std::size_t Size>
-inline std::shared_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type (&elements)[Size],
-    std::shared_ptr<magma::CommandBuffer> cmdBuffer,
+inline std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type (&elements)[Size],
+    std::unique_ptr<magma::CommandBuffer> cmdBuffer,
     std::shared_ptr<magma::Allocator> allocator /* nullptr */)
 {
     static_assert(Size > 0, "invalid array size");
-    auto inputBuffer = std::make_shared<AccelerationStructureInputBuffer>(std::move(cmdBuffer),
+    return std::make_unique<AccelerationStructureInputBuffer>(std::move(cmdBuffer),
         Size * sizeof(Type), elements, std::move(allocator));
-    return inputBuffer;
 }
 
 template<class Type>
-inline std::shared_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const std::vector<Type>& elements,
+inline std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const std::vector<Type>& elements,
     std::shared_ptr<magma::CommandBuffer> cmdBuffer,
     std::shared_ptr<magma::Allocator> allocator /* nullptr */)
 {
     MAGMA_ASSERT(!elements.empty());
-    auto inputBuffer = std::make_shared<AccelerationStructureInputBuffer>(std::move(cmdBuffer),
+    return std::make_unique<AccelerationStructureInputBuffer>(std::move(cmdBuffer),
         elements.size() * sizeof(Type), elements.data(), std::move(allocator));
-    return inputBuffer;
 }
 #endif //  VK_KHR_acceleration_structure
 } // namespace magma::helpers
