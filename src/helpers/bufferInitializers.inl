@@ -49,6 +49,15 @@ inline std::shared_ptr<IndexBuffer> makeIndexBuffer(const std::vector<Index>& in
 }
 
 #ifdef VK_KHR_acceleration_structure
+template<class Type>
+inline std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type& element,
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
+{
+    return std::make_unique<AccelerationStructureInputBuffer>(std::move(cmdBuffer),
+        sizeof(Type), &element, std::move(allocator));
+}
+
 template<class Type, std::size_t Size>
 inline std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type (&elements)[Size],
     std::shared_ptr<CommandBuffer> cmdBuffer,
