@@ -34,6 +34,7 @@ AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles()
     geometry.triangles.indexType = VK_INDEX_TYPE_NONE_KHR,
     geometry.triangles.indexData.deviceAddress = MAGMA_NULL;
     geometry.triangles.transformData.deviceAddress = MAGMA_NULL;
+    primitiveCount = 0;
 }
 
 size_t AccelerationStructureGeometryTriangles::getIndexSize() const noexcept

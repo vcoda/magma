@@ -28,8 +28,9 @@ namespace magma
 
     struct AccelerationStructureGeometry : VkAccelerationStructureGeometryKHR
     {
-        AccelerationStructureGeometry(VkGeometryTypeKHR geometryType) noexcept;
-        uint32_t primitiveCount = 0;
+        AccelerationStructureGeometry(VkGeometryTypeKHR geometryType,
+            VkGeometryFlagsKHR flags = 0) noexcept;
+        uint32_t primitiveCount;
     };
 
     /* Triangle geometry in a bottom-level acceleration structure. */
@@ -72,8 +73,7 @@ namespace magma
         AccelerationStructureGeometryAabbs() noexcept;
         template<class Buffer>
         explicit AccelerationStructureGeometryAabbs(const Buffer& aabbs,
-            VkGeometryFlagsKHR flags = 0,
-            VkDeviceSize stride = sizeof(VkAabbPositionsKHR)) noexcept;
+            VkGeometryFlagsKHR flags = 0) noexcept;
     };
 
     /* Geometry consisting of instances of other acceleration structures. */
