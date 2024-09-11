@@ -1,30 +1,30 @@
 namespace magma
 {
-template<class PodType, int N, bool Normalized, bool Scaled>
-constexpr Numeric VertexAttributeType<PodType, N, Normalized, Scaled>::getNumeric() noexcept
+template<class PodType, std::size_t Components, bool Normalized, bool Scaled>
+constexpr NumericFormat VertexAttributeType<PodType, Components, Normalized, Scaled>::numericFormat() noexcept
 {
     if constexpr (std::is_integral<PodType>::value)
     {
         if constexpr (std::is_unsigned<PodType>::value)
         {
             if constexpr (Scaled)
-                return Numeric::UScaled;
+                return NumericFormat::UScaled;
             else if (Normalized)
-                return Numeric::UNorm;
+                return NumericFormat::UNorm;
             else
-                return Numeric::UInt;
+                return NumericFormat::UInt;
         }
         else
         {
             if constexpr (Scaled)
-                return Numeric::SScaled;
+                return NumericFormat::SScaled;
             else if constexpr (Normalized)
-                return Numeric::SNorm;
+                return NumericFormat::SNorm;
             else
-                return Numeric::SInt;
+                return NumericFormat::SInt;
         }
     }
-    return Numeric::SFloat;
+    return NumericFormat::SFloat;
 }
 
 template<VkFormat Format>

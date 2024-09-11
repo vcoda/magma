@@ -30,7 +30,7 @@ namespace magma
     /* https://registry.khronos.org/vulkan/specs/1.1/html/vkspec.html#_identification_of_formats
        Table 34. Interpretation of Numeric Format */
 
-    enum class Numeric : uint8_t
+    enum class NumericFormat : uint8_t
     {
         UNorm, SNorm, UScaled, SScaled, UInt, SInt, UFloat, SFloat
     };
@@ -39,14 +39,16 @@ namespace magma
        parameters are used to distinguish numeric formats such as
        UNORM/SNORM, USCALED/SSCALED, UINT/SINT and SFLOAT. */
 
-    template<class PodType, int N,
+    template<class PodType, 
+        std::size_t Components,
         bool Normalized = false,
         bool Scaled = false>
     struct VertexAttributeType
     {
-        PodType v[N];
-        constexpr static std::size_t getSize() noexcept { return sizeof(PodType) * N; }
-        constexpr static Numeric getNumeric() noexcept;
+        PodType v[Components];
+        constexpr static std::size_t components() noexcept { Components; }
+        constexpr static std::size_t size() noexcept { return sizeof(PodType) * Components; }
+        constexpr static NumericFormat numericFormat() noexcept;
     };
 
     /* Each vertex attribute type should be associated

@@ -98,21 +98,21 @@ namespace magma
     static_assert(sampler::magLinearMinNearestMipLinearRepeat.getMipFilter() == MipFilter::Partial, "expected mixed filter");
 
     // Numeric formats
-    static_assert(UByteNorm::numeric() == Numeric::UNorm, "expected UNORM format");
-    static_assert(ByteNorm::numeric() == Numeric::SNorm, "expected SNORM format");
-    static_assert(UByte::numeric() == Numeric::UInt, "expected UINT format");
-    static_assert(Byte::numeric() == Numeric::SInt, "expected SINT format");
-    static_assert(UShortNorm::numeric() == Numeric::UNorm, "expected UNORM format");
-    static_assert(ShortNorm::numeric() == Numeric::SNorm, "expected SNORM format");
-    static_assert(UShort::numeric() == Numeric::UInt, "expected UINT format");
-    static_assert(Short::numeric() == Numeric::SInt, "expected SINT format");
-    static_assert(Half::numeric() == Numeric::SFloat, "expected SFLOAT format");
-    static_assert(UInt::numeric() == Numeric::UInt, "expected UINT format");
-    static_assert(Int::numeric() == Numeric::SInt, "expected SINT format");
-    static_assert(Float::numeric() == Numeric::SFloat, "expected SFLOAT format");
-    static_assert(LargeUInt::numeric() == Numeric::UInt, "expected UINT format");
-    static_assert(LargeInt::numeric() == Numeric::SInt, "expected SINT format");
-    static_assert(Double::numeric() == Numeric::SFloat, "expected SFLOAT format");
+    static_assert(UByteNorm::numericFormat() == NumericFormat::UNorm, "expected UNORM format");
+    static_assert(ByteNorm::numericFormat() == NumericFormat::SNorm, "expected SNORM format");
+    static_assert(UByte::numericFormat() == NumericFormat::UInt, "expected UINT format");
+    static_assert(Byte::numericFormat() == NumericFormat::SInt, "expected SINT format");
+    static_assert(UShortNorm::numericFormat() == NumericFormat::UNorm, "expected UNORM format");
+    static_assert(ShortNorm::numericFormat() == NumericFormat::SNorm, "expected SNORM format");
+    static_assert(UShort::numericFormat() == NumericFormat::UInt, "expected UINT format");
+    static_assert(Short::numericFormat() == NumericFormat::SInt, "expected SINT format");
+    static_assert(Half::numericFormat() == NumericFormat::SFloat, "expected SFLOAT format");
+    static_assert(UInt::numericFormat() == NumericFormat::UInt, "expected UINT format");
+    static_assert(Int::numericFormat() == NumericFormat::SInt, "expected SINT format");
+    static_assert(Float::numericFormat() == NumericFormat::SFloat, "expected SFLOAT format");
+    static_assert(LargeUInt::numericFormat() == NumericFormat::UInt, "expected UINT format");
+    static_assert(LargeInt::numericFormat() == NumericFormat::SInt, "expected SINT format");
+    static_assert(Double::numericFormat() == NumericFormat::SFloat, "expected SFLOAT format");
 #endif // MAGMA_VERIFY_CONSTEXPR
 
 #ifdef MAGMA_VERIFY_DESCRIPTORS
