@@ -48,6 +48,28 @@ inline std::shared_ptr<IndexBuffer> makeIndexBuffer(const std::vector<Index>& in
     return indexBuffer;
 }
 
+template<class Type, std::size_t Size>
+inline std::shared_ptr<StorageBuffer> makeStorageBuffer(const Type (&data)[Size],
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
+{
+    static_assert(Size > 0, "invalid array size");
+    auto storageBuffer = std::make_shared<StorageBuffer>(std::move(cmdBuffer),
+        Size * sizeof(Type), data, std::move(allocator));
+    return storageBuffer;
+}
+
+template<class Type>
+inline std::shared_ptr<StorageBuffer> makeStorageBuffer(const std::vector<Type>& data,
+    std::shared_ptr<CommandBuffer> cmdBuffer,
+    std::shared_ptr<Allocator> allocator /* nullptr */)
+{
+    MAGMA_ASSERT(!data.empty());
+    auto storageBuffer = std::make_shared<StorageBuffer>(std::move(cmdBuffer),
+        data.size() * sizeof(Type), data.data(), std::move(allocator));
+    return storageBuffer;
+}
+
 #ifdef VK_KHR_acceleration_structure
 template<class Type>
 inline std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type& element,

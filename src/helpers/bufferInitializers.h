@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../objects/vertexBuffer.h"
 #include "../objects/indexBuffer.h"
+#include "../objects/storageBuffer.h"
 #include "../objects/accelerationStructureInputBuffer.h"
 
 namespace magma
@@ -38,6 +39,14 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr);
         template<class Index>
         std::shared_ptr<IndexBuffer> makeIndexBuffer(const std::vector<Index>& indices,
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<Allocator> allocator = nullptr);
+        template<class Type, std::size_t Size>
+        std::shared_ptr<StorageBuffer> makeStorageBuffer(const Type (&data)[Size],
+            std::shared_ptr<CommandBuffer> cmdBuffer,
+            std::shared_ptr<Allocator> allocator = nullptr);
+        template<class Type>
+        std::shared_ptr<StorageBuffer> makeStorageBuffer(const std::vector<Type>& data,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
     #ifdef VK_KHR_acceleration_structure
