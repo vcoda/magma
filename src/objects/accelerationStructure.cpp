@@ -32,7 +32,7 @@ namespace magma
 #ifdef VK_KHR_acceleration_structure
 AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkAccelerationStructureTypeKHR structureType,
     VkAccelerationStructureCreateFlagsKHR flags, VkAccelerationStructureBuildTypeKHR buildType,
-    VkBuildAccelerationStructureFlagsKHR buildFlags, const std::forward_list<AccelerationStructureGeometry>& geometries,
+    VkBuildAccelerationStructureFlagsKHR buildFlags, const std::list<AccelerationStructureGeometry>& geometries,
     std::shared_ptr<Allocator> allocator, const StructureChain& extendedInfo):
     Resource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR, device, 0, sharing, allocator),
     structureType(structureType),
@@ -272,7 +272,7 @@ VkQueryType AccelerationStructure::castType(AccelerationStructureQuery::Type que
 }
 
 GenericAccelerationStructure::GenericAccelerationStructure(std::shared_ptr<Device> device,
-    const std::forward_list<AccelerationStructureGeometry>& geometries,
+    const std::list<AccelerationStructureGeometry>& geometries,
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkAccelerationStructureCreateFlagsKHR flags /* 0 */,

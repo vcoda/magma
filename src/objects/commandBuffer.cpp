@@ -826,7 +826,7 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
 
 #ifdef VK_KHR_acceleration_structure
 void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::forward_list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
+    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
 {
     std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
     for (auto const& geometry: geometries)
@@ -835,7 +835,7 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevel
 }
 
 void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::forward_list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
+    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
 {
     std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
     for (auto const& geometry: geometries)
@@ -849,7 +849,7 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
 // inline void CommandBuffer::updateAccelerationStructure
 
 void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-    const std::forward_list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& indirectBuildRanges,
+    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& indirectBuildRanges,
     const std::shared_ptr<Buffer>& scratchBuffer, uint32_t indirectStride /* sizeof(VkAccelerationStructureBuildRangeInfoKHR) */) noexcept
 {
     const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
@@ -1006,7 +1006,7 @@ void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<c
 
 void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
     const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::forward_list<AccelerationStructureGeometry>& geometries,
+    const std::list<AccelerationStructureGeometry>& geometries,
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
     const std::shared_ptr<Buffer>& scratchBuffer)
 {

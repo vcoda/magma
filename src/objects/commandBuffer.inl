@@ -787,14 +787,14 @@ inline void CommandBuffer::endTransformFeedback() noexcept
 
 #ifdef VK_KHR_acceleration_structure
 inline void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::forward_list<AccelerationStructureGeometry>& geometries, const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
+    const std::list<AccelerationStructureGeometry>& geometries, const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
     const std::shared_ptr<Buffer>& scratchBuffer) noexcept
 {
     rebuildAccelerationStructure(VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR, accelerationStructure, geometries, buildRanges, scratchBuffer);
 }
 
 inline void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::forward_list<AccelerationStructureGeometry>& geometries, const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
+    const std::list<AccelerationStructureGeometry>& geometries, const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
     const std::shared_ptr<Buffer>& scratchBuffer) noexcept
 {
     rebuildAccelerationStructure(VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR, accelerationStructure, geometries, buildRanges, scratchBuffer);

@@ -27,7 +27,7 @@ namespace magma
 {
 #ifdef VK_KHR_acceleration_structure
 BottomLevelAccelerationStructure::BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
-    const std::forward_list<AccelerationStructureGeometry>& geometries,
+    const std::list<AccelerationStructureGeometry>& geometries,
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
@@ -52,7 +52,7 @@ uint64_t BottomLevelAccelerationStructure::getReference() const noexcept
     return getObjectHandle();
 }
 
-void BottomLevelAccelerationStructure::build(const std::forward_list<AccelerationStructureGeometry>& geometries,
+void BottomLevelAccelerationStructure::build(const std::list<AccelerationStructureGeometry>& geometries,
     void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
@@ -61,7 +61,7 @@ void BottomLevelAccelerationStructure::build(const std::forward_list<Acceleratio
     build(geometries, buildRanges, scratchBuffer, std::move(deferredOperation));
 }
 
-void BottomLevelAccelerationStructure::build(const std::forward_list<AccelerationStructureGeometry>& geometries,
+void BottomLevelAccelerationStructure::build(const std::list<AccelerationStructureGeometry>& geometries,
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, void *scratchBuffer,
     std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
@@ -70,7 +70,7 @@ void BottomLevelAccelerationStructure::build(const std::forward_list<Acceleratio
     MAGMA_HANDLE_RESULT(result, "failed to build bottom-level acceleration structure");
 }
 
-void BottomLevelAccelerationStructure::update(const std::forward_list<AccelerationStructureGeometry>& geometries,
+void BottomLevelAccelerationStructure::update(const std::list<AccelerationStructureGeometry>& geometries,
     void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
@@ -79,7 +79,7 @@ void BottomLevelAccelerationStructure::update(const std::forward_list<Accelerati
     update(geometries, buildRanges, scratchBuffer, std::move(deferredOperation));
 }
 
-void BottomLevelAccelerationStructure::update(const std::forward_list<AccelerationStructureGeometry>& geometries,
+void BottomLevelAccelerationStructure::update(const std::list<AccelerationStructureGeometry>& geometries,
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, void *scratchBuffer,
     std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
@@ -89,7 +89,7 @@ void BottomLevelAccelerationStructure::update(const std::forward_list<Accelerati
 }
 
 VkResult BottomLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureModeKHR mode,
-    const std::forward_list<AccelerationStructureGeometry>& geometries,
+    const std::list<AccelerationStructureGeometry>& geometries,
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
     void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation)
 {

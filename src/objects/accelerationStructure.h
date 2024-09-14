@@ -83,7 +83,7 @@ namespace magma
             VkAccelerationStructureCreateFlagsKHR flags,
             VkAccelerationStructureBuildTypeKHR buildType,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
-            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::list<AccelerationStructureGeometry>& geometries,
             std::shared_ptr<Allocator> allocator,
             const StructureChain& extendedInfo);
         AccelerationStructure(std::shared_ptr<Device> device,
@@ -114,7 +114,7 @@ namespace magma
     {
     public:
         explicit GenericAccelerationStructure(std::shared_ptr<Device> device,
-            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::list<AccelerationStructureGeometry>& geometries,
             VkAccelerationStructureBuildTypeKHR buildType,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             std::shared_ptr<Allocator> allocator = nullptr,

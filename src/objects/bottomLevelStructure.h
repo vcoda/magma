@@ -28,7 +28,7 @@ namespace magma
     {
     public:
         explicit BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
-            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::list<AccelerationStructureGeometry>& geometries,
             VkAccelerationStructureBuildTypeKHR buildType,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             std::shared_ptr<Allocator> allocator = nullptr,
@@ -42,24 +42,24 @@ namespace magma
             VkAccelerationStructureCreateFlagsKHR flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         uint64_t getReference() const noexcept;
-        void build(const std::forward_list<AccelerationStructureGeometry>& geometries,
+        void build(const std::list<AccelerationStructureGeometry>& geometries,
             void *scratchBuffer,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
-        void build(const std::forward_list<AccelerationStructureGeometry>& geometries,
+        void build(const std::list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
             void *scratchBuffer,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
-        void update(const std::forward_list<AccelerationStructureGeometry>& geometries,
+        void update(const std::list<AccelerationStructureGeometry>& geometries,
             void *scratchBuffer,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
-        void update(const std::forward_list<AccelerationStructureGeometry>& geometries,
+        void update(const std::list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
             void *scratchBuffer,
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
 
     private:
         VkResult rebuild(VkBuildAccelerationStructureModeKHR mode,
-            const std::forward_list<AccelerationStructureGeometry>& geometries,
+            const std::list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
             void *scratchBuffer,
             std::shared_ptr<DeferredOperation> deferredOperation);
