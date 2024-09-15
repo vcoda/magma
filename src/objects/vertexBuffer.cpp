@@ -51,7 +51,7 @@ VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSiz
     CopyMemoryFunction copyFn /* nullptr */):
     VertexBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
-    stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
 VertexBuffer::VertexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,

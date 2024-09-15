@@ -79,7 +79,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
     CopyMemoryFunction copyFn /* nullptr */):
     IndexBuffer(cmdBuffer->getDevice(), indexType, size, allocator, optional, sharing)
 {
-    stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
 IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, std::shared_ptr<const SrcTransferBuffer> srcBuffer,

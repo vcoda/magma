@@ -80,7 +80,7 @@ namespace magma
             const Initializer& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
-        void stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
+        void copyStaged(std::shared_ptr<CommandBuffer> cmdBuffer,
             const void *data,
             std::shared_ptr<Allocator> allocator,
             CopyMemoryFunction copyFn = nullptr);

@@ -41,7 +41,7 @@ StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceS
     CopyMemoryFunction copyFn /* nullptr */):
     StorageBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
-    stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
 StorageBuffer::StorageBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,

@@ -42,7 +42,7 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_p
     CopyMemoryFunction copyFn /* nullptr */):
     AccelerationStructureInputBuffer(cmdBuffer->getDevice(), size, optional, sharing, allocator)
 {
-    stagedUpload(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
 AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
