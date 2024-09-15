@@ -127,7 +127,8 @@ VkDeviceSize AccelerationStructure::getProperty(AccelerationStructureQuery::Type
     MAGMA_DEVICE_EXTENSION(vkWriteAccelerationStructuresPropertiesKHR);
     const VkResult result = vkWriteAccelerationStructuresPropertiesKHR(getNativeDevice(),
         1, &handle, castType(queryType), sizeof(VkDeviceSize), &property, sizeof(VkDeviceSize));
-    MAGMA_ASSERT(MAGMA_SUCCEEDED(result));
+    MAGMA_ASSERT(VK_SUCCESS == result);
+    MAGMA_UNUSED(result);
     return property;
 }
 

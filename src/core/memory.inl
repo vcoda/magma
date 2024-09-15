@@ -109,6 +109,7 @@ inline char *copyString(const char *src) noexcept
     #if defined(_MSC_VER) || defined(__MINGW32__)
         const errno_t err = strcpy_s(dst, count, src);
         MAGMA_ASSERT(0 == err);
+        MAGMA_UNUSED(err);
     #else
         strcpy(dst, src);
     #endif // _MSC_VER || __MINGW32__
@@ -121,6 +122,7 @@ inline char *copyString(char *dst, std::size_t size, const char *src) noexcept
 #if defined(_MSC_VER) || defined(__MINGW32__)
     const errno_t err = strcpy_s(dst, size, src);
     MAGMA_ASSERT(0 == err);
+    MAGMA_UNUSED(err);
 #else
     MAGMA_ASSERT(strlen(src) < size);
     MAGMA_UNUSED(size);

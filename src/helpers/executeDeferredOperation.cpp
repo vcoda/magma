@@ -48,6 +48,7 @@ VkResult executeDeferredOperation(std::shared_ptr<DeferredOperation> deferredOpe
                     const VkResult result = deferredOperation->join();
                     // Future calls to vkDeferredOperationJoinKHR are not necessary and will simply harm performance.
                     MAGMA_ASSERT(result != VK_THREAD_DONE_KHR);
+                    MAGMA_UNUSED(result);
                 }));
     }
     for (auto& future : tasks)

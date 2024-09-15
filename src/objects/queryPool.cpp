@@ -190,6 +190,7 @@ std::vector<VkPerformanceCounterResultKHR> PerformanceQuery::getResults(bool wai
         // VK_QUERY_RESULT_PARTIAL_BIT, or VK_QUERY_RESULT_64_BIT.
         wait ? VK_QUERY_RESULT_WAIT_BIT : 0);
     MAGMA_ASSERT((VK_SUCCESS == result) || (VK_NOT_READY == result));
+    MAGMA_UNUSED(result);
     return counters;
 }
 #endif // VK_KHR_performance_query
