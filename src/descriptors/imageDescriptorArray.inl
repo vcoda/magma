@@ -16,6 +16,12 @@ inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
             {
                 return (it.sampler != VK_NULL_HANDLE);
             });
+    case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+        return std::all_of(descriptors.begin(), descriptors.end(),
+            [](auto const& it)
+            {
+                return (it.sampler != VK_NULL_HANDLE) && (it.imageView != VK_NULL_HANDLE);
+            });
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
