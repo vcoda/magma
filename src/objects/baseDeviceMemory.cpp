@@ -83,11 +83,11 @@ BaseDeviceMemory::BaseDeviceMemory(std::shared_ptr<Device> device,
 VkMemoryType BaseDeviceMemory::findMemoryType(VkMemoryPropertyFlags propertyFlags) const
 {
     const VkPhysicalDeviceMemoryProperties properties = device->getPhysicalDevice()->getMemoryProperties();
-    const uint32_t memoryTypeIndex = findTypeIndex(propertyFlags);
-    return properties.memoryTypes[memoryTypeIndex];
+    auto memoryTypeIndex = findTypeIndex(propertyFlags);
+    return properties.memoryTypes[memoryTypeIndex.value()];
 }
 
-uint32_t BaseDeviceMemory::findTypeIndex(VkMemoryPropertyFlags propertyFlags) const
+std::optional<uint32_t> BaseDeviceMemory::findTypeIndex(VkMemoryPropertyFlags propertyFlags) const noexcept
 {
     const VkPhysicalDeviceMemoryProperties properties = device->getPhysicalDevice()->getMemoryProperties();
     for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < properties.memoryTypeCount; ++memoryTypeIndex)
@@ -102,8 +102,7 @@ uint32_t BaseDeviceMemory::findTypeIndex(VkMemoryPropertyFlags propertyFlags) co
         if ((memoryType.propertyFlags & propertyFlags) == propertyFlags)
             return memoryTypeIndex;
     }
-    MAGMA_ERROR("failed to find suitable memory type");
-    return 0;
+    return std::nullopt;
 }
 
 float BaseDeviceMemory::clampPriority(float value) noexcept

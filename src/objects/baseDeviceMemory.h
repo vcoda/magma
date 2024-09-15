@@ -48,7 +48,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator,
             const StructureChain& extendedInfo) noexcept;
         VkMemoryType findMemoryType(VkMemoryPropertyFlags propertyFlags) const;
-        uint32_t findTypeIndex(VkMemoryPropertyFlags propertyFlags) const;
+        std::optional<uint32_t> findTypeIndex(VkMemoryPropertyFlags propertyFlags) const noexcept;
         float clampPriority(float value) noexcept;
 
         VkMemoryRequirements memoryRequirements;

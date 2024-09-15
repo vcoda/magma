@@ -39,7 +39,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     memoryAllocateInfo.pNext = extendedInfo.headNode();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
-    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
+    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags).value();
     const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to allocate device memory");
@@ -59,7 +59,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     memoryAllocateInfo.pNext = &importAndroidHardwareBufferInfo;
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
-    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags);
+    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags).value();
     importAndroidHardwareBufferInfo.sType = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
     importAndroidHardwareBufferInfo.pNext = extendedInfo.headNode();
     importAndroidHardwareBufferInfo.buffer = hardwareBuffer->getBuffer();
@@ -126,7 +126,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     memoryAllocateInfo.pNext = extendedInfo.headNode();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
-    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(memoryType.propertyFlags);
+    memoryAllocateInfo.memoryTypeIndex = findTypeIndex(memoryType.propertyFlags).value();
     const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
         MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to reallocate device memory");
