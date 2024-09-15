@@ -143,6 +143,7 @@ namespace magma
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
         VkExtent3D calculateValidMipExtent(uint32_t mipLevel) const noexcept;
+        static VkPipelineStageFlags getSuitableDstStageMask(std::shared_ptr<CommandBuffer> cmdBuffer);
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples) noexcept;
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
             VkFormat format,

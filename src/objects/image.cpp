@@ -675,6 +675,29 @@ VkExtent3D Image::calculateValidMipExtent(uint32_t level) const noexcept
 #endif // MAGMA_ENABLE_VALID_MIP_EXTENTS
 }
 
+VkPipelineStageFlags Image::getSuitableDstStageMask(std::shared_ptr<CommandBuffer> cmdBuffer)
+{
+    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
+    const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
+    std::shared_ptr<Device> device = cmdPool->getDevice();
+    std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
+    if (!queue)
+        return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    const VkQueueFlagBits flags = queue->getFlags();
+    VkPipelineStageFlags dstStageMask = 0;
+    if (flags & VK_QUEUE_GRAPHICS_BIT)
+        dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; // VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT?
+    else if (flags & VK_QUEUE_COMPUTE_BIT)
+    {
+        dstStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+        if (device->extensionEnabled(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME))
+            dstStageMask |= VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR;
+    }
+    else if (flags & VK_QUEUE_TRANSFER_BIT)
+        dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    return dstStageMask;
+}
+
 VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples) noexcept
 {
     switch (samples)

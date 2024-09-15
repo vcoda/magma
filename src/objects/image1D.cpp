@@ -45,9 +45,9 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
     Image1D(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, MAGMA_COUNT(mipMaps),
         std::move(allocator), optional, sharing)
 {
+    VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
     copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout,
-        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 
 Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
@@ -58,8 +58,8 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     Image1D(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, MAGMA_COUNT(mipMaps),
         allocator, optional, sharing)
 {
+    VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
     stagedUpload(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn),
-        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 } // namespace magma
