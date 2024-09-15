@@ -136,7 +136,7 @@ namespace magma
             const CopyLayout& bufferLayout,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
-        void stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
+        void copyMipmapStaged(std::shared_ptr<CommandBuffer> cmdBuffer,
             const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator,
             CopyMemoryFunction copyFn,

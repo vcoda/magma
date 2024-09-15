@@ -611,7 +611,7 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
-void Image::stagedUpload(std::shared_ptr<CommandBuffer> cmdBuffer,
+void Image::copyMipmapStaged(std::shared_ptr<CommandBuffer> cmdBuffer,
     const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
