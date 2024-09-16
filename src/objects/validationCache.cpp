@@ -77,7 +77,7 @@ void ValidationCache::mergeCaches(const std::vector<std::shared_ptr<const Valida
     for (auto const& cache: caches)
         dereferencedCaches.put(*cache);
     MAGMA_DEVICE_EXTENSION(vkMergeValidationCachesEXT);
-    const VkResult result = vkMergeValidationCachesEXT(getNativeDevice(), handle, MAGMA_COUNT(dereferencedCaches), dereferencedCaches);
+    const VkResult result = vkMergeValidationCachesEXT(getNativeDevice(), handle, dereferencedCaches.count(), dereferencedCaches);
     MAGMA_HANDLE_RESULT(result, "failed to merge validation caches");
 }
 #endif // VK_EXT_validation_cache

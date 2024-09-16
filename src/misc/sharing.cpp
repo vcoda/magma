@@ -46,7 +46,7 @@ VkSharingMode Sharing::getMode() const noexcept
 
 uint32_t Sharing::getQueueFamiliesCount() const noexcept
 {
-    return MAGMA_COUNT(queueFamilyIndices);
+    return core::countof(queueFamilyIndices);
 }
 
 uint32_t Sharing::chooseFamilyIndex(VkQueueFlagBits queueType,

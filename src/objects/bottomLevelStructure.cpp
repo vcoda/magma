@@ -93,7 +93,7 @@ VkResult BottomLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureM
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
     void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation)
 {
-    geometryCount = MAGMA_COUNT(geometries);
+    geometryCount = core::countof(geometries);
     MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);
     for (auto const& geometry: geometries)
         geometryPointers.put(&geometry);

@@ -118,7 +118,7 @@ void ShaderBindingTable::setupIndices(const std::vector<PipelineShaderStage>& sh
             shaderGroup.raygen = true;
         ++groupIndex;
     }
-    groupOffset += MAGMA_COUNT(shaderGroups);
+    groupOffset += core::countof(shaderGroups);
 }
 #endif // VK_KHR_ray_tracing_pipeline
 } // namespace magma

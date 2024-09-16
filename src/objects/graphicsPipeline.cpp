@@ -96,7 +96,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     std::shared_ptr<GraphicsPipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages)),
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), core::countof(shaderStages)),
     rsHash(0ull)
 {
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
@@ -109,7 +109,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     pipelineInfo.flags = flags;
     if (!basePipeline.expired())
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
+    pipelineInfo.stageCount = core::countof(dereferencedStages);
     pipelineInfo.pStages = dereferencedStages;
     pipelineInfo.pVertexInputState = &vertexInputState;
     pipelineInfo.pInputAssemblyState = &inputAssemblyState;
@@ -131,7 +131,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
         pipelineDynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
         pipelineDynamicStateInfo.pNext = nullptr;
         pipelineDynamicStateInfo.flags = 0;
-        pipelineDynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
+        pipelineDynamicStateInfo.dynamicStateCount = core::countof(dynamicStates);
         pipelineDynamicStateInfo.pDynamicStates = dynamicStates.data();
     }
 #ifdef VK_AMD_pipeline_compiler_control

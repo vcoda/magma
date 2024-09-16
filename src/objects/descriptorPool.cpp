@@ -65,7 +65,7 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device_, uint32_t maxSets
     }
 #endif // VK_EXT_descriptor_indexing
     descriptorPoolInfo.maxSets = maxSets;
-    descriptorPoolInfo.poolSizeCount = MAGMA_COUNT(descriptorPools);
+    descriptorPoolInfo.poolSizeCount = core::countof(descriptorPools);
     descriptorPoolInfo.pPoolSizes = descriptorPools.data();
 #ifdef VK_EXT_inline_uniform_block
     VkDescriptorPoolInlineUniformBlockCreateInfoEXT descriptorPoolInlineUniformBlockInfo;

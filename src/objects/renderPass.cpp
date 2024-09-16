@@ -95,7 +95,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.pNext = extendedInfo.headNode();
     renderPassInfo.flags = 0;
-    renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
+    renderPassInfo.attachmentCount = core::countof(attachments);
     renderPassInfo.pAttachments = attachments.data();
     renderPassInfo.subpassCount = 1;
     renderPassInfo.pSubpasses = &subpassDescription;
@@ -131,11 +131,11 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.pNext = extendedInfo.headNode();
     renderPassInfo.flags = 0;
-    renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
+    renderPassInfo.attachmentCount = core::countof(attachments);
     renderPassInfo.pAttachments = attachments.data();
-    renderPassInfo.subpassCount = MAGMA_COUNT(subpasses);
+    renderPassInfo.subpassCount = core::countof(subpasses);
     renderPassInfo.pSubpasses = subpasses.data();
-    renderPassInfo.dependencyCount = MAGMA_COUNT(dependencies);
+    renderPassInfo.dependencyCount = core::countof(dependencies);
     renderPassInfo.pDependencies = dependencies.data();
     const VkResult result = vkCreateRenderPass(getNativeDevice(), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create render pass");

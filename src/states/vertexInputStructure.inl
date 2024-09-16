@@ -35,7 +35,7 @@ inline VertexInputStructure<Vertex>::VertexInputStructure(uint32_t binding, cons
     pVertexBindingDescriptions = &vertexBindingDescription;
     VkVertexInputAttributeDescription *vertexAttributeDescriptions = core::copyInitializerList(attributes);
     MAGMA_ASSERT(vertexAttributeDescriptions);
-    vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
+    vertexAttributeDescriptionCount = core::countof(attributes);
     for (uint32_t i = 0; i < vertexAttributeDescriptionCount; ++i)
         vertexAttributeDescriptions[i].binding = binding;
     pVertexAttributeDescriptions = vertexAttributeDescriptions;

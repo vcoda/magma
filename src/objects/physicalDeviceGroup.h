@@ -41,7 +41,7 @@ namespace magma
             const StructureChain& enabledExtendedFeatures = StructureChain(),
             const StructureChain& extendedInfo = StructureChain()) const;
         uint32_t getGroupId() const { return groupId; }
-        uint32_t getPhysicalDeviceCount() const { return MAGMA_COUNT(physicalDevices); }
+        uint32_t getPhysicalDeviceCount() const { return core::countof(physicalDevices); }
         const std::shared_ptr<PhysicalDevice>& getPhysicalDevice(uint32_t deviceId) const noexcept { return physicalDevices[deviceId]; }
 
     private:

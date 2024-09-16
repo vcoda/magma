@@ -24,7 +24,7 @@ inline Specialization::Specialization(const Block& data, const SpecializationEnt
 template<class Block>
 inline Specialization::Specialization(const Block& data, const std::initializer_list<SpecializationEntry>& mapEntries) noexcept:
     VkSpecializationInfo{
-        MAGMA_COUNT(mapEntries), // mapEntryCount
+        core::countof(mapEntries), // mapEntryCount
         core::copyInitializerList(mapEntries), // pMapEntries
         sizeof(Block),  // dataSize
         core::copyBinaryData(data) // pData

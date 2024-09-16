@@ -60,7 +60,7 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
     dynamicStateInfo.pNext = nullptr;
     dynamicStateInfo.flags = 0;
-    dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates.front());
+    dynamicStateInfo.dynamicStateCount = core::countof(dynamicStates.front());
     dynamicStateInfo.pDynamicStates = dynamicStates.front().data();
     dynamicStateInfos.push_front(dynamicStateInfo);
     VkRayTracingPipelineCreateInfoKHR pipelineInfo;
@@ -69,9 +69,9 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stageCount = MAGMA_COUNT(shaderStages);
+    pipelineInfo.stageCount = core::countof(shaderStages);
     pipelineInfo.pStages = nullptr; // Fixup later
-    pipelineInfo.groupCount = MAGMA_COUNT(groups.front());
+    pipelineInfo.groupCount = core::countof(groups.front());
     pipelineInfo.pGroups = groups.front().data();
     pipelineInfo.maxPipelineRayRecursionDepth = maxPipelineRayRecursionDepth;
     pipelineInfo.pLibraryInfo = nullptr;
@@ -116,7 +116,7 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
         maxPipelineRayRecursionDepth,
         extendedInfo);
     hashes.push_front(hash);
-    return MAGMA_COUNT(pipelineInfos) - 1;
+    return core::countof(pipelineInfos) - 1;
 }
 
 void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
@@ -130,7 +130,7 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipe
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesKHR, VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
     const VkResult result = vkCreateRayTracingPipelinesKHR(getNativeDevice(),
         MAGMA_OPTIONAL_HANDLE(deferredOperation), MAGMA_OPTIONAL_HANDLE(pipelineCache),
-        MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
+        core::countof(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
     postCreate();
     groups.clear();
     dynamicStates.clear();

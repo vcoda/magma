@@ -39,7 +39,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     flags(flags),
     buildType(buildType),
     buildFlags(buildFlags),
-    geometryCount(MAGMA_COUNT(geometries)),
+    geometryCount(core::countof(geometries)),
     buildScratchSize(0ull),
     updateScratchSize(0ull)
 {

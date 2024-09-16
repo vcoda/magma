@@ -53,15 +53,15 @@ void Queue::bindSparse(std::shared_ptr<const Buffer> buffer, const std::vector<V
 {
     VkSparseBufferMemoryBindInfo bufferMemoryBindInfo;
     bufferMemoryBindInfo.buffer = MAGMA_OPTIONAL_HANDLE(buffer);
-    bufferMemoryBindInfo.bindCount = MAGMA_COUNT(bufferBinds);
+    bufferMemoryBindInfo.bindCount = core::countof(bufferBinds);
     bufferMemoryBindInfo.pBinds = bufferBinds.data();
     VkSparseImageOpaqueMemoryBindInfo imageOpaqueMemoryBindInfo;
     imageOpaqueMemoryBindInfo.image = MAGMA_OPTIONAL_HANDLE(imageOpaque);
-    imageOpaqueMemoryBindInfo.bindCount = MAGMA_COUNT(imageOpaqueBinds);
+    imageOpaqueMemoryBindInfo.bindCount = core::countof(imageOpaqueBinds);
     imageOpaqueMemoryBindInfo.pBinds = imageOpaqueBinds.data();
     VkSparseImageMemoryBindInfo imageMemoryBindInfo;
     imageMemoryBindInfo.image = MAGMA_OPTIONAL_HANDLE(image);
-    imageMemoryBindInfo.bindCount = MAGMA_COUNT(imageBinds);
+    imageMemoryBindInfo.bindCount = core::countof(imageBinds);
     imageMemoryBindInfo.pBinds = imageBinds.data();
     VkBindSparseInfo bindSparseInfo = {};
     bindSparseInfo.sType = VK_STRUCTURE_TYPE_BIND_SPARSE_INFO;
@@ -118,11 +118,11 @@ void Queue::bindSparse(const std::vector<VkSparseBufferMemoryBindInfo>& bufferBi
         bindSparseInfo.waitSemaphoreCount = dereferencedWaitSemaphores.count();
         bindSparseInfo.pWaitSemaphores = dereferencedWaitSemaphores;
     }
-    bindSparseInfo.bufferBindCount = MAGMA_COUNT(bufferBinds);
+    bindSparseInfo.bufferBindCount = core::countof(bufferBinds);
     bindSparseInfo.pBufferBinds = bufferBinds.data();
-    bindSparseInfo.imageOpaqueBindCount = MAGMA_COUNT(imageOpaqueBinds);
+    bindSparseInfo.imageOpaqueBindCount = core::countof(imageOpaqueBinds);
     bindSparseInfo.pImageOpaqueBinds = imageOpaqueBinds.data();
-    bindSparseInfo.imageBindCount = MAGMA_COUNT(imageBinds);
+    bindSparseInfo.imageBindCount = core::countof(imageBinds);
     bindSparseInfo.pImageBinds = imageBinds.data();
     if (signalSemaphores.size() > 0)
     {
@@ -322,11 +322,11 @@ void Queue::submitDeviceGroup(const std::initializer_list<std::shared_ptr<Comman
     VkDeviceGroupSubmitInfo deviceGroupSubmitInfo;
     deviceGroupSubmitInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO;
     deviceGroupSubmitInfo.pNext = nullptr;
-    deviceGroupSubmitInfo.waitSemaphoreCount = MAGMA_COUNT(waitSemaphoreDeviceIndices);
+    deviceGroupSubmitInfo.waitSemaphoreCount = core::countof(waitSemaphoreDeviceIndices);
     deviceGroupSubmitInfo.pWaitSemaphoreDeviceIndices = waitSemaphoreDeviceIndices.begin();
-    deviceGroupSubmitInfo.commandBufferCount = MAGMA_COUNT(cmdBufferDeviceMasks);
+    deviceGroupSubmitInfo.commandBufferCount = core::countof(cmdBufferDeviceMasks);
     deviceGroupSubmitInfo.pCommandBufferDeviceMasks = cmdBufferDeviceMasks.begin();
-    deviceGroupSubmitInfo.signalSemaphoreCount = MAGMA_COUNT(signalSemaphoreDeviceIndices);
+    deviceGroupSubmitInfo.signalSemaphoreCount = core::countof(signalSemaphoreDeviceIndices);
     deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.begin();
     submit(cmdBuffers, waitDstStageMask, waitSemaphores, signalSemaphores, std::move(fence), StructureChain(deviceGroupSubmitInfo));
 }
@@ -439,9 +439,9 @@ std::vector<VkCheckpointDataNV> Queue::getCheckpoints(std::shared_ptr<const Devi
 
 uint32_t Queue::inUseObjectCount() const noexcept
 {
-    uint32_t count = MAGMA_COUNT(submittedCmdBuffers);
+    uint32_t count = core::countof(submittedCmdBuffers);
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-    count += MAGMA_COUNT(inUse);
+    count += core::countof(inUse);
 #endif
     return count;
 }

@@ -19,7 +19,7 @@ inline uint64_t Pipeline::getCreationDuration() const noexcept
 
 inline uint64_t Pipeline::getStageCreationDuration(uint32_t stageIndex) const noexcept
 {
-    MAGMA_ASSERT(MAGMA_COUNT(stageCreationFeedbacks) == stageCount);
+    MAGMA_ASSERT(core::countof(stageCreationFeedbacks) == stageCount);
     MAGMA_ASSERT(stageIndex < stageCount);
     if (stageIndex >= stageCount)
         return 0ull;

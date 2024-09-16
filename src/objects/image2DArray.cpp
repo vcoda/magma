@@ -45,10 +45,10 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Image2DArray(cmdBuffer->getDevice(), format, mipMaps.front().extent,
-        MAGMA_COUNT(mipMaps) / arrayLayers, arrayLayers,
+        core::countof(mipMaps) / arrayLayers, arrayLayers,
         std::move(allocator), optional, sharing)
 {
-    MAGMA_ASSERT(MAGMA_COUNT(mipMaps) % arrayLayers == 0);
+    MAGMA_ASSERT(core::countof(mipMaps) % arrayLayers == 0);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
     copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
@@ -61,10 +61,10 @@ Image2DArray::Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     Image2DArray(cmdBuffer->getDevice(), format, mipMaps.front().extent,
-        MAGMA_COUNT(mipMaps) / arrayLayers, arrayLayers,
+        core::countof(mipMaps) / arrayLayers, arrayLayers,
         allocator, optional, sharing)
 {
-    MAGMA_ASSERT(MAGMA_COUNT(mipMaps) % arrayLayers == 0);
+    MAGMA_ASSERT(core::countof(mipMaps) % arrayLayers == 0);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
     copyMipmapStaged(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn),
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);

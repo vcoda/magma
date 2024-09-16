@@ -164,7 +164,7 @@ PerformanceQuery::PerformanceQuery(std::shared_ptr<Device> device, uint32_t queu
                 VK_STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_CREATE_INFO_KHR,
                 nullptr,
                 queueFamilyIndex,
-                MAGMA_COUNT(counterIndices),
+                core::countof(counterIndices),
                 counterIndices.data()
             })),
     queueFamilyIndex(queueFamilyIndex),

@@ -187,7 +187,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
         bindBufferMemoryInfo.memoryOffset = offset;
         bindBufferMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHR;
         bindBufferMemoryDeviceGroupInfo.pNext = nullptr;
-        bindBufferMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+        bindBufferMemoryDeviceGroupInfo.deviceIndexCount = core::countof(deviceIndices);
         bindBufferMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindBufferMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
         result = vkBindBufferMemory2KHR(getNativeDevice(), 1, &bindBufferMemoryInfo);
@@ -203,9 +203,9 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
         bindImageMemoryInfo.memoryOffset = offset;
         bindImageMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
         bindImageMemoryDeviceGroupInfo.pNext = nullptr;
-        bindImageMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+        bindImageMemoryDeviceGroupInfo.deviceIndexCount = core::countof(deviceIndices);
         bindImageMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
-        bindImageMemoryDeviceGroupInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
+        bindImageMemoryDeviceGroupInfo.splitInstanceBindRegionCount = core::countof(splitInstanceBindRegions);
         bindImageMemoryDeviceGroupInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
         result = vkBindImageMemory2KHR(getNativeDevice(), 1, &bindImageMemoryInfo);
@@ -219,7 +219,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
         bindAccelerationStructureMemoryInfo.accelerationStructure = core::reinterpret<VkAccelerationStructureNV>(object);
         bindAccelerationStructureMemoryInfo.memory = handle;
         bindAccelerationStructureMemoryInfo.memoryOffset = offset;
-        bindAccelerationStructureMemoryInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+        bindAccelerationStructureMemoryInfo.deviceIndexCount = core::countof(deviceIndices);
         bindAccelerationStructureMemoryInfo.pDeviceIndices = deviceIndices.data();
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
         result = vkBindAccelerationStructureMemoryNV(getNativeDevice(), 1, &bindAccelerationStructureMemoryInfo);

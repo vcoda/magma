@@ -41,7 +41,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
-    ImageCube(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, MAGMA_COUNT(mipMaps) / 6,
+    ImageCube(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, core::countof(mipMaps) / 6,
         std::move(allocator), optional, sharing)
 {
     MAGMA_ASSERT(mipMaps.size() % 6 == 0);
@@ -56,7 +56,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    ImageCube(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, MAGMA_COUNT(mipMaps) / 6,
+    ImageCube(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, core::countof(mipMaps) / 6,
         allocator, optional, sharing)
 {
     MAGMA_ASSERT(mipMaps.size() % 6 == 0);

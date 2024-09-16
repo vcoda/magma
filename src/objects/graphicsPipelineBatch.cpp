@@ -77,7 +77,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
     dynamicStateInfo.pNext = nullptr;
     dynamicStateInfo.flags = 0;
-    dynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates.front());
+    dynamicStateInfo.dynamicStateCount = core::countof(dynamicStates.front());
     dynamicStateInfo.pDynamicStates = dynamicStates.front().data();
     dynamicStateInfos.push_front(dynamicStateInfo);
     VkGraphicsPipelineCreateInfo pipelineInfo;
@@ -86,7 +86,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stageCount = MAGMA_COUNT(shaderStages);
+    pipelineInfo.stageCount = core::countof(shaderStages);
     pipelineInfo.pStages = nullptr; // Fixup later
     pipelineInfo.pVertexInputState = &vertexInputStates.front();
     pipelineInfo.pInputAssemblyState = &inputAssemblyStates.front();
@@ -147,7 +147,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
         extendedInfo);
     hashes.push_front(hash.first);
     rsHashes.push_front(hash.second);
-    return MAGMA_COUNT(pipelineInfos) - 1;
+    return core::countof(pipelineInfos) - 1;
 }
 
 void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
@@ -163,7 +163,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipeli
 #endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateGraphicsPipelines(getNativeDevice(), MAGMA_OPTIONAL_HANDLE(pipelineCache),
-        MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
+        core::countof(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
     // Free storage that had to be preserved until API call
     postCreate();
     vertexInputStates.clear();
@@ -193,7 +193,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipeli
         {
             pipelines.emplace_front(GraphicsPipeline::makeShared(
                 *handle++, device, *layout++, *basePipeline++, allocator,
-                MAGMA_COUNT(*shaderStages++),
+                core::countof(*shaderStages++),
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
                 stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,

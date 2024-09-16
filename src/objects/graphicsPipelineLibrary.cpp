@@ -93,7 +93,7 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
     graphicsPipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     graphicsPipelineInfo.pNext = &graphicsPipelineLibraryInfo;
     graphicsPipelineInfo.flags = flags | VK_PIPELINE_CREATE_LIBRARY_BIT_KHR;
-    graphicsPipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
+    graphicsPipelineInfo.stageCount = core::countof(dereferencedStages);
     graphicsPipelineInfo.pStages = dereferencedStages;
     graphicsPipelineInfo.pTessellationState = &tesselationState;
     graphicsPipelineInfo.pViewportState = &viewportState;
@@ -111,7 +111,7 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
     pipelineDynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
     pipelineDynamicStateInfo.pNext = nullptr;
     pipelineDynamicStateInfo.flags = 0;
-    pipelineDynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
+    pipelineDynamicStateInfo.dynamicStateCount = core::countof(dynamicStates);
     pipelineDynamicStateInfo.pDynamicStates = dynamicStates.data();
     VkPipeline handle = 0;
     const VkResult result = vkCreateGraphicsPipelines(getNativeDevice(), VK_NULL_HANDLE,

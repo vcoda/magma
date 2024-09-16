@@ -40,7 +40,7 @@ DeviceQueueDescriptor::DeviceQueueDescriptor(std::shared_ptr<const PhysicalDevic
         extendedInfo.headNode(),
         flags,
         0, // queueFamilyIndex
-        MAGMA_COUNT(queuePriorities),
+        core::countof(queuePriorities),
         core::copyInitializerList(queuePriorities)
     }
 {

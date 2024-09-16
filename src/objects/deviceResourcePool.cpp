@@ -32,10 +32,10 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
 {
     std::lock_guard<std::mutex> guard(DeviceChild::mtx);
     Resources statistics;
-    statistics.semaphoreCount = MAGMA_COUNT(semaphores);
-    statistics.fenceCount = MAGMA_COUNT(fences);
-    statistics.deviceMemoryCount = MAGMA_COUNT(deviceMemories);
-    statistics.bufferCount = MAGMA_COUNT(buffers);
+    statistics.semaphoreCount = core::countof(semaphores);
+    statistics.fenceCount = core::countof(fences);
+    statistics.deviceMemoryCount = core::countof(deviceMemories);
+    statistics.bufferCount = core::countof(buffers);
     foreach<Image>(images,
         [&statistics](const Image *image)
         {
@@ -58,14 +58,14 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
                 break;
             }
         });
-    statistics.eventCount = MAGMA_COUNT(events);
-    statistics.queryPoolCount = MAGMA_COUNT(queryPools);
-    statistics.bufferViewCount = MAGMA_COUNT(bufferViews);
-    statistics.imageViewCount = MAGMA_COUNT(imageViews);
-    statistics.shaderModuleCount = MAGMA_COUNT(shaderModules);
-    statistics.pipelineCacheCount = MAGMA_COUNT(pipelineCaches);
-    statistics.pipelineLayoutCount = MAGMA_COUNT(pipelineLayouts);
-    statistics.renderPassCount = MAGMA_COUNT(renderPasses);
+    statistics.eventCount = core::countof(events);
+    statistics.queryPoolCount = core::countof(queryPools);
+    statistics.bufferViewCount = core::countof(bufferViews);
+    statistics.imageViewCount = core::countof(imageViews);
+    statistics.shaderModuleCount = core::countof(shaderModules);
+    statistics.pipelineCacheCount = core::countof(pipelineCaches);
+    statistics.pipelineLayoutCount = core::countof(pipelineLayouts);
+    statistics.renderPassCount = core::countof(renderPasses);
     foreach<Pipeline>(pipelines,
         [&statistics](const Pipeline *pipeline)
         {
@@ -89,35 +89,35 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
             #endif
             }
         });
-    statistics.descriptorSetLayoutCount = MAGMA_COUNT(descriptorSetLayouts);
-    statistics.samplerCount = MAGMA_COUNT(samplers);
-    statistics.descriptorPoolCount = MAGMA_COUNT(descriptorPools);
-    statistics.descriptorSetCount = MAGMA_COUNT(descriptorSets);
-    statistics.framebufferCount = MAGMA_COUNT(framebuffers);
-    statistics.commandPoolCount = MAGMA_COUNT(commandPools);
+    statistics.descriptorSetLayoutCount = core::countof(descriptorSetLayouts);
+    statistics.samplerCount = core::countof(samplers);
+    statistics.descriptorPoolCount = core::countof(descriptorPools);
+    statistics.descriptorSetCount = core::countof(descriptorSets);
+    statistics.framebufferCount = core::countof(framebuffers);
+    statistics.commandPoolCount = core::countof(commandPools);
 #ifdef VK_KHR_acceleration_structure
-    statistics.accelerationStructureCount = MAGMA_COUNT(accelerationStructures);
+    statistics.accelerationStructureCount = core::countof(accelerationStructures);
 #endif
 #ifdef VK_EXT_validation_cache
-    statistics.validationCacheCount = MAGMA_COUNT(validationCaches);
+    statistics.validationCacheCount = core::countof(validationCaches);
 #endif
 #ifdef VK_INTEL_performance_query
-    statistics.performanceConfigurationCount = MAGMA_COUNT(performanceConfigurations);
+    statistics.performanceConfigurationCount = core::countof(performanceConfigurations);
 #endif
 #ifdef VK_KHR_deferred_host_operations
-    statistics.deferredOperationCount = MAGMA_COUNT(deferredOperations);
+    statistics.deferredOperationCount = core::countof(deferredOperations);
 #endif
 #ifdef VK_KHR_descriptor_update_template
-    statistics.descriptorUpdateTemplateCount = MAGMA_COUNT(descriptorUpdateTemplates);
+    statistics.descriptorUpdateTemplateCount = core::countof(descriptorUpdateTemplates);
 #endif
 #ifdef VK_NV_device_generated_commands
-    statistics.indirectCommandsLayoutCount = MAGMA_COUNT(indirectCommandsLayouts);
+    statistics.indirectCommandsLayoutCount = core::countof(indirectCommandsLayouts);
 #endif
 #ifdef VK_KHR_sampler_ycbcr_conversion
-    statistics.ycbcrSamplerCount = MAGMA_COUNT(ycbcrSamplers);
+    statistics.ycbcrSamplerCount = core::countof(ycbcrSamplers);
 #endif
 #ifdef VK_EXT_private_data
-    statistics.privateDataSlotCount = MAGMA_COUNT(privateDataSlots);
+    statistics.privateDataSlotCount = core::countof(privateDataSlots);
 #endif
     return statistics;
 }

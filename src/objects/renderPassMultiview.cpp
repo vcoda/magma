@@ -102,7 +102,7 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.pNext = &renderPassMultiviewInfo;
     renderPassInfo.flags = 0;
-    renderPassInfo.attachmentCount = MAGMA_COUNT(attachments);
+    renderPassInfo.attachmentCount = core::countof(attachments);
     renderPassInfo.pAttachments = attachments.data();
     renderPassInfo.subpassCount = 1;
     renderPassInfo.pSubpasses = &subpassDescription;
@@ -110,11 +110,11 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     renderPassInfo.pDependencies = dependencies;
     renderPassMultiviewInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO_KHR;
     renderPassMultiviewInfo.pNext = extendedInfo.headNode();
-    renderPassMultiviewInfo.subpassCount = MAGMA_COUNT(this->viewMasks);
+    renderPassMultiviewInfo.subpassCount = core::countof(this->viewMasks);
     renderPassMultiviewInfo.pViewMasks = this->viewMasks.data();
-    renderPassMultiviewInfo.dependencyCount = MAGMA_COUNT(this->viewOffsets);
+    renderPassMultiviewInfo.dependencyCount = core::countof(this->viewOffsets);
     renderPassMultiviewInfo.pViewOffsets = this->viewOffsets.data();
-    renderPassMultiviewInfo.correlationMaskCount = MAGMA_COUNT(this->correlationMasks);
+    renderPassMultiviewInfo.correlationMaskCount = core::countof(this->correlationMasks);
     renderPassMultiviewInfo.pCorrelationMasks = this->correlationMasks.data();
     const VkResult result = vkCreateRenderPass(getNativeDevice(), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create multiview render pass");

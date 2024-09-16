@@ -95,7 +95,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     {
         swapchainPresentModesInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODES_CREATE_INFO_EXT;
         swapchainPresentModesInfo.pNext = nullptr;
-        swapchainPresentModesInfo.presentModeCount = MAGMA_COUNT(optional.presentModes);
+        swapchainPresentModesInfo.presentModeCount = core::countof(optional.presentModes);
         swapchainPresentModesInfo.pPresentModes = optional.presentModes.data();
         linkNode(swapchainInfo, swapchainPresentModesInfo);
     }

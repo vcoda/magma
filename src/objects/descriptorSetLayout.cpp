@@ -35,7 +35,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
     descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     descriptorSetLayoutInfo.pNext = extendedInfo.headNode();
     descriptorSetLayoutInfo.flags = flags;
-    descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
+    descriptorSetLayoutInfo.bindingCount = core::countof(bindings);
     descriptorSetLayoutInfo.pBindings = bindings.data();
     const VkResult result = vkCreateDescriptorSetLayout(getNativeDevice(), &descriptorSetLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create descriptor set layout");

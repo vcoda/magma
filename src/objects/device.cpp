@@ -57,11 +57,11 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     deviceInfo.pNext = extendedInfo.headNode();
     deviceInfo.flags = 0;
-    deviceInfo.queueCreateInfoCount = MAGMA_COUNT(queueDescriptors);
+    deviceInfo.queueCreateInfoCount = core::countof(queueDescriptors);
     deviceInfo.pQueueCreateInfos = queueDescriptors.data();
-    deviceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers_);
+    deviceInfo.enabledLayerCount = core::countof(enabledLayers_);
     deviceInfo.ppEnabledLayerNames = enabledLayers_.data();
-    deviceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions_);
+    deviceInfo.enabledExtensionCount = core::countof(enabledExtensions_);
     deviceInfo.ppEnabledExtensionNames = enabledExtensions_.data();
     deviceInfo.pEnabledFeatures = enabledExtendedFeatures.empty() ? &enabledFeatures : nullptr;
 #ifdef VK_KHR_get_physical_device_properties2
@@ -165,7 +165,7 @@ void Device::updateDescriptorSets(uint32_t descriptorWriteCount, const VkWriteDe
 void Device::updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descriptorWrites,
     const std::vector<VkCopyDescriptorSet>& descriptorCopies /* {} */) const noexcept
 {
-    updateDescriptorSets(MAGMA_COUNT(descriptorWrites), descriptorWrites.data(), MAGMA_COUNT(descriptorCopies), descriptorCopies.data());
+    updateDescriptorSets(core::countof(descriptorWrites), descriptorWrites.data(), core::countof(descriptorCopies), descriptorCopies.data());
 }
 
 bool Device::waitIdle() const
@@ -234,7 +234,7 @@ bool Device::getDescriptorSetLayoutSupport(const std::vector<VkDescriptorSetLayo
     descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     descriptorSetLayoutInfo.pNext = extendedInfo.headNode();
     descriptorSetLayoutInfo.flags = flags;
-    descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
+    descriptorSetLayoutInfo.bindingCount = core::countof(bindings);
     descriptorSetLayoutInfo.pBindings = bindings.data();
     descriptorSetLayoutSupport.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT_KHR;
     descriptorSetLayoutSupport.pNext = nullptr;
@@ -255,7 +255,7 @@ uint32_t Device::getVariableDescriptorCountLayoutSupport(const std::vector<VkDes
     descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     descriptorSetLayoutInfo.pNext = extendedInfo.headNode();
     descriptorSetLayoutInfo.flags = flags;
-    descriptorSetLayoutInfo.bindingCount = MAGMA_COUNT(bindings);
+    descriptorSetLayoutInfo.bindingCount = core::countof(bindings);
     descriptorSetLayoutInfo.pBindings = bindings.data();
     descriptorSetLayoutSupport.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT_KHR;
     descriptorSetLayoutSupport.pNext = &descriptorSetVariableDescriptorCountLayoutSupport;
@@ -385,7 +385,7 @@ std::vector<uint64_t> Device::getCalibratedTimestamps(const std::vector<VkTimeDo
     std::vector<uint64_t> timestamps(timeDomains.size(), 0ull);
     uint64_t deviation = 0ull;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetCalibratedTimestampsEXT, VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME);
-    vkGetCalibratedTimestampsEXT(handle, MAGMA_COUNT(calibratedTimestampInfos), calibratedTimestampInfos, timestamps.data(),
+    vkGetCalibratedTimestampsEXT(handle, core::countof(calibratedTimestampInfos), calibratedTimestampInfos, timestamps.data(),
         maxDeviation ? maxDeviation : &deviation);
     return timestamps;
 }

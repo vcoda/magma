@@ -286,7 +286,7 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
     }
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(),
         firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets,
-        MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
+        core::countof(dynamicOffsets), dynamicOffsets.begin());
     MAGMA_INUSE(pipeline->getLayout());
 }
 
@@ -481,9 +481,9 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
     for (auto const& barrier: imageMemoryBarriers)
         dereferencedImageMemoryBarriers.put(barrier);
     vkCmdWaitEvents(handle, dereferencedEvents.size(), dereferencedEvents, srcStageMask, dstStageMask,
-        MAGMA_COUNT(memoryBarriers),
+        core::countof(memoryBarriers),
         memoryBarriers.data(),
-        MAGMA_COUNT(bufferMemoryBarriers),
+        core::countof(bufferMemoryBarriers),
         bufferMemoryBarriers.data(),
         dereferencedImageMemoryBarriers.size(),
         dereferencedImageMemoryBarriers);
@@ -525,9 +525,9 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     for (auto const& barrier: imageMemoryBarriers)
         dereferencedImageMemoryBarriers.put(barrier);
     vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        MAGMA_COUNT(memoryBarriers),
+        core::countof(memoryBarriers),
         memoryBarriers.data(),
-        MAGMA_COUNT(bufferMemoryBarriers),
+        core::countof(bufferMemoryBarriers),
         bufferMemoryBarriers.data(),
         dereferencedImageMemoryBarriers.size(),
         dereferencedImageMemoryBarriers);
@@ -564,7 +564,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     renderPassBeginInfo.framebuffer = *framebuffer;
     renderPassBeginInfo.renderArea.offset = renderArea.offset;
     renderPassBeginInfo.renderArea.extent = (renderArea.extent.width || renderArea.extent.height) ? renderArea.extent : framebuffer->getExtent();
-    renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    renderPassBeginInfo.clearValueCount = core::countof(clearValues);
     renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
     MAGMA_INUSE(renderPass);
@@ -600,11 +600,11 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     renderPassBeginInfo.framebuffer = *framebuffer;
     renderPassBeginInfo.renderArea.offset = renderArea.offset;
     renderPassBeginInfo.renderArea.extent = (renderArea.extent.width || renderArea.extent.height) ? renderArea.extent : framebuffer->getExtent();
-    renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    renderPassBeginInfo.clearValueCount = core::countof(clearValues);
     renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     renderPassBeginAttachmentInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
     renderPassBeginAttachmentInfo.pNext = nullptr;
-    renderPassBeginAttachmentInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
+    renderPassBeginAttachmentInfo.attachmentCount = core::countof(dereferencedAttachments);
     renderPassBeginAttachmentInfo.pAttachments = dereferencedAttachments;
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
     MAGMA_INUSE(renderPass);
@@ -681,12 +681,12 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     renderPassBeginInfo.framebuffer = *framebuffer;
     renderPassBeginInfo.renderArea.offset = VkOffset2D{0, 0};
     renderPassBeginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
-    renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    renderPassBeginInfo.clearValueCount = core::countof(clearValues);
     renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     renderPassBeginDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
     renderPassBeginDeviceGroupInfo.pNext = nullptr;
     renderPassBeginDeviceGroupInfo.deviceMask = deviceMask;
-    renderPassBeginDeviceGroupInfo.deviceRenderAreaCount = MAGMA_COUNT(deviceRenderAreas);
+    renderPassBeginDeviceGroupInfo.deviceRenderAreaCount = core::countof(deviceRenderAreas);
     renderPassBeginDeviceGroupInfo.pDeviceRenderAreas = deviceRenderAreas.data();
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
     MAGMA_INUSE(renderPass);
@@ -723,16 +723,16 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
     renderPassBeginInfo.framebuffer = *framebuffer;
     renderPassBeginInfo.renderArea.offset = VkOffset2D{0, 0};
     renderPassBeginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
-    renderPassBeginInfo.clearValueCount = MAGMA_COUNT(clearValues);
+    renderPassBeginInfo.clearValueCount = core::countof(clearValues);
     renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
     renderPassBeginDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
     renderPassBeginDeviceGroupInfo.pNext = &renderPassBeginAttachmentInfo;
     renderPassBeginDeviceGroupInfo.deviceMask = deviceMask;
-    renderPassBeginDeviceGroupInfo.deviceRenderAreaCount = MAGMA_COUNT(deviceRenderAreas);
+    renderPassBeginDeviceGroupInfo.deviceRenderAreaCount = core::countof(deviceRenderAreas);
     renderPassBeginDeviceGroupInfo.pDeviceRenderAreas = deviceRenderAreas.data();
     renderPassBeginAttachmentInfo.sType =  VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
     renderPassBeginAttachmentInfo.pNext = nullptr;
-    renderPassBeginAttachmentInfo.attachmentCount = MAGMA_COUNT(dereferencedAttachments);
+    renderPassBeginAttachmentInfo.attachmentCount = core::countof(dereferencedAttachments);
     renderPassBeginAttachmentInfo.pAttachments = dereferencedAttachments;
     vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
     MAGMA_INUSE(renderPass);

@@ -76,7 +76,7 @@ VkStridedDeviceAddressRegionKHR ShaderGroup::getRegion(uint32_t indexOffset) con
     {
         region.deviceAddress = shaderBindingTable->getDeviceAddress() + indexOffset * stride;
         region.stride = stride;
-        region.size = raygen ? stride : stride * MAGMA_COUNT(indices);
+        region.size = raygen ? stride : stride * core::countof(indices);
     }
     return region;
 }

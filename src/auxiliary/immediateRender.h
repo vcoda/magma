@@ -57,7 +57,7 @@ namespace magma
             const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
             uint32_t getMaxVertexCount() const noexcept { return maxVertexCount; }
             uint32_t getVertexCount() const noexcept { return vertexCount; }
-            uint32_t getPrimitiveCount() const noexcept { return MAGMA_COUNT(primitives); }
+            uint32_t getPrimitiveCount() const noexcept { return core::countof(primitives); }
             // Render states setup
             void setVertexShader(const VertexShaderStage& vertexShader) noexcept;
             void setFragmentShader(const FragmentShaderStage& fragmentShader) noexcept;

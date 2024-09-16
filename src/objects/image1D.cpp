@@ -42,7 +42,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
-    Image1D(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, MAGMA_COUNT(mipMaps),
+    Image1D(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, core::countof(mipMaps),
         std::move(allocator), optional, sharing)
 {
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
@@ -55,7 +55,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
-    Image1D(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, MAGMA_COUNT(mipMaps),
+    Image1D(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, core::countof(mipMaps),
         allocator, optional, sharing)
 {
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);

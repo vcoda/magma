@@ -78,7 +78,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     {
         imageFormatListInfo.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
         imageFormatListInfo.pNext = nullptr;
-        imageFormatListInfo.viewFormatCount = MAGMA_COUNT(viewFormats);
+        imageFormatListInfo.viewFormatCount = core::countof(viewFormats);
         imageFormatListInfo.pViewFormats = viewFormats.data();
         linkNode(imageInfo, imageFormatListInfo);
     }

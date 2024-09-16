@@ -20,7 +20,7 @@ inline std::shared_ptr<VertexBuffer> makeVertexBuffer(const std::vector<Vertex>&
     MAGMA_ASSERT(!vertices.empty());
     auto vertexBuffer = std::make_shared<VertexBuffer>(std::move(cmdBuffer),
         vertices.size() * sizeof(Vertex), vertices.data(), std::move(allocator));
-    vertexBuffer->setVertexCount(MAGMA_COUNT(vertices));
+    vertexBuffer->setVertexCount(core::countof(vertices));
     return vertexBuffer;
 }
 
@@ -44,7 +44,7 @@ inline std::shared_ptr<IndexBuffer> makeIndexBuffer(const std::vector<Index>& in
     MAGMA_ASSERT(!indices.empty());
     auto indexBuffer = std::make_shared<IndexBuffer>(std::move(cmdBuffer),
         getIndexType<Index>(), indices.size() * sizeof(Index), indices.data(), std::move(allocator));
-    MAGMA_ASSERT(indexBuffer->getIndexCount() == MAGMA_COUNT(indices));
+    MAGMA_ASSERT(indexBuffer->getIndexCount() == core::countof(indices));
     return indexBuffer;
 }
 

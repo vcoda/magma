@@ -53,9 +53,9 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
     instanceInfo.pNext = extendedInfo.headNode();
     instanceInfo.flags = flags;
     instanceInfo.pApplicationInfo = applicationInfo;
-    instanceInfo.enabledLayerCount = MAGMA_COUNT(enabledLayers);
+    instanceInfo.enabledLayerCount = core::countof(enabledLayers);
     instanceInfo.ppEnabledLayerNames = enabledLayers.data();
-    instanceInfo.enabledExtensionCount = MAGMA_COUNT(enabledExtensions);
+    instanceInfo.enabledExtensionCount = core::countof(enabledExtensions);
     instanceInfo.ppEnabledExtensionNames = enabledExtensions.data();
 #ifdef VK_EXT_debug_report
     VkDebugReportCallbackCreateInfoEXT debugReportCallbackInfo;
@@ -177,7 +177,7 @@ std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
 {
     const std::vector<VkPhysicalDeviceGroupPropertiesKHR>& deviceGroups = enumeratePhysicalDeviceGroups();
     MAGMA_ASSERT(groupId < deviceGroups.size());
-    if (groupId >= MAGMA_COUNT(deviceGroups))
+    if (groupId >= core::countof(deviceGroups))
         return nullptr;
     std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
     const VkPhysicalDeviceGroupProperties& deviceGroupProperties = deviceGroups[groupId];

@@ -99,7 +99,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surf
     {
         swapchainPresentModesInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODES_CREATE_INFO_EXT;
         swapchainPresentModesInfo.pNext = nullptr;
-        swapchainPresentModesInfo.presentModeCount = MAGMA_COUNT(optional.presentModes);
+        swapchainPresentModesInfo.presentModeCount = core::countof(optional.presentModes);
         swapchainPresentModesInfo.pPresentModes = optional.presentModes.data();
         linkNode(swapchainInfo, swapchainPresentModesInfo);
     }
@@ -301,9 +301,9 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     bindImageMemoryInfo.memoryOffset = 0;
     bindImageMemoryDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR;
     bindImageMemoryDeviceGroupInfo.pNext = &bindImageMemorySwapchainInfo;
-    bindImageMemoryDeviceGroupInfo.deviceIndexCount = MAGMA_COUNT(deviceIndices);
+    bindImageMemoryDeviceGroupInfo.deviceIndexCount = core::countof(deviceIndices);
     bindImageMemoryDeviceGroupInfo.pDeviceIndices = deviceIndices.data();
-    bindImageMemoryDeviceGroupInfo.splitInstanceBindRegionCount = MAGMA_COUNT(splitInstanceBindRegions);
+    bindImageMemoryDeviceGroupInfo.splitInstanceBindRegionCount = core::countof(splitInstanceBindRegions);
     bindImageMemoryDeviceGroupInfo.pSplitInstanceBindRegions = splitInstanceBindRegions.data();
     bindImageMemorySwapchainInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHR;
     bindImageMemorySwapchainInfo.pNext = nullptr;

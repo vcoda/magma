@@ -30,7 +30,7 @@ VertexInputState::VertexInputState(const VertexInputBinding& binding,
         0, // flags
         1, // vertexBindingDescriptionCount
         core::copyArray<VkVertexInputBindingDescription>(&binding, 1), // pVertexBindingDescriptions
-        MAGMA_COUNT(attributes), // vertexAttributeDescriptionCount
+        core::countof(attributes), // vertexAttributeDescriptionCount
         core::copyInitializerList<VkVertexInputAttributeDescription>(attributes) // pVertexAttributeDescriptions
     }
 {
@@ -48,9 +48,9 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
         VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
         nullptr, // pNext
         0, // flags
-        MAGMA_COUNT(bindings), // vertexBindingDescriptionCount
+        core::countof(bindings), // vertexBindingDescriptionCount
         core::copyInitializerList<VkVertexInputBindingDescription>(bindings), // pVertexBindingDescriptions
-        MAGMA_COUNT(attributes), // vertexAttributeDescriptionCount
+        core::countof(attributes), // vertexAttributeDescriptionCount
         core::copyInitializerList<VkVertexInputAttributeDescription>(attributes) // pVertexAttributeDescriptions
     }
 {
@@ -71,7 +71,7 @@ VertexInputState::VertexInputState(const VertexInputBindingDivisor& binding,
         0, // flags
         1, // vertexBindingDescriptionCount
         core::copyArray<VkVertexInputBindingDescription>(&binding, 1), // pVertexBindingDescriptions
-        MAGMA_COUNT(attributes), // vertexAttributeDescriptionCount
+        core::countof(attributes), // vertexAttributeDescriptionCount
         core::copyInitializerList<VkVertexInputAttributeDescription>(attributes) // pVertexAttributeDescriptions
     }
 {
@@ -105,7 +105,7 @@ VertexInputState::VertexInputState(const std::initializer_list<VertexInputBindin
         }
     }
     pVertexBindingDescriptions = vertexBindingDescriptions;
-    vertexAttributeDescriptionCount = MAGMA_COUNT(attributes);
+    vertexAttributeDescriptionCount = core::countof(attributes);
     pVertexAttributeDescriptions = core::copyInitializerList<VkVertexInputAttributeDescription>(attributes);
     vertexInputDivisorInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
     vertexInputDivisorInfo.pNext = nullptr;

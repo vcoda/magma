@@ -58,7 +58,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferAttachmentImageInfo.width = width;
     framebufferAttachmentImageInfo.height = height;
     framebufferAttachmentImageInfo.layerCount = layerCount;
-    framebufferAttachmentImageInfo.viewFormatCount = MAGMA_COUNT(viewFormats);
+    framebufferAttachmentImageInfo.viewFormatCount = core::countof(viewFormats);
     framebufferAttachmentImageInfo.pViewFormats = viewFormats.data();
     const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create imageless framebuffer");
@@ -99,7 +99,7 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     framebufferInfo.pNext = &framebufferAttachmentsInfo;
     framebufferInfo.flags = VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR;
     framebufferInfo.renderPass = *renderPass;
-    framebufferInfo.attachmentCount = MAGMA_COUNT(attachments);
+    framebufferInfo.attachmentCount = core::countof(attachments);
     framebufferInfo.pAttachments = nullptr;
     framebufferInfo.width = extent.width;
     framebufferInfo.height = extent.height;

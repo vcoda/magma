@@ -83,7 +83,7 @@ namespace magma
     class BasePipelineBatch : public PipelineBatch
     {
     public:
-        uint32_t getPipelineCount() const noexcept { return MAGMA_COUNT(pipelines); }
+        uint32_t getPipelineCount() const noexcept { return core::countof(pipelines); }
         const std::shared_ptr<PipelineType>& getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 
     protected:

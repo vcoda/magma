@@ -26,7 +26,7 @@ MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmen
     const std::initializer_list<float>& blendConstants_ /* {1, 1, 1, 1} */) noexcept
 {
     flags = flags;
-    attachmentCount = MAGMA_COUNT(attachments);
+    attachmentCount = core::countof(attachments);
     pAttachments = core::copyArray<VkPipelineColorBlendAttachmentState>(attachments.data(), attachments.size());
     MAGMA_ASSERT(blendConstants_.size() == 4);
     float *blendConstant = blendConstants;

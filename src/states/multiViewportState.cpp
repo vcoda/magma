@@ -26,7 +26,7 @@ MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_
     ViewportState(),
     viewports(viewports_)
 {
-    viewportCount = MAGMA_COUNT(viewports);
+    viewportCount = core::countof(viewports);
     pViewports = viewports.data();
     for (const VkViewport& viewport : viewports)
     {
@@ -37,7 +37,7 @@ MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_
         scissor.extent.height = static_cast<uint32_t>(std::fabs(viewport.height));
         scissors.push_back(scissor);
     }
-    scissorCount = MAGMA_COUNT(scissors);
+    scissorCount = core::countof(scissors);
     pScissors = scissors.data();
 }
 
@@ -46,9 +46,9 @@ MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_
     viewports(viewports_),
     scissors(scissors_)
 {
-    viewportCount = MAGMA_COUNT(viewports);
+    viewportCount = core::countof(viewports);
     pViewports = viewports.data();
-    scissorCount = MAGMA_COUNT(scissors);
+    scissorCount = core::countof(scissors);
     pScissors = scissors.data();
 }
 

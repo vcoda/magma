@@ -19,7 +19,7 @@ inline void CommandBuffer::setViewport(const VkViewport& viewport) noexcept
 
 inline void CommandBuffer::setViewports(const std::initializer_list<Viewport>& viewports) noexcept
 {
-    vkCmdSetViewport(handle, 0, MAGMA_COUNT(viewports), viewports.begin());
+    vkCmdSetViewport(handle, 0, core::countof(viewports), viewports.begin());
 }
 
 inline void CommandBuffer::setScissor(int32_t x, int32_t y, uint32_t width, uint32_t height) noexcept
@@ -35,7 +35,7 @@ inline void CommandBuffer::setScissor(const VkRect2D& scissor) noexcept
 
 inline void CommandBuffer::setScissors(const std::initializer_list<VkRect2D>& scissors) noexcept
 {
-    vkCmdSetScissor(handle, 0, MAGMA_COUNT(scissors), scissors.begin());
+    vkCmdSetScissor(handle, 0, core::countof(scissors), scissors.begin());
 }
 
 inline void CommandBuffer::setLineWidth(float lineWidth) noexcept
@@ -98,7 +98,7 @@ inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, cons
 {
     MAGMA_ASSERT(layout->hasLayout(descriptorSet->getLayout()));
     MAGMA_ASSERT(!descriptorSet->dirty());
-    vkCmdBindDescriptorSets(handle, bindPoint, *layout, setIndex, 1, descriptorSet->getHandleAddress(), MAGMA_COUNT(dynamicOffsets), dynamicOffsets.begin());
+    vkCmdBindDescriptorSets(handle, bindPoint, *layout, setIndex, 1, descriptorSet->getHandleAddress(), core::countof(dynamicOffsets), dynamicOffsets.begin());
     MAGMA_INUSE(layout);
     MAGMA_INUSE(descriptorSet);
 }
@@ -238,14 +238,14 @@ inline void CommandBuffer::drawMulti(const std::vector<VkMultiDrawInfoEXT>& vert
 {
     MAGMA_DEVICE_EXTENSION(vkCmdDrawMultiEXT);
     if (vkCmdDrawMultiEXT)
-        vkCmdDrawMultiEXT(handle, MAGMA_COUNT(vertexInfo), vertexInfo.data(), 1, 0, sizeof(VkMultiDrawInfoEXT));
+        vkCmdDrawMultiEXT(handle, core::countof(vertexInfo), vertexInfo.data(), 1, 0, sizeof(VkMultiDrawInfoEXT));
 }
 
 inline void CommandBuffer::drawMultiInstanced(const std::vector<VkMultiDrawInfoEXT>& vertexInfo, uint32_t instanceCount, uint32_t firstInstance) const noexcept
 {
     MAGMA_DEVICE_EXTENSION(vkCmdDrawMultiEXT);
     if (vkCmdDrawMultiEXT)
-        vkCmdDrawMultiEXT(handle, MAGMA_COUNT(vertexInfo), vertexInfo.data(), instanceCount, firstInstance, sizeof(VkMultiDrawInfoEXT));
+        vkCmdDrawMultiEXT(handle, core::countof(vertexInfo), vertexInfo.data(), instanceCount, firstInstance, sizeof(VkMultiDrawInfoEXT));
 }
 
 inline void CommandBuffer::drawMultiIndexed(const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo,
@@ -253,7 +253,7 @@ inline void CommandBuffer::drawMultiIndexed(const std::vector<VkMultiDrawIndexed
 {
     MAGMA_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
     if (vkCmdDrawMultiIndexedEXT)
-        vkCmdDrawMultiIndexedEXT(handle, MAGMA_COUNT(indexInfo), indexInfo.data(), 1, 0, sizeof(VkMultiDrawIndexedInfoEXT), vertexOffsets.data());
+        vkCmdDrawMultiIndexedEXT(handle, core::countof(indexInfo), indexInfo.data(), 1, 0, sizeof(VkMultiDrawIndexedInfoEXT), vertexOffsets.data());
 }
 
 inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDrawIndexedInfoEXT>& indexInfo, uint32_t instanceCount, uint32_t firstInstance,
@@ -261,7 +261,7 @@ inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDr
 {
     MAGMA_DEVICE_EXTENSION(vkCmdDrawMultiIndexedEXT);
     if (vkCmdDrawMultiIndexedEXT)
-        vkCmdDrawMultiIndexedEXT(handle, MAGMA_COUNT(indexInfo), indexInfo.data(), instanceCount, firstInstance, sizeof(VkMultiDrawIndexedInfoEXT), vertexOffsets.data());
+        vkCmdDrawMultiIndexedEXT(handle, core::countof(indexInfo), indexInfo.data(), instanceCount, firstInstance, sizeof(VkMultiDrawIndexedInfoEXT), vertexOffsets.data());
 }
 #endif // VK_EXT_multi_draw
 
@@ -392,7 +392,7 @@ inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<const Buffer>
 inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept
 {
     const VkImageLayout dstLayout = dstImage->getLayout(regions.front().imageSubresource.mipLevel);
-    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstLayout, MAGMA_COUNT(regions), regions.data());
+    vkCmdCopyBufferToImage(handle, *srcBuffer, *dstImage, dstLayout, core::countof(regions), regions.data());
     MAGMA_INUSE(srcBuffer);
     MAGMA_INUSE(dstImage);
 }
@@ -408,7 +408,7 @@ inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<const Image>&
 inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
 {
     const VkImageLayout srcLayout = srcImage->getLayout(regions.front().imageSubresource.mipLevel);
-    vkCmdCopyImageToBuffer(handle, *srcImage, srcLayout, *dstBuffer, MAGMA_COUNT(regions), regions.data());
+    vkCmdCopyImageToBuffer(handle, *srcImage, srcLayout, *dstBuffer, core::countof(regions), regions.data());
     MAGMA_INUSE(srcImage);
     MAGMA_INUSE(dstBuffer);
 }
@@ -458,7 +458,7 @@ inline void CommandBuffer::clearDepthStencilImage(const std::shared_ptr<Image>& 
 
 inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
 {
-    vkCmdClearAttachments(handle, MAGMA_COUNT(attachments), attachments.begin(), 1, &clearRect);
+    vkCmdClearAttachments(handle, core::countof(attachments), attachments.begin(), 1, &clearRect);
 }
 
 inline void CommandBuffer::resolveImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage) const noexcept
@@ -519,14 +519,14 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
 inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::initializer_list<MemoryBarrier>& barriers) const noexcept
 {
-    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, MAGMA_COUNT(barriers), barriers.begin(), 0, nullptr, 0, nullptr);
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, core::countof(barriers), barriers.begin(), 0, nullptr, 0, nullptr);
     MAGMA_INUSE(event);
 }
 
 inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::initializer_list<BufferMemoryBarrier>& barriers) const noexcept
 {
-    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 0, nullptr, MAGMA_COUNT(barriers), barriers.begin(), 0, nullptr);
+    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 0, nullptr, core::countof(barriers), barriers.begin(), 0, nullptr);
     MAGMA_INUSE(event);
 }
 
@@ -559,13 +559,13 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& barriers,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, MAGMA_COUNT(barriers), barriers.begin(), 0, nullptr, 0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, core::countof(barriers), barriers.begin(), 0, nullptr, 0, nullptr);
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& barriers,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, MAGMA_COUNT(barriers), barriers.begin(), 0, nullptr);
+    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, core::countof(barriers), barriers.begin(), 0, nullptr);
 }
 
 inline void CommandBuffer::batchPipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier,
@@ -832,7 +832,7 @@ inline void CommandBuffer::queryPipelineStatistics(VkQueryPipelineStatisticFlags
 inline uint32_t CommandBuffer::inUseObjectCount() const noexcept
 {
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-    return MAGMA_COUNT(inUse);
+    return core::countof(inUse);
 #endif
     return 0;
 }

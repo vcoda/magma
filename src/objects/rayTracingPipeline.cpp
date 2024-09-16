@@ -44,7 +44,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     const std::vector<VkDynamicState>& dynamicStates /* empty */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), MAGMA_COUNT(shaderStages_)),
+    Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), core::countof(shaderStages_)),
     shaderStages(shaderStages_),
     shaderGroups(shaderGroups_)
 {
@@ -60,9 +60,9 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     pipelineInfo.flags = flags;
     if (!basePipeline.expired())
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stageCount = MAGMA_COUNT(dereferencedStages);
+    pipelineInfo.stageCount = core::countof(dereferencedStages);
     pipelineInfo.pStages = dereferencedStages;
-    pipelineInfo.groupCount = MAGMA_COUNT(shaderGroups);
+    pipelineInfo.groupCount = core::countof(shaderGroups);
     pipelineInfo.pGroups = shaderGroups.data();
     pipelineInfo.maxPipelineRayRecursionDepth = maxPipelineRayRecursionDepth;
     pipelineInfo.pLibraryInfo = nullptr;
@@ -77,7 +77,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
         pipelineDynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
         pipelineDynamicStateInfo.pNext = nullptr;
         pipelineDynamicStateInfo.flags = 0;
-        pipelineDynamicStateInfo.dynamicStateCount = MAGMA_COUNT(dynamicStates);
+        pipelineDynamicStateInfo.dynamicStateCount = core::countof(dynamicStates);
         pipelineDynamicStateInfo.pDynamicStates = dynamicStates.data();
     }
     if (pipelineLibrary)
@@ -148,7 +148,7 @@ RayTracingPipeline::RayTracingPipeline(VkPipeline handle_, std::shared_ptr<Devic
 #endif // VK_EXT_pipeline_creation_feedback
     hash_t hash):
     Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator),
-        MAGMA_COUNT(shaderStages_),
+        core::countof(shaderStages_),
     #ifdef VK_EXT_pipeline_creation_feedback
         creationFeedback, stageCreationFeedbacks,
     #endif
@@ -182,7 +182,7 @@ VkDeviceSize RayTracingPipeline::getIntersectionShaderStackSize(uint32_t group) 
 std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles() const
 {
     const auto rayTracingPipelineProperties = device->getPhysicalDevice()->getRayTracingPipelineProperties();
-    const uint32_t shaderGroupCount = MAGMA_COUNT(shaderGroups);
+    const uint32_t shaderGroupCount = core::countof(shaderGroups);
     std::vector<uint8_t> shaderGroupHandles(shaderGroupCount * rayTracingPipelineProperties.shaderGroupHandleSize);
     MAGMA_DEVICE_EXTENSION(vkGetRayTracingShaderGroupHandlesKHR);
     const VkResult result = vkGetRayTracingShaderGroupHandlesKHR(getNativeDevice(),
@@ -194,7 +194,7 @@ std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles() const
 std::vector<uint8_t> RayTracingPipeline::getCaptureReplayShaderGroupHandles() const
 {
     const auto rayTracingPipelineProperties = device->getPhysicalDevice()->getRayTracingPipelineProperties();
-    const uint32_t shaderGroupCount = MAGMA_COUNT(shaderGroups);
+    const uint32_t shaderGroupCount = core::countof(shaderGroups);
     std::vector<uint8_t> shaderGroupHandles(shaderGroupCount * rayTracingPipelineProperties.shaderGroupHandleSize);
     MAGMA_DEVICE_EXTENSION(vkGetRayTracingCaptureReplayShaderGroupHandlesKHR);
     const VkResult result = vkGetRayTracingCaptureReplayShaderGroupHandlesKHR(getNativeDevice(),

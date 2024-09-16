@@ -128,6 +128,12 @@ inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
     return VK_NULL_HANDLE;
 }
 
+template<class T>
+inline uint32_t countof(const T& container) noexcept
+{
+    return static_cast<uint32_t>(container.size());
+}
+
 template<class Type>
 inline const std::unique_ptr<Type>& null() noexcept
 {

@@ -35,7 +35,7 @@ FramebufferAttachmentImage::FramebufferAttachmentImage(VkImageUsageFlags usage,
         width,
         height,
         layerCount,
-        MAGMA_COUNT(viewFormats),
+        core::countof(viewFormats),
         core::copyVector(viewFormats)
     }
 {}
@@ -49,7 +49,7 @@ FramebufferAttachmentImage::FramebufferAttachmentImage(std::shared_ptr<const Ima
         image->getWidth(),
         image->getHeight(),
         image->getArrayLayers(),
-        MAGMA_COUNT(image->getViewFormats()),
+        core::countof(image->getViewFormats()),
         core::copyVector(image->getViewFormats())
     }
 {}

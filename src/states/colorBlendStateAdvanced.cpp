@@ -52,7 +52,7 @@ AdvancedColorBlendState::AdvancedColorBlendState(const std::initializer_list<Adv
         colorBlendAdvanced->blendOverlap = blendOverlap;
         pNext = colorBlendAdvanced;
     }
-    attachmentCount = MAGMA_COUNT(attachments);
+    attachmentCount = core::countof(attachments);
     pAttachments = core::copyInitializerList<VkPipelineColorBlendAttachmentState>(attachments);
 }
 
@@ -69,7 +69,7 @@ AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColor
         colorBlendAdvanced->blendOverlap = blendOverlap;
         pNext = colorBlendAdvanced;
     }
-    attachmentCount = MAGMA_COUNT(attachments);
+    attachmentCount = core::countof(attachments);
     pAttachments = core::copyVector<VkPipelineColorBlendAttachmentState>(attachments);
 }
 

@@ -31,7 +31,7 @@ namespace magma
     {
     public:
         ~PipelineLibrary();
-        uint32_t getLibraryCount() const noexcept { return MAGMA_COUNT(libraries); }
+        uint32_t getLibraryCount() const noexcept { return core::countof(libraries); }
         const VkPipeline *getLibraries() const noexcept { return libraries.data(); }
 
     protected:

@@ -82,7 +82,7 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     hash = core::hashCombine(hash, shaderStage.getHash());
     hash = core::hashCombine(hash, layout->getHash());
     hashes.push_front(hash);
-    return MAGMA_COUNT(pipelineInfos) - 1;
+    return core::countof(pipelineInfos) - 1;
 }
 
 void ComputePipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
@@ -97,7 +97,7 @@ void ComputePipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelin
 #endif
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateComputePipelines(getNativeDevice(), MAGMA_OPTIONAL_HANDLE(pipelineCache),
-        MAGMA_COUNT(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
+        core::countof(pipelineInfos), pipelineInfos.data(), allocator.get(), handles.data());
     postCreate();
     if (VK_SUCCESS == result)
     {

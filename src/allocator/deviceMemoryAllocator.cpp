@@ -153,7 +153,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
             allocInfo.priority = *priority;
             allocInfos.push_back(allocInfo);
         });
-    std::vector<VmaAllocation> allocations(MAGMA_COUNT(allocInfos));
+    std::vector<VmaAllocation> allocations(core::countof(allocInfos));
     const VkResult result = vmaAllocateMemoryPages(allocator, memoryRequirements.data(), allocInfos.data(),
         allocations.size(), allocations.data(), nullptr);
     MAGMA_HANDLE_RESULT(result, "failed to allocate memory pages");
@@ -179,7 +179,7 @@ void DeviceMemoryAllocator::freePages(std::vector<DeviceMemoryBlock>& allocation
 {
     if (!allocations.empty())
     {
-        vmaFreeMemoryPages(allocator, MAGMA_COUNT(allocations), reinterpret_cast<VmaAllocation *>(allocations.data()));
+        vmaFreeMemoryPages(allocator, core::countof(allocations), reinterpret_cast<VmaAllocation *>(allocations.data()));
         allocations.clear();
         allocations.shrink_to_fit();
     }

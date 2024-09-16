@@ -23,8 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_BOOLEAN(condition) (condition) ? VkBool32(VK_TRUE) : VkBool32(VK_FALSE)
 
-#define MAGMA_COUNT(container) static_cast<uint32_t>((container).size())
-
 #define MAGMA_ASSERT(expression) assert(expression)
 
 #define MAGMA_FAILURE(message) MAGMA_ASSERT(!message)

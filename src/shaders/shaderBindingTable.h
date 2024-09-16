@@ -49,7 +49,7 @@ namespace magma
         explicit ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
             std::shared_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
-        uint32_t getShaderGroupCount() const noexcept { return MAGMA_COUNT(groups); }
+        uint32_t getShaderGroupCount() const noexcept { return core::countof(groups); }
         template<class Block>
         void addShaderRecord(VkShaderStageFlagBits stage,
             uint32_t groupIndex,

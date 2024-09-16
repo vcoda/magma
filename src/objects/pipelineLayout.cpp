@@ -41,7 +41,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     pipelineLayoutInfo.flags = flags;
     pipelineLayoutInfo.setLayoutCount = 0;
     pipelineLayoutInfo.pSetLayouts = nullptr;
-    pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
+    pipelineLayoutInfo.pushConstantRangeCount = core::countof(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
     const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
@@ -68,7 +68,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
     pipelineLayoutInfo.flags = flags;
     pipelineLayoutInfo.setLayoutCount = 1;
     pipelineLayoutInfo.pSetLayouts = setLayout->getHandleAddress();
-    pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
+    pipelineLayoutInfo.pushConstantRangeCount = core::countof(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
     const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
@@ -98,7 +98,7 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
     pipelineLayoutInfo.flags = flags;
     pipelineLayoutInfo.setLayoutCount = dereferencedSetLayouts.size();
     pipelineLayoutInfo.pSetLayouts = dereferencedSetLayouts;
-    pipelineLayoutInfo.pushConstantRangeCount = MAGMA_COUNT(pushConstantRanges);
+    pipelineLayoutInfo.pushConstantRangeCount = core::countof(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
     const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
