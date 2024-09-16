@@ -50,6 +50,7 @@ namespace magma
         VkAccelerationStructureCreateFlagsKHR getFlags() const noexcept { return flags; }
         VkAccelerationStructureBuildTypeKHR getBuildType() const noexcept { return buildType; }
         VkBuildAccelerationStructureFlagsKHR getBuildFlags() const noexcept { return buildFlags; }
+        uint32_t getGeometryCount() const noexcept { return geometryCount; }
         Family getFamily() const noexcept override final { return Family::AccelerationStructure; }
         VkDeviceSize getBuildScratchSize() const noexcept { return buildScratchSize; }
         VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
@@ -100,6 +101,7 @@ namespace magma
         const VkAccelerationStructureCreateFlagsKHR flags;
         const VkAccelerationStructureBuildTypeKHR buildType;
         const VkBuildAccelerationStructureFlagsKHR buildFlags;
+        uint32_t geometryCount;
         VkDeviceSize buildScratchSize;
         VkDeviceSize updateScratchSize;
         std::unique_ptr<Buffer> buffer;
