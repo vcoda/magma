@@ -45,7 +45,7 @@ namespace magma
         explicit RayTracingPipeline(std::shared_ptr<Device> device,
             const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
-            uint32_t maxPipelineRayRecursionDepth,
+            uint32_t maxRecursionDepth,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
@@ -57,6 +57,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         const std::vector<PipelineShaderStage>& getShaderStages() const noexcept { return shaderStages; }
         const std::vector<RayTracingShaderGroup>& getShaderGroups() const noexcept { return shaderGroups; }
+        uint32_t getMaxRecursionDepth() const noexcept { return maxRecursionDepth; }
         VkDeviceSize getGeneralShaderStackSize(uint32_t group) const noexcept;
         VkDeviceSize getClosestHitShaderStackSize(uint32_t group) const noexcept;
         VkDeviceSize getAnyHitShaderStackSize(uint32_t group) const noexcept;
@@ -74,6 +75,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator,
             const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
+            uint32_t maxRecursionDepth,
         #ifdef VK_EXT_pipeline_creation_feedback
             VkPipelineCreationFeedbackEXT creationFeedback,
             const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
@@ -84,6 +86,7 @@ namespace magma
 
         const std::vector<PipelineShaderStage> shaderStages;
         const std::vector<RayTracingShaderGroup> shaderGroups;
+        const uint32_t maxRecursionDepth;
     };
 
     /* Calculates hash of ray tracing pipeline. This function
@@ -95,7 +98,7 @@ namespace magma
         const std::vector<RayTracingShaderGroup>& shaderGroups,
         const std::vector<VkDynamicState>& dynamicStates,
         std::shared_ptr<PipelineLayout> layout,
-        uint32_t maxPipelineRayRecursionDepth,
+        uint32_t maxRecursionDepth,
         const StructureChain& extendedInfo = StructureChain()) noexcept;
 #endif // VK_KHR_ray_tracing_pipeline
 } // namespace magma

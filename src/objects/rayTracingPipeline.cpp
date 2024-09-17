@@ -35,7 +35,7 @@ namespace magma
 {
 #ifdef VK_KHR_ray_tracing_pipeline
 RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const std::vector<PipelineShaderStage>& shaderStages_,
-    const std::vector<RayTracingShaderGroup>& shaderGroups_, uint32_t maxPipelineRayRecursionDepth, std::shared_ptr<PipelineLayout> layout_,
+    const std::vector<RayTracingShaderGroup>& shaderGroups_, uint32_t maxRecursionDepth, std::shared_ptr<PipelineLayout> layout_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
@@ -46,7 +46,8 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     const StructureChain& extendedInfo /* default */):
     Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), core::countof(shaderStages_)),
     shaderStages(shaderStages_),
-    shaderGroups(shaderGroups_)
+    shaderGroups(shaderGroups_),
+    maxRecursionDepth(maxRecursionDepth)
 {
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
     for (auto const& stage: shaderStages)
@@ -64,7 +65,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     pipelineInfo.pStages = dereferencedStages;
     pipelineInfo.groupCount = core::countof(shaderGroups);
     pipelineInfo.pGroups = shaderGroups.data();
-    pipelineInfo.maxPipelineRayRecursionDepth = maxPipelineRayRecursionDepth;
+    pipelineInfo.maxPipelineRayRecursionDepth = maxRecursionDepth;
     pipelineInfo.pLibraryInfo = nullptr;
     pipelineInfo.pLibraryInterface = nullptr;
     pipelineInfo.pDynamicState = nullptr;
@@ -135,26 +136,27 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
         shaderGroups,
         dynamicStates,
         layout,
-        maxPipelineRayRecursionDepth,
+        maxRecursionDepth,
         extendedInfo);
 }
 
 RayTracingPipeline::RayTracingPipeline(VkPipeline handle_, std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
-    std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator,
-    const std::vector<PipelineShaderStage>& shaderStages_, const std::vector<RayTracingShaderGroup>& shaderGroups,
+    std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, const std::vector<PipelineShaderStage>& shaderStages,
+    const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxRecursionDepth,
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackEXT creationFeedback,
     const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
 #endif // VK_EXT_pipeline_creation_feedback
     hash_t hash):
     Pipeline(VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator),
-        core::countof(shaderStages_),
+        core::countof(shaderStages),
     #ifdef VK_EXT_pipeline_creation_feedback
         creationFeedback, stageCreationFeedbacks,
     #endif
         hash),
-    shaderStages(shaderStages_),
-    shaderGroups(shaderGroups)
+    shaderStages(shaderStages),
+    shaderGroups(shaderGroups),
+    maxRecursionDepth(maxRecursionDepth)
 {
     handle = handle_;
 }
@@ -215,14 +217,14 @@ hash_t psoHash(VkPipelineCreateFlags flags,
     const std::vector<RayTracingShaderGroup>& shaderGroups,
     const std::vector<VkDynamicState>& dynamicStates,
     std::shared_ptr<PipelineLayout> layout,
-    uint32_t maxPipelineRayRecursionDepth,
+    uint32_t maxRecursionDepth,
     const StructureChain& extendedInfo /* default */) noexcept
 {   // Erase flags that do not affect pipeline states
     // TODO: maybe clear some extension flags too?
     flags = flags & ~(VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT |
                       VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT |
                       VK_PIPELINE_CREATE_DERIVATIVE_BIT);
-    hash_t hash = core::hashArgs(flags, maxPipelineRayRecursionDepth);
+    hash_t hash = core::hashArgs(flags, maxRecursionDepth);
     for (auto const& stage: shaderStages)
         hash = core::hashCombine(hash, stage.getHash());
     for (auto const& group: shaderGroups)

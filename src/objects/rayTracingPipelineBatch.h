@@ -41,7 +41,7 @@ namespace magma
             std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
         uint32_t batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
-            uint32_t maxPipelineRayRecursionDepth,
+            uint32_t maxRecursionDepth,
             std::shared_ptr<PipelineLayout> layout,
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
             const std::vector<VkDynamicState>& dynamicStates = {},
@@ -55,6 +55,7 @@ namespace magma
         std::shared_ptr<DeferredOperation> deferredOperation;
         std::forward_list<std::vector<VkShaderStageFlagBits>> shaderStageFlags;
         std::forward_list<std::vector<RayTracingShaderGroup>> groups;
+        std::forward_list<uint32_t> maxRecursionDepths;
         std::forward_list<std::vector<VkDynamicState>> dynamicStates;
         std::forward_list<VkPipelineDynamicStateCreateInfo> dynamicStateInfos;
     };

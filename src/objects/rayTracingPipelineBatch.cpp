@@ -38,7 +38,7 @@ RayTracingPipelineBatch::RayTracingPipelineBatch(std::shared_ptr<Device> device,
 {}
 
 uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
-    const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxPipelineRayRecursionDepth,
+    const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxRecursionDepth,
     std::shared_ptr<PipelineLayout> layout,
     std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
     const std::vector<VkDynamicState>& dynamicStates_ /* void */,
@@ -51,6 +51,7 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     stages.push_front(shaderStages);
     shaderStageFlags.push_front(stageFlags);
     groups.push_front(shaderGroups);
+    maxRecursionDepths.push_front(maxRecursionDepth);
     dynamicStates.push_front(dynamicStates_);
     if (!layout)
         layout = std::make_shared<PipelineLayout>(device);
@@ -73,7 +74,7 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     pipelineInfo.pStages = nullptr; // Fixup later
     pipelineInfo.groupCount = core::countof(groups.front());
     pipelineInfo.pGroups = groups.front().data();
-    pipelineInfo.maxPipelineRayRecursionDepth = maxPipelineRayRecursionDepth;
+    pipelineInfo.maxPipelineRayRecursionDepth = maxRecursionDepth;
     pipelineInfo.pLibraryInfo = nullptr;
     pipelineInfo.pLibraryInterface = nullptr;
     pipelineInfo.pDynamicState = &dynamicStateInfos.front();
@@ -113,7 +114,7 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
         shaderGroups,
         dynamicStates_,
         layout,
-        maxPipelineRayRecursionDepth,
+        maxRecursionDepth,
         extendedInfo);
     hashes.push_front(hash);
     return core::countof(pipelineInfos) - 1;
@@ -143,6 +144,7 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipe
         auto pipelineInfo = pipelineInfos.cbegin();
         auto shaderStages = stages.cbegin();
         auto shaderGroups = groups.cbegin();
+        auto maxRecursionDepth = maxRecursionDepths.cbegin();
     #ifdef VK_EXT_pipeline_creation_feedback
         auto creationFeedback = creationFeedbacks.cbegin();
         auto stageFeedbacks = stageCreationFeedbacks.cbegin();
@@ -152,7 +154,7 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipe
         {
             pipelines.emplace_front(RayTracingPipeline::makeShared(
                 *handle++, device, *layout++, *basePipeline++, allocator,
-                *shaderStages++, *shaderGroups++,
+                *shaderStages++, *shaderGroups++, *maxRecursionDepth++,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
                 stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,
