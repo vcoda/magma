@@ -66,11 +66,29 @@ namespace magma
         size_t getIndexSize() const noexcept;
     };
 
+    /* Axis-aligned bounding box. */
+
+    struct Aabb : VkAabbPositionsKHR
+    {
+        Aabb(): VkAabbPositionsKHR{} {}
+        Aabb(float minX, float minY, float minZ,
+            float maxX, float maxY, float maxZ) noexcept;
+        Aabb(const float min[3], const float max[3]) noexcept;
+        Aabb(const float bounds[6]) noexcept;
+        template<class Vector>
+        Aabb(const Vector& min, const Vector& max) noexcept;
+        // An inactive AABB is one for which the minimum X coordinate is NaN
+        void deactivate() noexcept { minX = nanf(""); }
+        bool inactive() const noexcept { return isnan(minX); }
+    };
+
     /* Axis-aligned bounding box geometry in a bottom-level acceleration structure. */
 
     struct AccelerationStructureGeometryAabbs : AccelerationStructureGeometry
     {
         AccelerationStructureGeometryAabbs() noexcept;
+        explicit AccelerationStructureGeometryAabbs(const std::vector<Aabb>& aabbs,
+            VkGeometryFlagsKHR flags = 0) noexcept;
         template<class Buffer>
         explicit AccelerationStructureGeometryAabbs(const Buffer& aabbs,
             VkGeometryFlagsKHR flags = 0) noexcept;
