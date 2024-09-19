@@ -77,6 +77,7 @@ namespace magma
         Aabb(const float bounds[6]) noexcept;
         template<class Vector>
         Aabb(const Vector& min, const Vector& max) noexcept;
+        void translate(float x, float y, float z) noexcept;
         // An inactive AABB is one for which the minimum X coordinate is NaN
         void deactivate() noexcept { minX = nanf(""); }
         bool inactive() const noexcept { return isnan(minX); }

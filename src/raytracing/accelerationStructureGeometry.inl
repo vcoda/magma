@@ -97,6 +97,16 @@ inline Aabb::Aabb(const float bounds[6]) noexcept:
     }
 {}
 
+inline void Aabb::translate(float x, float y, float z) noexcept
+{
+    minX += x;
+    minY += y;
+    minZ += z;
+    maxX += x;
+    maxY += y;
+    maxZ += z;
+}
+
 template<class Vector>
 inline Aabb::Aabb(const Vector& min, const Vector& max) noexcept:
     VkAabbPositionsKHR{
