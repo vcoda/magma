@@ -87,6 +87,8 @@ namespace magma
     struct AccelerationStructureGeometryAabbs : AccelerationStructureGeometry
     {
         AccelerationStructureGeometryAabbs() noexcept;
+        explicit AccelerationStructureGeometryAabbs(const Aabb& aabb,
+            VkGeometryFlagsKHR flags = 0) noexcept;
         explicit AccelerationStructureGeometryAabbs(const std::vector<Aabb>& aabbs,
             VkGeometryFlagsKHR flags = 0) noexcept;
         template<class Buffer>

@@ -115,6 +115,16 @@ inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs() 
     primitiveCount = 0;
 }
 
+inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(const Aabb& aabb, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR, flags)
+{
+    geometry.aabbs.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR;
+    geometry.aabbs.pNext = nullptr;
+    geometry.aabbs.data.hostAddress = &aabb;
+    geometry.aabbs.stride = sizeof(Aabb);
+    primitiveCount = 1;
+}
+
 inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(const std::vector<Aabb>& aabbs, VkGeometryFlagsKHR flags /* 0 */) noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR, flags)
 {
