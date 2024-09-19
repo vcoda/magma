@@ -215,7 +215,7 @@ Other compositors like Wayland or XRANDR have not been tested.
 
 ## Examples
 
-To test that all components of library work as expected, I wrote a collection of simple C++ samples that use Magma.
-They are written in a cross-platform way (Windows/Linux/MacOS) to make sure that library is able to work on all platforms.
+To test that all components of the library work as expected, I wrote a collection of samples that use Magma.
+They are written in a cross-platform way (Windows/Linux) to make sure that library is able to work on all platforms.
 
-You can find these samples here: [Basic C++ sample usages of Magma library and Vulkan graphics API](https://github.com/vcoda/basic-graphics-samples)
+You can find these samples here: [graphics](https://github.com/vcoda/basic-graphics-samples) and [ray-tracing](https://github.com/vcoda/basic-raytracing-samples).
