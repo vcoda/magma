@@ -218,6 +218,7 @@
     <ClInclude Include="..\..\src\descriptors\imageArrayElement.h" />
     <ClInclude Include="..\..\src\descriptors\imageDescriptor.h" />
     <ClInclude Include="..\..\src\descriptors\imageDescriptorArray.h" />
+    <ClInclude Include="..\..\src\descriptors\imageDescriptorVariableArray.h" />
     <ClInclude Include="..\..\src\descriptors\inlineUniformBlock.h" />
     <ClInclude Include="..\..\src\exceptions\compileError.h" />
     <ClInclude Include="..\..\src\exceptions\errorResult.h" />
@@ -708,6 +709,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\descriptors\imageArrayElement.inl" />
     <None Include="..\..\src\descriptors\imageDescriptor.inl" />
     <None Include="..\..\src\descriptors\imageDescriptorArray.inl" />
+    <None Include="..\..\src\descriptors\imageDescriptorVariableArray.inl" />
     <None Include="..\..\src\descriptors\inlineUniformBlock.inl" />
     <None Include="..\..\src\helpers\alignedUniformArray.inl" />
     <None Include="..\..\src\helpers\bufferInitializers.inl" />

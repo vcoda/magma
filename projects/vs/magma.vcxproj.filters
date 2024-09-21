@@ -900,6 +900,9 @@
     <ClInclude Include="..\..\src\objects\variableCountDescriptorSet.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\imageDescriptorVariableArray.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1668,6 +1671,9 @@
     </None>
     <None Include="..\..\src\packed\x11y11z10ufloat.inl">
       <Filter>Header Files\packed</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\imageDescriptorVariableArray.inl">
+      <Filter>Header Files\descriptors</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
