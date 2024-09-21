@@ -36,6 +36,10 @@ namespace magma
     public:
         void setImageType(VkImageType imageType) noexcept;
         VkImageType getImageType() const noexcept { return imageType; }
+    #ifdef VK_EXT_descriptor_indexing
+        void setBindingFlags(VkDescriptorBindingFlagsEXT flags) noexcept { bindingFlags = flags; }
+        VkDescriptorBindingFlagsEXT getBindingFlags() const noexcept { return bindingFlags; }
+    #endif
         bool modified() const noexcept { return dirty; }
         virtual bool associatedWithResource() const noexcept = 0;
         virtual void write(VkDescriptorSet dstSet,
@@ -49,6 +53,9 @@ namespace magma
             VkWriteDescriptorSet& writeDescriptorSet) const noexcept;
 
         VkImageType imageType;
+    #ifdef VK_EXT_descriptor_indexing
+        VkDescriptorBindingFlagsEXT bindingFlags;
+    #endif
         mutable bool dirty;
         template<class Type>
         friend class descriptor::ArrayElement;
