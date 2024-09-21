@@ -81,6 +81,13 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
     }
 }
 
+DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
+    DescriptorSetTable& setTable, std::shared_ptr<IAllocator> allocator):
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool_->getDevice(), std::move(allocator)),
+    setTable(setTable),
+    descriptorPool(std::move(descriptorPool_))
+{}
+
 DescriptorSet::~DescriptorSet()
 {
     if (descriptorPool->canFreeDescriptorSet())

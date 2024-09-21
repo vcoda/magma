@@ -56,7 +56,10 @@ namespace magma
         void update();
         uint32_t writeDescriptors(VkWriteDescriptorSet *descriptorWrites) const;
 
-    private:
+    protected:
+        DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
+            DescriptorSetTable& setTable,
+            std::shared_ptr<IAllocator> allocator);
         void validateReflection(const std::unique_ptr<const ShaderReflection>& shaderReflection,
             uint32_t setIndex) const;
 

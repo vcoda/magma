@@ -102,6 +102,9 @@ namespace magma
 #ifdef VK_EXT_debug_utils
     MAGMA_TYPEDEF_SHARED_PTR(DebugUtilsMessenger);
 #endif
+#ifdef VK_EXT_descriptor_indexing
+    MAGMA_TYPEDEF_SHARED_PTR(VariableCountDescriptorSet);
+#endif
 #ifdef VK_EXT_fragment_density_map
     MAGMA_TYPEDEF_SHARED_PTR(FragmentDensityMap);
     MAGMA_TYPEDEF_SHARED_PTR(FragmentDensityMapView);

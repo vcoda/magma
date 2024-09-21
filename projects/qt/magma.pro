@@ -158,6 +158,7 @@ SOURCES += \
     ../../src/objects/transformFeedbackBuffer.cpp \
     ../../src/objects/uniformTexelBuffer.cpp \
     ../../src/objects/validationCache.cpp \
+    ../../src/objects/variableCountDescriptorSet.cpp \
     ../../src/objects/vertexBuffer.cpp \
     ../../src/platform/androidHardwareBuffer.cpp \
     ../../src/platform/androidSurface.cpp \

@@ -897,6 +897,9 @@
     <ClInclude Include="..\..\src\objects\model\objectType.h">
       <Filter>Header Files\objects\model</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\variableCountDescriptorSet.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1396,6 +1399,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\objects\model\deviceChild.cpp">
       <Filter>Source Files\objects\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\variableCountDescriptorSet.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -112,6 +112,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/uniformBuffer.h"
 #include "src/objects/uniformTexelBuffer.h"
 #include "src/objects/validationCache.h"
+#include "src/objects/variableCountDescriptorSet.h"
 #include "src/objects/vertexBuffer.h"
 
 #include "src/shaders/pipelineShaderStage.h"

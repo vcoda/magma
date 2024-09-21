@@ -202,6 +202,7 @@ src\objects\topLevelStructure.cpp ^
 src\objects\transformFeedbackBuffer.cpp ^
 src\objects\uniformTexelBuffer.cpp ^
 src\objects\validationCache.cpp ^
+src\objects\variableCountDescriptorSet.cpp ^
 src\objects\vertexBuffer.cpp ^
 src\platform\androidHardwareBuffer.cpp ^
 src\platform\androidSurface.cpp ^
@@ -399,6 +400,7 @@ topLevelStructure.obj ^
 transformFeedbackBuffer.obj ^
 uniformTexelBuffer.obj ^
 validationCache.obj ^
+variableCountDescriptorSet.obj ^
 vertexBuffer.obj ^
 androidHardwareBuffer.obj ^
 androidSurface.obj ^

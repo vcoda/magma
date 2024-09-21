@@ -169,6 +169,7 @@ SRC_OBJS= \
 	src/objects/transformFeedbackBuffer.o \
 	src/objects/uniformTexelBuffer.o \
 	src/objects/validationCache.o \
+	src/objects/variableCountDescriptorSet.o \
 	src/objects/vertexBuffer.o \
 	\
 	src/platform/directFbSurface.o \

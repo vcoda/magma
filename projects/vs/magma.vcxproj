@@ -365,6 +365,7 @@
     <ClInclude Include="..\..\src\objects\uniformBuffer.h" />
     <ClInclude Include="..\..\src\objects\uniformTexelBuffer.h" />
     <ClInclude Include="..\..\src\objects\validationCache.h" />
+    <ClInclude Include="..\..\src\objects\variableCountDescriptorSet.h" />
     <ClInclude Include="..\..\src\objects\vertexBuffer.h" />
     <ClInclude Include="..\..\src\packed\color.h" />
     <ClInclude Include="..\..\src\packed\expPow2.h" />
@@ -573,6 +574,7 @@
     <ClCompile Include="..\..\src\objects\transformFeedbackBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\uniformTexelBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\validationCache.cpp" />
+    <ClCompile Include="..\..\src\objects\variableCountDescriptorSet.cpp" />
     <ClCompile Include="..\..\src\objects\vertexBuffer.cpp" />
     <ClCompile Include="..\..\src\platform\d3dExternalSemaphore.cpp" />
     <ClCompile Include="..\..\src\platform\externalFence.cpp" />
