@@ -66,6 +66,12 @@ VariableCountDescriptorSet::VariableCountDescriptorSet(std::shared_ptr<Descripto
         // Set global stage flags if they have not been assigned for descriptor binding
         if (!bindings.back().stageFlags)
             bindings.back().stageFlags = stageFlags;
+        if (binding->getBindingFlags() & VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT)
+        {
+            bool canUpdateAfterBind = descriptorPool->getFlags() & VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
+            if (!canUpdateAfterBind)
+                MAGMA_ERROR("descriptor with update-after-bind flag can't be allocated from this pool");
+        }
         bindingFlags.push_back(binding->getBindingFlags());
     }
     // If an element of pBindingFlags includes VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT,
