@@ -30,8 +30,7 @@ namespace magma
        must not allocate and/or free descriptor sets from
        the same pool in multiple threads simultaneously. */
 
-    class DescriptorPool : public NonDispatchable<VkDescriptorPool>,
-        public std::enable_shared_from_this<DescriptorPool>
+    class DescriptorPool : public NonDispatchable<VkDescriptorPool>
     {
     public:
         explicit DescriptorPool(std::shared_ptr<Device> device,
