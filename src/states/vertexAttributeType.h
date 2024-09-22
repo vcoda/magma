@@ -46,7 +46,7 @@ namespace magma
     struct VertexAttributeType
     {
         PodType v[Components];
-        constexpr static std::size_t components() noexcept { Components; }
+        constexpr static std::size_t components() noexcept { return Components; }
         constexpr static std::size_t size() noexcept { return sizeof(PodType) * Components; }
         constexpr static NumericFormat numericFormat() noexcept;
     };
