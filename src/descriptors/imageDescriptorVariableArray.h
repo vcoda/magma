@@ -32,6 +32,8 @@ namespace magma
         class ImageDescriptorVariableArray : public DescriptorSetLayoutBinding
         {
         public:
+            uint32_t getSize() const noexcept { return core::countof(descriptors); }
+            void remove(uint32_t index);
             bool associatedWithResource() const noexcept override { return true; }
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
@@ -39,8 +41,10 @@ namespace magma
         protected:
             ImageDescriptorVariableArray(VkDescriptorType descriptorType,
                 uint32_t binding) noexcept;
+            uint32_t insert(const VkDescriptorImageInfo& imageInfo);
 
             std::vector<VkDescriptorImageInfo> descriptors;
+            std::set<uint32_t> invalidDescriptorIndices;
         };
 
         /* A combined image sampler is a single descriptor type associated
@@ -52,7 +56,7 @@ namespace magma
         public:
             CombinedImageSamplerVariableArray(uint32_t binding) noexcept:
                 ImageDescriptorVariableArray(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-            void add(std::shared_ptr<const ImageView> imageView,
+            uint32_t add(std::shared_ptr<const ImageView> imageView,
                 std::shared_ptr<const magma::Sampler> sampler);
         };
 
@@ -65,7 +69,7 @@ namespace magma
         public:
             SampledImageVariableArray(uint32_t binding) noexcept:
                 ImageDescriptorVariableArray(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
-            void add(std::shared_ptr<const ImageView> imageView);
+            uint32_t add(std::shared_ptr<const ImageView> imageView);
         };
     } // namespace descriptor
 } // namespace magma
