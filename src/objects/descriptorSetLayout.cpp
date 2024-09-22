@@ -29,7 +29,8 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT, std::move(device), std::move(allocator)),
-    bindings(bindings_)
+    bindings(bindings_),
+    flags(flags)
 {
     VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo;
     descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
