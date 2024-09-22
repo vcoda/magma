@@ -80,7 +80,7 @@ namespace magma
         void translate(float x, float y, float z) noexcept;
         // An inactive AABB is one for which the minimum X coordinate is NaN
         void deactivate() noexcept { minX = nanf(""); }
-        bool inactive() const noexcept { return isnan(minX); }
+        bool inactive() const noexcept { return std::isnan(minX); }
     };
 
     /* Axis-aligned bounding box geometry in a bottom-level acceleration structure. */
