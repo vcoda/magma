@@ -90,7 +90,8 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
 
 DescriptorSet::~DescriptorSet()
 {
-    if (descriptorPool->canFreeDescriptorSet())
+    bool canFreeDescriptorSet = descriptorPool->getFlags() & VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+    if (canFreeDescriptorSet)
         vkFreeDescriptorSets(getNativeDevice(), *descriptorPool, 1, &handle);
 }
 

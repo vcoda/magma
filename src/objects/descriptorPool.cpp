@@ -29,54 +29,26 @@ namespace magma
 {
 DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const descriptor::DescriptorPool& descriptorPool,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    bool freeDescriptorSet /* false */,
-    bool updateAfterBind /* false */,
-    uint32_t maxInlineUniformBlockBindings /* 0 */,
+    VkDescriptorPoolCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    DescriptorPool(std::move(device), maxSets, std::vector<descriptor::DescriptorPool>{descriptorPool}, std::move(allocator),
-        freeDescriptorSet, updateAfterBind, maxInlineUniformBlockBindings, extendedInfo)
+    DescriptorPool(std::move(device), maxSets, std::vector<descriptor::DescriptorPool>{descriptorPool},
+        std::move(allocator), flags, extendedInfo)
 {}
 
-DescriptorPool::DescriptorPool(std::shared_ptr<Device> device_, uint32_t maxSets, const std::vector<descriptor::DescriptorPool>& descriptorPools,
+DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::vector<descriptor::DescriptorPool>& descriptorPools,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    bool freeDescriptorSet /* false */,
-    bool updateAfterBind /* false */,
-    uint32_t maxInlineUniformBlockBindings /* 0 */,
+    VkDescriptorPoolCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device_), std::move(allocator)),
-    freeDescriptorSet(freeDescriptorSet)
+    NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_POOL, std::move(device), std::move(allocator)),
+    flags(flags)
 {
-    MAGMA_UNUSED(updateAfterBind);
-    MAGMA_UNUSED(maxInlineUniformBlockBindings);
     VkDescriptorPoolCreateInfo descriptorPoolInfo;
     descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     descriptorPoolInfo.pNext = extendedInfo.headNode();
-    descriptorPoolInfo.flags = 0;
-    if (freeDescriptorSet)
-    {   // Mobile implementations may use a simpler allocator if that flag is not set,
-        // relying on the fact that pool memory will only be recycled in block.
-        descriptorPoolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    }
-#ifdef VK_EXT_descriptor_indexing
-    if (updateAfterBind)
-    {   // Specifies that descriptor sets allocated from this pool can include bindings
-        // with the VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT bit set.
-        descriptorPoolInfo.flags |= VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
-    }
-#endif // VK_EXT_descriptor_indexing
+    descriptorPoolInfo.flags = flags;
     descriptorPoolInfo.maxSets = maxSets;
     descriptorPoolInfo.poolSizeCount = core::countof(descriptorPools);
     descriptorPoolInfo.pPoolSizes = descriptorPools.data();
-#ifdef VK_EXT_inline_uniform_block
-    VkDescriptorPoolInlineUniformBlockCreateInfoEXT descriptorPoolInlineUniformBlockInfo;
-    if ((maxInlineUniformBlockBindings > 0) && extensionEnabled(VK_EXT_INLINE_UNIFORM_BLOCK_EXTENSION_NAME))
-    {
-        descriptorPoolInfo.pNext = &descriptorPoolInlineUniformBlockInfo;
-        descriptorPoolInlineUniformBlockInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_INLINE_UNIFORM_BLOCK_CREATE_INFO_EXT;
-        descriptorPoolInlineUniformBlockInfo.pNext = extendedInfo.headNode();
-        descriptorPoolInlineUniformBlockInfo.maxInlineUniformBlockBindings = maxInlineUniformBlockBindings;
-    }
-#endif // VK_EXT_inline_uniform_block
     const VkResult result = vkCreateDescriptorPool(getNativeDevice(), &descriptorPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create descriptor pool");
 }

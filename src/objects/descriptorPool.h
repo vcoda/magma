@@ -38,23 +38,19 @@ namespace magma
             uint32_t maxSets,
             const descriptor::DescriptorPool& descriptorPool,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            bool freeDescriptorSet = false,
-            bool updateAfterBind = false,
-            uint32_t maxInlineUniformBlockBindings = 0,
+            VkDescriptorPoolCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit DescriptorPool(std::shared_ptr<Device> device,
             uint32_t maxSets,
             const std::vector<descriptor::DescriptorPool>& descriptorPools,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            bool freeDescriptorSet = false,
-            bool updateAfterBind = false,
-            uint32_t maxInlineUniformBlockBindings = 0,
+            VkDescriptorPoolCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~DescriptorPool();
+        VkDescriptorPoolCreateFlags getFlags() const noexcept { return flags; }
         void reset(VkDescriptorPoolResetFlags flags = 0);
-        bool canFreeDescriptorSet() const noexcept { return freeDescriptorSet; }
 
     private:
-        const bool freeDescriptorSet;
+        const VkDescriptorPoolCreateFlags flags;
     };
 } // namespace magma
