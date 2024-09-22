@@ -48,6 +48,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
     std::vector<uint32_t> locations;
     for (auto const& descriptor: reflection)
         locations.push_back(descriptor.get().binding);
+    std::sort(locations.begin(), locations.end());
     if (std::unique(locations.begin(), locations.end()) != locations.end())
         MAGMA_ERROR("elements of descriptor set layout should have unique binding locations");
     if (shaderReflectionFactory && !shaderFileName.empty())
