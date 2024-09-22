@@ -18,11 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "descriptorPool.h"
-#include "descriptorSet.h"
-#include "descriptorSetLayout.h"
-#include "device.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
