@@ -40,7 +40,10 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, std::sha
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass_), attachment->getExtent(), attachment->getArrayLayerCount(), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
+    renderPass(std::move(renderPass)),
+    extent(attachment->getExtent2D()),
+    layerCount(attachment->getArrayLayerCount())
 {
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -61,7 +64,10 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const st
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass_), attachments.front()->getExtent(), attachments.front()->getArrayLayerCount(), std::move(allocator))
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
+    renderPass(std::move(renderPass)),
+    extent(attachments.front()->getExtent2D()),
+    layerCount(attachments.front()->getArrayLayerCount())
 {
     MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
     for (auto& attachment: attachments)

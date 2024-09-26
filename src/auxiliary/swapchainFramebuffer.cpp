@@ -36,7 +36,7 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainImage> color
     Framebuffer(color->getFormat(), depthStencilFormat, color->getSamples())
 {   // Create color view
     std::shared_ptr<Device> device = color->getDevice();
-    colorView = std::make_shared<ImageView>(color, swizzle);
+    colorView = std::make_shared<SharedImageView>(color, swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Let it know what view format will be paired with the image
         Image::Initializer imageFormatList;
@@ -44,9 +44,9 @@ SwapchainFramebuffer::SwapchainFramebuffer(std::shared_ptr<SwapchainImage> color
         // Create depth/stencil attachment
         const VkExtent2D extent{color->getWidth(), color->getHeight()};
         constexpr bool sampled = false;
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), sampled,
+        std::unique_ptr<Image> depthStencil = std::make_unique<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, color->getSamples(), sampled,
             allocator, false, imageFormatList);
-        depthStencilView = std::make_shared<ImageView>(depthStencil);
+        depthStencilView = std::make_shared<UniqueImageView>(std::move(depthStencil));
     }
     const AttachmentDescription colorAttachment(color->getFormat(), 1,
         op::clearStore, // Clear color, store

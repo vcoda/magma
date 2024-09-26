@@ -26,7 +26,7 @@ namespace magma
     namespace descriptor
     {
         typedef std::pair<std::shared_ptr<const ImageView>,
-            std::shared_ptr<const magma::Sampler>> ImageSampler;
+            std::shared_ptr<magma::Sampler>> ImageSampler;
 
         /* Base class of image/sampler descriptor. */
 
@@ -41,7 +41,7 @@ namespace magma
             ImageDescriptor(VkDescriptorType descriptorType,
                 uint32_t binding) noexcept;
             void update(std::shared_ptr<const ImageView> imageView,
-                std::shared_ptr<const magma::Sampler> sampler,
+                std::shared_ptr<magma::Sampler> sampler,
                 VkImageUsageFlags usage) noexcept;
 
             VkDescriptorImageInfo descriptor;

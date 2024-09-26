@@ -25,24 +25,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image, VkFormat mutableFormat,
-    const StructureChain& extendedInfo /* default */):
-    MutableImageView(std::move(image), mutableFormat, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, extendedInfo)
+MutableImageView::MutableImageView(std::unique_ptr<MutableImage> image, VkFormat mutableFormat,
+    VkImageViewCreateFlags flags /* 0 */, const StructureChain& extendedInfo /* default */):
+    MutableImageView(std::move(image), mutableFormat, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, flags, extendedInfo)
 {}
 
-MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image_, VkFormat mutableFormat,
+MutableImageView::MutableImageView(std::unique_ptr<MutableImage> image, VkFormat mutableFormat,
     uint32_t baseMipLevel,
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
     uint32_t baseArrayLayer /* 0 */,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,
+    VkImageViewCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    ImageView(std::move(image_), baseMipLevel, levelCount, baseArrayLayer, layerCount, 0),
+    ImageView(image.get(), baseMipLevel, baseArrayLayer, layerCount, flags),
+    mutableImage(std::move(image)),
     mutableFormat(mutableFormat)
 {
     VkImageViewCreateInfo imageViewInfo;
     imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     imageViewInfo.pNext = extendedInfo.headNode();
-    imageViewInfo.flags = 0;
+    imageViewInfo.flags = flags;
     imageViewInfo.image = *image;
     imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags());
     imageViewInfo.format = mutableFormat;
@@ -57,5 +59,12 @@ MutableImageView::MutableImageView(std::shared_ptr<MutableImage> image_, VkForma
     imageViewInfo.subresourceRange.layerCount = layerCount;
     const VkResult result = vkCreateImageView(getNativeDevice(), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create mutable image view");
+}
+
+MutableImageView::~MutableImageView() {}
+
+Image *MutableImageView::getImage() const noexcept
+{
+    return mutableImage.get();
 }
 } // namespace magma

@@ -43,15 +43,21 @@ namespace magma
     class FragmentDensityMapView : public ImageView
     {
     public:
-        explicit FragmentDensityMapView(std::shared_ptr<FragmentDensityMap> fragmentDensityMap,
+        explicit FragmentDensityMapView(std::unique_ptr<FragmentDensityMap> fragmentDensityMap,
             bool fragmentDensityMapDynamic,
             bool fragmentDensityMapDeferred,
             VkImageUsageFlags usage = 0,
             const StructureChain& extendedInfo = StructureChain());
+        ~FragmentDensityMapView();
+        Image *getImage() const noexcept override;
+        const std::unique_ptr<FragmentDensityMap>& getImagePointer() const noexcept { return fragmentDensityMap; }
         bool dynamic() const noexcept { return flags & VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT; }
     #ifdef VK_EXT_fragment_density_map2
         bool deferred() const noexcept { return flags & VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT; }
     #endif
+
+    private:
+        std::unique_ptr<FragmentDensityMap> fragmentDensityMap;
     };
 #endif // VK_EXT_fragment_density_map
 } // namespace magma

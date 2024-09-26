@@ -56,7 +56,6 @@ namespace magma
 
             const bool colorClearOp;
             const bool depthStencilClearOp;
-            std::vector<std::shared_ptr<Image2D>> attachments;
             std::vector<std::shared_ptr<ImageView>> attachmentViews;
             mutable std::shared_ptr<RenderPass> depthRenderPass;
             mutable std::shared_ptr<magma::Framebuffer> depthFramebuffer;

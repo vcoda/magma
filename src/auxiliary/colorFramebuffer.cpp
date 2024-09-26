@@ -48,19 +48,15 @@ ColorFramebuffer::ColorFramebuffer(std::shared_ptr<Device> device, const VkForma
     imageFormatList.viewFormats.push_back(colorFormat);
     // Create color attachment
     constexpr bool colorSampled = true;
-    color = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
+    std::unique_ptr<Image> color = std::make_unique<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
         allocator, false, imageFormatList);
+    colorView = std::make_shared<UniqueImageView>(std::move(color), swizzle);
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         imageFormatList.viewFormats.back() = depthStencilFormat;
-        depthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1, depthSampled,
+        std::unique_ptr<Image> depthStencil = std::make_unique<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1, depthSampled,
             allocator, false, imageFormatList);
-    }
-    // Create color view
-    colorView = std::make_shared<ImageView>(color, swizzle);
-    if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-    {   // Create depth/stencil view
-        depthStencilView = std::make_shared<ImageView>(depthStencil);
+        depthStencilView = std::make_shared<UniqueImageView>(std::move(depthStencil));
     }
     // Setup attachment descriptors
     const AttachmentDescription colorAttachment(colorFormat, 1,

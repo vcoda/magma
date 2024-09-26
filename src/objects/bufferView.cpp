@@ -25,18 +25,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-BufferView::BufferView(std::shared_ptr<Buffer> resource,
-    VkFormat format,
-    VkDeviceSize offset /* 0 */,
-    VkDeviceSize range /* VK_WHOLE_SIZE */,
-    const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_BUFFER_VIEW, resource->getDevice(), resource->getHostAllocator()),
-    buffer(std::move(resource)),
+BufferView::BufferView(const Buffer *buffer, VkFormat format,
+    VkDeviceSize offset, VkDeviceSize range, const StructureChain& extendedInfo):
+    NonDispatchable(VK_OBJECT_TYPE_BUFFER_VIEW, buffer->getDevice(), buffer->getHostAllocator()),
     format(format),
     offset(offset),
     range(range)
 {
-    MAGMA_ASSERT(buffer->getUsage() & (VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT));
     VkBufferViewCreateInfo bufferViewInfo;
     bufferViewInfo.sType = VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO;
     bufferViewInfo.pNext = extendedInfo.headNode();

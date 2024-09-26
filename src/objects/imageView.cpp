@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,33 +27,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ImageView::ImageView(std::shared_ptr<Image> image,
-    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    VkImageViewCreateFlags flags /* 0 */,
-    VkImageUsageFlags usage /* 0 */,
-    const StructureChain& extendedInfo /* default */):
-    ImageView(std::move(image), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, swizzle, flags, usage, extendedInfo)
-{}
-
-ImageView::ImageView(std::shared_ptr<Image> image_,
-    uint32_t baseMipLevel,
-    uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
-    uint32_t baseArrayLayer /* 0 */,
-    uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,
-    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
-    VkImageViewCreateFlags flags /* 0 */,
-    VkImageUsageFlags usage /* 0 */,
-    const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image_->getDevice(), image_->getHostAllocator()),
-    image(std::move(image_)),
+ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t levelCount, uint32_t baseArrayLayer, uint32_t layerCount_,
+    const VkComponentMapping& swizzle, VkImageViewCreateFlags flags, VkImageUsageFlags usage, const StructureChain& extendedInfo):
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image->getDevice(), image->getHostAllocator()),
     flags(flags),
+    viewType(imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags())),
+    format(image->getFormat()),
 #ifdef VK_KHR_maintenance2
     usage(usage),
 #endif
     baseMipLevel(baseMipLevel),
-    levelCount(levelCount),
     baseArrayLayer(baseArrayLayer),
-    layerCount(layerCount)
+    layerCount(VK_REMAINING_ARRAY_LAYERS == layerCount_ ? image->getArrayLayers() - baseArrayLayer : layerCount_)
 {
     MAGMA_UNUSED(usage);
     VkImageViewCreateInfo imageViewInfo;
@@ -61,7 +46,7 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     imageViewInfo.pNext = extendedInfo.headNode();
     imageViewInfo.flags = flags;
     imageViewInfo.image = *image;
-    imageViewInfo.viewType = imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags());
+    imageViewInfo.viewType = viewType;
     imageViewInfo.format = image->getFormat();
     const Format format(imageViewInfo.format);
     if (!(format.depth() || format.stencil() || format.depthStencil()))
@@ -77,7 +62,7 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     imageViewInfo.subresourceRange.baseMipLevel = baseMipLevel;
     imageViewInfo.subresourceRange.levelCount = levelCount;
     imageViewInfo.subresourceRange.baseArrayLayer = baseArrayLayer;
-    imageViewInfo.subresourceRange.layerCount = layerCount;
+    imageViewInfo.subresourceRange.layerCount = layerCount_;
 #ifdef VK_KHR_maintenance2
     VkImageViewUsageCreateInfoKHR imageViewUsageInfo;
     if (usage && extensionEnabled(VK_KHR_MAINTENANCE2_EXTENSION_NAME))
@@ -92,51 +77,47 @@ ImageView::ImageView(std::shared_ptr<Image> image_,
     MAGMA_HANDLE_RESULT(result, "failed to create image view");
 }
 
-ImageView::ImageView(std::shared_ptr<Image> image, uint32_t baseMipLevel, uint32_t levelCount, uint32_t baseArrayLayer, uint32_t layerCount,
-    VkImageViewCreateFlags flags):
+ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t baseArrayLayer, uint32_t layerCount, VkImageViewCreateFlags flags):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image->getDevice(), image->getHostAllocator()),
-    image(std::move(image)),
     flags(flags),
+    viewType(imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags())),
+    format(image->getFormat()),
 #ifdef VK_KHR_maintenance2
-    usage(0),
+    usage(usage),
 #endif
     baseMipLevel(baseMipLevel),
-    levelCount(levelCount),
     baseArrayLayer(baseArrayLayer),
     layerCount(layerCount)
 {}
 
-ImageView::~ImageView()
+VkExtent2D ImageView::getExtent2D() const noexcept
 {
-    vkDestroyImageView(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    const VkExtent3D extent = getExtent3D();
+    return {extent.width, extent.height};
 }
 
-uint32_t ImageView::getMipLevelCount() const noexcept
+VkExtent3D ImageView::getExtent3D() const noexcept
 {
-    if (VK_REMAINING_MIP_LEVELS == levelCount)
-        return image->getMipLevels() - baseMipLevel;
-    return levelCount;
+    return getImage()->calculateMipExtent(baseMipLevel);
 }
 
-uint32_t ImageView::getArrayLayerCount() const noexcept
+VkDescriptorImageInfo ImageView::getDescriptor(const std::unique_ptr<Sampler>& sampler) const noexcept
 {
-    if (VK_REMAINING_ARRAY_LAYERS == layerCount)
-        return image->getArrayLayers() - baseArrayLayer;
-    return layerCount;
-}
-
-VkExtent3D ImageView::getExtent() const noexcept
-{
-    return image->calculateMipExtent(baseMipLevel);
-}
-
-VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept
-{
-    MAGMA_ASSERT(image->hasUniformLayout());
+    MAGMA_ASSERT(getImage()->hasUniformLayout());
     VkDescriptorImageInfo imageDescriptorInfo;
     imageDescriptorInfo.sampler = MAGMA_OPTIONAL_HANDLE(sampler); // VK_NULL_HANDLE for storage image
     imageDescriptorInfo.imageView = handle;
-    imageDescriptorInfo.imageLayout = image->getLayout(0);
+    imageDescriptorInfo.imageLayout = getImage()->getLayout(0);
+    return imageDescriptorInfo;
+}
+
+VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<Sampler> sampler /* nullptr */) const noexcept
+{
+    MAGMA_ASSERT(getImage()->hasUniformLayout());
+    VkDescriptorImageInfo imageDescriptorInfo;
+    imageDescriptorInfo.sampler = MAGMA_OPTIONAL_HANDLE(sampler); // VK_NULL_HANDLE for storage image
+    imageDescriptorInfo.imageView = handle;
+    imageDescriptorInfo.imageLayout = getImage()->getLayout(0);
     return imageDescriptorInfo;
 }
 

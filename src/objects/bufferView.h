@@ -30,21 +30,49 @@ namespace magma
     class BufferView : public NonDispatchable<VkBufferView>
     {
     public:
-        explicit BufferView(std::shared_ptr<Buffer> resource,
-            VkFormat format,
-            VkDeviceSize offset = 0,
-            VkDeviceSize range = VK_WHOLE_SIZE,
-            const StructureChain& extendedInfo = StructureChain());
         ~BufferView();
-        const std::shared_ptr<Buffer>& getBuffer() const noexcept { return buffer; }
+        virtual Buffer *getBuffer() const noexcept = 0;
         VkFormat getFormat() const noexcept { return format; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         VkDeviceSize getRange() const noexcept { return range; }
 
+    protected:
+        BufferView(const Buffer *buffer,
+            VkFormat format,
+            VkDeviceSize offset,
+            VkDeviceSize range,
+            const StructureChain& extendedInfo);
+
     private:
-        std::shared_ptr<Buffer> buffer;
         const VkFormat format;
         const VkDeviceSize offset;
         const VkDeviceSize range;
     };
+
+    /* Buffer view may have various resource ownership strategy.
+       If buffer has a single interpretation, unique ownership is
+       preferred. Sometimes a few different interpretations of
+       the same buffer may be necessary, so a shared ownership of
+       resource is used. */
+
+    template<class Pointer>
+    class TBufferView : public BufferView
+    {
+    public:
+        explicit TBufferView(Pointer buffer,
+            VkFormat format,
+            VkDeviceSize offset = 0,
+            VkDeviceSize range = VK_WHOLE_SIZE,
+            const StructureChain& extendedInfo = StructureChain());
+        Buffer *getBuffer() const noexcept override { return buffer.get(); }
+        const Pointer& getBufferPointer() const noexcept { return buffer; }
+
+    private:
+        const Pointer buffer;
+    };
+
+    typedef TBufferView<std::unique_ptr<Buffer>> UniqueBufferView;
+    typedef TBufferView<std::shared_ptr<Buffer>> SharedBufferView;
 } // namespace magma
+
+#include "bufferView.inl"

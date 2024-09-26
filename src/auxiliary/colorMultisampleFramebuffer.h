@@ -68,9 +68,6 @@ namespace magma
 
         private:
             const bool colorClearOp;
-            std::shared_ptr<Image2D> msaaColor;
-            std::shared_ptr<Image2D> msaaDepthStencil;
-            std::shared_ptr<Image2D> resolve;
             std::shared_ptr<ImageView> msaaColorView;
             std::shared_ptr<ImageView> msaaDepthStencilView;
             std::shared_ptr<ImageView> resolveView;

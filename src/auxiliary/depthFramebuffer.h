@@ -39,7 +39,6 @@ namespace magma
             const std::shared_ptr<ImageView>& getDepthView() const noexcept { return depthView; }
 
         private:
-            std::shared_ptr<Image2D> depth;
             std::shared_ptr<ImageView> depthView;
         };
     } // namespace aux

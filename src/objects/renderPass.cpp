@@ -254,7 +254,7 @@ void RenderPass::begin(const FramebufferAttachments& attachments) const noexcept
         [](auto& attachment, auto& attachmentDesc)
         {   // initialLayout is the layout the attachment image subresource
             // will be in when a render pass instance begins
-            const std::shared_ptr<Image>& image = (*attachment)->getImage();
+            auto image = (*attachment)->getImage();
             image->setLayout(attachmentDesc->initialLayout);
         });
 }
@@ -265,7 +265,7 @@ void RenderPass::end(const FramebufferAttachments& attachments) const noexcept
         [](auto& attachment, auto& attachmentDesc)
         {   // finalLayout is the layout the attachment image subresource
             // will be transitioned to when a render pass instance ends.
-            const std::shared_ptr<Image>& image = (*attachment)->getImage();
+            auto image = (*attachment)->getImage();
             switch (attachmentDesc->finalLayout)
             {
             case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:

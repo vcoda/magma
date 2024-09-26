@@ -71,8 +71,9 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     imageFormatList.viewFormats.push_back(format);
     // Create high-precision color buffer
     constexpr bool sampled = true;
-    accumBuffer = std::make_shared<ColorAttachment>(device, format, extent, 1, 1, sampled, allocator, false, imageFormatList);
-    bufferView = std::make_shared<ImageView>(accumBuffer);
+    std::unique_ptr<ColorAttachment> accumBuffer = std::make_unique<ColorAttachment>(
+        device, format, extent, 1, 1, sampled, allocator, false, imageFormatList);
+    bufferView = std::make_shared<UniqueImageView>(std::move(accumBuffer));
     framebuffer = std::make_shared<Framebuffer>(renderPass, bufferView, hostAllocator, 0);
     // Create descriptor set for fragment shader
     descriptorSet = std::make_shared<ImageDescriptorSet>(device, reflection, hostAllocator);
@@ -109,7 +110,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         nullptr); // basePipeline
 }
 
-void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> imageView) noexcept
+void AccumulationBuffer::accumulate(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(cmdBuffer);
     MAGMA_ASSERT(imageView);

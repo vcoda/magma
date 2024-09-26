@@ -58,11 +58,10 @@ namespace magma
             uint32_t getCount() const noexcept { return count; }
             void setAccumLimit(uint32_t count) noexcept { maxCount = count; }
             void accumulate(std::shared_ptr<CommandBuffer> cmdBuffer,
-                std::shared_ptr<const ImageView> imageView) noexcept;
+                std::shared_ptr<ImageView> imageView) noexcept;
             void reset() noexcept { count = 0; }
 
         private:
-            std::shared_ptr<ColorAttachment> accumBuffer;
             std::shared_ptr<ImageView> bufferView;
             std::shared_ptr<Framebuffer> framebuffer;
             std::shared_ptr<RenderPass> renderPass;
@@ -74,3 +73,4 @@ namespace magma
         };
     } // namespace aux
 } // namespace magma
+

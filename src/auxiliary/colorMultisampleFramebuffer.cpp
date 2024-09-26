@@ -55,24 +55,20 @@ ColorMultisampleFramebuffer::ColorMultisampleFramebuffer(std::shared_ptr<Device>
     imageFormatList.viewFormats.push_back(colorFormat);
     // Create multisample color attachment
     constexpr bool explicitResolve = false;
-    msaaColor = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, sampleCount, msaaColorSampled, // TODO: recheck it
-        allocator, explicitResolve, imageFormatList);
+    std::unique_ptr<Image> msaaColor = std::make_unique<ColorAttachment>(device, colorFormat, extent, 1,
+        sampleCount, msaaColorSampled, allocator, explicitResolve, imageFormatList);
+    msaaColorView = std::make_shared<UniqueImageView>(std::move(msaaColor), swizzle);
     // Create color resolve attachment
     constexpr bool colorSampled = true;
-    resolve = std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
+    std::unique_ptr<Image> resolve = std::make_unique<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
         allocator, explicitResolve, imageFormatList);
+    resolveView = std::make_shared<UniqueImageView>(std::move(resolve));
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create multisample depth attachment
         imageFormatList.viewFormats.back() = depthStencilFormat;
-        msaaDepthStencil = std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, sampleCount,
+        std::unique_ptr<Image> msaaDepthStencil = std::make_unique<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, sampleCount,
             msaaDepthSampled || msaaStencilSampled, allocator, explicitResolve, imageFormatList);
-    }
-    // Create color and resolve views
-    msaaColorView = std::make_shared<ImageView>(msaaColor, swizzle);
-    resolveView = std::make_shared<ImageView>(resolve);
-    if (depthStencilFormat != VK_FORMAT_UNDEFINED)
-    {   // Create depth/stencil view
-        msaaDepthStencilView = std::make_shared<ImageView>(msaaDepthStencil);
+        msaaDepthStencilView = std::make_shared<UniqueImageView>(std::move(msaaDepthStencil));
     }
     // Typically, after the multisampled image is resolved, we don't need the
     // multisampled image anymore. Therefore, the multisampled image must be

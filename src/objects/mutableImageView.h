@@ -28,19 +28,25 @@ namespace magma
     class MutableImageView : public ImageView
     {
     public:
-        explicit MutableImageView(std::shared_ptr<MutableImage> image,
+        explicit MutableImageView(std::unique_ptr<MutableImage> image,
             VkFormat mutableFormat,
+            VkImageViewCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        explicit MutableImageView(std::shared_ptr<MutableImage> image,
+        explicit MutableImageView(std::unique_ptr<MutableImage> image,
             VkFormat mutableFormat,
             uint32_t baseMipLevel,
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
             uint32_t baseArrayLayer = 0,
             uint32_t layerCount = VK_REMAINING_ARRAY_LAYERS,
+            VkImageViewCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        VkFormat getMutableFormat() noexcept { return mutableFormat; }
+        ~MutableImageView();
+        Image *getImage() const noexcept override;
+        VkFormat getFormat() const noexcept override { return mutableFormat; }
+        const std::unique_ptr<MutableImage>& getImagePointer() const noexcept { return mutableImage; }
 
     private:
+        const std::unique_ptr<MutableImage> mutableImage;
         const VkFormat mutableFormat;
     };
 } // namespace magma

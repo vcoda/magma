@@ -41,28 +41,28 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     Image::Initializer imageFormatList;
     imageFormatList.viewFormats.push_back(VK_FORMAT_UNDEFINED);
     uint32_t index = 0;
-    for (const VkFormat colorFormat : colorAttachmentFormats)
+    for (const VkFormat colorFormat: colorAttachmentFormats)
     {   // Create color attachment
         imageFormatList.viewFormats.back() = colorFormat;
         constexpr bool colorSampled = true;
-        attachments.emplace_back(std::make_shared<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
-            allocator, false, imageFormatList));
+        std::unique_ptr<Image> color = std::make_unique<ColorAttachment>(device, colorFormat, extent, 1, 1, colorSampled,
+            allocator, false, imageFormatList);
         // Create color view
         constexpr VkComponentMapping dontSwizzle = {
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY,
             VK_COMPONENT_SWIZZLE_IDENTITY};
-        attachmentViews.emplace_back(std::make_shared<ImageView>(attachments.back(),
+        attachmentViews.push_back(std::make_shared<UniqueImageView>(std::move(color),
             swizzles.empty() ? dontSwizzle : swizzles[index++]));
     }
     if (depthStencilFormat != VK_FORMAT_UNDEFINED)
     {   // Create depth/stencil attachment
         imageFormatList.viewFormats.back() = depthStencilFormat;
-        attachments.emplace_back(std::make_shared<DepthStencilAttachment>(device, depthStencilFormat, extent, 1, 1, depthSampled,
-            allocator, false, imageFormatList));
+        std::unique_ptr<Image> depthStencil = std::make_unique<DepthStencilAttachment>(device, depthStencilFormat,
+            extent, 1, 1, depthSampled, allocator, false, imageFormatList);
         // Create depth/stencil view
-        attachmentViews.push_back(std::make_shared<ImageView>(attachments.back()));
+        attachmentViews.push_back(std::make_shared<UniqueImageView>(std::move(depthStencil)));
     }
     // Setup attachment descriptions
     std::vector<AttachmentDescription> attachmentDescriptions;

@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,17 +33,70 @@ namespace magma
     class ImageView : public NonDispatchable<VkImageView>
     {
     public:
-        explicit ImageView(std::shared_ptr<Image> image,
-            const VkComponentMapping& swizzle = {
-                // https://github.com/SaschaWillems/Vulkan/issues/160
-                VK_COMPONENT_SWIZZLE_IDENTITY,
-                VK_COMPONENT_SWIZZLE_IDENTITY,
-                VK_COMPONENT_SWIZZLE_IDENTITY,
-                VK_COMPONENT_SWIZZLE_IDENTITY},
+        ~ImageView();
+        virtual Image *getImage() const noexcept = 0;
+        VkImageViewCreateFlags getFlags() const noexcept { return flags; }
+        VkImageViewType getType() const noexcept { return viewType; }
+        virtual VkFormat getFormat() const noexcept { return format; }
+    #ifdef VK_KHR_maintenance2
+        VkImageUsageFlags getUsage() const noexcept { return usage; }
+    #endif
+        uint32_t getBaseMipLevel() const noexcept { return baseMipLevel; }
+        uint32_t getBaseArrayLayer() const noexcept { return baseArrayLayer; }
+        uint32_t getArrayLayerCount() const noexcept { return layerCount; }
+        VkExtent2D getExtent2D() const noexcept;
+        VkExtent3D getExtent3D() const noexcept;
+        VkDescriptorImageInfo getDescriptor(const std::unique_ptr<Sampler>& sampler) const noexcept;
+        VkDescriptorImageInfo getDescriptor(std::shared_ptr<Sampler> sampler = nullptr) const noexcept;
+
+    protected:
+        ImageView(const Image *image,
+            uint32_t baseMipLevel,
+            uint32_t levelCount,
+            uint32_t baseArrayLayer,
+            uint32_t layerCount,
+            const VkComponentMapping& swizzle,
+            VkImageViewCreateFlags flags,
+            VkImageUsageFlags usage,
+            const StructureChain& extendedInfo);
+        ImageView(const Image *image,
+            uint32_t baseMipLevel,
+            uint32_t baseArrayLayer,
+            uint32_t layerCount,
+            VkImageViewCreateFlags flags);
+        VkImageViewType imageToViewType(VkImageType imageType, uint32_t arrayLayers, VkImageCreateFlags flags) noexcept;
+
+        const VkImageViewCreateFlags flags;
+        const VkImageViewType viewType;
+        const VkFormat format;
+    #ifdef VK_KHR_maintenance2
+        const VkImageUsageFlags usage;
+    #endif
+        const uint32_t baseMipLevel;
+        const uint32_t baseArrayLayer;
+        const uint32_t layerCount;
+    };
+
+    /* Image view may have various resource ownership strategy.
+       If image has a single interpretation, unique ownership is
+       preferred. Sometimes a few different interpretations of
+       the same image may be necessary, so a shared ownership of
+       resource is used. */
+
+    template<class Pointer>
+    class TImageView : public ImageView
+    {
+    public:
+        explicit TImageView(Pointer image,
             VkImageViewCreateFlags flags = 0,
             VkImageUsageFlags usage = 0,
             const StructureChain& extendedInfo = StructureChain());
-        explicit ImageView(std::shared_ptr<Image> image,
+        explicit TImageView(Pointer image,
+            const VkComponentMapping& swizzle,
+            VkImageViewCreateFlags flags = 0,
+            VkImageUsageFlags usage = 0,
+            const StructureChain& extendedInfo = StructureChain());
+        explicit TImageView(Pointer image,
             uint32_t baseMipLevel,
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
             uint32_t baseArrayLayer = 0,
@@ -56,38 +109,15 @@ namespace magma
             VkImageViewCreateFlags flags = 0,
             VkImageUsageFlags usage = 0,
             const StructureChain& extendedInfo = StructureChain());
-        ~ImageView();
-        const std::shared_ptr<Image>& getImage() const noexcept { return image; }
-        VkImageViewCreateFlags getFlags() const noexcept { return flags; }
-    #ifdef VK_KHR_maintenance2
-        VkImageUsageFlags getUsage() const noexcept { return usage; }
-    #endif
-        uint32_t getBaseMipLevel() const noexcept { return baseMipLevel; }
-        uint32_t getMipLevelCount() const noexcept;
-        uint32_t getBaseArrayLayer() const noexcept { return baseArrayLayer; }
-        uint32_t getArrayLayerCount() const noexcept;
-        VkExtent3D getExtent() const noexcept;
-        VkDescriptorImageInfo getDescriptor(std::shared_ptr<const Sampler> sampler) const noexcept;
+        Image *getImage() const noexcept override { return image.get(); }
+        const Pointer& getImagePointer() const noexcept { return image; }
 
-    protected:
-        ImageView(std::shared_ptr<Image> image,
-            uint32_t baseMipLevel,
-            uint32_t levelCount,
-            uint32_t baseArrayLayer,
-            uint32_t layerCount,
-            VkImageViewCreateFlags flags);
-        static VkImageViewType imageToViewType(VkImageType imageType,
-            uint32_t arrayLayers,
-            VkImageCreateFlags flags) noexcept;
-
-        std::shared_ptr<Image> image;
-        const VkImageViewCreateFlags flags;
-    #ifdef VK_KHR_maintenance2
-        const VkImageUsageFlags usage;
-    #endif
-        const uint32_t baseMipLevel;
-        const uint32_t levelCount;
-        const uint32_t baseArrayLayer;
-        const uint32_t layerCount;
+    private:
+        const Pointer image;
     };
+
+    typedef TImageView<std::unique_ptr<Image>> UniqueImageView;
+    typedef TImageView<std::shared_ptr<Image>> SharedImageView;
 } // namespace magma
+
+#include "imageView.inl"
