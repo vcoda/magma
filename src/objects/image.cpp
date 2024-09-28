@@ -260,7 +260,7 @@ VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t
     subresourceLayers.aspectMask = getAspectMask();
     subresourceLayers.mipLevel = mipLevel;
     subresourceLayers.baseArrayLayer = getArrayLayers() ? baseArrayLayer : 0;
-    subresourceLayers.layerCount = arrayLayers;
+    subresourceLayers.layerCount = arrayLayers - subresourceLayers.baseArrayLayer;
     return subresourceLayers;
 }
 
@@ -271,6 +271,7 @@ VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32
     subresourceRange.baseMipLevel = baseMipLevel;
     subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
     subresourceRange.baseArrayLayer = getArrayLayers() ? baseArrayLayer : 0;
+    subresourceRange.layerCount = arrayLayers - subresourceRange.baseArrayLayer;
     return subresourceRange;
 }
 
