@@ -21,9 +21,9 @@ namespace magma
 {
 #ifdef VK_KHR_acceleration_structure
     VkDeviceOrHostAddressConstKHR address(VkDeviceAddress deviceAddress) noexcept;
+    VkDeviceOrHostAddressConstKHR address(const void *hostAddress) noexcept;
     template<class Buffer>
     VkDeviceOrHostAddressConstKHR address(const Buffer& buffer) noexcept;
-    VkDeviceOrHostAddressConstKHR address(const void *buffer) noexcept;
     VkDeviceAddress align(std::size_t alignment, VkDeviceSize sizeOfBufferToBeAligned,
         VkDeviceAddress address, VkDeviceSize& sizeOfBufferLeftToOperate) noexcept;
 #endif // VK_KHR_acceleration_structure

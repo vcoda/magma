@@ -8,18 +8,18 @@ inline VkDeviceOrHostAddressConstKHR address(VkDeviceAddress deviceAddress) noex
     return addr;
 }
 
+inline VkDeviceOrHostAddressConstKHR address(const void *hostAddress) noexcept
+{
+    VkDeviceOrHostAddressConstKHR addr;
+    addr.hostAddress = hostAddress;
+    return addr;
+}
+
 template<class Buffer>
 inline VkDeviceOrHostAddressConstKHR address(const Buffer& buffer) noexcept
 {
     VkDeviceOrHostAddressConstKHR addr;
     addr.deviceAddress = buffer ? buffer->getDeviceAddress() : MAGMA_NULL;
-    return addr;
-}
-
-inline VkDeviceOrHostAddressConstKHR address(const void *buffer) noexcept
-{
-    VkDeviceOrHostAddressConstKHR addr;
-    addr.hostAddress = buffer;
     return addr;
 }
 
