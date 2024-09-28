@@ -41,7 +41,7 @@ inline void ImageSamplerArrayElement::operator=(const ImageSampler& imageSampler
     if ((this->element.imageView != *imageSampler.first) ||
         (this->element.sampler != *imageSampler.second))
     {
-        this->element = imageSampler.first->getDescriptor(imageSampler.second);
+        this->element = imageSampler.first->getDescriptor(imageSampler.second.get());
         this->setImageType(imageSampler.first->getImage()->getType());
         this->setDirty();
     }
