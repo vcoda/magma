@@ -33,7 +33,7 @@ void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeD
     dirty = false;
 }
 
-void ImageDescriptor::update(std::shared_ptr<const ImageView> imageView, std::shared_ptr<magma::Sampler> sampler,
+void ImageDescriptor::update(std::shared_ptr<const ImageView> imageView, std::shared_ptr<const magma::Sampler> sampler,
     VkImageUsageFlags usage) noexcept
 {
     MAGMA_UNUSED(usage);
