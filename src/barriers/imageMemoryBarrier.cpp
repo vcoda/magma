@@ -23,24 +23,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image, VkImageLayout newLayout) noexcept:
-    ImageMemoryBarrier(std::move(image), newLayout, ImageSubresourceRange(image))
+ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout) noexcept:
+    ImageMemoryBarrier(image, newLayout, ImageSubresourceRange(image))
 {}
 
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLayout newLayout, const VkImageSubresourceRange& subresourceRange) noexcept:
+ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, const VkImageSubresourceRange& subresourceRange) noexcept:
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
         nullptr, // pNext
         VK_ACCESS_NONE_KHR, // srcAccessMask
         VK_ACCESS_NONE_KHR, // dstAccessMask
-        image_->getLayout(subresourceRange.baseMipLevel),
+        image->getLayout(subresourceRange.baseMipLevel),
         newLayout,
         VK_QUEUE_FAMILY_IGNORED,
         VK_QUEUE_FAMILY_IGNORED,
-        *image_,
+        *image,
         subresourceRange
     },
-    image(std::move(image_))
+    image(image)
 {
     switch (oldLayout)
     {
@@ -171,20 +171,20 @@ ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLay
     }
 }
 
-ImageMemoryBarrier::ImageMemoryBarrier(std::shared_ptr<Image> image_, VkImageLayout newLayout,
+ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
     VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept:
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
         nullptr, // pNext
         srcAccessMask,
         dstAccessMask,
-        image_->getLayout(0),
+        image->getLayout(0),
         newLayout,
         VK_QUEUE_FAMILY_IGNORED,
         VK_QUEUE_FAMILY_IGNORED,
-        *image_,
+        *image,
         subresourceRange
     },
-    image(std::move(image_))
+    image(image)
 {}
 } // namespace magma

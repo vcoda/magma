@@ -530,7 +530,7 @@ VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint3
         MAGMA_FAILURE("unknown new image layout");
     }
     const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel, baseArrayLayer);
-    const ImageMemoryBarrier memoryBarrier(shared_from_this(), newLayout, subresourceRange);
+    const ImageMemoryBarrier memoryBarrier(this, newLayout, subresourceRange);
     cmdBuffer->pipelineBarrier(srcStageMask, dstStageMask, memoryBarrier);
     return oldLayout;
 }
@@ -558,14 +558,15 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
     subresourceRange.levelCount = 1;
     subresourceRange.baseArrayLayer = arrayLayer;
     subresourceRange.layerCount = 1;
-    // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
-    const std::shared_ptr<Image> self = std::shared_ptr<Image>(this, [](Image *) {});
     // Image layout transition to destination of a transfer command
-    const ImageMemoryBarrier transferDst(self, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
+    const ImageMemoryBarrier transferDst(this, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
-    cmdBuffer->copyBufferToImage(std::move(srcBuffer), self, region);
+    {   // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
+        const std::shared_ptr<Image> self = std::shared_ptr<Image>(this, [](Image *) {});
+        cmdBuffer->copyBufferToImage(std::move(srcBuffer), self, region);
+    }
     // Image layout transition to <dstLayout> (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
-    const ImageMemoryBarrier shaderRead(self, dstLayout, subresourceRange);
+    const ImageMemoryBarrier shaderRead(this, dstLayout, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
@@ -600,14 +601,15 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
     subresourceRange.levelCount = mipLevels;
     subresourceRange.baseArrayLayer = 0;
     subresourceRange.layerCount = arrayLayers;
-    // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
-    const std::shared_ptr<Image> self = std::shared_ptr<Image>(this, [](Image *) {});
     // Image layout transition to destination of a transfer command
-    const ImageMemoryBarrier transferDst(self, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
+    const ImageMemoryBarrier transferDst(this, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
-    cmdBuffer->copyBufferToImage(srcBuffer, self, regions);
+    {   // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
+        const std::shared_ptr<Image> self = std::shared_ptr<Image>(this, [](Image *) {});
+        cmdBuffer->copyBufferToImage(srcBuffer, self, regions);
+    }
     // Image layout transition to <dstLayout> (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
-    const ImageMemoryBarrier shaderRead(self, dstLayout, subresourceRange);
+    const ImageMemoryBarrier shaderRead(this, dstLayout, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 

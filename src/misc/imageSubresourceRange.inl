@@ -1,6 +1,6 @@
 namespace magma
 {
-inline ImageSubresourceRange::ImageSubresourceRange(std::shared_ptr<const Image> image,
+inline ImageSubresourceRange::ImageSubresourceRange(const Image *image,
     uint32_t baseMipLevel /* 0 */,
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */) noexcept:
     VkImageSubresourceRange{
@@ -12,13 +12,13 @@ inline ImageSubresourceRange::ImageSubresourceRange(std::shared_ptr<const Image>
     }
 {}
 
-inline ImageSubresourceRange::ImageSubresourceRange(std::shared_ptr<const Image1DArray> image,
+inline ImageSubresourceRange::ImageSubresourceRange(const Image1DArray *imageArray,
     uint32_t baseMipLevel /* 0 */,
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
     uint32_t baseArrayLayer /* 0 */,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */) noexcept:
     VkImageSubresourceRange{
-        image->getAspectMask(),
+        imageArray->getAspectMask(),
         baseMipLevel,
         levelCount,
         baseArrayLayer,
@@ -26,13 +26,13 @@ inline ImageSubresourceRange::ImageSubresourceRange(std::shared_ptr<const Image1
     }
 {}
 
-inline ImageSubresourceRange::ImageSubresourceRange(std::shared_ptr<const Image2DArray> image,
+inline ImageSubresourceRange::ImageSubresourceRange(const Image2DArray *imageArray,
     uint32_t baseMipLevel /* 0 */,
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
     uint32_t baseArrayLayer /* 0 */,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */) noexcept:
     VkImageSubresourceRange{
-        image->getAspectMask(),
+        imageArray->getAspectMask(),
         baseMipLevel,
         levelCount,
         baseArrayLayer,

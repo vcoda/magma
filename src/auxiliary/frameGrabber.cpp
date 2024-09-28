@@ -47,10 +47,10 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::s
     MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Recording);
     // Transition of destination image to transfer dest optimal layout
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        ImageMemoryBarrier(dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL));
+        ImageMemoryBarrier(dstImage.get(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL));
     // Transition of swapchain image to transfer source optimal layout
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        ImageMemoryBarrier(srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL));
+        ImageMemoryBarrier(srcImage.get(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL));
     if (srcBlit && dstBlit)
     {   // Use image blitting, format swizzle will be performed automatically
         VkOffset3D blitSize;
@@ -90,10 +90,10 @@ void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, std::s
     }
     // Transition of destination image to general layout, which is the required layout for mapping
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        ImageMemoryBarrier(dstImage, VK_IMAGE_LAYOUT_GENERAL));
+        ImageMemoryBarrier(dstImage.get(), VK_IMAGE_LAYOUT_GENERAL));
     // Transition of swapchain image back to old layout
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        ImageMemoryBarrier(srcImage, oldLayout));
+        ImageMemoryBarrier(srcImage.get(), oldLayout));
     // Do we need to handle swizzling?
     swizzleBgra = false;
     if (!srcBlit || !dstBlit)

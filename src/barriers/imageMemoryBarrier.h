@@ -31,18 +31,18 @@ namespace magma
 
     struct ImageMemoryBarrier : VkImageMemoryBarrier
     {
-        ImageMemoryBarrier(std::shared_ptr<Image> image,
+        ImageMemoryBarrier(Image *image,
             VkImageLayout newLayout) noexcept;
-        ImageMemoryBarrier(std::shared_ptr<Image> image,
+        ImageMemoryBarrier(Image *image,
             VkImageLayout newLayout,
             const VkImageSubresourceRange& subresourceRange) noexcept;
-        ImageMemoryBarrier(std::shared_ptr<Image> image,
+        ImageMemoryBarrier(Image *image,
             VkImageLayout newLayout,
             VkAccessFlags srcAccessMask,
             VkAccessFlags dstAccessMask) noexcept;
 
     private:
-        std::shared_ptr<Image> image; // Image layout will be updated by CommandBuffer::pipelineBarrier()
+        Image *image; // Image layout will be updated by CommandBuffer::pipelineBarrier()
         friend class CommandBuffer;
     };
 } // namespace magma

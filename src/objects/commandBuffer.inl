@@ -463,7 +463,7 @@ inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAtt
 
 inline void CommandBuffer::resolveImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage) const noexcept
 {
-    const ImageResolve region(srcImage, dstImage);
+    const ImageResolve region(srcImage.get(), dstImage.get());
     resolveImage(srcImage, dstImage, region);
 }
 

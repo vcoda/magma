@@ -22,11 +22,11 @@ namespace magma
 {
     struct ImageResolve : VkImageResolve
     {
-        explicit ImageResolve(std::shared_ptr<const Image> srcImage,
-            std::shared_ptr<const Image> dstImage) noexcept;
-        explicit ImageResolve(std::shared_ptr<const Image> srcImage,
+        explicit ImageResolve(const Image *srcImage,
+            const Image *dstImage) noexcept;
+        explicit ImageResolve(const Image *srcImage,
             uint32_t srcMipLevel,
-            std::shared_ptr<const Image> dstImage,
+            const Image *dstImage,
             uint32_t dstMipLevel) noexcept;
     };
 } // namespace magma

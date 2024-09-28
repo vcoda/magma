@@ -51,9 +51,9 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilte
     const VkImageAspectFlags aspectMask = image->getAspectMask();
     VkExtent3D srcMipExtent = image->calculateMipExtent(baseMipLevel);
     // Transition of base mip level to transfer source layout
-    const ImageSubresourceRange baseMip(image, baseMipLevel, 1);
+    const ImageSubresourceRange baseMip(image.get(), baseMipLevel, 1);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, baseMip));
+        ImageMemoryBarrier(image.get(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, baseMip));
     for (uint32_t level = baseMipLevel + 1; level < image->getMipLevels(); ++level)
     {
         const VkExtent3D dstMipExtent = image->calculateMipExtent(level);
@@ -74,22 +74,22 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilte
         blitRegion.dstOffsets[1].x = static_cast<int32_t>(dstMipExtent.width);
         blitRegion.dstOffsets[1].y = static_cast<int32_t>(dstMipExtent.height);
         blitRegion.dstOffsets[1].z = 1;
-        const ImageSubresourceRange dstMip(image, level, 1);
+        const ImageSubresourceRange dstMip(image.get(), level, 1);
         // Transition of dest mip level to transfer dest layout
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-            ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, dstMip));
+            ImageMemoryBarrier(image.get(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, dstMip));
         // Downsample larger mip to a smaller one
         cmdBuffer->blitImage(image, image, blitRegion, filter);
         // Transition of dest mip level to transfer source layout
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-            ImageMemoryBarrier(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstMip));
+            ImageMemoryBarrier(image.get(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstMip));
         srcMipExtent = dstMipExtent;
     }
     if (hadUniformLayout) // Restore image layout of mips remaining after <baseMipLevel>
         image->layoutTransitionBaseMipLayer(oldLayouts[0], baseMipLevel, 0, cmdBuffer);
     else
     {   // Restore image layouts for each mip level
-        ImageSubresourceRange dstMip(image, baseMipLevel, 1);
+        ImageSubresourceRange dstMip(image.get(), baseMipLevel, 1);
         for (uint32_t level = baseMipLevel; level < image->getMipLevels(); ++level)
         {
             const VkImageLayout oldLayout = oldLayouts[level - baseMipLevel];
@@ -97,7 +97,7 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilte
             {
                 dstMip.baseMipLevel = level;
                 cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
-                    ImageMemoryBarrier(image, oldLayout, dstMip));
+                    ImageMemoryBarrier(image.get(), oldLayout, dstMip));
             }
         }
     }
