@@ -46,8 +46,7 @@ namespace magma
         uint32_t getArrayLayerCount() const noexcept { return layerCount; }
         VkExtent2D getExtent2D() const noexcept;
         VkExtent3D getExtent3D() const noexcept;
-        VkDescriptorImageInfo getDescriptor(const std::unique_ptr<Sampler>& sampler) const noexcept;
-        VkDescriptorImageInfo getDescriptor(std::shared_ptr<Sampler> sampler = nullptr) const noexcept;
+        VkDescriptorImageInfo getDescriptor(const Sampler *sampler = nullptr) const noexcept;
 
     protected:
         ImageView(const Image *image,

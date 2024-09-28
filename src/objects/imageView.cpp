@@ -106,21 +106,11 @@ VkExtent3D ImageView::getExtent3D() const noexcept
     return getImage()->calculateMipExtent(baseMipLevel);
 }
 
-VkDescriptorImageInfo ImageView::getDescriptor(const std::unique_ptr<Sampler>& sampler) const noexcept
+VkDescriptorImageInfo ImageView::getDescriptor(const Sampler *sampler /* nullptr */) const noexcept
 {
     MAGMA_ASSERT(getImage()->hasUniformLayout());
     VkDescriptorImageInfo imageDescriptorInfo;
-    imageDescriptorInfo.sampler = MAGMA_OPTIONAL_HANDLE(sampler); // VK_NULL_HANDLE for storage image
-    imageDescriptorInfo.imageView = handle;
-    imageDescriptorInfo.imageLayout = getImage()->getLayout(0);
-    return imageDescriptorInfo;
-}
-
-VkDescriptorImageInfo ImageView::getDescriptor(std::shared_ptr<Sampler> sampler /* nullptr */) const noexcept
-{
-    MAGMA_ASSERT(getImage()->hasUniformLayout());
-    VkDescriptorImageInfo imageDescriptorInfo;
-    imageDescriptorInfo.sampler = MAGMA_OPTIONAL_HANDLE(sampler); // VK_NULL_HANDLE for storage image
+    imageDescriptorInfo.sampler = sampler ? *sampler : VK_NULL_HANDLE;
     imageDescriptorInfo.imageView = handle;
     imageDescriptorInfo.imageLayout = getImage()->getLayout(0);
     return imageDescriptorInfo;

@@ -44,7 +44,7 @@ void ImageDescriptor::update(std::shared_ptr<const ImageView> imageView, std::sh
         (sampler && descriptor.sampler != *sampler))
     {
         setImageType(image->getType());
-        descriptor = imageView->getDescriptor(std::move(sampler)); // May be null
+        descriptor = imageView->getDescriptor(sampler.get()); // May be null
         if (VK_IMAGE_LAYOUT_UNDEFINED == descriptor.imageLayout)
         {   // Assume that later image layout will be changed,
             // e.g. when a render pass instance ends.
