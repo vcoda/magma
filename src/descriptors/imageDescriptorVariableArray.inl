@@ -52,6 +52,6 @@ inline uint32_t CombinedImageSamplerVariableArray::add(std::shared_ptr<const Ima
 
 inline uint32_t SampledImageVariableArray::add(std::shared_ptr<const ImageView> imageView)
 {
-    return insert(imageView->getDescriptor(nullptr));
+    return insert(imageView->getDescriptor());
 }
 } // namespace magma::descriptor

@@ -23,7 +23,7 @@ inline void ImageArrayElement::operator=(std::shared_ptr<const ImageView> imageV
     MAGMA_ASSERT(MAGMA_BITWISE_AND(imageView->getImage()->getUsage(), this->usage));
     if (this->element.imageView != *imageView)
     {
-        this->element = imageView->getDescriptor(nullptr);
+        this->element = imageView->getDescriptor();
         this->setImageType(imageView->getImage()->getType());
         this->setDirty();
     }
@@ -59,7 +59,7 @@ inline void ImageImmutableSamplerArrayElement::operator=(const ImageSampler& ima
     MAGMA_ASSERT(MAGMA_BITWISE_AND(imageSampler.first->getImage()->getUsage(), this->usage));
     if (this->element.imageView != *imageSampler.first)
     {
-        this->element = imageSampler.first->getDescriptor(nullptr);
+        this->element = imageSampler.first->getDescriptor();
         this->setImageType(imageSampler.first->getImage()->getType());
         this->setDirty();
     }
@@ -78,7 +78,7 @@ inline void ImageImmutableSamplerArrayElement::operator=(std::shared_ptr<const I
     MAGMA_ASSERT(MAGMA_BITWISE_AND(imageView->getImage()->getUsage(), this->usage));
     if (this->element.imageView != *imageView)
     {
-        this->element = imageView->getDescriptor(nullptr);
+        this->element = imageView->getDescriptor();
         this->setImageType(imageView->getImage()->getType());
         this->setDirty();
     }
