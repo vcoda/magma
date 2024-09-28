@@ -40,8 +40,8 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, std::sha
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
-    renderPass(std::move(renderPass)),
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass_->getDevice(), std::move(allocator)),
+    renderPass(std::move(renderPass_)),
     extent(attachment->getExtent2D()),
     layerCount(attachment->getArrayLayerCount())
 {
@@ -64,8 +64,8 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const st
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
-    renderPass(std::move(renderPass)),
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass_->getDevice(), std::move(allocator)),
+    renderPass(std::move(renderPass_)),
     extent(attachments.front()->getExtent2D()),
     layerCount(attachments.front()->getArrayLayerCount())
 {
