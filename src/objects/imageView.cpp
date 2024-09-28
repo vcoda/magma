@@ -90,6 +90,11 @@ ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t baseArr
     layerCount(layerCount)
 {}
 
+ImageView::~ImageView()
+{
+    vkDestroyImageView(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
 VkExtent2D ImageView::getExtent2D() const noexcept
 {
     const VkExtent3D extent = getExtent3D();
