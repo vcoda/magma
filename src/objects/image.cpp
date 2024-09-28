@@ -271,7 +271,6 @@ VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32
     subresourceRange.baseMipLevel = baseMipLevel;
     subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
     subresourceRange.baseArrayLayer = getArrayLayers() ? baseArrayLayer : 0;
-    subresourceLayers.layerCount = arrayLayers;
     return subresourceRange;
 }
 
