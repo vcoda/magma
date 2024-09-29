@@ -14,7 +14,7 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
 {
     geometry.triangles.vertexFormat = vertexFormat;
     geometry.triangles.vertexData.hostAddress = vertices;
-    geometry.triangles.vertexStride = (VkDeviceSize)Format(vertexFormat).size(),
+    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size()),
     geometry.triangles.maxVertex = maxVertex;
     geometry.triangles.transformData.hostAddress = transform;
     flags = flags_;
@@ -28,7 +28,7 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
 {
     geometry.triangles.vertexFormat = vertexFormat;
     geometry.triangles.vertexData.hostAddress = vertices;
-    geometry.triangles.vertexStride = (VkDeviceSize)Format(vertexFormat).size(),
+    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size()),
     geometry.triangles.maxVertex = maxVertex;
     geometry.triangles.indexType = indexType;
     geometry.triangles.indexData.hostAddress = indices;
@@ -45,8 +45,8 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
 {
     geometry.triangles.vertexFormat = vertexFormat;
     geometry.triangles.vertexData.deviceAddress = vertices->getDeviceAddress();
-    geometry.triangles.vertexStride = (VkDeviceSize)Format(vertexFormat).size(),
-    geometry.triangles.maxVertex = uint32_t(vertices->getSize() / geometry.triangles.vertexStride - 1),
+    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size()),
+    geometry.triangles.maxVertex = static_cast<uint32_t>(vertices->getSize() / geometry.triangles.vertexStride) - 1,
     geometry.triangles.transformData = address(transform);
     flags = flags_;
     primitiveCount = (geometry.triangles.maxVertex + 1) / 3;
@@ -59,8 +59,8 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
 {
     geometry.triangles.vertexFormat = vertexFormat;
     geometry.triangles.vertexData.deviceAddress = vertices->getDeviceAddress();
-    geometry.triangles.vertexStride = (VkDeviceSize)Format(vertexFormat).size(),
-    geometry.triangles.maxVertex = uint32_t(vertices->getSize() / geometry.triangles.vertexStride - 1),
+    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size()),
+    geometry.triangles.maxVertex = static_cast<uint32_t>(vertices->getSize() / geometry.triangles.vertexStride) - 1,
     geometry.triangles.indexType = indexType;
     geometry.triangles.indexData.deviceAddress = indices->getDeviceAddress();
     geometry.triangles.transformData = address(transform);
