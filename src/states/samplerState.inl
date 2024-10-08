@@ -131,7 +131,7 @@ constexpr bool SamplerState::operator==(const SamplerState& other) const noexcep
 }
 
 constexpr AnisotropicSamplerState::AnisotropicSamplerState(const VkSamplerAddressMode addressMode,
-    const float maxAnisotropy_ /* std::numeric_limits<float>::max() */) noexcept:
+    const float maxAnisotropy_) noexcept:
     SamplerState(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode)
 {
     anisotropyEnable = VK_TRUE;

@@ -94,7 +94,7 @@ namespace magma
     static_assert(sampler::magMinMipNearestRepeat.getMipFilter() == MipFilter::Nearest, "expected nearest filter");
     static_assert(sampler::magMinLinearMipNearestRepeat.getMipFilter() == MipFilter::Bilinear, "expected bilinear filter");
     static_assert(sampler::magMinMipLinearRepeat.getMipFilter() == MipFilter::Trilinear, "expected trilinear filter");
-    static_assert(sampler::magMinLinearMipAnisotropicRepeat.getMipFilter() == MipFilter::Anisotropic, "expected anisotropic filter");
+    static_assert(sampler::magMinLinearMipAnisotropicRepeatX1.getMipFilter() == MipFilter::Anisotropic, "expected anisotropic filter");
     static_assert(sampler::magLinearMinNearestMipLinearRepeat.getMipFilter() == MipFilter::Partial, "expected mixed filter");
 
     // Numeric formats
