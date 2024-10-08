@@ -19,20 +19,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Nearest filtering is a sampling of nearest texel.
-       Bilinear filtering is an interpolation of four texels in two directions.
-       Trilinear filtering also performs linear interpolation between mipmaps.
-       Anisotropic filtering performs long and narrow projection of the pixel
-       filter footprint into texture space. */
+    /* 1. Nearest filtering is a sampling of nearest texel.
+       2. Bilinear filtering is an interpolation of four texels in two directions.
+       3. Trilinear filtering also performs linear interpolation between mipmaps.
+       4. Anisotropic filtering performs long and narrow projection of the pixel
+          filter footprint into texture space.
+       5. Cubic filtering is an hermite interpolation of four coefficients to
+          reconstruct a signal. */
 
-    enum class MagFilter : uint8_t
+    enum class MagnificationFilter : uint8_t
     {
-        Nearest, Bilinear
+        Nearest, Bilinear, Cubic, Unknown
     };
 
-    enum class MipFilter : uint8_t
+    enum class MinificationFilter : uint8_t
     {
-        Nearest, Bilinear, Trilinear, Anisotropic, Partial
+        Nearest, Bilinear, Trilinear, Anisotropic, Mixed
     };
 
     /* Sampler state defines texture filtration parameters
@@ -47,8 +49,8 @@ namespace magma
             VkSamplerAddressMode addressMode) noexcept;
         constexpr SamplerState(const SamplerState&) noexcept;
         constexpr bool chained() const noexcept { return pNext != nullptr; }
-        constexpr MagFilter getMagFilter() const noexcept;
-        constexpr MipFilter getMipFilter() const noexcept;
+        constexpr MagnificationFilter getMagFilter() const noexcept;
+        constexpr MinificationFilter getMinFilter() const noexcept;
         constexpr hash_t hash() const noexcept;
         hash_t chainedHash() const noexcept;
         constexpr bool operator==(const SamplerState&) const noexcept;
