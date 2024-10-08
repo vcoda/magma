@@ -213,7 +213,7 @@ void Profiler::copyTimestamps(std::shared_ptr<CommandBuffer> cmdBuffer, std::sha
     {   // vkCmdCopyQueryPoolResults is considered to be a transfer operation, and its writes to buffer memory
         // must be synchronized using VK_PIPELINE_STAGE_TRANSFER_BIT and VK_ACCESS_TRANSFER_WRITE_BIT before using the results.
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_HOST_BIT,
-            BufferMemoryBarrier(std::move(buffer), barrier::buffer::transferWriteHostRead));
+            BufferMemoryBarrier(buffer.get(), barrier::buffer::transferWriteHostRead));
     }
 }
 

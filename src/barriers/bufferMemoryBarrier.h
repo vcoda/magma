@@ -31,14 +31,14 @@ namespace magma
     {
         constexpr BufferMemoryBarrier(VkAccessFlags srcAccessMask,
             VkAccessFlags dstAccessMask) noexcept;
-        BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
+        BufferMemoryBarrier(const Buffer *buffer,
             VkAccessFlags srcAccessMask,
             VkAccessFlags dstAccessMask,
             VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
-        BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
+        BufferMemoryBarrier(const Buffer *buffer,
             const BufferMemoryBarrier& barrier) noexcept;
-        BufferMemoryBarrier(std::shared_ptr<const Buffer> buffer,
+        BufferMemoryBarrier(const Buffer *buffer,
             const BufferMemoryBarrier& barrier,
             VkDeviceSize offset,
             VkDeviceSize size) noexcept;
