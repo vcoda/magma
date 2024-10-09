@@ -31,5 +31,7 @@ namespace magma
         void layoutTransition(std::shared_ptr<Image> image,
             VkImageLayout newLayout,
             std::shared_ptr<CommandBuffer> cmdBuffer);
+        void batchLayoutTransition(const std::unordered_map<std::shared_ptr<Image>, VkImageLayout>& imageLayouts,
+            std::shared_ptr<CommandBuffer> cmdBuffer);
     } // namespace helpers
 } // namespace magma

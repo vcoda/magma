@@ -37,4 +37,20 @@ void layoutTransition(std::shared_ptr<Image> image, VkImageLayout newLayout,
     // Block until execution is complete
     finish(std::move(cmdBuffer));
 }
+
+void batchLayoutTransition(const std::unordered_map<std::shared_ptr<Image>, VkImageLayout>& imageLayouts,
+    std::shared_ptr<CommandBuffer> cmdBuffer)
+{
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
+    cmdBuffer->reset();
+    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+    {
+        for (auto& [image, layout]: imageLayouts)
+            image->layoutTransition(layout, cmdBuffer);
+    }
+    cmdBuffer->end();
+    // Block until execution is complete
+    finish(std::move(cmdBuffer));
+}
 } // namespace magma::helpers
