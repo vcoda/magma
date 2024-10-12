@@ -58,8 +58,8 @@ constexpr MagnificationFilter SamplerState::getMagFilter() const noexcept
 #ifdef VK_EXT_filter_cubic
     case VK_FILTER_CUBIC_EXT:
         return MagnificationFilter::Cubic;
-    }
 #endif // VK_EXT_filter_cubic
+    }
     return MagnificationFilter::Unknown;
 }
 
