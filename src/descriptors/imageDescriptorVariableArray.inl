@@ -20,6 +20,12 @@ inline void ImageDescriptorVariableArray::remove(uint32_t index)
     dirty = true;
 }
 
+inline void ImageDescriptorVariableArray::clear()
+{
+    descriptors.clear();
+    invalidDescriptorIndices.clear();
+}
+
 inline uint32_t ImageDescriptorVariableArray::insert(const VkDescriptorImageInfo& imageInfo)
 {
     dirty = true;

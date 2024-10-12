@@ -27,13 +27,14 @@ namespace magma
 
     namespace descriptor
     {
-        /* Base class of variable count image/sampler descriptors. */
+        /* Base class of variable count of image/sampler descriptors. */
 
         class ImageDescriptorVariableArray : public DescriptorSetLayoutBinding
         {
         public:
             uint32_t getSize() const noexcept { return core::countof(descriptors); }
             void remove(uint32_t index);
+            void clear();
             bool associatedWithResource() const noexcept override { return true; }
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
