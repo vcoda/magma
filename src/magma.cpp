@@ -182,6 +182,10 @@ namespace magma
     #ifdef VK_KHR_acceleration_structure
         descriptor::AccelerationStructure accelerationStructure = 1;
     #endif // VK_KHR_acceleration_structure
+    #ifdef VK_EXT_descriptor_indexing
+        descriptor::CombinedImageSamplerVariableArray combinedImageSamplerVariableArray = 2;
+        descriptor::SampledImageVariableArray sampledImageVariableArray = 3;
+    #endif // VK_EXT_descriptor_indexing
     };
 #endif // MAGMA_VERIFY_DESCRIPTORS
 } // namespace magma
