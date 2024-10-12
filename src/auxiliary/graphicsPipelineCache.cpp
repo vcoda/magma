@@ -75,7 +75,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates,
-    std::shared_ptr<PipelineLayout> layout,
+    const std::unique_ptr<PipelineLayout>& layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
     VkPipelineCreateFlags flags /* 0 */,
@@ -127,6 +127,8 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
             flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
         }
     }
+    // Clone base layout as it has unique ownership
+    std::unique_ptr<PipelineLayout> layoutClone = layout->clone();
     // Create new pipeline using cache (and base pipeline if exists)
     std::shared_ptr<GraphicsPipeline> pipeline = std::make_shared<GraphicsPipeline>(device,
         shaderStages,
@@ -139,7 +141,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         depthStencilState,
         colorBlendState,
         dynamicStates,
-        std::move(layout),
+        std::move(layoutClone),
         std::move(renderPass),
         subpass,
         allocator,

@@ -31,7 +31,7 @@ namespace magma
     public:
         explicit ComputePipelineBatch(std::shared_ptr<Device> device) noexcept;
         uint32_t batchPipeline(const PipelineShaderStage& shaderStage,
-            std::shared_ptr<PipelineLayout> layout,
+            std::unique_ptr<PipelineLayout> layout,
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());

@@ -35,7 +35,7 @@ namespace magma
 {
 #ifdef VK_KHR_ray_tracing_pipeline
 RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const std::vector<PipelineShaderStage>& shaderStages_,
-    const std::vector<RayTracingShaderGroup>& shaderGroups_, uint32_t maxRecursionDepth, std::shared_ptr<PipelineLayout> layout_,
+    const std::vector<RayTracingShaderGroup>& shaderGroups_, uint32_t maxRecursionDepth, std::unique_ptr<PipelineLayout> layout_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
     std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
@@ -140,7 +140,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
         extendedInfo);
 }
 
-RayTracingPipeline::RayTracingPipeline(VkPipeline handle_, std::shared_ptr<Device> device, std::shared_ptr<PipelineLayout> layout,
+RayTracingPipeline::RayTracingPipeline(VkPipeline handle_, std::shared_ptr<Device> device, std::unique_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, const std::vector<PipelineShaderStage>& shaderStages,
     const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxRecursionDepth,
 #ifdef VK_EXT_pipeline_creation_feedback
@@ -216,7 +216,7 @@ hash_t psoHash(VkPipelineCreateFlags flags,
     const std::vector<PipelineShaderStage>& shaderStages,
     const std::vector<RayTracingShaderGroup>& shaderGroups,
     const std::vector<VkDynamicState>& dynamicStates,
-    std::shared_ptr<PipelineLayout> layout,
+    const std::unique_ptr<PipelineLayout>& layout,
     uint32_t maxRecursionDepth,
     const StructureChain& extendedInfo /* default */) noexcept
 {   // Erase flags that do not affect pipeline states

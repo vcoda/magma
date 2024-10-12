@@ -46,7 +46,7 @@ namespace magma
             const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
             uint32_t maxRecursionDepth,
-            std::shared_ptr<PipelineLayout> layout,
+            std::unique_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
@@ -70,7 +70,7 @@ namespace magma
         MAGMA_MAKE_SHARED(RayTracingPipeline)
         RayTracingPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
-            std::shared_ptr<PipelineLayout> layout,
+            std::unique_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
             const std::vector<PipelineShaderStage>& shaderStages,
@@ -97,7 +97,7 @@ namespace magma
         const std::vector<PipelineShaderStage>& shaderStages,
         const std::vector<RayTracingShaderGroup>& shaderGroups,
         const std::vector<VkDynamicState>& dynamicStates,
-        std::shared_ptr<PipelineLayout> layout,
+        const std::unique_ptr<PipelineLayout>& layout,
         uint32_t maxRecursionDepth,
         const StructureChain& extendedInfo = StructureChain()) noexcept;
 #endif // VK_KHR_ray_tracing_pipeline

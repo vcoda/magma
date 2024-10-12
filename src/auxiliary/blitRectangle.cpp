@@ -105,7 +105,8 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         (samples & VK_SAMPLE_COUNT_64_BIT) ? renderstate::multisampleSixtyFour :
         renderstate::dontMultisample;
     // Create blit pipeline
-    auto pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout(), allocator);
+    std::unique_ptr<PipelineLayout> pipelineLayout = std::make_unique<PipelineLayout>(
+        descriptorSet->getLayout(), allocator);
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstate::nullVertexInput,

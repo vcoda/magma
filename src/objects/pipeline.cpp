@@ -32,7 +32,7 @@ namespace magma
 VkPipelineCompilerControlFlagsAMD Pipeline::compilerControlFlags = 0;
 #endif
 
-Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device_, std::shared_ptr<PipelineLayout> layout_,
+Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device_, std::unique_ptr<PipelineLayout> layout_,
     std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, uint32_t stageCount,
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackEXT creationFeedback /* {} */,
@@ -52,7 +52,7 @@ Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device
 {
     if (!layout)
     {   // Layout must be a valid VkPipelineLayout handle
-        layout = std::make_shared<PipelineLayout>(device);
+        layout = std::make_unique<PipelineLayout>(device);
     }
 }
 

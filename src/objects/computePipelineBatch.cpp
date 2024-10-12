@@ -33,13 +33,13 @@ ComputePipelineBatch::ComputePipelineBatch(std::shared_ptr<Device> device) noexc
 {}
 
 uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderStage,
-    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
+    std::unique_ptr<PipelineLayout> layout, std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */, const StructureChain& extendedInfo /* default */)
 {
     stages.emplace_front(1, shaderStage);
     if (!layout)
-        layout = std::make_shared<PipelineLayout>(device);
-    layouts.push_front(layout);
+        layout = std::make_unique<PipelineLayout>(device);
+    layouts.push_front(std::move(layout));
     basePipelines.push_front(basePipeline);
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
@@ -102,7 +102,7 @@ void ComputePipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelin
     if (VK_SUCCESS == result)
     {
         auto handle = handles.cbegin();
-        auto layout = layouts.cbegin();
+        auto layout = layouts.begin();
         auto basePipeline = basePipelines.cbegin();
     #ifdef VK_EXT_pipeline_creation_feedback
         auto creationFeedback = creationFeedbacks.cbegin();
@@ -112,7 +112,7 @@ void ComputePipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipelin
         while (handle != handles.cend())
         {
             pipelines.emplace_front(ComputePipeline::makeShared(
-                *handle++, device, *layout++, *basePipeline++, allocator,
+                *handle++, device, std::move(*layout++), *basePipeline++, allocator,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
                 stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,

@@ -102,7 +102,8 @@ constexpr
     };
     // Create font pipeline
     constexpr push::FragmentConstantRange<PushConstants> pushConstantRange;
-    pipelineLayout = std::make_shared<PipelineLayout>(descriptorSet->getLayout(), pushConstantRange);
+    std::unique_ptr<PipelineLayout> pipelineLayout = std::make_unique<PipelineLayout>(
+        descriptorSet->getLayout(), pushConstantRange);
     pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstate::nullVertexInput,
@@ -112,7 +113,7 @@ constexpr
         renderstate::depthAlwaysDontWrite,
         renderstate::blendNormalRgb,
         std::initializer_list<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
-        pipelineLayout,
+        std::move(pipelineLayout),
         std::move(renderPass), 0,
         std::move(hostAllocator),
         std::move(pipelineCache));
@@ -120,7 +121,7 @@ constexpr
 
 void TextShader::draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
 {
-    cmdBuffer->pushConstant(pipelineLayout, VK_SHADER_STAGE_FRAGMENT_BIT, stringCount);
+    cmdBuffer->pushConstant(*pipeline->getLayout(), VK_SHADER_STAGE_FRAGMENT_BIT, stringCount);
     cmdBuffer->bindDescriptorSet(pipeline, 0, descriptorSet);
     cmdBuffer->bindPipeline(pipeline);
     cmdBuffer->draw(3);

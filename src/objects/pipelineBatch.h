@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../shaders/pipelineShaderStage.h"
+#include "pipelineLayout.h"
 #include "pipelineLibrary.h"
 #include "../misc/structureChain.h"
 
@@ -24,7 +25,6 @@ namespace magma
 {
     class Device;
     class Pipeline;
-    class PipelineLayout;
     class PipelineCache;
     class IAllocator;
 
@@ -58,7 +58,7 @@ namespace magma
 
         std::shared_ptr<Device> device;
         std::forward_list<std::vector<PipelineShaderStage>> stages;
-        std::forward_list<std::shared_ptr<PipelineLayout>> layouts;
+        std::forward_list<std::unique_ptr<PipelineLayout>> layouts;
         std::forward_list<std::shared_ptr<Pipeline>> basePipelines;
     #ifdef VK_AMD_pipeline_compiler_control
         std::forward_list<VkPipelineCompilerControlCreateInfoAMD> pipelineCompilerControlInfos;

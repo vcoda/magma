@@ -30,7 +30,7 @@ namespace magma
         explicit ComputePipelineLibrary(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr) noexcept;
         void compileComputeShader(const PipelineShaderStage& shaderStage,
-            std::shared_ptr<PipelineLayout> layout,
+            std::unique_ptr<PipelineLayout> layout,
             VkPipelineCreateFlags flags = 0);
     };
 #endif // VK_KHR_pipeline_library

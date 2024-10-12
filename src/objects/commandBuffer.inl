@@ -82,43 +82,41 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
     vkCmdSetStencilReference(handle, MAGMA_STENCIL_FACE_MASK(frontFace, backFace), reference);
 }
 
-inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, const std::shared_ptr<PipelineLayout>& layout, uint32_t setIndex,
+inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, const PipelineLayout& layout, uint32_t setIndex,
     const std::shared_ptr<DescriptorSet>& descriptorSet, uint32_t dynamicOffset /* std::numeric_limits<uint32_t>::max() */) noexcept
 {
-    MAGMA_ASSERT(layout->hasLayout(descriptorSet->getLayout()));
+    MAGMA_ASSERT(layout.hasLayout(descriptorSet->getLayout()));
     MAGMA_ASSERT(!descriptorSet->dirty());
     const uint32_t dynamicOffsetCount = dynamicOffset < std::numeric_limits<uint32_t>::max() ? 1 : 0;
-    vkCmdBindDescriptorSets(handle, bindPoint, *layout, setIndex, 1, descriptorSet->getHandleAddress(), dynamicOffsetCount, dynamicOffsetCount ? &dynamicOffset : nullptr);
-    MAGMA_INUSE(layout);
+    vkCmdBindDescriptorSets(handle, bindPoint, layout, setIndex, 1, descriptorSet->getHandleAddress(), dynamicOffsetCount, dynamicOffsetCount ? &dynamicOffset : nullptr);
     MAGMA_INUSE(descriptorSet);
 }
 
-inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, const std::shared_ptr<PipelineLayout>& layout, uint32_t setIndex,
+inline void CommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, const PipelineLayout& layout, uint32_t setIndex,
     const std::shared_ptr<DescriptorSet>& descriptorSet, const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
 {
-    MAGMA_ASSERT(layout->hasLayout(descriptorSet->getLayout()));
+    MAGMA_ASSERT(layout.hasLayout(descriptorSet->getLayout()));
     MAGMA_ASSERT(!descriptorSet->dirty());
-    vkCmdBindDescriptorSets(handle, bindPoint, *layout, setIndex, 1, descriptorSet->getHandleAddress(), core::countof(dynamicOffsets), dynamicOffsets.begin());
-    MAGMA_INUSE(layout);
+    vkCmdBindDescriptorSets(handle, bindPoint, layout, setIndex, 1, descriptorSet->getHandleAddress(), core::countof(dynamicOffsets), dynamicOffsets.begin());
     MAGMA_INUSE(descriptorSet);
 }
 
 inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, uint32_t setIndex,
     const std::shared_ptr<DescriptorSet>& descriptorSet, uint32_t dynamicOffset /* std::numeric_limits<uint32_t>::max() */) noexcept
 {
-    bindDescriptorSet(pipeline->getBindPoint(), pipeline->getLayout(), setIndex, descriptorSet, dynamicOffset);
+    bindDescriptorSet(pipeline->getBindPoint(), *pipeline->getLayout(), setIndex, descriptorSet, dynamicOffset);
 }
 
 inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, uint32_t setIndex,
     const std::shared_ptr<DescriptorSet>& descriptorSet, const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
 {
-    bindDescriptorSet(pipeline->getBindPoint(), pipeline->getLayout(), setIndex, descriptorSet, dynamicOffsets);
+    bindDescriptorSet(pipeline->getBindPoint(), *pipeline->getLayout(), setIndex, descriptorSet, dynamicOffsets);
 }
 
 #ifdef VK_KHR_push_descriptor
 inline void CommandBuffer::pushDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, uint32_t setIndex, const std::shared_ptr<DescriptorSet>& descriptorSet)
 {
-    pushDescriptorSet(pipeline->getBindPoint(), pipeline->getLayout(), setIndex, descriptorSet);
+    pushDescriptorSet(pipeline->getBindPoint(), *pipeline->getLayout(), setIndex, descriptorSet);
 }
 #endif // VK_KHR_push_descriptor
 
@@ -707,35 +705,31 @@ inline void CommandBuffer::copyQueryResultsWithAvailability<uint64_t>(const std:
 }
 
 template<class Type>
-inline void CommandBuffer::pushConstant(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type& constant,
+inline void CommandBuffer::pushConstant(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const Type& constant,
     uint32_t offset /* 0 */) noexcept
 {
-    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type)), &constant);
-    MAGMA_INUSE(layout);
+    vkCmdPushConstants(handle, layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type)), &constant);
 }
 
 template<class Type, uint32_t PushConstantCount>
-inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const Type(&constants)[PushConstantCount],
+inline void CommandBuffer::pushConstants(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const Type(&constants)[PushConstantCount],
     uint32_t offset /* 0 */) noexcept
 {
-    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * PushConstantCount), constants);
-    MAGMA_INUSE(layout);
+    vkCmdPushConstants(handle, layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * PushConstantCount), constants);
 }
 
 template<class Type>
-inline void CommandBuffer::pushConstants(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants,
+inline void CommandBuffer::pushConstants(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants,
     uint32_t offset /* 0 */) noexcept
 {
-    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * constants.size()), constants.data());
-    MAGMA_INUSE(layout);
+    vkCmdPushConstants(handle, layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * constants.size()), constants.data());
 }
 
 template<class BlockType>
-inline void CommandBuffer::pushConstantBlock(const std::shared_ptr<PipelineLayout>& layout, VkShaderStageFlags stageFlags, const BlockType& block,
+inline void CommandBuffer::pushConstantBlock(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const BlockType& block,
     uint32_t offset /* 0 */) noexcept
 {
-    vkCmdPushConstants(handle, *layout, stageFlags, offset, static_cast<uint32_t>(sizeof(BlockType)), &block);
-    MAGMA_INUSE(layout);
+    vkCmdPushConstants(handle, layout, stageFlags, offset, static_cast<uint32_t>(sizeof(BlockType)), &block);
 }
 
 inline void CommandBuffer::nextSubpass(VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept

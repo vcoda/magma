@@ -51,7 +51,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates_,
-    std::shared_ptr<PipelineLayout> layout,
+    std::unique_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
@@ -69,8 +69,8 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     colorBlendStates.push_front(colorBlendState);
     dynamicStates.push_front(dynamicStates_);
     if (!layout)
-        layout = std::make_shared<PipelineLayout>(device);
-    layouts.push_front(layout);
+        layout = std::make_unique<PipelineLayout>(device);
+    layouts.push_front(std::move(layout));
     renderPasses.push_front(renderPass);
     basePipelines.push_front(basePipeline);
     VkPipelineDynamicStateCreateInfo dynamicStateInfo;
@@ -180,7 +180,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipeli
     if (VK_SUCCESS == result)
     {
         auto handle = handles.cbegin();
-        auto layout = layouts.cbegin();
+        auto layout = layouts.begin();
         auto basePipeline = basePipelines.cbegin();
         auto shaderStages = stages.cbegin();
     #ifdef VK_EXT_pipeline_creation_feedback
@@ -192,7 +192,7 @@ void GraphicsPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipeli
         while (handle != handles.cend())
         {
             pipelines.emplace_front(GraphicsPipeline::makeShared(
-                *handle++, device, *layout++, *basePipeline++, allocator,
+                *handle++, device, std::move(*layout++), *basePipeline++, allocator,
                 core::countof(*shaderStages++),
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,

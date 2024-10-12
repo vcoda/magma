@@ -51,7 +51,7 @@ namespace magma
         public:
             explicit ImmediateRender(const uint32_t maxVertexCount,
                 std::shared_ptr<RenderPass> renderPass,
-                std::shared_ptr<PipelineLayout> layout,
+                std::unique_ptr<PipelineLayout> layout,
                 std::shared_ptr<PipelineCache> pipelineCache,
                 std::shared_ptr<Allocator> allocator = nullptr);
             const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
@@ -102,7 +102,7 @@ namespace magma
             const bool stippledLinesEnabled;
             std::shared_ptr<Device> device;
             std::shared_ptr<RenderPass> renderPass;
-            std::shared_ptr<PipelineLayout> layout;
+            std::unique_ptr<PipelineLayout> layout;
             std::shared_ptr<GraphicsPipelineCache> pipelineCache;
             std::shared_ptr<DynamicVertexBuffer> vertexBuffer;
             std::list<Primitive> primitives;

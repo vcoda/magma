@@ -39,7 +39,7 @@ RayTracingPipelineBatch::RayTracingPipelineBatch(std::shared_ptr<Device> device,
 
 uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
     const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxRecursionDepth,
-    std::shared_ptr<PipelineLayout> layout,
+    std::unique_ptr<PipelineLayout> layout,
     std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
     const std::vector<VkDynamicState>& dynamicStates_ /* void */,
     VkPipelineCreateFlags flags /* 0 */,
@@ -54,8 +54,8 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     maxRecursionDepths.push_front(maxRecursionDepth);
     dynamicStates.push_front(dynamicStates_);
     if (!layout)
-        layout = std::make_shared<PipelineLayout>(device);
-    layouts.push_front(layout);
+        layout = std::make_unique<PipelineLayout>(device);
+    layouts.push_front(std::move(layout));
     basePipelines.push_front(basePipeline);
     VkPipelineDynamicStateCreateInfo dynamicStateInfo;
     dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
@@ -139,7 +139,7 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipe
     if (VK_SUCCESS == result)
     {
         auto handle = handles.cbegin();
-        auto layout = layouts.cbegin();
+        auto layout = layouts.begin();
         auto basePipeline = basePipelines.cbegin();
         auto pipelineInfo = pipelineInfos.cbegin();
         auto shaderStages = stages.cbegin();
@@ -153,7 +153,7 @@ void RayTracingPipelineBatch::buildPipelines(std::shared_ptr<PipelineCache> pipe
         while (handle != handles.cend())
         {
             pipelines.emplace_front(RayTracingPipeline::makeShared(
-                *handle++, device, *layout++, *basePipeline++, allocator,
+                *handle++, device, std::move(*layout++), *basePipeline++, allocator,
                 *shaderStages++, *shaderGroups++, *maxRecursionDepth++,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,

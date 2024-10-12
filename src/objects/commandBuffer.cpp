@@ -287,14 +287,14 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
     vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(),
         firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets,
         core::countof(dynamicOffsets), dynamicOffsets.begin());
-    MAGMA_INUSE(pipeline->getLayout());
+    MAGMA_INUSE(pipeline);
 }
 
 #ifdef VK_KHR_push_descriptor
-void CommandBuffer::pushDescriptorSet(VkPipelineBindPoint bindPoint, const std::shared_ptr<PipelineLayout>& layout, uint32_t setIndex,
+void CommandBuffer::pushDescriptorSet(VkPipelineBindPoint bindPoint, const PipelineLayout& layout, uint32_t setIndex,
     const std::shared_ptr<DescriptorSet>& descriptorSet)
 {
-    MAGMA_ASSERT(layout->hasLayout(descriptorSet->getLayout()));
+    MAGMA_ASSERT(layout.hasLayout(descriptorSet->getLayout()));
     MAGMA_ASSERT(descriptorSet->dirty());
     const std::size_t descriptorCount = descriptorSet->getDescriptorCount();
     MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptorCount);
@@ -304,8 +304,7 @@ void CommandBuffer::pushDescriptorSet(VkPipelineBindPoint bindPoint, const std::
         MAGMA_DEVICE_EXTENSION(vkCmdPushDescriptorSetKHR);
         if (vkCmdPushDescriptorSetKHR)
         {
-            vkCmdPushDescriptorSetKHR(handle, bindPoint, *layout, setIndex, descriptorWriteCount, descriptorWrites);
-            MAGMA_INUSE(layout);
+            vkCmdPushDescriptorSetKHR(handle, bindPoint, layout, setIndex, descriptorWriteCount, descriptorWrites);
             MAGMA_INUSE(descriptorSet);
         }
     }

@@ -33,7 +33,7 @@ ComputePipelineLibrary::ComputePipelineLibrary(std::shared_ptr<Device> device,
 {}
 
 void ComputePipelineLibrary::compileComputeShader(const PipelineShaderStage& shaderStage,
-    std::shared_ptr<PipelineLayout> layout, VkPipelineCreateFlags flags /* 0 */)
+    std::unique_ptr<PipelineLayout> layout, VkPipelineCreateFlags flags /* 0 */)
 {
     VkComputePipelineCreateInfo computePipelineInfo;
     computePipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;

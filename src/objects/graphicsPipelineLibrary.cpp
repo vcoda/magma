@@ -66,7 +66,7 @@ void GraphicsPipelineLibrary::compileVertexInputInterface(const VertexInputState
 void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<PipelineShaderStage>& preRasterizationShaderStages,
     const TesselationState& tesselationState, const ViewportState& viewportState,
     const RasterizationState& rasterizationState, const std::vector<VkDynamicState>& dynamicStates,
-    std::shared_ptr<PipelineLayout> layout, VkPipelineCreateFlags flags /* 0 */)
+    std::unique_ptr<PipelineLayout> layout, VkPipelineCreateFlags flags /* 0 */)
 {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#pipelines-graphics-subsets-pre-rasterization
     MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, preRasterizationShaderStages.size());
     for (auto const& stage: preRasterizationShaderStages)
@@ -122,7 +122,7 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
 
 void GraphicsPipelineLibrary::compileFragmentShader(const PipelineShaderStage& shaderStage,
     const MultisampleState& multisampleState, const DepthStencilState& depthStencilState,
-    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<RenderPass> renderPass, uint32_t subpass,
+    std::unique_ptr<PipelineLayout> layout, std::shared_ptr<RenderPass> renderPass, uint32_t subpass,
     VkPipelineCreateFlags flags /* 0 */)
 {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#pipelines-graphics-subsets-fragment-shader
     if (shaderStage.stage != VK_SHADER_STAGE_FRAGMENT_BIT)

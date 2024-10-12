@@ -33,7 +33,8 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator)),
-    pushConstantRanges(pushConstantRanges_)
+    pushConstantRanges(pushConstantRanges_),
+    flags(flags)
 {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -60,7 +61,8 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, setLayout->getDevice(), std::move(allocator)),
     setLayouts({setLayout}),
-    pushConstantRanges(pushConstantRanges_)
+    pushConstantRanges(pushConstantRanges_),
+    flags(flags)
 {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -87,7 +89,8 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, (*setLayouts_.begin())->getDevice(), std::move(allocator)),
-    pushConstantRanges(pushConstantRanges_)
+    pushConstantRanges(pushConstantRanges_),
+    flags(flags)
 {
     MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts_.size());
     for (auto const& layout: setLayouts_)
@@ -118,6 +121,34 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
 PipelineLayout::~PipelineLayout()
 {
     vkDestroyPipelineLayout(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+}
+
+std::unique_ptr<PipelineLayout> PipelineLayout::clone() const
+{
+    MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts.size());
+    for (auto const& layout: setLayouts)
+    {
+        std::shared_ptr<const DescriptorSetLayout> setLayout = layout.lock();
+        MAGMA_ASSERT(setLayout != nullptr);
+        if (setLayout)
+            dereferencedSetLayouts.put(*setLayout);
+    }
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo;
+    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    pipelineLayoutInfo.pNext = nullptr;
+    pipelineLayoutInfo.flags = flags;
+    pipelineLayoutInfo.setLayoutCount = dereferencedSetLayouts.size();
+    pipelineLayoutInfo.pSetLayouts = dereferencedSetLayouts;
+    pipelineLayoutInfo.pushConstantRangeCount = core::countof(pushConstantRanges);
+    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
+    VkPipelineLayout handle;
+    const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    MAGMA_HANDLE_RESULT(result, "failed to clone pipeline layout");
+    std::unique_ptr<PipelineLayout> layout(new PipelineLayout(device, hostAllocator, flags, handle));
+    layout->setLayouts = setLayouts;
+    layout->pushConstantRanges = pushConstantRanges;
+    layout->hash = hash;
+    return layout;
 }
 
 bool PipelineLayout::hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout_) const noexcept
