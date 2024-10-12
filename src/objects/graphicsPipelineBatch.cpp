@@ -70,7 +70,6 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     dynamicStates.push_front(dynamicStates_);
     if (!layout)
         layout = std::make_unique<PipelineLayout>(device);
-    layouts.push_front(std::move(layout));
     renderPasses.push_front(renderPass);
     basePipelines.push_front(basePipeline);
     VkPipelineDynamicStateCreateInfo dynamicStateInfo;
@@ -141,12 +140,13 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
         depthStencilState,
         colorBlendState,
         dynamicStates_,
-        std::move(layout),
+        layout,
         std::move(renderPass),
         subpass,
         extendedInfo);
     hashes.push_front(hash.first);
     rsHashes.push_front(hash.second);
+    layouts.push_front(std::move(layout));
     return core::countof(pipelineInfos) - 1;
 }
 
