@@ -34,7 +34,7 @@ namespace magma
             const Type *operator->() const noexcept;
             Type& operator*() noexcept;
             const Type& operator*() const noexcept;
-            operator bool() const noexcept;
+            operator bool() const;
 
         private:
             std::variant<std::unique_ptr<Type>, std::shared_ptr<Type>> ptr;

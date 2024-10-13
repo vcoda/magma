@@ -63,8 +63,9 @@ inline const Type& variant_ptr<Type>::operator*() const noexcept
 }
 
 template<class Type>
-inline variant_ptr<Type>::operator bool() const noexcept
+inline variant_ptr<Type>::operator bool() const
 {
-    return get() != nullptr;
+    auto visitor = [](auto const& p) -> bool { return p.operator bool(); };
+    return std::visit(visitor, ptr);
 }
 } // namespace magma::core
