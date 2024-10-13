@@ -28,13 +28,13 @@ namespace magma
             variant_ptr(std::nullptr_t) noexcept {}
             variant_ptr(std::unique_ptr<Type> ptr) noexcept;
             variant_ptr(std::shared_ptr<Type> ptr) noexcept;
-            Type *get();
-            const Type *get() const;
-            Type *operator->();
-            const Type *operator->() const;
-            Type& operator*();
-            const Type& operator*() const;
-            operator bool() const;
+            Type *get() noexcept;
+            const Type *get() const noexcept;
+            Type *operator->() noexcept;
+            const Type *operator->() const noexcept;
+            Type& operator*() noexcept;
+            const Type& operator*() const noexcept;
+            operator bool() const noexcept;
 
         private:
             std::variant<std::unique_ptr<Type>, std::shared_ptr<Type>> ptr;
