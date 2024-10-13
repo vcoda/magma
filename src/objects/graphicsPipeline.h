@@ -125,8 +125,8 @@ namespace magma
         const DepthStencilState& depthStencilState,
         const ColorBlendState& colorBlendState,
         const std::vector<VkDynamicState>& dynamicStates,
-        const std::unique_ptr<PipelineLayout>& layout,
-        std::shared_ptr<RenderPass> renderPass,
+        const PipelineLayout *layout,
+        const RenderPass *renderPass,
         uint32_t subpass,
         const StructureChain& extendedInfo = StructureChain()) noexcept;
 } // namespace magma

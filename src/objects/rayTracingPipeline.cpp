@@ -135,7 +135,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
         shaderStages,
         shaderGroups,
         dynamicStates,
-        layout,
+        layout.get(),
         maxRecursionDepth,
         extendedInfo);
 }
@@ -216,7 +216,7 @@ hash_t psoHash(VkPipelineCreateFlags flags,
     const std::vector<PipelineShaderStage>& shaderStages,
     const std::vector<RayTracingShaderGroup>& shaderGroups,
     const std::vector<VkDynamicState>& dynamicStates,
-    const std::unique_ptr<PipelineLayout>& layout,
+    const PipelineLayout *layout,
     uint32_t maxRecursionDepth,
     const StructureChain& extendedInfo /* default */) noexcept
 {   // Erase flags that do not affect pipeline states

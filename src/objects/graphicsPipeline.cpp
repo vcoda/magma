@@ -201,8 +201,8 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
         depthStencilState,
         colorBlendState,
         dynamicStates,
-        layout,
-        std::move(renderPass),
+        layout.get(),
+        renderPass.get(),
         subpass,
         extendedInfo);
     hash = hashes.first;
@@ -243,8 +243,8 @@ std::pair<hash_t, hash_t> psoHash(VkPipelineCreateFlags flags,
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates,
-    const std::unique_ptr<PipelineLayout>& layout,
-    std::shared_ptr<RenderPass> renderPass,
+    const PipelineLayout *layout,
+    const RenderPass *renderPass,
     uint32_t subpass,
     const StructureChain& extendedInfo /* default */) noexcept
 {   // Erase flags that do not affect pipeline states

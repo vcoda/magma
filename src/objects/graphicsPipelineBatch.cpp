@@ -140,8 +140,8 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
         depthStencilState,
         colorBlendState,
         dynamicStates_,
-        layout,
-        std::move(renderPass),
+        layout.get(),
+        renderPass.get(),
         subpass,
         extendedInfo);
     hashes.push_front(hash.first);

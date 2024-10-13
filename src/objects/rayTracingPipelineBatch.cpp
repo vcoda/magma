@@ -113,7 +113,7 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
         shaderStages,
         shaderGroups,
         dynamicStates_,
-        layout,
+        layout.get(),
         maxRecursionDepth,
         extendedInfo);
     hashes.push_front(hash);

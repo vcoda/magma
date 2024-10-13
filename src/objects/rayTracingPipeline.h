@@ -97,7 +97,7 @@ namespace magma
         const std::vector<PipelineShaderStage>& shaderStages,
         const std::vector<RayTracingShaderGroup>& shaderGroups,
         const std::vector<VkDynamicState>& dynamicStates,
-        const std::unique_ptr<PipelineLayout>& layout,
+        const PipelineLayout *layout,
         uint32_t maxRecursionDepth,
         const StructureChain& extendedInfo = StructureChain()) noexcept;
 #endif // VK_KHR_ray_tracing_pipeline

@@ -93,8 +93,8 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
         depthStencilState,
         colorBlendState,
         dynamicStates,
-        layout,
-        renderPass,
+        layout.get(),
+        renderPass.get(),
         subpass,
         extendedInfo);
     // Lookup for existing pipeline
