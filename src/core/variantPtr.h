@@ -25,6 +25,7 @@ namespace magma
         class variant_ptr
         {
         public:
+            variant_ptr(std::nullptr_t) noexcept {}
             variant_ptr(std::unique_ptr<Type> ptr) noexcept;
             variant_ptr(std::shared_ptr<Type> ptr) noexcept;
             Type *get();
