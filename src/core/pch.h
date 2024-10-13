@@ -52,6 +52,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <variant>
 #include <vector>
 
 /*
