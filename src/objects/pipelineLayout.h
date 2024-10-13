@@ -67,18 +67,12 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineLayoutCreateFlags flags = 0);
         ~PipelineLayout();
-        std::unique_ptr<PipelineLayout> clone() const;
         VkPipelineLayoutCreateFlags getFlags() const noexcept { return flags; }
         bool hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout) const noexcept;
         hash_t getHash() const noexcept;
         friend std::ostream& operator<<(std::ostream&, const PipelineLayout&);
 
     private:
-        PipelineLayout(std::shared_ptr<Device> device,
-            std::shared_ptr<IAllocator> allocator,
-            VkPipelineLayoutCreateFlags flags,
-            VkPipelineLayout handle);
-
         std::vector<std::weak_ptr<const DescriptorSetLayout>> setLayouts;
         std::vector<PushConstantRange> pushConstantRanges;
         const VkPipelineLayoutCreateFlags flags;

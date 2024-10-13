@@ -37,7 +37,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::aux
 {
 ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<RenderPass> renderPass,
-    std::unique_ptr<PipelineLayout> layout_, std::shared_ptr<PipelineCache> pipelineCache,
+    std::shared_ptr<PipelineLayout> layout_, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     wideLinesEnabled(renderPass->getDevice()->getEnabledFeatures().wideLines),
@@ -66,7 +66,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
             float m[4][4];
         };
         constexpr push::VertexConstantRange<Transform> pushConstantRange;
-        layout = std::make_unique<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
+        layout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
     }
 constexpr
 #include "spirv/output/immv"

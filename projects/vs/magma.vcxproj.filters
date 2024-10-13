@@ -903,6 +903,9 @@
     <ClInclude Include="..\..\src\descriptors\imageDescriptorVariableArray.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\core\variantPtr.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1680,6 +1683,9 @@
     </None>
     <None Include="..\..\src\objects\bufferView.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\core\variantPtr.inl">
+      <Filter>Header Files\core</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -40,7 +40,7 @@ namespace magma
         ~Pipeline();
         VkPipelineBindPoint getBindPoint() const noexcept { return bindPoint; }
         uint32_t getStageCount() const noexcept { return stageCount; }
-        const std::unique_ptr<PipelineLayout>& getLayout() const noexcept { return layout; }
+        const core::variant_ptr<PipelineLayout>& getLayout() const noexcept { return layout; }
         std::shared_ptr<Pipeline> getBasePipeline() const noexcept { return basePipeline.lock(); }
         hash_t getHash() const noexcept { return hash; }
     #ifdef VK_KHR_pipeline_executable_properties
@@ -65,7 +65,7 @@ namespace magma
     protected:
         Pipeline(VkPipelineBindPoint bindPoint,
             std::shared_ptr<Device> device,
-            std::unique_ptr<PipelineLayout> layout,
+            core::variant_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
             uint32_t stageCount,
@@ -77,7 +77,7 @@ namespace magma
 
         const VkPipelineBindPoint bindPoint;
         const uint32_t stageCount;
-        std::unique_ptr<PipelineLayout> layout;
+        core::variant_ptr<PipelineLayout> layout;
         std::weak_ptr<Pipeline> basePipeline;
     #ifdef VK_EXT_pipeline_creation_feedback
         VkPipelineCreationFeedbackEXT creationFeedback;

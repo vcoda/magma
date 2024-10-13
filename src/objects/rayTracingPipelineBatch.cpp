@@ -39,7 +39,7 @@ RayTracingPipelineBatch::RayTracingPipelineBatch(std::shared_ptr<Device> device,
 
 uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
     const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxRecursionDepth,
-    std::unique_ptr<PipelineLayout> layout,
+    core::variant_ptr<PipelineLayout> layout,
     std::shared_ptr<RayTracingPipeline> basePipeline /* nullptr */,
     const std::vector<VkDynamicState>& dynamicStates_ /* void */,
     VkPipelineCreateFlags flags /* 0 */,

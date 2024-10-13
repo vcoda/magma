@@ -46,7 +46,7 @@ namespace magma
             const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
             uint32_t maxRecursionDepth,
-            std::unique_ptr<PipelineLayout> layout,
+            core::variant_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator = nullptr,
             std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
             std::shared_ptr<PipelineCache> pipelineCache = nullptr,
@@ -70,7 +70,7 @@ namespace magma
         MAGMA_MAKE_SHARED(RayTracingPipeline)
         RayTracingPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
-            std::unique_ptr<PipelineLayout> layout,
+            core::variant_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
             const std::vector<PipelineShaderStage>& shaderStages,

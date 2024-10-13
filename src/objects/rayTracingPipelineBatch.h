@@ -42,7 +42,7 @@ namespace magma
         uint32_t batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
             uint32_t maxRecursionDepth,
-            std::unique_ptr<PipelineLayout> layout,
+            core::variant_ptr<PipelineLayout> layout,
             std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
             const std::vector<VkDynamicState>& dynamicStates = {},
             VkPipelineCreateFlags flags = 0,

@@ -33,7 +33,7 @@ ComputePipelineBatch::ComputePipelineBatch(std::shared_ptr<Device> device) noexc
 {}
 
 uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderStage,
-    std::unique_ptr<PipelineLayout> layout, std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
+    core::variant_ptr<PipelineLayout> layout, std::shared_ptr<ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */, const StructureChain& extendedInfo /* default */)
 {
     stages.emplace_front(1, shaderStage);

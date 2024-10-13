@@ -30,12 +30,4 @@ inline PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_pt
     VkPipelineLayoutCreateFlags flags /* 0 */):
     PipelineLayout(setLayouts, {/* empty */}, std::move(allocator), flags)
 {}
-
-inline PipelineLayout::PipelineLayout(std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator,
-    VkPipelineLayoutCreateFlags flags, VkPipelineLayout layout):
-    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator)),
-    flags(flags)
-{
-    handle = layout;
-}
 } // namespace magma
