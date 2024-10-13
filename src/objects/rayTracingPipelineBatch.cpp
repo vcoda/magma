@@ -55,7 +55,6 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     dynamicStates.push_front(dynamicStates_);
     if (!layout)
         layout = std::make_unique<PipelineLayout>(device);
-    layouts.push_front(std::move(layout));
     basePipelines.push_front(basePipeline);
     VkPipelineDynamicStateCreateInfo dynamicStateInfo;
     dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
@@ -117,6 +116,7 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
         maxRecursionDepth,
         extendedInfo);
     hashes.push_front(hash);
+    layouts.push_front(std::move(layout));
     return core::countof(pipelineInfos) - 1;
 }
 

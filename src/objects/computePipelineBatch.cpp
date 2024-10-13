@@ -39,7 +39,6 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     stages.emplace_front(1, shaderStage);
     if (!layout)
         layout = std::make_unique<PipelineLayout>(device);
-    layouts.push_front(std::move(layout));
     basePipelines.push_front(basePipeline);
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
@@ -82,6 +81,7 @@ uint32_t ComputePipelineBatch::batchPipeline(const PipelineShaderStage& shaderSt
     hash = core::hashCombine(hash, shaderStage.getHash());
     hash = core::hashCombine(hash, layout->getHash());
     hashes.push_front(hash);
+    layouts.push_front(std::move(layout));
     return core::countof(pipelineInfos) - 1;
 }
 
