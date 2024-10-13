@@ -102,7 +102,7 @@ namespace magma
             const bool stippledLinesEnabled;
             std::shared_ptr<Device> device;
             std::shared_ptr<RenderPass> renderPass;
-            std::shared_ptr<PipelineLayout> layout;
+            std::shared_ptr<PipelineLayout> sharedLayout;
             std::shared_ptr<GraphicsPipelineCache> pipelineCache;
             std::shared_ptr<DynamicVertexBuffer> vertexBuffer;
             std::list<Primitive> primitives;

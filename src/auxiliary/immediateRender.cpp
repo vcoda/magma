@@ -37,14 +37,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::aux
 {
 ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<RenderPass> renderPass,
-    std::shared_ptr<PipelineLayout> layout_, std::shared_ptr<PipelineCache> pipelineCache,
+    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<PipelineCache> pipelineCache,
     std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     wideLinesEnabled(renderPass->getDevice()->getEnabledFeatures().wideLines),
     stippledLinesEnabled(renderPass->getDevice()->checkFeatures()->stippledLinesEnabled()),
     device(renderPass->getDevice()),
     renderPass(std::move(renderPass)),
-    layout(std::move(layout_)),
+    sharedLayout(std::move(layout)),
     pipelineCache(std::make_shared<GraphicsPipelineCache>(device, std::move(pipelineCache),
     #ifdef VK_KHR_pipeline_library
         nullptr,
@@ -59,14 +59,14 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     const bool stagedPool = device->getFeatures()->supportsDeviceLocalHostVisibleMemory();
     vertexBuffer = std::make_shared<DynamicVertexBuffer>(device, vertexBufferSize, stagedPool, allocator);
     setIdentity();
-    if (!layout)
+    if (!sharedLayout)
     {   // If layout hasn't been specified, create a default one
         struct Transform
         {
             float m[4][4];
         };
         constexpr push::VertexConstantRange<Transform> pushConstantRange;
-        layout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
+        sharedLayout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
     }
 constexpr
 #include "spirv/output/immv"
@@ -156,8 +156,7 @@ bool ImmediateRender::commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
         if (stippledLinesEnabled && !primitive.stippledLineState)
             cmdBuffer->setLineStipple(primitive.lineStippleFactor, primitive.lineStipplePattern);
     #endif // VK_EXT_line_rasterization
-        if (layout)
-            cmdBuffer->pushConstantBlock(*layout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
+        cmdBuffer->pushConstantBlock(*sharedLayout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
     #ifdef VK_EXT_debug_utils
         if (primitive.labelName)
@@ -217,6 +216,6 @@ std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTop
         TesselationState(), ViewportState(),
         rasterizationState, multisampleState,
         depthStencilState, colorBlendState, dynamicStates,
-        layout, renderPass, 0);
+        sharedLayout, renderPass, 0);
 }
 } // namespace magma::aux
