@@ -51,17 +51,15 @@ namespace magma
             uint32_t indexCount,
             const void *transform = nullptr,
             VkGeometryFlagsKHR flags = 0) noexcept;
-        template<class Buffer>
         explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
-            const Buffer& vertices,
-            const Buffer& transform = nullptr,
+            const Buffer *vertices,
+            const Buffer *transform = nullptr,
             VkGeometryFlagsKHR flags = 0) noexcept;
-        template<class Buffer>
         explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
-            const Buffer& vertices,
+            const Buffer *vertices,
             VkIndexType indexType,
-            const Buffer& indices,
-            const Buffer& transform = nullptr,
+            const Buffer *indices,
+            const Buffer *transform = nullptr,
             VkGeometryFlagsKHR flags = 0) noexcept;
         size_t getIndexSize() const noexcept;
     };
@@ -92,8 +90,7 @@ namespace magma
             VkGeometryFlagsKHR flags = 0) noexcept;
         explicit AccelerationStructureGeometryAabbs(const std::vector<Aabb>& aabbs,
             VkGeometryFlagsKHR flags = 0) noexcept;
-        template<class Buffer>
-        explicit AccelerationStructureGeometryAabbs(const Buffer& aabbs,
+        explicit AccelerationStructureGeometryAabbs(const Buffer *aabbs,
             VkGeometryFlagsKHR flags = 0) noexcept;
     };
 
@@ -105,8 +102,8 @@ namespace magma
         explicit AccelerationStructureGeometryInstances(uint32_t instanceCount,
             const void *instances,
             VkGeometryFlagsKHR flags = 0) noexcept;
-        template<class Buffer>
-        explicit AccelerationStructureGeometryInstances(const Buffer& instances,
+        template<class Instance>
+        explicit AccelerationStructureGeometryInstances(const AccelerationStructureInstanceBuffer<Instance> *instances,
             VkGeometryFlagsKHR flags = 0) noexcept;
     };
 } // namespace magma
