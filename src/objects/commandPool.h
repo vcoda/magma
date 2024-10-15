@@ -32,8 +32,7 @@ namespace magma
        operations that allocate, free, and reset command buffers
        or the pool itself. */
 
-    class CommandPool : public NonDispatchable<VkCommandPool>,
-        public std::enable_shared_from_this<CommandPool>
+    class CommandPool : public NonDispatchable<VkCommandPool>
     {
     public:
         explicit CommandPool(std::shared_ptr<Device> device,
