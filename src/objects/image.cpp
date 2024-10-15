@@ -679,9 +679,8 @@ VkExtent3D Image::calculateValidMipExtent(uint32_t level) const noexcept
 
 VkPipelineStageFlags Image::getSuitableDstStageMask(std::shared_ptr<CommandBuffer> cmdBuffer)
 {
-    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
-    const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
-    std::shared_ptr<Device> device = cmdPool->getDevice();
+    const uint32_t queueFamilyIndex = cmdBuffer->getQueueFamilyIndex();
+    const std::shared_ptr<Device>& device = cmdBuffer->getDevice();
     std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
     if (!queue)
         return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;

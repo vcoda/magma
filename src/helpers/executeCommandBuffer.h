@@ -28,7 +28,7 @@ namespace magma
            It allocates command buffer, calls begin/end() and submits it
            to the graphics queue. */
 
-        void executeCommandBuffer(std::shared_ptr<CommandPool> cmdPool,
+        void executeCommandBuffer(const std::unique_ptr<CommandPool>& cmdPool,
             std::function<void(std::shared_ptr<CommandBuffer>)> cmdFn,
             const char *blockName = "magma::helpers::executeCommandBuffer",
             uint32_t blockColor = 0x0);

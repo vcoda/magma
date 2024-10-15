@@ -26,13 +26,14 @@ namespace magma
     class PrimaryCommandBuffer : public CommandBuffer
     {
     public:
-        explicit PrimaryCommandBuffer(std::shared_ptr<CommandPool> cmdPool);
+        explicit PrimaryCommandBuffer(const std::unique_ptr<CommandPool>& cmdPool);
         void executeCommands(const std::shared_ptr<CommandBuffer>& cmdBuffer) noexcept;
         void executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
 
     private:
         MAGMA_MAKE_SHARED(PrimaryCommandBuffer)
-        PrimaryCommandBuffer(VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool);
+        PrimaryCommandBuffer(VkCommandBuffer handle,
+            const CommandPool *cmdPool);
         friend CommandPool;
     };
 } // namespace magma

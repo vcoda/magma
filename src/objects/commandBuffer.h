@@ -607,11 +607,11 @@ namespace magma
         void setCheckpoint(const char *MAGMA_NOOP(name)) noexcept MAGMA_NOOP_METHOD;
     #endif
 
-        std::shared_ptr<CommandPool> getCommandPool() const noexcept { return cmdPool.lock(); }
         const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
         const std::unique_ptr<Fence>& getFence() const noexcept { return fence; }
         bool primary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_PRIMARY == level; }
         bool secondary() const noexcept { return VK_COMMAND_BUFFER_LEVEL_SECONDARY == level; }
+        uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
         State getState() const noexcept { return state; }
         VkCommandBufferUsageFlags getUsage() const noexcept { return usage; }
         bool allowsReset() const noexcept { return VK_TRUE == resetCommandBuffer; }
@@ -682,9 +682,9 @@ namespace magma
     protected:
         CommandBuffer(VkCommandBufferLevel level,
             VkCommandBuffer handle,
-            std::shared_ptr<CommandPool> cmdPool);
+            const CommandPool *cmdPool);
         CommandBuffer(VkCommandBufferLevel level,
-            std::shared_ptr<CommandPool> cmdPool);
+            const CommandPool *cmdPool);
         void queueSubmissionFinished() noexcept;
         void executionFinished() noexcept;
         friend CommandPool;
@@ -725,10 +725,11 @@ namespace magma
             const std::shared_ptr<Buffer>& scratchBuffer);
     #endif // VK_KHR_acceleration_structure
 
-        std::weak_ptr<CommandPool> cmdPool;
+        const VkCommandBufferLevel level;
+        const VkCommandPool cmdPool;
+        const uint32_t queueFamilyIndex;
         std::shared_ptr<Device> device;
         std::unique_ptr<Fence> fence;
-        const VkCommandBufferLevel level;
         VkCommandBufferUsageFlags usage;
         std::atomic<State> state;
         const VkBool32 resetCommandBuffer : 1;

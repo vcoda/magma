@@ -46,12 +46,9 @@ void finish(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Queue> que
 }
 
 void finish(std::shared_ptr<CommandBuffer> cmdBuffer, bool waitIdle /* false */)
-{
-    std::shared_ptr<CommandPool> cmdPool = cmdBuffer->getCommandPool();
-    MAGMA_ASSERT(cmdPool);
-    const uint32_t queueFamilyIndex = cmdPool->getQueueFamilyIndex();
-    // Get queue associated with command buffer
-    std::shared_ptr<Queue> queue = cmdPool->getDevice()->getQueueByFamily(queueFamilyIndex);
+{   // Get queue associated with command buffer
+    const uint32_t queueFamilyIndex = cmdBuffer->getQueueFamilyIndex();
+    std::shared_ptr<Queue> queue = cmdBuffer->getDevice()->getQueueByFamily(queueFamilyIndex);
     MAGMA_ASSERT(queue);
     finish(std::move(cmdBuffer), std::move(queue), waitIdle);
 }

@@ -37,15 +37,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, std::shared_ptr<CommandPool> cmdPool_):
+CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, const CommandPool *cmdPool):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle),
-    cmdPool(cmdPool_),
-    device(cmdPool_->getDevice()),
-    fence(std::make_unique<Fence>(device)),
     level(level),
+    cmdPool(cmdPool->getHandle()),
+    queueFamilyIndex(cmdPool->getQueueFamilyIndex()),
+    device(cmdPool->getDevice()),
+    fence(std::make_unique<Fence>(device)),
     usage(0),
     state(State::Initial),
-    resetCommandBuffer((cmdPool_->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
+    resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
     debugMarkerEnabled(VK_FALSE),
     debugUtilsEnabled(VK_FALSE),
     occlusionQueryEnable(VK_FALSE),
@@ -68,15 +69,16 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
 #endif
 }
 
-CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<CommandPool> cmdPool_):
+CommandBuffer::CommandBuffer(VkCommandBufferLevel level, const CommandPool *cmdPool):
     Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER),
-    cmdPool(cmdPool_),
-    device(cmdPool_->getDevice()),
-    fence(std::make_unique<Fence>(device)),
     level(level),
+    cmdPool(cmdPool->getHandle()),
+    queueFamilyIndex(cmdPool->getQueueFamilyIndex()),
+    device(cmdPool->getDevice()),
+    fence(std::make_unique<Fence>(device)),
     usage(0),
     state(State::Initial),
-    resetCommandBuffer((cmdPool_->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
+    resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
     debugMarkerEnabled(VK_FALSE),
     debugUtilsEnabled(VK_FALSE),
     occlusionQueryEnable(VK_FALSE),
@@ -100,7 +102,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
     VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
     cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     cmdBufferAllocateInfo.pNext = nullptr;
-    cmdBufferAllocateInfo.commandPool = *cmdPool_;
+    cmdBufferAllocateInfo.commandPool = *cmdPool;
     cmdBufferAllocateInfo.level = level;
     cmdBufferAllocateInfo.commandBufferCount = 1;
     const VkResult result = vkAllocateCommandBuffers(getNativeDevice(), &cmdBufferAllocateInfo, &handle);
@@ -110,11 +112,8 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, std::shared_ptr<Command
 
 CommandBuffer::~CommandBuffer()
 {
-    if (handle)
-    {   // Release if not freed through command pool
-        MAGMA_ASSERT(!cmdPool.expired());
-        vkFreeCommandBuffers(getNativeDevice(), *cmdPool.lock(), 1, &handle);
-    }
+    if (handle) // Release only if hasn't been freed through command pool
+        vkFreeCommandBuffers(getNativeDevice(), cmdPool, 1, &handle);
 }
 
 bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
