@@ -186,9 +186,6 @@
     <ClInclude Include="..\..\src\objects\deviceMemory.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\dispatchable.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\objects\display.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -802,9 +799,6 @@
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\objects\baseDeviceMemory.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\objects\iobject.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\objects\deviceResourcePool.h">
@@ -1658,9 +1652,6 @@
       <Filter>Header Files\helpers</Filter>
     </None>
     <None Include="..\..\src\objects\indexBuffer.inl">
-      <Filter>Header Files\objects</Filter>
-    </None>
-    <None Include="..\..\src\objects\dispatchable.inl">
       <Filter>Header Files\objects</Filter>
     </None>
     <None Include="..\..\src\objects\model\dispatchable.inl">

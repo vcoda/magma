@@ -291,7 +291,6 @@
     <ClInclude Include="..\..\src\objects\descriptorSetLayout.h" />
     <ClInclude Include="..\..\src\objects\device.h" />
     <ClInclude Include="..\..\src\objects\deviceMemory.h" />
-    <ClInclude Include="..\..\src\objects\dispatchable.h" />
     <ClInclude Include="..\..\src\objects\display.h" />
     <ClInclude Include="..\..\src\objects\displayMode.h" />
     <ClInclude Include="..\..\src\objects\dstTransferBuffer.h" />
@@ -321,7 +320,6 @@
     <ClInclude Include="..\..\src\objects\indexBuffer.h" />
     <ClInclude Include="..\..\src\objects\indirectBuffer.h" />
     <ClInclude Include="..\..\src\objects\instance.h" />
-    <ClInclude Include="..\..\src\objects\iobject.h" />
     <ClInclude Include="..\..\src\objects\iresource.h" />
     <ClInclude Include="..\..\src\objects\managedDeviceMemory.h" />
     <ClInclude Include="..\..\src\objects\model\deviceChild.h" />
@@ -733,7 +731,6 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\objects\bufferView.inl" />
     <None Include="..\..\src\objects\commandBuffer.inl" />
     <None Include="..\..\src\objects\device.inl" />
-    <None Include="..\..\src\objects\dispatchable.inl" />
     <None Include="..\..\src\objects\image.inl" />
     <None Include="..\..\src\objects\imageView.inl" />
     <None Include="..\..\src\objects\indexBuffer.inl" />
