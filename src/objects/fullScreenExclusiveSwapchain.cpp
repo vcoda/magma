@@ -34,7 +34,7 @@ namespace magma
 {
 #ifdef VK_EXT_full_screen_exclusive
 FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device,
-    std::shared_ptr<const Surface> surface, uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat,
+    const std::unique_ptr<Surface>& surface, uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat,
     const VkExtent2D& extent, uint32_t arrayLayers, VkImageUsageFlags imageUsage,
     VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode, VkFullScreenExclusiveEXT fullScreenExclusive,

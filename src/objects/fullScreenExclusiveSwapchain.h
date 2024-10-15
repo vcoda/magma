@@ -34,7 +34,7 @@ namespace magma
     {
     public:
         explicit FullScreenExclusiveSwapchain(std::shared_ptr<Device> device,
-            std::shared_ptr<const Surface> surface,
+            const std::unique_ptr<Surface>& surface,
             uint32_t minImageCount,
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& extent,

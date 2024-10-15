@@ -59,14 +59,14 @@ namespace magma
         std::vector<VkLayerProperties> enumerateLayers() const;
         std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
     #ifdef VK_KHR_surface
-        bool getSurfaceSupport(std::shared_ptr<const Surface> surface,
+        bool getSurfaceSupport(const std::unique_ptr<Surface>& surface,
             uint32_t queueFamilyIndex) const noexcept;
-        VkSurfaceCapabilitiesKHR getSurfaceCapabilities(std::shared_ptr<const Surface> surface) const;
-        std::vector<VkSurfaceFormatKHR> getSurfaceFormats(std::shared_ptr<const Surface> surface) const;
-        std::vector<VkPresentModeKHR> getSurfacePresentModes(std::shared_ptr<const Surface> surface) const;
+        VkSurfaceCapabilitiesKHR getSurfaceCapabilities(const std::unique_ptr<Surface>& surface) const;
+        std::vector<VkSurfaceFormatKHR> getSurfaceFormats(const std::unique_ptr<Surface>& surface) const;
+        std::vector<VkPresentModeKHR> getSurfacePresentModes(const std::unique_ptr<Surface>& surface) const;
     #ifdef VK_EXT_full_screen_exclusive
-        bool getFullScreenExclusiveSurfaceSupport(std::shared_ptr<const Surface> surface) const;
-        std::vector<VkPresentModeKHR> getFullScreenExclusiveSurfacePresentModes(std::shared_ptr<const Surface> surface,
+        bool getFullScreenExclusiveSurfaceSupport(const std::unique_ptr<Surface>& surface) const;
+        std::vector<VkPresentModeKHR> getFullScreenExclusiveSurfacePresentModes(const std::unique_ptr<Surface>& surface,
             VkFullScreenExclusiveEXT fullScreenExclusive
         #ifdef VK_KHR_win32_surface
            ,HMONITOR hMonitor = NULL
@@ -74,10 +74,10 @@ namespace magma
             ) const;
     #endif // VK_EXT_full_screen_exclusive
     #ifdef VK_KHR_shared_presentable_image
-        VkImageUsageFlags getSurfaceSharedPresentFlags(std::shared_ptr<const Surface> surface) const;
+        VkImageUsageFlags getSurfaceSharedPresentFlags(const std::unique_ptr<Surface>& surface) const;
     #endif
     #ifdef VK_KHR_device_group
-        std::vector<VkRect2D> getPresentRectangles(std::shared_ptr<const Surface> surface) const;
+        std::vector<VkRect2D> getPresentRectangles(const std::unique_ptr<Surface>& surface) const;
     #endif
     #ifdef VK_KHR_performance_query
         uint32_t getNumQueueFamilyPerformanceCounters(uint32_t queueFamilyIndex) const noexcept;
@@ -87,7 +87,7 @@ namespace magma
             const std::vector<uint32_t>& counterIndices) const;
     #endif // VK_KHR_performance_query
     #ifdef VK_AMD_display_native_hdr
-        bool getSurfaceLocalDimmingSupport(std::shared_ptr<const Surface> surface) const;
+        bool getSurfaceLocalDimmingSupport(const std::unique_ptr<Surface>& surface) const;
     #endif
     #endif // VK_KHR_surface
         // VK_KHR_xxx_surface
@@ -598,7 +598,7 @@ namespace magma
         VkPhysicalDeviceFeatures getFeatures2(void *features) const;
         VkPhysicalDeviceProperties getProperties2(void *properties) const;
     #ifdef VK_KHR_surface
-        VkSurfaceCapabilitiesKHR getSurfaceCapabilities2(std::shared_ptr<const Surface> surface,
+        VkSurfaceCapabilitiesKHR getSurfaceCapabilities2(const std::unique_ptr<Surface>& surface,
             void *surfaceCapabilities) const;
     #endif // VK_KHR_surface
 

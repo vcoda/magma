@@ -28,8 +28,7 @@ namespace magma
        object for the respective platform. */
 
 #ifdef VK_KHR_surface
-    class Surface : public NonDispatchable<VkSurfaceKHR>,
-        public std::enable_shared_from_this<Surface>
+    class Surface : public NonDispatchable<VkSurfaceKHR>
     {
     public:
         ~Surface();

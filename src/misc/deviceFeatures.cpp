@@ -126,7 +126,7 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExt
 }
 #endif // VK_KHR_external_semaphore_capabilities
 
-bool DeviceFeatures::supportsImageUsage(std::shared_ptr<const Surface> surface, VkImageUsageFlags flags) const
+bool DeviceFeatures::supportsImageUsage(const std::unique_ptr<Surface>& surface, VkImageUsageFlags flags) const
 {
     if (auto physicalDevice = parent.lock())
     {

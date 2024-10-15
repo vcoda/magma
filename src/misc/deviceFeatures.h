@@ -53,7 +53,7 @@ namespace magma
     #ifdef VK_KHR_external_semaphore_capabilities
         ExternalFeatures supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const;
     #endif
-        bool supportsImageUsage(std::shared_ptr<const Surface> surface,
+        bool supportsImageUsage(const std::unique_ptr<Surface>& surface,
             VkImageUsageFlags flags) const;
         bool supportsDeviceLocalHostVisibleMemory() const noexcept;
         Vendor getVendor() const noexcept;

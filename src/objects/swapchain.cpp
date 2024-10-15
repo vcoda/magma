@@ -61,7 +61,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, VkSurfaceFormatKHR surfaceF
 #endif // !MAGMA_NO_EXCEPTIONS
 }
 
-Swapchain::Swapchain(std::shared_ptr<Device> device_, std::shared_ptr<const Surface> surface,
+Swapchain::Swapchain(std::shared_ptr<Device> device_, const std::unique_ptr<Surface>& surface,
     uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat, const VkExtent2D& extent,
     uint32_t arrayLayers, VkImageUsageFlags imageUsage, VkSurfaceTransformFlagBitsKHR preTransform,
     VkCompositeAlphaFlagBitsKHR compositeAlpha, VkPresentModeKHR presentMode, const Initializer& optional,
