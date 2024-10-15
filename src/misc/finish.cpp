@@ -30,7 +30,7 @@ void finish(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Queue> que
 {
     if (waitIdle)
     {   // Wait for queue operations to finish
-        queue->submit(cmdBuffer);
+        queue->submit(std::move(cmdBuffer));
         queue->waitIdle();
     }
     else
