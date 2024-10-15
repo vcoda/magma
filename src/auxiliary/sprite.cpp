@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::aux
 {
-Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
+Sprite::Sprite(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkDeviceSize offset,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */):
@@ -59,11 +59,11 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
     }
     const CopyLayout bufferLayout = {offset, 0, 0};
     constexpr VkOffset3D imageOffset{0, 0, 0};
-    copyMip(std::move(cmdBuffer), 0, 0, std::move(srcBuffer), bufferLayout, imageOffset,
+    copyMip(cmdBuffer, 0, 0, std::move(srcBuffer), bufferLayout, imageOffset,
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT);
 }
 
-Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent_,
+Sprite::Sprite(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format, const VkExtent2D& extent_,
     VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
@@ -95,12 +95,12 @@ Sprite::Sprite(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const 
         bottomRight.y *= footprint.second;
     }
     const MipData mip = {extent, size, data};
-    copyMipmapStaged(std::move(cmdBuffer), {mip}, std::move(allocator), std::move(copyFn),
+    copyMipmapStaged(cmdBuffer, {mip}, std::move(allocator), std::move(copyFn),
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
         VK_PIPELINE_STAGE_TRANSFER_BIT);
 }
 
-void Sprite::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Image> dstImage,
+void Sprite::blit(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<Image> dstImage,
     VkFilter filter /* VK_FILTER_NEAREST */) const noexcept
 {
     const VkExtent3D dstExtent = dstImage->calculateMipExtent(0);

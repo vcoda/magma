@@ -31,6 +31,6 @@ namespace magma
         bool generateMipmap(std::shared_ptr<Image> image,
             uint32_t baseLevel,
             VkFilter filter,
-            std::shared_ptr<CommandBuffer> cmdBuffer) noexcept;
+            const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept;
     } // namespace aux
 } // namespace magma

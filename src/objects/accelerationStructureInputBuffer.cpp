@@ -35,17 +35,17 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_p
         optional, sharing, std::move(allocator))
 {}
 
-AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
+AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     AccelerationStructureInputBuffer(cmdBuffer->getDevice(), size, optional, sharing, allocator)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(cmdBuffer, data, std::move(allocator), std::move(copyFn));
 }
 
-AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
@@ -55,7 +55,7 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_p
         size > 0 ? size : srcBuffer->getSize(), 
         optional, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    copyTransfer(cmdBuffer, std::move(srcBuffer), srcOffset);
 }
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

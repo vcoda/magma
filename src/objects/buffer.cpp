@@ -346,7 +346,7 @@ void Buffer::copyHost(const void *srcBuffer, VkDeviceSize srcBufferSize,
     }
 }
 
-void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+void Buffer::copyTransfer(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     VkDeviceSize srcOffset /* 0 */,
     VkDeviceSize dstOffset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */)
@@ -365,7 +365,7 @@ void Buffer::copyTransfer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_
     cmdBuffer->copyBuffer(srcBuffer, self, region);
 }
 
-void Buffer::copyStaged(std::shared_ptr<CommandBuffer> cmdBuffer, const void *data,
+void Buffer::copyStaged(const std::unique_ptr<CommandBuffer>& cmdBuffer, const void *data,
     std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn /* nullptr */)
 {
     MAGMA_ASSERT(data);
@@ -381,6 +381,6 @@ void Buffer::copyStaged(std::shared_ptr<CommandBuffer> cmdBuffer, const void *da
     }
     cmdBuffer->end();
     // Block until execution is complete
-    finish(std::move(cmdBuffer));
+    finish(cmdBuffer);
 }
 } // namespace magma

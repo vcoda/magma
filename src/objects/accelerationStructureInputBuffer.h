@@ -27,14 +27,14 @@ namespace magma
     class AccelerationStructureInputBuffer : public Buffer
     {
     public:
-        explicit AccelerationStructureInputBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit AccelerationStructureInputBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkDeviceSize size,
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
-        explicit AccelerationStructureInputBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit AccelerationStructureInputBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,

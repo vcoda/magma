@@ -28,7 +28,7 @@ namespace magma
            facilitate the development of debugging tools for tracking which
            pipelined command contributed to device loss. */
 
-        std::vector<uint32_t> readbackBufferMarkers(std::shared_ptr<CommandBuffer> cmdBuffer,
+        std::vector<uint32_t> readbackBufferMarkers(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             const char *blockName = "magma::helpers::readbackBufferMarkers",
             uint32_t blockColor = 0x0);
     } // namespace helpers

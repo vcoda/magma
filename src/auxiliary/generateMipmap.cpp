@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::aux
 {
 bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilter filter,
-    std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
+    const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
 {
     MAGMA_ASSERT(image);
     MAGMA_ASSERT(MAGMA_BITWISE_AND(image->getUsage(), VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT));

@@ -111,7 +111,8 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, const CommandPool *cmdP
 }
 
 CommandBuffer::~CommandBuffer()
-{
+{   // Command buffer must not be destroyed while queue is executing its commands
+    MAGMA_ASSERT(state != State::Pending);
     if (handle) // Release only if hasn't been freed through command pool
         vkFreeCommandBuffers(getNativeDevice(), cmdPool, 1, &handle);
 }

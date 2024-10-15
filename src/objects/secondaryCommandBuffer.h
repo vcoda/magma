@@ -33,7 +33,7 @@ namespace magma
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, cmdPool.get()) {}
 
     private:
-        MAGMA_MAKE_SHARED(SecondaryCommandBuffer)
+        MAGMA_MAKE_UNIQUE(SecondaryCommandBuffer)
         SecondaryCommandBuffer(VkCommandBuffer handle, const CommandPool *cmdPool):
             CommandBuffer(VK_COMMAND_BUFFER_LEVEL_SECONDARY, handle, cmdPool) {}
         friend CommandPool;

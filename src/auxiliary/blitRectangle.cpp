@@ -132,7 +132,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     }
 }
 
-void BlitRectangle::blit(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> imageView, VkFilter filter, const VkRect2D& rc,
+void BlitRectangle::blit(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<const ImageView> imageView, VkFilter filter, const VkRect2D& rc,
     bool negativeViewportHeight /* false */) const noexcept
 {
     MAGMA_ASSERT(imageView);

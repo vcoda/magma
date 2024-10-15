@@ -216,7 +216,7 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
     return bindedImages;
 }
 
-VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer,
+VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, const std::unique_ptr<CommandBuffer>& cmdBuffer,
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
 {
     VkImageLayout oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -229,7 +229,7 @@ VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, std::shared_p
             oldLayout = image->layoutTransition(newLayout, cmdBuffer, shaderStageMask);
     }
     cmdBuffer->end();
-    finish(std::move(cmdBuffer));
+    finish(cmdBuffer);
     return oldLayout;
 }
 

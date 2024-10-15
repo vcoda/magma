@@ -77,7 +77,7 @@ namespace magma
         uint32_t getImageCount() const;
         const std::vector<std::shared_ptr<SwapchainImage>>& getImages() const;
         VkImageLayout layoutTransition(VkImageLayout newLayout,
-            std::shared_ptr<CommandBuffer> cmdBuffer,
+            const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT) noexcept;
         uint32_t acquireNextImage(std::shared_ptr<const Semaphore> semaphore = nullptr,
             std::shared_ptr<const Fence> fence = nullptr,

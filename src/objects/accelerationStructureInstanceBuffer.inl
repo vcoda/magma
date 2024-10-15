@@ -33,21 +33,21 @@ inline Instance& AccelerationStructureInstanceBuffer<Instance>::getInstance(uint
 }
 
 template<class Instance>
-inline void AccelerationStructureInstanceBuffer<Instance>::updateModified(std::shared_ptr<CommandBuffer> cmdBuffer)
+inline void AccelerationStructureInstanceBuffer<Instance>::updateModified(const std::unique_ptr<CommandBuffer>& cmdBuffer)
 {
     if (last >= first)
     {
         const VkDeviceSize offset = sizeof(Instance) * first;
         const VkDeviceSize size = sizeof(Instance) * (last - first + 1);
-        copyTransfer(std::move(cmdBuffer), srcBuffer, offset, offset, size);
+        copyTransfer(cmdBuffer, srcBuffer, offset, offset, size);
         first = std::numeric_limits<uint32_t>::max();
         last = std::numeric_limits<uint32_t>::min();
     }
 }
 
 template<class Instance>
-inline void AccelerationStructureInstanceBuffer<Instance>::updateWhole(std::shared_ptr<CommandBuffer> cmdBuffer)
+inline void AccelerationStructureInstanceBuffer<Instance>::updateWhole(const std::unique_ptr<CommandBuffer>& cmdBuffer)
 {
-    copyTransfer(std::move(cmdBuffer), srcBuffer, 0, 0, VK_WHOLE_SIZE);
+    copyTransfer(cmdBuffer, srcBuffer, 0, 0, VK_WHOLE_SIZE);
 }
 } // namespace magma

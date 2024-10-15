@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::helpers
 {
-std::vector<uint32_t> readbackBufferMarkers(std::shared_ptr<CommandBuffer> cmdBuffer,
+std::vector<uint32_t> readbackBufferMarkers(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     const char *blockName /* magma::helpers::readbackBufferMarkers */,
     uint32_t blockColor /* 0x0 */)
 {
@@ -42,7 +42,7 @@ std::vector<uint32_t> readbackBufferMarkers(std::shared_ptr<CommandBuffer> cmdBu
             cmdBuffer->copyBuffer(srcBuffer, dstBuffer, 0, 0, dstBuffer->getSize());
             cmdBuffer->end();
             // Block until execution is complete
-            finish(std::move(cmdBuffer));
+            finish(cmdBuffer);
         }
         helpers::mapScoped<uint32_t>(dstBuffer,
             [&bufferMarkers, size](const uint32_t *srcData)

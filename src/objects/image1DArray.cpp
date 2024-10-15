@@ -36,7 +36,7 @@ Image1DArray::Image1DArray(std::shared_ptr<Device> device, VkFormat format, uint
         optional, sharing, std::move(allocator))
 {}
 
-Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t arrayLayers,
+Image1DArray::Image1DArray(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format, uint32_t arrayLayers,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMaps,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -48,11 +48,11 @@ Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
 {
     MAGMA_ASSERT(core::countof(mipMaps) % arrayLayers == 0);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
-    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout,
+    copyMipmap(cmdBuffer, std::move(srcBuffer), mipMaps, bufferLayout,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 
-Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t arrayLayers,
+Image1DArray::Image1DArray(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format, uint32_t arrayLayers,
     const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
@@ -64,7 +64,7 @@ Image1DArray::Image1DArray(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat fo
 {
     MAGMA_ASSERT(core::countof(mipMaps) % arrayLayers == 0);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
-    copyMipmapStaged(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn),
+    copyMipmapStaged(cmdBuffer, mipMaps, std::move(allocator), std::move(copyFn),
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 } // namespace magma

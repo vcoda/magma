@@ -39,8 +39,8 @@ namespace magma
         uint32_t getInstanceCount() const noexcept { return instanceCount; }
         Instance& getInstance(uint32_t index) noexcept;
         const Instance& getInstance(uint32_t index) const noexcept { return instances[index]; }
-        void updateModified(std::shared_ptr<CommandBuffer> cmdBuffer);
-        void updateWhole(std::shared_ptr<CommandBuffer> cmdBuffer);
+        void updateModified(const std::unique_ptr<CommandBuffer>& cmdBuffer);
+        void updateWhole(const std::unique_ptr<CommandBuffer>& cmdBuffer);
 
     private:
         const uint32_t instanceCount;

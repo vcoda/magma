@@ -72,17 +72,17 @@ IndexBuffer::IndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, 
         optional, sharing, allocator)
 {}
 
-IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, VkDeviceSize size, const void *data,
+IndexBuffer::IndexBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkIndexType indexType, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     IndexBuffer(cmdBuffer->getDevice(), indexType, size, allocator, optional, sharing)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(cmdBuffer, data, std::move(allocator), std::move(copyFn));
 }
 
-IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+IndexBuffer::IndexBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkIndexType indexType, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
@@ -92,7 +92,7 @@ IndexBuffer::IndexBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkIndexType i
         size ? size : srcBuffer->getSize(),
         std::move(allocator), optional, sharing)
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    copyTransfer(cmdBuffer, std::move(srcBuffer), srcOffset);
 }
 
 DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size, bool stagedPool,

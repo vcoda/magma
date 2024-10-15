@@ -23,9 +23,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #if defined(VK_EXT_debug_marker) || defined(VK_EXT_debug_utils)
-ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer_,
+ScopedDebugMarker::ScopedDebugMarker(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     const char *name, float r, float g, float b, float a /* 1 */) noexcept:
-    cmdBuffer(std::move(cmdBuffer_))
+    cmdBuffer(cmdBuffer)
 {
     const uint32_t color = uint32_t(a * 255.f) |
         (uint32_t(b * 255.f) << 8) |
@@ -38,9 +38,9 @@ ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer_,
 #endif
 }
 
-ScopedDebugMarker::ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer_,
+ScopedDebugMarker::ScopedDebugMarker(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     const char *name, uint32_t color /* 0x0 */) noexcept:
-    cmdBuffer(std::move(cmdBuffer_))
+    cmdBuffer(cmdBuffer)
 {
 #ifdef VK_EXT_debug_utils
     cmdBuffer->beginDebugLabel(name, color);

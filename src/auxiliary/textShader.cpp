@@ -119,7 +119,7 @@ constexpr
         std::move(pipelineCache));
 }
 
-void TextShader::draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept
+void TextShader::draw(const std::unique_ptr<CommandBuffer>& cmdBuffer) const noexcept
 {
     cmdBuffer->pushConstant(*pipeline->getLayout(), VK_SHADER_STAGE_FRAGMENT_BIT, stringCount);
     cmdBuffer->bindDescriptorSet(pipeline, 0, descriptorSet);

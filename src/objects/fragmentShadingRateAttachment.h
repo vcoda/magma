@@ -32,7 +32,7 @@ namespace magma
     class FragmentShadingRateAttachment : public Image2D
     {
     public:
-        explicit FragmentShadingRateAttachment(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit FragmentShadingRateAttachment(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t arrayLayers,
@@ -42,7 +42,7 @@ namespace magma
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
-        explicit FragmentShadingRateAttachment(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit FragmentShadingRateAttachment(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t arrayLayers,

@@ -28,16 +28,16 @@ namespace magma
     class ScopedDebugMarker final : NonCopyable
     {
     public:
-        explicit ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit ScopedDebugMarker(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             const char *name,
             float r, float g, float b, float a = 1.f) noexcept;
-        explicit ScopedDebugMarker(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit ScopedDebugMarker(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             const char *name,
             uint32_t color = 0x0) noexcept;
         ~ScopedDebugMarker();
 
     private:
-        std::shared_ptr<CommandBuffer> cmdBuffer;
+        const std::unique_ptr<CommandBuffer>& cmdBuffer;
     };
 #endif // VK_EXT_debug_marker || VK_EXT_debug_utils
 

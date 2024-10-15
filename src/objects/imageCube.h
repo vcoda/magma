@@ -35,7 +35,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
-        explicit ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit ImageCube(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkFormat format,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const std::vector<Mip>& mipMaps,
@@ -43,7 +43,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
-        explicit ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit ImageCube(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkFormat format,
             const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator = nullptr,

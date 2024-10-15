@@ -30,14 +30,14 @@ namespace magma
         class Sprite : public Image
         {
         public:
-            explicit Sprite(std::shared_ptr<CommandBuffer> cmdBuffer,
+            explicit Sprite(const std::unique_ptr<CommandBuffer>& cmdBuffer,
                 VkFormat format,
                 const VkExtent2D& extent,
                 std::shared_ptr<const SrcTransferBuffer> srcBuffer,
                 VkDeviceSize offset,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 const Sharing& sharing = Sharing());
-            explicit Sprite(std::shared_ptr<CommandBuffer> cmdBuffer,
+            explicit Sprite(const std::unique_ptr<CommandBuffer>& cmdBuffer,
                 VkFormat format,
                 const VkExtent2D& extent,
                 VkDeviceSize size,
@@ -56,7 +56,7 @@ namespace magma
             bool isFlippedHorizontally() const noexcept { return topLeft.x > bottomRight.x; }
             void flipVertical() noexcept { std::swap(topLeft.y, bottomRight.y); }
             bool isFlippedVertically() const noexcept { return topLeft.y > bottomRight.y; }
-            void blit(std::shared_ptr<CommandBuffer> cmdBuffer,
+            void blit(const std::unique_ptr<CommandBuffer>& cmdBuffer,
                 std::shared_ptr<Image> dstImage,
                 VkFilter filter = VK_FILTER_NEAREST) const noexcept;
 

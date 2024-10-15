@@ -29,13 +29,13 @@ PrimaryCommandBuffer::PrimaryCommandBuffer(VkCommandBuffer handle, const Command
     CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, cmdPool)
 {}
 
-void PrimaryCommandBuffer::executeCommands(const std::shared_ptr<CommandBuffer>& cmdBuffer) noexcept
+void PrimaryCommandBuffer::executeCommands(const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
 {
     MAGMA_ASSERT(cmdBuffer->secondary());
     vkCmdExecuteCommands(handle, 1, cmdBuffer->getHandleAddress());
 }
 
-void PrimaryCommandBuffer::executeCommands(const std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
+void PrimaryCommandBuffer::executeCommands(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
     MAGMA_ASSERT_FOR_EACH(cmdBuffers, cmdBuffer, cmdBuffer->secondary());
     MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());

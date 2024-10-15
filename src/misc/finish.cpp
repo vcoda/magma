@@ -25,12 +25,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-void finish(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Queue> queue,
+void finish(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<Queue> queue,
     bool waitIdle /* false */)
 {
     if (waitIdle)
     {   // Wait for queue operations to finish
-        queue->submit(std::move(cmdBuffer));
+        queue->submit(cmdBuffer);
         queue->waitIdle();
     }
     else
@@ -45,11 +45,11 @@ void finish(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Queue> que
     }
 }
 
-void finish(std::shared_ptr<CommandBuffer> cmdBuffer, bool waitIdle /* false */)
+void finish(const std::unique_ptr<CommandBuffer>& cmdBuffer, bool waitIdle /* false */)
 {   // Get queue associated with command buffer
     const uint32_t queueFamilyIndex = cmdBuffer->getQueueFamilyIndex();
     std::shared_ptr<Queue> queue = cmdBuffer->getDevice()->getQueueByFamily(queueFamilyIndex);
     MAGMA_ASSERT(queue);
-    finish(std::move(cmdBuffer), std::move(queue), waitIdle);
+    finish(cmdBuffer, std::move(queue), waitIdle);
 }
 } // namespace magma

@@ -34,7 +34,7 @@ BaseCountBuffer::BaseCountBuffer(std::shared_ptr<Device> device, uint32_t count,
     stageMask(stageMask)
 {}
 
-void BaseCountBuffer::readback(std::shared_ptr<CommandBuffer> cmdBuffer) const
+void BaseCountBuffer::readback(const std::unique_ptr<CommandBuffer>& cmdBuffer) const
 {
     if (!hostBuffer)
         hostBuffer = std::make_unique<DstTransferBuffer>(device, size);
@@ -50,7 +50,7 @@ CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags st
     BaseCountBuffer(std::move(device), 1, stageMask, std::move(allocator), sharing)
 {}
 
-void CountBuffer::setValue(uint32_t value, std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
+void CountBuffer::setValue(uint32_t value, const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
 {
     cmdBuffer->fillBuffer(shared_from_this(), value);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, stageMask,
@@ -75,7 +75,7 @@ DispatchCountBuffer::DispatchCountBuffer(std::shared_ptr<Device> device, VkPipel
 {}
 
 void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
-    std::shared_ptr<CommandBuffer> cmdBuffer) noexcept
+    const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
 {
     auto self = shared_from_this();
     cmdBuffer->fillBuffer(self, x, sizeof(uint32_t), 0);

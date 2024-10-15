@@ -45,10 +45,10 @@ namespace magma
         uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
         VkCommandPoolCreateFlags getFlags() const noexcept { return flags; }
         bool reset(bool releaseResources = false) noexcept;
-        std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
+        std::vector<std::unique_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
             bool primaryLevel,
             const StructureChain& extendedInfo = StructureChain());
-        void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
+        void freeCommandBuffers(std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers) noexcept;
     #ifdef VK_KHR_maintenance1
         void trim(VkCommandPoolTrimFlagsKHR flags = 0);
     #endif

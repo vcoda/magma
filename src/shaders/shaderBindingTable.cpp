@@ -29,24 +29,24 @@ namespace magma
 class SBTBuffer : public Buffer
 {
 public:
-    SBTBuffer(std::shared_ptr<magma::CommandBuffer> cmdBuffer, const std::vector<uint8_t>& buffer, std::shared_ptr<Allocator> allocator):
+    SBTBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, const std::vector<uint8_t>& buffer, std::shared_ptr<Allocator> allocator):
         Buffer(cmdBuffer->getDevice(), buffer.size(), 0, // flags
             VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
             Initializer(), Sharing(), allocator)
     {
-        copyStaged(std::move(cmdBuffer), buffer.data(), std::move(allocator));
+        copyStaged(cmdBuffer, buffer.data(), std::move(allocator));
     }
 };
 
 ShaderBindingTable::ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
-    std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Allocator> allocator /* nullptr */)
+    const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<Allocator> allocator /* nullptr */)
 {
-    build(std::move(pipeline), std::move(cmdBuffer), std::move(allocator));
+    build(std::move(pipeline), cmdBuffer, std::move(allocator));
 }
 
 void ShaderBindingTable::build(std::shared_ptr<const RayTracingPipeline> pipeline,
-    std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Allocator> allocator /* nullptr */,
+    const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<Allocator> allocator /* nullptr */,
     const std::vector<VkRayTracingPipelineCreateInfoKHR>& librariesInfo /*= {} */)
 {
     // Get the total number of groups and handle index position

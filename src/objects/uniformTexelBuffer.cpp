@@ -34,17 +34,17 @@ UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<Device> device, VkDeviceS
         optional, sharing, std::move(allocator))
 {}
 
-UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
+UniformTexelBuffer::UniformTexelBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     UniformTexelBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(cmdBuffer, data, std::move(allocator), std::move(copyFn));
 }
 
-UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+UniformTexelBuffer::UniformTexelBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
@@ -54,6 +54,6 @@ UniformTexelBuffer::UniformTexelBuffer(std::shared_ptr<CommandBuffer> cmdBuffer,
         size ? size : srcBuffer->getSize(),
         std::move(allocator), optional, sharing)
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    copyTransfer(cmdBuffer, std::move(srcBuffer), srcOffset);
 }
 } // namespace magma

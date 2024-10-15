@@ -45,7 +45,7 @@ namespace magma
                 uint32_t maxChars = 1024,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 std::shared_ptr<PipelineCache> pipelineCache = nullptr);
-            void draw(std::shared_ptr<CommandBuffer> cmdBuffer) const noexcept;
+            void draw(const std::unique_ptr<CommandBuffer>& cmdBuffer) const noexcept;
             void begin();
             void end();
             bool print(uint32_t x, uint32_t y,

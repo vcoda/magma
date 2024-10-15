@@ -47,7 +47,7 @@ namespace magma
     public:
         ShaderBindingTable() = default;
         explicit ShaderBindingTable(std::shared_ptr<const RayTracingPipeline> pipeline,
-            std::shared_ptr<CommandBuffer> cmdBuffer,
+            const std::unique_ptr<CommandBuffer>& cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
         uint32_t getShaderGroupCount() const noexcept { return core::countof(groups); }
         template<class Block>
@@ -55,7 +55,7 @@ namespace magma
             uint32_t groupIndex,
             const Block& block);
         void build(std::shared_ptr<const RayTracingPipeline> pipeline,
-            std::shared_ptr<CommandBuffer> cmdBuffer,
+            const std::unique_ptr<CommandBuffer>& cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
             const std::vector<VkRayTracingPipelineCreateInfoKHR>& librariesInfo = {});
         VkStridedDeviceAddressRegionKHR getDeviceAddressRegion(VkShaderStageFlagBits stage,

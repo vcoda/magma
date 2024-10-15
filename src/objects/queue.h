@@ -72,13 +72,13 @@ namespace magma
             const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores = {},
             const std::unique_ptr<Fence>& fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-        void submit(std::shared_ptr<CommandBuffer> cmdBuffer,
+        void submit(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkPipelineStageFlags waitDstStageMask = 0,
             std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
             std::shared_ptr<Semaphore> signalSemaphore = nullptr,
             const std::unique_ptr<Fence>& fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-        void submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
+        void submit(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers,
             const std::initializer_list<VkPipelineStageFlags> waitDstStageMask = {},
             const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
             const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores = {},
@@ -100,7 +100,7 @@ namespace magma
         #endif // VK_KHR_timeline_semaphore
     #endif // VK_KHR_external_semaphore_win32
     #ifdef VK_KHR_device_group
-        void submitDeviceGroup(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
+        void submitDeviceGroup(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers,
             const std::initializer_list<uint32_t> cmdBufferDeviceMasks = {},
             const std::initializer_list<VkPipelineStageFlags> waitDstStageMask = {},
             const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
@@ -141,7 +141,7 @@ namespace magma
     #ifdef VK_EXT_swapchain_maintenance1
         VkPresentModeKHR presentMode;
     #endif
-        std::list<std::shared_ptr<CommandBuffer>> submittedCmdBuffers;
+        std::vector<CommandBuffer *> submittedCommandBuffers;
     #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
         std::unordered_set<std::shared_ptr<const IObject>> inUse;
     #endif

@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_conditional_rendering
-ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
+ConditionalRenderingBuffer::ConditionalRenderingBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
@@ -35,10 +35,10 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, allocator)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(cmdBuffer, data, std::move(allocator), std::move(copyFn));
 }
 
-ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+ConditionalRenderingBuffer::ConditionalRenderingBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
@@ -51,7 +51,7 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(std::shared_ptr<CommandBu
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
+    copyTransfer(cmdBuffer, std::move(srcBuffer), size, srcOffset);
 }
 #endif // VK_EXT_conditional_rendering
 } // namespace magma

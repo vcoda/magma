@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_fragment_shading_rate
-FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<CommandBuffer> cmdBuffer,
+FragmentShadingRateAttachment::FragmentShadingRateAttachment(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
     VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -62,10 +62,10 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<Com
         }
     }
     cmdBuffer->end();
-    finish(std::move(cmdBuffer));
+    finish(cmdBuffer);
 }
 
-FragmentShadingRateAttachment::FragmentShadingRateAttachment(std::shared_ptr<CommandBuffer> cmdBuffer,
+FragmentShadingRateAttachment::FragmentShadingRateAttachment(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,

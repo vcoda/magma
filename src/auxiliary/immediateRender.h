@@ -75,7 +75,7 @@ namespace magma
                 const char *labelName = nullptr,
                 uint32_t labelColor = 0xFFFFFFFF);
             bool endPrimitive(bool loop = false) noexcept;
-            bool commitPrimitives(std::shared_ptr<CommandBuffer> cmdBuffer,
+            bool commitPrimitives(const std::unique_ptr<CommandBuffer>& cmdBuffer,
                 bool freePrimitiveList = true) noexcept;
             bool reset() noexcept;
             // Per-vertex attributes

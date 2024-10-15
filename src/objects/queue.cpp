@@ -138,7 +138,7 @@ void Queue::bindSparse(const std::vector<VkSparseBufferMemoryBindInfo>& bufferBi
     MAGMA_HANDLE_RESULT(result, "failed to submit sparse binding operations");
 }
 
-void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
+void Queue::submit(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     VkPipelineStageFlags waitDstStageMask /* 0 */,
     std::shared_ptr<const Semaphore> waitSemaphore /* nullptr */,
     std::shared_ptr<Semaphore> signalSemaphore /* nullptr */,
@@ -168,10 +168,10 @@ void Queue::submit(std::shared_ptr<CommandBuffer> cmdBuffer,
     MAGMA_INUSE(waitSemaphore);
     MAGMA_INUSE(signalSemaphore);
     cmdBuffer->queueSubmissionFinished();
-    submittedCmdBuffers.emplace_front(std::move(cmdBuffer));
+    submittedCommandBuffers.push_back(cmdBuffer.get());
 }
 
-void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
+void Queue::submit(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers,
     const std::initializer_list<VkPipelineStageFlags> waitDstStageMask /* void */,
     const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores /* void */,
     const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores /* void */,
@@ -209,7 +209,7 @@ void Queue::submit(const std::initializer_list<std::shared_ptr<CommandBuffer>> c
             MAGMA_ASSERT(cmdBuffer->primary());
             MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Executable);
             dereferencedCmdBuffers.put(*cmdBuffer);
-            submittedCmdBuffers.emplace_front(cmdBuffer);
+            submittedCommandBuffers.push_back(cmdBuffer.get());
         }
     }
     submitInfo.commandBufferCount = dereferencedCmdBuffers.count();
@@ -309,7 +309,7 @@ void Queue::submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semapho
 #endif // VK_KHR_external_semaphore_win32
 
 #ifdef VK_KHR_device_group
-void Queue::submitDeviceGroup(const std::initializer_list<std::shared_ptr<CommandBuffer>> cmdBuffers,
+void Queue::submitDeviceGroup(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers,
     const std::initializer_list<uint32_t> cmdBufferDeviceMasks /* void */,
     const std::initializer_list<VkPipelineStageFlags> waitDstStageMask /* void */,
     const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores /* void */,
@@ -439,11 +439,11 @@ std::vector<VkCheckpointDataNV> Queue::getCheckpoints(std::shared_ptr<const Devi
 
 uint32_t Queue::inUseObjectCount() const noexcept
 {
-    uint32_t count = core::countof(submittedCmdBuffers);
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-    count += core::countof(inUse);
-#endif
-    return count;
+    return core::countof(inUse);
+#else
+    return 0;
+#endif // MAGMA_RETAIN_OBJECTS_IN_USE
 }
 
 /* 3.3.1. Object Lifetime
@@ -456,9 +456,9 @@ uint32_t Queue::inUseObjectCount() const noexcept
 
 void Queue::onIdle()
 {
-    for (auto& cmdBuffer: submittedCmdBuffers)
+    for (auto cmdBuffer: submittedCommandBuffers)
         cmdBuffer->executionFinished();
-    submittedCmdBuffers.clear();
+    submittedCommandBuffers.clear();
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
     inUse.clear();
 #endif

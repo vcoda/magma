@@ -33,7 +33,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
-        explicit Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit Image2DArray(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkFormat format,
             uint32_t arrayLayers,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
@@ -42,7 +42,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
-        explicit Image2DArray(std::shared_ptr<CommandBuffer> cmdBuffer,
+        explicit Image2DArray(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkFormat format,
             uint32_t arrayLayers,
             const std::vector<MipData>& mipMaps,

@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_fragment_density_map
-FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
+FragmentDensityMap::FragmentDensityMap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
     VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -62,10 +62,10 @@ FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
         }
     }
     cmdBuffer->end();
-    finish(std::move(cmdBuffer));
+    finish(cmdBuffer);
 }
 
-FragmentDensityMap::FragmentDensityMap(std::shared_ptr<CommandBuffer> cmdBuffer,
+FragmentDensityMap::FragmentDensityMap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,

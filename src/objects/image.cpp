@@ -402,14 +402,14 @@ void Image::onDefragment()
     bindMemory(std::move(memory), offset);
 }
 
-VkImageLayout Image::layoutTransition(VkImageLayout newLayout, std::shared_ptr<CommandBuffer> cmdBuffer,
+VkImageLayout Image::layoutTransition(VkImageLayout newLayout, const std::unique_ptr<CommandBuffer>& cmdBuffer,
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
 {
-    return layoutTransitionBaseMipLayer(newLayout, 0, 0, std::move(cmdBuffer), shaderStageMask);
+    return layoutTransitionBaseMipLayer(newLayout, 0, 0, cmdBuffer, shaderStageMask);
 }
 
 VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint32_t baseMipLevel, uint32_t baseArrayLayer,
-    std::shared_ptr<CommandBuffer> cmdBuffer,
+    const std::unique_ptr<CommandBuffer>& cmdBuffer,
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
 {
     const VkImageLayout oldLayout = mipLayouts[baseMipLevel];
@@ -535,7 +535,7 @@ VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint3
     return oldLayout;
 }
 
-void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
+void Image::copyMip(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     uint32_t mipLevel, uint32_t arrayLayer,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
@@ -570,7 +570,7 @@ void Image::copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
-void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
+void Image::copyMipmap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
@@ -613,7 +613,7 @@ void Image::copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
-void Image::copyMipmapStaged(std::shared_ptr<CommandBuffer> cmdBuffer,
+void Image::copyMipmapStaged(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
@@ -651,7 +651,7 @@ void Image::copyMipmapStaged(std::shared_ptr<CommandBuffer> cmdBuffer,
     }
     cmdBuffer->end();
     // Block until execution is complete
-    finish(std::move(cmdBuffer));
+    finish(cmdBuffer);
 }
 
 VkExtent3D Image::calculateValidMipExtent(uint32_t level) const noexcept
@@ -677,7 +677,7 @@ VkExtent3D Image::calculateValidMipExtent(uint32_t level) const noexcept
 #endif // MAGMA_ENABLE_VALID_MIP_EXTENTS
 }
 
-VkPipelineStageFlags Image::getSuitableDstStageMask(std::shared_ptr<CommandBuffer> cmdBuffer)
+VkPipelineStageFlags Image::getSuitableDstStageMask(const std::unique_ptr<CommandBuffer>& cmdBuffer)
 {
     const uint32_t queueFamilyIndex = cmdBuffer->getQueueFamilyIndex();
     const std::shared_ptr<Device>& device = cmdBuffer->getDevice();

@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::helpers
 {
 void layoutTransition(std::shared_ptr<Image> image, VkImageLayout newLayout,
-    std::shared_ptr<CommandBuffer> cmdBuffer)
+    const std::unique_ptr<CommandBuffer>& cmdBuffer)
 {
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
@@ -35,11 +35,11 @@ void layoutTransition(std::shared_ptr<Image> image, VkImageLayout newLayout,
     }
     cmdBuffer->end();
     // Block until execution is complete
-    finish(std::move(cmdBuffer));
+    finish(cmdBuffer);
 }
 
 void batchLayoutTransition(const std::unordered_map<std::shared_ptr<Image>, VkImageLayout>& imageLayouts,
-    std::shared_ptr<CommandBuffer> cmdBuffer)
+    const std::unique_ptr<CommandBuffer>& cmdBuffer)
 {
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
@@ -51,6 +51,6 @@ void batchLayoutTransition(const std::unordered_map<std::shared_ptr<Image>, VkIm
     }
     cmdBuffer->end();
     // Block until execution is complete
-    finish(std::move(cmdBuffer));
+    finish(cmdBuffer);
 }
 } // namespace magma::helpers

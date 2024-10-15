@@ -36,7 +36,7 @@ Image1D::Image1D(std::shared_ptr<Device> device, VkFormat format, uint32_t width
         optional, sharing, std::move(allocator))
 {}
 
-Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
+Image1D::Image1D(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMaps,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -46,11 +46,11 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
         std::move(allocator), optional, sharing)
 {
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
-    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout,
+    copyMipmap(cmdBuffer, std::move(srcBuffer), mipMaps, bufferLayout,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 
-Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
+Image1D::Image1D(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
@@ -59,7 +59,7 @@ Image1D::Image1D(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, cons
         allocator, optional, sharing)
 {
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
-    copyMipmapStaged(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn),
+    copyMipmapStaged(cmdBuffer, mipMaps, std::move(allocator), std::move(copyFn),
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 } // namespace magma

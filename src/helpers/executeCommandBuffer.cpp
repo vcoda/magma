@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::helpers
 {
 void executeCommandBuffer(const std::unique_ptr<CommandPool>& cmdPool,
-    std::function<void(std::shared_ptr<CommandBuffer>)> cmdFn,
+    std::function<void(const std::unique_ptr<CommandBuffer>&)> cmdFn,
     const char *blockName /* magma::helpers::executeCommandBuffer */,
     uint32_t blockColor /* 0x0 */)
 {   /* VK_COMMAND_POOL_CREATE_TRANSIENT_BIT specifies that command
@@ -33,7 +33,7 @@ void executeCommandBuffer(const std::unique_ptr<CommandPool>& cmdPool,
        This flag may be used by the implementation to control memory
        allocation behavior within the pool. */
     MAGMA_ASSERT(cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_TRANSIENT_BIT);
-    std::shared_ptr<CommandBuffer> cmdBuffer = std::make_shared<PrimaryCommandBuffer>(cmdPool);
+    std::unique_ptr<CommandBuffer> cmdBuffer = std::make_unique<PrimaryCommandBuffer>(cmdPool);
     if (cmdBuffer->begin(blockName, blockColor, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
     {
         try
@@ -49,7 +49,7 @@ void executeCommandBuffer(const std::unique_ptr<CommandPool>& cmdPool,
         }
         cmdBuffer->end();
         // Block until execution is complete
-        finish(std::move(cmdBuffer));
+        finish(cmdBuffer);
     }
 }
 } // namespace magma::helpers

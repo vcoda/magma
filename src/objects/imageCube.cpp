@@ -35,7 +35,7 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
         optional, sharing, std::move(allocator))
 {}
 
-ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
+ImageCube::ImageCube(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMaps,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -47,11 +47,11 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format,
     MAGMA_ASSERT(mipMaps.size() % 6 == 0);
     MAGMA_ASSERT(mipMaps.front().extent.width == mipMaps.front().extent.height);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
-    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout,
+    copyMipmap(cmdBuffer, std::move(srcBuffer), mipMaps, bufferLayout,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 
-ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
+ImageCube::ImageCube(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
@@ -62,7 +62,7 @@ ImageCube::ImageCube(std::shared_ptr<CommandBuffer> cmdBuffer, VkFormat format, 
     MAGMA_ASSERT(mipMaps.size() % 6 == 0);
     MAGMA_ASSERT(mipMaps.front().extent.width == mipMaps.front().extent.height);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer);
-    copyMipmapStaged(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn),
+    copyMipmapStaged(cmdBuffer, mipMaps, std::move(allocator), std::move(copyFn),
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 } // namespace magma

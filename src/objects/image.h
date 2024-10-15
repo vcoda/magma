@@ -90,14 +90,14 @@ namespace magma
     #endif
         void onDefragment() override;
         VkImageLayout layoutTransition(VkImageLayout newLayout,
-            std::shared_ptr<CommandBuffer> cmdBuffer,
+            const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT) noexcept;
         VkImageLayout layoutTransitionBaseMipLayer(VkImageLayout newLayout,
             uint32_t baseMipLevel,
             uint32_t baseArrayLayer,
-            std::shared_ptr<CommandBuffer> cmdBuffer,
+            const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT) noexcept;
-        void copyMip(std::shared_ptr<CommandBuffer> cmdBuffer,
+        void copyMip(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             uint32_t mipLevel,
             uint32_t arrayLayer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
@@ -130,20 +130,20 @@ namespace magma
             VkImageCreateFlags flags,
             VkImageUsageFlags usage,
             VkImageTiling tiling);
-        void copyMipmap(std::shared_ptr<CommandBuffer> cmdBuffer,
+        void copyMipmap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             const std::vector<Mip>& mipMaps,
             const CopyLayout& bufferLayout,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
-        void copyMipmapStaged(std::shared_ptr<CommandBuffer> cmdBuffer,
+        void copyMipmapStaged(const std::unique_ptr<CommandBuffer>& cmdBuffer,
             const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator,
             CopyMemoryFunction copyFn,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
         VkExtent3D calculateValidMipExtent(uint32_t mipLevel) const noexcept;
-        static VkPipelineStageFlags getSuitableDstStageMask(std::shared_ptr<CommandBuffer> cmdBuffer);
+        static VkPipelineStageFlags getSuitableDstStageMask(const std::unique_ptr<CommandBuffer>& cmdBuffer);
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples) noexcept;
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
             VkFormat format,
