@@ -35,7 +35,7 @@ namespace magma
         const std::shared_ptr<Instance>& getInstance() const noexcept { return instance; }
 
     protected:
-        explicit Surface(std::shared_ptr<Instance> instance,
+        Surface(std::shared_ptr<Instance> instance,
             std::shared_ptr<IAllocator> allocator);
 
         std::shared_ptr<Instance> instance;
