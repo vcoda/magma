@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_debug_report
-DebugReportCallback::DebugReportCallback(std::shared_ptr<const Instance> instance_,
+DebugReportCallback::DebugReportCallback(std::shared_ptr<Instance> instance_,
     PFN_vkDebugReportCallbackEXT userCallback,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDebugReportFlagsEXT flags /* INFORMATION_BIT | WARNING_BIT_EXT | PERFORMANCE_WARNING_BIT_EXT | ERROR_BIT DEBUG_BIT */,

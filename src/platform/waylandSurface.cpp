@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_wayland_surface
-WaylandSurface::WaylandSurface(std::shared_ptr<const Instance> instance_,
+WaylandSurface::WaylandSurface(std::shared_ptr<Instance> instance_,
     wl_display *display, wl_surface *surface,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkWaylandSurfaceCreateFlagsKHR flags /* 0 */):

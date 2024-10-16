@@ -29,7 +29,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_surface
-Surface::Surface(std::shared_ptr<const Instance> instance, std::shared_ptr<IAllocator> allocator):
+Surface::Surface(std::shared_ptr<Instance> instance, std::shared_ptr<IAllocator> allocator):
     NonDispatchable(VK_OBJECT_TYPE_SURFACE_KHR, std::move(allocator)),
     instance(std::move(instance))
 {}
@@ -41,7 +41,7 @@ Surface::~Surface()
 #endif // VK_KHR_surface
 
 #ifdef VK_KHR_display
-DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance_,
+DisplaySurface::DisplaySurface(std::shared_ptr<Instance> instance_,
     std::shared_ptr<const DisplayMode> displayMode_,
     uint32_t planeIndex, uint32_t planeStackIndex,
     VkSurfaceTransformFlagBitsKHR transform,
@@ -73,7 +73,7 @@ DisplaySurface::DisplaySurface(std::shared_ptr<const Instance> instance_,
 #endif // VK_KHR_display
 
 #ifdef VK_EXT_headless_surface
-HeadlessSurface::HeadlessSurface(std::shared_ptr<const Instance> instance_,
+HeadlessSurface::HeadlessSurface(std::shared_ptr<Instance> instance_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkHeadlessSurfaceCreateFlagsEXT flags /* 0 */):
     Surface(std::move(instance_), std::move(allocator))

@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_android_surface
-AndroidSurface::AndroidSurface(std::shared_ptr<const Instance> instance_,
+AndroidSurface::AndroidSurface(std::shared_ptr<Instance> instance_,
     ANativeWindow *window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkAndroidSurfaceCreateFlagsKHR flags /* 0 */):

@@ -28,7 +28,7 @@ namespace magma
     class MetalSurface : public Surface
     {
     public:
-        explicit MetalSurface(std::shared_ptr<const Instance> instance,
+        explicit MetalSurface(std::shared_ptr<Instance> instance,
             const CAMetalLayer *layer,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkMetalSurfaceCreateFlagsEXT flags = 0);

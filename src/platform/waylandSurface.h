@@ -27,7 +27,7 @@ namespace magma
     class WaylandSurface : public Surface
     {
     public:
-        explicit WaylandSurface(std::shared_ptr<const Instance> instance,
+        explicit WaylandSurface(std::shared_ptr<Instance> instance,
             wl_display *display,
             wl_surface *surface,
             std::shared_ptr<IAllocator> allocator = nullptr,

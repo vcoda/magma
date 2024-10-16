@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_win32_surface
-Win32Surface::Win32Surface(std::shared_ptr<const Instance> instance_,
+Win32Surface::Win32Surface(std::shared_ptr<Instance> instance_,
     HINSTANCE hInstance, HWND hWnd,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkWin32SurfaceCreateFlagsKHR flags /* 0 */):

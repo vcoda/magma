@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_xcb_surface
-XcbSurface::XcbSurface(std::shared_ptr<const Instance> instance_,
+XcbSurface::XcbSurface(std::shared_ptr<Instance> instance_,
     xcb_connection_t *connection, xcb_window_t window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkXcbSurfaceCreateFlagsKHR flags /* 0 */):

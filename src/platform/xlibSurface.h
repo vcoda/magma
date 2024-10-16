@@ -28,7 +28,7 @@ namespace magma
     class XlibSurface : public Surface
     {
     public:
-        explicit XlibSurface(std::shared_ptr<const Instance> instance,
+        explicit XlibSurface(std::shared_ptr<Instance> instance,
             ::Display *dpy,
             Window window,
             std::shared_ptr<IAllocator> allocator = nullptr,

@@ -29,7 +29,7 @@ namespace magma
     class MacOSSurface : public Surface
     {
     public:
-        explicit MacOSSurface(std::shared_ptr<const Instance> instance,
+        explicit MacOSSurface(std::shared_ptr<Instance> instance,
             const void *view,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkMacOSSurfaceCreateFlagsMVK flags = 0);

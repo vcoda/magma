@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_directfb_surface
-DirectFBSurface::DirectFBSurface(std::shared_ptr<const Instance> instance_,
+DirectFBSurface::DirectFBSurface(std::shared_ptr<Instance> instance_,
     IDirectFB *dfb, IDirectFBSurface *surface,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDirectFBSurfaceCreateFlagsEXT flags /* 0 */):

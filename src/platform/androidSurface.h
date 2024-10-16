@@ -28,7 +28,7 @@ namespace magma
     class AndroidSurface : public Surface
     {
     public:
-        explicit AndroidSurface(std::shared_ptr<const Instance> instance,
+        explicit AndroidSurface(std::shared_ptr<Instance> instance,
             ANativeWindow *window,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkAndroidSurfaceCreateFlagsKHR flags = 0);

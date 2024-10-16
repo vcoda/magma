@@ -28,7 +28,7 @@ namespace magma
     class XcbSurface : public Surface
     {
     public:
-        explicit XcbSurface(std::shared_ptr<const Instance> instance,
+        explicit XcbSurface(std::shared_ptr<Instance> instance,
             xcb_connection_t *connection,
             xcb_window_t window,
             std::shared_ptr<IAllocator> allocator = nullptr,

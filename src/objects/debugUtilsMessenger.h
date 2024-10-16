@@ -34,7 +34,7 @@ namespace magma
     class DebugUtilsMessenger : public NonDispatchable<VkDebugUtilsMessengerEXT>
     {
     public:
-        explicit DebugUtilsMessenger(std::shared_ptr<const Instance> instance,
+        explicit DebugUtilsMessenger(std::shared_ptr<Instance> instance,
             PFN_vkDebugUtilsMessengerCallbackEXT userCallback,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDebugUtilsMessageSeverityFlagsEXT messageSeverity =
@@ -49,6 +49,7 @@ namespace magma
             void *userData = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         ~DebugUtilsMessenger();
+        const std::shared_ptr<Instance>& getInstance() const noexcept { return instance; }
         void message(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
             VkDebugUtilsMessageTypeFlagsEXT messageTypes,
             const char *messageIdName,
@@ -61,7 +62,7 @@ namespace magma
             const char *format, ...) const noexcept;
 
     private:
-        std::shared_ptr<const Instance> instance;
+        std::shared_ptr<Instance> instance;
     };
 #endif // VK_EXT_debug_utils
 } // namespace magma

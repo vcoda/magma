@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_QNX_screen_surface
-QnxSurface::QnxSurface(std::shared_ptr<const Instance> instance_,
+QnxSurface::QnxSurface(std::shared_ptr<Instance> instance_,
     struct _screen_context *context, struct _screen_window *window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkScreenSurfaceCreateFlagsQNX flags /* 0 */):

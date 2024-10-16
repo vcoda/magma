@@ -34,7 +34,7 @@ namespace magma
     class DebugReportCallback : public NonDispatchable<VkDebugReportCallbackEXT>
     {
     public:
-        explicit DebugReportCallback(std::shared_ptr<const Instance> instance,
+        explicit DebugReportCallback(std::shared_ptr<Instance> instance,
             PFN_vkDebugReportCallbackEXT userCallback,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDebugReportFlagsEXT flags =
@@ -46,6 +46,7 @@ namespace magma
             void *userData = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         ~DebugReportCallback();
+        const std::shared_ptr<Instance>& getInstance() const noexcept { return instance; }
         void message(VkDebugReportFlagsEXT flags,
             VkObjectType objectType,
             uint64_t object,
@@ -62,7 +63,7 @@ namespace magma
             const char *format, ...) const noexcept;
 
     private:
-        std::shared_ptr<const Instance> instance;
+        std::shared_ptr<Instance> instance;
     };
 #endif // VK_EXT_debug_report
 } // namespace magma
