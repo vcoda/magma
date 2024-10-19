@@ -53,7 +53,7 @@ namespace magma
                 const VkExtent2D& extent,
                 std::shared_ptr<ShaderModule> fragmentShader,
                 std::shared_ptr<Allocator> allocator = nullptr,
-                std::shared_ptr<PipelineCache> pipelineCache = nullptr);
+                const std::unique_ptr<PipelineCache>& pipelineCache = nullptr);
             const std::shared_ptr<ImageView>& getBufferView() const noexcept { return bufferView; }
             uint32_t getCount() const noexcept { return count; }
             void setAccumLimit(uint32_t count) noexcept { maxCount = count; }

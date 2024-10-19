@@ -54,15 +54,14 @@ namespace magma
         {
         public:
             explicit GraphicsPipelineCache(std::shared_ptr<Device> device,
-                std::shared_ptr<PipelineCache> pipelineCache,
-            #ifdef VK_KHR_pipeline_library
-                std::shared_ptr<PipelineLibrary> pipelineLibrary,
-            #endif
                 bool useDerivativePipelines,
                 bool disablePipelineOptimization,
+            #ifdef VK_KHR_pipeline_library
+                const std::unique_ptr<PipelineLibrary>& pipelineLibrary = nullptr,
+            #endif
                 std::shared_ptr<IAllocator> allocator = nullptr);
             const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
-            const std::shared_ptr<PipelineCache>& getPipelineCache() const noexcept { return pipelineCache; }
+            const std::unique_ptr<PipelineCache>& getPipelineCache() const noexcept { return pipelineCache; }
             const std::shared_ptr<IAllocator>& getAllocator() const noexcept { return allocator; }
             uint32_t getCachedPipelineCount() const noexcept { return core::countof(pipelines); }
             std::shared_ptr<GraphicsPipeline> lookupPipeline(const std::vector<PipelineShaderStage>& shaderStages,
@@ -83,9 +82,9 @@ namespace magma
 
         private:
             std::shared_ptr<Device> device;
-            std::shared_ptr<PipelineCache> pipelineCache;
+            std::unique_ptr<PipelineCache> pipelineCache;
         #ifdef VK_KHR_pipeline_library
-            std::shared_ptr<PipelineLibrary> pipelineLibrary;
+            const std::unique_ptr<PipelineLibrary>& pipelineLibrary;
         #endif
             std::shared_ptr<IAllocator> allocator;
             VkPipelineCreateFlags psoFlags;

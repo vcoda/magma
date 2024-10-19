@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
+#include "../objects/pipelineLibrary.h"
 #include "../objects/graphicsPipeline.h"
 #include "../objects/renderPass.h"
 #include "../objects/shaderModule.h"
@@ -37,19 +38,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::aux
 {
 ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<RenderPass> renderPass,
-    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<PipelineCache> pipelineCache,
-    std::shared_ptr<Allocator> allocator /* nullptr */):
+    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     wideLinesEnabled(renderPass->getDevice()->getEnabledFeatures().wideLines),
     stippledLinesEnabled(renderPass->getDevice()->checkFeatures()->stippledLinesEnabled()),
     device(renderPass->getDevice()),
     renderPass(std::move(renderPass)),
     sharedLayout(std::move(layout)),
-    pipelineCache(std::make_shared<GraphicsPipelineCache>(device, std::move(pipelineCache),
+    pipelineCache(std::make_unique<GraphicsPipelineCache>(device, true, false,
     #ifdef VK_KHR_pipeline_library
         nullptr,
     #endif
-        true, false, MAGMA_HOST_ALLOCATOR(allocator))),
+        MAGMA_HOST_ALLOCATOR(allocator))),
     rasterizationState(renderstate::fillCullBackCcw),
     multisampleState(renderstate::dontMultisample),
     depthStencilState(renderstate::depthAlwaysDontWrite),
@@ -78,6 +78,11 @@ constexpr
     std::shared_ptr<ShaderModule> fragmentShader = std::make_shared<ShaderModule>(device, fsImm, fsImmHash, MAGMA_HOST_ALLOCATOR(allocator), false);
     shaderStages.push_back(VertexShaderStage(vertexShader, "main"));
     shaderStages.push_back(FragmentShaderStage(fragmentShader, "main"));
+}
+
+const std::unique_ptr<PipelineCache>& ImmediateRender::getPipelineCache() const noexcept
+{
+    return pipelineCache->getPipelineCache();
 }
 
 bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,

@@ -35,23 +35,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::aux
 {
 GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device_,
-    std::shared_ptr<PipelineCache> pipelineCache_,
-#ifdef VK_KHR_pipeline_library
-    std::shared_ptr<PipelineLibrary> pipelineLibrary_,
-#endif
     bool useDerivativePipelines,
     bool disablePipelineOptimization,
+#ifdef VK_KHR_pipeline_library
+    const std::unique_ptr<PipelineLibrary>& pipelineLibrary_ /* nullptr */,
+#endif
     std::shared_ptr<IAllocator> allocator_ /* nullptr */):
     device(std::move(device_)),
-    pipelineCache(std::move(pipelineCache_)),
+    pipelineCache(std::make_unique<PipelineCache>(device, allocator)),
 #ifdef VK_KHR_pipeline_library
-    pipelineLibrary(std::move(pipelineLibrary_)),
+    pipelineLibrary(pipelineLibrary_),
 #endif
     allocator(std::move(allocator_)),
     psoFlags(0)
 {
-    if (!pipelineCache)
-        pipelineCache = std::make_shared<PipelineCache>(device, allocator);
     if (useDerivativePipelines)
     {   // Specify that the pipeline to be created is allowed to be
         // the parent of a pipeline that will be created.

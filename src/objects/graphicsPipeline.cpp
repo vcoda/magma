@@ -54,9 +54,9 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+    const std::unique_ptr<PipelineLibrary>& pipelineLibrary /* nullptr */,
 #endif
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
@@ -66,9 +66,9 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
         std::move(layout), std::move(renderPass), subpass,
-        std::move(allocator), std::move(pipelineCache),
+        std::move(allocator), pipelineCache,
     #ifdef VK_KHR_pipeline_library
-        std::move(pipelineLibrary),
+        pipelineLibrary,
     #endif
         std::move(basePipeline),
         flags, extendedInfo)
@@ -89,9 +89,9 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+    const std::unique_ptr<PipelineLibrary>& pipelineLibrary /* nullptr */,
 #endif
     std::shared_ptr<GraphicsPipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,

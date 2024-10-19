@@ -47,8 +47,10 @@ namespace magma
             const std::vector<VkDynamicState>& dynamicStates = {},
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        void buildPipelines(std::shared_ptr<PipelineCache> pipelineCache = nullptr,
-            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+        void buildPipelines(const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
+        #ifdef VK_KHR_pipeline_library
+            const std::unique_ptr<PipelineLibrary>& pipelineLibrary = nullptr,
+        #endif
             std::shared_ptr<IAllocator> allocator = nullptr) override;
 
     private:

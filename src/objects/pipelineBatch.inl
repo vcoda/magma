@@ -20,7 +20,7 @@ inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::fixup() noexcep
 
 #ifdef VK_KHR_pipeline_library
 template<class PipelineType, class PipelineCreateInfo>
-inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::linkPipelineLibrary(std::shared_ptr<PipelineLibrary> pipelineLibrary)
+inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::linkPipelineLibrary(const std::unique_ptr<PipelineLibrary>& pipelineLibrary)
 {
     if (pipelineLibrary)
     {

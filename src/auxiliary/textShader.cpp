@@ -28,6 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/descriptorSet.h"
 #include "../objects/descriptorSetLayout.h"
 #include "../objects/pipelineLayout.h"
+#include "../objects/pipelineLibrary.h"
 #include "../objects/graphicsPipeline.h"
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
@@ -73,7 +74,7 @@ struct TextShader::PushConstants
 TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     const uint32_t maxChars /* 1024 */,
     std::shared_ptr<Allocator> allocator_ /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
+    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */):
     maxStrings(16),
     maxChars(maxChars),
     allocator(std::move(allocator_))
@@ -116,7 +117,7 @@ constexpr
         std::move(pipelineLayout),
         std::move(renderPass), 0,
         std::move(hostAllocator),
-        std::move(pipelineCache));
+        pipelineCache);
 }
 
 void TextShader::draw(const std::unique_ptr<CommandBuffer>& cmdBuffer) const noexcept

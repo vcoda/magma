@@ -59,9 +59,9 @@ namespace magma
             std::shared_ptr<RenderPass> renderPass,
             uint32_t subpass,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+            const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
-            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+            const std::unique_ptr<PipelineLibrary>& pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
@@ -81,9 +81,9 @@ namespace magma
             std::shared_ptr<RenderPass> renderPass,
             uint32_t subpass,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<PipelineCache> pipelineCache = nullptr,
+            const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
-            std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+            const std::unique_ptr<PipelineLibrary>& pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,

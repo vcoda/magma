@@ -29,8 +29,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/shaderModule.h"
 #include "../objects/sampler.h"
 #include "../objects/descriptorSet.h"
-#include "../objects/graphicsPipeline.h"
 #include "../objects/pipelineLayout.h"
+#include "../objects/pipelineLibrary.h"
+#include "../objects/graphicsPipeline.h"
 #include "../objects/commandBuffer.h"
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
@@ -52,7 +53,7 @@ namespace magma::aux
 AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<ShaderModule> fragmentShader,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */):
+    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */):
     count(0),
     maxCount(std::numeric_limits<uint32_t>::max())
 {

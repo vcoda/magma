@@ -27,8 +27,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/sampler.h"
 #include "../objects/descriptorPool.h"
 #include "../objects/descriptorSet.h"
-#include "../objects/graphicsPipeline.h"
 #include "../objects/pipelineLayout.h"
+#include "../objects/pipelineLibrary.h"
+#include "../objects/graphicsPipeline.h"
 #include "../objects/commandBuffer.h"
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
@@ -55,7 +56,7 @@ struct BlitRectangle::DescriptorSetTable : magma::DescriptorSetTable
 };
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     BlitRectangle(renderPass,
         std::make_shared<ShaderModule>(renderPass->getDevice(), fsBlit, core::hashArray(fsBlit), allocator, true),
@@ -66,7 +67,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     std::shared_ptr<ShaderModule> fragmentShader,
     std::shared_ptr<Specialization> specialization /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     renderPass(std::move(renderPass))
 {
@@ -119,7 +120,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::move(pipelineLayout),
         this->renderPass, 0,
         std::move(allocator),
-        std::move(pipelineCache),
+        pipelineCache,
         nullptr); // basePipeline
     for (auto const& attachment: this->renderPass->getAttachments())
     {

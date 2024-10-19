@@ -32,9 +32,9 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     const PipelineShaderStage& shaderStage,
     core::variant_ptr<PipelineLayout> layout_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    std::shared_ptr<PipelineCache> pipelineCache /* nullptr */,
+    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    std::shared_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+    const std::unique_ptr<PipelineLibrary>& pipelineLibrary /* nullptr */,
 #endif
     std::shared_ptr<ComputePipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
