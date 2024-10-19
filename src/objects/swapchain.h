@@ -60,7 +60,7 @@ namespace magma
             VkPresentModeKHR presentMode,
             const Initializer& optional,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<Swapchain> oldSwapchain = nullptr,
+            const std::unique_ptr<Swapchain>& oldSwapchain = nullptr,
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
         ~Swapchain();
@@ -111,7 +111,7 @@ namespace magma
             VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags,
             const Sharing& sharing,
-            std::shared_ptr<Swapchain> oldSwapchain,
+            const std::unique_ptr<Swapchain>& oldSwapchain,
             std::shared_ptr<IAllocator> allocator);
         void addImage(std::shared_ptr<SwapchainImage> image,
             uint32_t imageIndex);

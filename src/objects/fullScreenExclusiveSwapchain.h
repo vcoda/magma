@@ -48,7 +48,7 @@ namespace magma
             HMONITOR hMonitor = NULL,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr,
-            std::shared_ptr<Swapchain> oldSwapchain = nullptr,
+            const std::unique_ptr<Swapchain>& oldSwapchain = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());

@@ -45,7 +45,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     HMONITOR hMonitor /* NULL */,
 #endif // VK_KHR_win32_surface
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    std::shared_ptr<Swapchain> oldSwapchain /* nullptr */,
+    const std::unique_ptr<Swapchain>& oldSwapchain /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
