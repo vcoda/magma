@@ -33,6 +33,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/commandBuffer.h"
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
+#include "../shaders/shaderReflectionFactory.h"
 #include "../shaders/specialization.h"
 #include "../descriptors/imageDescriptor.h"
 #include "../descriptors/descriptorSetTable.h"

@@ -32,6 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/graphicsPipeline.h"
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
+#include "../shaders/shaderReflectionFactory.h"
 #include "../descriptors/bufferDescriptor.h"
 #include "../descriptors/descriptorSetTable.h"
 #include "../states/vertexInputStructure.h"
