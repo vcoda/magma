@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
+#include "../objects/pipelineCache.h"
 #include "../objects/pipelineLibrary.h"
 #include "../objects/graphicsPipeline.h"
 #include "../objects/renderPass.h"
