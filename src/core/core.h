@@ -97,6 +97,12 @@ inline void linkNode(Parent& parent, Child& child) noexcept
 namespace core
 {
 template<class Type>
+inline typename Type::NativeHandle dereference(const Type *obj) noexcept
+{
+    return obj ? obj->getHandle() : VK_NULL_HANDLE;
+}
+
+template<class Type>
 inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& obj) noexcept
 {
     return obj ? obj->getHandle() : VK_NULL_HANDLE;
