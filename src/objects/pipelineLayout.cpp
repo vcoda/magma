@@ -123,16 +123,15 @@ PipelineLayout::~PipelineLayout()
     vkDestroyPipelineLayout(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-bool PipelineLayout::hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout_) const noexcept
+bool PipelineLayout::hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout) const noexcept
 {
-    auto it = std::find_if(setLayouts.begin(), setLayouts.end(),
-        [&setLayout_](auto const& layout)
+    return std::any_of(setLayouts.begin(), setLayouts.end(),
+        [&setLayout](auto const& weak)
         {
-            if (auto setLayout = layout.lock())
-                return setLayout->getHash() == setLayout_->getHash();
+            if (auto layout = weak.lock())
+                return layout->getHash() == setLayout->getHash();
             return false;
         });
-    return it != setLayouts.end();
 }
 
 hash_t PipelineLayout::getHash() const noexcept
