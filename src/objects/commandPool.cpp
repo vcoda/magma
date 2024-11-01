@@ -87,9 +87,9 @@ void CommandPool::freeCommandBuffers(std::vector<std::unique_ptr<CommandBuffer>>
     for (auto& cmdBuffer: cmdBuffers)
     {
         MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Pending);
-        commandBuffers.put(*cmdBuffer);
+        commandBuffers.put(cmdBuffer->getLean());
         cmdBuffer->releaseObjectsInUse();
-        cmdBuffer->handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in destructor
+        cmdBuffer->getLean().handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in the destructor
     }
     vkFreeCommandBuffers(getNativeDevice(), handle, commandBuffers.size(), commandBuffers);
     cmdBuffers.clear();

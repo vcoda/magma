@@ -31,16 +31,19 @@ PrimaryCommandBuffer::PrimaryCommandBuffer(VkCommandBuffer handle, const Command
 
 void PrimaryCommandBuffer::executeCommands(const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
 {
-    MAGMA_ASSERT(cmdBuffer->secondary());
-    vkCmdExecuteCommands(handle, 1, cmdBuffer->getHandleAddress());
+    MAGMA_ASSERT(!cmdBuffer->primary());
+    const LeanCommandBuffer *leanCmdBuffer = &cmdBuffer->getLean();
+    leanCmd.executeCommands(1, &leanCmdBuffer);
 }
 
 void PrimaryCommandBuffer::executeCommands(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
-    MAGMA_ASSERT_FOR_EACH(cmdBuffers, cmdBuffer, cmdBuffer->secondary());
-    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
+    MAGMA_STACK_ARRAY(const LeanCommandBuffer*, leanCmdBuffers, cmdBuffers.size());
     for (auto const& cmdBuffer: cmdBuffers)
-        dereferencedCmdBuffers.put(*cmdBuffer);
-    vkCmdExecuteCommands(handle, dereferencedCmdBuffers.size(), dereferencedCmdBuffers);
+    {
+        MAGMA_ASSERT(!cmdBuffer->primary());
+        leanCmdBuffers.put(&cmdBuffer->getLean());
+    }
+    leanCmd.executeCommands(leanCmdBuffers.count(), leanCmdBuffers);
 }
 } // namespace magma

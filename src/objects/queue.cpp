@@ -157,7 +157,7 @@ void Queue::submit(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     }
     submitInfo.pWaitDstStageMask = &waitDstStageMask;
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = cmdBuffer->getHandleAddress();
+    submitInfo.pCommandBuffers = cmdBuffer->getLean().getHandleAddress();
     if (signalSemaphore)
     {
         submitInfo.signalSemaphoreCount = 1;
@@ -208,7 +208,7 @@ void Queue::submit(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers
         {
             MAGMA_ASSERT(cmdBuffer->primary());
             MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Executable);
-            dereferencedCmdBuffers.put(*cmdBuffer);
+            dereferencedCmdBuffers.put(cmdBuffer->getLean());
             submittedCommandBuffers.push_back(cmdBuffer.get());
         }
     }

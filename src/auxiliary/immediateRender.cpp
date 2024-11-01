@@ -23,11 +23,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../objects/deviceMemory.h"
 #include "../objects/commandBuffer.h"
-#include "../objects/pipelineCache.h"
 #include "../objects/pipelineLibrary.h"
 #include "../objects/graphicsPipeline.h"
 #include "../objects/renderPass.h"
 #include "../objects/shaderModule.h"
+#include "../objects/vertexBuffer.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/viewportState.h"
@@ -147,10 +147,21 @@ bool ImmediateRender::commitPrimitives(const std::unique_ptr<CommandBuffer>& cmd
     std::shared_ptr<GraphicsPipeline> prevPipeline;
     for (auto const& primitive: primitives)
     {
-    #ifdef VK_EXT_debug_utils
         if (primitive.labelName)
-            cmdBuffer->beginDebugLabel(primitive.labelName, primitive.labelColor);
-    #endif // VK_EXT_debug_utils
+        {
+            float r, g, b, a;
+            MAGMA_DWORD_TO_FLOAT_RGBA(primitive.labelColor, r, g, b, a);
+        #if defined(VK_EXT_debug_utils)
+            cmdBuffer->beginDebugLabel(primitive.labelName, r, g, b, a);
+        #elif defined(VK_EXT_debug_marker)
+            cmdBuffer->beginDebugMarker(primitive.labelName, r, g, b, a);
+        #else
+            MAGMA_UNUSED(r);
+            MAGMA_UNUSED(g);
+            MAGMA_UNUSED(b);
+            MAGMA_UNUSED(a);
+        #endif // !defined(VK_EXT_debug_marker)
+        }
         if (primitive.pipeline != prevPipeline)
         {
             cmdBuffer->bindPipeline(primitive.pipeline);
@@ -164,10 +175,14 @@ bool ImmediateRender::commitPrimitives(const std::unique_ptr<CommandBuffer>& cmd
     #endif // VK_EXT_line_rasterization
         cmdBuffer->pushConstantBlock(*sharedLayout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
-    #ifdef VK_EXT_debug_utils
         if (primitive.labelName)
+        {
+        #if defined(VK_EXT_debug_utils)
             cmdBuffer->endDebugLabel();
-    #endif // VK_EXT_debug_utils
+        #elif defined(VK_EXT_debug_marker)
+            cmdBuffer->endDebugMarker();
+        #endif
+        }
     }
     if (freePrimitiveList)
         reset();

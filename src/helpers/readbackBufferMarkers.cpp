@@ -32,14 +32,15 @@ std::vector<uint32_t> readbackBufferMarkers(const std::unique_ptr<CommandBuffer>
     const VkDeviceSize size = cmdBuffer->getMarkerOffset();
     if (size)
     {
-        const std::shared_ptr<Buffer>& srcBuffer = cmdBuffer->getMarkerBuffer();
-        std::shared_ptr<Buffer> dstBuffer = std::make_shared<DstTransferBuffer>(cmdBuffer->getDevice(), size);
+        const std::unique_ptr<Buffer>& srcBuffer = cmdBuffer->getMarkerBuffer();
+        std::unique_ptr<Buffer> dstBuffer = std::make_unique<DstTransferBuffer>(cmdBuffer->getDevice(), size);
         MAGMA_ASSERT(cmdBuffer->allowsReset());
         MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
         cmdBuffer->reset();
-        if (cmdBuffer->begin(blockName, blockColor, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
+        if (cmdBuffer->beginAnnotated(blockName, blockColor, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
         {   // Copy from device to host
-            cmdBuffer->copyBuffer(srcBuffer, dstBuffer, 0, 0, dstBuffer->getSize());
+            VkBufferCopy copyRegion{0, 0, VK_WHOLE_SIZE};
+            cmdBuffer->getLean().copyBuffer(srcBuffer.get(), dstBuffer.get(), copyRegion);
             cmdBuffer->end();
             // Block until execution is complete
             finish(cmdBuffer);

@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2023 Victor Coda.
+Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,152 +17,82 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "device.h"
-#include "physicalDevice.h"
-#include "instance.h"
 #include "commandBuffer.h"
 #include "commandPool.h"
+#include "instance.h"
+#include "device.h"
+#include "physicalDevice.h"
 #include "framebuffer.h"
 #include "imagelessFramebuffer.h"
 #include "renderPass.h"
-#include "imageView.h"
 #include "fence.h"
-#include "bottomLevelStructure.h"
-#include "topLevelStructure.h"
 #include "../shaders/shaderBindingTable.h"
 #include "../raytracing/accelerationStructureGeometry.h"
-#include "../misc/featureQuery.h"
 #include "../exceptions/errorResult.h"
-#include "../core/foreach.h"
 
 namespace magma
 {
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, const CommandPool *cmdPool):
-    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER, handle),
+    leanCmd(handle, cmdPool),
     level(level),
     cmdPool(cmdPool->getHandle()),
     queueFamilyIndex(cmdPool->getQueueFamilyIndex()),
+    extensions(cmdPool->getDevice()),
     device(cmdPool->getDevice()),
     fence(std::make_unique<Fence>(device)),
     usage(0),
     state(State::Initial),
-    resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
-    debugMarkerEnabled(VK_FALSE),
-    debugUtilsEnabled(VK_FALSE),
-    occlusionQueryEnable(VK_FALSE),
-    conditionalRenderingEnable(VK_FALSE),
-    negativeViewportHeightEnabled(device->checkFeatures()->negativeViewportHeightEnabled()),
-    inRenderPass(VK_FALSE),
-    inConditionalRendering(VK_FALSE),
-    inTransformFeedback(VK_FALSE),
-    labeledRecording(VK_FALSE),
-    labeledRenderPass(VK_FALSE),
-    queryFlags(0),
-    pipelineStatistics(0),
-    markerOffset(0ull)
+    resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0)
 {
-#ifdef VK_EXT_debug_marker
-    debugMarkerEnabled = device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
-#endif
-#ifdef VK_EXT_debug_utils
-    debugUtilsEnabled = device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-#endif
+    resetInternalState();
 }
 
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, const CommandPool *cmdPool):
-    Dispatchable(VK_OBJECT_TYPE_COMMAND_BUFFER),
+    leanCmd(level, cmdPool),
     level(level),
     cmdPool(cmdPool->getHandle()),
     queueFamilyIndex(cmdPool->getQueueFamilyIndex()),
+    extensions(cmdPool->getDevice()),
     device(cmdPool->getDevice()),
     fence(std::make_unique<Fence>(device)),
     usage(0),
     state(State::Initial),
-    resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0),
-    debugMarkerEnabled(VK_FALSE),
-    debugUtilsEnabled(VK_FALSE),
-    occlusionQueryEnable(VK_FALSE),
-    conditionalRenderingEnable(VK_FALSE),
-    negativeViewportHeightEnabled(device->checkFeatures()->negativeViewportHeightEnabled()),
-    inRenderPass(VK_FALSE),
-    inConditionalRendering(VK_FALSE),
-    inTransformFeedback(VK_FALSE),
-    labeledRecording(VK_FALSE),
-    labeledRenderPass(VK_FALSE),
-    queryFlags(0),
-    pipelineStatistics(0),
-    markerOffset(0ull)
+    resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0)
 {
-#ifdef VK_EXT_debug_marker
-    debugMarkerEnabled = device->extensionEnabled(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
-#endif
-#ifdef VK_EXT_debug_utils
-    debugUtilsEnabled = device->getPhysicalDevice()->getInstance()->extensionEnabled(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-#endif
-    VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
-    cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    cmdBufferAllocateInfo.pNext = nullptr;
-    cmdBufferAllocateInfo.commandPool = *cmdPool;
-    cmdBufferAllocateInfo.level = level;
-    cmdBufferAllocateInfo.commandBufferCount = 1;
-    const VkResult result = vkAllocateCommandBuffers(getNativeDevice(), &cmdBufferAllocateInfo, &handle);
-    MAGMA_HANDLE_RESULT(result, VK_COMMAND_BUFFER_LEVEL_PRIMARY == level ?
-        "failed to allocate primary command buffer" : "failed to allocate secondary command buffer");
+    resetInternalState();
 }
 
 CommandBuffer::~CommandBuffer()
 {   // Command buffer must not be destroyed while queue is executing its commands
     MAGMA_ASSERT(state != State::Pending);
-    if (handle) // Release only if hasn't been freed through command pool
-        vkFreeCommandBuffers(getNativeDevice(), cmdPool, 1, &handle);
 }
 
 bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
-    VkCommandBufferBeginInfo cmdBufferBeginInfo;
-    cmdBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    cmdBufferBeginInfo.pNext = nullptr;
-    cmdBufferBeginInfo.flags = flags;
-    cmdBufferBeginInfo.pInheritanceInfo = nullptr;
-    const VkResult result = vkBeginCommandBuffer(handle, &cmdBufferBeginInfo);
+    MAGMA_ASSERT(state != State::Recording);
+    const VkResult result = leanCmd.begin(flags);
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
+    {
         state = State::Recording;
+        stats = DrawStatistics();
+    }
     usage = flags;
     return (VK_SUCCESS == result);
 }
 
 bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
-    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+    bool occlusionQueryEnable /* false */, VkQueryControlFlags queryFlags /* 0 */, VkQueryPipelineStatisticFlags pipelineStatistics /* 0 */,
+    VkCommandBufferUsageFlags flags /* 0 */, const StructureChain& extendedInfo /* default */) noexcept
 {
-    VkCommandBufferBeginInfo cmdBufferBeginInfo;
-    VkCommandBufferInheritanceInfo cmdBufferInheritanceInfo;
-    cmdBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    cmdBufferBeginInfo.pNext = nullptr;
-    cmdBufferBeginInfo.flags = flags | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
-    cmdBufferBeginInfo.pInheritanceInfo = &cmdBufferInheritanceInfo;
-    cmdBufferInheritanceInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
-    cmdBufferInheritanceInfo.pNext = nullptr;
-    cmdBufferInheritanceInfo.renderPass = *renderPass;
-    cmdBufferInheritanceInfo.subpass = subpass;
-    cmdBufferInheritanceInfo.framebuffer = *framebuffer;
-    cmdBufferInheritanceInfo.occlusionQueryEnable = occlusionQueryEnable;
-    cmdBufferInheritanceInfo.queryFlags = queryFlags;
-    cmdBufferInheritanceInfo.pipelineStatistics = pipelineStatistics;
-#ifdef VK_EXT_conditional_rendering
-    VkCommandBufferInheritanceConditionalRenderingInfoEXT cmdBufferInheritanceConditionalRenderingInfo;
-    if (device->extensionEnabled(VK_EXT_CONDITIONAL_RENDERING_EXTENSION_NAME))
-    {
-        cmdBufferInheritanceInfo.pNext = &cmdBufferInheritanceConditionalRenderingInfo;
-        cmdBufferInheritanceConditionalRenderingInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT;
-        cmdBufferInheritanceConditionalRenderingInfo.pNext = nullptr;
-        cmdBufferInheritanceConditionalRenderingInfo.conditionalRenderingEnable = conditionalRenderingEnable;
-    }
-#endif // VK_EXT_conditional_rendering
-    const VkResult result = vkBeginCommandBuffer(handle, &cmdBufferBeginInfo);
+    MAGMA_ASSERT(state != State::Recording);
+    const VkResult result = leanCmd.beginInherited(renderPass.get(), subpass, framebuffer.get(), occlusionQueryEnable, queryFlags, pipelineStatistics, flags, extendedInfo);
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
+    {
         state = State::Recording;
+        stats = DrawStatistics();
+    }
     usage = flags;
     return (VK_SUCCESS == result);
 }
@@ -170,74 +100,44 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
 void CommandBuffer::end()
 {
     MAGMA_ASSERT(State::Recording == state);
-    MAGMA_ASSERT(!inRenderPass);
-    MAGMA_ASSERT(!inConditionalRendering);
-    MAGMA_ASSERT(!inTransformFeedback);
+    MAGMA_ASSERT(!renderingPass);
+    MAGMA_ASSERT(!nonIndexedQuery);
+    MAGMA_ASSERT(!indexedQuery);
+    MAGMA_ASSERT(!conditionalRendering);
+    MAGMA_ASSERT(!transformFeedback);
     if (State::Recording == state)
     {
-        if (!pipelineBarriers.empty())
-        {   // Flush deferred memory barriers
-            for (auto const& [hash, batch]: pipelineBarriers)
-            {
-                pipelineBarrier(batch.srcStageMask,
-                    batch.dstStageMask,
-                    batch.memoryBarriers,
-                    batch.bufferMemoryBarriers,
-                    batch.imageMemoryBarriers,
-                    batch.dependencyFlags);
-                MAGMA_UNUSED(hash);
-            }
-            pipelineBarriers.clear();
-        }
-        if (labeledRecording)
+        if (annotatedBegin)
         {
-        #ifdef VK_EXT_debug_utils
-            endDebugLabel();
-            labeledRecording = VK_FALSE;
-        #endif
+            popDebugMarker();
+            annotatedBegin = VK_FALSE;
         }
         /* Performance - critical commands generally do not have return codes.
            If a run time error occurs in such commands, the implementation will defer
            reporting the error until a specified point. For commands that record
            into command buffers (vkCmd*), run time errors are reported by vkEndCommandBuffer. */
-        const VkResult result = vkEndCommandBuffer(handle);
+        const VkResult result = leanCmd.end();
         // This is the only place where command buffer may throw an exception.
         MAGMA_HANDLE_RESULT(result, "failed to record command buffer");
         state = State::Executable;
     }
 }
 
-bool CommandBuffer::reset(bool releaseResources /* false */) noexcept
+bool CommandBuffer::reset(VkCommandBufferResetFlags flags /* 0 */) noexcept
 {   // The command buffer can be in any state other than pending
     MAGMA_ASSERT(state != State::Pending);
-    MAGMA_ASSERT(resetCommandBuffer);
-    VkCommandBufferResetFlags flags = 0;
-    if (releaseResources)
-    {   /* Specifies that most or all memory resources currently owned by
-           the command buffer should be returned to the parent command pool.
-           If this flag is not set, then the command buffer may hold onto
-           memory resources and reuse them when recording commands. */
-        flags |= VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
-    }
-    const VkResult result = vkResetCommandBuffer(handle, flags);
+    MAGMA_ASSERT(allowsReset());
+    const VkResult result = leanCmd.reset(flags);
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
     {
         releaseObjectsInUse();
         state = State::Initial;
-        inRenderPass = VK_FALSE;
-        inConditionalRendering = VK_FALSE;
-        inTransformFeedback = VK_FALSE;
-        renderPassState.renderPass.reset();
-        renderPassState.framebuffer.reset();
-        renderPassState.attachments.clear();
-        markerOffset = 0ull;
+        resetInternalState();
         return true;
     }
     return false;
 }
-
-// inline void CommandBuffer::bindPipeline
 
 void CommandBuffer::setViewport(float x, float y, float width, float height,
     float minDepth /* 0 */, float maxDepth /* 1 */) noexcept
@@ -247,906 +147,543 @@ void CommandBuffer::setViewport(float x, float y, float width, float height,
     viewport.y = y;
     if (height < 0)
     {
-        if (device->checkFeatures()->maintenanceEnabled(1))
+        if (extensions.KHR_maintenance1)
             viewport.y = -height - y; // Move origin to bottom left
     }
     viewport.width = width;
     viewport.height = height;
     if (height < 0)
     {
-        if (!negativeViewportHeightEnabled)
+        if (!(extensions.KHR_maintenance1 || extensions.AMD_negative_viewport_height))
             viewport.height = -height; // Negative viewport height not supported
     }
     viewport.minDepth = minDepth;
     viewport.maxDepth = maxDepth;
-    vkCmdSetViewport(handle, 0, 1, &viewport);
+    leanCmd.setViewport(viewport);
 }
-
-// inline void CommandBuffer::setScissor
-// inline void CommandBuffer::setLineWidth
-// inline void CommandBuffer::setDepthBias
-// inline void CommandBuffer::setBlendConstants
-// inline void CommandBuffer::setDepthBounds
-// inline void CommandBuffer::setStencilCompareMask
-// inline void CommandBuffer::setStencilWriteMask
-// inline void CommandBuffer::setStencilReference
-// inline void CommandBuffer::bindDescriptorSet
-// inline void CommandBuffer::pushDescriptorSet
 
 void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
     const std::initializer_list<uint32_t>& dynamicOffsets /* empty */) noexcept
 {
-    MAGMA_ASSERT_FOR_EACH(descriptorSets, descriptorSet, pipeline->getLayout()->hasLayout(descriptorSet->getLayout()));
-    MAGMA_ASSERT_FOR_EACH(descriptorSets, descriptorSet, !descriptorSet->dirty());
-    MAGMA_STACK_ARRAY(VkDescriptorSet, dereferencedDescriptorSets, descriptorSets.size());
+    MAGMA_STACK_ARRAY(const DescriptorSet*, unmanagedDescriptorSets, descriptorSets.size());
     for (auto const& descriptorSet: descriptorSets)
     {
-        dereferencedDescriptorSets.put(*descriptorSet);
+        unmanagedDescriptorSets.put(descriptorSet.get());
         MAGMA_INUSE(descriptorSet);
     }
-    vkCmdBindDescriptorSets(handle, pipeline->getBindPoint(), *pipeline->getLayout(),
-        firstSet, dereferencedDescriptorSets.size(), dereferencedDescriptorSets,
+    leanCmd.bindDescriptorSets(pipeline->getBindPoint(), pipeline->getLayout().get(), firstSet, unmanagedDescriptorSets.count(), unmanagedDescriptorSets,
         core::countof(dynamicOffsets), dynamicOffsets.begin());
-    MAGMA_INUSE(pipeline);
 }
 
-#ifdef VK_KHR_push_descriptor
-void CommandBuffer::pushDescriptorSet(VkPipelineBindPoint bindPoint, const PipelineLayout& layout, uint32_t setIndex,
-    const std::shared_ptr<DescriptorSet>& descriptorSet)
+void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<Buffer>>& vertexBuffers, std::initializer_list<VkDeviceSize> offsets /* empty */) noexcept
 {
-    MAGMA_ASSERT(layout.hasLayout(descriptorSet->getLayout()));
-    MAGMA_ASSERT(descriptorSet->dirty());
-    const std::size_t descriptorCount = descriptorSet->getDescriptorCount();
-    MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, descriptorCount);
-    const uint32_t descriptorWriteCount = descriptorSet->writeDescriptors(descriptorWrites);
-    if (descriptorWriteCount)
+    MAGMA_STACK_ARRAY(const Buffer*, unmanagedVertexBuffers, vertexBuffers.size());
+    for (auto const& buffer: vertexBuffers)
     {
-        MAGMA_DEVICE_EXTENSION(vkCmdPushDescriptorSetKHR);
-        if (vkCmdPushDescriptorSetKHR)
-        {
-            vkCmdPushDescriptorSetKHR(handle, bindPoint, layout, setIndex, descriptorWriteCount, descriptorWrites);
-            MAGMA_INUSE(descriptorSet);
-        }
+        unmanagedVertexBuffers.put(buffer.get());
+        MAGMA_INUSE(buffer);
     }
-}
-#endif // VK_KHR_push_descriptor
-
-// inline void CommandBuffer::bindIndexBuffer
-// inline void CommandBuffer::bindVertexBuffer
-// inline void CommandBuffer::bindVertexBuffers
-
-#ifdef VK_EXT_transform_feedback
-void CommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, const std::shared_ptr<TransformFeedbackBuffer>& transformFeedbackBuffer,
-    VkDeviceSize offset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */)
-{
-    MAGMA_DEVICE_EXTENSION(vkCmdBindTransformFeedbackBuffersEXT);
-    if (vkCmdBindTransformFeedbackBuffersEXT)
-    {
-        vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, 1, transformFeedbackBuffer->getHandleAddress(), &offset, &size);
-        MAGMA_INUSE(transformFeedbackBuffer);
-    }
+    leanCmd.bindVertexBuffers(firstBinding, unmanagedVertexBuffers.count(), unmanagedVertexBuffers, offsets.begin());
 }
 
-void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<TransformFeedbackBuffer>>& transformFeedbackBuffers,
-    std::vector<VkDeviceSize> offsets /* empty */,
-    const std::initializer_list<VkDeviceSize>& sizes /* empty */)
-{
-    MAGMA_ASSERT(transformFeedbackBuffers.size() > 0);
-    if (offsets.size() > 0) {
-        MAGMA_ASSERT(offsets.size() >= transformFeedbackBuffers.size());
-    }
-    if (sizes.size() > 0) {
-        MAGMA_ASSERT(sizes.size() >= transformFeedbackBuffers.size());
-    }
-    MAGMA_DEVICE_EXTENSION(vkCmdBindTransformFeedbackBuffersEXT);
-    if (vkCmdBindTransformFeedbackBuffersEXT)
-    {
-        MAGMA_STACK_ARRAY(VkBuffer, dereferencedBuffers, transformFeedbackBuffers.size());
-        for (auto const& buffer: transformFeedbackBuffers)
-        {
-            dereferencedBuffers.put(*buffer);
-            MAGMA_INUSE(buffer);
-        }
-        if (offsets.empty())
-            offsets.resize(transformFeedbackBuffers.size(), 0);
-        vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, dereferencedBuffers.size(), dereferencedBuffers, offsets.data(), sizes.begin());
-    }
-}
-#endif // VK_EXT_transform_feedback
-
-// inline void CommandBuffer::draw
-// inline void CommandBuffer::drawInstanced
-// inline void CommandBuffer::drawIndexed
-// inline void CommandBuffer::drawIndexedInstanced
-// inline void CommandBuffer::drawIndirect
-// inline void CommandBuffer::drawIndexedIndirect
-// inline void CommandBuffer::drawMulti
-// inline void CommandBuffer::drawMultiInstanced
-// inline void CommandBuffer::drawMultiIndexed
-// inline void CommandBuffer::drawMultiIndexedInstanced
-// inline void CommandBuffer::drawIndirectByteCount
-// inline void CommandBuffer::dispatch
-// inline void CommandBuffer::dispatchIndirect
-
-void CommandBuffer::copyBuffer(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer,
+void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer,
     VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) const noexcept
 {
-    VkBufferCopy bufferCopy;
-    bufferCopy.srcOffset = srcOffset;
-    bufferCopy.dstOffset = dstOffset;
+    VkBufferCopy region;
+    region.srcOffset = srcOffset;
+    region.dstOffset = dstOffset;
     if (size < VK_WHOLE_SIZE)
-        bufferCopy.size = size;
+        region.size = size;
     else
     {
         MAGMA_ASSERT(srcBuffer->getSize() >= dstBuffer->getSize());
-        bufferCopy.size = dstBuffer->getSize();
+        region.size = dstBuffer->getSize();
     }
-    vkCmdCopyBuffer(handle, *srcBuffer, *dstBuffer, 1, &bufferCopy);
+    leanCmd.copyBuffer(srcBuffer.get(), dstBuffer.get(), region);
     MAGMA_INUSE(srcBuffer);
     MAGMA_INUSE(dstBuffer);
 }
 
-void CommandBuffer::copyImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage,
-    uint32_t mipLevel /* 0 */, const VkOffset3D& srcOffset /* 0, 0, 0 */, const VkOffset3D& dstOffset /* 0, 0, 0 */) const noexcept
+ void CommandBuffer::copyImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, uint32_t mipLevel) const noexcept
 {
-    const VkImageLayout srcLayout = srcImage->getLayout(mipLevel);
-    const VkImageLayout dstLayout = dstImage->getLayout(mipLevel);
-    VkImageCopy imageCopy;
-    imageCopy.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
-    imageCopy.srcOffset = srcOffset;
-    imageCopy.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
-    imageCopy.dstOffset = dstOffset;
-    imageCopy.extent = dstImage->calculateMipExtent(mipLevel);
-    vkCmdCopyImage(handle, *srcImage, srcLayout, *dstImage, dstLayout, 1, &imageCopy);
-    MAGMA_INUSE(srcImage);
-    MAGMA_INUSE(dstImage);
+    VkImageCopy region;
+    region.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
+    region.srcOffset = VkOffset3D{0, 0, 0};
+    region.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
+    region.dstOffset = VkOffset3D{0, 0, 0};
+    region.extent = srcImage->calculateMipExtent(mipLevel);
+    copyImage(srcImage, dstImage, region);
 }
 
-// blitImage
-
-void CommandBuffer::blitImage(const std::shared_ptr<const Image>& srcImage, const std::shared_ptr<Image>& dstImage, VkFilter filter,
-    uint32_t mipLevel /* 0 */, const VkOffset2D& srcOffset /* 0, 0 */, const VkOffset2D& dstOffset /* 0, 0 */) const noexcept
+void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, uint32_t srcMipLevel, uint32_t dstMipLevel, VkFilter filter) const noexcept
 {
-    const VkExtent3D srcExtent = srcImage->calculateMipExtent(mipLevel);
-    const VkExtent3D dstExtent = dstImage->calculateMipExtent(mipLevel);
-    VkImageBlit imageBlit;
-    imageBlit.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
-    imageBlit.srcOffsets[0].x = srcOffset.x;
-    imageBlit.srcOffsets[0].y = srcOffset.y;
-    imageBlit.srcOffsets[0].z = 0;
-    imageBlit.srcOffsets[1].x = srcExtent.width;
-    imageBlit.srcOffsets[1].y = srcExtent.height,
-    imageBlit.srcOffsets[1].z = 1;
-    imageBlit.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
-    imageBlit.dstOffsets[0].x = dstOffset.x;
-    imageBlit.dstOffsets[0].y = dstOffset.y;
-    imageBlit.dstOffsets[0].z = 0;
-    imageBlit.dstOffsets[1].x = dstExtent.width;
-    imageBlit.dstOffsets[1].y = dstExtent.height,
-    imageBlit.dstOffsets[1].z = 1;
-    const VkImageLayout srcLayout = srcImage->getLayout(mipLevel);
-    const VkImageLayout dstLayout = dstImage->getLayout(mipLevel);
-    vkCmdBlitImage(handle, *srcImage, srcLayout, *dstImage, dstLayout, 1, &imageBlit, filter);
-    MAGMA_INUSE(srcImage);
-    MAGMA_INUSE(dstImage);
+    VkExtent3D srcExtent = srcImage->calculateMipExtent(srcMipLevel);
+    VkExtent3D dstExtent = dstImage->calculateMipExtent(dstMipLevel);
+    VkImageBlit region;
+    region.srcSubresource = srcImage->getSubresourceLayers(srcMipLevel);
+    region.srcOffsets[0] = VkOffset3D{0, 0, 0};
+    region.srcOffsets[1].x = srcExtent.width;
+    region.srcOffsets[1].y = srcExtent.height,
+    region.srcOffsets[1].z = 1;
+    region.dstSubresource = dstImage->getSubresourceLayers(dstMipLevel);
+    region.dstOffsets[0] = VkOffset3D{0, 0, 0};
+    region.dstOffsets[1].x = dstExtent.width;
+    region.dstOffsets[1].y = dstExtent.height,
+    region.dstOffsets[1].z = 1;
+    blitImage(srcImage, dstImage, region, filter);
 }
 
-// inline void CommandBuffer::copyImage
-// inline void CommandBuffer::blitImage
-// inline void CommandBuffer::copyBufferToImage
-// inline void CommandBuffer::copyImageToBuffer
-// inline void CommandBuffer::updateBuffer
-// inline void CommandBuffer::fillBuffer
-// inline void CommandBuffer::clearColorImage
-// inline void CommandBuffer::clearDepthStencilImage
-// inline void CommandBuffer::clearAttachments
-// inline void CommandBuffer::resolveImage
-
-// inline void CommandBuffer::setEvent
-// inline void CommandBuffer::resetEvent
-// inline void CommandBuffer::waitEvent
-// inline void CommandBuffer::waitEvent
-// inline void CommandBuffer::waitEvent
-// inline void CommandBuffer::waitEvent
-// inline void CommandBuffer::waitEvent
-// inline void CommandBuffer::waitEvent
-
-void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::initializer_list<ImageMemoryBarrier>& barriers) const noexcept
+void CommandBuffer::waitEvents(const std::initializer_list<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+    const std::initializer_list<MemoryBarrier>& memoryBarriers /* empty */,
+    const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
+    const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_ /* empty */) const noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedBarriers, barriers.size());
-    for (auto const& barrier: barriers)
-        dereferencedBarriers.put(barrier);
-    vkCmdWaitEvents(handle, 1, event->getHandleAddress(), srcStageMask, dstStageMask, 0, nullptr, 0, nullptr, dereferencedBarriers.size(), dereferencedBarriers);
-    for (auto const& barrier: barriers)
-        changeImageMipLayouts(barrier);
+    MAGMA_STACK_ARRAY(const Event*, unmanagedEvents, events.size());
+    for (auto const& event: events)
+    {
+        unmanagedEvents.put(event.get());
+        MAGMA_INUSE(event);
+    }
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    for (auto const& barrier: imageMemoryBarriers_)
+    {
+        imageMemoryBarriers.put(barrier);
+        changeImageLayout(barrier);
+    }
+    leanCmd.waitEvents(unmanagedEvents.count(), unmanagedEvents, srcStageMask, dstStageMask,
+        core::countof(memoryBarriers), memoryBarriers.begin(),
+        core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin(),
+        imageMemoryBarriers.count(), imageMemoryBarriers);
 }
 
 void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<MemoryBarrier>& memoryBarriers /* empty */,
-    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
-    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* empty */) const noexcept
+    const std::vector<MemoryBarrier>& memoryBarriers,
+    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers,
+    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
-    MAGMA_STACK_ARRAY(VkEvent, dereferencedEvents, events.size());
+    MAGMA_STACK_ARRAY(const Event*, unmanagedEvents, events.size());
     for (auto const& event: events)
     {
-        dereferencedEvents.put(*event);
+        unmanagedEvents.put(event.get());
         MAGMA_INUSE(event);
     }
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
-    for (auto const& barrier: imageMemoryBarriers)
-        dereferencedImageMemoryBarriers.put(barrier);
-    vkCmdWaitEvents(handle, dereferencedEvents.size(), dereferencedEvents, srcStageMask, dstStageMask,
-        core::countof(memoryBarriers),
-        memoryBarriers.data(),
-        core::countof(bufferMemoryBarriers),
-        bufferMemoryBarriers.data(),
-        dereferencedImageMemoryBarriers.size(),
-        dereferencedImageMemoryBarriers);
-    for (auto const& barrier: imageMemoryBarriers)
-        changeImageMipLayouts(barrier);
-}
-
-// inline void CommandBuffer::pipelineBarrier
-// inline void CommandBuffer::pipelineBarrier
-// inline void CommandBuffer::pipelineBarrier
-// inline void CommandBuffer::pipelineBarrier
-// inline void CommandBuffer::pipelineBarrier
-// inline void CommandBuffer::pipelineBarrier
-
-void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& barriers,
-    VkDependencyFlags dependencyFlags /* 0 */) noexcept
-{
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedBarriers, barriers.size());
-    for (auto const& barrier: barriers)
-        dereferencedBarriers.put(barrier);
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 0, nullptr, dereferencedBarriers.size(), dereferencedBarriers);
-    for (auto const& barrier: barriers)
-        changeImageMipLayouts(barrier);
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    for (auto const& barrier: imageMemoryBarriers_)
+    {
+        imageMemoryBarriers.put(barrier);
+        changeImageLayout(barrier);
+    }
+    leanCmd.waitEvents(unmanagedEvents.count(), unmanagedEvents, srcStageMask, dstStageMask,
+        core::countof(memoryBarriers), memoryBarriers.data(),
+        core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data(),
+        imageMemoryBarriers.count(), imageMemoryBarriers);
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<MemoryBarrier>& memoryBarriers /* empty */,
-    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
-    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers /* empty */,
+    const std::initializer_list<MemoryBarrier>& memoryBarriers /* empty */,
+    const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
+    const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_ /* empty */,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, dereferencedImageMemoryBarriers, imageMemoryBarriers.size());
-    for (auto const& barrier: imageMemoryBarriers)
-        dereferencedImageMemoryBarriers.put(barrier);
-    vkCmdPipelineBarrier(handle, srcStageMask, dstStageMask, dependencyFlags,
-        core::countof(memoryBarriers),
-        memoryBarriers.data(),
-        core::countof(bufferMemoryBarriers),
-        bufferMemoryBarriers.data(),
-        dereferencedImageMemoryBarriers.size(),
-        dereferencedImageMemoryBarriers);
-    for (auto const& barrier: imageMemoryBarriers)
-        changeImageMipLayouts(barrier);
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    for (auto const& barrier: imageMemoryBarriers_)
+    {
+        imageMemoryBarriers.put(barrier);
+        changeImageLayout(barrier);
+    }
+    leanCmd.pipelineBarrier(srcStageMask, dstStageMask,
+        core::countof(memoryBarriers), memoryBarriers.begin(),
+        core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin(),
+        imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
 }
 
-// inline void CommandBuffer::beginQuery
-// inline void CommandBuffer::endQuery
-// inline void CommandBuffer::beginQueryIndexed
-// inline void CommandBuffer::endQueryIndexed
-// inline void CommandBuffer::resetQueryPool
-// inline void CommandBuffer::writeTimestamp
-// inline void CommandBuffer::copyQueryResults
-// inline void CommandBuffer::copyQueryResultsWithAvailability
-// inline void CommandBuffer::pushConstants()
-// inline void CommandBuffer::pushConstantBlock()
+void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+    const std::vector<MemoryBarrier>& memoryBarriers,
+    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers,
+    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
+{
+    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    for (auto const& barrier: imageMemoryBarriers_)
+    {
+        imageMemoryBarriers.put(barrier);
+        changeImageLayout(barrier);
+    }
+    leanCmd.pipelineBarrier(srcStageMask, dstStageMask,
+        core::countof(memoryBarriers), memoryBarriers.data(),
+        core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data(),
+        imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
+}
 
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::vector<ClearValue>& clearValues /* empty */,
-    const VkRect2D& renderArea /* {0, 0, 0, 0} */,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+    const std::initializer_list<ClearValue>& clearValues /* empty */, const VkRect2D& renderArea_ /* {0, 0, 0, 0} */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    if (clearValues.empty()) {
-        MAGMA_ASSERT(!renderPass->usesClear());
+    MAGMA_ASSERT(!renderingPass);
+    VkRect2D renderArea;
+    if (renderArea_.extent.width && renderArea_.extent.height)
+        renderArea = renderArea_;
+    else
+    {
+        renderArea.offset = VkOffset2D{0, 0};
+        renderArea.extent = framebuffer->getExtent();
     }
-    VkRenderPassBeginInfo renderPassBeginInfo;
-    renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassBeginInfo.pNext = nullptr;
-    renderPassBeginInfo.renderPass = *renderPass;
-    renderPassBeginInfo.framebuffer = *framebuffer;
-    renderPassBeginInfo.renderArea.offset = renderArea.offset;
-    renderPassBeginInfo.renderArea.extent = (renderArea.extent.width || renderArea.extent.height) ? renderArea.extent : framebuffer->getExtent();
-    renderPassBeginInfo.clearValueCount = core::countof(clearValues);
-    renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
+    leanCmd.beginRenderPass(renderPass.get(), framebuffer.get(), core::countof(clearValues), (const VkClearValue *)clearValues.begin(), renderArea, contents);
     MAGMA_INUSE(renderPass);
     MAGMA_INUSE(framebuffer);
     renderPass->begin(framebuffer->getAttachments());
     renderPassState.renderPass = renderPass;
     renderPassState.framebuffer = framebuffer;
-    inRenderPass = VK_TRUE;
+    renderingPass = VK_TRUE;
 }
-
-#ifdef VK_KHR_imageless_framebuffer
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass,
-    const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
-    const std::vector<std::shared_ptr<ImageView>>& attachments,
-    const std::vector<ClearValue>& clearValues /* empty */,
-    const VkRect2D& renderArea /* {0, 0, 0, 0} */,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
-{
-    if (clearValues.empty()) {
-        MAGMA_ASSERT(!renderPass->usesClear());
-    }
-    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
-    for (auto const& attachment: attachments)
-    {
-        dereferencedAttachments.put(*attachment);
-        MAGMA_INUSE(attachment);
-    }
-    VkRenderPassBeginInfo renderPassBeginInfo;
-    VkRenderPassAttachmentBeginInfoKHR renderPassBeginAttachmentInfo;
-    renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassBeginInfo.pNext = &renderPassBeginAttachmentInfo;
-    renderPassBeginInfo.renderPass = *renderPass;
-    renderPassBeginInfo.framebuffer = *framebuffer;
-    renderPassBeginInfo.renderArea.offset = renderArea.offset;
-    renderPassBeginInfo.renderArea.extent = (renderArea.extent.width || renderArea.extent.height) ? renderArea.extent : framebuffer->getExtent();
-    renderPassBeginInfo.clearValueCount = core::countof(clearValues);
-    renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    renderPassBeginAttachmentInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
-    renderPassBeginAttachmentInfo.pNext = nullptr;
-    renderPassBeginAttachmentInfo.attachmentCount = core::countof(dereferencedAttachments);
-    renderPassBeginAttachmentInfo.pAttachments = dereferencedAttachments;
-    vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
-    MAGMA_INUSE(renderPass);
-    MAGMA_INUSE(framebuffer);
-    renderPass->begin(attachments);
-    renderPassState = {renderPass, framebuffer, attachments};
-    inRenderPass = VK_TRUE;
-}
-#endif // VK_KHR_imageless_framebuffer
-
-// inline CommandBuffer::nextSubpass
 
 void CommandBuffer::endRenderPass() noexcept
 {
-    MAGMA_ASSERT(inRenderPass);
-    if (inRenderPass)
+    MAGMA_ASSERT(renderingPass);
+    if (annotatedRenderPass)
     {
-    #ifdef VK_EXT_debug_utils
-        if (labeledRenderPass)
-        {
-            endDebugLabel();
-            labeledRenderPass = VK_FALSE;
-        }
-    #endif // VK_EXT_debug_utils
-        vkCmdEndRenderPass(handle);
-        if (!renderPassState.attachments.empty())
-            renderPassState.renderPass->end(renderPassState.attachments);
-        else if (renderPassState.framebuffer)
-            renderPassState.renderPass->end(renderPassState.framebuffer->getAttachments());
-        renderPassState.renderPass.reset();
-        renderPassState.framebuffer.reset();
-        renderPassState.attachments.clear();
-        inRenderPass = VK_FALSE;
+        popDebugMarker();
+        annotatedRenderPass = VK_FALSE;
     }
+    leanCmd.endRenderPass();
+    if (!renderPassState.attachments.empty())
+        renderPassState.renderPass->end(renderPassState.attachments);
+    else if (renderPassState.framebuffer)
+        renderPassState.renderPass->end(renderPassState.framebuffer->getAttachments());
+    renderPassState.renderPass.reset();
+    renderPassState.framebuffer.reset();
+    renderPassState.attachments.clear();
+    renderingPass = VK_FALSE;
 }
 
 #ifdef VK_KHR_device_group
-// inline CommandBuffer::setDeviceMask
-// inline CommandBuffer::dispatchBase
-
-bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask,
-    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, VkCommandBufferUsageFlags flags /* 0 */) noexcept
 {
-    VkCommandBufferBeginInfo cmdBufferBeginInfo;
-    VkDeviceGroupCommandBufferBeginInfo cmdBufferBeginDeviceGroupInfo;
-    cmdBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    cmdBufferBeginInfo.pNext = &cmdBufferBeginDeviceGroupInfo;
-    cmdBufferBeginInfo.flags = flags;
-    cmdBufferBeginInfo.pInheritanceInfo = nullptr;
-    cmdBufferBeginDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO;
-    cmdBufferBeginDeviceGroupInfo.pNext = nullptr;
-    cmdBufferBeginDeviceGroupInfo.deviceMask = deviceMask;
-    const VkResult result = vkBeginCommandBuffer(handle, &cmdBufferBeginInfo);
-    MAGMA_ASSERT(VK_SUCCESS == result);
-    if (VK_SUCCESS == result)
-        state = State::Recording;
-    return (VK_SUCCESS == result);
-}
-
-void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
-    const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::vector<VkRect2D>& deviceRenderAreas /* empty */,
-    const std::vector<ClearValue>& clearValues /* empty */,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
-{
-    if (clearValues.empty()) {
-        MAGMA_ASSERT(!renderPass->usesClear());
-    }
-    VkRenderPassBeginInfo renderPassBeginInfo;
-    VkDeviceGroupRenderPassBeginInfo renderPassBeginDeviceGroupInfo;
-    renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassBeginInfo.pNext = &renderPassBeginDeviceGroupInfo;
-    renderPassBeginInfo.renderPass = *renderPass;
-    renderPassBeginInfo.framebuffer = *framebuffer;
-    renderPassBeginInfo.renderArea.offset = VkOffset2D{0, 0};
-    renderPassBeginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
-    renderPassBeginInfo.clearValueCount = core::countof(clearValues);
-    renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    renderPassBeginDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
-    renderPassBeginDeviceGroupInfo.pNext = nullptr;
-    renderPassBeginDeviceGroupInfo.deviceMask = deviceMask;
-    renderPassBeginDeviceGroupInfo.deviceRenderAreaCount = core::countof(deviceRenderAreas);
-    renderPassBeginDeviceGroupInfo.pDeviceRenderAreas = deviceRenderAreas.data();
-    vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
-    MAGMA_INUSE(renderPass);
-    MAGMA_INUSE(framebuffer);
-    renderPass->begin(framebuffer->getAttachments());
-    inRenderPass = VK_TRUE;
-    renderPassState = {renderPass, framebuffer};
-}
-
-#ifdef VK_KHR_imageless_framebuffer
-void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
-    const std::shared_ptr<RenderPass>& renderPass,
-    const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
-    const std::vector<std::shared_ptr<ImageView>>& attachments,
-    const std::vector<VkRect2D>& deviceRenderAreas /* empty */,
-    const std::vector<ClearValue>& clearValues /* empty */,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
-{
-    if (clearValues.empty()) {
-        MAGMA_ASSERT(!renderPass->usesClear());
-    }
-    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
-    for (auto const& attachment: attachments)
+    MAGMA_ASSERT(extensions.KHR_device_group);
+    if (extensions.KHR_device_group)
     {
-        dereferencedAttachments.put(*attachment);
-        MAGMA_INUSE(attachment);
+        const VkResult result = leanCmd.beginDeviceGroup(deviceMask, flags);
+        MAGMA_ASSERT(VK_SUCCESS == result);
+        if (VK_SUCCESS == result)
+            state = State::Recording;
+        return (VK_SUCCESS == result);
     }
-    VkRenderPassBeginInfo renderPassBeginInfo;
-    VkDeviceGroupRenderPassBeginInfo renderPassBeginDeviceGroupInfo;
-    VkRenderPassAttachmentBeginInfoKHR renderPassBeginAttachmentInfo;
-    renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassBeginInfo.pNext = &renderPassBeginDeviceGroupInfo;
-    renderPassBeginInfo.renderPass = *renderPass;
-    renderPassBeginInfo.framebuffer = *framebuffer;
-    renderPassBeginInfo.renderArea.offset = VkOffset2D{0, 0};
-    renderPassBeginInfo.renderArea.extent = deviceRenderAreas.empty() ? framebuffer->getExtent() : VkExtent2D{0, 0};
-    renderPassBeginInfo.clearValueCount = core::countof(clearValues);
-    renderPassBeginInfo.pClearValues = reinterpret_cast<const VkClearValue *>(clearValues.data());
-    renderPassBeginDeviceGroupInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO;
-    renderPassBeginDeviceGroupInfo.pNext = &renderPassBeginAttachmentInfo;
-    renderPassBeginDeviceGroupInfo.deviceMask = deviceMask;
-    renderPassBeginDeviceGroupInfo.deviceRenderAreaCount = core::countof(deviceRenderAreas);
-    renderPassBeginDeviceGroupInfo.pDeviceRenderAreas = deviceRenderAreas.data();
-    renderPassBeginAttachmentInfo.sType =  VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
-    renderPassBeginAttachmentInfo.pNext = nullptr;
-    renderPassBeginAttachmentInfo.attachmentCount = core::countof(dereferencedAttachments);
-    renderPassBeginAttachmentInfo.pAttachments = dereferencedAttachments;
-    vkCmdBeginRenderPass(handle, &renderPassBeginInfo, contents);
-    MAGMA_INUSE(renderPass);
-    MAGMA_INUSE(framebuffer);
-    renderPass->begin(attachments);
-    inRenderPass = VK_TRUE;
-    renderPassState = {renderPass, framebuffer, attachments};
+    return false;
 }
-#endif // VK_KHR_imageless_framebuffer
+
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
+    const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    MAGMA_ASSERT(!renderingPass);
+    MAGMA_ASSERT(extensions.KHR_device_group);
+    if (extensions.KHR_device_group)
+    {
+        leanCmd.beginDeviceGroupRenderPass(deviceMask, renderPass.get(), framebuffer.get(),
+            core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()),
+            core::countof(deviceRenderAreas), deviceRenderAreas.begin(), contents);
+        MAGMA_INUSE(renderPass);
+        MAGMA_INUSE(framebuffer);
+        renderPass->begin(framebuffer->getAttachments());
+        renderPassState.renderPass = renderPass;
+        renderPassState.framebuffer = framebuffer;
+        renderingPass = VK_TRUE;
+    }
+}
 #endif // VK_KHR_device_group
 
 #ifdef VK_EXT_conditional_rendering
-void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buffer,
-    VkDeviceSize offset /* 0 */,
-    bool inverted /* false */) noexcept
+void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset /* 0 */, bool inverted /* false */) noexcept
 {
-    MAGMA_ASSERT(offset <= buffer->getSize() - sizeof(uint32_t));
-    MAGMA_ASSERT(offset % sizeof(uint32_t) == 0);
-    MAGMA_DEVICE_EXTENSION(vkCmdBeginConditionalRenderingEXT);
-    if (vkCmdBeginConditionalRenderingEXT)
+    MAGMA_ASSERT(!conditionalRendering);
+    MAGMA_ASSERT(extensions.EXT_conditional_rendering);
+    if (extensions.EXT_conditional_rendering)
     {
-        VkConditionalRenderingBeginInfoEXT conditionalRenderingBeginInfo;
-        conditionalRenderingBeginInfo.sType = VK_STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT;
-        conditionalRenderingBeginInfo.pNext = nullptr;
-        conditionalRenderingBeginInfo.buffer = *buffer;
-        conditionalRenderingBeginInfo.offset = offset;
-        conditionalRenderingBeginInfo.flags = inverted ? VK_CONDITIONAL_RENDERING_INVERTED_BIT_EXT : 0;
-        vkCmdBeginConditionalRenderingEXT(handle, &conditionalRenderingBeginInfo);
+        leanCmd.beginConditionalRendering(buffer.get(), offset, inverted);
         MAGMA_INUSE(buffer);
-        inConditionalRendering = VK_TRUE;
+        conditionalRendering = VK_TRUE;
     }
 }
 
 void CommandBuffer::endConditionalRendering() noexcept
 {
-    MAGMA_ASSERT(inConditionalRendering);
-    MAGMA_DEVICE_EXTENSION(vkCmdEndConditionalRenderingEXT);
-    if (vkCmdEndConditionalRenderingEXT)
+    MAGMA_ASSERT(conditionalRendering);
+    MAGMA_ASSERT(extensions.EXT_conditional_rendering);
+    if (extensions.EXT_conditional_rendering)
     {
-        vkCmdEndConditionalRenderingEXT(handle);
-        inConditionalRendering = VK_FALSE;
+        if (annotatedConditionalRendering)
+        {
+            popDebugMarker();
+            annotatedConditionalRendering = VK_FALSE;
+        }
+        leanCmd.endConditionalRendering();
+        conditionalRendering = VK_FALSE;
     }
 }
 #endif // VK_EXT_conditional_rendering
 
 #ifdef VK_EXT_transform_feedback
-// inline void CommandBuffer::beginTransformFeedback()
-// inline void CommandBuffer::endTransformFeedback()
-
-void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
-    const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
+void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<Buffer>>& transformFeedbackBuffers,
+    const std::initializer_list<VkDeviceSize>& offsets, const std::initializer_list<VkDeviceSize>& sizes /* empty */) noexcept
 {
-    if (counterBufferOffsets.size() > 0) {
-        MAGMA_ASSERT(counterBufferOffsets.size() >= counterBuffers.size());
-    }
-    MAGMA_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
-    if (vkCmdBeginTransformFeedbackEXT)
+    MAGMA_ASSERT(extensions.EXT_transform_feedback);
+    if (extensions.EXT_transform_feedback)
     {
-        MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBuffers.size());
-        for (auto const& buffer: counterBuffers)
+        MAGMA_STACK_ARRAY(const Buffer*, unmanagedTransformFeedbackBuffers, transformFeedbackBuffers.size());
+        for (auto const& buffer: transformFeedbackBuffers)
         {
-            dereferencedCounterBuffers.put(*buffer);
+            unmanagedTransformFeedbackBuffers.put(buffer.get());
             MAGMA_INUSE(buffer);
         }
-        vkCmdBeginTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
-        inTransformFeedback = VK_TRUE;
+        leanCmd.bindTransformFeedbackBuffers(firstBinding, unmanagedTransformFeedbackBuffers.count(), unmanagedTransformFeedbackBuffers, offsets.begin(), sizes.begin());
     }
 }
 
-void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<TransformFeedbackCounterBuffer>>& counterBuffers,
+void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<Buffer>>& counterBuffers,
     const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
-    MAGMA_ASSERT(inTransformFeedback);
-    if (counterBufferOffsets.size() > 0) {
-        MAGMA_ASSERT(counterBufferOffsets.size() >= counterBuffers.size());
-    }
-    MAGMA_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
-    if (vkCmdEndTransformFeedbackEXT)
+    MAGMA_ASSERT(!transformFeedback);
+    MAGMA_ASSERT(extensions.EXT_transform_feedback);
+    if (extensions.EXT_transform_feedback)
     {
-        MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBuffers.size());
+        MAGMA_STACK_ARRAY(const Buffer*, unmanagedCounterBuffers, counterBuffers.size());
         for (auto const& buffer: counterBuffers)
         {
-            dereferencedCounterBuffers.put(*buffer);
+            unmanagedCounterBuffers.put(buffer.get());
             MAGMA_INUSE(buffer);
         }
-        vkCmdEndTransformFeedbackEXT(handle, firstCounterBuffer, dereferencedCounterBuffers.size(), dereferencedCounterBuffers, counterBufferOffsets.begin());
-        inTransformFeedback = VK_FALSE;
+        leanCmd.beginTransformFeedback(firstCounterBuffer, unmanagedCounterBuffers.count(), unmanagedCounterBuffers, counterBufferOffsets.begin());
+        transformFeedback = VK_TRUE;
+    }
+}
+
+void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<Buffer>>& counterBuffers,
+    const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
+{
+    MAGMA_ASSERT(transformFeedback);
+    MAGMA_ASSERT(extensions.EXT_transform_feedback);
+    if (extensions.EXT_transform_feedback)
+    {
+        if (annotatedTransformFeedback)
+        {
+            popDebugMarker();
+            annotatedTransformFeedback = VK_FALSE;
+        }
+        MAGMA_STACK_ARRAY(const Buffer*, unmanagedCounterBuffers, counterBuffers.size());
+        for (auto const& buffer: counterBuffers)
+        {
+            unmanagedCounterBuffers.put(buffer.get());
+            MAGMA_INUSE(buffer);
+        }
+        leanCmd.endTransformFeedback(firstCounterBuffer, unmanagedCounterBuffers.count(), unmanagedCounterBuffers, counterBufferOffsets.begin());
+        transformFeedback = VK_FALSE;
     }
 }
 #endif // VK_EXT_transform_feedback
 
-#ifdef VK_KHR_acceleration_structure
-void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
+#ifdef VK_KHR_imageless_framebuffer
+void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
+    const std::vector<std::shared_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue>& clearValues /* empty */,
+    const VkRect2D& renderArea_ /* {0, 0, 0, 0} */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
-    for (auto const& geometry: geometries)
-        buildRanges.push_back({geometry.primitiveCount});
-    rebuildAccelerationStructure(VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR, accelerationStructure, geometries, buildRanges, scratchBuffer);
-}
-
-void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) noexcept
-{
-    std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
-    for (auto const& geometry: geometries)
-        buildRanges.push_back({geometry.primitiveCount});
-    rebuildAccelerationStructure(VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR, accelerationStructure, geometries, buildRanges, scratchBuffer);
-}
-
-// inline void CommandBuffer::buildAccelerationStructure
-// inline void CommandBuffer::updateAccelerationStructure
-// inline void CommandBuffer::buildAccelerationStructure
-// inline void CommandBuffer::updateAccelerationStructure
-
-void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& indirectBuildRanges,
-    const std::shared_ptr<Buffer>& scratchBuffer, uint32_t indirectStride /* sizeof(VkAccelerationStructureBuildRangeInfoKHR) */) noexcept
-{
-    const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-    MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);
-    MAGMA_STACK_ARRAY(uint32_t, primitiveCounts, geometryCount);
-    for (auto const& geometry: geometries)
+    MAGMA_ASSERT(!renderingPass);
+    MAGMA_ASSERT(extensions.KHR_imageless_framebuffer);
+    if (extensions.KHR_imageless_framebuffer)
     {
-        geometryPointers.put(&geometry);
-        primitiveCounts.put(geometry.primitiveCount);
+        MAGMA_STACK_ARRAY(const ImageView*, unmanagedAttachments, attachments.size());
+        for (auto const& attachment: attachments)
+        {
+            unmanagedAttachments.put(attachment.get());
+            MAGMA_INUSE(attachment);
+        }
+        VkRect2D renderArea;
+        if (renderArea_.extent.width && renderArea_.extent.height)
+            renderArea = renderArea_;
+        else
+        {
+            renderArea.offset = VkOffset2D{0, 0};
+            renderArea.extent = framebuffer->getExtent();
+        }
+        leanCmd.beginRenderPass(renderPass.get(), framebuffer.get(), unmanagedAttachments.count(), unmanagedAttachments,
+            core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()), renderArea, contents);
+        MAGMA_INUSE(renderPass);
+        MAGMA_INUSE(framebuffer);
+        renderPass->begin(framebuffer->getAttachments());
+        renderPassState.renderPass = renderPass;
+        renderPassState.framebuffer = framebuffer;
+        renderPassState.attachments = attachments;
+        renderingPass = VK_TRUE;
     }
-    VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
-    buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
-    buildGeometryInfo.pNext = nullptr;
-    buildGeometryInfo.type = accelerationStructure->getType();
-    buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
-    buildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR;
-    buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
-    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
-    buildGeometryInfo.geometryCount = geometryCount;
-    buildGeometryInfo.pGeometries = nullptr;
-    buildGeometryInfo.ppGeometries = geometryPointers;
-    buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
-    const VkDeviceAddress indirectDeviceAddress = indirectBuildRanges->getDeviceAddress();
-    const uint32_t *maxPrimitiveCounts = primitiveCounts;
-    MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresIndirectKHR);
-    if (vkCmdBuildAccelerationStructuresIndirectKHR)
+}
+
+#ifdef VK_KHR_device_group
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
+    const std::vector<std::shared_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue>& clearValues /* empty */,
+    const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+{
+    MAGMA_ASSERT(!renderingPass);
+    MAGMA_ASSERT(extensions.KHR_imageless_framebuffer && extensions.KHR_device_group);
+    if (extensions.KHR_imageless_framebuffer && extensions.KHR_device_group)
     {
-        vkCmdBuildAccelerationStructuresIndirectKHR(handle, 1, &buildGeometryInfo, &indirectDeviceAddress, &indirectStride, &maxPrimitiveCounts);
+        MAGMA_STACK_ARRAY(const ImageView*, unmanagedAttachments, attachments.size());
+        for (auto const& attachment: attachments)
+        {
+            unmanagedAttachments.put(attachment.get());
+            MAGMA_INUSE(attachment);
+        }
+        leanCmd.beginDeviceGroupRenderPass(deviceMask, renderPass.get(), framebuffer.get(), unmanagedAttachments.count(), unmanagedAttachments,
+            core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()),
+            core::countof(deviceRenderAreas), deviceRenderAreas.begin(), contents);
+        MAGMA_INUSE(renderPass);
+        MAGMA_INUSE(framebuffer);
+        renderPass->begin(framebuffer->getAttachments());
+        renderPassState.renderPass = renderPass;
+        renderPassState.framebuffer = framebuffer;
+        renderPassState.attachments = attachments;
+        renderingPass = VK_TRUE;
+    }
+}
+#endif // VK_KHR_device_group
+#endif // VK_KHR_imageless_framebuffer
+
+#ifdef VK_KHR_acceleration_structure
+void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
+    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.KHR_acceleration_structure);
+    if (extensions.KHR_acceleration_structure)
+    {
+        const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
+        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        MAGMA_STACK_ARRAY(VkAccelerationStructureBuildRangeInfoKHR, buildRanges, geometryCount);
+        for (auto const& geometry: geometries)
+        {
+            geometryPointers.put(&geometry);
+            buildRanges.put({geometry.primitiveCount});
+        }
+        leanCmd.buildAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges, scratchBuffer.get());
+        MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
+    const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.KHR_acceleration_structure);
+    if (extensions.KHR_acceleration_structure)
+    {
+        const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
+        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        for (auto const& geometry: geometries)
+            geometryPointers.put(&geometry);
+        leanCmd.buildAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges.data(), scratchBuffer.get());
+        MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
+    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.KHR_acceleration_structure);
+    if (extensions.KHR_acceleration_structure)
+    {
+        const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
+        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        MAGMA_STACK_ARRAY(VkAccelerationStructureBuildRangeInfoKHR, buildRanges, geometryCount);
+        for (auto const& geometry: geometries)
+        {
+            geometryPointers.put(&geometry);
+            buildRanges.put({geometry.primitiveCount});
+        }
+        leanCmd.updateAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges, scratchBuffer.get());
+        MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
+    const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.KHR_acceleration_structure);
+    if (extensions.KHR_acceleration_structure)
+    {
+        const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
+        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        for (auto const& geometry: geometries)
+            geometryPointers.put(&geometry);
+        leanCmd.updateAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges.data(), scratchBuffer.get());
+        MAGMA_INUSE(accelerationStructure);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
+    const std::shared_ptr<Buffer>& indirectBuildRanges, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.KHR_acceleration_structure);
+    if (extensions.KHR_acceleration_structure)
+    {
+        const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
+        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        MAGMA_STACK_ARRAY(uint32_t, maxPrimitiveCounts, geometryCount);
+        for (auto const& geometry: geometries)
+        {
+            geometryPointers.put(&geometry);
+            maxPrimitiveCounts.put(geometry.primitiveCount);
+        }
+        leanCmd.updateAccelerationStructureIndirect(accelerationStructure.get(), geometryCount, geometryPointers, maxPrimitiveCounts, indirectBuildRanges.get(), scratchBuffer.get());
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(indirectBuildRanges);
         MAGMA_INUSE(scratchBuffer);
     }
 }
-
-void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
-    const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
-{
-    VkCopyAccelerationStructureInfoKHR copyInfo;
-    copyInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR;
-    copyInfo.pNext = nullptr;
-    copyInfo.src = *srcAccelerationStructure;
-    copyInfo.dst = *dstAccelerationStructure;
-    copyInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
-    MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureKHR);
-    if (vkCmdCopyAccelerationStructureKHR)
-    {
-        vkCmdCopyAccelerationStructureKHR(handle, &copyInfo);
-        MAGMA_INUSE(srcAccelerationStructure);
-        MAGMA_INUSE(dstAccelerationStructure);
-    }
-}
-
-void CommandBuffer::compactAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure,
-    const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
-{
-    VkCopyAccelerationStructureInfoKHR copyInfo;
-    copyInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR;
-    copyInfo.pNext = nullptr;
-    copyInfo.src = *srcAccelerationStructure;
-    copyInfo.dst = *dstAccelerationStructure;
-    copyInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_KHR;
-    MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureKHR);
-    if (vkCmdCopyAccelerationStructureKHR)
-    {
-        vkCmdCopyAccelerationStructureKHR(handle, &copyInfo);
-        MAGMA_INUSE(srcAccelerationStructure);
-        MAGMA_INUSE(dstAccelerationStructure);
-    }
-}
-
-void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_ptr<const AccelerationStructure>& srcAccelerationStructure, const std::shared_ptr<Buffer>& dstBuffer)
-{
-    VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
-    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
-    copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src = *srcAccelerationStructure;
-    copyMemoryInfo.dst.deviceAddress = dstBuffer->getDeviceAddress();
-    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
-    MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
-    if (vkCmdCopyAccelerationStructureToMemoryKHR)
-    {
-        vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
-        MAGMA_INUSE(srcAccelerationStructure);
-        MAGMA_INUSE(dstBuffer);
-    }
-}
-
-void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<const Buffer>& srcBuffer, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure)
-{
-    VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
-    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
-    copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src.deviceAddress = srcBuffer->getDeviceAddress();
-    copyMemoryInfo.dst = *dstAccelerationStructure;
-    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR;
-    MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
-    if (vkCmdCopyMemoryToAccelerationStructureKHR)
-    {
-        vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
-        MAGMA_INUSE(srcBuffer);
-        MAGMA_INUSE(dstAccelerationStructure);
-    }
-}
-
-void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<const AccelerationStructure>& accelerationStructure, const std::shared_ptr<Buffer>& buffer,
-    VkDeviceAddress bufferOffset /* 0 */)
-{
-    VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
-    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
-    copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src = *accelerationStructure;
-    copyMemoryInfo.dst.deviceAddress = buffer->getDeviceAddress() + bufferOffset;
-    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_SERIALIZE_KHR;
-    MAGMA_ASSERT(MAGMA_DEVICE_ADDRESS_ALIGNED(copyMemoryInfo.dst.deviceAddress));
-    MAGMA_DEVICE_EXTENSION(vkCmdCopyAccelerationStructureToMemoryKHR);
-    if (vkCmdCopyAccelerationStructureToMemoryKHR)
-    {
-        vkCmdCopyAccelerationStructureToMemoryKHR(handle, &copyMemoryInfo);
-        MAGMA_INUSE(accelerationStructure);
-        MAGMA_INUSE(buffer);
-    }
-}
-
-void CommandBuffer::deserializeAccelerationStructure(const std::shared_ptr<const Buffer>& buffer, const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-    VkDeviceAddress bufferOffset /* 0 */)
-{
-    VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
-    copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
-    copyMemoryInfo.pNext = nullptr;
-    copyMemoryInfo.src.deviceAddress = buffer->getDeviceAddress() + bufferOffset;
-    copyMemoryInfo.dst = *accelerationStructure;
-    copyMemoryInfo.mode = VK_COPY_ACCELERATION_STRUCTURE_MODE_DESERIALIZE_KHR;
-    MAGMA_ASSERT(MAGMA_DEVICE_ADDRESS_ALIGNED(copyMemoryInfo.src.deviceAddress));
-    MAGMA_DEVICE_EXTENSION(vkCmdCopyMemoryToAccelerationStructureKHR);
-    if (vkCmdCopyMemoryToAccelerationStructureKHR)
-    {
-        vkCmdCopyMemoryToAccelerationStructureKHR(handle, &copyMemoryInfo);
-        MAGMA_INUSE(buffer);
-        MAGMA_INUSE(accelerationStructure);
-    }
-}
-
-void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<const AccelerationStructure>& accelerationStructure,
-    const std::shared_ptr<QueryPool>& queryPool, uint32_t firstQuery /* 0 */)
-{
-    MAGMA_DEVICE_EXTENSION(vkCmdWriteAccelerationStructuresPropertiesKHR);
-    if (vkCmdWriteAccelerationStructuresPropertiesKHR)
-    {
-        vkCmdWriteAccelerationStructuresPropertiesKHR(handle, 1, accelerationStructure->getHandleAddress(), queryPool->getType(), *queryPool, firstQuery);
-        MAGMA_INUSE(accelerationStructure);
-        MAGMA_INUSE(queryPool);
-    }
-}
-
-void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
-    const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::list<AccelerationStructureGeometry>& geometries,
-    const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
-    const std::shared_ptr<Buffer>& scratchBuffer)
-{
-    const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-    MAGMA_ASSERT(buildRanges.size() >= geometryCount);
-    MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);
-    for (auto const& geometry: geometries)
-        geometryPointers.put(&geometry);
-    VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
-    buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
-    buildGeometryInfo.pNext = nullptr;
-    buildGeometryInfo.type = accelerationStructure->getType();
-    buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
-    buildGeometryInfo.mode = mode;
-    if (VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR == mode)
-        buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
-    else // VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR
-        buildGeometryInfo.srcAccelerationStructure = *accelerationStructure;
-    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
-    buildGeometryInfo.geometryCount = geometryCount;
-    buildGeometryInfo.pGeometries = nullptr;
-    buildGeometryInfo.ppGeometries = geometryPointers;
-    buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
-    const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = buildRanges.data();
-    MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
-    if (vkCmdBuildAccelerationStructuresKHR)
-    {
-        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
-        MAGMA_INUSE(accelerationStructure);
-        MAGMA_INUSE(scratchBuffer);
-    }
-}
-
-void CommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode,
-    const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure,
-    const AccelerationStructureGeometryInstances& instances, const std::shared_ptr<Buffer>& scratchBuffer)
-{
-    VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
-    buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
-    buildGeometryInfo.pNext = nullptr;
-    buildGeometryInfo.type = accelerationStructure->getType();
-    buildGeometryInfo.flags = accelerationStructure->getBuildFlags();
-    buildGeometryInfo.mode = mode;
-    if (VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR == mode)
-        buildGeometryInfo.srcAccelerationStructure = VK_NULL_HANDLE;
-    else // VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR
-        buildGeometryInfo.srcAccelerationStructure = *accelerationStructure;
-    buildGeometryInfo.dstAccelerationStructure = *accelerationStructure;
-    buildGeometryInfo.geometryCount = 1; // If type is VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR, geometryCount must be 1
-    buildGeometryInfo.pGeometries = &instances;
-    buildGeometryInfo.ppGeometries = nullptr;
-    buildGeometryInfo.scratchData.deviceAddress = scratchBuffer->getDeviceAddress();
-    const VkAccelerationStructureBuildRangeInfoKHR buildRangeInfo = {instances.primitiveCount};
-    const VkAccelerationStructureBuildRangeInfoKHR *buildRangeInfos = &buildRangeInfo;
-    MAGMA_DEVICE_EXTENSION(vkCmdBuildAccelerationStructuresKHR);
-    if (vkCmdBuildAccelerationStructuresKHR)
-    {
-        vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
-        MAGMA_INUSE(accelerationStructure);
-        MAGMA_INUSE(scratchBuffer);
-    }
-}
 #endif // VK_KHR_acceleration_structure
 
-#ifdef VK_KHR_ray_tracing_pipeline
-void CommandBuffer::setRayTracingPipelineStackSize(uint32_t pipelineStackSize) const noexcept
+void CommandBuffer::resetInternalState()
 {
-    MAGMA_DEVICE_EXTENSION(vkCmdSetRayTracingPipelineStackSizeKHR);
-    if (vkCmdSetRayTracingPipelineStackSizeKHR)
-        vkCmdSetRayTracingPipelineStackSizeKHR(handle, pipelineStackSize);
+    stats = DrawStatistics();
+    renderingPass = VK_FALSE;
+    nonIndexedQuery = VK_FALSE;
+    indexedQuery = VK_FALSE;
+    conditionalRendering = VK_FALSE;
+    transformFeedback = VK_FALSE;
+    annotatedBegin = VK_FALSE;
+    annotatedRenderPass = VK_FALSE;
+    annotatedConditionalRendering = VK_FALSE;
+    annotatedTransformFeedback = VK_FALSE;
+    renderPassState.renderPass.reset();
+    renderPassState.framebuffer.reset();
+    renderPassState.attachments.clear();
+    markerOffset = 0ull;
 }
 
-void CommandBuffer::traceRays(const ShaderBindingTable& shaderBindingTable,
-    uint32_t width, uint32_t height, uint32_t depth) const noexcept
-{
-    VkStridedDeviceAddressRegionKHR raygenShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_RAYGEN_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR missShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_MISS_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR hitShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR callableShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_CALLABLE_BIT_KHR);
-    MAGMA_DEVICE_EXTENSION(vkCmdTraceRaysKHR);
-    if (vkCmdTraceRaysKHR)
-    {
-        vkCmdTraceRaysKHR(handle,
-            &raygenShaderBindingTable,
-            &missShaderBindingTable,
-            &hitShaderBindingTable,
-            &callableShaderBindingTable,
-            width, height, depth);
-    }
-}
+#define MAGMA_DEVICE_EXTENSION_ENABLED(name) name(device->extensionEnabled(MAGMA_EXTENSION_PREFIX #name))
+#define MAGMA_INSTANCE_EXTENSION_ENABLED(name) name(device->getPhysicalDevice()->getInstance()->extensionEnabled(MAGMA_EXTENSION_PREFIX #name))
 
-void CommandBuffer::traceRaysIndirect(const ShaderBindingTable& shaderBindingTable,
-    const std::shared_ptr<const Buffer>& indirectBuffer) const noexcept
-{
-    VkStridedDeviceAddressRegionKHR raygenShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_RAYGEN_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR missShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_MISS_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR hitShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
-    VkStridedDeviceAddressRegionKHR callableShaderBindingTable = shaderBindingTable.getDeviceAddressRegion(VK_SHADER_STAGE_CALLABLE_BIT_KHR);
-    MAGMA_DEVICE_EXTENSION(vkCmdTraceRaysIndirectKHR);
-    if (vkCmdTraceRaysIndirectKHR)
-    {
-        vkCmdTraceRaysIndirectKHR(handle,
-            &raygenShaderBindingTable,
-            &missShaderBindingTable,
-            &hitShaderBindingTable,
-            &callableShaderBindingTable,
-            indirectBuffer->getDeviceAddress());
-        MAGMA_INUSE(indirectBuffer);
-    }
-}
-#endif // VK_KHR_ray_tracing_pipeline
+CommandBuffer::Extensions::Extensions(std::shared_ptr<const Device> device):
+    MAGMA_DEVICE_EXTENSION_ENABLED(AMD_buffer_marker),
+    MAGMA_DEVICE_EXTENSION_ENABLED(AMD_draw_indirect_count),
+    MAGMA_DEVICE_EXTENSION_ENABLED(AMD_negative_viewport_height),
 
-#ifdef VK_KHR_ray_tracing_maintenance1
-void CommandBuffer::traceRaysIndirect(const std::shared_ptr<Buffer>& indirectBuffer) const noexcept
-{
-    MAGMA_DEVICE_EXTENSION(vkCmdTraceRaysIndirect2KHR);
-    if (vkCmdTraceRaysIndirect2KHR)
-    {
-        vkCmdTraceRaysIndirect2KHR(handle, indirectBuffer->getDeviceAddress());
-        MAGMA_INUSE(indirectBuffer);
-    }
-}
-#endif // VK_KHR_ray_tracing_maintenance1
+    MAGMA_DEVICE_EXTENSION_ENABLED(EXT_debug_marker),
+    MAGMA_DEVICE_EXTENSION_ENABLED(EXT_conditional_rendering),
+    MAGMA_DEVICE_EXTENSION_ENABLED(EXT_line_rasterization),
+    MAGMA_DEVICE_EXTENSION_ENABLED(EXT_mesh_shader),
+    MAGMA_DEVICE_EXTENSION_ENABLED(EXT_multi_draw),
+    MAGMA_DEVICE_EXTENSION_ENABLED(EXT_transform_feedback),
 
-inline VkDevice CommandBuffer::getNativeDevice() const noexcept
-{
-    return device->getHandle();
-}
+    MAGMA_DEVICE_EXTENSION_ENABLED(KHR_acceleration_structure),
+    MAGMA_DEVICE_EXTENSION_ENABLED(KHR_device_group),
+    MAGMA_DEVICE_EXTENSION_ENABLED(KHR_draw_indirect_count),
+    MAGMA_DEVICE_EXTENSION_ENABLED(KHR_imageless_framebuffer),
+    MAGMA_DEVICE_EXTENSION_ENABLED(KHR_maintenance1),
+    MAGMA_DEVICE_EXTENSION_ENABLED(KHR_push_descriptor),
+    MAGMA_DEVICE_EXTENSION_ENABLED(KHR_ray_tracing_pipeline),
+    MAGMA_DEVICE_EXTENSION_ENABLED(KHR_ray_tracing_maintenance1),
 
-void CommandBuffer::changeImageMipLayouts(const ImageMemoryBarrier& barrier) const noexcept
-{
-    uint32_t levelCount = barrier.subresourceRange.levelCount;
-    if (VK_REMAINING_MIP_LEVELS == levelCount)
-        levelCount = barrier.image->getMipLevels() - barrier.subresourceRange.baseMipLevel;
-    MAGMA_ASSERT(barrier.subresourceRange.baseMipLevel + levelCount <= barrier.image->getMipLevels());
-    for (uint32_t i = 0; i < levelCount; ++i)
-        barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
-}
+    MAGMA_DEVICE_EXTENSION_ENABLED(NV_device_diagnostic_checkpoints),
+    MAGMA_DEVICE_EXTENSION_ENABLED(NV_mesh_shader),
 
-CommandBuffer::PipelineBarrierBatch *CommandBuffer::lookupBarrierBatch(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags) noexcept
-{
-    const hash_t hash = core::hashArgs(srcStageMask, dstStageMask, dependencyFlags);
-    auto it = pipelineBarriers.find(hash);
-    if (it != pipelineBarriers.end())
-        return &it->second;
-    PipelineBarrierBatch batch{srcStageMask, dstStageMask, dependencyFlags};
-    try
-    {
-        it = pipelineBarriers.emplace(hash, batch).first;
-    }
-    catch (...) {}
-    if (it != pipelineBarriers.end())
-        return &it->second;
-    return nullptr;
-}
+    MAGMA_INSTANCE_EXTENSION_ENABLED(EXT_debug_utils)
+{}
 } // namespace magma

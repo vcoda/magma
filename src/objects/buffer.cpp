@@ -360,9 +360,7 @@ void Buffer::copyTransfer(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::
     region.srcOffset = srcOffset;
     region.dstOffset = dstOffset;
     region.size = (VK_WHOLE_SIZE == size) ? wholeSize : size;
-    // We couldn't call shared_from_this() from ctor, so use custom ref object w/ empty deleter
-    std::shared_ptr<Buffer> self = std::shared_ptr<Buffer>(this, [](Buffer *) {});
-    cmdBuffer->copyBuffer(srcBuffer, self, region);
+    cmdBuffer->getLean().copyBuffer(srcBuffer.get(), this, region);
 }
 
 void Buffer::copyStaged(const std::unique_ptr<CommandBuffer>& cmdBuffer, const void *data,

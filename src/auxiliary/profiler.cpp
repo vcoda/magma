@@ -127,14 +127,19 @@ void Profiler::beginSection(const std::unique_ptr<CommandBuffer>& cmdBuffer, con
     MAGMA_ASSERT(strlen(name) > 0);
     if (useLabels)
     {
+        float r, g, b, a;
+        MAGMA_DWORD_TO_FLOAT_RGBA(color, r, g, b, a);
     #if defined(VK_EXT_debug_utils)
-        cmdBuffer->beginDebugLabel(name, color);
+        cmdBuffer->beginDebugLabel(name, r, g, b, a);
     #elif defined(VK_EXT_debug_marker)
-        cmdBuffer->beginDebugMarker(name, color);
+        cmdBuffer->beginDebugMarker(name, r, g, b, a);
     #else
         MAGMA_UNUSED(name);
-        MAGMA_UNUSED(color);
-    #endif // VK_EXT_debug_marker
+        MAGMA_UNUSED(r);
+        MAGMA_UNUSED(g);
+        MAGMA_UNUSED(b);
+        MAGMA_UNUSED(a);
+    #endif // !defined(VK_EXT_debug_marker)
     }
     const uint32_t beginQuery = queryCount % queryPool->getQueryCount();
     sections.emplace_front(name, frameIndex, beginQuery);

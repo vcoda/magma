@@ -29,11 +29,9 @@ namespace magma
     {
     public:
         explicit ScopedDebugMarker(const std::unique_ptr<CommandBuffer>& cmdBuffer,
-            const char *name,
-            float r, float g, float b, float a = 1.f) noexcept;
+            const char *name, float r, float g, float b, float a = 1.f) noexcept;
         explicit ScopedDebugMarker(const std::unique_ptr<CommandBuffer>& cmdBuffer,
-            const char *name,
-            uint32_t color = 0x0) noexcept;
+            const char *name, uint32_t color = 0) noexcept;
         ~ScopedDebugMarker();
 
     private:

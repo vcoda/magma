@@ -40,8 +40,8 @@ void BaseCountBuffer::readback(const std::unique_ptr<CommandBuffer>& cmdBuffer) 
         hostBuffer = std::make_unique<DstTransferBuffer>(device, size);
     cmdBuffer->pipelineBarrier(stageMask, VK_PIPELINE_STAGE_TRANSFER_BIT,
         BufferMemoryBarrier(this, barrier::buffer::shaderWriteTransferRead));
-    const VkBufferCopy bufferCopy{0, 0, size};
-    vkCmdCopyBuffer(*cmdBuffer, handle, *hostBuffer, 1, &bufferCopy);
+    const VkBufferCopy region{0, 0, size};
+    cmdBuffer->getLean().copyBuffer(this, hostBuffer.get(), region);
 }
 
 CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,
@@ -52,7 +52,7 @@ CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags st
 
 void CountBuffer::setValue(uint32_t value, const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
 {
-    cmdBuffer->fillBuffer(shared_from_this(), value);
+    cmdBuffer->getLean().fillBuffer(this, value);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, stageMask,
         BufferMemoryBarrier(this, barrier::buffer::transferWriteShaderRead));
 }
@@ -77,11 +77,11 @@ DispatchCountBuffer::DispatchCountBuffer(std::shared_ptr<Device> device, VkPipel
 void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
     const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
 {
-    auto self = shared_from_this();
-    cmdBuffer->fillBuffer(self, x, sizeof(uint32_t), 0);
-    cmdBuffer->fillBuffer(self, y, sizeof(uint32_t), sizeof(uint32_t));
-    cmdBuffer->fillBuffer(self, z, sizeof(uint32_t), sizeof(uint32_t) * 2);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, stageMask,
+    auto& leanCmd = cmdBuffer->getLean();
+    leanCmd.fillBuffer(this, x, sizeof(uint32_t), 0);
+    leanCmd.fillBuffer(this, y, sizeof(uint32_t), sizeof(uint32_t));
+    leanCmd.fillBuffer(this, z, sizeof(uint32_t), sizeof(uint32_t) * 2);
+    leanCmd.pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, stageMask,
         BufferMemoryBarrier(this, barrier::buffer::transferWriteShaderRead));
 }
 

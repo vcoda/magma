@@ -31,9 +31,7 @@ namespace magma
        accessed from queues. */
 
     template<class Self, class Type>
-    class Resource : public IResource,
-        public NonDispatchable<Type>,
-        public std::enable_shared_from_this<Self>
+    class Resource : public IResource, public NonDispatchable<Type>
     {
     public:
         VkDeviceSize getSize() const noexcept { return size; }

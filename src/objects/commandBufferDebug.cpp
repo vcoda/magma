@@ -17,103 +17,102 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#ifdef MAGMA_DEBUG
 #include "commandBuffer.h"
 #include "storageBuffer.h"
-#include "dstTransferBuffer.h"
 
 namespace magma
 {
-#ifdef MAGMA_DEBUG
 #ifdef VK_EXT_debug_marker
-void CommandBuffer::beginDebugMarker(const char *name, uint32_t color) noexcept
+void CommandBuffer::beginDebugMarker(const char *name, float r, float g, float b, float a /* 1 */) noexcept
 {
-    MAGMA_ASSERT(name);
-    MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerBeginEXT);
-    if (vkCmdDebugMarkerBeginEXT && debugMarkerEnabled)
+    MAGMA_ASSERT(strlen(name));
+    if (extensions.EXT_debug_marker)
     {
-        VkDebugMarkerMarkerInfoEXT debugMarkerInfo;
-        debugMarkerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
-        debugMarkerInfo.pNext = nullptr;
-        debugMarkerInfo.pMarkerName = name;
-        debugMarkerInfo.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
-        debugMarkerInfo.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
-        debugMarkerInfo.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
-        debugMarkerInfo.color[3] = (color & 0xFF) / 255.f; // A
-        vkCmdDebugMarkerBeginEXT(handle, &debugMarkerInfo);
+        VkDebugMarkerMarkerInfoEXT debugMarker;
+        debugMarker.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
+        debugMarker.pNext = nullptr;
+        debugMarker.pMarkerName = name;
+        debugMarker.color[0] = r;
+        debugMarker.color[1] = g;
+        debugMarker.color[2] = b;
+        debugMarker.color[3] = a;
+        MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerBeginEXT);
+        vkCmdDebugMarkerBeginEXT(leanCmd, &debugMarker);
     }
 }
 
 void CommandBuffer::endDebugMarker() noexcept
 {
-    MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerEndEXT);
-    if (vkCmdDebugMarkerEndEXT && debugMarkerEnabled)
-        vkCmdDebugMarkerEndEXT(handle);
+    if (extensions.EXT_debug_marker)
+    {
+        MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerEndEXT);
+        vkCmdDebugMarkerEndEXT(leanCmd);
+    }
 }
 
-void CommandBuffer::insertDebugMarker(const char *name, uint32_t color) noexcept
+void CommandBuffer::insertDebugMarker(const char *name, float r, float g, float b, float a /* 1 */) noexcept
 {
-    MAGMA_ASSERT(name);
-    MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
-    if (vkCmdDebugMarkerInsertEXT && debugMarkerEnabled)
+    MAGMA_ASSERT(strlen(name));
+    if (extensions.EXT_debug_marker)
     {
-        VkDebugMarkerMarkerInfoEXT debugMarkerInfo;
-        debugMarkerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
-        debugMarkerInfo.pNext = nullptr;
-        debugMarkerInfo.pMarkerName = name;
-        debugMarkerInfo.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
-        debugMarkerInfo.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
-        debugMarkerInfo.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
-        debugMarkerInfo.color[3] = (color & 0xFF) / 255.f; // A
-        vkCmdDebugMarkerInsertEXT(handle, &debugMarkerInfo);
+        VkDebugMarkerMarkerInfoEXT debugMarker;
+        debugMarker.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
+        debugMarker.pNext = nullptr;
+        debugMarker.pMarkerName = name;
+        debugMarker.color[0] = r;
+        debugMarker.color[1] = g;
+        debugMarker.color[2] = b;
+        debugMarker.color[3] = a;
+        MAGMA_DEVICE_EXTENSION(vkCmdDebugMarkerInsertEXT);
+        vkCmdDebugMarkerInsertEXT(leanCmd, &debugMarker);
     }
 }
 #endif // VK_EXT_debug_marker
 
 #ifdef VK_EXT_debug_utils
-void CommandBuffer::beginDebugLabel(const char *name, uint32_t color) noexcept
+void CommandBuffer::beginDebugLabel(const char *name, float r, float g, float b, float a /* 1 */) noexcept
 {
-    MAGMA_ASSERT(name);
-    MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_DEVICE_EXTENSION(vkCmdBeginDebugUtilsLabelEXT);
-    if (vkCmdBeginDebugUtilsLabelEXT && debugUtilsEnabled)
+    MAGMA_ASSERT(strlen(name));
+    if (extensions.EXT_debug_utils)
     {
-        VkDebugUtilsLabelEXT debugUtilsLabel;
-        debugUtilsLabel.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
-        debugUtilsLabel.pNext = nullptr;
-        debugUtilsLabel.pLabelName = name;
-        debugUtilsLabel.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
-        debugUtilsLabel.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
-        debugUtilsLabel.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
-        debugUtilsLabel.color[3] = (color & 0xFF) / 255.f; // A
-        vkCmdBeginDebugUtilsLabelEXT(handle, &debugUtilsLabel);
+        VkDebugUtilsLabelEXT debugLabel;
+        debugLabel.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
+        debugLabel.pNext = nullptr;
+        debugLabel.pLabelName = name;
+        debugLabel.color[0] = r;
+        debugLabel.color[1] = g;
+        debugLabel.color[2] = b;
+        debugLabel.color[3] = a;
+        MAGMA_DEVICE_EXTENSION(vkCmdBeginDebugUtilsLabelEXT);
+        vkCmdBeginDebugUtilsLabelEXT(leanCmd, &debugLabel);
     }
 }
 
 void CommandBuffer::endDebugLabel() noexcept
 {
-    MAGMA_DEVICE_EXTENSION(vkCmdEndDebugUtilsLabelEXT);
-    if (vkCmdEndDebugUtilsLabelEXT && debugUtilsEnabled)
-        vkCmdEndDebugUtilsLabelEXT(handle);
+    if (extensions.EXT_debug_utils)
+    {
+        MAGMA_DEVICE_EXTENSION(vkCmdEndDebugUtilsLabelEXT);
+        vkCmdEndDebugUtilsLabelEXT(leanCmd);
+    }
 }
 
-void CommandBuffer::insertDebugLabel(const char *name, uint32_t color) noexcept
+void CommandBuffer::insertDebugLabel(const char *name, float r, float g, float b, float a /* 1 */) noexcept
 {
-    MAGMA_ASSERT(name);
-    MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_DEVICE_EXTENSION(vkCmdInsertDebugUtilsLabelEXT);
-    if (vkCmdInsertDebugUtilsLabelEXT && debugUtilsEnabled)
+    MAGMA_ASSERT(strlen(name));
+    if (extensions.EXT_debug_utils)
     {
-        VkDebugUtilsLabelEXT debugUtilsLabel;
-        debugUtilsLabel.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
-        debugUtilsLabel.pNext = nullptr;
-        debugUtilsLabel.pLabelName = name;
-        debugUtilsLabel.color[0] = ((color >> 24) & 0xFF) / 255.f; // R
-        debugUtilsLabel.color[1] = ((color >> 16) & 0xFF) / 255.f; // G
-        debugUtilsLabel.color[2] = ((color >> 8) & 0xFF) / 255.f; // B
-        debugUtilsLabel.color[3] = (color & 0xFF) / 255.f; // A
-        vkCmdInsertDebugUtilsLabelEXT(handle, &debugUtilsLabel);
+        VkDebugUtilsLabelEXT debugLabel;
+        debugLabel.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
+        debugLabel.pNext = nullptr;
+        debugLabel.pLabelName = name;
+        debugLabel.color[0] = r;
+        debugLabel.color[1] = g;
+        debugLabel.color[2] = b;
+        debugLabel.color[3] = a;
+        MAGMA_DEVICE_EXTENSION(vkCmdInsertDebugUtilsLabelEXT);
+        vkCmdInsertDebugUtilsLabelEXT(leanCmd, &debugLabel);
     }
 }
 #endif // VK_EXT_debug_utils
@@ -123,23 +122,25 @@ void CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, uin
 {
     constexpr VkDeviceSize maxBufferMarkers = 1024;
     if (!markerBuffer)
-    {   // Implementations may only support a limited number of
-        // pipelined marker write operations in flight at a given time,
-        // thus excessive number of marker write operations may degrade
-        // command execution performance.
-        markerBuffer = std::make_shared<StorageBuffer>(device, sizeof(uint32_t) * maxBufferMarkers);
+    {   /* Implementations may only support a limited number of
+           pipelined marker write operations in flight at a given time,
+           thus excessive number of marker write operations may degrade
+           command execution performance. */
+        markerBuffer = std::make_unique<StorageBuffer>(device, sizeof(uint32_t) * maxBufferMarkers);
     }
     MAGMA_ASSERT(markerOffset <= markerBuffer->getSize() - sizeof(uint32_t));
 #ifdef VK_AMD_buffer_marker
-    MAGMA_DEVICE_EXTENSION(vkCmdWriteBufferMarkerAMD);
-    if (vkCmdWriteBufferMarkerAMD)
-        vkCmdWriteBufferMarkerAMD(handle, pipelineStage, *markerBuffer, markerOffset, marker);
+    if (extensions.AMD_buffer_marker)
+    {
+        MAGMA_DEVICE_EXTENSION(vkCmdWriteBufferMarkerAMD);
+        vkCmdWriteBufferMarkerAMD(leanCmd, pipelineStage, *markerBuffer, markerOffset, marker);
+    }
     else
 #endif // VK_AMD_buffer_marker
     {
         MAGMA_UNUSED(pipelineStage); // VkPipelineStageFlagBits used only with VK_AMD_buffer_marker extension
-        MAGMA_ASSERT(!inRenderPass); // vkCmdFillBuffer must be called outside render pass
-        vkCmdFillBuffer(handle, *markerBuffer, markerOffset, sizeof(uint32_t), marker);
+        MAGMA_ASSERT(!renderingPass); // vkCmdFillBuffer must be called outside render pass
+        vkCmdFillBuffer(leanCmd, *markerBuffer, markerOffset, sizeof(uint32_t), marker);
     }
     markerOffset += sizeof(uint32_t);
 }
@@ -149,122 +150,38 @@ void CommandBuffer::setCheckpoint(const char *name) noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
-    MAGMA_DEVICE_EXTENSION(vkCmdSetCheckpointNV);
-    if (vkCmdSetCheckpointNV)
-        vkCmdSetCheckpointNV(handle, name);
+    if (extensions.NV_device_diagnostic_checkpoints)
+    {
+        MAGMA_DEVICE_EXTENSION(vkCmdSetCheckpointNV);
+        vkCmdSetCheckpointNV(leanCmd, name);
+    }
 }
 #endif // VK_NV_device_diagnostic_checkpoints
-#endif // MAGMA_DEBUG
 
-bool CommandBuffer::begin(const char *blockName, uint32_t blockColor,
-    VkCommandBufferUsageFlags flags /* 0 */) noexcept
+void CommandBuffer::pushDebugMarker(const char* name, uint32_t color) noexcept
 {
-    const bool beginResult = begin(flags);
+    float r, g, b, a;
+    MAGMA_DWORD_TO_FLOAT_RGBA(color, r, g, b, a);
 #ifdef VK_EXT_debug_utils
-    beginDebugLabel(blockName, blockColor);
-    labeledRecording = VK_TRUE;
-#else
-    MAGMA_UNUSED(blockName);
-    MAGMA_UNUSED(blockColor);
+    if (extensions.EXT_debug_utils)
+        return beginDebugLabel(name, r, g, b, a);
 #endif // VK_EXT_debug_utils
-    return beginResult;
-}
-
-bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const char *blockName, uint32_t blockColor,
-    VkCommandBufferUsageFlags flags /* 0 */) noexcept
-{
-    const bool beginResult = beginInherited(renderPass, subpass, framebuffer, flags);
-#ifdef VK_EXT_debug_utils
-    beginDebugLabel(blockName, blockColor);
-    labeledRecording = VK_TRUE;
-#else
-    MAGMA_UNUSED(blockName);
-    MAGMA_UNUSED(blockColor);
-#endif // VK_EXT_debug_utils
-    return beginResult;
-}
-
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::vector<ClearValue>& clearValues, const char *passName, uint32_t passColor,
-    const VkRect2D& renderArea /* {0, 0, 0, 0} */,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
-{
-    beginRenderPass(renderPass, framebuffer, clearValues, renderArea, contents);
-#ifdef VK_EXT_debug_utils
-    beginDebugLabel(passName, passColor);
-    labeledRenderPass = VK_TRUE;
-#else
-    MAGMA_UNUSED(passName);
-    MAGMA_UNUSED(passColor);
+#ifdef VK_EXT_debug_marker
+    if (extensions.EXT_debug_marker)
+        beginDebugMarker(name, r, g, b, a);
 #endif // VK_EXT_debug_utils
 }
 
-#ifdef VK_KHR_imageless_framebuffer
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
-    const std::vector<std::shared_ptr<ImageView>>& attachments, const std::vector<ClearValue>& clearValues,
-    const char *passName, uint32_t passColor,
-    const VkRect2D& renderArea /* {0, 0, 0, 0} */,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+void CommandBuffer::popDebugMarker() noexcept
 {
-    beginRenderPass(renderPass, framebuffer, attachments, clearValues, renderArea, contents);
 #ifdef VK_EXT_debug_utils
-    beginDebugLabel(passName, passColor);
-    labeledRenderPass = VK_TRUE;
-#else
-    MAGMA_UNUSED(passName);
-    MAGMA_UNUSED(passColor);
+    if (extensions.EXT_debug_utils)
+        return endDebugLabel();
+#endif // VK_EXT_debug_utils
+#ifdef VK_EXT_debug_marker
+    if (extensions.EXT_debug_marker)
+        endDebugMarker();
 #endif // VK_EXT_debug_utils
 }
-#endif // VK_KHR_imageless_framebuffer
-
-#ifdef VK_KHR_device_group
-bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, const char *blockName, uint32_t blockColor,
-    VkCommandBufferUsageFlags flags /* 0 */) noexcept
-{
-    const bool result = beginDeviceGroup(deviceMask, flags);
-#ifdef VK_EXT_debug_utils
-    beginDebugLabel(blockName, blockColor);
-    labeledRecording = VK_TRUE;
-#else
-    MAGMA_UNUSED(blockName);
-    MAGMA_UNUSED(blockColor);
-#endif // VK_EXT_debug_utils
-    return result;
-}
-
-void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
-    const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::vector<VkRect2D>& deviceRenderAreas, const std::vector<ClearValue>& clearValues,
-    const char *passName, uint32_t passColor,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
-{
-    beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, deviceRenderAreas, clearValues, contents);
-#ifdef VK_EXT_debug_utils
-    beginDebugLabel(passName, passColor);
-    labeledRenderPass = VK_TRUE;
-#else
-    MAGMA_UNUSED(passName);
-    MAGMA_UNUSED(passColor);
-#endif // VK_EXT_debug_utils
-}
-
-#ifdef VK_KHR_imageless_framebuffer
-void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask,
-    const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
-    const std::vector<std::shared_ptr<ImageView>>& attachments, const std::vector<VkRect2D>& deviceRenderAreas,
-    const std::vector<ClearValue>& clearValues, const char *passName, uint32_t passColor,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
-{
-    beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, attachments, deviceRenderAreas, clearValues, contents);
-#ifdef VK_EXT_debug_utils
-    beginDebugLabel(passName, passColor);
-    labeledRenderPass = VK_TRUE;
-#else
-    MAGMA_UNUSED(passName);
-    MAGMA_UNUSED(passColor);
-#endif // VK_EXT_debug_utils
-}
-#endif // VK_KHR_imageless_framebuffer
-#endif // VK_KHR_device_group
 } // namespace magma
+#endif // MAGMA_DEBUG

@@ -127,7 +127,7 @@ void Sprite::blit(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_p
             int32_t dstHeight = static_cast<int32_t>(dstExtent.height);
             clip(blitRegion.srcOffsets, blitRegion.dstOffsets, dstWidth, dstHeight);
         }
-        cmdBuffer->blitImage(shared_from_this(), dstImage, blitRegion, filter);
+        cmdBuffer->getLean().blitImage(this, dstImage.get(), blitRegion, filter);
     }
 }
 

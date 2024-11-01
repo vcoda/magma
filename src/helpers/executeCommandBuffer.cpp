@@ -34,7 +34,7 @@ void executeCommandBuffer(const std::unique_ptr<CommandPool>& cmdPool,
        allocation behavior within the pool. */
     MAGMA_ASSERT(cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_TRANSIENT_BIT);
     std::unique_ptr<CommandBuffer> cmdBuffer = std::make_unique<PrimaryCommandBuffer>(cmdPool);
-    if (cmdBuffer->begin(blockName, blockColor, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
+    if (cmdBuffer->beginAnnotated(blockName, blockColor, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
     {
         try
         {   /* Callback function may optionally throw an exception.
