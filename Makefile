@@ -135,6 +135,7 @@ SRC_OBJS= \
 	src/objects/indexBuffer.o \
 	src/objects/indirectBuffer.o \
 	src/objects/instance.o \
+	src/objects/leanCommandBuffer.o \
 	src/objects/managedDeviceMemory.o \
 	src/objects/mutableImage.o \
 	src/objects/mutableImageView.o \

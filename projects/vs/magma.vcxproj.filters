@@ -900,6 +900,9 @@
     <ClInclude Include="..\..\src\core\variantPtr.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\leanCommandBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1403,6 +1406,9 @@
     <ClCompile Include="..\..\src\objects\variableCountDescriptorSet.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\objects\leanCommandBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\objects\commandBuffer.inl">
@@ -1677,6 +1683,9 @@
     </None>
     <None Include="..\..\src\core\variantPtr.inl">
       <Filter>Header Files\core</Filter>
+    </None>
+    <None Include="..\..\src\objects\leanCommandBuffer.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

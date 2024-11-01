@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{8D9D4A3E-439A-4210-8879-259B20D992CA}</ProjectGuid>
     <RootNamespace>magma</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -321,6 +321,7 @@
     <ClInclude Include="..\..\src\objects\indirectBuffer.h" />
     <ClInclude Include="..\..\src\objects\instance.h" />
     <ClInclude Include="..\..\src\objects\iresource.h" />
+    <ClInclude Include="..\..\src\objects\leanCommandBuffer.h" />
     <ClInclude Include="..\..\src\objects\managedDeviceMemory.h" />
     <ClInclude Include="..\..\src\objects\model\deviceChild.h" />
     <ClInclude Include="..\..\src\objects\model\dispatchable.h" />
@@ -538,6 +539,7 @@
     <ClCompile Include="..\..\src\objects\indexBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\indirectBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\instance.cpp" />
+    <ClCompile Include="..\..\src\objects\leanCommandBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\managedDeviceMemory.cpp" />
     <ClCompile Include="..\..\src\objects\model\deviceChild.cpp" />
     <ClCompile Include="..\..\src\objects\mutableImage.cpp" />
@@ -735,6 +737,7 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\objects\imageView.inl" />
     <None Include="..\..\src\objects\indexBuffer.inl" />
     <None Include="..\..\src\objects\indirectBuffer.inl" />
+    <None Include="..\..\src\objects\leanCommandBuffer.inl" />
     <None Include="..\..\src\objects\model\dispatchable.inl" />
     <None Include="..\..\src\objects\model\nondispatchable.inl" />
     <None Include="..\..\src\objects\model\object.inl" />

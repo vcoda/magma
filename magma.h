@@ -78,6 +78,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/indexBuffer.h"
 #include "src/objects/indirectBuffer.h"
 #include "src/objects/instance.h"
+#include "src/objects/leanCommandBuffer.h"
 #include "src/objects/mutableImage.h"
 #include "src/objects/mutableImageView.h"
 #include "src/objects/physicalDevice.h"

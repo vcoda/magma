@@ -124,6 +124,7 @@ SOURCES += \
     ../../src/objects/indexBuffer.cpp \
     ../../src/objects/indirectBuffer.cpp \
     ../../src/objects/instance.cpp \
+    ../../src/objects/leanCommandBuffer.cpp \
     ../../src/objects/managedDeviceMemory.cpp \
     ../../src/objects/mutableImage.cpp \
     ../../src/objects/mutableImageView.cpp \
@@ -363,6 +364,7 @@ HEADERS += \
     ../../src/objects/indirectBuffer.h \
     ../../src/objects/instance.h \
     ../../src/objects/iresource.h \
+    ../../src/objects/leanCommandBuffer.h \
     ../../src/objects/managedDeviceMemory.h \
     ../../src/objects/mutableImage.h \
     ../../src/objects/mutableImageView.h \

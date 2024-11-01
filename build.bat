@@ -168,6 +168,7 @@ src\objects\imageView.cpp ^
 src\objects\indexBuffer.cpp ^
 src\objects\indirectBuffer.cpp ^
 src\objects\instance.cpp ^
+src\objects\leanCommandBuffer.cpp ^
 src\objects\managedDeviceMemory.cpp ^
 src\objects\mutableImage.cpp ^
 src\objects\mutableImageView.cpp ^
@@ -366,6 +367,7 @@ imageView.obj ^
 indexBuffer.obj ^
 indirectBuffer.obj ^
 instance.obj ^
+leanCommandBuffer.obj ^
 managedDeviceMemory.obj ^
 mutableImage.obj ^
 mutableImageView.obj ^
