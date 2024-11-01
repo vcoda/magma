@@ -245,6 +245,8 @@ VkExtent3D Image::calculateMipExtent(uint32_t level) const noexcept
 
 VkSubresourceLayout Image::getSubresourceLayout(uint32_t mipLevel, uint32_t arrayLayer /* 0 */) const noexcept
 {
+    MAGMA_ASSERT(mipLevel < mipLevels);
+    MAGMA_ASSERT(arrayLayer < arrayLayers);
     VkImageSubresource subresource;
     subresource.aspectMask = getAspectMask();
     subresource.mipLevel = mipLevel;
@@ -256,6 +258,8 @@ VkSubresourceLayout Image::getSubresourceLayout(uint32_t mipLevel, uint32_t arra
 
 VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t baseArrayLayer /* 0 */) const noexcept
 {
+    MAGMA_ASSERT(mipLevel < mipLevels);
+    MAGMA_ASSERT(baseArrayLayer < arrayLayers);
     VkImageSubresourceLayers subresourceLayers;
     subresourceLayers.aspectMask = getAspectMask();
     subresourceLayers.mipLevel = mipLevel;
@@ -266,6 +270,8 @@ VkImageSubresourceLayers Image::getSubresourceLayers(uint32_t mipLevel, uint32_t
 
 VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32_t baseArrayLayer /* 0 */) const noexcept
 {
+    MAGMA_ASSERT(baseMipLevel < mipLevels);
+    MAGMA_ASSERT(baseArrayLayer < arrayLayers);
     VkImageSubresourceRange subresourceRange;
     subresourceRange.aspectMask = getAspectMask();
     subresourceRange.baseMipLevel = baseMipLevel;
@@ -278,6 +284,8 @@ VkImageSubresourceRange Image::getSubresourceRange(uint32_t baseMipLevel, uint32
 VkSparseImageMemoryBind Image::getSparseMemoryBind(uint32_t mipLevel, uint32_t arrayLayer,
     const VkOffset3D& offset, const VkExtent3D& extent, VkDeviceSize memoryOffset) const noexcept
 {
+    MAGMA_ASSERT(mipLevel < mipLevels);
+    MAGMA_ASSERT(arrayLayer < arrayLayers);
     VkSparseImageMemoryBind sparseImageMemoryBind;
     sparseImageMemoryBind.subresource.aspectMask = getAspectMask();
     sparseImageMemoryBind.subresource.mipLevel = mipLevel;
