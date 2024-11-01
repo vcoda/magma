@@ -53,27 +53,50 @@ namespace magma
     {
         namespace buffer
         {
-            constexpr BufferMemoryBarrier transferWriteHostRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_HOST_READ_BIT);
+            constexpr BufferMemoryBarrier transferWriteIndirectCommandRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+            constexpr BufferMemoryBarrier transferWriteIndexRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_INDEX_READ_BIT);
+            constexpr BufferMemoryBarrier transferWriteVertexAttributeRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+            constexpr BufferMemoryBarrier transferWriteUniformRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_UNIFORM_READ_BIT);
+            constexpr BufferMemoryBarrier transferWriteInputAttachmentRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_INPUT_ATTACHMENT_READ_BIT);
             constexpr BufferMemoryBarrier transferWriteShaderRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
-
-            constexpr BufferMemoryBarrier shaderWriteIndirectCmdRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+            constexpr BufferMemoryBarrier transferWriteColorAttachmentRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_COLOR_ATTACHMENT_READ_BIT);
+            constexpr BufferMemoryBarrier transferWriteDepthStencilAttachmentRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT);
+            constexpr BufferMemoryBarrier transferWriteHostRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_HOST_READ_BIT);
+            constexpr BufferMemoryBarrier transferWriteMemoryRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_MEMORY_READ_BIT);
+        #ifdef VK_EXT_transform_feedback
+            constexpr BufferMemoryBarrier transferWriteTransformFeedbackCounterRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT);
+        #endif // VK_EXT_transform_feedback
+        #ifdef VK_EXT_conditional_rendering
+            constexpr BufferMemoryBarrier transferWriteConditionalRenderingRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT);
+        #endif
+        #ifdef VK_KHR_acceleration_structure
+            constexpr BufferMemoryBarrier transferWriteAccelerationStructureRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
+        #endif
+            constexpr BufferMemoryBarrier shaderWriteIndirectCommandRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
             constexpr BufferMemoryBarrier shaderWriteIndexRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_INDEX_READ_BIT);
-            constexpr BufferMemoryBarrier shaderWriteVertexAttribRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+            constexpr BufferMemoryBarrier shaderWriteVertexAttributeRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
             constexpr BufferMemoryBarrier shaderWriteUniformRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_UNIFORM_READ_BIT);
-            constexpr BufferMemoryBarrier shaderReadWrite(VK_ACCESS_SHADER_READ_BIT, VK_ACCESS_SHADER_WRITE_BIT);
-            constexpr BufferMemoryBarrier shaderWriteRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
+            constexpr BufferMemoryBarrier shaderWriteInputAttachmentRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_INPUT_ATTACHMENT_READ_BIT);
+            constexpr BufferMemoryBarrier shaderWriteColorAttachmentRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_COLOR_ATTACHMENT_READ_BIT);
+            constexpr BufferMemoryBarrier shaderWriteDepthStencilAttachmentRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT);
             constexpr BufferMemoryBarrier shaderWriteTransferRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
             constexpr BufferMemoryBarrier shaderWriteHostRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_HOST_READ_BIT);
+            constexpr BufferMemoryBarrier shaderWriteMemoryRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_MEMORY_READ_BIT);
         #ifdef VK_EXT_transform_feedback
-            constexpr BufferMemoryBarrier transformFeedbackWriteVertexAttribRead(VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
-            constexpr BufferMemoryBarrier transformFeedbackCntWriteIndirectCmdRead(VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
-            constexpr BufferMemoryBarrier transformFeedbackCntWriteRead(VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT, VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT);
+            constexpr BufferMemoryBarrier shaderWriteTransformFeedbackCounterRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT);
         #endif // VK_EXT_transform_feedback
         #ifdef VK_EXT_conditional_rendering
             constexpr BufferMemoryBarrier shaderWriteConditionalRenderingRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT);
         #endif
         #ifdef VK_KHR_acceleration_structure
-            constexpr BufferMemoryBarrier transferWriteAccelerationStructureRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
+            constexpr BufferMemoryBarrier shaderWriteAccelerationStructureRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
+        #endif
+        #ifdef VK_EXT_transform_feedback
+            constexpr BufferMemoryBarrier transformFeedbackWriteVertexAttributeRead(VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+            constexpr BufferMemoryBarrier transformFeedbackCounterWriteIndirectCommandRead(VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+            constexpr BufferMemoryBarrier transformFeedbackCounterWriteRead(VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT, VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT);
+        #endif // VK_EXT_transform_feedback
+        #ifdef VK_KHR_acceleration_structure
             constexpr BufferMemoryBarrier accelerationStructureWriteRead(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR, VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR);
             constexpr BufferMemoryBarrier accelerationStructureWriteShaderRead(VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR, VK_ACCESS_SHADER_READ_BIT);
         #endif // VK_KHR_acceleration_structure
