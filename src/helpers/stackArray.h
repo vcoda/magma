@@ -38,7 +38,7 @@ namespace magma
                 length(static_cast<uint32_t>(size)),
                 pos(0)
             {
-                if (!std::is_pod<Type>())
+                if constexpr (std::is_default_constructible<Type>::value)
                 {
                     for (Type *p = begin(); p != end(); ++p)
                         new(p) Type();
@@ -50,7 +50,7 @@ namespace magma
 
             ~StackArray()
             {
-                if (!std::is_pod<Type>())
+                if constexpr (std::is_destructible<Type>::value)
                 {
                     for (Type *p = begin(); p != end(); ++p)
                         p->~Type();
