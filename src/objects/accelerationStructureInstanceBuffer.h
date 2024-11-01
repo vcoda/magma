@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef VK_KHR_acceleration_structure
 #include "accelerationStructureInputBuffer.h"
 #include "srcTransferBuffer.h"
-#include "commandBuffer.h"
 
 namespace magma
 {
