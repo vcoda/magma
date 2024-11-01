@@ -1,7 +1,7 @@
 namespace magma::helpers
 {
 template<class Type>
-inline void mapScopedRange(std::shared_ptr<Buffer> buffer,
+inline void mapScopedRange(const Buffer *buffer,
     VkDeviceSize offset, VkDeviceSize size,
     std::function<void(Type *data)> mapFn)
 {
@@ -26,10 +26,27 @@ inline void mapScopedRange(std::shared_ptr<Buffer> buffer,
 }
 
 template<class Type>
-inline void mapScoped(std::shared_ptr<Buffer> buffer,
-    std::function<void(Type *data)> mapFn)
+inline void mapScopedRange(const std::unique_ptr<Buffer>& buffer, VkDeviceSize offset, VkDeviceSize size, std::function<void(Type *data)> mapFn)
 {
-    mapScopedRange(std::move(buffer), 0, VK_WHOLE_SIZE, std::move(mapFn));
+    mapScopedRange(buffer.get(), offset, size, std::move(mapFn));
+}
+
+template<class Type>
+inline void mapScopedRange(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset, VkDeviceSize size, std::function<void(Type *data)> mapFn)
+{
+    mapScopedRange(buffer.get(), offset, size, std::move(mapFn));
+}
+
+template<class Type>
+inline void mapScoped(const std::unique_ptr<Buffer>& buffer, std::function<void(Type *data)> mapFn)
+{
+    mapScopedRange(buffer.get(), 0, VK_WHOLE_SIZE, std::move(mapFn));
+}
+
+template<class Type>
+inline void mapScoped(const std::shared_ptr<Buffer>& buffer, std::function<void(Type *data)> mapFn)
+{
+    mapScopedRange(buffer.get(), 0, VK_WHOLE_SIZE, std::move(mapFn));
 }
 
 template<class Type>

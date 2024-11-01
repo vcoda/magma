@@ -25,10 +25,13 @@ namespace magma
     namespace helpers
     {
         template<class Type>
-        void mapScopedRange(std::shared_ptr<Buffer> buffer, VkDeviceSize offset, VkDeviceSize size,
+        void mapScopedRange(const Buffer *buffer, VkDeviceSize offset, VkDeviceSize size,
             std::function<void(Type *data)> mapFn);
         template<class Type>
-        void mapScoped(std::shared_ptr<Buffer> buffer,
+        void mapScoped(const std::unique_ptr<Buffer>& buffer,
+            std::function<void(Type *data)> mapFn);
+        template<class Type>
+        void mapScoped(const std::shared_ptr<Buffer>& buffer,
             std::function<void(Type *data)> mapFn);
         template<class Type>
         void mapScoped(std::shared_ptr<UniformBuffer<Type>> uniformBuffer,
