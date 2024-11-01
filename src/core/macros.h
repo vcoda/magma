@@ -82,12 +82,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // _MSC_VER || __MINGW32__
 
 #ifdef MAGMA_DEBUG
-    #define MAGMA_NOOP(param) param
-    #define MAGMA_NOOP_METHOD
+    #define MAGMA_NOOP
     #define MAGMA_ASSERT_FOR_EACH(arr, it, expr) for (auto const& it: arr) MAGMA_ASSERT(expr)
 #else
-    #define MAGMA_NOOP(param)
-    #define MAGMA_NOOP_METHOD {}
+    #define MAGMA_NOOP {}
     #define MAGMA_ASSERT_FOR_EACH(arr, it, expr)
 #endif // MAGMA_DEBUG
 

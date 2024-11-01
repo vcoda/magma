@@ -271,20 +271,20 @@ namespace magma
     #endif // VK_KHR_ray_tracing_maintenance1
 
     #ifdef VK_EXT_debug_marker
-        void beginDebugMarker(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP_METHOD;
-        void endDebugMarker() noexcept MAGMA_NOOP_METHOD;
-        void insertDebugMarker(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP_METHOD;
+        void beginDebugMarker(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP;
+        void endDebugMarker() noexcept MAGMA_NOOP;
+        void insertDebugMarker(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP;
     #endif // VK_EXT_debug_marker
     #ifdef VK_EXT_debug_utils
-        void beginDebugLabel(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP_METHOD;
-        void endDebugLabel() noexcept MAGMA_NOOP_METHOD;
-        void insertDebugLabel(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP_METHOD;
+        void beginDebugLabel(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP;
+        void endDebugLabel() noexcept MAGMA_NOOP;
+        void insertDebugLabel(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP;
     #endif // VK_EXT_debug_utils
-        void writeBufferMarker(VkPipelineStageFlagBits /* pipelineStage */, uint32_t /* marker */) MAGMA_NOOP_METHOD;
+        void writeBufferMarker(VkPipelineStageFlagBits /* pipelineStage */, uint32_t /* marker */) MAGMA_NOOP;
         const std::unique_ptr<Buffer>& getMarkerBuffer() const noexcept { return markerBuffer; }
         VkDeviceSize getMarkerOffset() const noexcept { return markerOffset; }
     #ifdef VK_NV_device_diagnostic_checkpoints
-        void setCheckpoint(const char* /* name */) noexcept MAGMA_NOOP_METHOD;
+        void setCheckpoint(const char* /* name */) noexcept MAGMA_NOOP;
     #endif
 
         bool beginAnnotated(const char *name, uint32_t color, VkCommandBufferUsageFlags flags = 0) noexcept;
@@ -395,8 +395,8 @@ namespace magma
         void queueSubmissionFinished() noexcept;
         void executionFinished() noexcept;
         void changeImageLayout(const ImageMemoryBarrier& barrier) const noexcept;
-        void pushDebugMarker(const char* /* name */, uint32_t /* color */) noexcept MAGMA_NOOP_METHOD;
-        void popDebugMarker() noexcept MAGMA_NOOP_METHOD;
+        void pushDebugMarker(const char* /* name */, uint32_t /* color */) noexcept MAGMA_NOOP;
+        void popDebugMarker() noexcept MAGMA_NOOP;
         void resetInternalState();
 
         const VkCommandBufferLevel level;
