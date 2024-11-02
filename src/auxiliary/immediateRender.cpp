@@ -56,17 +56,14 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     depthStencilState(renderstate::depthAlwaysDontWrite),
     colorBlendState(renderstate::dontBlendRgba)
 {
+    setIdentity();
+    memcpy(viewProj, world, sizeof(world));
     const VkDeviceSize vertexBufferSize = sizeof(Vertex) * maxVertexCount;
     const bool stagedPool = device->getFeatures()->supportsDeviceLocalHostVisibleMemory();
     vertexBuffer = std::make_shared<DynamicVertexBuffer>(device, vertexBufferSize, stagedPool, allocator);
-    setIdentity();
     if (!sharedLayout)
     {   // If layout hasn't been specified, create a default one
-        struct Transform
-        {
-            float m[4][4];
-        };
-        constexpr push::VertexConstantRange<Transform> pushConstantRange;
+        constexpr push::VertexConstantRange<PushConstants> pushConstantRange;
         sharedLayout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
     }
 constexpr
@@ -111,7 +108,7 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
     primitive.lineWidth = lineWidth;
     primitive.lineStippleFactor = lineStippleFactor;
     primitive.lineStipplePattern = lineStipplePattern;
-    memcpy(primitive.transform, transform, sizeof(transform));
+    memcpy(primitive.world, world, sizeof(world));
     primitive.vertexCount = 0;
     primitive.firstVertex = vertexCount;
     primitive.labelName = labelName;
@@ -145,6 +142,8 @@ bool ImmediateRender::commitPrimitives(const std::unique_ptr<CommandBuffer>& cmd
         return false;
     cmdBuffer->bindVertexBuffer(0, vertexBuffer);
     std::shared_ptr<GraphicsPipeline> prevPipeline;
+    PushConstants pushConstants;
+    memcpy(pushConstants.viewProj, viewProj, sizeof(viewProj));
     for (auto const& primitive: primitives)
     {
         if (primitive.labelName)
@@ -173,7 +172,8 @@ bool ImmediateRender::commitPrimitives(const std::unique_ptr<CommandBuffer>& cmd
         if (stippledLinesEnabled && !primitive.stippledLineState)
             cmdBuffer->setLineStipple(primitive.lineStippleFactor, primitive.lineStipplePattern);
     #endif // VK_EXT_line_rasterization
-        cmdBuffer->pushConstantBlock(*sharedLayout, VK_SHADER_STAGE_VERTEX_BIT, primitive.transform);
+        memcpy(pushConstants.world, primitive.world, sizeof(primitive.world));
+        cmdBuffer->pushConstantBlock(*sharedLayout, VK_SHADER_STAGE_VERTEX_BIT, pushConstants);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
         if (primitive.labelName)
         {

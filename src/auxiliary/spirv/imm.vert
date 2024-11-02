@@ -14,7 +14,8 @@ out gl_PerVertex {
 };
 
 layout(push_constant) uniform PushConstants {
-  mat4 worldViewProj;
+  mat4 world;
+  mat4 viewProj;
 };
 
 void main()
@@ -23,5 +24,6 @@ void main()
   oColor = color;
   oTexCoord = texCoord;
   gl_PointSize = normalPointSize.w;
+  mat4 worldViewProj = world * viewProj;
   gl_Position = worldViewProj * position;
 }

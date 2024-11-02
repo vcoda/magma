@@ -70,13 +70,19 @@ inline void ImmediateRender::setIdentity() noexcept
         {0.f, 1.f, 0.f, 0.f},
         {0.f, 0.f, 1.f, 0.f},
         {0.f, 0.f, 0.f, 1.f}};
-    setTransform(identity);
+    memcpy(world, identity, sizeof(identity));
 }
 
 inline void ImmediateRender::setTransform(const float matrix[4][4]) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);
-    memcpy(transform, matrix, sizeof(transform));
+    memcpy(world, matrix, sizeof(world));
+}
+
+inline void ImmediateRender::setViewProjTransform(const float matrix[4][4]) noexcept
+{
+    MAGMA_ASSERT(!insidePrimitive);
+    memcpy(viewProj, matrix, sizeof(viewProj));
 }
 
 inline void ImmediateRender::normal(float x, float y, float z) noexcept

@@ -70,6 +70,7 @@ namespace magma
             void setLineStipplePattern(uint16_t stipplePattern) noexcept;
             void setIdentity() noexcept;
             void setTransform(const float matrix[4][4]) noexcept;
+            void setViewProjTransform(const float matrix[4][4]) noexcept;
             // Primitive generation
             bool beginPrimitive(VkPrimitiveTopology topology,
                 const char *labelName = nullptr,
@@ -94,6 +95,7 @@ namespace magma
         private:
             struct Vertex;
             struct Primitive;
+            struct PushConstants;
             std::shared_ptr<GraphicsPipeline> lookupPipeline(VkPrimitiveTopology,
                 bool wideLineState, bool stippledLineState);
 
@@ -115,7 +117,8 @@ namespace magma
             float lineWidth = 1.f;
             uint32_t lineStippleFactor = 1;
             uint16_t lineStipplePattern = 0b1111111111111111;
-            float transform[4][4];
+            float world[4][4];
+            float viewProj[4][4];
             Vertex *current = nullptr;
             bool insidePrimitive = false;
             uint32_t vertexCount = 0;
@@ -131,17 +134,23 @@ namespace magma
 
         struct ImmediateRender::Primitive
         {
-            VkBool32 wideLineState : 1;
+            VkBool32 wideLineState: 1;
             VkBool32 stippledLineState: 1;
             std::shared_ptr<GraphicsPipeline> pipeline;
             float lineWidth;
             uint32_t lineStippleFactor;
             uint16_t lineStipplePattern;
-            float transform[4][4];
+            float world[4][4];
             uint32_t vertexCount;
             uint32_t firstVertex;
             const char *labelName;
             uint32_t labelColor;
+        };
+
+        struct ImmediateRender::PushConstants
+        {
+            float world[4][4];
+            float viewProj[4][4];
         };
     } // namespace aux
 } // namespace magma
