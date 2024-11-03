@@ -24,14 +24,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::helpers
 {
 void layoutTransition(std::shared_ptr<Image> image, VkImageLayout newLayout,
-    const std::unique_ptr<CommandBuffer>& cmdBuffer)
+    const std::unique_ptr<CommandBuffer>& cmdBuffer,
+    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */,
+    VkDependencyFlags dependencyFlags /* 0 */)
 {
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     cmdBuffer->reset();
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {
-        image->layoutTransition(newLayout, cmdBuffer);
+        image->layoutTransition(newLayout, cmdBuffer, shaderStageMask, dependencyFlags);
     }
     cmdBuffer->end();
     // Block until execution is complete

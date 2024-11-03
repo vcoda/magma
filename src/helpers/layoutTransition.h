@@ -30,8 +30,8 @@ namespace magma
 
         void layoutTransition(std::shared_ptr<Image> image,
             VkImageLayout newLayout,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer);
-        void batchLayoutTransition(const std::unordered_map<std::shared_ptr<Image>, VkImageLayout>& imageLayouts,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer);
+            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VkDependencyFlags dependencyFlags = 0);
     } // namespace helpers
 } // namespace magma
