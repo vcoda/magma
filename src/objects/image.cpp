@@ -411,14 +411,16 @@ void Image::onDefragment()
 }
 
 VkImageLayout Image::layoutTransition(VkImageLayout newLayout, const std::unique_ptr<CommandBuffer>& cmdBuffer,
-    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
+    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    return layoutTransitionBaseMipLayer(newLayout, 0, 0, cmdBuffer, shaderStageMask);
+    return layoutTransitionBaseMipLayer(newLayout, 0, 0, cmdBuffer, shaderStageMask, dependencyFlags);
 }
 
 VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint32_t baseMipLevel, uint32_t baseArrayLayer,
     const std::unique_ptr<CommandBuffer>& cmdBuffer,
-    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */) noexcept
+    VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */,
+    VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     const VkImageLayout oldLayout = mipLayouts[baseMipLevel];
     VkPipelineStageFlags srcStageMask = 0;
@@ -534,12 +536,15 @@ VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint3
         dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
         break;
 #endif // VK_KHR_fragment_shading_rate
+    case VK_IMAGE_LAYOUT_UNDEFINED:
+        MAGMA_FAILURE("undefined new image layout");
+        break;
     default:
         MAGMA_FAILURE("unknown new image layout");
     }
     const VkImageSubresourceRange subresourceRange = getSubresourceRange(baseMipLevel, baseArrayLayer);
     const ImageMemoryBarrier memoryBarrier(this, newLayout, subresourceRange);
-    cmdBuffer->pipelineBarrier(srcStageMask, dstStageMask, memoryBarrier);
+    cmdBuffer->pipelineBarrier(srcStageMask, dstStageMask, memoryBarrier, dependencyFlags);
     return oldLayout;
 }
 
