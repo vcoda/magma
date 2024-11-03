@@ -33,5 +33,18 @@ namespace magma
             const std::unique_ptr<CommandBuffer>& cmdBuffer,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
             VkDependencyFlags dependencyFlags = 0);
+
+        struct ImageLayoutTransition
+        {
+            std::shared_ptr<Image> image;
+            VkImageLayout newLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            uint32_t baseMipLevel = 0;
+            uint32_t baseArrayLayer = 0;
+        };
+
+        void batchLayoutTransition(const std::vector<ImageLayoutTransition>& imageLayouts,
+            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VkDependencyFlags dependencyFlags = 0);
     } // namespace helpers
 } // namespace magma
