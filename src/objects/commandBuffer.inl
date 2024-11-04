@@ -375,7 +375,10 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
 {
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
+    {
         imageMemoryBarriers.put(barrier);
+        changeImageLayout(barrier);
+    }
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
 }
 
@@ -383,7 +386,10 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
 {
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
+    {
         imageMemoryBarriers.put(barrier);
+        changeImageLayout(barrier);
+    }
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
 }
 
