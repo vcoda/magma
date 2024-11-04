@@ -46,10 +46,11 @@ void batchLayoutTransition(const std::vector<ImageLayoutTransition>& imageLayout
 {
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
-    std::vector<ImageMemoryBarrier> imageMemoryBarriers;
     cmdBuffer->reset();
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {
+        std::vector<ImageMemoryBarrier> imageMemoryBarriers;
+        imageMemoryBarriers.reserve(imageLayouts.size());
         for (const ImageLayoutTransition& it: imageLayouts)
         {
             VkImageSubresourceRange subresourceRange = it.image->getSubresourceRange(it.baseMipLevel, it.baseArrayLayer);
