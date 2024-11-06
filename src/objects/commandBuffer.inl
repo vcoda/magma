@@ -122,18 +122,32 @@ inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t in
     ++stats.drawIndexedCount;
 }
 
-inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& indirectBuffer) const noexcept
+inline void CommandBuffer::drawIndirect(const std::shared_ptr<Buffer>& buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
 {
-    leanCmd.drawIndirect(indirectBuffer.get(), indirectBuffer->getDrawCount());
+    leanCmd.drawIndirect(buffer.get(), drawCount, offset);
     ++stats.drawIndirectCount;
-    MAGMA_INUSE(indirectBuffer);
+    MAGMA_INUSE(buffer);
 }
 
-inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& indirectBuffer) const noexcept
+inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept
 {
-    leanCmd.drawIndexedIndirect(indirectBuffer.get(), indirectBuffer->getDrawCount());
+    leanCmd.drawIndirect(buffer.get(), buffer->getDrawCount());
+    ++stats.drawIndirectCount;
+    MAGMA_INUSE(buffer);
+}
+
+inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffer>& buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
+{
+    leanCmd.drawIndexedIndirect(buffer.get(), drawCount, offset);
+    ++stats.drawIndirectCount;
+    MAGMA_INUSE(buffer);
+}
+
+inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept
+{
+    leanCmd.drawIndexedIndirect(buffer.get(), buffer->getDrawCount());
     ++stats.drawIndexedIndirectCount;
-    MAGMA_INUSE(indirectBuffer);
+    MAGMA_INUSE(buffer);
 }
 
 inline void CommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
