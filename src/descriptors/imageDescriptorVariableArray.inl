@@ -9,7 +9,10 @@ inline void ImageDescriptorVariableArray::remove(uint32_t index)
     if (descriptors.empty())
         return;
     if (index == getSize() - 1)
+    {
         descriptors.pop_back();
+        --descriptorCount;
+    }
     else
     {
         VkDescriptorImageInfo& descriptor = descriptors[index];
