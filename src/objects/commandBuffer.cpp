@@ -234,8 +234,8 @@ void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std:
 }
 
 void CommandBuffer::waitEvents(const std::initializer_list<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::initializer_list<MemoryBarrier>& memoryBarriers /* empty */,
-    const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
+    const std::initializer_list<VkMemoryBarrier>& memoryBarriers /* empty */,
+    const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
     const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_ /* empty */) const noexcept
 {
     MAGMA_STACK_ARRAY(const Event*, unmanagedEvents, events.size());
@@ -257,8 +257,8 @@ void CommandBuffer::waitEvents(const std::initializer_list<std::shared_ptr<Event
 }
 
 void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<MemoryBarrier>& memoryBarriers,
-    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers,
+    const std::vector<VkMemoryBarrier>& memoryBarriers,
+    const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers,
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
     MAGMA_STACK_ARRAY(const Event*, unmanagedEvents, events.size());
@@ -280,8 +280,8 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::initializer_list<MemoryBarrier>& memoryBarriers /* empty */,
-    const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
+    const std::initializer_list<VkMemoryBarrier>& memoryBarriers /* empty */,
+    const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
     const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_ /* empty */,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
@@ -298,8 +298,8 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<MemoryBarrier>& memoryBarriers,
-    const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers,
+    const std::vector<VkMemoryBarrier>& memoryBarriers,
+    const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers,
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
