@@ -122,16 +122,16 @@ inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t in
     ++stats.drawIndexedCount;
 }
 
-inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& indirectBuffer, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& indirectBuffer) const noexcept
 {
-    leanCmd.drawIndirect(indirectBuffer.get(), indirectBuffer->getDrawCount(), offset);
+    leanCmd.drawIndirect(indirectBuffer.get(), indirectBuffer->getDrawCount());
     ++stats.drawIndirectCount;
     MAGMA_INUSE(indirectBuffer);
 }
 
-inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& indirectBuffer, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& indirectBuffer) const noexcept
 {
-    leanCmd.drawIndexedIndirect(indirectBuffer.get(), indirectBuffer->getDrawCount(), offset);
+    leanCmd.drawIndexedIndirect(indirectBuffer.get(), indirectBuffer->getDrawCount());
     ++stats.drawIndexedIndirectCount;
     MAGMA_INUSE(indirectBuffer);
 }

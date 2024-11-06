@@ -92,8 +92,8 @@ namespace magma
         void drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex = 0, uint32_t firstInstance = 0) const noexcept;
         void drawIndexed(uint32_t indexCount, uint32_t firstIndex = 0, int32_t vertexOffset = 0) const noexcept;
         void drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset, uint32_t firstInstance) const noexcept;
-        void drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer, VkDeviceSize offset = 0) const noexcept;
-        void drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer, VkDeviceSize offset = 0) const noexcept;
+        void drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept;
+        void drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept;
         void dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept;
         void dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset = 0) const noexcept;
 
