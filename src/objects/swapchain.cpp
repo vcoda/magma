@@ -164,6 +164,7 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, const std::unique_ptr<Surf
     {
         throw exception::InitializationFailed("initialization of swapchain "
             "could not be completed for implementation-specific reasons");
+    }
 #endif // !MAGMA_NO_EXCEPTIONS
     handleError(result, "failed to create swapchain");
 }
