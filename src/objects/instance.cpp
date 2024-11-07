@@ -109,7 +109,8 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
         throw exception::InitializationFailed("initialization of Vulkan could not be completed "
             "for implementation-specific reasons");
     case VK_ERROR_INCOMPATIBLE_DRIVER:
-        throw exception::IncompatibleDriver("could not find a compatible Vulkan ICD");
+        throw exception::IncompatibleDriver("the requested version of Vulkan is not supported "
+            "by the driver or is otherwise incompatible for implementation-specific reasons");
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create instance");
