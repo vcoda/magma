@@ -55,7 +55,9 @@ Swapchain::Swapchain(std::shared_ptr<Device> device, VkSurfaceFormatKHR surfaceF
     retired(false),
     imageIndex(0)
 {
-#ifndef MAGMA_NO_EXCEPTIONS
+#ifdef MAGMA_NO_EXCEPTIONS
+    MAGMA_UNUSED(oldSwapchain);
+#else
     if (oldSwapchain && oldSwapchain->hadRetired())
         throw exception::OutOfDate("old swapchain must be a non-retired");
 #endif // !MAGMA_NO_EXCEPTIONS
