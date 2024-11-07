@@ -160,7 +160,14 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     #endif // VK_EXT_debug_utils
     }
 #endif // VK_EXT_debug_report || VK_EXT_debug_utils
-    handleError(result, "failed to create fullscreen exclusive swapchain");
+#ifndef MAGMA_NO_EXCEPTIONS
+    if (VK_ERROR_INITIALIZATION_FAILED == result)
+    {
+        throw exception::InitializationFailed("initialization of full-screen "
+            "exclusive swapchain could not be completed for implementation-specific reasons");
+    }
+#endif // !MAGMA_NO_EXCEPTIONS
+    handleError(result, "failed to create full-screen exclusive swapchain");
 }
 
 void FullScreenExclusiveSwapchain::acquireFullScreenExclusiveMode()
