@@ -106,7 +106,8 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
     switch (result)
     {
     case VK_ERROR_INITIALIZATION_FAILED:
-        throw exception::InitializationFailed("failed to create Vulkan instance");
+        throw exception::InitializationFailed("initialization of Vulkan could not be completed "
+            "for implementation-specific reasons");
     case VK_ERROR_INCOMPATIBLE_DRIVER:
         throw exception::IncompatibleDriver("could not find a compatible Vulkan ICD");
     }

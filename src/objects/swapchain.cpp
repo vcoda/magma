@@ -159,6 +159,12 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, const std::unique_ptr<Surf
     #endif // VK_EXT_debug_utils
     }
 #endif // VK_EXT_debug_report || VK_EXT_debug_utils
+#ifndef MAGMA_NO_EXCEPTIONS
+    if (VK_ERROR_INITIALIZATION_FAILED == result)
+    {
+        throw exception::InitializationFailed("initialization of swapchain "
+            "could not be completed for implementation-specific reasons");
+#endif // !MAGMA_NO_EXCEPTIONS
     handleError(result, "failed to create swapchain");
 }
 
@@ -340,8 +346,6 @@ void Swapchain::handleError(VkResult result, const char *message) const
 #ifndef MAGMA_NO_EXCEPTIONS
     switch (result)
     {
-    case VK_ERROR_INITIALIZATION_FAILED:
-        throw exception::InitializationFailed(message);
     case VK_ERROR_DEVICE_LOST:
         throw exception::DeviceLost(message, MAGMA_SOURCE_LOCATION);
 #ifdef VK_KHR_surface

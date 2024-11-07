@@ -83,7 +83,10 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     const VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
 #ifndef MAGMA_NO_EXCEPTIONS
     if (VK_ERROR_INITIALIZATION_FAILED == result)
-        throw exception::InitializationFailed("failed to create logical device");
+    {
+        throw exception::InitializationFailed("initialization of logical device "
+            "could not be completed for implementation-specific reasons");
+    }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create logical device");
     // Store enabled layers and extensions
