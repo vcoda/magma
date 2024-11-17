@@ -189,7 +189,7 @@ inline void LeanCommandBuffer::updateBuffer(const Buffer *buffer, VkDeviceSize d
 inline void LeanCommandBuffer::fillBuffer(const Buffer *buffer, uint32_t data,
     VkDeviceSize size /* VK_WHOLE_SIZE */, VkDeviceSize offset /* 0 */) const noexcept
 {
-    return vkCmdFillBuffer(handle, *buffer, offset, size, data);
+    vkCmdFillBuffer(handle, *buffer, offset, size, data);
 }
 
 inline void LeanCommandBuffer::clearColorImage(Image *image, const VkClearColorValue& color, const VkImageSubresourceRange& range) const noexcept
