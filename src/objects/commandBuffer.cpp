@@ -136,7 +136,6 @@ bool CommandBuffer::reset(VkCommandBufferResetFlags flags /* 0 */) noexcept
     if (VK_SUCCESS == result)
     {
         releaseObjectsInUse();
-        state = State::Initial;
         resetInternalState();
         return true;
     }
@@ -645,6 +644,7 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
 
 void CommandBuffer::resetInternalState()
 {
+    state = State::Initial;
     stats = DrawStatistics();
     renderingPass = VK_FALSE;
     nonIndexedQuery = VK_FALSE;
