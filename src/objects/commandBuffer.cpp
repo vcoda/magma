@@ -75,7 +75,9 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     if (VK_SUCCESS == result)
     {
         state = State::Recording;
+    #ifdef MAGMA_STATS
         stats = DrawStatistics();
+    #endif
     }
     usage = flags;
     return (VK_SUCCESS == result);
@@ -91,7 +93,9 @@ bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass
     if (VK_SUCCESS == result)
     {
         state = State::Recording;
+    #ifdef MAGMA_STATS
         stats = DrawStatistics();
+    #endif
     }
     usage = flags;
     return (VK_SUCCESS == result);
