@@ -642,7 +642,7 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
 }
 #endif // VK_KHR_acceleration_structure
 
-void CommandBuffer::resetInternalState()
+void CommandBuffer::resetInternalState() noexcept
 {
     state = State::Initial;
     stats = DrawStatistics();

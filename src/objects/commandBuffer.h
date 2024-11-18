@@ -399,7 +399,7 @@ namespace magma
         void changeImageLayout(const ImageMemoryBarrier& barrier) const noexcept;
         void pushDebugMarker(const char* /* name */, uint32_t /* color */) noexcept MAGMA_NOOP;
         void popDebugMarker() noexcept MAGMA_NOOP;
-        void resetInternalState();
+        void resetInternalState() noexcept;
 
         const VkCommandBufferLevel level;
         const VkCommandPool cmdPool;
