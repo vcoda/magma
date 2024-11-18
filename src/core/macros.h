@@ -90,11 +90,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // MAGMA_DEBUG
 
 #ifdef MAGMA_STATS
-    #define MAGMA_INCR(cnt) ++cnt
-    #define MAGMA_INCRN(cnt, n) cnt += n
+    #define MAGMA_INCR(cnt, n) cnt += n
 #else
-    #define MAGMA_INCR(cnt)
-    #define MAGMA_INCRN(cnt, n)
+    #define MAGMA_INCR(cnt, n)
 #endif // MAGMA_STATS
 
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE

@@ -101,65 +101,65 @@ inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::sh
 inline void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex /* 0 */) const noexcept
 {
     leanCmd.draw(vertexCount, 1, firstVertex, 0);
-    MAGMA_INCR(stats.drawCount);
+    MAGMA_INCR(stats.drawCount, 1);
 }
 
 inline void CommandBuffer::drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex /* 0 */, uint32_t firstInstance /* 0 */) const noexcept
 {
     leanCmd.draw(vertexCount, instanceCount, firstVertex, firstInstance);
-    MAGMA_INCR(stats.drawCount);
+    MAGMA_INCR(stats.drawCount, 1);
 }
 
 inline void CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t firstIndex /* 0 */, int32_t vertexOffset /* 0 */) const noexcept
 {
     leanCmd.drawIndexed(indexCount, 1, firstIndex, vertexOffset, 0);
-    MAGMA_INCR(stats.drawIndexedCount);
+    MAGMA_INCR(stats.drawIndexedCount, 1);
 }
 
 inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset, uint32_t firstInstance) const noexcept
 {
     leanCmd.drawIndexed(indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
-    MAGMA_INCR(stats.drawIndexedCount);
+    MAGMA_INCR(stats.drawIndexedCount, 1);
 }
 
 inline void CommandBuffer::drawIndirect(const std::shared_ptr<Buffer>& buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.drawIndirect(buffer.get(), drawCount, offset);
-    MAGMA_INCR(stats.drawIndirectCount);
+    MAGMA_INCR(stats.drawIndirectCount, 1);
     MAGMA_INUSE(buffer);
 }
 
 inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept
 {
     leanCmd.drawIndirect(buffer.get(), buffer->getDrawCount());
-    MAGMA_INCR(stats.drawIndirectCount);
+    MAGMA_INCR(stats.drawIndirectCount, 1);
     MAGMA_INUSE(buffer);
 }
 
 inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffer>& buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.drawIndexedIndirect(buffer.get(), drawCount, offset);
-    MAGMA_INCR(stats.drawIndirectCount);
+    MAGMA_INCR(stats.drawIndirectCount, 1);
     MAGMA_INUSE(buffer);
 }
 
 inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept
 {
     leanCmd.drawIndexedIndirect(buffer.get(), buffer->getDrawCount());
-    MAGMA_INCR(stats.drawIndexedIndirectCount);
+    MAGMA_INCR(stats.drawIndexedIndirectCount, 1);
     MAGMA_INUSE(buffer);
 }
 
 inline void CommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept
 {
     leanCmd.dispatch(groupCountX, groupCountY, groupCountZ);
-    MAGMA_INCR(stats.dispatchCount);
+    MAGMA_INCR(stats.dispatchCount, 1);
 }
 
 inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.dispatchIndirect(buffer.get(), offset);
-    MAGMA_INCR(stats.dispatchIndirectCount);
+    MAGMA_INCR(stats.dispatchIndirectCount, 1);
 }
 
 inline void CommandBuffer::copyImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageCopy& region) const noexcept
@@ -577,7 +577,7 @@ inline void CommandBuffer::drawMulti(const std::vector<VkMultiDrawInfoEXT>& vert
     {
         const uint32_t drawCount = core::countof(vertexInfo);
         leanCmd.drawMulti(drawCount, vertexInfo.data(), 1, 0);
-        MAGMA_INCRN(stats.drawCount, drawCount);
+        MAGMA_INCR(stats.drawCount, drawCount);
     }
 }
 
@@ -588,7 +588,7 @@ inline void CommandBuffer::drawMultiInstanced(const std::vector<VkMultiDrawInfoE
     {
         const uint32_t drawCount = core::countof(vertexInfo);
         leanCmd.drawMulti(drawCount, vertexInfo.data(), instanceCount, firstInstance);
-        MAGMA_INCRN(stats.drawCount, drawCount);
+        MAGMA_INCR(stats.drawCount, drawCount);
     }
 }
 
@@ -599,7 +599,7 @@ inline void CommandBuffer::drawMultiIndexed(const std::vector<VkMultiDrawIndexed
     {
         const uint32_t drawIndexedCount = core::countof(indexInfo);
         leanCmd.drawMultiIndexed(drawIndexedCount, indexInfo.data(), 0, 1, vertexOffsets.data());
-        MAGMA_INCRN(stats.drawIndexedCount, drawIndexedCount);
+        MAGMA_INCR(stats.drawIndexedCount, drawIndexedCount);
     }
 }
 
@@ -611,7 +611,7 @@ inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDr
     {
         const uint32_t drawIndexedCount = core::countof(indexInfo);
         leanCmd.drawMultiIndexed(drawIndexedCount, indexInfo.data(), instanceCount, firstInstance, vertexOffsets.data());
-        MAGMA_INCRN(stats.drawIndexedCount, drawIndexedCount);
+        MAGMA_INCR(stats.drawIndexedCount, drawIndexedCount);
     }
 }
 #endif // VK_EXT_multi_draw
@@ -624,7 +624,7 @@ inline void CommandBuffer::drawIndirectCount(const std::shared_ptr<Buffer>& buff
     if (extensions.KHR_draw_indirect_count || extensions.AMD_draw_indirect_count)
     {
         leanCmd.drawIndirectCount(buffer.get(), countBuffer.get(), maxDrawCount, offset, countBufferOffset);
-        MAGMA_INCR(stats.drawIndirectCount);
+        MAGMA_INCR(stats.drawIndirectCount, 1);
         MAGMA_INUSE(buffer);
         MAGMA_INUSE(countBuffer);
     }
@@ -637,7 +637,7 @@ inline void CommandBuffer::drawIndexedIndirectCount(const std::shared_ptr<Buffer
     if (extensions.KHR_draw_indirect_count || extensions.AMD_draw_indirect_count)
     {
         leanCmd.drawIndexedIndirectCount(buffer.get(), countBuffer.get(), maxDrawCount, offset, countBufferOffset);
-        MAGMA_INCR(stats.drawIndexedIndirectCount);
+        MAGMA_INCR(stats.drawIndexedIndirectCount, 1);
         MAGMA_INUSE(buffer);
         MAGMA_INUSE(countBuffer);
     }
@@ -651,7 +651,7 @@ inline void CommandBuffer::drawMeshTasks(uint32_t groupCountX, uint32_t groupCou
     if (extensions.EXT_mesh_shader || extensions.NV_mesh_shader)
     {
         leanCmd.drawMeshTasks(groupCountX, groupCountY, groupCountZ);
-        MAGMA_INCR(stats.drawMeshTasksCount);
+        MAGMA_INCR(stats.drawMeshTasksCount, 1);
     }
 }
 
@@ -661,7 +661,7 @@ inline void CommandBuffer::drawMeshTasksIndirect(const std::shared_ptr<DrawMeshT
     if (extensions.EXT_mesh_shader || extensions.NV_mesh_shader)
     {
         leanCmd.drawMeshTasksIndirect(buffer.get(), buffer->getDrawCount(), offset);
-        MAGMA_INCR(stats.drawMeshTasksIndirectCount);
+        MAGMA_INCR(stats.drawMeshTasksIndirectCount, 1);
         MAGMA_INUSE(buffer);
     }
 }
@@ -673,7 +673,7 @@ inline void CommandBuffer::drawMeshTasksIndirectCount(const std::shared_ptr<Draw
     if (extensions.EXT_mesh_shader || extensions.NV_mesh_shader)
     {
         leanCmd.drawMeshTasksIndirectCount(buffer.get(), countBuffer.get(), buffer->getDrawCount(), offset, countBufferOffset);
-        MAGMA_INCR(stats.drawMeshTasksIndirectCount);
+        MAGMA_INCR(stats.drawMeshTasksIndirectCount, 1);
         MAGMA_INUSE(buffer);
         MAGMA_INUSE(countBuffer);
     }
@@ -722,7 +722,7 @@ inline void CommandBuffer::drawIndirectByteCount(const std::shared_ptr<Buffer>& 
     if (extensions.EXT_transform_feedback)
     {
         leanCmd.drawIndirectByteCount(1, 0, counterBuffer.get(), vertexStride, counterBufferOffset, counterOffset);
-        MAGMA_INCR(stats.drawIndirectCount);
+        MAGMA_INCR(stats.drawIndirectCount, 1);
         MAGMA_INUSE(counterBuffer);
     }
 }
@@ -734,7 +734,7 @@ inline void CommandBuffer::drawIndirectByteCountInstanced(uint32_t instanceCount
     if (extensions.EXT_transform_feedback)
     {
         leanCmd.drawIndirectByteCount(instanceCount, firstInstance, counterBuffer.get(), vertexStride, counterBufferOffset, counterOffset);
-        MAGMA_INCR(stats.drawIndirectCount);
+        MAGMA_INCR(stats.drawIndirectCount, 1);
         MAGMA_INUSE(counterBuffer);
     }
 }
