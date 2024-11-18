@@ -83,12 +83,14 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     return (VK_SUCCESS == result);
 }
 
-bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass, const std::shared_ptr<Framebuffer>& framebuffer,
-    bool occlusionQueryEnable /* false */, VkQueryControlFlags queryFlags /* 0 */, VkQueryPipelineStatisticFlags pipelineStatistics /* 0 */,
-    VkCommandBufferUsageFlags flags /* 0 */, const StructureChain& extendedInfo /* default */) noexcept
+bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass,
+    const std::shared_ptr<Framebuffer>& framebuffer, bool occlusionQueryEnable /* false */, VkQueryControlFlags queryFlags /* 0 */,
+    VkQueryPipelineStatisticFlags pipelineStatistics /* 0 */, VkCommandBufferUsageFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */) noexcept
 {
     MAGMA_ASSERT(state != State::Recording);
-    const VkResult result = leanCmd.beginInherited(renderPass.get(), subpass, framebuffer.get(), occlusionQueryEnable, queryFlags, pipelineStatistics, flags, extendedInfo);
+    const VkResult result = leanCmd.beginInherited(renderPass.get(), subpass, framebuffer.get(), occlusionQueryEnable,
+        queryFlags, pipelineStatistics, flags, extendedInfo);
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS == result)
     {
@@ -178,7 +180,8 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
         core::countof(dynamicOffsets), dynamicOffsets.begin());
 }
 
-void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<Buffer>>& vertexBuffers, std::initializer_list<VkDeviceSize> offsets /* empty */) noexcept
+void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<Buffer>>& vertexBuffers,
+    std::initializer_list<VkDeviceSize> offsets /* empty */) noexcept
 {
     MAGMA_STACK_ARRAY(const Buffer*, unmanagedVertexBuffers, vertexBuffers.size());
     for (auto const& buffer: vertexBuffers)
@@ -218,7 +221,8 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const s
     copyImage(srcImage, dstImage, region);
 }
 
-void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, uint32_t srcMipLevel, uint32_t dstMipLevel, VkFilter filter) const noexcept
+void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage,
+    uint32_t srcMipLevel, uint32_t dstMipLevel, VkFilter filter) const noexcept
 {
     VkExtent3D srcExtent = srcImage->calculateMipExtent(srcMipLevel);
     VkExtent3D dstExtent = dstImage->calculateMipExtent(dstMipLevel);
@@ -260,8 +264,7 @@ void CommandBuffer::waitEvents(const std::initializer_list<std::shared_ptr<Event
 }
 
 void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
-    const std::vector<VkMemoryBarrier>& memoryBarriers,
-    const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers,
+    const std::vector<VkMemoryBarrier>& memoryBarriers, const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers,
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
     MAGMA_STACK_ARRAY(const Event*, unmanagedEvents, events.size());
@@ -319,7 +322,8 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
 }
 
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::initializer_list<ClearValue>& clearValues /* empty */, const VkRect2D& renderArea_ /* {0, 0, 0, 0} */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+    const std::initializer_list<ClearValue>& clearValues /* empty */, const VkRect2D& renderArea_ /* {0, 0, 0, 0} */,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     MAGMA_ASSERT(!renderingPass);
     VkRect2D renderArea;
@@ -374,7 +378,8 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, VkCommandBufferUsageFl
 }
 
 void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+    const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     MAGMA_ASSERT(!renderingPass);
     MAGMA_ASSERT(extensions.KHR_device_group);
@@ -518,9 +523,10 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
 }
 
 #ifdef VK_KHR_device_group
-void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
-    const std::vector<std::shared_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue>& clearValues /* empty */,
-    const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::shared_ptr<RenderPass>& renderPass,
+    const std::shared_ptr<ImagelessFramebuffer>& framebuffer, const std::vector<std::shared_ptr<ImageView>>& attachments,
+    const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */,
+    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     MAGMA_ASSERT(!renderingPass);
     MAGMA_ASSERT(extensions.KHR_imageless_framebuffer && extensions.KHR_device_group);
@@ -548,8 +554,8 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::s
 #endif // VK_KHR_imageless_framebuffer
 
 #ifdef VK_KHR_acceleration_structure
-void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
-    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
+    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -568,8 +574,9 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevel
     }
 }
 
-void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
-    const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
+    const std::list<AccelerationStructureGeometry>& geometries, const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
+    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -584,8 +591,8 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevel
     }
 }
 
-void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
-    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
+    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -604,8 +611,9 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
     }
 }
 
-void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
-    const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
+    const std::list<AccelerationStructureGeometry>& geometries, const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
+    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -620,8 +628,9 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
     }
 }
 
-void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
-    const std::shared_ptr<Buffer>& indirectBuildRanges, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
+    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& indirectBuildRanges,
+    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -634,7 +643,8 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
             geometryPointers.put(&geometry);
             maxPrimitiveCounts.put(geometry.primitiveCount);
         }
-        leanCmd.updateAccelerationStructureIndirect(accelerationStructure.get(), geometryCount, geometryPointers, maxPrimitiveCounts, indirectBuildRanges.get(), scratchBuffer.get());
+        leanCmd.updateAccelerationStructureIndirect(accelerationStructure.get(), geometryCount, geometryPointers, maxPrimitiveCounts,
+            indirectBuildRanges.get(), scratchBuffer.get());
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(indirectBuildRanges);
         MAGMA_INUSE(scratchBuffer);
