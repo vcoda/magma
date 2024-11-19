@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "graphicsPipelineCache.h"
 #include "../objects/graphicsPipeline.h"
 #include "../objects/pipelineLayout.h"
-#include "../objects/pipelineCache.h"
 #include "../objects/pipelineLibrary.h"
 #include "../objects/renderPass.h"
 #include "../states/vertexInputState.h"

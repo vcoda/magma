@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "base.h"
+#include "../objects/pipelineCache.h"
 #include "../shaders/pipelineShaderStage.h"
 #include "../misc/structureChain.h"
 
