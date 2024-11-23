@@ -26,7 +26,6 @@ namespace magma
     class Device;
     class GraphicsPipeline;
     class PipelineLayout;
-    class PipelineCache;
 #ifdef VK_KHR_pipeline_library
     class PipelineLibrary;
 #endif
