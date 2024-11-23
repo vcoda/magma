@@ -187,4 +187,13 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
     },
     image(image)
 {}
+
+void ImageMemoryBarrier::updateImageLayout() const noexcept
+{
+    uint32_t levelCount = subresourceRange.levelCount;
+    if (VK_REMAINING_MIP_LEVELS == levelCount)
+        levelCount = image->getMipLevels() - subresourceRange.baseMipLevel;
+    for (uint32_t level = 0; level < levelCount; ++level)
+        image->setLayout(subresourceRange.baseMipLevel + level, newLayout);
+}
 } // namespace magma

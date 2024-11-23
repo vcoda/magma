@@ -396,7 +396,6 @@ namespace magma
         VkDevice getNativeDevice() const noexcept { return leanCmd.device; }
         void queueSubmissionFinished() noexcept;
         void executionFinished() noexcept;
-        void changeImageLayout(const ImageMemoryBarrier& barrier) const noexcept;
         void pushDebugMarker(const char* /* name */, uint32_t /* color */) noexcept MAGMA_NOOP;
         void popDebugMarker() noexcept MAGMA_NOOP;
         void resetInternalState() noexcept;

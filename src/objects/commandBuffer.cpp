@@ -255,7 +255,7 @@ void CommandBuffer::waitEvents(const std::initializer_list<std::shared_ptr<Event
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
-        changeImageLayout(barrier);
+        barrier.updateImageLayout();
     }
     leanCmd.waitEvents(unmanagedEvents.count(), unmanagedEvents, srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.begin(),
@@ -277,7 +277,7 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
-        changeImageLayout(barrier);
+        barrier.updateImageLayout();
     }
     leanCmd.waitEvents(unmanagedEvents.count(), unmanagedEvents, srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.data(),
@@ -295,7 +295,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
-        changeImageLayout(barrier);
+        barrier.updateImageLayout();
     }
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.begin(),
@@ -313,7 +313,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
-        changeImageLayout(barrier);
+        barrier.updateImageLayout();
     }
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.data(),

@@ -292,7 +292,7 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
 inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, barrier);
-    changeImageLayout(barrier);
+    barrier.updateImageLayout();
     MAGMA_INUSE(event);
 }
 
@@ -326,7 +326,7 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
-        changeImageLayout(barrier);
+        barrier.updateImageLayout();
     }
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, imageMemoryBarriers.count(), imageMemoryBarriers);
     MAGMA_INUSE(event);
@@ -338,7 +338,7 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
-        changeImageLayout(barrier);
+        barrier.updateImageLayout();
     }
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, imageMemoryBarriers.count(), imageMemoryBarriers);
     MAGMA_INUSE(event);
@@ -362,7 +362,7 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier, VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, barrier, dependencyFlags);
-    changeImageLayout(barrier);
+    barrier.updateImageLayout();
 }
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkMemoryBarrier>& memoryBarriers, VkDependencyFlags dependencyFlags /* 0 */) noexcept
@@ -391,7 +391,7 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
-        changeImageLayout(barrier);
+        barrier.updateImageLayout();
     }
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
 }
@@ -402,7 +402,7 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
-        changeImageLayout(barrier);
+        barrier.updateImageLayout();
     }
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
 }
@@ -1031,14 +1031,5 @@ inline void CommandBuffer::executionFinished() noexcept
     {
         state = State::Executable;
     }
-}
-
-inline void CommandBuffer::changeImageLayout(const ImageMemoryBarrier& barrier) const noexcept
-{
-    uint32_t levelCount = barrier.subresourceRange.levelCount;
-    if (VK_REMAINING_MIP_LEVELS == levelCount)
-        levelCount = barrier.image->getMipLevels() - barrier.subresourceRange.baseMipLevel;
-    for (uint32_t i = 0; i < levelCount; ++i)
-        barrier.image->setLayout(barrier.subresourceRange.baseMipLevel + i, barrier.newLayout);
 }
 } // namespace magma
