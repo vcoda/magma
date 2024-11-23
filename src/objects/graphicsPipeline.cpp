@@ -34,7 +34,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
-#include "../helpers/stackArray.h"
 #include "../helpers/streamInsertOperators.h"
 
 std::ostream& operator<<(std::ostream&, const VkPipelineDynamicStateCreateInfo&);
@@ -109,7 +108,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     pipelineInfo.flags = flags;
     if (!basePipeline.expired())
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stageCount = core::countof(dereferencedStages);
+    pipelineInfo.stageCount = dereferencedStages.count();
     pipelineInfo.pStages = dereferencedStages;
     pipelineInfo.pVertexInputState = &vertexInputState;
     pipelineInfo.pInputAssemblyState = &inputAssemblyState;

@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "renderPassMultiview.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"
 

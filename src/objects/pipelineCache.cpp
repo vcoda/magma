@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineCache.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -78,7 +77,7 @@ void PipelineCache::mergeCaches(const std::vector<std::shared_ptr<const Pipeline
     MAGMA_STACK_ARRAY(VkPipelineCache, dereferencedSrcCaches, srcCaches.size());
     for (auto const& cache: srcCaches)
         dereferencedSrcCaches.put(*cache);
-    const VkResult result = vkMergePipelineCaches(getNativeDevice(), handle, dereferencedSrcCaches.size(), dereferencedSrcCaches);
+    const VkResult result = vkMergePipelineCaches(getNativeDevice(), handle, dereferencedSrcCaches.count(), dereferencedSrcCaches);
     MAGMA_HANDLE_RESULT(result, "failed to merge pipeline caches");
 }
 } // namespace magma

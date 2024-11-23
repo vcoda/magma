@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipelineLayout.h"
 #include "queryPool.h"
 #include "../misc/extension.h"
-#include "../helpers/stackArray.h"
+
 
 namespace magma
 {

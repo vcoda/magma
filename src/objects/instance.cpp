@@ -23,7 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/application.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
-#include "../helpers/stackArray.h"
 #include "../core/refCountChecker.h"
 #include "../misc/extension.h"
 

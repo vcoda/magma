@@ -32,7 +32,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/deviceFeatures.h"
 #include "../misc/extension.h"
 #include "../misc/finish.h"
-#include "../helpers/stackArray.h"
 #include "../helpers/streamInsertOperators.h"
 #include "../helpers/stringifyFlags.h"
 #include "../exceptions/errorResult.h"

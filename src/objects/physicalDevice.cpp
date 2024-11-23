@@ -26,7 +26,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/compatibility.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
-#include "../helpers/stackArray.h"
 
 namespace magma
 {

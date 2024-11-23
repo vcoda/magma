@@ -23,7 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "device.h"
 #include "physicalDevice.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
 #include "../misc/featureQuery.h"
 #include "../misc/format.h"
 #include "../exceptions/errorResult.h"

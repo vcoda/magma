@@ -564,9 +564,6 @@
     <ClInclude Include="..\..\src\helpers\mapScoped.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\helpers\stackArray.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\helpers\uniformArray.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
@@ -902,6 +899,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\objects\leanCommandBuffer.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\stackArray.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

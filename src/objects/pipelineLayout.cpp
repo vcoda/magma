@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorSetLayout.h"
 #include "device.h"
 #include "../allocator/allocator.h"
-#include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/streamInsertOperators.h"
 #include "../helpers/stringifyFlags.h"
@@ -99,7 +98,7 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.pNext = nullptr;
     pipelineLayoutInfo.flags = flags;
-    pipelineLayoutInfo.setLayoutCount = dereferencedSetLayouts.size();
+    pipelineLayoutInfo.setLayoutCount = dereferencedSetLayouts.count();
     pipelineLayoutInfo.pSetLayouts = dereferencedSetLayouts;
     pipelineLayoutInfo.pushConstantRangeCount = core::countof(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();

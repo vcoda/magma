@@ -27,7 +27,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "swapchain.h"
 #include "../platform/d3dExternalSemaphore.h"
-#include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

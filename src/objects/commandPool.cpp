@@ -91,7 +91,7 @@ void CommandPool::freeCommandBuffers(std::vector<std::unique_ptr<CommandBuffer>>
         cmdBuffer->releaseObjectsInUse();
         cmdBuffer->getLean().handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in the destructor
     }
-    vkFreeCommandBuffers(getNativeDevice(), handle, commandBuffers.size(), commandBuffers);
+    vkFreeCommandBuffers(getNativeDevice(), handle, commandBuffers.count(), commandBuffers);
     cmdBuffers.clear();
 }
 

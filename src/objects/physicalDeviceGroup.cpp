@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "physicalDeviceGroup.h"
 #include "physicalDevice.h"
-#include "../helpers/stackArray.h"
 
 namespace magma
 {

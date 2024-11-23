@@ -27,7 +27,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflectionFactory.h"
 #include "../helpers/enumerationCast.h"
 #include "../helpers/streamInsertOperators.h"
-#include "../helpers/stackArray.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

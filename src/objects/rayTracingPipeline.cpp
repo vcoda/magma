@@ -29,7 +29,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/alignment.h"
-#include "../helpers/stackArray.h"
 
 namespace magma
 {
@@ -63,7 +62,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     pipelineInfo.flags = flags;
     if (!basePipeline.expired())
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stageCount = core::countof(dereferencedStages);
+    pipelineInfo.stageCount = dereferencedStages.count();
     pipelineInfo.pStages = dereferencedStages;
     pipelineInfo.groupCount = core::countof(shaderGroups);
     pipelineInfo.pGroups = shaderGroups.data();

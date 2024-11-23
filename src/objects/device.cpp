@@ -31,7 +31,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../raytracing/accelerationStructureHeader.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
-#include "../helpers/stackArray.h"
 #include "../misc/extension.h"
 
 namespace magma
@@ -188,7 +187,7 @@ bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noex
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (auto const& fence: fences)
         dereferencedFences.put(*fence);
-    const VkResult result = vkResetFences(handle, dereferencedFences.size(), dereferencedFences);
+    const VkResult result = vkResetFences(handle, dereferencedFences.count(), dereferencedFences);
     return (VK_SUCCESS == result);
 }
 
@@ -198,7 +197,7 @@ bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bo
     MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
     for (auto const& fence: fences)
         dereferencedFences.put(*fence);
-    const VkResult result = vkWaitForFences(handle, dereferencedFences.size(), dereferencedFences, MAGMA_BOOLEAN(waitAll), timeout);
+    const VkResult result = vkWaitForFences(handle, dereferencedFences.count(), dereferencedFences, MAGMA_BOOLEAN(waitAll), timeout);
     MAGMA_HANDLE_RESULT(result, "failed to wait for fence(s)");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
@@ -216,7 +215,7 @@ bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>
     waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO_KHR;
     waitInfo.pNext = nullptr;
     waitInfo.flags = waitAll ? 0 : VK_SEMAPHORE_WAIT_ANY_BIT_KHR;
-    waitInfo.semaphoreCount = dereferencedSemaphores.size();
+    waitInfo.semaphoreCount = dereferencedSemaphores.count();
     waitInfo.pSemaphores = dereferencedSemaphores;
     waitInfo.pValues = values.data();
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
@@ -388,7 +387,7 @@ std::vector<uint64_t> Device::getCalibratedTimestamps(const std::vector<VkTimeDo
     std::vector<uint64_t> timestamps(timeDomains.size(), 0ull);
     uint64_t deviation = 0ull;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetCalibratedTimestampsEXT, VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME);
-    vkGetCalibratedTimestampsEXT(handle, core::countof(calibratedTimestampInfos), calibratedTimestampInfos, timestamps.data(),
+    vkGetCalibratedTimestampsEXT(handle, calibratedTimestampInfos.count(), calibratedTimestampInfos, timestamps.data(),
         maxDeviation ? maxDeviation : &deviation);
     return timestamps;
 }

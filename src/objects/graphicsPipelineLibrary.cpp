@@ -32,7 +32,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
-#include "../helpers/stackArray.h"
 
 namespace magma
 {
@@ -93,7 +92,7 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
     graphicsPipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     graphicsPipelineInfo.pNext = &graphicsPipelineLibraryInfo;
     graphicsPipelineInfo.flags = flags | VK_PIPELINE_CREATE_LIBRARY_BIT_KHR;
-    graphicsPipelineInfo.stageCount = core::countof(dereferencedStages);
+    graphicsPipelineInfo.stageCount = dereferencedStages.count();
     graphicsPipelineInfo.pStages = dereferencedStages;
     graphicsPipelineInfo.pTessellationState = &tesselationState;
     graphicsPipelineInfo.pViewportState = &viewportState;
