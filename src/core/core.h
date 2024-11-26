@@ -37,7 +37,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define MAGMA_DEVICE_ADDRESS_ALIGNMENT 256
 
 #define MAGMA_MAX_STRING 4096
-#define MAGMA_MAX_STACK_ARRAY_SIZE 4096
 
 #define MAGMA_BAD_CODE 0xBAADC0DE
 
