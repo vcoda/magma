@@ -178,6 +178,7 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
     }
     leanCmd.bindDescriptorSets(pipeline->getBindPoint(), pipeline->getLayout().get(), firstSet, unmanagedDescriptorSets.count(), unmanagedDescriptorSets,
         core::countof(dynamicOffsets), dynamicOffsets.begin());
+    MAGMA_INCR(bindStats.bindDescriptorSetCount, 1);
 }
 
 void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<Buffer>>& vertexBuffers,
@@ -190,6 +191,7 @@ void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initiali
         MAGMA_INUSE(buffer);
     }
     leanCmd.bindVertexBuffers(firstBinding, unmanagedVertexBuffers.count(), unmanagedVertexBuffers, offsets.begin());
+    MAGMA_INCR(stats.bindVertexBufferCount, 1);
 }
 
 void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer,
@@ -301,6 +303,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
         core::countof(memoryBarriers), memoryBarriers.begin(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin(),
         imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
+    MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
@@ -319,6 +322,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
         core::countof(memoryBarriers), memoryBarriers.data(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data(),
         imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
+    MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
 void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
@@ -335,6 +339,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         renderArea.extent = framebuffer->getExtent();
     }
     leanCmd.beginRenderPass(renderPass.get(), framebuffer.get(), core::countof(clearValues), (const VkClearValue *)clearValues.begin(), renderArea, contents);
+    MAGMA_INCR(stats.renderPassCount, 1);
     MAGMA_INUSE(renderPass);
     MAGMA_INUSE(framebuffer);
     renderPass->begin(framebuffer->getAttachments());
@@ -388,6 +393,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::s
         leanCmd.beginDeviceGroupRenderPass(deviceMask, renderPass.get(), framebuffer.get(),
             core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()),
             core::countof(deviceRenderAreas), deviceRenderAreas.begin(), contents);
+        MAGMA_INCR(stats.renderPassCount, 1);
         MAGMA_INUSE(renderPass);
         MAGMA_INUSE(framebuffer);
         renderPass->begin(framebuffer->getAttachments());
@@ -406,6 +412,7 @@ void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buf
     if (extensions.EXT_conditional_rendering)
     {
         leanCmd.beginConditionalRendering(buffer.get(), offset, inverted);
+        MAGMA_INCR(stats.conditionalRenderingCount, 1);
         MAGMA_INUSE(buffer);
         conditionalRendering = VK_TRUE;
     }
@@ -442,6 +449,7 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
             MAGMA_INUSE(buffer);
         }
         leanCmd.bindTransformFeedbackBuffers(firstBinding, unmanagedTransformFeedbackBuffers.count(), unmanagedTransformFeedbackBuffers, offsets.begin(), sizes.begin());
+        MAGMA_INCR(stats.bindTransformFeedbackBufferCount, 1);
     }
 }
 
@@ -459,6 +467,7 @@ void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const st
             MAGMA_INUSE(buffer);
         }
         leanCmd.beginTransformFeedback(firstCounterBuffer, unmanagedCounterBuffers.count(), unmanagedCounterBuffers, counterBufferOffsets.begin());
+        MAGMA_INCR(stats.transformFeedbackCount, 1);
         transformFeedback = VK_TRUE;
     }
 }
@@ -512,6 +521,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         }
         leanCmd.beginRenderPass(renderPass.get(), framebuffer.get(), unmanagedAttachments.count(), unmanagedAttachments,
             core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()), renderArea, contents);
+        MAGMA_INCR(stats.renderPassCount, 1);
         MAGMA_INUSE(renderPass);
         MAGMA_INUSE(framebuffer);
         renderPass->begin(framebuffer->getAttachments());
@@ -541,6 +551,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::s
         leanCmd.beginDeviceGroupRenderPass(deviceMask, renderPass.get(), framebuffer.get(), unmanagedAttachments.count(), unmanagedAttachments,
             core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()),
             core::countof(deviceRenderAreas), deviceRenderAreas.begin(), contents);
+        MAGMA_INCR(stats.renderPassCount, 1);
         MAGMA_INUSE(renderPass);
         MAGMA_INUSE(framebuffer);
         renderPass->begin(framebuffer->getAttachments());
@@ -655,7 +666,7 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
 void CommandBuffer::resetInternalState() noexcept
 {
     state = State::Initial;
-    stats = DrawStatistics();
+    stats = Statistics();
     renderingPass = VK_FALSE;
     nonIndexedQuery = VK_FALSE;
     indexedQuery = VK_FALSE;

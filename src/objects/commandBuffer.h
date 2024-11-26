@@ -320,16 +320,29 @@ namespace magma
             const std::initializer_list<VkDeviceSize>& counterBufferOffsets = {}) noexcept;
     #endif // VK_EXT_transform_feedback
 
-        struct DrawStatistics
+        struct Statistics
         {
-            uint32_t drawCount = 0;
-            uint32_t drawIndexedCount = 0;
-            uint32_t drawIndirectCount = 0;
-            uint32_t drawIndexedIndirectCount = 0;
-            uint32_t dispatchCount = 0;
-            uint32_t dispatchIndirectCount = 0;
-            uint32_t drawMeshTasksCount = 0;
-            uint32_t drawMeshTasksIndirectCount = 0;
+            uint16_t bindPipelineCount = 0;
+            uint16_t bindDescriptorSetCount = 0;
+            uint16_t pushDescriptorSetCount = 0;
+            uint16_t bindIndexBufferCount = 0;
+            uint16_t bindVertexBufferCount = 0;
+            uint16_t bindTransformFeedbackBufferCount = 0;
+            uint16_t pipelineBarrierCount = 0;
+            uint16_t queryCount = 0;
+            uint16_t indexedQueryCount = 0;
+            uint16_t pushConstantCount = 0;
+            uint16_t renderPassCount = 0;
+            uint16_t conditionalRenderingCount = 0;
+            uint16_t transformFeedbackCount = 0;
+            uint16_t drawCount = 0;
+            uint16_t drawIndexedCount = 0;
+            uint16_t drawIndirectCount = 0;
+            uint16_t drawIndexedIndirectCount = 0;
+            uint16_t dispatchCount = 0;
+            uint16_t dispatchIndirectCount = 0;
+            uint16_t drawMeshTasksCount = 0;
+            uint16_t drawMeshTasksIndirectCount = 0;
         };
 
         LeanCommandBuffer& getLean() noexcept { return leanCmd; }
@@ -339,7 +352,7 @@ namespace magma
         const std::unique_ptr<Fence>& getFence() const noexcept { return fence; }
         VkCommandBufferUsageFlags getUsage() const noexcept { return usage; }
         State getState() const noexcept { return state; }
-        const DrawStatistics& getDrawStats() const noexcept { return stats; }
+        const Statistics& getStats() const noexcept { return stats; }
         bool allowsReset() const noexcept { return VK_TRUE == resetCommandBuffer; }
         bool insideRenderPass() const noexcept { return renderingPass; }
         bool insideQuery() const noexcept { return nonIndexedQuery; }
@@ -408,7 +421,7 @@ namespace magma
         std::unique_ptr<Fence> fence;
         VkCommandBufferUsageFlags usage;
         State state;
-        mutable DrawStatistics stats;
+        mutable Statistics stats;
         const VkBool32 resetCommandBuffer: 1;
         VkBool32 renderingPass: 1;
         VkBool32 nonIndexedQuery: 1;
