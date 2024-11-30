@@ -38,6 +38,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_MAX_STRING 4096
 
+#define MAGMA_MAX_BUFFER_MARKERS 1024
+
 #define MAGMA_BAD_CODE 0xBAADC0DE
 
 #define MAGMA_EXTENSION_PREFIX "VK_"

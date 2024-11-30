@@ -120,20 +120,20 @@ void CommandBuffer::insertDebugLabel(const char *name, float r, float g, float b
 // https://asawicki.info/news_1677_debugging_vulkan_driver_crash_-_equivalent_of_nvidia_aftermath.html
 bool CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, uint32_t marker) const noexcept
 {
+    constexpr VkDeviceSize size = MAGMA_MAX_BUFFER_MARKERS * sizeof(uint32_t);
     if (!markerBuffer) try
     {   /* Implementations may only support a limited number of
            pipelined marker write operations in flight at a given time,
            thus excessive number of marker write operations may degrade
            command execution performance. */
-        constexpr VkDeviceSize MaxBufferMarkers = 1024;
-        markerBuffer = std::make_unique<DynamicStorageBuffer>(device, MaxBufferMarkers * sizeof(uint32_t), false);
+        markerBuffer = std::make_unique<DynamicStorageBuffer>(device, size, false);
     }
     catch (...)
     {
         return false;
     }
     uint64_t offset = markerBuffer->getPrivateData();
-    if (offset >= markerBuffer->getSize())
+    if (offset >= size)
         return false;
 #ifdef VK_AMD_buffer_marker
     if (extensions.AMD_buffer_marker)
