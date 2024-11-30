@@ -100,7 +100,6 @@ src\extensions\layers.cpp ^
 src\helpers\executeCommandBuffer.cpp ^
 src\helpers\executeDeferredOperation.cpp ^
 src\helpers\layoutTransition.cpp ^
-src\helpers\readbackBufferMarkers.cpp ^
 src\helpers\streamInsertOperators.cpp ^
 src\helpers\stringifyFlags.cpp ^
 src\misc\application.cpp ^
@@ -299,7 +298,6 @@ layers.obj ^
 executeCommandBuffer.obj ^
 executeDeferredOperation.obj ^
 layoutTransition.obj ^
-readbackBufferMarkers.obj ^
 streamInsertOperators.obj ^
 stringifyFlags.obj ^
 application.obj ^

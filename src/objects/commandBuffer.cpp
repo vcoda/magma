@@ -679,7 +679,8 @@ void CommandBuffer::resetInternalState() noexcept
     renderPassState.renderPass.reset();
     renderPassState.framebuffer.reset();
     renderPassState.attachments.clear();
-    markerOffset = 0ull;
+    if (markerBuffer)
+        markerBuffer->setPrivateData(0ull);
 }
 
 #define MAGMA_DEVICE_EXTENSION_ENABLED(name) name(device->extensionEnabled(MAGMA_EXTENSION_PREFIX #name))

@@ -118,31 +118,39 @@ void CommandBuffer::insertDebugLabel(const char *name, float r, float g, float b
 #endif // VK_EXT_debug_utils
 
 // https://asawicki.info/news_1677_debugging_vulkan_driver_crash_-_equivalent_of_nvidia_aftermath.html
-void CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, uint32_t marker)
+bool CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, uint32_t marker) const noexcept
 {
-    constexpr VkDeviceSize maxBufferMarkers = 1024;
-    if (!markerBuffer)
+    if (!markerBuffer) try
     {   /* Implementations may only support a limited number of
            pipelined marker write operations in flight at a given time,
            thus excessive number of marker write operations may degrade
            command execution performance. */
-        markerBuffer = std::make_unique<StorageBuffer>(device, sizeof(uint32_t) * maxBufferMarkers);
+        constexpr VkDeviceSize MaxBufferMarkers = 1024;
+        markerBuffer = std::make_unique<DynamicStorageBuffer>(device, MaxBufferMarkers * sizeof(uint32_t), false);
     }
-    MAGMA_ASSERT(markerOffset <= markerBuffer->getSize() - sizeof(uint32_t));
+    catch (...)
+    {
+        return false;
+    }
+    uint64_t offset = markerBuffer->getPrivateData();
+    if (offset >= markerBuffer->getSize())
+        return false;
 #ifdef VK_AMD_buffer_marker
     if (extensions.AMD_buffer_marker)
     {
         MAGMA_DEVICE_EXTENSION(vkCmdWriteBufferMarkerAMD);
-        vkCmdWriteBufferMarkerAMD(leanCmd, pipelineStage, *markerBuffer, markerOffset, marker);
+        vkCmdWriteBufferMarkerAMD(leanCmd, pipelineStage, *markerBuffer, offset, marker);
     }
     else
 #endif // VK_AMD_buffer_marker
     {
         MAGMA_UNUSED(pipelineStage); // VkPipelineStageFlagBits used only with VK_AMD_buffer_marker extension
         MAGMA_ASSERT(!renderingPass); // vkCmdFillBuffer must be called outside render pass
-        vkCmdFillBuffer(leanCmd, *markerBuffer, markerOffset, sizeof(uint32_t), marker);
+        vkCmdFillBuffer(leanCmd, *markerBuffer, offset, sizeof(uint32_t), marker);
     }
-    markerOffset += sizeof(uint32_t);
+    offset += sizeof(uint32_t);
+    markerBuffer->setPrivateData(offset);
+    return true;
 }
 
 #ifdef VK_NV_device_diagnostic_checkpoints

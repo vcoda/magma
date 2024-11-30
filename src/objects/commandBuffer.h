@@ -282,9 +282,8 @@ namespace magma
         void endDebugLabel() noexcept MAGMA_NOOP;
         void insertDebugLabel(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP;
     #endif // VK_EXT_debug_utils
-        void writeBufferMarker(VkPipelineStageFlagBits /* pipelineStage */, uint32_t /* marker */) MAGMA_NOOP;
+        bool writeBufferMarker(VkPipelineStageFlagBits /* pipelineStage */, uint32_t /* marker */) const noexcept MAGMA_NOOP;
         const std::unique_ptr<Buffer>& getMarkerBuffer() const noexcept { return markerBuffer; }
-        VkDeviceSize getMarkerOffset() const noexcept { return markerOffset; }
     #ifdef VK_NV_device_diagnostic_checkpoints
         void setCheckpoint(const char* /* name */) noexcept MAGMA_NOOP;
     #endif
@@ -433,8 +432,7 @@ namespace magma
         VkBool32 annotatedConditionalRendering: 1;
         VkBool32 annotatedTransformFeedback: 1;
         RenderPassState renderPassState;
-        std::unique_ptr<Buffer> markerBuffer;
-        std::atomic<VkDeviceSize> markerOffset;
+        mutable std::unique_ptr<Buffer> markerBuffer;
     #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
         // User may optionally compile library with this define to allow
         // deferred release of resources bound to command buffer.

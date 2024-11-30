@@ -242,7 +242,6 @@
     <ClInclude Include="..\..\src\helpers\layoutTransition.h" />
     <ClInclude Include="..\..\src\helpers\mapScoped.h" />
     <ClInclude Include="..\..\src\helpers\mapTyped.h" />
-    <ClInclude Include="..\..\src\helpers\readbackBufferMarkers.h" />
     <ClInclude Include="..\..\src\helpers\streamInsertOperators.h" />
     <ClInclude Include="..\..\src\helpers\stringifyFlags.h" />
     <ClInclude Include="..\..\src\helpers\uniformArray.h" />
@@ -472,7 +471,6 @@
     <ClCompile Include="..\..\src\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\src\helpers\executeDeferredOperation.cpp" />
     <ClCompile Include="..\..\src\helpers\layoutTransition.cpp" />
-    <ClCompile Include="..\..\src\helpers\readbackBufferMarkers.cpp" />
     <ClCompile Include="..\..\src\helpers\streamInsertOperators.cpp" />
     <ClCompile Include="..\..\src\helpers\stringifyFlags.cpp" />
     <ClCompile Include="..\..\src\magma.cpp" />
