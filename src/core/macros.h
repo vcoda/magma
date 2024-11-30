@@ -91,6 +91,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_ASSERT_FOR_EACH(arr, it, expr)
 #endif // MAGMA_DEBUG
 
+#if defined(MAGMA_DIAGNOSTIC) && defined(MAGMA_DEBUG)
+    #define MAGMA_CHECKPOINT(stage) magma::CommandBuffer::insertDebugCheckpoint(__FUNCTION__, (VkPipelineStageFlagBits)stage)
+#else
+    #define MAGMA_CHECKPOINT(stage)
+#endif
+
 #ifdef MAGMA_STATS
     #define MAGMA_INCR(cnt, n) cnt += n
 #else

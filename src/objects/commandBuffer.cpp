@@ -165,6 +165,7 @@ void CommandBuffer::setViewport(float x, float y, float width, float height,
     viewport.minDepth = minDepth;
     viewport.maxDepth = maxDepth;
     leanCmd.setViewport(viewport);
+    MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
 }
 
 void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
@@ -178,6 +179,7 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
     }
     leanCmd.bindDescriptorSets(pipeline->getBindPoint(), pipeline->getLayout().get(), firstSet, unmanagedDescriptorSets.count(), unmanagedDescriptorSets,
         core::countof(dynamicOffsets), dynamicOffsets.begin());
+    MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     MAGMA_INCR(bindStats.bindDescriptorSetCount, 1);
 }
 
@@ -191,6 +193,7 @@ void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initiali
         MAGMA_INUSE(buffer);
     }
     leanCmd.bindVertexBuffers(firstBinding, unmanagedVertexBuffers.count(), unmanagedVertexBuffers, offsets.begin());
+    MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
     MAGMA_INCR(stats.bindVertexBufferCount, 1);
 }
 
@@ -208,6 +211,7 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const s
         region.size = dstBuffer->getSize();
     }
     leanCmd.copyBuffer(srcBuffer.get(), dstBuffer.get(), region);
+    MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
     MAGMA_INUSE(srcBuffer);
     MAGMA_INUSE(dstBuffer);
 }
@@ -263,6 +267,7 @@ void CommandBuffer::waitEvents(const std::initializer_list<std::shared_ptr<Event
         core::countof(memoryBarriers), memoryBarriers.begin(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin(),
         imageMemoryBarriers.count(), imageMemoryBarriers);
+    MAGMA_CHECKPOINT(dstStageMask);
 }
 
 void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
@@ -285,6 +290,7 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
         core::countof(memoryBarriers), memoryBarriers.data(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data(),
         imageMemoryBarriers.count(), imageMemoryBarriers);
+    MAGMA_CHECKPOINT(dstStageMask);
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
@@ -303,6 +309,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
         core::countof(memoryBarriers), memoryBarriers.begin(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin(),
         imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
+    MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
@@ -322,6 +329,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
         core::countof(memoryBarriers), memoryBarriers.data(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data(),
         imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
+    MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
@@ -339,13 +347,14 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         renderArea.extent = framebuffer->getExtent();
     }
     leanCmd.beginRenderPass(renderPass.get(), framebuffer.get(), core::countof(clearValues), (const VkClearValue *)clearValues.begin(), renderArea, contents);
+    renderingPass = VK_TRUE;
+    MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     MAGMA_INCR(stats.renderPassCount, 1);
     MAGMA_INUSE(renderPass);
     MAGMA_INUSE(framebuffer);
     renderPass->begin(framebuffer->getAttachments());
     renderPassState.renderPass = renderPass;
     renderPassState.framebuffer = framebuffer;
-    renderingPass = VK_TRUE;
 }
 
 void CommandBuffer::endRenderPass() noexcept
@@ -357,6 +366,8 @@ void CommandBuffer::endRenderPass() noexcept
         annotatedRenderPass = VK_FALSE;
     }
     leanCmd.endRenderPass();
+    renderingPass = VK_FALSE;
+    MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     if (!renderPassState.attachments.empty())
         renderPassState.renderPass->end(renderPassState.attachments);
     else if (renderPassState.framebuffer)
@@ -364,7 +375,6 @@ void CommandBuffer::endRenderPass() noexcept
     renderPassState.renderPass.reset();
     renderPassState.framebuffer.reset();
     renderPassState.attachments.clear();
-    renderingPass = VK_FALSE;
 }
 
 #ifdef VK_KHR_device_group
@@ -376,7 +386,10 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, VkCommandBufferUsageFl
         const VkResult result = leanCmd.beginDeviceGroup(deviceMask, flags);
         MAGMA_ASSERT(VK_SUCCESS == result);
         if (VK_SUCCESS == result)
+        {
+            MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
             state = State::Recording;
+        }
         return (VK_SUCCESS == result);
     }
     return false;
@@ -393,6 +406,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::s
         leanCmd.beginDeviceGroupRenderPass(deviceMask, renderPass.get(), framebuffer.get(),
             core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()),
             core::countof(deviceRenderAreas), deviceRenderAreas.begin(), contents);
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
         MAGMA_INCR(stats.renderPassCount, 1);
         MAGMA_INUSE(renderPass);
         MAGMA_INUSE(framebuffer);
@@ -412,9 +426,10 @@ void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buf
     if (extensions.EXT_conditional_rendering)
     {
         leanCmd.beginConditionalRendering(buffer.get(), offset, inverted);
+        conditionalRendering = VK_TRUE;
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_CONDITIONAL_RENDERING_BIT_EXT);
         MAGMA_INCR(stats.conditionalRenderingCount, 1);
         MAGMA_INUSE(buffer);
-        conditionalRendering = VK_TRUE;
     }
 }
 
@@ -431,6 +446,7 @@ void CommandBuffer::endConditionalRendering() noexcept
         }
         leanCmd.endConditionalRendering();
         conditionalRendering = VK_FALSE;
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_CONDITIONAL_RENDERING_BIT_EXT);
     }
 }
 #endif // VK_EXT_conditional_rendering
@@ -449,6 +465,7 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
             MAGMA_INUSE(buffer);
         }
         leanCmd.bindTransformFeedbackBuffers(firstBinding, unmanagedTransformFeedbackBuffers.count(), unmanagedTransformFeedbackBuffers, offsets.begin(), sizes.begin());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT);
         MAGMA_INCR(stats.bindTransformFeedbackBufferCount, 1);
     }
 }
@@ -467,8 +484,9 @@ void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const st
             MAGMA_INUSE(buffer);
         }
         leanCmd.beginTransformFeedback(firstCounterBuffer, unmanagedCounterBuffers.count(), unmanagedCounterBuffers, counterBufferOffsets.begin());
-        MAGMA_INCR(stats.transformFeedbackCount, 1);
         transformFeedback = VK_TRUE;
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT);
+        MAGMA_INCR(stats.transformFeedbackCount, 1);
     }
 }
 
@@ -492,6 +510,7 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
         }
         leanCmd.endTransformFeedback(firstCounterBuffer, unmanagedCounterBuffers.count(), unmanagedCounterBuffers, counterBufferOffsets.begin());
         transformFeedback = VK_FALSE;
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT);
     }
 }
 #endif // VK_EXT_transform_feedback
@@ -521,6 +540,8 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         }
         leanCmd.beginRenderPass(renderPass.get(), framebuffer.get(), unmanagedAttachments.count(), unmanagedAttachments,
             core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()), renderArea, contents);
+        renderingPass = VK_TRUE;
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
         MAGMA_INCR(stats.renderPassCount, 1);
         MAGMA_INUSE(renderPass);
         MAGMA_INUSE(framebuffer);
@@ -528,7 +549,6 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         renderPassState.renderPass = renderPass;
         renderPassState.framebuffer = framebuffer;
         renderPassState.attachments = attachments;
-        renderingPass = VK_TRUE;
     }
 }
 
@@ -551,6 +571,8 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::s
         leanCmd.beginDeviceGroupRenderPass(deviceMask, renderPass.get(), framebuffer.get(), unmanagedAttachments.count(), unmanagedAttachments,
             core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()),
             core::countof(deviceRenderAreas), deviceRenderAreas.begin(), contents);
+        renderingPass = VK_TRUE;
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
         MAGMA_INCR(stats.renderPassCount, 1);
         MAGMA_INUSE(renderPass);
         MAGMA_INUSE(framebuffer);
@@ -558,7 +580,6 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::s
         renderPassState.renderPass = renderPass;
         renderPassState.framebuffer = framebuffer;
         renderPassState.attachments = attachments;
-        renderingPass = VK_TRUE;
     }
 }
 #endif // VK_KHR_device_group
@@ -580,6 +601,7 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevel
             buildRanges.put({geometry.primitiveCount});
         }
         leanCmd.buildAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges, scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
     }
@@ -597,6 +619,7 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevel
         for (auto const& geometry: geometries)
             geometryPointers.put(&geometry);
         leanCmd.buildAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges.data(), scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
     }
@@ -617,6 +640,7 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
             buildRanges.put({geometry.primitiveCount});
         }
         leanCmd.updateAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges, scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
     }
@@ -634,6 +658,7 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
         for (auto const& geometry: geometries)
             geometryPointers.put(&geometry);
         leanCmd.updateAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges.data(), scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(scratchBuffer);
     }
@@ -656,6 +681,7 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
         }
         leanCmd.updateAccelerationStructureIndirect(accelerationStructure.get(), geometryCount, geometryPointers, maxPrimitiveCounts,
             indirectBuildRanges.get(), scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
         MAGMA_INUSE(accelerationStructure);
         MAGMA_INUSE(indirectBuildRanges);
         MAGMA_INUSE(scratchBuffer);
