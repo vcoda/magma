@@ -495,7 +495,10 @@
     <ClCompile Include="..\..\src\objects\buffer.cpp" />
     <ClCompile Include="..\..\src\objects\bufferView.cpp" />
     <ClCompile Include="..\..\src\objects\commandBuffer.cpp" />
-    <ClCompile Include="..\..\src\objects\commandBufferDebug.cpp" />
+    <ClCompile Include="..\..\src\objects\commandBufferDebug.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\src\objects\commandPool.cpp" />
     <ClCompile Include="..\..\src\objects\computePipeline.cpp" />
     <ClCompile Include="..\..\src\objects\computePipelineBatch.cpp" />
