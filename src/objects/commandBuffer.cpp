@@ -681,6 +681,7 @@ void CommandBuffer::resetInternalState() noexcept
     renderPassState.attachments.clear();
     if (markerBuffer)
         markerBuffer->setPrivateData(0ull);
+    checkpoints.clear();
 }
 
 #define MAGMA_DEVICE_EXTENSION_ENABLED(name) name(device->extensionEnabled(MAGMA_EXTENSION_PREFIX #name))

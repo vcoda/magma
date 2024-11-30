@@ -282,10 +282,11 @@ namespace magma
         void endDebugLabel() noexcept MAGMA_NOOP;
         void insertDebugLabel(const char* /* name */, float /* r */, float /* g */, float /* b */, float /* a */ = 1.f) noexcept MAGMA_NOOP;
     #endif // VK_EXT_debug_utils
-        bool writeBufferMarker(VkPipelineStageFlagBits /* pipelineStage */, uint32_t /* marker */) const noexcept MAGMA_NOOP;
-        const std::unique_ptr<Buffer>& getMarkerBuffer() const noexcept { return markerBuffer; }
+    #ifdef VK_AMD_buffer_marker
+        void writeBufferMarker(VkPipelineStageFlagBits /* pipelineStage */, const std::unique_ptr<Buffer>& /* dstBuffer */, VkDeviceSize /* dstOffset */, uint32_t /* marker */) const noexcept MAGMA_NOOP;
+    #endif
     #ifdef VK_NV_device_diagnostic_checkpoints
-        void setCheckpoint(const char* /* name */) noexcept MAGMA_NOOP;
+        void setCheckpoint(const char* /* name */) const noexcept MAGMA_NOOP;
     #endif
 
         bool beginAnnotated(const char *name, uint32_t color, VkCommandBufferUsageFlags flags = 0) noexcept;
@@ -352,6 +353,7 @@ namespace magma
         VkCommandBufferUsageFlags getUsage() const noexcept { return usage; }
         State getState() const noexcept { return state; }
         const Statistics& getStats() const noexcept { return stats; }
+        const std::unique_ptr<Buffer>& getMarkerBuffer() const noexcept { return markerBuffer; }
         bool allowsReset() const noexcept { return VK_TRUE == resetCommandBuffer; }
         bool insideRenderPass() const noexcept { return renderingPass; }
         bool insideQuery() const noexcept { return nonIndexedQuery; }
@@ -410,6 +412,7 @@ namespace magma
         void executionFinished() noexcept;
         void pushDebugMarker(const char* /* name */, uint32_t /* color */) noexcept MAGMA_NOOP;
         void popDebugMarker() noexcept MAGMA_NOOP;
+        void insertDebugCheckpoint(const char *command, VkPipelineStageFlagBits pipelineStage) const noexcept;
         void resetInternalState() noexcept;
 
         const VkCommandBufferLevel level;
@@ -433,6 +436,7 @@ namespace magma
         VkBool32 annotatedTransformFeedback: 1;
         RenderPassState renderPassState;
         mutable std::unique_ptr<Buffer> markerBuffer;
+        mutable std::vector<const char *> checkpoints;
     #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
         // User may optionally compile library with this define to allow
         // deferred release of resources bound to command buffer.

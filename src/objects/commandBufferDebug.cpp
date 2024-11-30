@@ -117,44 +117,19 @@ void CommandBuffer::insertDebugLabel(const char *name, float r, float g, float b
 }
 #endif // VK_EXT_debug_utils
 
-// https://asawicki.info/news_1677_debugging_vulkan_driver_crash_-_equivalent_of_nvidia_aftermath.html
-bool CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, uint32_t marker) const noexcept
-{
-    constexpr VkDeviceSize size = MAGMA_MAX_BUFFER_MARKERS * sizeof(uint32_t);
-    if (!markerBuffer) try
-    {   /* Implementations may only support a limited number of
-           pipelined marker write operations in flight at a given time,
-           thus excessive number of marker write operations may degrade
-           command execution performance. */
-        markerBuffer = std::make_unique<DynamicStorageBuffer>(device, size, false);
-    }
-    catch (...)
-    {
-        return false;
-    }
-    uint64_t offset = markerBuffer->getPrivateData();
-    if (offset >= size)
-        return false;
 #ifdef VK_AMD_buffer_marker
+void CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, const std::unique_ptr<Buffer>& dstBuffer, VkDeviceSize dstOffset, uint32_t marker) const noexcept
+{
     if (extensions.AMD_buffer_marker)
     {
         MAGMA_DEVICE_EXTENSION(vkCmdWriteBufferMarkerAMD);
-        vkCmdWriteBufferMarkerAMD(leanCmd, pipelineStage, *markerBuffer, offset, marker);
+        vkCmdWriteBufferMarkerAMD(leanCmd, pipelineStage, dstBuffer->getHandle(), dstOffset, marker);
     }
-    else
-#endif // VK_AMD_buffer_marker
-    {
-        MAGMA_UNUSED(pipelineStage); // VkPipelineStageFlagBits used only with VK_AMD_buffer_marker extension
-        MAGMA_ASSERT(!renderingPass); // vkCmdFillBuffer must be called outside render pass
-        vkCmdFillBuffer(leanCmd, *markerBuffer, offset, sizeof(uint32_t), marker);
-    }
-    offset += sizeof(uint32_t);
-    markerBuffer->setPrivateData(offset);
-    return true;
 }
+#endif // VK_AMD_buffer_marker
 
 #ifdef VK_NV_device_diagnostic_checkpoints
-void CommandBuffer::setCheckpoint(const char *name) noexcept
+void CommandBuffer::setCheckpoint(const char *name) const noexcept
 {
     MAGMA_ASSERT(name);
     MAGMA_ASSERT(strlen(name) > 0);
@@ -190,6 +165,41 @@ void CommandBuffer::popDebugMarker() noexcept
     if (extensions.EXT_debug_marker)
         endDebugMarker();
 #endif // VK_EXT_debug_utils
+}
+
+// https://asawicki.info/news_1677_debugging_vulkan_driver_crash_-_equivalent_of_nvidia_aftermath.html
+void CommandBuffer::insertDebugCheckpoint(const char *command, VkPipelineStageFlagBits pipelineStage) const noexcept
+{
+    MAGMA_UNUSED(pipelineStage);
+    MAGMA_ASSERT(State::Recording == state);
+#ifdef VK_NV_device_diagnostic_checkpoints
+    if (extensions.NV_device_diagnostic_checkpoints)
+        return setCheckpoint(command);
+#endif // VK_NV_device_diagnostic_checkpoints
+    if (!markerBuffer) try
+    {   /* Implementations may only support a limited number of
+           pipelined marker write operations in flight at a given time,
+           thus excessive number of marker write operations may degrade
+           command execution performance. */
+        constexpr VkDeviceSize size = MAGMA_MAX_BUFFER_MARKERS * sizeof(uint32_t);
+        markerBuffer = std::make_unique<DynamicStorageBuffer>(device, size, false);
+    } catch (...) { return; }
+    uint64_t offset = markerBuffer->getPrivateData();
+    MAGMA_ASSERT(offset < markerBuffer->getSize());
+    const uint32_t marker = core::countof(checkpoints);
+#ifdef VK_AMD_buffer_marker
+    if (extensions.AMD_buffer_marker)
+        writeBufferMarker(pipelineStage, markerBuffer, offset, marker);
+    else
+#endif // VK_AMD_buffer_marker
+    if (!renderingPass)
+        leanCmd.fillBuffer(markerBuffer.get(), marker, sizeof(uint32_t), offset);
+    if (extensions.AMD_buffer_marker || !renderingPass)
+    {
+        offset += sizeof(uint32_t);
+        markerBuffer->setPrivateData(offset);
+        checkpoints.push_back(command);
+    }
 }
 } // namespace magma
 #endif // MAGMA_DEBUG
