@@ -35,12 +35,9 @@ void DeviceChild::setPrivateData(uint64_t data)
     if (!device)
         return;
 #ifdef VK_EXT_private_data
-    std::shared_ptr<PrivateDataSlot> dataSlot = device->getPrivateDataSlot();
+    const std::unique_ptr<PrivateDataSlot>& dataSlot = device->getPrivateDataSlot();
     if (dataSlot)
-    {
-        dataSlot->setPrivateData(this, data);
-        return;
-    }
+        return dataSlot->setPrivateData(this, data);
 #endif // VK_EXT_private_data
     std::lock_guard<std::mutex> lock(mtx);
     std::unordered_map<uint64_t, uint64_t>& dataMap = device->getPrivateDataMap();
@@ -53,7 +50,7 @@ uint64_t DeviceChild::getPrivateData() const noexcept
     if (!device)
         return 0ull;
 #ifdef VK_EXT_private_data
-    std::shared_ptr<PrivateDataSlot> dataSlot = device->getPrivateDataSlot();
+    const std::unique_ptr<PrivateDataSlot>& dataSlot = device->getPrivateDataSlot();
     if (dataSlot)
         return dataSlot->getPrivateData(this);
 #endif // VK_EXT_private_data

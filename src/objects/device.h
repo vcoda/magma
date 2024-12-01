@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "model/dispatchable.h"
+#include "privateDataSlot.h"
 #include "../misc/deviceQueueDescriptor.h"
 #include "../misc/deviceFaultInfo.h"
 #include "../misc/structureChain.h"
@@ -121,8 +122,8 @@ namespace magma
     #endif
         std::unordered_map<uint64_t, uint64_t>& getPrivateDataMap() noexcept { return privateData; }
     #ifdef VK_EXT_private_data
-        void setPrivateDataSlot(std::shared_ptr<PrivateDataSlot> privateDataSlot_) noexcept { privateDataSlot = privateDataSlot_; }
-        std::shared_ptr<PrivateDataSlot> getPrivateDataSlot() const noexcept { return privateDataSlot.lock(); }
+        void setPrivateDataSlot(std::unique_ptr<PrivateDataSlot> privateDataSlot_) noexcept { privateDataSlot = std::move(privateDataSlot_); }
+        const std::unique_ptr<PrivateDataSlot>& getPrivateDataSlot() const noexcept { return privateDataSlot; }
     #endif // VK_EXT_private_data
         template<class PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
@@ -156,7 +157,7 @@ namespace magma
         mutable std::map<std::pair<uint32_t, uint32_t>, std::shared_ptr<Queue>> queues;
         std::unordered_map<uint64_t, uint64_t> privateData;
     #ifdef VK_EXT_private_data
-        std::weak_ptr<PrivateDataSlot> privateDataSlot;
+        std::unique_ptr<PrivateDataSlot> privateDataSlot;
     #endif
         mutable std::unique_ptr<DeviceFeatures> features;
         mutable std::unique_ptr<FeatureQuery> featureQuery;
