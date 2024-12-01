@@ -130,8 +130,7 @@ void CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, con
 #ifdef VK_NV_device_diagnostic_checkpoints
 void CommandBuffer::setCheckpoint(const char *name) const noexcept
 {
-    MAGMA_ASSERT(name);
-    MAGMA_ASSERT(strlen(name) > 0);
+    MAGMA_ASSERT(strlen(name));
     if (extensions.NV_device_diagnostic_checkpoints)
     {
         MAGMA_DEVICE_EXTENSION(vkCmdSetCheckpointNV);
