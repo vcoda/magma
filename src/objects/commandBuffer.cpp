@@ -25,6 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "framebuffer.h"
 #include "imagelessFramebuffer.h"
 #include "renderPass.h"
+#include "storageBuffer.h"
 #include "fence.h"
 #include "../shaders/shaderBindingTable.h"
 #include "../raytracing/accelerationStructureGeometry.h"
@@ -688,6 +689,19 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
     }
 }
 #endif // VK_KHR_acceleration_structure
+
+const std::unique_ptr<Buffer>& CommandBuffer::getMarkerBuffer() const noexcept
+{
+    if (!markerBuffer) try
+    {   /* Implementations may only support a limited number of
+           pipelined marker write operations in flight at a given time,
+           thus excessive number of marker write operations may degrade
+           command execution performance. */
+        constexpr VkDeviceSize size = MAGMA_MAX_BUFFER_MARKERS * sizeof(uint32_t);
+        markerBuffer = std::make_unique<DynamicStorageBuffer>(device, size, false);
+    } catch (...) {}
+    return markerBuffer;
+}
 
 void CommandBuffer::resetInternalState() noexcept
 {

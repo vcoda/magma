@@ -353,7 +353,7 @@ namespace magma
         VkCommandBufferUsageFlags getUsage() const noexcept { return usage; }
         State getState() const noexcept { return state; }
         const Statistics& getStats() const noexcept { return stats; }
-        const std::unique_ptr<Buffer>& getMarkerBuffer() const noexcept { return markerBuffer; }
+        const std::unique_ptr<Buffer>& getMarkerBuffer() const noexcept;
         const std::vector<const char *>& getCheckpoints() const noexcept { return checkpoints; }
         bool allowsReset() const noexcept { return VK_TRUE == resetCommandBuffer; }
         bool insideRenderPass() const noexcept { return renderingPass; }

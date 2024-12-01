@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #ifdef MAGMA_DEBUG
 #include "commandBuffer.h"
-#include "storageBuffer.h"
 
 namespace magma
 {
@@ -176,14 +175,9 @@ void CommandBuffer::insertDebugCheckpoint(const char *command, VkPipelineStageFl
     if (extensions.NV_device_diagnostic_checkpoints)
         return setCheckpoint(command);
 #endif // VK_NV_device_diagnostic_checkpoints
-    if (!markerBuffer) try
-    {   /* Implementations may only support a limited number of
-           pipelined marker write operations in flight at a given time,
-           thus excessive number of marker write operations may degrade
-           command execution performance. */
-        constexpr VkDeviceSize size = MAGMA_MAX_BUFFER_MARKERS * sizeof(uint32_t);
-        markerBuffer = std::make_unique<DynamicStorageBuffer>(device, size, false);
-    } catch (...) { return; }
+    const std::unique_ptr<Buffer>& markerBuffer = getMarkerBuffer();
+    if (!markerBuffer)
+        return;
     uint64_t offset = markerBuffer->getPrivateData();
     MAGMA_ASSERT(offset < markerBuffer->getSize());
     const uint32_t marker = core::countof(checkpoints);
