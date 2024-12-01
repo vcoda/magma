@@ -188,12 +188,12 @@ void CommandBuffer::insertDebugCheckpoint(const char *command, VkPipelineStageFl
 #endif // VK_AMD_buffer_marker
     if (!renderingPass)
         leanCmd.fillBuffer(markerBuffer.get(), marker, sizeof(uint32_t), offset);
-    if (extensions.AMD_buffer_marker || !renderingPass)
+    if (extensions.AMD_buffer_marker || !renderingPass) try
     {
         offset += sizeof(uint32_t);
         markerBuffer->setPrivateData(offset);
         checkpoints.push_back(command);
-    }
+    } catch (...) {}
 }
 } // namespace magma
 #endif // MAGMA_DEBUG
