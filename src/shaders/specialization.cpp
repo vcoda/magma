@@ -24,9 +24,9 @@ namespace magma
 Specialization::Specialization(const Specialization& other) noexcept:
     VkSpecializationInfo{
         other.mapEntryCount,
-        core::copyArray(other.pMapEntries, mapEntryCount),
+        core::copyArray(other.pMapEntries, other.mapEntryCount),
         other.dataSize,
-        core::copyBinaryData(other.pData, dataSize)
+        core::copyBinaryData(other.pData, other.dataSize)
     }
 {}
 
