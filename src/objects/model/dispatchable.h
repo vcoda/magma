@@ -33,7 +33,7 @@ namespace magma
         static_assert(sizeof(Type) == sizeof(intptr_t),
             "invalid size of dispatchable handle type");
     public:
-        Class getClass() const noexcept { return Class::Dispatchable; }
+        Class getClass() const noexcept override { return Class::Dispatchable; }
         VkObjectType getObjectType() const noexcept override;
         uint64_t getObjectHandle() const noexcept override;
 

@@ -44,7 +44,7 @@ namespace magma
             "invalid size of non-dispatchable handle type");
     public:
         ~NonDispatchable();
-        Class getClass() const noexcept { return Class::NonDispatchable; }
+        Class getClass() const noexcept override { return Class::NonDispatchable; }
         VkObjectType getObjectType() const noexcept override;
         uint64_t getObjectHandle() const noexcept override;
 
