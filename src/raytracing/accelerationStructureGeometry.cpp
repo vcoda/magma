@@ -31,7 +31,7 @@ AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles()
     geometry.triangles.vertexData.deviceAddress = MAGMA_NULL;
     geometry.triangles.vertexStride = 0;
     geometry.triangles.maxVertex = 0;
-    geometry.triangles.indexType = VK_INDEX_TYPE_NONE_KHR,
+    geometry.triangles.indexType = VK_INDEX_TYPE_NONE_KHR;
     geometry.triangles.indexData.deviceAddress = MAGMA_NULL;
     geometry.triangles.transformData.deviceAddress = MAGMA_NULL;
     primitiveCount = 0;
