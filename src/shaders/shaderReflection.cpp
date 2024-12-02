@@ -29,7 +29,7 @@ ShaderReflection::ShaderReflection(const SpirvWord *bytecode, std::size_t byteco
     MAGMA_HANDLE_REFLECTION_RESULT(result, "failed to create shader reflection");
 }
 
-ShaderReflection::~ShaderReflection() noexcept
+ShaderReflection::~ShaderReflection()
 {
     spvReflectDestroyShaderModule(&module);
 }
