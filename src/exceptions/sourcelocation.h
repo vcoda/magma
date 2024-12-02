@@ -32,7 +32,7 @@ namespace magma
 
         struct source_location
         {
-            /* constexpr */ std::uint_least32_t line() const noexcept { return ln; }
+            /* constexpr */ std::uint_least32_t line() const noexcept { return static_cast<std::uint_least32_t>(ln); }
             /* constexpr */ std::uint_least32_t column() const noexcept { return 0; }
             /* constexpr */ const char* file_name() const noexcept { return file; }
             /* constexpr */ const char* function_name() const noexcept { return function; }
