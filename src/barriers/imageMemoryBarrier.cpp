@@ -183,7 +183,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
         VK_QUEUE_FAMILY_IGNORED,
         VK_QUEUE_FAMILY_IGNORED,
         *image,
-        subresourceRange
+        ImageSubresourceRange(image)
     },
     image(image)
 {}
