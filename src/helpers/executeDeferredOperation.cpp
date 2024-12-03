@@ -51,7 +51,7 @@ VkResult executeDeferredOperation(std::shared_ptr<DeferredOperation> deferredOpe
                     MAGMA_UNUSED(result);
                 }));
     }
-    for (auto& future : tasks)
+    for (auto& future: tasks)
         future.get();
     // If the deferred operation is complete, it returns the appropriate return value from
     // the original command. This value must be one of the VkResult values which could have been

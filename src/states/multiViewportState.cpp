@@ -28,7 +28,7 @@ MultiViewportState::MultiViewportState(const std::vector<VkViewport>& viewports_
 {
     viewportCount = core::countof(viewports);
     pViewports = viewports.data();
-    for (const VkViewport& viewport : viewports)
+    for (const VkViewport& viewport: viewports)
     {
         VkRect2D scissor;
         scissor.offset.x = static_cast<int32_t>(viewport.x);
@@ -83,7 +83,7 @@ hash_t MultiViewportState::hash() const noexcept
         flags,
         viewportCount,
         scissorCount);
-    for (const VkViewport& viewport : viewports)
+    for (const VkViewport& viewport: viewports)
     {
         hash = core::hashCombine(hash, core::hashArgs(
             viewport.x,
@@ -93,7 +93,7 @@ hash_t MultiViewportState::hash() const noexcept
             viewport.minDepth,
             viewport.maxDepth));
     }
-    for (const VkRect2D& scissor : scissors)
+    for (const VkRect2D& scissor: scissors)
     {
         hash = core::hashCombine(hash, core::hashArgs(
             scissor.offset.x,

@@ -145,11 +145,11 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
         renderPassInfo.subpassCount,
         renderPassInfo.dependencyCount,
         extendedInfo.hash());
-    for (auto const& attachment : attachments)
+    for (auto const& attachment: attachments)
         hash = core::hashCombine(hash, attachment.hash());
-    for (auto const& subpass : subpasses)
+    for (auto const& subpass: subpasses)
         hash = core::hashCombine(hash, subpass.getHash());
-    for (auto const& dependency : dependencies)
+    for (auto const& dependency: dependencies)
         hash = core::hashCombine(hash, dependency.hash());
 }
 

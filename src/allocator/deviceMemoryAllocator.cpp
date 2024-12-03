@@ -159,7 +159,7 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
     MAGMA_HANDLE_RESULT(result, "failed to allocate memory pages");
     std::vector<DeviceMemoryBlock> memoryPages;
     memoryPages.reserve(allocations.size());
-    for (auto& allocation : allocations)
+    for (auto& allocation: allocations)
         memoryPages.push_back(reinterpret_cast<DeviceMemoryBlock>(allocation));
     return memoryPages;
 }
@@ -300,7 +300,7 @@ std::vector<VmaAllocation> DeviceMemoryAllocator::gatherSuballocations(const std
     allocations.reserve(objects.size());
     defragmentationResources.clear();
     defragmentationResources.reserve(objects.size());
-    for (auto& resource : objects)
+    for (auto& resource: objects)
     {
         const ManagedDeviceMemory *managedDeviceMemory = dynamic_cast<const ManagedDeviceMemory *>(resource->getMemory().get());
         if (managedDeviceMemory)

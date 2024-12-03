@@ -66,7 +66,7 @@ MultiAttachmentFramebuffer::MultiAttachmentFramebuffer(std::shared_ptr<Device> d
     }
     // Setup attachment descriptions
     std::vector<AttachmentDescription> attachmentDescriptions;
-    for (const VkFormat format : colorAttachmentFormats)
+    for (const VkFormat format: colorAttachmentFormats)
     {
         attachmentDescriptions.emplace_back(format, 1,
             colorClearOp ? op::clearStore : op::store, // Clear (optionally) color, store
