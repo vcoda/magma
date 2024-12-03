@@ -91,12 +91,7 @@ void DebugUtilsMessenger::messageFormat(VkDebugUtilsMessageSeverityFlagBitsEXT m
     char buffer[MAGMA_MAX_STRING];
     va_list args;
     va_start(args, format);
-#if defined(_MSC_VER) || defined(__MINGW32__)
-    vsnprintf_s(buffer, MAGMA_MAX_STRING, _TRUNCATE, format, args);
-#else
-    MAGMA_ASSERT(strlen(format) < MAGMA_MAX_STRING);
-    vsprintf(buffer, format, args);
-#endif // _MSC_VER || __MINGW32__
+    vsnprintf(buffer, MAGMA_MAX_STRING, format, args);
     va_end(args);
     message(messageSeverity, messageTypes, messageIdName, messageIdNumber, buffer);
 }

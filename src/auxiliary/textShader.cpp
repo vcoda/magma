@@ -158,12 +158,7 @@ bool TextShader::print(uint32_t x, uint32_t y, uint32_t color, const char *forma
     char sz[MAGMA_MAX_STRING];
     va_list args;
     va_start(args, format);
-    int written;
-#if defined(_MSC_VER) || defined(__MINGW32__)
-    written = vsprintf_s(sz, format, args);
-#else
-    written = sprintf(sz, format, args);
-#endif
+    int written = snprintf(sz, MAGMA_MAX_STRING, format, args);
     MAGMA_ASSERT(written != -1);
     const uint32_t length = static_cast<uint32_t>(strlen(sz));
     String *str = strings++;
