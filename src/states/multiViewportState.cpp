@@ -65,7 +65,7 @@ MultiViewportState& MultiViewportState::operator=(const MultiViewportState& othe
 {
     if (this != &other)
     {
-        viewports = other.viewports,
+        viewports = other.viewports;
         scissors = other.scissors;
         flags = other.flags;
         viewportCount = other.viewportCount;
