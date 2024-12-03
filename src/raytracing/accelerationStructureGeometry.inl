@@ -70,7 +70,7 @@ inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTria
     MAGMA_ASSERT(vertexFormat);
     geometry.triangles.vertexFormat = vertexFormat;
     geometry.triangles.vertexData = address(vertices);
-    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size()),
+    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size());
     geometry.triangles.maxVertex = static_cast<uint32_t>(vertices->getSize() / geometry.triangles.vertexStride) - 1;
     geometry.triangles.indexType = indexType;
     geometry.triangles.indexData = address(indices);
