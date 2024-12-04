@@ -389,6 +389,8 @@ bool PhysicalDevice::getPresentationSupport(uint32_t queueFamilyIndex,
     MAGMA_UNUSED(visualID);
     result = vkGetPhysicalDeviceScreenPresentationSupportQNX(handle, queueFamilyIndex,
         reinterpret_cast<_screen_window *>(display));
+#else
+    result = VK_TRUE;
 #endif
     return (VK_TRUE == result);
 }
