@@ -237,12 +237,12 @@ void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std:
     region.srcSubresource = srcImage->getSubresourceLayers(srcMipLevel);
     region.srcOffsets[0] = VkOffset3D{0, 0, 0};
     region.srcOffsets[1].x = srcExtent.width;
-    region.srcOffsets[1].y = srcExtent.height,
+    region.srcOffsets[1].y = srcExtent.height;
     region.srcOffsets[1].z = 1;
     region.dstSubresource = dstImage->getSubresourceLayers(dstMipLevel);
     region.dstOffsets[0] = VkOffset3D{0, 0, 0};
     region.dstOffsets[1].x = dstExtent.width;
-    region.dstOffsets[1].y = dstExtent.height,
+    region.dstOffsets[1].y = dstExtent.height;
     region.dstOffsets[1].z = 1;
     blitImage(srcImage, dstImage, region, filter);
 }
