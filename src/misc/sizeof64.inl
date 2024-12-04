@@ -505,4 +505,3 @@ case 1000484000: return 24; // VkPhysicalDeviceTilePropertiesFeaturesQCOM
 case 1000484001: return 48; // VkTilePropertiesQCOM
 case 1000485000: return 24; // VkPhysicalDeviceAmigoProfilingFeaturesSEC
 case 1000485001: return 32; // VkAmigoProfilingSubmitInfoSEC
-default: return 0;

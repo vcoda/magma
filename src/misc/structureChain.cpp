@@ -162,6 +162,9 @@ size_t StructureChain::getNodeSize(VkStructureType sType) noexcept
 #else
     #include "sizeof86.inl"
 #endif
+    default:
+        MAGMA_FAILURE("unknown structure type");
+        return 0;
     }
 }
 } // namespace magma

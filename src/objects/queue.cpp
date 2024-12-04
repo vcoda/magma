@@ -397,6 +397,8 @@ void Queue::present(const std::unique_ptr<Swapchain>& swapchain, uint32_t imageI
     case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
         throw exception::FullScreenExclusiveModeLost("queue present failed");
 #endif
+    default:
+        break;
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "queue present failed");

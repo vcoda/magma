@@ -280,6 +280,8 @@ void RenderPass::end(const FramebufferAttachments& attachments) const noexcept
             case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
                 MAGMA_ASSERT(image->getUsage() & (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT));
                 break;
+            default:
+                break;
             }
             image->setLayout(attachmentDesc->finalLayout);
         });

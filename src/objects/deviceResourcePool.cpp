@@ -56,6 +56,8 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
             case VK_IMAGE_TYPE_3D:
                 ++statistics.image3DCount;
                 break;
+            default:
+                break;
             }
         });
     statistics.eventCount = core::countof(events);
@@ -87,6 +89,8 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
                 ++statistics.subpassShadingPipelineCount;
                 break;
             #endif
+            default:
+                break;
             }
         });
     statistics.descriptorSetLayoutCount = core::countof(descriptorSetLayouts);

@@ -721,8 +721,8 @@ VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples) noexcept
     case 16: return VK_SAMPLE_COUNT_16_BIT;
     case 32: return VK_SAMPLE_COUNT_32_BIT;
     case 64: return VK_SAMPLE_COUNT_64_BIT;
+    default: return VK_SAMPLE_COUNT_1_BIT;
     }
-    return VK_SAMPLE_COUNT_1_BIT;
 }
 
 VkFormat Image::checkFormatFeature(std::shared_ptr<Device> device, VkFormat format, VkFormatFeatureFlags requiredFeature)

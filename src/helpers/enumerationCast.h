@@ -132,6 +132,7 @@ constexpr VkDebugReportObjectTypeEXT objectToDebugReportType(const VkObjectType 
         return VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_COLLECTION_FUCHSIA_EXT;
 #endif
     default:
+        MAGMA_FAILURE("unknown object type");
         return VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT;
     }
 }
@@ -167,6 +168,7 @@ constexpr VkDescriptorType spirvToDescriptorType(const SpvReflectDescriptorType 
         return VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
 #endif
     default:
+        MAGMA_FAILURE("unknown descriptor type");
         return VK_DESCRIPTOR_TYPE_MAX_ENUM;
     }
 }
@@ -182,8 +184,10 @@ constexpr VkImageType spirvDimToImageType(const SpvDim dim) noexcept
         return VK_IMAGE_TYPE_2D;
     case SpvDim3D:
         return VK_IMAGE_TYPE_3D;
+    default:
+        MAGMA_FAILURE("unknown spirv dimension");
+        return VK_IMAGE_TYPE_MAX_ENUM;
     }
-    return VK_IMAGE_TYPE_MAX_ENUM;
 }
 } // namespace helpers
 } // namespace magma

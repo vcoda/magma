@@ -136,7 +136,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
 void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
     VkDeviceSize offset /* 0 */)
 {
-    VkResult result = VK_SUCCESS;
+    VkResult result;
     switch (objectType)
     {
     case VK_OBJECT_TYPE_BUFFER:
@@ -162,7 +162,8 @@ void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
         break;
 #endif // VK_NV_ray_tracing
     default:
-        MAGMA_FAILURE("unknown type of binded object");
+        MAGMA_FAILURE("unknown object type");
+        result = VK_ERROR_UNKNOWN;
     };
     MAGMA_HANDLE_RESULT(result, "failed to bind device memory");
     if (VK_SUCCESS == result)

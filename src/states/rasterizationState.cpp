@@ -87,7 +87,7 @@ hash_t RasterizationState::chainedHash() const noexcept
     #endif // VK_EXT_transform_feedback
         // Add any new rasterization state descriptors here
         default:
-            MAGMA_ASSERT(false && "unknown chained structure");
+            MAGMA_FAILURE("unknown chained structure");
         }
         next = reinterpret_cast<const VkBaseInStructure *>(next->pNext);
     }

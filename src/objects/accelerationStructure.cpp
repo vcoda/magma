@@ -268,9 +268,10 @@ VkQueryType AccelerationStructure::castType(AccelerationStructureQuery::Type que
     case AccelerationStructureQuery::Type::BottomLevelPointers:
         return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR;
 #endif // VK_KHR_ray_tracing_maintenance1
+    default:
+        MAGMA_FAILURE("invalid query type");
+        return VK_QUERY_TYPE_MAX_ENUM;
     }
-    MAGMA_ASSERT(false);
-    return VK_QUERY_TYPE_MAX_ENUM;
 }
 
 GenericAccelerationStructure::GenericAccelerationStructure(std::shared_ptr<Device> device,

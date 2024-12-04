@@ -177,6 +177,7 @@ DeviceFeatures::Vendor DeviceFeatures::getVendor() const noexcept
         case 0x5143: return Vendor::Qualcomm;
         case 0x5333: return Vendor::S3Graphics;
         case 0x8086: return Vendor::Intel;
+        default:     return Vendor::Unknown;
         }
     }
     return Vendor::Unknown;

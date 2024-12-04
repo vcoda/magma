@@ -110,6 +110,8 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
     case VK_ERROR_INCOMPATIBLE_DRIVER:
         throw exception::IncompatibleDriver("the requested version of Vulkan is not supported "
             "by the driver or is otherwise incompatible for implementation-specific reasons");
+    default:
+        break;
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create instance");

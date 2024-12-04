@@ -368,6 +368,8 @@ void Swapchain::handleError(VkResult result, const char *message) const
     case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
         throw exception::FullScreenExclusiveModeLost(message);
 #endif
+    default:
+        break;
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, message);

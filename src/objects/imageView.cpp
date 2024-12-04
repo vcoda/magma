@@ -143,7 +143,9 @@ VkImageViewType ImageView::imageToViewType(VkImageType imageType, uint32_t array
             return VK_IMAGE_VIEW_TYPE_2D_ARRAY;
     #endif
         return VK_IMAGE_VIEW_TYPE_3D;
+    default:
+        MAGMA_FAILURE("unknown image type");
+        return VK_IMAGE_VIEW_TYPE_MAX_ENUM;
     }
-    return VK_IMAGE_VIEW_TYPE_MAX_ENUM;
 }
 } // namespace magma

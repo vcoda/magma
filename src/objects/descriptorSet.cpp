@@ -186,6 +186,9 @@ void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflect
                         << "assigned: " << binding.getImageType();
                 }
             }
+            break;
+        default:
+            break;
         }
         const std::string error = out.str();
         if (!error.empty())

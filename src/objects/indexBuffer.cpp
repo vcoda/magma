@@ -50,7 +50,7 @@ std::size_t BaseIndexBuffer::getIndexSize() const noexcept
         return sizeof(uint8_t);
 #endif // VK_EXT_index_type_uint8
     default:
-        MAGMA_ASSERT(false);
+        MAGMA_FAILURE("invalid index type");
         return 0;
     }
 }
