@@ -31,18 +31,20 @@ BottomLevelAccelerationStructure::BottomLevelAccelerationStructure(std::shared_p
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
+    const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR,
-        flags, buildType, buildFlags, geometries, std::move(allocator), extendedInfo)
+        flags, buildType, buildFlags, geometries, std::move(allocator), sharing, extendedInfo)
 {}
 
 BottomLevelAccelerationStructure::BottomLevelAccelerationStructure(std::shared_ptr<Device> device, VkDeviceSize deserializedSize,
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
+    const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR,
-        flags, buildType, buildFlags, deserializedSize, std::move(allocator), extendedInfo)
+        flags, buildType, buildFlags, deserializedSize, std::move(allocator), sharing, extendedInfo)
 {}
 
 uint64_t BottomLevelAccelerationStructure::getReference() const noexcept

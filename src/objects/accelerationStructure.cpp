@@ -33,7 +33,7 @@ namespace magma
 AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkAccelerationStructureTypeKHR structureType,
     VkAccelerationStructureCreateFlagsKHR flags, VkAccelerationStructureBuildTypeKHR buildType,
     VkBuildAccelerationStructureFlagsKHR buildFlags, const std::list<AccelerationStructureGeometry>& geometries,
-    std::shared_ptr<Allocator> allocator, const StructureChain& extendedInfo):
+    std::shared_ptr<Allocator> allocator, const Sharing& sharing, const StructureChain& extendedInfo):
     Resource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR, device, 0, sharing, allocator),
     structureType(structureType),
     flags(flags),
@@ -67,7 +67,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     vkGetAccelerationStructureBuildSizesKHR(getNativeDevice(), buildType, &buildGeometryInfo, maxPrimitiveCounts, &buildSizesInfo);
     // Allocate buffer where the acceleration structure will be stored
     buffer = std::make_unique<AccelerationStructureStorageBuffer>(std::move(device),
-        buildSizesInfo.accelerationStructureSize, buildType, std::move(allocator));
+        buildSizesInfo.accelerationStructureSize, buildType, std::move(allocator), Buffer::Initializer(), sharing);
     VkAccelerationStructureCreateInfoKHR accelerationStructureInfo;
     accelerationStructureInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
     accelerationStructureInfo.pNext = extendedInfo.headNode();
@@ -89,7 +89,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
 AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkAccelerationStructureTypeKHR structureType,
     VkAccelerationStructureCreateFlagsKHR flags, VkAccelerationStructureBuildTypeKHR buildType,
     VkBuildAccelerationStructureFlagsKHR buildFlags, VkDeviceSize deserializedSize,
-    std::shared_ptr<Allocator> allocator, const StructureChain& extendedInfo):
+    std::shared_ptr<Allocator> allocator, const Sharing& sharing, const StructureChain& extendedInfo):
     Resource(VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR, device, 0, sharing, allocator),
     structureType(structureType),
     flags(flags),
@@ -100,7 +100,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     updateScratchSize(deserializedSize)
 {
     buffer = std::make_unique<AccelerationStructureStorageBuffer>(std::move(device),
-        deserializedSize, buildType, std::move(allocator));
+        deserializedSize, buildType, std::move(allocator), Buffer::Initializer(), sharing);
     VkAccelerationStructureCreateInfoKHR accelerationStructureInfo;
     accelerationStructureInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
     accelerationStructureInfo.pNext = extendedInfo.headNode();
@@ -278,9 +278,10 @@ GenericAccelerationStructure::GenericAccelerationStructure(std::shared_ptr<Devic
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
+    const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_GENERIC_KHR,
-        flags, buildType, buildFlags, geometries, std::move(allocator), extendedInfo)
+        flags, buildType, buildFlags, geometries, std::move(allocator), sharing, extendedInfo)
 {}
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

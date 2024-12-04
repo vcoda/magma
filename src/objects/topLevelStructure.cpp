@@ -31,18 +31,20 @@ TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Dev
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
+    const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR,
-        flags, buildType, buildFlags, {instances}, std::move(allocator), extendedInfo)
+        flags, buildType, buildFlags, {instances}, std::move(allocator), sharing, extendedInfo)
 {}
 
 TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Device> device, VkDeviceSize deserializedSize,
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
+    const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     AccelerationStructure(std::move(device), VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR,
-        flags, buildType, buildFlags, deserializedSize, std::move(allocator), extendedInfo)
+        flags, buildType, buildFlags, deserializedSize, std::move(allocator), sharing, extendedInfo)
 {}
 
 void TopLevelAccelerationStructure::build(const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,

@@ -86,6 +86,7 @@ namespace magma
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             const std::list<AccelerationStructureGeometry>& geometries,
             std::shared_ptr<Allocator> allocator,
+            const Sharing& sharing,
             const StructureChain& extendedInfo);
         AccelerationStructure(std::shared_ptr<Device> device,
             VkAccelerationStructureTypeKHR structureType,
@@ -94,6 +95,7 @@ namespace magma
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             VkDeviceSize deserializedSize,
             std::shared_ptr<Allocator> allocator,
+            const Sharing& sharing,
             const StructureChain& extendedInfo);
         static VkQueryType castType(AccelerationStructureQuery::Type queryType) noexcept;
 
@@ -121,6 +123,7 @@ namespace magma
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkAccelerationStructureCreateFlagsKHR createFlags = 0,
+            const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
     };
 #endif // VK_KHR_acceleration_structure

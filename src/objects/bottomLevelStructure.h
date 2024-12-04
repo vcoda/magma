@@ -33,6 +33,7 @@ namespace magma
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkAccelerationStructureCreateFlagsKHR flags = 0,
+            const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
         explicit BottomLevelAccelerationStructure(std::shared_ptr<Device> device,
             VkDeviceSize deserializedSize,
@@ -40,6 +41,7 @@ namespace magma
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkAccelerationStructureCreateFlagsKHR flags = 0,
+            const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
         uint64_t getReference() const noexcept;
         void build(const std::list<AccelerationStructureGeometry>& geometries,
