@@ -208,7 +208,6 @@ std::vector<uint8_t> RayTracingPipeline::getCaptureReplayShaderGroupHandles() co
 
 VkDeviceSize RayTracingPipeline::getShaderGroupStackSize(uint32_t group, VkShaderGroupShaderKHR groupShader) const noexcept
 {
-    MAGMA_ASSERT(groupShader != VK_SHADER_UNUSED_KHR);
     MAGMA_DEVICE_EXTENSION(vkGetRayTracingShaderGroupStackSizeKHR);
     return vkGetRayTracingShaderGroupStackSizeKHR(getNativeDevice(), handle, group, groupShader);
 }
