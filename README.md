@@ -145,6 +145,10 @@ If you have error `glslangValidator': Permission denied` after running Make, go 
 chmod +x glslangValidator
 ```
 
+### MacOS
+
+* [Getting Started with the macOS Vulkan SDK](https://vulkan.lunarg.com/doc/view/1.3.283.0/mac/getting_started.html)<br>
+
 ## Build instructions
 
 ### Windows
