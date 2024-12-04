@@ -83,7 +83,7 @@ ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t baseArr
     viewType(imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags())),
     format(image->getFormat()),
 #ifdef VK_KHR_maintenance2
-    usage(usage),
+    usage(image->getUsage()),
 #endif
     baseMipLevel(baseMipLevel),
     baseArrayLayer(baseArrayLayer),
