@@ -331,7 +331,7 @@ uint32_t PhysicalDevice::getNumQueueFamilyPerformanceQueryPasses(uint32_t queueF
     queryPoolPerformanceInfo.sType = VK_STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_CREATE_INFO_KHR;
     queryPoolPerformanceInfo.pNext = nullptr;
     queryPoolPerformanceInfo.queueFamilyIndex = queueFamilyIndex;
-    queryPoolPerformanceInfo.counterIndexCount = core::countof(counterIndices),
+    queryPoolPerformanceInfo.counterIndexCount = core::countof(counterIndices);
     queryPoolPerformanceInfo.pCounterIndices = counterIndices.data();
     uint32_t numPasses = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR, VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME);
