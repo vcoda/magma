@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4100) // unreferenced formal parameter
-#pragma warning(disable: 4127) // conditional expression is constant
 #pragma warning(disable: 4189) // local variable is initialized but not referenced
 #pragma warning(disable: 4505) // unreferenced local function has been removed
 #endif // _MSC_VER
