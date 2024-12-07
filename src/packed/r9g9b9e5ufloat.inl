@@ -44,8 +44,13 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
         (((uint32_t)_mm_extract_epi32(iv, 1) & 0x1FF) << 9) |
         ((uint32_t)_mm_extract_epi32(iv, 0) & 0x1FF);
 #elif defined(MAGMA_NEON)
-    #error NEON codepath not implemented
-#else
+    //#error NEON codepath not implemented
+    float32x4_t v = {r, g, b, 0.f};
+    v = vmaxq_f32(v, vdupq_n_f32(0.f));
+    v = vminq_f32(v, vdupq_n_f32(MAX_RGB9E5));
+    // Horizontal max3
+    // TODO:
+#else // MAGMA_NEON
     r = std::min(std::max(0.f, r), MAX_RGB9E5);
     g = std::min(std::max(0.f, g), MAX_RGB9E5);
     b = std::min(std::max(0.f, b), MAX_RGB9E5);
@@ -66,7 +71,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     gm = (uint32_t)std::roundf(g * scale);
     bm = (uint32_t)std::roundf(b * scale);
     e = (uint32_t)exp;
-#endif // MAGMA_NEON
+#endif
 }
 
 inline void R9g9b9e5Ufloat::unpack(float v[3]) const noexcept

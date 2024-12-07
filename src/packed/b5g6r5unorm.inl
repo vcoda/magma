@@ -13,8 +13,18 @@ inline B5g6r5Unorm::B5g6r5Unorm(float b, float g, float r) noexcept
         (((uint16_t)_mm_extract_epi16(iv, 2) & 0x3F) << 5) |
         ((uint16_t)_mm_extract_epi16(iv, 0) & 0x1F);
 #elif defined(MAGMA_NEON)
-    #error NEON codepath not implemented
-#else
+    float32x4_t v = {b, g, r, 0.f};
+    v = vmaxq_f32(v, vdupq_n_f32(0.f));
+    v = vminq_f32(v, vdupq_n_f32(1.f));
+    float32x4_t scale = {31.f, 63.f, 31.f, 0.f};
+    v = vmulq_f32(v, scale);
+    v = vrndnq_f32(v);
+    uint32x4_t iv = vcvtnq_u32_f32(v);
+    this->v =
+        (((uint16_t)vgetq_lane_u32(iv, 0) & 0x1F) << 11) |
+        (((uint16_t)vgetq_lane_u32(iv, 1) & 0x3F) << 5) |
+        ((uint16_t)vgetq_lane_u32(iv, 2) & 0x1F);
+#else // MAGMA_NEON
     b = std::min(std::max(0.f, b), 1.f);
     g = std::min(std::max(0.f, g), 1.f);
     r = std::min(std::max(0.f, r), 1.f);
@@ -24,7 +34,7 @@ inline B5g6r5Unorm::B5g6r5Unorm(float b, float g, float r) noexcept
     v = (((uint16_t)b & 0x1F) << 11) |
         (((uint16_t)g & 0x3F) << 5) |
         ((uint16_t)r & 0x1F);
-#endif // MAGMA_NEON
+#endif
 }
 
 inline B5g6r5Unorm::B5g6r5Unorm(uint8_t b, uint8_t g, uint8_t r) noexcept:
