@@ -64,9 +64,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #ifndef NOMINMAX
         #define NOMINMAX 1
     #endif
-#elif defined(__unix__) || defined(__unix)
+#elif defined(__unix__) || defined(__unix) || defined(__APPLE__)
     #include <unistd.h>
-#endif // __unix__ || __unix
+#endif // __unix__ || __unix || __APPLE__
 
 /*
  * Vulkan SDK
