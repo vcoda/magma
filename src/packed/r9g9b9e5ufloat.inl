@@ -44,12 +44,30 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
         (((uint32_t)_mm_extract_epi32(iv, 1) & 0x1FF) << 9) |
         ((uint32_t)_mm_extract_epi32(iv, 0) & 0x1FF);
 #elif defined(MAGMA_NEON)
-    //#error NEON codepath not implemented
     float32x4_t v = {r, g, b, 0.f};
     v = vmaxq_f32(v, vdupq_n_f32(0.f));
     v = vminq_f32(v, vdupq_n_f32(MAX_RGB9E5));
     // Horizontal max3
-    // TODO:
+    float32x4_t max3 = vmaxq_f32(v, v);
+    max3 = vmaxq_f32(max3, v);
+    // TODO: begin vectorize
+    float maxRgb = vgetq_lane_f32(max_val, 0);
+    int fl = floorLog2(maxRgb);
+    int exp = (-EXP_BIAS - 1 > fl ? -EXP_BIAS - 1 : fl) + 1 + EXP_BIAS;
+    // TODO: end vectorize
+    float32x4_t scale = vdupq_n_f32(rcpExpPow2[exp]);
+    v = vmulq_f32(v, scale); // max(r, g, b) / (2^(exp - EXP_BIAS - MANTISSA_BITS))
+    int32x4_t iv = vcvtq_s32_f32(v);
+    int maxm = vgetq_lane_s32(iv, 0);
+    if (MAX_MANTISSA + 1 == maxm) ++exp;
+    scale = vdupq_n_f32(rcpExpPow2[exp]);
+    v = vmulq_f32(v, scale);
+    iv = vcvtq_s32_f32(v);
+    this->v =
+        (((uint32_t)exp & 0x1F) << 27) |
+        (((uint32_t)vgetq_lane_s32(iv, 2) & 0x1FF) << 18) |
+        (((uint32_t)vgetq_lane_s32(iv, 1) & 0x1FF) << 9) |
+        ((uint32_t)vgetq_lane_s32(iv, 0) & 0x1FF);
 #else // MAGMA_NEON
     r = std::min(std::max(0.f, r), MAX_RGB9E5);
     g = std::min(std::max(0.f, g), MAX_RGB9E5);
