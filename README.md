@@ -151,11 +151,7 @@ Download and install [Xcode IDE](https://developer.apple.com/xcode/). Apple ID m
 * [Getting Started with the macOS Vulkan SDK](https://vulkan.lunarg.com/doc/view/1.3.283.0/mac/getting_started.html)<br>
 
 You need to properly configure VK_SDK_PATH environment variable and make it visible to Xcode.<br>
-Open **Terminal**, check that VK_SDK_PATH environment variable is present:
-```
-echo $VK_SDK_PATH
-```
-If not, open zshrc file in Nano:
+Run **Terminal**, open zshrc file in Nano:
 ```
 nano ~/.zshrc
 ```
@@ -163,7 +159,10 @@ Add environment variable:
 ```
 export VK_SDK_PATH=<you_path/VulkanSDK/1.x.xxx.x/macOS>
 ```
-Press Ctrl-O to save changes.<br>
+Press Ctrl-O/Ctrl-X to save/close. Check that environment variable is present:
+```
+echo $VK_SDK_PATH
+```
 With Xcode versions 7 and later, you may need to enable this behavior:
 ```
 defaults write com.apple.dt.Xcode UseSanitizedBuildSystemEnvironment -bool NO
