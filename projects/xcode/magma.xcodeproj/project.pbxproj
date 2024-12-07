@@ -2487,6 +2487,8 @@
 					"$(OTHER_CFLAGS)",
 					"-ftemplate-depth=2048",
 					"-fconstexpr-depth=2048",
+					"-Wno-documentation",
+					"-Wno-nullability-completeness",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -2510,6 +2512,8 @@
 					"$(OTHER_CFLAGS)",
 					"-ftemplate-depth=2048",
 					"-fconstexpr-depth=2048",
+					"-Wno-documentation",
+					"-Wno-nullability-completeness",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
