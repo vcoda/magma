@@ -51,7 +51,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     float32x4_t max3 = vmaxq_f32(v, v);
     max3 = vmaxq_f32(max3, v);
     // TODO: begin vectorize
-    float maxRgb = vgetq_lane_f32(max_val, 0);
+    float maxRgb = vgetq_lane_f32(max3, 0);
     int fl = floorLog2(maxRgb);
     int exp = (-EXP_BIAS - 1 > fl ? -EXP_BIAS - 1 : fl) + 1 + EXP_BIAS;
     // TODO: end vectorize
