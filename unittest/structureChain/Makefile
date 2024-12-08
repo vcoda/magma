@@ -25,4 +25,3 @@ unittest: unittest.cpp
 
 clean:
 	@rm -rf unittest
-

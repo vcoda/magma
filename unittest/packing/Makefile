@@ -17,9 +17,9 @@
 ARCH = $(shell uname -m)
 
 ifeq ($(ARCH), x86_64)
-    SIMD_FLAGS = -DMAGMA_SSE -msse4
+	SIMD_FLAGS = -DMAGMA_SSE -msse4
 else
-    SIMD_FLAGS = -DMAGMA_NEON
+	SIMD_FLAGS = -DMAGMA_NEON
 endif
 
 INCLUDE_DIR=-I$(VULKAN_SDK)/include -I../../src
