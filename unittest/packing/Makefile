@@ -15,7 +15,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 INCLUDE_DIR=-I$(VULKAN_SDK)/include -I../../src
-CFLAGS=-std=c++14 -m64 -msse4 -DMAGMA_SSE $(INCLUDE_DIR)
+CFLAGS=-std=c++17 -m64 -msse4 -DMAGMA_SSE $(INCLUDE_DIR)
 
 unittest: unittest.cpp
 	g++ $(CFLAGS) unittest.cpp -o unittest
