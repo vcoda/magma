@@ -14,8 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+ARCH = $(shell uname -m)
+
+ifeq ($(ARCH), x86_64)
+    SIMD_FLAGS = -DMAGMA_SSE -msse4
+else
+    SIMD_FLAGS = -DMAGMA_NEON
+endif
+
 INCLUDE_DIR=-I$(VULKAN_SDK)/include -I../../src
-CFLAGS=-std=c++17 -m64 -msse4 -DMAGMA_SSE $(INCLUDE_DIR)
+CFLAGS=-std=c++17 -m64 $(SIMD_FLAGS) $(INCLUDE_DIR)
 
 unittest: unittest.cpp
 	g++ $(CFLAGS) unittest.cpp -o unittest
