@@ -16,13 +16,16 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #ifdef MAGMA_SSE
-#pragma message("x86 SSE is used")
+#pragma message("Using x86 SSE")
 #elif defined(MAGMA_NEON)
-#pragma message("ARM Neon is used")
+#pragma message("Using ARM Neon")
+#else
+#pragma message("Using FPU")
 #endif
 
 #include "core/pch.h"
 #include "packed/color.h"
+#include "packed/vector.h"
 
 void testPack16Formats()
 {
@@ -41,6 +44,17 @@ void testPack16Formats()
         std::cout << "B5G5R5A1_UNORM_PACK16 value is invalid!" << std::endl;
 }
 
+void testPack32Formats()
+{
+    constexpr float x = .25f, y = .5f, z = .75f;
+    if (magma::packed::X10y10z10w2Unorm(x, y, z, 1).v != 0x6ff80100)
+        std::cout << "A2B10G10R10_UNORM_PACK32 value is invalid!" << std::endl;
+    if (magma::packed::X10y10z10w2Snorm(-x, -y, -z, 1).v != 0x681c0380)
+        std::cout << "A2B10G10R10_SNORM_PACK32 value is invalid!" << std::endl;
+    if (magma::packed::X11y11z10Ufloat(x, y, z).v != 0x741c0340)
+        std::cout << "B10G11R11_UFLOAT_PACK32 value is invalid!" << std::endl;
+}
+
 void testSharedExponentFormat()
 {
     constexpr float r = .2f, g = .3f, b = .5f;
@@ -53,8 +67,10 @@ void testSharedExponentFormat()
 
 int main()
 {
-    std::cout << "Test UNORM_PACK16 format packing" << std::endl;
+    std::cout << "Test PACK16 format packing" << std::endl;
     testPack16Formats();
+    std::cout << "Test PACK32 format packing" << std::endl;
+    testPack32Formats();
     std::cout << "Test E5B9G9R9 format packing" << std::endl;
     testSharedExponentFormat();
     return 0;
