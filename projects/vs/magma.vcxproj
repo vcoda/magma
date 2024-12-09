@@ -319,12 +319,12 @@
     <ClInclude Include="..\..\src\objects\indexBuffer.h" />
     <ClInclude Include="..\..\src\objects\indirectBuffer.h" />
     <ClInclude Include="..\..\src\objects\instance.h" />
-    <ClInclude Include="..\..\src\objects\iresource.h" />
     <ClInclude Include="..\..\src\objects\leanCommandBuffer.h" />
     <ClInclude Include="..\..\src\objects\managedDeviceMemory.h" />
     <ClInclude Include="..\..\src\objects\model\deviceChild.h" />
     <ClInclude Include="..\..\src\objects\model\dispatchable.h" />
     <ClInclude Include="..\..\src\objects\model\iobject.h" />
+    <ClInclude Include="..\..\src\objects\model\iresource.h" />
     <ClInclude Include="..\..\src\objects\model\nondispatchable.h" />
     <ClInclude Include="..\..\src\objects\model\object.h" />
     <ClInclude Include="..\..\src\objects\model\objectType.h" />

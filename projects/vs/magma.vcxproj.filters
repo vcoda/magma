@@ -267,9 +267,6 @@
     <ClInclude Include="..\..\src\objects\instance.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\iresource.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\objects\managedDeviceMemory.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -899,6 +896,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\stackArray.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objects\model\iresource.h">
+      <Filter>Header Files\objects\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
