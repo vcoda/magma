@@ -102,8 +102,8 @@ void Queue::bindSparse(const std::vector<VkSparseBufferMemoryBindInfo>& bufferBi
     const std::unique_ptr<Fence>& fence /* nullptr */,
     const StructureChain& extendedInfo /* default */)
 {
-    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
-    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
+    MAGMA_VLA(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
+    MAGMA_VLA(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
     VkBindSparseInfo bindSparseInfo = {};
     bindSparseInfo.sType = VK_STRUCTURE_TYPE_BIND_SPARSE_INFO;
     bindSparseInfo.pNext = extendedInfo.headNode();
@@ -180,9 +180,9 @@ void Queue::submit(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers
     MAGMA_ASSERT(cmdBuffers.size());
     if (0 == cmdBuffers.size())
         return;
-    MAGMA_STACK_ARRAY(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
-    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
-    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
+    MAGMA_VLA(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
+    MAGMA_VLA(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
+    MAGMA_VLA(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
     // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkSubmitInfo.html
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;

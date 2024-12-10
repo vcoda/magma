@@ -107,7 +107,7 @@ bool DescriptorSet::dirty() const
 
 void DescriptorSet::update()
 {
-    MAGMA_STACK_ARRAY(VkWriteDescriptorSet, descriptorWrites, setTable.getSize());
+    MAGMA_VLA(VkWriteDescriptorSet, descriptorWrites, setTable.getSize());
     const uint32_t descriptorWriteCount = writeDescriptors(descriptorWrites);
     if (descriptorWriteCount)
         device->updateDescriptorSets(descriptorWriteCount, descriptorWrites, 0, nullptr);

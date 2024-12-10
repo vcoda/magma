@@ -34,7 +34,7 @@ std::shared_ptr<Device> PhysicalDeviceGroup::createDevice(const std::set<DeviceQ
     const StructureChain& enabledExtendedFeatures /* default */,
     const StructureChain& extendedInfo /* default */) const
 {
-    MAGMA_STACK_ARRAY(VkPhysicalDevice, dereferencedPhysicalDevices, getPhysicalDeviceCount());
+    MAGMA_VLA(VkPhysicalDevice, dereferencedPhysicalDevices, getPhysicalDeviceCount());
     for (auto const& physicalDevice: physicalDevices)
         dereferencedPhysicalDevices.put(*physicalDevice);
     VkDeviceGroupDeviceCreateInfoKHR deviceGroupDeviceInfo;

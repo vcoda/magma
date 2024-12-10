@@ -176,5 +176,5 @@ constexpr T alignDown(T value, T alignment) noexcept
 #include "macros.h"
 #include "hash.h"
 #include "memory.h"
-#include "stackArray.h"
 #include "variantPtr.h"
+#include "vla.h"

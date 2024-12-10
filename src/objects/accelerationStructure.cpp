@@ -43,8 +43,8 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     buildScratchSize(0ull),
     updateScratchSize(0ull)
 {
-    MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);
-    MAGMA_STACK_ARRAY(uint32_t, maxPrimitiveCounts, geometryCount);
+    MAGMA_VLA(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);
+    MAGMA_VLA(uint32_t, maxPrimitiveCounts, geometryCount);
     for (auto const& geometry: geometries)
     {
         geometryPointers.put(&geometry);

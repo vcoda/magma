@@ -38,7 +38,7 @@ void PrimaryCommandBuffer::executeCommands(const std::unique_ptr<CommandBuffer>&
 
 void PrimaryCommandBuffer::executeCommands(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
-    MAGMA_STACK_ARRAY(const LeanCommandBuffer*, leanCmdBuffers, cmdBuffers.size());
+    MAGMA_VLA(const LeanCommandBuffer*, leanCmdBuffers, cmdBuffers.size());
     for (auto const& cmdBuffer: cmdBuffers)
     {
         MAGMA_ASSERT(!cmdBuffer->primary());

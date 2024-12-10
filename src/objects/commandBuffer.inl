@@ -282,7 +282,7 @@ inline void CommandBuffer::clearDepthStencilImage(const std::shared_ptr<Image>& 
 
 inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
 {
-    MAGMA_STACK_ARRAY(VkClearAttachment, clearAttachments, attachments.size());
+    MAGMA_VLA(VkClearAttachment, clearAttachments, attachments.size());
     for (auto const& attachment: attachments)
         clearAttachments.put(attachment);
     leanCmd.clearAttachments(core::countof(attachments), clearAttachments, clearRect);
@@ -376,7 +376,7 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
 
 inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
@@ -389,7 +389,7 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
 
 inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
@@ -459,7 +459,7 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_, VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
@@ -472,7 +472,7 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
 
 inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_, VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);

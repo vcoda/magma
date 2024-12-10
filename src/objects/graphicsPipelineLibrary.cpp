@@ -67,7 +67,7 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
     const RasterizationState& rasterizationState, const std::vector<VkDynamicState>& dynamicStates,
     const std::unique_ptr<PipelineLayout>& layout, VkPipelineCreateFlags flags /* 0 */)
 {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#pipelines-graphics-subsets-pre-rasterization
-    MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, preRasterizationShaderStages.size());
+    MAGMA_VLA(VkPipelineShaderStageCreateInfo, dereferencedStages, preRasterizationShaderStages.size());
     for (auto const& stage: preRasterizationShaderStages)
     {
         switch (stage.stage)

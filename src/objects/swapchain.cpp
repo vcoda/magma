@@ -209,7 +209,7 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
         vkGetSwapchainImagesKHR(getNativeDevice(), handle, &swapchainImageCount, nullptr);
         if (swapchainImageCount)
         {
-            MAGMA_STACK_ARRAY(VkImage, swapchainImages, swapchainImageCount);
+            MAGMA_VLA(VkImage, swapchainImages, swapchainImageCount);
             const VkResult result = vkGetSwapchainImagesKHR(getNativeDevice(), handle, &swapchainImageCount, swapchainImages);
             MAGMA_HANDLE_RESULT(result, "failed to get swapchain images");
             uint32_t imageIndex = 0;

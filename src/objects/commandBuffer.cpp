@@ -172,7 +172,7 @@ void CommandBuffer::setViewport(float x, float y, float width, float height,
 void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
     const std::initializer_list<uint32_t>& dynamicOffsets /* empty */) noexcept
 {
-    MAGMA_STACK_ARRAY(const DescriptorSet*, unmanagedDescriptorSets, descriptorSets.size());
+    MAGMA_VLA(const DescriptorSet*, unmanagedDescriptorSets, descriptorSets.size());
     for (auto const& descriptorSet: descriptorSets)
     {
         unmanagedDescriptorSets.put(descriptorSet.get());
@@ -187,7 +187,7 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
 void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<Buffer>>& vertexBuffers,
     std::initializer_list<VkDeviceSize> offsets /* empty */) noexcept
 {
-    MAGMA_STACK_ARRAY(const Buffer*, unmanagedVertexBuffers, vertexBuffers.size());
+    MAGMA_VLA(const Buffer*, unmanagedVertexBuffers, vertexBuffers.size());
     for (auto const& buffer: vertexBuffers)
     {
         unmanagedVertexBuffers.put(buffer.get());
@@ -252,13 +252,13 @@ void CommandBuffer::waitEvents(const std::initializer_list<std::shared_ptr<Event
     const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
     const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_ /* empty */) const noexcept
 {
-    MAGMA_STACK_ARRAY(const Event*, unmanagedEvents, events.size());
+    MAGMA_VLA(const Event*, unmanagedEvents, events.size());
     for (auto const& event: events)
     {
         unmanagedEvents.put(event.get());
         MAGMA_INUSE(event);
     }
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
@@ -275,13 +275,13 @@ void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events
     const std::vector<VkMemoryBarrier>& memoryBarriers, const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers,
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
-    MAGMA_STACK_ARRAY(const Event*, unmanagedEvents, events.size());
+    MAGMA_VLA(const Event*, unmanagedEvents, events.size());
     for (auto const& event: events)
     {
         unmanagedEvents.put(event.get());
         MAGMA_INUSE(event);
     }
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
@@ -300,7 +300,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_ /* empty */,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
@@ -320,7 +320,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
+    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
     {
         imageMemoryBarriers.put(barrier);
@@ -459,7 +459,7 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
     if (extensions.EXT_transform_feedback)
     {
-        MAGMA_STACK_ARRAY(const Buffer*, unmanagedTransformFeedbackBuffers, transformFeedbackBuffers.size());
+        MAGMA_VLA(const Buffer*, unmanagedTransformFeedbackBuffers, transformFeedbackBuffers.size());
         for (auto const& buffer: transformFeedbackBuffers)
         {
             unmanagedTransformFeedbackBuffers.put(buffer.get());
@@ -478,7 +478,7 @@ void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const st
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
     if (extensions.EXT_transform_feedback)
     {
-        MAGMA_STACK_ARRAY(const Buffer*, unmanagedCounterBuffers, counterBuffers.size());
+        MAGMA_VLA(const Buffer*, unmanagedCounterBuffers, counterBuffers.size());
         for (auto const& buffer: counterBuffers)
         {
             unmanagedCounterBuffers.put(buffer.get());
@@ -503,7 +503,7 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
             popDebugMarker();
             annotatedTransformFeedback = VK_FALSE;
         }
-        MAGMA_STACK_ARRAY(const Buffer*, unmanagedCounterBuffers, counterBuffers.size());
+        MAGMA_VLA(const Buffer*, unmanagedCounterBuffers, counterBuffers.size());
         for (auto const& buffer: counterBuffers)
         {
             unmanagedCounterBuffers.put(buffer.get());
@@ -525,7 +525,7 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     MAGMA_ASSERT(extensions.KHR_imageless_framebuffer);
     if (extensions.KHR_imageless_framebuffer)
     {
-        MAGMA_STACK_ARRAY(const ImageView*, unmanagedAttachments, attachments.size());
+        MAGMA_VLA(const ImageView*, unmanagedAttachments, attachments.size());
         for (auto const& attachment: attachments)
         {
             unmanagedAttachments.put(attachment.get());
@@ -563,7 +563,7 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::s
     MAGMA_ASSERT(extensions.KHR_imageless_framebuffer && extensions.KHR_device_group);
     if (extensions.KHR_imageless_framebuffer && extensions.KHR_device_group)
     {
-        MAGMA_STACK_ARRAY(const ImageView*, unmanagedAttachments, attachments.size());
+        MAGMA_VLA(const ImageView*, unmanagedAttachments, attachments.size());
         for (auto const& attachment: attachments)
         {
             unmanagedAttachments.put(attachment.get());
@@ -594,8 +594,8 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevel
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
-        MAGMA_STACK_ARRAY(VkAccelerationStructureBuildRangeInfoKHR, buildRanges, geometryCount);
+        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        MAGMA_VLA(VkAccelerationStructureBuildRangeInfoKHR, buildRanges, geometryCount);
         for (auto const& geometry: geometries)
         {
             geometryPointers.put(&geometry);
@@ -616,7 +616,7 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevel
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
         for (auto const& geometry: geometries)
             geometryPointers.put(&geometry);
         leanCmd.buildAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges.data(), scratchBuffer.get());
@@ -633,8 +633,8 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
-        MAGMA_STACK_ARRAY(VkAccelerationStructureBuildRangeInfoKHR, buildRanges, geometryCount);
+        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        MAGMA_VLA(VkAccelerationStructureBuildRangeInfoKHR, buildRanges, geometryCount);
         for (auto const& geometry: geometries)
         {
             geometryPointers.put(&geometry);
@@ -655,7 +655,7 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
         for (auto const& geometry: geometries)
             geometryPointers.put(&geometry);
         leanCmd.updateAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges.data(), scratchBuffer.get());
@@ -673,8 +673,8 @@ void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<Ac
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_STACK_ARRAY(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
-        MAGMA_STACK_ARRAY(uint32_t, maxPrimitiveCounts, geometryCount);
+        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        MAGMA_VLA(uint32_t, maxPrimitiveCounts, geometryCount);
         for (auto const& geometry: geometries)
         {
             geometryPointers.put(&geometry);

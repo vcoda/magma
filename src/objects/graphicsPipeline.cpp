@@ -98,7 +98,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), core::countof(shaderStages)),
     rsHash(0ull)
 {
-    MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
+    MAGMA_VLA(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
     for (auto const& stage: shaderStages)
         dereferencedStages.put(stage);
     VkGraphicsPipelineCreateInfo pipelineInfo;
