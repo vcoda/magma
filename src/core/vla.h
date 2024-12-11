@@ -35,6 +35,7 @@ namespace magma
                 len(static_cast<uint32_t>(len)),
                 cnt(0)
             {
+                MAGMA_ASSERT(ptr);
                 if constexpr (std::is_default_constructible<T>::value)
                 {
                     for (T *p = begin(); p != end(); ++p)
