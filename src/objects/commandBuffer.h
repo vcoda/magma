@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "leanCommandBuffer.h"
 #include "indirectBuffer.h"
 #include "transformFeedbackBuffer.h"
+#include "topLevelStructure.h"
 #include "../barriers/memoryBarrier.h"
 #include "../barriers/bufferMemoryBarrier.h"
 #include "../barriers/imageMemoryBarrier.h"
