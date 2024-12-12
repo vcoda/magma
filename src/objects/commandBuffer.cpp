@@ -86,8 +86,8 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     return (VK_SUCCESS == result);
 }
 
-bool CommandBuffer::beginInherited(const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass,
-    const std::shared_ptr<Framebuffer>& framebuffer, bool occlusionQueryEnable /* false */, VkQueryControlFlags queryFlags /* 0 */,
+bool CommandBuffer::beginInherited(lent_ptr<RenderPass> renderPass, uint32_t subpass,
+    lent_ptr<Framebuffer> framebuffer, bool occlusionQueryEnable /* false */, VkQueryControlFlags queryFlags /* 0 */,
     VkQueryPipelineStatisticFlags pipelineStatistics /* 0 */, VkCommandBufferUsageFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */) noexcept
 {
@@ -171,7 +171,7 @@ void CommandBuffer::setViewport(float x, float y, float width, float height,
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
 }
 
-void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::initializer_list<std::shared_ptr<DescriptorSet>>& descriptorSets,
+void CommandBuffer::bindDescriptorSets(lent_ptr<Pipeline> pipeline, uint32_t firstSet, const std::initializer_list<lent_ptr<DescriptorSet>>& descriptorSets,
     const std::initializer_list<uint32_t>& dynamicOffsets /* empty */) noexcept
 {
     MAGMA_STACK_ARRAY(const DescriptorSet*, unmanagedDescriptorSets, descriptorSets.size());
@@ -186,8 +186,8 @@ void CommandBuffer::bindDescriptorSets(const std::shared_ptr<Pipeline>& pipeline
     MAGMA_INCR(bindStats.bindDescriptorSetCount, 1);
 }
 
-void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<Buffer>>& vertexBuffers,
-    std::initializer_list<VkDeviceSize> offsets /* empty */) noexcept
+void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<lent_ptr<Buffer>>& vertexBuffers,
+    const std::initializer_list<VkDeviceSize>& offsets /* empty */) noexcept
 {
     MAGMA_STACK_ARRAY(const Buffer*, unmanagedVertexBuffers, vertexBuffers.size());
     for (auto const& buffer: vertexBuffers)
@@ -200,7 +200,7 @@ void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initiali
     MAGMA_INCR(stats.bindVertexBufferCount, 1);
 }
 
-void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Buffer>& dstBuffer,
+void CommandBuffer::copyBuffer(lent_ptr<Buffer> srcBuffer, lent_ptr<Buffer> dstBuffer,
     VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) const noexcept
 {
     VkBufferCopy region;
@@ -219,7 +219,7 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const s
     MAGMA_INUSE(dstBuffer);
 }
 
- void CommandBuffer::copyImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, uint32_t mipLevel) const noexcept
+ void CommandBuffer::copyImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, uint32_t mipLevel) const noexcept
 {
     VkImageCopy region;
     region.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
@@ -227,10 +227,10 @@ void CommandBuffer::copyBuffer(const std::shared_ptr<Buffer>& srcBuffer, const s
     region.dstSubresource = dstImage->getSubresourceLayers(mipLevel);
     region.dstOffset = VkOffset3D{0, 0, 0};
     region.extent = srcImage->calculateMipExtent(mipLevel);
-    copyImage(srcImage, dstImage, region);
+    copyImage(std::move(srcImage), std::move(dstImage), region);
 }
 
-void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage,
+void CommandBuffer::blitImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage,
     uint32_t srcMipLevel, uint32_t dstMipLevel, VkFilter filter) const noexcept
 {
     VkExtent3D srcExtent = srcImage->calculateMipExtent(srcMipLevel);
@@ -246,10 +246,10 @@ void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std:
     region.dstOffsets[1].x = dstExtent.width;
     region.dstOffsets[1].y = dstExtent.height;
     region.dstOffsets[1].z = 1;
-    blitImage(srcImage, dstImage, region, filter);
+    blitImage(std::move(srcImage), std::move(dstImage), region, filter);
 }
 
-void CommandBuffer::waitEvents(const std::initializer_list<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+void CommandBuffer::waitEvents(const std::initializer_list<lent_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::initializer_list<VkMemoryBarrier>& memoryBarriers /* empty */,
     const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
     const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_ /* empty */) const noexcept
@@ -273,7 +273,7 @@ void CommandBuffer::waitEvents(const std::initializer_list<std::shared_ptr<Event
     MAGMA_CHECKPOINT(dstStageMask);
 }
 
-void CommandBuffer::waitEvents(const std::vector<std::shared_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+void CommandBuffer::waitEvents(const std::vector<lent_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::vector<VkMemoryBarrier>& memoryBarriers, const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers,
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
@@ -336,8 +336,8 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::initializer_list<ClearValue>& clearValues /* empty */, const VkRect2D& renderArea_ /* {0, 0, 0, 0} */,
+void CommandBuffer::beginRenderPass(lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
+    const std::initializer_list<ClearValue> clearValues /* empty */, const VkRect2D& renderArea_ /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     MAGMA_ASSERT(!renderingPass);
@@ -356,8 +356,8 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
     MAGMA_INUSE(renderPass);
     MAGMA_INUSE(framebuffer);
     renderPass->begin(framebuffer->getAttachments());
-    renderPassState.renderPass = renderPass;
-    renderPassState.framebuffer = framebuffer;
+    renderPassState.renderPass = renderPass.get();
+    renderPassState.framebuffer = framebuffer.get();
 }
 
 void CommandBuffer::endRenderPass() noexcept
@@ -375,8 +375,8 @@ void CommandBuffer::endRenderPass() noexcept
         renderPassState.renderPass->end(renderPassState.attachments);
     else if (renderPassState.framebuffer)
         renderPassState.renderPass->end(renderPassState.framebuffer->getAttachments());
-    renderPassState.renderPass.reset();
-    renderPassState.framebuffer.reset();
+    renderPassState.renderPass = nullptr;
+    renderPassState.framebuffer = nullptr;
     renderPassState.attachments.clear();
 }
 
@@ -398,7 +398,7 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, VkCommandBufferUsageFl
     return false;
 }
 
-void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
     const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -414,15 +414,15 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::s
         MAGMA_INUSE(renderPass);
         MAGMA_INUSE(framebuffer);
         renderPass->begin(framebuffer->getAttachments());
-        renderPassState.renderPass = renderPass;
-        renderPassState.framebuffer = framebuffer;
+        renderPassState.renderPass = renderPass.get();
+        renderPassState.framebuffer = framebuffer.get();
         renderingPass = VK_TRUE;
     }
 }
 #endif // VK_KHR_device_group
 
 #ifdef VK_EXT_conditional_rendering
-void CommandBuffer::beginConditionalRendering(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset /* 0 */, bool inverted /* false */) noexcept
+void CommandBuffer::beginConditionalRendering(lent_ptr<Buffer> buffer, VkDeviceSize offset /* 0 */, bool inverted /* false */) noexcept
 {
     MAGMA_ASSERT(!conditionalRendering);
     MAGMA_ASSERT(extensions.EXT_conditional_rendering);
@@ -455,8 +455,8 @@ void CommandBuffer::endConditionalRendering() noexcept
 #endif // VK_EXT_conditional_rendering
 
 #ifdef VK_EXT_transform_feedback
-void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::initializer_list<std::shared_ptr<Buffer>>& transformFeedbackBuffers,
-    const std::initializer_list<VkDeviceSize>& offsets, const std::initializer_list<VkDeviceSize>& sizes /* empty */) noexcept
+void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const std::initializer_list<lent_ptr<Buffer>> transformFeedbackBuffers,
+    const std::initializer_list<VkDeviceSize> offsets, const std::initializer_list<VkDeviceSize> sizes /* empty */) noexcept
 {
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
     if (extensions.EXT_transform_feedback)
@@ -473,7 +473,7 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
     }
 }
 
-void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<Buffer>>& counterBuffers,
+void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<Buffer>>& counterBuffers,
     const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
     MAGMA_ASSERT(!transformFeedback);
@@ -493,8 +493,8 @@ void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const st
     }
 }
 
-void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<Buffer>>& counterBuffers,
-    const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
+void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<Buffer>> counterBuffers,
+    const std::initializer_list<VkDeviceSize> counterBufferOffsets /* empty */) noexcept
 {
     MAGMA_ASSERT(transformFeedback);
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
@@ -519,8 +519,8 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
 #endif // VK_EXT_transform_feedback
 
 #ifdef VK_KHR_imageless_framebuffer
-void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
-    const std::vector<std::shared_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue>& clearValues /* empty */,
+void CommandBuffer::beginRenderPass(lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
+    const std::vector<lent_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue> clearValues /* empty */,
     const VkRect2D& renderArea_ /* {0, 0, 0, 0} */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     MAGMA_ASSERT(!renderingPass);
@@ -549,16 +549,18 @@ void CommandBuffer::beginRenderPass(const std::shared_ptr<RenderPass>& renderPas
         MAGMA_INUSE(renderPass);
         MAGMA_INUSE(framebuffer);
         renderPass->begin(framebuffer->getAttachments());
-        renderPassState.renderPass = renderPass;
-        renderPassState.framebuffer = framebuffer;
-        renderPassState.attachments = attachments;
+        renderPassState.renderPass = renderPass.get();
+        renderPassState.framebuffer = framebuffer.get();
+        MAGMA_ASSERT(renderPassState.attachments.empty());
+        for (auto const& attachment: attachments)
+            renderPassState.attachments.push_back(attachment.get());
     }
 }
 
 #ifdef VK_KHR_device_group
-void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::shared_ptr<RenderPass>& renderPass,
-    const std::shared_ptr<ImagelessFramebuffer>& framebuffer, const std::vector<std::shared_ptr<ImageView>>& attachments,
-    const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */,
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<RenderPass> renderPass,
+    lent_ptr<ImagelessFramebuffer> framebuffer, const std::vector<lent_ptr<ImageView>>& attachments,
+    const std::initializer_list<ClearValue> clearValues /* empty */, const std::initializer_list<VkRect2D> deviceRenderAreas /* empty */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     MAGMA_ASSERT(!renderingPass);
@@ -580,17 +582,17 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const std::s
         MAGMA_INUSE(renderPass);
         MAGMA_INUSE(framebuffer);
         renderPass->begin(framebuffer->getAttachments());
-        renderPassState.renderPass = renderPass;
-        renderPassState.framebuffer = framebuffer;
-        renderPassState.attachments = attachments;
+        renderPassState.renderPass = renderPass.get();
+        renderPassState.framebuffer = framebuffer.get();
+        //renderPassState.attachments = attachments;
     }
 }
 #endif // VK_KHR_device_group
 #endif // VK_KHR_imageless_framebuffer
 
 #ifdef VK_KHR_acceleration_structure
-void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+void CommandBuffer::buildAccelerationStructure(lent_ptr<BottomLevelAccelerationStructure> accelerationStructure,
+    const std::list<AccelerationStructureGeometry>& geometries, lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -610,9 +612,9 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevel
     }
 }
 
-void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
+void CommandBuffer::buildAccelerationStructure(lent_ptr<BottomLevelAccelerationStructure> accelerationStructure,
     const std::list<AccelerationStructureGeometry>& geometries, const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
-    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+    lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -628,8 +630,8 @@ void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<BottomLevel
     }
 }
 
-void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
-    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+void CommandBuffer::updateAccelerationStructure(lent_ptr<BottomLevelAccelerationStructure> accelerationStructure,
+    const std::list<AccelerationStructureGeometry>& geometries, lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -649,9 +651,9 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
     }
 }
 
-void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLevelAccelerationStructure>& accelerationStructure,
+void CommandBuffer::updateAccelerationStructure(lent_ptr<BottomLevelAccelerationStructure> accelerationStructure,
     const std::list<AccelerationStructureGeometry>& geometries, const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
-    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+    lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -667,9 +669,9 @@ void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<BottomLeve
     }
 }
 
-void CommandBuffer::updateAccelerationStructureIndirect(const std::shared_ptr<AccelerationStructure>& accelerationStructure,
-    const std::list<AccelerationStructureGeometry>& geometries, const std::shared_ptr<Buffer>& indirectBuildRanges,
-    const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+void CommandBuffer::updateAccelerationStructureIndirect(lent_ptr<AccelerationStructure> accelerationStructure,
+    const std::list<AccelerationStructureGeometry> geometries, lent_ptr<Buffer> indirectBuildRanges,
+    lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -718,8 +720,8 @@ void CommandBuffer::resetInternalState() noexcept
     annotatedRenderPass = VK_FALSE;
     annotatedConditionalRendering = VK_FALSE;
     annotatedTransformFeedback = VK_FALSE;
-    renderPassState.renderPass.reset();
-    renderPassState.framebuffer.reset();
+    renderPassState.renderPass = nullptr;
+    renderPassState.framebuffer = nullptr;
     renderPassState.attachments.clear();
     if (markerBuffer)
         markerBuffer->setPrivateData(0ull);
@@ -729,7 +731,7 @@ void CommandBuffer::resetInternalState() noexcept
 #define MAGMA_DEVICE_EXTENSION_ENABLED(name) name(device->extensionEnabled(MAGMA_EXTENSION_PREFIX #name))
 #define MAGMA_INSTANCE_EXTENSION_ENABLED(name) name(device->getPhysicalDevice()->getInstance()->extensionEnabled(MAGMA_EXTENSION_PREFIX #name))
 
-CommandBuffer::Extensions::Extensions(std::shared_ptr<const Device> device):
+CommandBuffer::Extensions::Extensions(lent_ptr<const Device> device):
     MAGMA_DEVICE_EXTENSION_ENABLED(AMD_buffer_marker),
     MAGMA_DEVICE_EXTENSION_ENABLED(AMD_draw_indirect_count),
     MAGMA_DEVICE_EXTENSION_ENABLED(AMD_negative_viewport_height),

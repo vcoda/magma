@@ -25,7 +25,6 @@ namespace magma
 {
     class Format;
     class ImageView;
-    typedef std::vector<std::shared_ptr<ImageView>> FramebufferAttachments;
 
     /* A render pass represents a collection of attachments,
        subpasses, and dependencies between the subpasses,
@@ -78,8 +77,8 @@ namespace magma
         hash_t hash;
 
     private:
-        void begin(const FramebufferAttachments& attachments) const noexcept;
-        void end(const FramebufferAttachments& attachments) const noexcept;
+        void begin(const std::vector<ImageView *>& attachments) const noexcept;
+        void end(const std::vector<ImageView *>& attachments) const noexcept;
         friend class CommandBuffer;
     };
 } // namespace magma

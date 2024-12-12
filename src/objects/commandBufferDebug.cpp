@@ -117,7 +117,7 @@ void CommandBuffer::insertDebugLabel(const char *name, float r, float g, float b
 #endif // VK_EXT_debug_utils
 
 #ifdef VK_AMD_buffer_marker
-void CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, const std::unique_ptr<Buffer>& dstBuffer, VkDeviceSize dstOffset, uint32_t marker) const noexcept
+void CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, lent_ptr<Buffer> dstBuffer, VkDeviceSize dstOffset, uint32_t marker) const noexcept
 {
     if (extensions.AMD_buffer_marker)
     {

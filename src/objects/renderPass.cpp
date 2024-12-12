@@ -245,7 +245,7 @@ SubpassDependency RenderPass::subpassEndDependency(bool colorAttachment, bool de
     return subpassDependency;
 }
 
-void RenderPass::begin(const FramebufferAttachments& attachments) const noexcept
+void RenderPass::begin(const std::vector<ImageView *>& attachments) const noexcept
 {
     core::forConstEach(attachments, this->attachments,
         [](auto& attachment, auto& attachmentDesc)
@@ -256,7 +256,7 @@ void RenderPass::begin(const FramebufferAttachments& attachments) const noexcept
         });
 }
 
-void RenderPass::end(const FramebufferAttachments& attachments) const noexcept
+void RenderPass::end(const std::vector<ImageView *>& attachments) const noexcept
 {
     core::forConstEach(attachments, this->attachments,
         [](auto& attachment, auto& attachmentDesc)

@@ -1,6 +1,6 @@
 namespace magma
 {
-inline void CommandBuffer::bindPipeline(const std::shared_ptr<Pipeline>& pipeline) noexcept
+inline void CommandBuffer::bindPipeline(lent_ptr<Pipeline> pipeline) noexcept
 {
     leanCmd.bindPipeline(pipeline.get());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
@@ -85,7 +85,7 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT);
 }
 
-inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::shared_ptr<DescriptorSet>& descriptorSet,
+inline void CommandBuffer::bindDescriptorSet(lent_ptr<Pipeline> pipeline, uint32_t firstSet, lent_ptr<DescriptorSet> descriptorSet,
     uint32_t dynamicOffset /* std::numeric_limits<uint32_t>::max() */) noexcept
 {
     uint32_t dynamicOffsetCount = dynamicOffset < std::numeric_limits<uint32_t>::max() ? 1 : 0;
@@ -95,7 +95,7 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     MAGMA_INUSE(descriptorSet);
 }
 
-inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, uint32_t firstSet, const std::shared_ptr<DescriptorSet>& descriptorSet, const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
+inline void CommandBuffer::bindDescriptorSet(lent_ptr<Pipeline> pipeline, uint32_t firstSet, lent_ptr<DescriptorSet> descriptorSet, const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
 {
     leanCmd.bindDescriptorSet(pipeline->getBindPoint(), pipeline->getLayout().get(), firstSet, descriptorSet.get(), core::countof(dynamicOffsets), dynamicOffsets.begin());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
@@ -103,7 +103,7 @@ inline void CommandBuffer::bindDescriptorSet(const std::shared_ptr<Pipeline>& pi
     MAGMA_INUSE(descriptorSet);
 }
 
-inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer>& indexBuffer, VkDeviceSize offset /* 0 */) noexcept
+inline void CommandBuffer::bindIndexBuffer(lent_ptr<BaseIndexBuffer> indexBuffer, VkDeviceSize offset /* 0 */) noexcept
 {
     leanCmd.bindIndexBuffer(indexBuffer.get(), offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
@@ -111,7 +111,7 @@ inline void CommandBuffer::bindIndexBuffer(const std::shared_ptr<BaseIndexBuffer
     MAGMA_INUSE(indexBuffer);
 }
 
-inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, const std::shared_ptr<Buffer>& vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
+inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, lent_ptr<Buffer> vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
 {
     leanCmd.bindVertexBuffer(firstBinding, vertexBuffer.get(), offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
@@ -147,7 +147,7 @@ inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t in
     MAGMA_INCR(stats.drawIndexedCount, 1);
 }
 
-inline void CommandBuffer::drawIndirect(const std::shared_ptr<Buffer>& buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::drawIndirect(lent_ptr<Buffer> buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.drawIndirect(buffer.get(), drawCount, offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT);
@@ -155,7 +155,7 @@ inline void CommandBuffer::drawIndirect(const std::shared_ptr<Buffer>& buffer, u
     MAGMA_INUSE(buffer);
 }
 
-inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer>& buffer) const noexcept
+inline void CommandBuffer::drawIndirect(lent_ptr<DrawIndirectBuffer> buffer) const noexcept
 {
     leanCmd.drawIndirect(buffer.get(), buffer->getDrawCount());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT);
@@ -163,7 +163,7 @@ inline void CommandBuffer::drawIndirect(const std::shared_ptr<DrawIndirectBuffer
     MAGMA_INUSE(buffer);
 }
 
-inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffer>& buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::drawIndexedIndirect(lent_ptr<Buffer> buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.drawIndexedIndirect(buffer.get(), drawCount, offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT);
@@ -171,7 +171,7 @@ inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<Buffer>& bu
     MAGMA_INUSE(buffer);
 }
 
-inline void CommandBuffer::drawIndexedIndirect(const std::shared_ptr<DrawIndexedIndirectBuffer>& buffer) const noexcept
+inline void CommandBuffer::drawIndexedIndirect(lent_ptr<DrawIndexedIndirectBuffer> buffer) const noexcept
 {
     leanCmd.drawIndexedIndirect(buffer.get(), buffer->getDrawCount());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT);
@@ -186,14 +186,14 @@ inline void CommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, 
     MAGMA_INCR(stats.dispatchCount, 1);
 }
 
-inline void CommandBuffer::dispatchIndirect(const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::dispatchIndirect(lent_ptr<Buffer> buffer, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.dispatchIndirect(buffer.get(), offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT);
     MAGMA_INCR(stats.dispatchIndirectCount, 1);
 }
 
-inline void CommandBuffer::copyImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageCopy& region) const noexcept
+inline void CommandBuffer::copyImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageCopy& region) const noexcept
 {
     leanCmd.copyImage(srcImage.get(), dstImage.get(), region);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -201,7 +201,7 @@ inline void CommandBuffer::copyImage(const std::shared_ptr<Image>& srcImage, con
     MAGMA_INUSE(dstImage);
 }
 
-inline void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageBlit& region, VkFilter filter) const noexcept
+inline void CommandBuffer::blitImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageBlit& region, VkFilter filter) const noexcept
 {
     leanCmd.blitImage(srcImage.get(), dstImage.get(), region, filter);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -209,7 +209,7 @@ inline void CommandBuffer::blitImage(const std::shared_ptr<Image>& srcImage, con
     MAGMA_INUSE(dstImage);
 }
 
-inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, const VkBufferImageCopy& region) const noexcept
+inline void CommandBuffer::copyBufferToImage(lent_ptr<Buffer> srcBuffer, lent_ptr<Image> dstImage, const VkBufferImageCopy& region) const noexcept
 {
     leanCmd.copyBufferToImage(srcBuffer.get(), dstImage.get(), 1, &region);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -217,7 +217,7 @@ inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcB
     MAGMA_INUSE(dstImage);
 }
 
-inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<Image>& dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept
+inline void CommandBuffer::copyBufferToImage(lent_ptr<Buffer> srcBuffer, lent_ptr<Image> dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept
 {
     leanCmd.copyBufferToImage(srcBuffer.get(), dstImage.get(), core::countof(regions), regions.data());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -225,7 +225,7 @@ inline void CommandBuffer::copyBufferToImage(const std::shared_ptr<Buffer>& srcB
     MAGMA_INUSE(dstImage);
 }
 
-inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const VkBufferImageCopy& region) const noexcept
+inline void CommandBuffer::copyImageToBuffer(lent_ptr<Image> srcImage, lent_ptr<Buffer> dstBuffer, const VkBufferImageCopy& region) const noexcept
 {
     leanCmd.copyImageToBuffer(srcImage.get(), dstBuffer.get(), 1, &region);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -233,7 +233,7 @@ inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcIm
     MAGMA_INUSE(dstBuffer);
 }
 
-inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Buffer>& dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
+inline void CommandBuffer::copyImageToBuffer(lent_ptr<Image> srcImage, lent_ptr<Buffer> dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
 {
     leanCmd.copyImageToBuffer(srcImage.get(), dstBuffer.get(), core::countof(regions), regions.data());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -241,7 +241,7 @@ inline void CommandBuffer::copyImageToBuffer(const std::shared_ptr<Image>& srcIm
     MAGMA_INUSE(dstBuffer);
 }
 
-inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, VkDeviceSize dataSize, const void *data, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::updateBuffer(lent_ptr<Buffer> buffer, VkDeviceSize dataSize, const void *data, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.updateBuffer(buffer.get(), dataSize, data, offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -249,7 +249,7 @@ inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, V
 }
 
 template<class Type>
-inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, const std::vector<Type>& data, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::updateBuffer(lent_ptr<Buffer> buffer, const std::vector<Type>& data, VkDeviceSize offset /* 0 */) const noexcept
 {
     VkDeviceSize dataSize = static_cast<VkDeviceSize>(sizeof(Type) * data.size());
     leanCmd.updateBuffer(buffer.get(), dataSize, data.data(), offset);
@@ -257,14 +257,14 @@ inline void CommandBuffer::updateBuffer(const std::shared_ptr<Buffer>& buffer, c
     MAGMA_INUSE(buffer);
 }
 
-inline void CommandBuffer::fillBuffer(const std::shared_ptr<Buffer>& buffer, uint32_t value, VkDeviceSize size /* VK_WHOLE_SIZE */, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::fillBuffer(lent_ptr<Buffer> buffer, uint32_t value, VkDeviceSize size /* VK_WHOLE_SIZE */, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.fillBuffer(buffer.get(), value, size, offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
     MAGMA_INUSE(buffer);
 }
 
-inline void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, const ClearColor& color, const VkImageSubresourceRange& range) const noexcept
+inline void CommandBuffer::clearColorImage(lent_ptr<Image> image, const ClearColor& color, const VkImageSubresourceRange& range) const noexcept
 {
     const VkClearValue& clearValue = color;
     leanCmd.clearColorImage(image.get(), clearValue.color, range);
@@ -272,7 +272,7 @@ inline void CommandBuffer::clearColorImage(const std::shared_ptr<Image>& image, 
     MAGMA_INUSE(image);
 }
 
-inline void CommandBuffer::clearDepthStencilImage(const std::shared_ptr<Image>& image, const ClearDepthStencil& depthStencil, const VkImageSubresourceRange& range) const noexcept
+inline void CommandBuffer::clearDepthStencilImage(lent_ptr<Image> image, const ClearDepthStencil& depthStencil, const VkImageSubresourceRange& range) const noexcept
 {
     const VkClearValue& clearValue = depthStencil;
     leanCmd.clearDepthStencilImage(image.get(), clearValue.depthStencil, range);
@@ -289,13 +289,13 @@ inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAtt
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 }
 
-inline void CommandBuffer::resolveImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage) const noexcept
+inline void CommandBuffer::resolveImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage) const noexcept
 {
     ImageResolve region(srcImage.get(), dstImage.get());
-    resolveImage(srcImage, dstImage, region);
+    resolveImage(std::move(srcImage), std::move(dstImage), region);
 }
 
-inline void CommandBuffer::resolveImage(const std::shared_ptr<Image>& srcImage, const std::shared_ptr<Image>& dstImage, const VkImageResolve& region) const noexcept
+inline void CommandBuffer::resolveImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageResolve& region) const noexcept
 {
     leanCmd.resolveImage(srcImage.get(), dstImage.get(), region);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -303,42 +303,42 @@ inline void CommandBuffer::resolveImage(const std::shared_ptr<Image>& srcImage, 
     MAGMA_INUSE(dstImage);
 }
 
-inline void CommandBuffer::setEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags stageMask) const noexcept
+inline void CommandBuffer::setEvent(lent_ptr<Event> event, VkPipelineStageFlags stageMask) const noexcept
 {
     leanCmd.setEvent(event.get(), stageMask);
     MAGMA_CHECKPOINT(stageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::resetEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags stageMask) const noexcept
+inline void CommandBuffer::resetEvent(lent_ptr<Event> event, VkPipelineStageFlags stageMask) const noexcept
 {
     leanCmd.resetEvent(event.get(), stageMask);
     MAGMA_CHECKPOINT(stageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkMemoryBarrier& barrier) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkMemoryBarrier& barrier) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, barrier);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkBufferMemoryBarrier& barrier) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkBufferMemoryBarrier& barrier) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, barrier);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, barrier);
     MAGMA_CHECKPOINT(dstStageMask);
@@ -346,35 +346,35 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkMemoryBarrier>& memoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkMemoryBarrier>& memoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(memoryBarriers), memoryBarriers.begin());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkMemoryBarrier>& memoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkMemoryBarrier>& memoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(memoryBarriers), memoryBarriers.data());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
@@ -387,7 +387,7 @@ inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipe
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(const std::shared_ptr<Event>& event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
     MAGMA_STACK_ARRAY(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
@@ -483,7 +483,7 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
-inline void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t query) noexcept
+inline void CommandBuffer::beginQuery(lent_ptr<QueryPool> queryPool, uint32_t query) noexcept
 {
     MAGMA_ASSERT(!nonIndexedQuery);
     leanCmd.beginQuery(queryPool.get(), query);
@@ -493,7 +493,7 @@ inline void CommandBuffer::beginQuery(const std::shared_ptr<QueryPool>& queryPoo
     nonIndexedQuery = VK_TRUE;
 }
 
-inline void CommandBuffer::endQuery(const std::shared_ptr<QueryPool>& queryPool, uint32_t query) noexcept
+inline void CommandBuffer::endQuery(lent_ptr<QueryPool> queryPool, uint32_t query) noexcept
 {
     MAGMA_ASSERT(nonIndexedQuery);
     leanCmd.endQuery(queryPool.get(), query);
@@ -502,14 +502,14 @@ inline void CommandBuffer::endQuery(const std::shared_ptr<QueryPool>& queryPool,
     nonIndexedQuery = VK_FALSE;
 }
 
-inline void CommandBuffer::resetQueryPool(const std::shared_ptr<QueryPool>& queryPool, uint32_t firstQuery, uint32_t queryCount) noexcept
+inline void CommandBuffer::resetQueryPool(lent_ptr<QueryPool> queryPool, uint32_t firstQuery, uint32_t queryCount) noexcept
 {
     leanCmd.resetQueryPool(queryPool.get(), firstQuery, queryCount);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     MAGMA_INUSE(queryPool);
 }
 
-inline void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage, const std::shared_ptr<QueryPool>& queryPool, uint32_t query) noexcept
+inline void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage, lent_ptr<QueryPool> queryPool, uint32_t query) noexcept
 {
     leanCmd.writeTimestamp(pipelineStage, queryPool.get(), query);
     MAGMA_CHECKPOINT(pipelineStage);
@@ -517,7 +517,7 @@ inline void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage,
 }
 
 template<class Type>
-inline void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& /* queryPool */, const std::shared_ptr<Buffer>& /* dstBuffer */, bool /* wait */,
+inline void CommandBuffer::copyQueryResults(lent_ptr<QueryPool> /* queryPool */, lent_ptr<Buffer> /* dstBuffer */, bool /* wait */,
     uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
@@ -525,7 +525,7 @@ inline void CommandBuffer::copyQueryResults(const std::shared_ptr<QueryPool>& /*
 }
 
 template<>
-inline void CommandBuffer::copyQueryResults<uint32_t>(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer, bool wait,
+inline void CommandBuffer::copyQueryResults<uint32_t>(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer, bool wait,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
 {
     if (std::numeric_limits<uint32_t>::max() == queryCount)
@@ -538,7 +538,7 @@ inline void CommandBuffer::copyQueryResults<uint32_t>(const std::shared_ptr<Quer
 }
 
 template<>
-inline void CommandBuffer::copyQueryResults<uint64_t>(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer, bool wait,
+inline void CommandBuffer::copyQueryResults<uint64_t>(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer, bool wait,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
 {
     if (std::numeric_limits<uint32_t>::max() == queryCount)
@@ -551,7 +551,7 @@ inline void CommandBuffer::copyQueryResults<uint64_t>(const std::shared_ptr<Quer
 }
 
 template<class Type>
-inline void CommandBuffer::copyQueryResultsWithAvailability(const std::shared_ptr<QueryPool>& /* queryPool */, const std::shared_ptr<Buffer>& /* dstBuffer */,
+inline void CommandBuffer::copyQueryResultsWithAvailability(lent_ptr<QueryPool> /* queryPool */, lent_ptr<Buffer> /* dstBuffer */,
     uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
@@ -559,7 +559,7 @@ inline void CommandBuffer::copyQueryResultsWithAvailability(const std::shared_pt
 }
 
 template<>
-inline void CommandBuffer::copyQueryResultsWithAvailability<uint32_t>(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer,
+inline void CommandBuffer::copyQueryResultsWithAvailability<uint32_t>(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
 {
     if (std::numeric_limits<uint32_t>::max() == queryCount)
@@ -572,7 +572,7 @@ inline void CommandBuffer::copyQueryResultsWithAvailability<uint32_t>(const std:
 }
 
 template<>
-inline void CommandBuffer::copyQueryResultsWithAvailability<uint64_t>(const std::shared_ptr<QueryPool>& queryPool, const std::shared_ptr<Buffer>& dstBuffer,
+inline void CommandBuffer::copyQueryResultsWithAvailability<uint64_t>(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
 {
     if (std::numeric_limits<uint32_t>::max() == queryCount)
@@ -662,7 +662,7 @@ inline void CommandBuffer::setLineStipple(uint32_t stippleFactor, uint16_t stipp
 #endif // VK_EXT_line_rasterization
 
 #ifdef VK_KHR_push_descriptor
-inline void CommandBuffer::pushDescriptorSet(const std::shared_ptr<Pipeline>& pipeline, uint32_t set, const std::shared_ptr<DescriptorSet>& descriptorSet) noexcept
+inline void CommandBuffer::pushDescriptorSet(lent_ptr<Pipeline> pipeline, uint32_t set, lent_ptr<DescriptorSet> descriptorSet) noexcept
 {
     MAGMA_ASSERT(extensions.KHR_push_descriptor);
     if (extensions.KHR_push_descriptor)
@@ -727,7 +727,7 @@ inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDr
 #endif // VK_EXT_multi_draw
 
 #if defined(VK_KHR_draw_indirect_count) || defined(VK_AMD_draw_indirect_count)
-inline void CommandBuffer::drawIndirectCount(const std::shared_ptr<Buffer>& buffer, const std::shared_ptr<Buffer>& countBuffer, uint32_t maxDrawCount,
+inline void CommandBuffer::drawIndirectCount(lent_ptr<Buffer> buffer, lent_ptr<Buffer> countBuffer, uint32_t maxDrawCount,
     VkDeviceSize offset /* 0 */, VkDeviceSize countBufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_draw_indirect_count || extensions.AMD_draw_indirect_count);
@@ -741,7 +741,7 @@ inline void CommandBuffer::drawIndirectCount(const std::shared_ptr<Buffer>& buff
     }
 }
 
-inline void CommandBuffer::drawIndexedIndirectCount(const std::shared_ptr<Buffer>& buffer, const std::shared_ptr<Buffer>& countBuffer, uint32_t maxDrawCount,
+inline void CommandBuffer::drawIndexedIndirectCount(lent_ptr<Buffer> buffer, lent_ptr<Buffer> countBuffer, uint32_t maxDrawCount,
     VkDeviceSize offset /* 0 */, VkDeviceSize countBufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_draw_indirect_count || extensions.AMD_draw_indirect_count);
@@ -768,7 +768,7 @@ inline void CommandBuffer::drawMeshTasks(uint32_t groupCountX, uint32_t groupCou
     }
 }
 
-inline void CommandBuffer::drawMeshTasksIndirect(const std::shared_ptr<DrawMeshTasksIndirectBuffer>& buffer, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::drawMeshTasksIndirect(lent_ptr<DrawMeshTasksIndirectBuffer> buffer, VkDeviceSize offset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.EXT_mesh_shader || extensions.NV_mesh_shader);
     if (extensions.EXT_mesh_shader || extensions.NV_mesh_shader)
@@ -780,7 +780,7 @@ inline void CommandBuffer::drawMeshTasksIndirect(const std::shared_ptr<DrawMeshT
     }
 }
 
-inline void CommandBuffer::drawMeshTasksIndirectCount(const std::shared_ptr<DrawMeshTasksIndirectBuffer>& buffer, const std::shared_ptr<Buffer>& countBuffer,
+inline void CommandBuffer::drawMeshTasksIndirectCount(lent_ptr<DrawMeshTasksIndirectBuffer> buffer, lent_ptr<Buffer> countBuffer,
     VkDeviceSize offset /* 0 */, VkDeviceSize countBufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.EXT_mesh_shader || extensions.NV_mesh_shader);
@@ -796,7 +796,7 @@ inline void CommandBuffer::drawMeshTasksIndirectCount(const std::shared_ptr<Draw
 #endif // VK_EXT_mesh_shader || VK_NV_mesh_shader
 
 #ifdef VK_EXT_transform_feedback
-inline void CommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, const std::shared_ptr<Buffer>& transformFeedbackBuffer, VkDeviceSize offset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
+inline void CommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, lent_ptr<Buffer> transformFeedbackBuffer, VkDeviceSize offset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
     if (extensions.EXT_transform_feedback)
@@ -808,7 +808,7 @@ inline void CommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, co
     }
 }
 
-inline void CommandBuffer::beginQueryIndexed(const std::shared_ptr<QueryPool>& queryPool, uint32_t query, uint32_t index) noexcept
+inline void CommandBuffer::beginQueryIndexed(lent_ptr<QueryPool> queryPool, uint32_t query, uint32_t index) noexcept
 {
     MAGMA_ASSERT(!indexedQuery);
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
@@ -822,7 +822,7 @@ inline void CommandBuffer::beginQueryIndexed(const std::shared_ptr<QueryPool>& q
     }
 }
 
-inline void CommandBuffer::endQueryIndexed(const std::shared_ptr<QueryPool>& queryPool, uint32_t query, uint32_t index) noexcept
+inline void CommandBuffer::endQueryIndexed(lent_ptr<QueryPool> queryPool, uint32_t query, uint32_t index) noexcept
 {
     MAGMA_ASSERT(indexedQuery);
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
@@ -835,7 +835,7 @@ inline void CommandBuffer::endQueryIndexed(const std::shared_ptr<QueryPool>& que
     }
 }
 
-inline void CommandBuffer::drawIndirectByteCount(const std::shared_ptr<Buffer>& counterBuffer, uint32_t vertexStride,
+inline void CommandBuffer::drawIndirectByteCount(lent_ptr<Buffer> counterBuffer, uint32_t vertexStride,
     VkDeviceSize counterBufferOffset /* 0 */, uint32_t counterOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
@@ -847,7 +847,7 @@ inline void CommandBuffer::drawIndirectByteCount(const std::shared_ptr<Buffer>& 
     }
 }
 
-inline void CommandBuffer::drawIndirectByteCountInstanced(uint32_t instanceCount, uint32_t firstInstance, const std::shared_ptr<Buffer>& counterBuffer, uint32_t vertexStride,
+inline void CommandBuffer::drawIndirectByteCountInstanced(uint32_t instanceCount, uint32_t firstInstance, lent_ptr<Buffer> counterBuffer, uint32_t vertexStride,
     VkDeviceSize counterBufferOffset /* 0 */, uint32_t counterOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
@@ -862,7 +862,7 @@ inline void CommandBuffer::drawIndirectByteCountInstanced(uint32_t instanceCount
 #endif // VK_EXT_transform_feedback
 
 #ifdef VK_KHR_acceleration_structure
-inline void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure, const AccelerationStructureGeometryInstances& instances, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+inline void CommandBuffer::buildAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureGeometryInstances& instances, lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -874,7 +874,7 @@ inline void CommandBuffer::buildAccelerationStructure(const std::shared_ptr<TopL
     }
 }
 
-inline void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<TopLevelAccelerationStructure>& accelerationStructure, const AccelerationStructureGeometryInstances& instances, const std::shared_ptr<Buffer>& scratchBuffer) const noexcept
+inline void CommandBuffer::updateAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureGeometryInstances& instances, lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -886,7 +886,7 @@ inline void CommandBuffer::updateAccelerationStructure(const std::shared_ptr<Top
     }
 }
 
-inline void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure) const noexcept
+inline void CommandBuffer::copyAccelerationStructure(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -898,7 +898,7 @@ inline void CommandBuffer::copyAccelerationStructure(const std::shared_ptr<Accel
     }
 }
 
-inline void CommandBuffer::compactAccelerationStructure(const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure) const noexcept
+inline void CommandBuffer::compactAccelerationStructure(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -910,7 +910,7 @@ inline void CommandBuffer::compactAccelerationStructure(const std::shared_ptr<Ac
     }
 }
 
-inline void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure, const std::shared_ptr<Buffer>& dstBuffer) const noexcept
+inline void CommandBuffer::copyAccelerationStructureToBuffer(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -922,7 +922,7 @@ inline void CommandBuffer::copyAccelerationStructureToBuffer(const std::shared_p
     }
 }
 
-inline void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure) const noexcept
+inline void CommandBuffer::copyBufferToAccelerationStructure(lent_ptr<Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -934,7 +934,7 @@ inline void CommandBuffer::copyBufferToAccelerationStructure(const std::shared_p
     }
 }
 
-inline void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<AccelerationStructure>& srcAccelerationStructure, const std::shared_ptr<Buffer>& dstBuffer, VkDeviceAddress bufferOffset /* 0 */) const noexcept
+inline void CommandBuffer::serializeAccelerationStructure(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer, VkDeviceAddress bufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -946,7 +946,7 @@ inline void CommandBuffer::serializeAccelerationStructure(const std::shared_ptr<
     }
 }
 
-inline void CommandBuffer::deserializeAccelerationStructure(const std::shared_ptr<Buffer>& srcBuffer, const std::shared_ptr<AccelerationStructure>& dstAccelerationStructure, VkDeviceAddress bufferOffset /* 0 */) const noexcept
+inline void CommandBuffer::deserializeAccelerationStructure(lent_ptr<Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure, VkDeviceAddress bufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -958,7 +958,7 @@ inline void CommandBuffer::deserializeAccelerationStructure(const std::shared_pt
     }
 }
 
-inline void CommandBuffer::writeAccelerationStructureProperties(const std::shared_ptr<AccelerationStructure>& accelerationStructure, const std::shared_ptr<QueryPool>& queryPool, uint32_t firstQuery /* 0 */) const noexcept
+inline void CommandBuffer::writeAccelerationStructureProperties(lent_ptr<AccelerationStructure> accelerationStructure, lent_ptr<QueryPool> queryPool, uint32_t firstQuery /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -992,7 +992,7 @@ inline void CommandBuffer::traceRays(const ShaderBindingTable& shaderBindingTabl
     }
 }
 
-inline void CommandBuffer::traceRaysIndirect(const ShaderBindingTable& shaderBindingTable, const std::shared_ptr<Buffer>& indirectBuffer) const noexcept
+inline void CommandBuffer::traceRaysIndirect(const ShaderBindingTable& shaderBindingTable, lent_ptr<Buffer> indirectBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_ray_tracing_pipeline);
     if (extensions.KHR_ray_tracing_pipeline)
@@ -1005,7 +1005,7 @@ inline void CommandBuffer::traceRaysIndirect(const ShaderBindingTable& shaderBin
 #endif // VK_KHR_ray_tracing_pipeline
 
 #ifdef VK_KHR_ray_tracing_maintenance1
-inline void CommandBuffer::traceRaysIndirect(const std::shared_ptr<Buffer>& indirectBuffer) const noexcept
+inline void CommandBuffer::traceRaysIndirect(lent_ptr<Buffer> indirectBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_ray_tracing_maintenance1);
     if (extensions.KHR_ray_tracing_maintenance1)
@@ -1028,11 +1028,11 @@ inline bool CommandBuffer::beginAnnotated(const char *name, uint32_t color, VkCo
     return false;
 }
 
-inline bool CommandBuffer::beginInheritedAnnotated(const char *name, uint32_t color, const std::shared_ptr<RenderPass>& renderPass, uint32_t subpass,
-    const std::shared_ptr<Framebuffer>& framebuffer, bool occlusionQueryEnable, VkQueryControlFlags queryFlags /* 0 */, VkQueryPipelineStatisticFlags pipelineStatistics /* 0 */,
+inline bool CommandBuffer::beginInheritedAnnotated(const char *name, uint32_t color, lent_ptr<RenderPass> renderPass, uint32_t subpass,
+    lent_ptr<Framebuffer> framebuffer, bool occlusionQueryEnable, VkQueryControlFlags queryFlags /* 0 */, VkQueryPipelineStatisticFlags pipelineStatistics /* 0 */,
     VkCommandBufferUsageFlags flags /* 0 */, const StructureChain& extendedInfo /* default */) noexcept
 {
-    if (beginInherited(renderPass, subpass, framebuffer, occlusionQueryEnable, queryFlags, pipelineStatistics, flags, extendedInfo))
+    if (beginInherited(std::move(renderPass), subpass, std::move(framebuffer), occlusionQueryEnable, queryFlags, pipelineStatistics, flags, extendedInfo))
     {
         pushDebugMarker(name, color);
         annotatedBegin = VK_TRUE;
@@ -1041,20 +1041,20 @@ inline bool CommandBuffer::beginInheritedAnnotated(const char *name, uint32_t co
     return false;
 }
 
-inline void CommandBuffer::beginRenderPassAnnotated(const char *name, uint32_t color, const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
+inline void CommandBuffer::beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
     const std::initializer_list<ClearValue>& clearValues /* empty */, const VkRect2D& renderArea /* {0, 0, 0, 0} */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    beginRenderPass(renderPass, framebuffer, clearValues, renderArea, contents);
+    beginRenderPass(std::move(renderPass), std::move(framebuffer), clearValues, renderArea, contents);
     pushDebugMarker(name, color);
     annotatedRenderPass = VK_TRUE;
 }
 
 #ifdef VK_KHR_imageless_framebuffer
-inline void CommandBuffer::beginRenderPassAnnotated(const char *name, uint32_t color, const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer,
-    const std::vector<std::shared_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue>& clearValues /* empty */,
+inline void CommandBuffer::beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
+    const std::vector<lent_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue>& clearValues /* empty */,
     const VkRect2D& renderArea /* {0, 0, 0, 0} */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    beginRenderPass(renderPass, framebuffer, attachments, clearValues, renderArea, contents);
+    beginRenderPass(std::move(renderPass), std::move(framebuffer), attachments, clearValues, renderArea, contents);
     pushDebugMarker(name, color);
     annotatedRenderPass = VK_TRUE;
 }
@@ -1074,13 +1074,12 @@ inline bool CommandBuffer::beginDeviceGroupAnnotated(const char *name, uint32_t 
 }
 
 inline void CommandBuffer::beginDeviceGroupRenderPassAnnotated(const char *name, uint32_t color, uint32_t deviceMask,
-    const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<Framebuffer>& framebuffer,
-    const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */,
-    VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
+    lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer, const std::initializer_list<ClearValue>& clearValues /* empty */,
+    const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     if (extensions.KHR_device_group)
     {
-        beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, clearValues, deviceRenderAreas, contents);
+        beginDeviceGroupRenderPass(deviceMask, std::move(renderPass), std::move(framebuffer), clearValues, deviceRenderAreas, contents);
         pushDebugMarker(name, color);
         annotatedRenderPass = VK_TRUE;
     }
@@ -1088,11 +1087,11 @@ inline void CommandBuffer::beginDeviceGroupRenderPassAnnotated(const char *name,
 
 #ifdef VK_KHR_imageless_framebuffer
 inline void CommandBuffer::beginDeviceGroupRenderPassAnnotated(const char *name, uint32_t color, uint32_t deviceMask,
-    const std::shared_ptr<RenderPass>& renderPass, const std::shared_ptr<ImagelessFramebuffer>& framebuffer, const std::vector<std::shared_ptr<ImageView>>& attachments,
+    lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer, const std::vector<lent_ptr<ImageView>>& attachments,
     const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    beginDeviceGroupRenderPass(deviceMask, renderPass, framebuffer, attachments, clearValues, deviceRenderAreas, contents);
+    beginDeviceGroupRenderPass(deviceMask, std::move(renderPass), std::move(framebuffer), attachments, clearValues, deviceRenderAreas, contents);
     if (renderingPass)
     {
         pushDebugMarker(name, color);
@@ -1103,9 +1102,9 @@ inline void CommandBuffer::beginDeviceGroupRenderPassAnnotated(const char *name,
 #endif // VK_KHR_device_group
 
 #ifdef VK_EXT_conditional_rendering
-inline void CommandBuffer::beginConditionalRenderingAnnotated(const char *name, uint32_t color, const std::shared_ptr<Buffer>& buffer, VkDeviceSize offset /* 0 */, bool inverted /* false */) noexcept
+inline void CommandBuffer::beginConditionalRenderingAnnotated(const char *name, uint32_t color, lent_ptr<Buffer> buffer, VkDeviceSize offset /* 0 */, bool inverted /* false */) noexcept
 {
-    beginConditionalRendering(buffer, offset, inverted);
+    beginConditionalRendering(std::move(buffer), offset, inverted);
     if (conditionalRendering)
     {
         pushDebugMarker(name, color);
@@ -1115,7 +1114,7 @@ inline void CommandBuffer::beginConditionalRenderingAnnotated(const char *name, 
 #endif // VK_EXT_conditional_rendering
 
 #ifdef VK_EXT_transform_feedback
-inline void CommandBuffer::beginTransformFeedbackAnnotated(const char *name, uint32_t color, uint32_t firstCounterBuffer, const std::initializer_list<std::shared_ptr<Buffer>>& counterBuffers,
+inline void CommandBuffer::beginTransformFeedbackAnnotated(const char *name, uint32_t color, uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<Buffer>>& counterBuffers,
     const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
     beginTransformFeedback(firstCounterBuffer, counterBuffers, counterBufferOffsets);
