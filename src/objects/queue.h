@@ -55,65 +55,65 @@ namespace magma
         void setPresentMode(VkPresentModeKHR presentMode_) noexcept { presentMode = presentMode_; }
         VkPresentModeKHR getPresentMode() const noexcept { return presentMode; }
     #endif // VK_EXT_swapchain_maintenance1
-        void bindSparse(std::shared_ptr<const Buffer> buffer,
+        void bindSparse(lent_ptr<const Buffer> buffer,
             const std::vector<VkSparseMemoryBind>& bufferBinds,
-            std::shared_ptr<const Image> imageOpaque,
+            lent_ptr<const Image> imageOpaque,
             const std::vector<VkSparseMemoryBind>& imageOpaqueBinds,
-            std::shared_ptr<const Image> image,
+            lent_ptr<const Image> image,
             const std::vector<VkSparseImageMemoryBind>& imageBinds,
-            std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
-            std::shared_ptr<Semaphore> signalSemaphore = nullptr,
-            const std::unique_ptr<Fence>& fence = nullptr,
+            lent_ptr<const Semaphore> waitSemaphore = nullptr,
+            lent_ptr<Semaphore> signalSemaphore = nullptr,
+            lent_ptr<Fence> fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         void bindSparse(const std::vector<VkSparseBufferMemoryBindInfo>& bufferBinds,
             const std::vector<VkSparseImageOpaqueMemoryBindInfo>& imageOpaqueBinds,
             const std::vector<VkSparseImageMemoryBindInfo>& imageBinds,
-            const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
-            const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores = {},
-            const std::unique_ptr<Fence>& fence = nullptr,
+            const std::initializer_list<lent_ptr<const Semaphore>>& waitSemaphores = {},
+            const std::initializer_list<lent_ptr<Semaphore>>& signalSemaphores = {},
+            lent_ptr<Fence> fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-        void submit(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+        void submit(lent_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags waitDstStageMask = 0,
-            std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
-            std::shared_ptr<Semaphore> signalSemaphore = nullptr,
-            const std::unique_ptr<Fence>& fence = nullptr,
+            lent_ptr<const Semaphore> waitSemaphore = nullptr,
+            lent_ptr<Semaphore> signalSemaphore = nullptr,
+            lent_ptr<Fence> fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-        void submit(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers,
-            const std::initializer_list<VkPipelineStageFlags> waitDstStageMask = {},
-            const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
-            const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores = {},
-            const std::unique_ptr<Fence>& fence = nullptr,
+        void submit(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers,
+            const std::initializer_list<VkPipelineStageFlags>& waitDstStageMask = {},
+            const std::initializer_list<lent_ptr<const Semaphore>>& waitSemaphores = {},
+            const std::initializer_list<lent_ptr<Semaphore>>& signalSemaphores = {},
+            lent_ptr<Fence> fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_timeline_semaphore
-        void submit(std::shared_ptr<const TimelineSemaphore> semaphore,
+        void submit(lent_ptr<const TimelineSemaphore> semaphore,
             uint64_t waitValue,
             uint64_t signalValue);
     #endif // VK_KHR_timeline_semaphore
     #ifdef VK_KHR_external_semaphore_win32
-        void submit(std::shared_ptr<const D3d12ExternalSemaphore> semaphore,
+        void submit(lent_ptr<const D3d12ExternalSemaphore> semaphore,
             uint64_t waitValue,
             uint64_t signalValue);
         #ifdef VK_KHR_timeline_semaphore
-        void submit(std::shared_ptr<const D3d12ExternalTimelineSemaphore> semaphore,
+        void submit(lent_ptr<const D3d12ExternalTimelineSemaphore> semaphore,
             uint64_t waitValue,
             uint64_t signalValue);
         #endif // VK_KHR_timeline_semaphore
     #endif // VK_KHR_external_semaphore_win32
     #ifdef VK_KHR_device_group
-        void submitDeviceGroup(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers,
-            const std::initializer_list<uint32_t> cmdBufferDeviceMasks = {},
-            const std::initializer_list<VkPipelineStageFlags> waitDstStageMask = {},
-            const std::initializer_list<std::shared_ptr<const Semaphore>> waitSemaphores = {},
-            const std::initializer_list<uint32_t> waitSemaphoreDeviceIndices = {},
-            const std::initializer_list<std::shared_ptr<Semaphore>> signalSemaphores = {},
-            const std::initializer_list<uint32_t> signalSemaphoreDeviceIndices = {},
-            const std::unique_ptr<Fence>& fence = nullptr);
+        void submitDeviceGroup(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers,
+            const std::initializer_list<uint32_t>& cmdBufferDeviceMasks = {},
+            const std::initializer_list<VkPipelineStageFlags>& waitDstStageMask = {},
+            const std::initializer_list<lent_ptr<const Semaphore>>& waitSemaphores = {},
+            const std::initializer_list<uint32_t>& waitSemaphoreDeviceIndices = {},
+            const std::initializer_list<lent_ptr<Semaphore>>& signalSemaphores = {},
+            const std::initializer_list<uint32_t>& signalSemaphoreDeviceIndices = {},
+            lent_ptr<Fence> fence = nullptr);
     #endif // VK_KHR_device_group
         void waitIdle();
         void present(const std::unique_ptr<Swapchain>& swapchain,
             uint32_t imageIndex,
-            std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
-            const std::unique_ptr<Fence>& presentFence = nullptr,
+            lent_ptr<const Semaphore> waitSemaphore = nullptr,
+            lent_ptr<Fence> presentFence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_display_swapchain
         void presentDisplay(const std::unique_ptr<Swapchain>& swapchain,
@@ -121,11 +121,11 @@ namespace magma
             const VkRect2D& srcRect,
             const VkRect2D& dstRect,
             bool persistent,
-            std::shared_ptr<const Semaphore> waitSemaphore = nullptr,
-            const std::unique_ptr<Fence>& presentFence = nullptr);
+            lent_ptr<const Semaphore> waitSemaphore = nullptr,
+            lent_ptr<Fence> presentFence = nullptr);
     #endif // VK_KHR_display_swapchain
     #ifdef VK_NV_device_diagnostic_checkpoints
-        std::vector<VkCheckpointDataNV> getCheckpoints(std::shared_ptr<const Device> device) const;
+        std::vector<VkCheckpointDataNV> getCheckpoints(lent_ptr<const Device> device) const;
     #endif
         uint32_t inUseObjectCount() const noexcept;
         void onIdle();
