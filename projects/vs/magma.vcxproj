@@ -200,6 +200,7 @@
     <ClInclude Include="..\..\src\core\core.h" />
     <ClInclude Include="..\..\src\core\foreach.h" />
     <ClInclude Include="..\..\src\core\hash.h" />
+    <ClInclude Include="..\..\src\core\lentPtr.h" />
     <ClInclude Include="..\..\src\core\linearAllocator.h" />
     <ClInclude Include="..\..\src\core\macros.h" />
     <ClInclude Include="..\..\src\core\memory.h" />

@@ -900,6 +900,9 @@
     <ClInclude Include="..\..\src\objects\model\iresource.h">
       <Filter>Header Files\objects\model</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\core\lentPtr.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">

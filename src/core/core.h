@@ -177,4 +177,14 @@ constexpr T alignDown(T value, T alignment) noexcept
 #include "hash.h"
 #include "memory.h"
 #include "stackArray.h"
+#include "lentPtr.h"
 #include "variantPtr.h"
+
+namespace magma::core
+{
+template<class Type>
+inline typename Type::NativeHandle dereference(const lent_ptr<Type>& obj) noexcept
+{
+    return obj ? obj->getHandle() : VK_NULL_HANDLE;
+}
+} // namespace magma::core
