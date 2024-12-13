@@ -324,14 +324,14 @@ inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkMemoryBarrier& barrier) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, barrier);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkBufferMemoryBarrier& barrier) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, barrier);
     MAGMA_CHECKPOINT(dstStageMask);
@@ -346,28 +346,28 @@ inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkMemoryBarrier>& memoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(memoryBarriers), memoryBarriers.begin());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkMemoryBarrier>& memoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(memoryBarriers), memoryBarriers.data());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data());
     MAGMA_CHECKPOINT(dstStageMask);
@@ -407,14 +407,14 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
-inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkMemoryBarrier& barrier, VkDependencyFlags dependencyFlags /* 0 */) noexcept
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier, VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, barrier, dependencyFlags);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
-inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkBufferMemoryBarrier& barrier, VkDependencyFlags dependencyFlags /* 0 */) noexcept
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier, VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, barrier, dependencyFlags);
     MAGMA_CHECKPOINT(dstStageMask);
@@ -429,28 +429,28 @@ inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, Vk
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
-inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkMemoryBarrier>& memoryBarriers, VkDependencyFlags dependencyFlags /* 0 */) noexcept
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers, VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, core::countof(memoryBarriers), memoryBarriers.begin(), dependencyFlags);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
-inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkMemoryBarrier>& memoryBarriers, VkDependencyFlags dependencyFlags /* 0 */) noexcept
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers, VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, core::countof(memoryBarriers), memoryBarriers.data(), dependencyFlags);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
-inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers, VkDependencyFlags dependencyFlags /* 0 */) noexcept
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers, VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin(), dependencyFlags);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
-inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers, VkDependencyFlags dependencyFlags /* 0 */) noexcept
+inline void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers, VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask, core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data(), dependencyFlags);
     MAGMA_CHECKPOINT(dstStageMask);

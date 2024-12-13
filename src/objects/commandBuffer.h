@@ -123,34 +123,34 @@ namespace magma
         void setEvent(lent_ptr<Event> event, VkPipelineStageFlags stageMask) const noexcept;
         void resetEvent(lent_ptr<Event> event, VkPipelineStageFlags stageMask) const noexcept;
         void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkMemoryBarrier& barrier) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkBufferMemoryBarrier& barrier) const noexcept;
+        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier) const noexcept;
+        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier) const noexcept;
         void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkMemoryBarrier>& memoryBarriers) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkMemoryBarrier>& memoryBarriers) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers) const noexcept;
+        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers) const noexcept;
+        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers) const noexcept;
+        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept;
+        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept;
         void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept;
         void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept;
-        void waitEvents(const std::initializer_list<lent_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkMemoryBarrier>& memoryBarriers = {},
-            const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers = {}, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers = {}) const noexcept;
-        void waitEvents(const std::vector<lent_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkMemoryBarrier>& memoryBarriers,
-            const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept;
+        void waitEvents(const std::initializer_list<lent_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers = {},
+            const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers = {}, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers = {}) const noexcept;
+        void waitEvents(const std::vector<lent_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers,
+            const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept;
 
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags = 0) noexcept;
-        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkMemoryBarrier& barrier, VkDependencyFlags dependencyFlags = 0) noexcept;
-        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkBufferMemoryBarrier& barrier, VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier, VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier, VkDependencyFlags dependencyFlags = 0) noexcept;
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier, VkDependencyFlags dependencyFlags = 0) noexcept;
-        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkMemoryBarrier>& memoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
-        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkMemoryBarrier>& memoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
-        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
-        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
-        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<VkMemoryBarrier>& memoryBarriers = {},
-            const std::initializer_list<VkBufferMemoryBarrier>& bufferMemoryBarriers = {}, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers = {}, VkDependencyFlags dependencyFlags = 0) noexcept;
-        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<VkMemoryBarrier>& memoryBarriers,
-            const std::vector<VkBufferMemoryBarrier>& bufferMemoryBarriers, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers = {},
+            const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers = {}, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers = {}, VkDependencyFlags dependencyFlags = 0) noexcept;
+        void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers,
+            const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers, VkDependencyFlags dependencyFlags = 0) noexcept;
 
         void beginQuery(lent_ptr<QueryPool> queryPool, uint32_t query) noexcept;
         void endQuery(lent_ptr<QueryPool> queryPool, uint32_t query) noexcept;
