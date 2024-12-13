@@ -209,7 +209,7 @@ inline void CommandBuffer::blitImage(lent_ptr<Image> srcImage, lent_ptr<Image> d
     MAGMA_INUSE(dstImage);
 }
 
-inline void CommandBuffer::copyBufferToImage(lent_ptr<Buffer> srcBuffer, lent_ptr<Image> dstImage, const VkBufferImageCopy& region) const noexcept
+inline void CommandBuffer::copyBufferToImage(lent_ptr<const Buffer> srcBuffer, lent_ptr<Image> dstImage, const VkBufferImageCopy& region) const noexcept
 {
     leanCmd.copyBufferToImage(srcBuffer.get(), dstImage.get(), 1, &region);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -217,7 +217,7 @@ inline void CommandBuffer::copyBufferToImage(lent_ptr<Buffer> srcBuffer, lent_pt
     MAGMA_INUSE(dstImage);
 }
 
-inline void CommandBuffer::copyBufferToImage(lent_ptr<Buffer> srcBuffer, lent_ptr<Image> dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept
+inline void CommandBuffer::copyBufferToImage(lent_ptr<const Buffer> srcBuffer, lent_ptr<Image> dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept
 {
     leanCmd.copyBufferToImage(srcBuffer.get(), dstImage.get(), core::countof(regions), regions.data());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);

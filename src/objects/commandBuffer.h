@@ -106,8 +106,8 @@ namespace magma
         void copyImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, uint32_t mipLevel) const noexcept;
         void blitImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageBlit& region, VkFilter filter) const noexcept;
         void blitImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, uint32_t srcMipLevel, uint32_t dstMipLevel, VkFilter filter) const noexcept;
-        void copyBufferToImage(lent_ptr<Buffer> srcBuffer, lent_ptr<Image> dstImage, const VkBufferImageCopy& region) const noexcept;
-        void copyBufferToImage(lent_ptr<Buffer> srcBuffer, lent_ptr<Image> dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept;
+        void copyBufferToImage(lent_ptr<const Buffer> srcBuffer, lent_ptr<Image> dstImage, const VkBufferImageCopy& region) const noexcept;
+        void copyBufferToImage(lent_ptr<const Buffer> srcBuffer, lent_ptr<Image> dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept;
         void copyImageToBuffer(lent_ptr<Image> srcImage, lent_ptr<Buffer> dstBuffer, const VkBufferImageCopy& region) const noexcept;
         void copyImageToBuffer(lent_ptr<Image> srcImage, lent_ptr<Buffer> dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept;
         void updateBuffer(lent_ptr<Buffer> buffer, VkDeviceSize dataSize, const void *data, VkDeviceSize offset = 0) const noexcept;
