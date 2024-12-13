@@ -84,7 +84,7 @@ namespace magma
     {
     public:
         uint32_t getPipelineCount() const noexcept { return core::countof(pipelines); }
-        const std::shared_ptr<PipelineType>& getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
+        const std::unique_ptr<PipelineType>& getPipeline(uint32_t index) const noexcept { return pipelines[index]; }
 
     protected:
         BasePipelineBatch(std::shared_ptr<Device> device) noexcept;
@@ -96,7 +96,7 @@ namespace magma
         void postBuild();
 
         std::vector<PipelineCreateInfo> pipelineInfos;
-        std::deque<std::shared_ptr<PipelineType>> pipelines;
+        std::deque<std::unique_ptr<PipelineType>> pipelines;
     };
 } // namespace magma
 

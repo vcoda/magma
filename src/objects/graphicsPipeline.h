@@ -91,7 +91,7 @@ namespace magma
         hash_t getRenderStateHash() const noexcept { return rsHash; }
 
     private:
-        MAGMA_MAKE_SHARED(GraphicsPipeline)
+        MAGMA_MAKE_UNIQUE(GraphicsPipeline)
         GraphicsPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
             core::variant_ptr<PipelineLayout> layout,

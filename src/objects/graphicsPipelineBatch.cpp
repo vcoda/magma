@@ -191,7 +191,7 @@ void GraphicsPipelineBatch::buildPipelines(const std::unique_ptr<PipelineCache>&
         auto rsHash = rsHashes.cbegin();
         while (handle != handles.cend())
         {
-            pipelines.emplace_front(GraphicsPipeline::makeShared(
+            pipelines.emplace_front(GraphicsPipeline::makeUnique(
                 *handle++, device, std::move(*layout++), *basePipeline++, allocator,
                 core::countof(*shaderStages++),
             #ifdef VK_EXT_pipeline_creation_feedback

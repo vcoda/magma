@@ -69,7 +69,7 @@ namespace magma
 
     private:
         friend class RayTracingPipelineBatch;
-        MAGMA_MAKE_SHARED(RayTracingPipeline)
+        MAGMA_MAKE_UNIQUE(RayTracingPipeline)
         RayTracingPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
             core::variant_ptr<PipelineLayout> layout,

@@ -111,7 +111,7 @@ void ComputePipelineBatch::buildPipelines(const std::unique_ptr<PipelineCache>& 
         auto hash = hashes.cbegin();
         while (handle != handles.cend())
         {
-            pipelines.emplace_front(ComputePipeline::makeShared(
+            pipelines.emplace_front(ComputePipeline::makeUnique(
                 *handle++, device, std::move(*layout++), *basePipeline++, allocator,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,

@@ -154,7 +154,7 @@ void RayTracingPipelineBatch::buildPipelines(const std::unique_ptr<PipelineCache
         auto hash = hashes.cbegin();
         while (handle != handles.cend())
         {
-            pipelines.emplace_front(RayTracingPipeline::makeShared(
+            pipelines.emplace_front(RayTracingPipeline::makeUnique(
                 *handle++, device, std::move(*layout++), *basePipeline++, allocator,
                 *shaderStages++, *shaderGroups++, *maxRecursionDepth++,
             #ifdef VK_EXT_pipeline_creation_feedback
