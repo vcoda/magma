@@ -5,7 +5,7 @@ inline BufferArrayElement::BufferArrayElement(DescriptorSetLayoutBinding *array,
     ArrayElement<VkDescriptorBufferInfo>(array, element, usage)
 {}
 
-inline void BufferArrayElement::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+inline void BufferArrayElement::operator=(lent_ptr<const Buffer> buffer) noexcept
 {
     MAGMA_ASSERT(buffer);
     MAGMA_ASSERT(MAGMA_BITWISE_AND(buffer->getUsage(), this->usage));
@@ -21,7 +21,7 @@ inline TexelBufferArrayElement::TexelBufferArrayElement(DescriptorSetLayoutBindi
     ArrayElement<VkBufferView>(array, element, usage)
 {}
 
-inline void TexelBufferArrayElement::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
+inline void TexelBufferArrayElement::operator=(lent_ptr<const BufferView> bufferView) noexcept
 {
     MAGMA_ASSERT(bufferView);
     MAGMA_ASSERT(MAGMA_BITWISE_AND(bufferView->getBuffer()->getUsage(), this->usage));

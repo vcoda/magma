@@ -20,37 +20,37 @@ inline bool TexelBufferDescriptor::associatedWithResource() const noexcept
     return (descriptor != VK_NULL_HANDLE);
 }
 
-inline UniformTexelBuffer& UniformTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
+inline UniformTexelBuffer& UniformTexelBuffer::operator=(lent_ptr<const BufferView> bufferView) noexcept
 {
     update(std::move(bufferView), VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT);
     return *this;
 }
 
-inline StorageTexelBuffer& StorageTexelBuffer::operator=(std::shared_ptr<const BufferView> bufferView) noexcept
+inline StorageTexelBuffer& StorageTexelBuffer::operator=(lent_ptr<const BufferView> bufferView) noexcept
 {
     update(std::move(bufferView), VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT);
     return *this;
 }
 
-inline UniformBuffer& UniformBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+inline UniformBuffer& UniformBuffer::operator=(lent_ptr<const Buffer> buffer) noexcept
 {
     update(std::move(buffer), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
     return *this;
 }
 
-inline StorageBuffer& StorageBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+inline StorageBuffer& StorageBuffer::operator=(lent_ptr<const Buffer> buffer) noexcept
 {
     update(std::move(buffer), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
     return *this;
 }
 
-inline DynamicUniformBuffer& DynamicUniformBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+inline DynamicUniformBuffer& DynamicUniformBuffer::operator=(lent_ptr<const Buffer> buffer) noexcept
 {
     update(std::move(buffer), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
     return *this;
 }
 
-inline DynamicStorageBuffer& DynamicStorageBuffer::operator=(std::shared_ptr<const Buffer> buffer) noexcept
+inline DynamicStorageBuffer& DynamicStorageBuffer::operator=(lent_ptr<const Buffer> buffer) noexcept
 {
     update(std::move(buffer), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
     return *this;

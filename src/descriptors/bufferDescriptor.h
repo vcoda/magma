@@ -37,7 +37,7 @@ namespace magma
         protected:
             BufferDescriptor(VkDescriptorType descriptorType,
                 uint32_t binding) noexcept;
-            void update(std::shared_ptr<const Buffer> buffer,
+            void update(lent_ptr<const Buffer> buffer,
                 VkBufferUsageFlags usage) noexcept;
 
         private:
@@ -56,7 +56,7 @@ namespace magma
         protected:
             TexelBufferDescriptor(VkDescriptorType descriptorType,
                 uint32_t binding) noexcept;
-            void update(std::shared_ptr<const BufferView> bufferView,
+            void update(lent_ptr<const BufferView> bufferView,
                 VkBufferUsageFlags usage) noexcept;
 
         private:
@@ -72,7 +72,7 @@ namespace magma
         public:
             UniformTexelBuffer(uint32_t binding) noexcept:
                 TexelBufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
-            UniformTexelBuffer& operator=(std::shared_ptr<const BufferView>) noexcept;
+            UniformTexelBuffer& operator=(lent_ptr<const BufferView>) noexcept;
         };
 
         /* A storage texel buffer is a descriptor type associated with
@@ -84,7 +84,7 @@ namespace magma
         public:
             StorageTexelBuffer(uint32_t binding) noexcept:
                 TexelBufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
-            StorageTexelBuffer& operator=(std::shared_ptr<const BufferView>) noexcept;
+            StorageTexelBuffer& operator=(lent_ptr<const BufferView>) noexcept;
         };
 
         /* A uniform buffer is a descriptor type associated with
@@ -97,7 +97,7 @@ namespace magma
         public:
             UniformBuffer(uint32_t binding) noexcept:
                 BufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
-            UniformBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
+            UniformBuffer& operator=(lent_ptr<const Buffer>) noexcept;
         };
 
         /* A storage buffer is a descriptor type associated with
@@ -110,7 +110,7 @@ namespace magma
         public:
             StorageBuffer(uint32_t binding) noexcept:
                 BufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
-            StorageBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
+            StorageBuffer& operator=(lent_ptr<const Buffer>) noexcept;
         };
 
         /* A dynamic uniform buffer is almost identical to a uniform buffer,
@@ -124,7 +124,7 @@ namespace magma
         public:
             DynamicUniformBuffer(uint32_t binding) noexcept:
                 BufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
-            DynamicUniformBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
+            DynamicUniformBuffer& operator=(lent_ptr<const Buffer>) noexcept;
         };
 
         /* A dynamic storage buffer is almost identical to a storage buffer,
@@ -138,7 +138,7 @@ namespace magma
         public:
             DynamicStorageBuffer(uint32_t binding) noexcept:
                 BufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
-            DynamicStorageBuffer& operator=(std::shared_ptr<const Buffer>) noexcept;
+            DynamicStorageBuffer& operator=(lent_ptr<const Buffer>) noexcept;
         };
     } // namespace descriptor
 } // namespace magma

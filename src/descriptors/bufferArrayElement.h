@@ -30,7 +30,7 @@ namespace magma
             explicit BufferArrayElement(DescriptorSetLayoutBinding *array,
                 VkDescriptorBufferInfo& element,
                 VkBufferUsageFlags usage) noexcept;
-            void operator=(std::shared_ptr<const Buffer>) noexcept;
+            void operator=(lent_ptr<const Buffer>) noexcept;
         };
 
         /* Element of array of texel buffer descriptors. */
@@ -41,7 +41,7 @@ namespace magma
             explicit TexelBufferArrayElement(DescriptorSetLayoutBinding *array,
                 VkBufferView& element,
                 VkBufferUsageFlags usage) noexcept;
-            void operator=(std::shared_ptr<const BufferView>) noexcept;
+            void operator=(lent_ptr<const BufferView>) noexcept;
         };
     } // namespace descriptor
 } // namespace magma

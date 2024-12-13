@@ -32,7 +32,7 @@ void BufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& write
     dirty = false;
 }
 
-void BufferDescriptor::update(std::shared_ptr<const Buffer> buffer, VkBufferUsageFlags usage) noexcept
+void BufferDescriptor::update(lent_ptr<const Buffer> buffer, VkBufferUsageFlags usage) noexcept
 {
     MAGMA_UNUSED(usage);
     MAGMA_ASSERT(buffer);
@@ -53,7 +53,7 @@ void TexelBufferDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& 
     dirty = false;
 }
 
-void TexelBufferDescriptor::update(std::shared_ptr<const BufferView> bufferView, VkBufferUsageFlags usage) noexcept
+void TexelBufferDescriptor::update(lent_ptr<const BufferView> bufferView, VkBufferUsageFlags usage) noexcept
 {
     MAGMA_UNUSED(usage);
     MAGMA_ASSERT(bufferView);
