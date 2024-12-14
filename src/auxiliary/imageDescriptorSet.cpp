@@ -75,11 +75,11 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
 ImageDescriptorSet::~ImageDescriptorSet()
 {}
 
-void ImageDescriptorSet::writeDescriptor(std::shared_ptr<const ImageView> imageView, std::shared_ptr<Sampler> sampler)
+void ImageDescriptorSet::writeDescriptor(lent_ptr<const ImageView> imageView, lent_ptr<const Sampler> sampler)
 {
     if (imageView->getImage()->getUsage() & VK_IMAGE_USAGE_STORAGE_BIT)
-        storageImageTable->image = imageView;
+        storageImageTable->image = std::move(imageView);
     else
-        imageTable->image = {imageView, sampler};
+        imageTable->image = {std::move(imageView), std::move(sampler)};
 }
 } // namespace magma::aux

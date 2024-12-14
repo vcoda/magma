@@ -27,8 +27,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::aux
 {
-Sprite::Sprite(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format, const VkExtent2D& extent,
-    std::shared_ptr<const SrcTransferBuffer> srcBuffer, VkDeviceSize offset,
+Sprite::Sprite(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent,
+    lent_ptr<const SrcTransferBuffer> srcBuffer, VkDeviceSize offset,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */):
     Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent.width, extent.height, 1},
@@ -59,11 +59,11 @@ Sprite::Sprite(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format,
     }
     const CopyLayout bufferLayout = {offset, 0, 0};
     constexpr VkOffset3D imageOffset{0, 0, 0};
-    copyMip(cmdBuffer, 0, 0, std::move(srcBuffer), bufferLayout, imageOffset,
+    copyMip(std::move(cmdBuffer), 0, 0, std::move(srcBuffer), bufferLayout, imageOffset,
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT);
 }
 
-Sprite::Sprite(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format, const VkExtent2D& extent_,
+Sprite::Sprite(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExtent2D& extent_,
     VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
@@ -95,12 +95,12 @@ Sprite::Sprite(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkFormat format,
         bottomRight.y *= footprint.second;
     }
     const MipData mip = {extent, size, data};
-    copyMipmapStaged(cmdBuffer, {mip}, std::move(allocator), std::move(copyFn),
+    copyMipmapStaged(std::move(cmdBuffer), {mip}, std::move(allocator), std::move(copyFn),
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
         VK_PIPELINE_STAGE_TRANSFER_BIT);
 }
 
-void Sprite::blit(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<Image> dstImage,
+void Sprite::blit(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<Image> dstImage,
     VkFilter filter /* VK_FILTER_NEAREST */) const noexcept
 {
     const VkExtent3D dstExtent = dstImage->calculateMipExtent(0);
@@ -127,7 +127,7 @@ void Sprite::blit(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_p
             int32_t dstHeight = static_cast<int32_t>(dstExtent.height);
             clip(blitRegion.srcOffsets, blitRegion.dstOffsets, dstWidth, dstHeight);
         }
-        cmdBuffer->getLean().blitImage(this, dstImage.get(), blitRegion, filter);
+        cmdBuffer->blitImage(this, std::move(dstImage), blitRegion, filter);
     }
 }
 

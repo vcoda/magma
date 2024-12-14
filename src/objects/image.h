@@ -90,19 +90,19 @@ namespace magma
     #endif
         void onDefragment() override;
         VkImageLayout layoutTransition(VkImageLayout newLayout,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
             VkDependencyFlags dependencyFlags = 0) noexcept;
         VkImageLayout layoutTransitionBaseMipLayer(VkImageLayout newLayout,
             uint32_t baseMipLevel,
             uint32_t baseArrayLayer,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
             VkDependencyFlags dependencyFlags = 0) noexcept;
-        void copyMip(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+        void copyMip(lent_ptr<CommandBuffer> cmdBuffer,
             uint32_t mipLevel,
             uint32_t arrayLayer,
-            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+            lent_ptr<const SrcTransferBuffer> srcBuffer,
             const CopyLayout& bufferLayout,
             const VkOffset3D& imageOffset,
             VkImageLayout dstLayout,
@@ -132,20 +132,20 @@ namespace magma
             VkImageCreateFlags flags,
             VkImageUsageFlags usage,
             VkImageTiling tiling);
-        void copyMipmap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
-            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+        void copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
+            lent_ptr<const SrcTransferBuffer> srcBuffer,
             const std::vector<Mip>& mipMaps,
             const CopyLayout& bufferLayout,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
-        void copyMipmapStaged(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+        void copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer,
             const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator,
             CopyMemoryFunction copyFn,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
         VkExtent3D calculateValidMipExtent(uint32_t mipLevel) const noexcept;
-        static VkPipelineStageFlags getSuitableDstStageMask(const std::unique_ptr<CommandBuffer>& cmdBuffer);
+        VkPipelineStageFlags getSuitableDstStageMask(uint32_t queueFamilyIndex) const;
         static VkSampleCountFlagBits getSampleCountBit(uint32_t samples) noexcept;
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
             VkFormat format,

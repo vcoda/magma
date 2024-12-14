@@ -193,7 +193,7 @@ inline void CommandBuffer::dispatchIndirect(lent_ptr<Buffer> buffer, VkDeviceSiz
     MAGMA_INCR(stats.dispatchIndirectCount, 1);
 }
 
-inline void CommandBuffer::copyImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageCopy& region) const noexcept
+inline void CommandBuffer::copyImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage, const VkImageCopy& region) const noexcept
 {
     leanCmd.copyImage(srcImage.get(), dstImage.get(), region);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -201,7 +201,7 @@ inline void CommandBuffer::copyImage(lent_ptr<Image> srcImage, lent_ptr<Image> d
     MAGMA_INUSE(dstImage);
 }
 
-inline void CommandBuffer::blitImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageBlit& region, VkFilter filter) const noexcept
+inline void CommandBuffer::blitImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage, const VkImageBlit& region, VkFilter filter) const noexcept
 {
     leanCmd.blitImage(srcImage.get(), dstImage.get(), region, filter);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -225,7 +225,7 @@ inline void CommandBuffer::copyBufferToImage(lent_ptr<const Buffer> srcBuffer, l
     MAGMA_INUSE(dstImage);
 }
 
-inline void CommandBuffer::copyImageToBuffer(lent_ptr<Image> srcImage, lent_ptr<Buffer> dstBuffer, const VkBufferImageCopy& region) const noexcept
+inline void CommandBuffer::copyImageToBuffer(lent_ptr<const Image> srcImage, lent_ptr<Buffer> dstBuffer, const VkBufferImageCopy& region) const noexcept
 {
     leanCmd.copyImageToBuffer(srcImage.get(), dstBuffer.get(), 1, &region);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -233,7 +233,7 @@ inline void CommandBuffer::copyImageToBuffer(lent_ptr<Image> srcImage, lent_ptr<
     MAGMA_INUSE(dstBuffer);
 }
 
-inline void CommandBuffer::copyImageToBuffer(lent_ptr<Image> srcImage, lent_ptr<Buffer> dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
+inline void CommandBuffer::copyImageToBuffer(lent_ptr<const Image> srcImage, lent_ptr<Buffer> dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept
 {
     leanCmd.copyImageToBuffer(srcImage.get(), dstBuffer.get(), core::countof(regions), regions.data());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);

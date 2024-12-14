@@ -27,9 +27,9 @@ namespace magma
        operations are finished. This is an analogue of
        glFinish() function in OpenGL. */
 
-    void finish(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+    void finish(lent_ptr<CommandBuffer> cmdBuffer,
         std::shared_ptr<Queue> queue,
         bool waitIdle = false);
-    void finish(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+    void finish(lent_ptr<CommandBuffer> cmdBuffer,
         bool waitIdle = false);
 } // namespace magma

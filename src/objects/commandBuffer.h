@@ -100,16 +100,16 @@ namespace magma
         void dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept;
         void dispatchIndirect(lent_ptr<Buffer> buffer, VkDeviceSize offset = 0) const noexcept;
 
-        void copyBuffer(lent_ptr<Buffer> srcBuffer, lent_ptr<Buffer> dstBuffer,
+        void copyBuffer(lent_ptr<const Buffer> srcBuffer, lent_ptr<Buffer> dstBuffer,
             VkDeviceSize srcOffset = 0, VkDeviceSize dstOffset = 0, VkDeviceSize size = VK_WHOLE_SIZE) const noexcept;
-        void copyImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageCopy& region) const noexcept;
-        void copyImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, uint32_t mipLevel) const noexcept;
-        void blitImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageBlit& region, VkFilter filter) const noexcept;
-        void blitImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, uint32_t srcMipLevel, uint32_t dstMipLevel, VkFilter filter) const noexcept;
+        void copyImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage, const VkImageCopy& region) const noexcept;
+        void copyImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage, uint32_t mipLevel) const noexcept;
+        void blitImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage, const VkImageBlit& region, VkFilter filter) const noexcept;
+        void blitImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage, uint32_t srcMipLevel, uint32_t dstMipLevel, VkFilter filter) const noexcept;
         void copyBufferToImage(lent_ptr<const Buffer> srcBuffer, lent_ptr<Image> dstImage, const VkBufferImageCopy& region) const noexcept;
         void copyBufferToImage(lent_ptr<const Buffer> srcBuffer, lent_ptr<Image> dstImage, const std::vector<VkBufferImageCopy>& regions) const noexcept;
-        void copyImageToBuffer(lent_ptr<Image> srcImage, lent_ptr<Buffer> dstBuffer, const VkBufferImageCopy& region) const noexcept;
-        void copyImageToBuffer(lent_ptr<Image> srcImage, lent_ptr<Buffer> dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept;
+        void copyImageToBuffer(lent_ptr<const Image> srcImage, lent_ptr<Buffer> dstBuffer, const VkBufferImageCopy& region) const noexcept;
+        void copyImageToBuffer(lent_ptr<const Image> srcImage, lent_ptr<Buffer> dstBuffer, const std::vector<VkBufferImageCopy>& regions) const noexcept;
         void updateBuffer(lent_ptr<Buffer> buffer, VkDeviceSize dataSize, const void *data, VkDeviceSize offset = 0) const noexcept;
         template<class Type> void updateBuffer(lent_ptr<Buffer> buffer, const std::vector<Type>& data, VkDeviceSize offset = 0) const noexcept;
         void fillBuffer(lent_ptr<Buffer> buffer, uint32_t value, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0) const noexcept;

@@ -34,7 +34,7 @@ BaseCountBuffer::BaseCountBuffer(std::shared_ptr<Device> device, uint32_t count,
     stageMask(stageMask)
 {}
 
-void BaseCountBuffer::readback(const std::unique_ptr<CommandBuffer>& cmdBuffer) const
+void BaseCountBuffer::readback(lent_ptr<CommandBuffer> cmdBuffer) const
 {
     if (!hostBuffer)
         hostBuffer = std::make_unique<DstTransferBuffer>(device, size);
@@ -50,7 +50,7 @@ CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags st
     BaseCountBuffer(std::move(device), 1, stageMask, std::move(allocator), sharing)
 {}
 
-void CountBuffer::setValue(uint32_t value, const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
+void CountBuffer::setValue(uint32_t value, lent_ptr<CommandBuffer> cmdBuffer) noexcept
 {
     cmdBuffer->getLean().fillBuffer(this, value);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, stageMask,
@@ -75,7 +75,7 @@ DispatchCountBuffer::DispatchCountBuffer(std::shared_ptr<Device> device, VkPipel
 {}
 
 void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
-    const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
+    lent_ptr<CommandBuffer> cmdBuffer) noexcept
 {
     auto& leanCmd = cmdBuffer->getLean();
     leanCmd.fillBuffer(this, x, sizeof(uint32_t), 0);

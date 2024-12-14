@@ -25,12 +25,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-void finish(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<Queue> queue,
+void finish(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Queue> queue,
     bool waitIdle /* false */)
 {
     if (waitIdle)
     {   // Wait for queue operations to finish
-        queue->submit(cmdBuffer);
+        queue->submit(std::move(cmdBuffer));
         queue->waitIdle();
     }
     else
@@ -38,18 +38,18 @@ void finish(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<Que
         auto& fence = cmdBuffer->getFence();
         if (Fence::State::Signaled == fence->getStatus())
             fence->reset();
-        queue->submit(cmdBuffer, 0, nullptr, nullptr, fence);
+        queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
         fence->wait();
         queue->onIdle();
         fence->reset();
     }
 }
 
-void finish(const std::unique_ptr<CommandBuffer>& cmdBuffer, bool waitIdle /* false */)
+void finish(lent_ptr<CommandBuffer> cmdBuffer, bool waitIdle /* false */)
 {   // Get queue associated with command buffer
     const uint32_t queueFamilyIndex = cmdBuffer->getQueueFamilyIndex();
     std::shared_ptr<Queue> queue = cmdBuffer->getDevice()->getQueueByFamily(queueFamilyIndex);
     MAGMA_ASSERT(queue);
-    finish(cmdBuffer, std::move(queue), waitIdle);
+    finish(std::move(cmdBuffer), std::move(queue), waitIdle);
 }
 } // namespace magma

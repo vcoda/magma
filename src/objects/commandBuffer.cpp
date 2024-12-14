@@ -200,7 +200,7 @@ void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initiali
     MAGMA_INCR(stats.bindVertexBufferCount, 1);
 }
 
-void CommandBuffer::copyBuffer(lent_ptr<Buffer> srcBuffer, lent_ptr<Buffer> dstBuffer,
+void CommandBuffer::copyBuffer(lent_ptr<const Buffer> srcBuffer, lent_ptr<Buffer> dstBuffer,
     VkDeviceSize srcOffset /* 0 */, VkDeviceSize dstOffset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) const noexcept
 {
     VkBufferCopy region;
@@ -219,7 +219,7 @@ void CommandBuffer::copyBuffer(lent_ptr<Buffer> srcBuffer, lent_ptr<Buffer> dstB
     MAGMA_INUSE(dstBuffer);
 }
 
- void CommandBuffer::copyImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, uint32_t mipLevel) const noexcept
+ void CommandBuffer::copyImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage, uint32_t mipLevel) const noexcept
 {
     VkImageCopy region;
     region.srcSubresource = srcImage->getSubresourceLayers(mipLevel);
@@ -230,7 +230,7 @@ void CommandBuffer::copyBuffer(lent_ptr<Buffer> srcBuffer, lent_ptr<Buffer> dstB
     copyImage(std::move(srcImage), std::move(dstImage), region);
 }
 
-void CommandBuffer::blitImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage,
+void CommandBuffer::blitImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage,
     uint32_t srcMipLevel, uint32_t dstMipLevel, VkFilter filter) const noexcept
 {
     VkExtent3D srcExtent = srcImage->calculateMipExtent(srcMipLevel);

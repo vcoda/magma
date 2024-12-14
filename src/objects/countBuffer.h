@@ -29,7 +29,7 @@ namespace magma
     {
     public:
         VkPipelineStageFlags getStageMask() const noexcept { return stageMask; }
-        void readback(const std::unique_ptr<CommandBuffer>& cmdBuffer) const;
+        void readback(lent_ptr<CommandBuffer> cmdBuffer) const;
 
     protected:
         BaseCountBuffer(std::shared_ptr<Device> device,
@@ -52,7 +52,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing());
         void setValue(uint32_t value,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept;
+            lent_ptr<CommandBuffer> cmdBuffer) noexcept;
         uint32_t getValue() const noexcept;
     };
 
@@ -67,7 +67,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing());
         void setValues(uint32_t x, uint32_t y, uint32_t z,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept;
+            lent_ptr<CommandBuffer> cmdBuffer) noexcept;
         std::array<uint32_t, 3> getValues() const noexcept;
     };
 } // namespace magma

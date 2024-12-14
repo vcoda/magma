@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_fragment_density_map
-FragmentDensityMap::FragmentDensityMap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+FragmentDensityMap::FragmentDensityMap(lent_ptr<CommandBuffer> cmdBuffer,
     VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
     VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -45,7 +45,7 @@ FragmentDensityMap::FragmentDensityMap(const std::unique_ptr<CommandBuffer>& cmd
         optional, sharing, std::move(allocator))
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator),
+    auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, data, std::move(allocator),
         Buffer::Initializer(), Sharing(), std::move(copyFn));
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
@@ -56,18 +56,18 @@ FragmentDensityMap::FragmentDensityMap(const std::unique_ptr<CommandBuffer>& cmd
         {
             constexpr CopyLayout bufferLayout = {0, 0, 0};
             constexpr VkOffset3D imageOffset = {0, 0, 0};
-            copyMip(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
+            copyMip(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
                 VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT,
                 VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT);
         }
     }
     cmdBuffer->end();
-    finish(cmdBuffer);
+    finish(std::move(cmdBuffer));
 }
 
-FragmentDensityMap::FragmentDensityMap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+FragmentDensityMap::FragmentDensityMap(lent_ptr<CommandBuffer> cmdBuffer,
     VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
-    std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+    lent_ptr<const SrcTransferBuffer> srcBuffer,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
@@ -86,7 +86,7 @@ FragmentDensityMap::FragmentDensityMap(const std::unique_ptr<CommandBuffer>& cmd
     for (uint32_t arrayLayer = 0; arrayLayer < arrayLayers; ++arrayLayer)
     {
         constexpr VkOffset3D imageOffset = {0, 0, 0};
-        copyMip(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
+        copyMip(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
             VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT,
             VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT);
     }

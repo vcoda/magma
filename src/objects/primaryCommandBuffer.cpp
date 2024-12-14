@@ -29,7 +29,7 @@ PrimaryCommandBuffer::PrimaryCommandBuffer(VkCommandBuffer handle, const Command
     CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, cmdPool)
 {}
 
-void PrimaryCommandBuffer::executeCommands(const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
+void PrimaryCommandBuffer::executeCommands(lent_ptr<CommandBuffer> cmdBuffer) noexcept
 {
     MAGMA_ASSERT(!cmdBuffer->primary());
     const LeanCommandBuffer *leanCmdBuffer = &cmdBuffer->getLean();

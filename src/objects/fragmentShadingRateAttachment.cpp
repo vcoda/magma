@@ -26,7 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_fragment_shading_rate
-FragmentShadingRateAttachment::FragmentShadingRateAttachment(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuffer> cmdBuffer,
     VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
     VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -56,16 +56,16 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(const std::unique_p
         {
             constexpr CopyLayout bufferLayout = {0, 0, 0};
             constexpr VkOffset3D imageOffset = {0, 0, 0};
-            copyMip(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
+            copyMip(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
                 VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
                 VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR);
         }
     }
     cmdBuffer->end();
-    finish(cmdBuffer);
+    finish(std::move(cmdBuffer));
 }
 
-FragmentShadingRateAttachment::FragmentShadingRateAttachment(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuffer> cmdBuffer,
     VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
     std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
@@ -86,7 +86,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(const std::unique_p
     for (uint32_t arrayLayer = 0; arrayLayer < arrayLayers; ++arrayLayer)
     {
         constexpr VkOffset3D imageOffset = {0, 0, 0};
-        copyMip(cmdBuffer, 0, arrayLayer, srcBuffer, bufferLayout, imageOffset,
+        copyMip(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
             VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
             VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR);
     }

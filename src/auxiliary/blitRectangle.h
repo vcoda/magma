@@ -52,7 +52,7 @@ namespace magma
                 std::shared_ptr<Specialization> specialization = nullptr,
                 const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
-            void blit(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            void blit(lent_ptr<CommandBuffer> cmdBuffer,
                 std::shared_ptr<const ImageView> imageView,
                 VkFilter filter,
                 const VkRect2D& rc,

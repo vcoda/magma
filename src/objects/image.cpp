@@ -30,7 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/format.h"
 #include "../misc/finish.h"
-#include "../helpers/mapScoped.h"
+#include "../misc/mapBuffer.h"
 #include "../exceptions/errorResult.h"
 #include "../core/foreach.h"
 
@@ -410,15 +410,15 @@ void Image::onDefragment()
     bindMemory(std::move(memory), offset);
 }
 
-VkImageLayout Image::layoutTransition(VkImageLayout newLayout, const std::unique_ptr<CommandBuffer>& cmdBuffer,
+VkImageLayout Image::layoutTransition(VkImageLayout newLayout, lent_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    return layoutTransitionBaseMipLayer(newLayout, 0, 0, cmdBuffer, shaderStageMask, dependencyFlags);
+    return layoutTransitionBaseMipLayer(newLayout, 0, 0, std::move(cmdBuffer), shaderStageMask, dependencyFlags);
 }
 
 VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint32_t baseMipLevel, uint32_t baseArrayLayer,
-    const std::unique_ptr<CommandBuffer>& cmdBuffer,
+    lent_ptr<CommandBuffer> cmdBuffer,
     VkPipelineStageFlags shaderStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
@@ -548,9 +548,9 @@ VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint3
     return oldLayout;
 }
 
-void Image::copyMip(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+void Image::copyMip(lent_ptr<CommandBuffer> cmdBuffer,
     uint32_t mipLevel, uint32_t arrayLayer,
-    std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+    lent_ptr<const SrcTransferBuffer> srcBuffer,
     const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
     VkImageLayout dstLayout,
     VkPipelineStageFlags dstStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
@@ -575,15 +575,15 @@ void Image::copyMip(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     const ImageMemoryBarrier transferDst(this, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
     {
-        cmdBuffer->getLean().copyBufferToImage(srcBuffer.get(), this, 1, &region);
+        cmdBuffer->copyBufferToImage(std::move(srcBuffer), this, region);
     }
     // Image layout transition to <dstLayout> (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     const ImageMemoryBarrier shaderRead(this, dstLayout, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
-void Image::copyMipmap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
-    std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
+    lent_ptr<const SrcTransferBuffer> srcBuffer,
     const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {
@@ -617,15 +617,14 @@ void Image::copyMipmap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     const ImageMemoryBarrier transferDst(this, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
     {
-        cmdBuffer->getLean().copyBufferToImage(srcBuffer.get(), this, core::countof(regions), regions.data());
+        cmdBuffer->copyBufferToImage(std::move(srcBuffer), this, regions);
     }
     // Image layout transition to <dstLayout> (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     const ImageMemoryBarrier shaderRead(this, dstLayout, subresourceRange);
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
-void Image::copyMipmapStaged(const std::unique_ptr<CommandBuffer>& cmdBuffer,
-    const std::vector<MipData>& mipMaps,
+void Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {   // Setup mip chain for buffer copy
@@ -638,9 +637,9 @@ void Image::copyMipmapStaged(const std::unique_ptr<CommandBuffer>& cmdBuffer,
         bufferOffset += MAGMA_ALIGN(mip.size);
     }
     // Allocate staged buffer for mip data
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, bufferOffset, nullptr,
+    auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, bufferOffset, nullptr,
         std::move(allocator), Buffer::Initializer(), Sharing());
-    helpers::mapScoped<uint8_t>(srcBuffer,
+    map<uint8_t>(srcBuffer,
         [&](uint8_t *buffer)
         {
             if (!copyFn)
@@ -656,13 +655,13 @@ void Image::copyMipmapStaged(const std::unique_ptr<CommandBuffer>& cmdBuffer,
     cmdBuffer->reset();
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {   // Copy buffer to image
-        copyMipmap(cmdBuffer, srcBuffer, mipChain,
+        copyMipmap(cmdBuffer.get(), srcBuffer, mipChain,
             CopyLayout{0, 0, 0},
             dstLayout, dstStageMask);
     }
     cmdBuffer->end();
     // Block until execution is complete
-    finish(cmdBuffer);
+    finish(std::move(cmdBuffer));
 }
 
 VkExtent3D Image::calculateValidMipExtent(uint32_t level) const noexcept
@@ -688,10 +687,8 @@ VkExtent3D Image::calculateValidMipExtent(uint32_t level) const noexcept
 #endif // MAGMA_ENABLE_VALID_MIP_EXTENTS
 }
 
-VkPipelineStageFlags Image::getSuitableDstStageMask(const std::unique_ptr<CommandBuffer>& cmdBuffer)
+VkPipelineStageFlags Image::getSuitableDstStageMask(uint32_t queueFamilyIndex) const
 {
-    const uint32_t queueFamilyIndex = cmdBuffer->getQueueFamilyIndex();
-    const std::shared_ptr<Device>& device = cmdBuffer->getDevice();
     std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
     if (!queue)
         return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;

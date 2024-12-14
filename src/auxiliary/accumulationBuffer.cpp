@@ -112,13 +112,13 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         nullptr); // basePipeline
 }
 
-void AccumulationBuffer::accumulate(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<ImageView> imageView) noexcept
+void AccumulationBuffer::accumulate(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(cmdBuffer);
     MAGMA_ASSERT(imageView);
     if (count < maxCount)
     {
-        descriptorSet->writeDescriptor(imageView, nearestSampler);
+        descriptorSet->writeDescriptor(std::move(imageView), nearestSampler);
         cmdBuffer->beginRenderPass(renderPass, framebuffer);
         {   // Calculate blend weight
             const float weight = 1.f - count / (1.f + count);

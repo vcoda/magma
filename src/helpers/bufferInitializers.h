@@ -27,40 +27,40 @@ namespace magma
     {
         template<class Vertex, std::size_t Size>
         std::shared_ptr<VertexBuffer> makeVertexBuffer(const Vertex (&vertices)[Size],
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
         template<class Vertex>
         std::shared_ptr<VertexBuffer> makeVertexBuffer(const std::vector<Vertex>& vertices,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
         template<class Index, std::size_t Size>
         std::shared_ptr<IndexBuffer> makeIndexBuffer(const Index (&indices)[Size],
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
         template<class Index>
         std::shared_ptr<IndexBuffer> makeIndexBuffer(const std::vector<Index>& indices,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
         template<class Type, std::size_t Size>
         std::shared_ptr<StorageBuffer> makeStorageBuffer(const Type (&data)[Size],
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
         template<class Type>
         std::shared_ptr<StorageBuffer> makeStorageBuffer(const std::vector<Type>& data,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
     #ifdef VK_KHR_acceleration_structure
         template<class Type>
         std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type& element,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
         template<class Type, std::size_t Size>
         std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const Type (&elements)[Size],
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
         template<class Type>
         std::unique_ptr<AccelerationStructureInputBuffer> makeInputBuffer(const std::vector<Type>& elements,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
     #endif // VK_KHR_acceleration_structure
     } // namespace helpers

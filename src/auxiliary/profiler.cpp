@@ -76,7 +76,7 @@ void Profiler::set(Profiler *profiler) noexcept
         profilers[Compute] = profiler;
 }
 
-bool Profiler::beginFrame(const std::unique_ptr<CommandBuffer>& cmdBuffer, uint32_t frameIndex_)
+bool Profiler::beginFrame(lent_ptr<CommandBuffer> cmdBuffer, uint32_t frameIndex_)
 {
     MAGMA_ASSERT(!insideFrame);
     MAGMA_ASSERT(stack.empty());
@@ -121,7 +121,7 @@ bool Profiler::endFrame()
     return true;
 }
 
-void Profiler::beginSection(const std::unique_ptr<CommandBuffer>& cmdBuffer, const char *name, uint32_t color)
+void Profiler::beginSection(lent_ptr<CommandBuffer> cmdBuffer, const char *name, uint32_t color)
 {
     MAGMA_ASSERT(insideFrame);
     MAGMA_ASSERT(strlen(name) > 0);
@@ -151,7 +151,7 @@ void Profiler::beginSection(const std::unique_ptr<CommandBuffer>& cmdBuffer, con
     queryCount += 2;
 }
 
-void Profiler::endSection(const std::unique_ptr<CommandBuffer>& cmdBuffer)
+void Profiler::endSection(lent_ptr<CommandBuffer> cmdBuffer)
 {
     MAGMA_ASSERT(insideFrame);
     MAGMA_ASSERT(!stack.empty());
@@ -206,7 +206,7 @@ std::vector<Profiler::Sample> Profiler::collectSamples(bool wait) const
     return samples;
 }
 
-void Profiler::copyTimestamps(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<Buffer> buffer,
+void Profiler::copyTimestamps(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
     VkDeviceSize bufferOffset /* 0 */, bool hostRead /* true */) const noexcept
 {
     constexpr bool wait = true;

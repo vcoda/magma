@@ -134,7 +134,7 @@ bool ImmediateRender::endPrimitive(bool loop /* false */) noexcept
     return true;
 }
 
-bool ImmediateRender::commitPrimitives(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+bool ImmediateRender::commitPrimitives(lent_ptr<CommandBuffer> cmdBuffer,
     bool freePrimitiveList /* true */) noexcept
 {
     MAGMA_ASSERT(!insidePrimitive);

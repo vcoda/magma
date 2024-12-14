@@ -34,17 +34,17 @@ StorageTexelBuffer::StorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceS
         optional, sharing, std::move(allocator))
 {}
 
-StorageTexelBuffer::StorageTexelBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkDeviceSize size, const void *data,
+StorageTexelBuffer::StorageTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     StorageTexelBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
-    copyStaged(cmdBuffer, data, std::move(allocator), std::move(copyFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
-StorageTexelBuffer::StorageTexelBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+StorageTexelBuffer::StorageTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
@@ -54,7 +54,7 @@ StorageTexelBuffer::StorageTexelBuffer(const std::unique_ptr<CommandBuffer>& cmd
         size ? size : srcBuffer->getSize(),
         std::move(allocator), optional, sharing)
 {
-    copyTransfer(cmdBuffer, std::move(srcBuffer), srcOffset);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 
 DynamicStorageTexelBuffer::DynamicStorageTexelBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool stagedPool,

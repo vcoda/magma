@@ -27,8 +27,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::aux
 {
-bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilter filter,
-    const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept
+bool generateMipmap(lent_ptr<Image> image, uint32_t baseMipLevel, VkFilter filter,
+    lent_ptr<CommandBuffer> cmdBuffer) noexcept
 {
     MAGMA_ASSERT(image);
     MAGMA_ASSERT(MAGMA_BITWISE_AND(image->getUsage(), VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT));
@@ -79,14 +79,14 @@ bool generateMipmap(std::shared_ptr<Image> image, uint32_t baseMipLevel, VkFilte
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
             ImageMemoryBarrier(image.get(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, dstMip));
         // Downsample larger mip to a smaller one
-        cmdBuffer->blitImage(image, image, blitRegion, filter);
+        cmdBuffer->blitImage(image.get(), image.get(), blitRegion, filter);
         // Transition of dest mip level to transfer source layout
         cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
             ImageMemoryBarrier(image.get(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstMip));
         srcMipExtent = dstMipExtent;
     }
     if (hadUniformLayout) // Restore image layout of mips remaining after <baseMipLevel>
-        image->layoutTransitionBaseMipLayer(oldLayouts[0], baseMipLevel, 0, cmdBuffer);
+        image->layoutTransitionBaseMipLayer(oldLayouts[0], baseMipLevel, 0, std::move(cmdBuffer));
     else
     {   // Restore image layouts for each mip level
         ImageSubresourceRange dstMip(image.get(), baseMipLevel, 1);

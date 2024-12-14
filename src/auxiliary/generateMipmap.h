@@ -28,9 +28,9 @@ namespace magma
            series of image blit operations. This is an analogue of
            glGenerateMipmap() function in OpenGL. */
 
-        bool generateMipmap(std::shared_ptr<Image> image,
+        bool generateMipmap(lent_ptr<Image> image,
             uint32_t baseLevel,
             VkFilter filter,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer) noexcept;
+            lent_ptr<CommandBuffer> cmdBuffer) noexcept;
     } // namespace aux
 } // namespace magma

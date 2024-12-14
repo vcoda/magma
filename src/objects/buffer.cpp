@@ -346,39 +346,36 @@ void Buffer::copyHost(const void *srcBuffer, VkDeviceSize srcBufferSize,
     }
 }
 
-void Buffer::copyTransfer(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+void Buffer::copyTransfer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,
     VkDeviceSize srcOffset /* 0 */,
     VkDeviceSize dstOffset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */)
 {
     if (VK_WHOLE_SIZE == size)
         MAGMA_ASSERT(0 == dstOffset);
-    const VkDeviceSize wholeSize = std::min(getSize(), srcBuffer->getSize());
+    const VkDeviceSize safeSize = std::min(getSize(), srcBuffer->getSize());
     if (VK_WHOLE_SIZE != size)
-        size = std::min(size, wholeSize);
-    VkBufferCopy region;
-    region.srcOffset = srcOffset;
-    region.dstOffset = dstOffset;
-    region.size = (VK_WHOLE_SIZE == size) ? wholeSize : size;
-    cmdBuffer->getLean().copyBuffer(srcBuffer.get(), this, region);
+        size = std::min(size, safeSize);
+    cmdBuffer->copyBuffer(std::move(srcBuffer), this, srcOffset, dstOffset,
+        (VK_WHOLE_SIZE == size) ? safeSize : size);
 }
 
-void Buffer::copyStaged(const std::unique_ptr<CommandBuffer>& cmdBuffer, const void *data,
+void Buffer::copyStaged(lent_ptr<CommandBuffer> cmdBuffer, const void *data,
     std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn /* nullptr */)
 {
     MAGMA_ASSERT(data);
     // Allocate temporary staged buffer
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data,
+    auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, data,
         std::move(allocator), Initializer(), Sharing(), std::move(copyFn));
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     cmdBuffer->reset();
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {   // Copy buffer from host to device
-        copyTransfer(cmdBuffer, srcBuffer);
+        copyTransfer(cmdBuffer.get(), srcBuffer);
     }
     cmdBuffer->end();
     // Block until execution is complete
-    finish(cmdBuffer);
+    finish(std::move(cmdBuffer));
 }
 } // namespace magma

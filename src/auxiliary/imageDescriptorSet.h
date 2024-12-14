@@ -44,8 +44,8 @@ namespace magma
             ~ImageDescriptorSet();
             const std::shared_ptr<DescriptorSetLayout>& getLayout() const noexcept { return descriptorSetLayout; }
             const std::shared_ptr<DescriptorSet>& getSet() const noexcept { return descriptorSet; }
-            void writeDescriptor(std::shared_ptr<const ImageView> imageView,
-                std::shared_ptr<Sampler> sampler);
+            void writeDescriptor(lent_ptr<const ImageView> imageView,
+                lent_ptr<const Sampler> sampler);
 
         private:
             struct ImageTable;

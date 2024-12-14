@@ -48,14 +48,14 @@ namespace magma
             void setLabelUsage(bool enable) noexcept { useLabels = enable; }
             bool getLabelUsage() const noexcept { return useLabels; }
             uint32_t getQueryCount() const noexcept { return queryCount; }
-            bool beginFrame(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            bool beginFrame(lent_ptr<CommandBuffer> cmdBuffer,
                 uint32_t frameIndex);
             bool endFrame();
-            void beginSection(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            void beginSection(lent_ptr<CommandBuffer> cmdBuffer,
                 const char *name, uint32_t color);
-            void endSection(const std::unique_ptr<CommandBuffer>& cmdBuffer);
+            void endSection(lent_ptr<CommandBuffer> cmdBuffer);
             std::vector<Sample> collectSamples(bool wait) const;
-            void copyTimestamps(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            void copyTimestamps(lent_ptr<CommandBuffer> cmdBuffer,
                 std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset = 0,
                 bool hostRead = true) const noexcept;
 

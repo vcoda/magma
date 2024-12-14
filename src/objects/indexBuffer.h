@@ -54,7 +54,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
-        explicit IndexBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+        explicit IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer,
             VkIndexType indexType,
             VkDeviceSize size,
             const void *data,
@@ -62,7 +62,7 @@ namespace magma
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
-        explicit IndexBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+        explicit IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer,
             VkIndexType indexType,
             std::shared_ptr<const SrcTransferBuffer> srcBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,

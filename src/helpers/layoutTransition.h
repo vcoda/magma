@@ -30,7 +30,7 @@ namespace magma
 
         void layoutTransition(std::shared_ptr<Image> image,
             VkImageLayout newLayout,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             VkDependencyFlags dependencyFlags = 0);
 
         struct ImageLayoutTransition
@@ -42,7 +42,7 @@ namespace magma
         };
 
         void batchLayoutTransition(const std::vector<ImageLayoutTransition>& imageLayouts,
-            const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            lent_ptr<CommandBuffer> cmdBuffer,
             VkDependencyFlags dependencyFlags = 0);
     } // namespace helpers
 } // namespace magma

@@ -27,35 +27,35 @@ namespace magma
 AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
     Buffer(std::move(device), size, 0, // flags
-        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | 
-        VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR | 
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | 
+        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR |
+        VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR |
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
         VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {}
 
-AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, VkDeviceSize size, const void *data,
+AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFunction copyFn /* nullptr */):
     AccelerationStructureInputBuffer(cmdBuffer->getDevice(), size, optional, sharing, allocator)
 {
-    copyStaged(cmdBuffer, data, std::move(allocator), std::move(copyFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
-AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(const std::unique_ptr<CommandBuffer>& cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     AccelerationStructureInputBuffer(cmdBuffer->getDevice(),
-        size > 0 ? size : srcBuffer->getSize(), 
+        size > 0 ? size : srcBuffer->getSize(),
         optional, sharing, std::move(allocator))
 {
-    copyTransfer(cmdBuffer, std::move(srcBuffer), srcOffset);
+    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
 }
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

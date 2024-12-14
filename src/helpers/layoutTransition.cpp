@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::helpers
 {
 void layoutTransition(std::shared_ptr<Image> image, VkImageLayout newLayout,
-    const std::unique_ptr<CommandBuffer>& cmdBuffer,
+    lent_ptr<CommandBuffer> cmdBuffer,
     VkDependencyFlags dependencyFlags /* 0 */)
 {
     MAGMA_ASSERT(cmdBuffer->allowsReset());
@@ -33,15 +33,15 @@ void layoutTransition(std::shared_ptr<Image> image, VkImageLayout newLayout,
     cmdBuffer->reset();
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {
-        image->layoutTransition(newLayout, cmdBuffer, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, dependencyFlags);
+        image->layoutTransition(newLayout, cmdBuffer.get(), VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, dependencyFlags);
     }
     cmdBuffer->end();
     // Block until execution is complete
-    finish(cmdBuffer);
+    finish(std::move(cmdBuffer));
 }
 
 void batchLayoutTransition(const std::vector<ImageLayoutTransition>& imageLayouts,
-    const std::unique_ptr<CommandBuffer>& cmdBuffer,
+    lent_ptr<CommandBuffer> cmdBuffer,
     VkDependencyFlags dependencyFlags /* 0 */)
 {
     MAGMA_ASSERT(cmdBuffer->allowsReset());
@@ -64,6 +64,6 @@ void batchLayoutTransition(const std::vector<ImageLayoutTransition>& imageLayout
     }
     cmdBuffer->end();
     // Block until execution is complete
-    finish(cmdBuffer);
+    finish(std::move(cmdBuffer));
 }
 } // namespace magma::helpers

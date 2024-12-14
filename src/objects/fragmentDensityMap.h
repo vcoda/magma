@@ -33,7 +33,7 @@ namespace magma
     class FragmentDensityMap : public Image2D
     {
     public:
-        explicit FragmentDensityMap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+        explicit FragmentDensityMap(lent_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t arrayLayers,
@@ -43,11 +43,11 @@ namespace magma
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
-        explicit FragmentDensityMap(const std::unique_ptr<CommandBuffer>& cmdBuffer,
+        explicit FragmentDensityMap(lent_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             const VkExtent2D& extent,
             uint32_t arrayLayers,
-            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+            lent_ptr<const SrcTransferBuffer> srcBuffer,
             const CopyLayout& bufferLayout = {0, 0, 0},
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
