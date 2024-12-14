@@ -25,8 +25,8 @@ namespace magma
 
     namespace descriptor
     {
-        typedef std::pair<std::shared_ptr<const ImageView>,
-            std::shared_ptr<const magma::Sampler>> ImageSampler;
+        typedef std::pair<lent_ptr<const ImageView>,
+            lent_ptr<const magma::Sampler>> ImageSampler;
 
         /* Base class of image/sampler descriptor. */
 
@@ -40,8 +40,8 @@ namespace magma
         protected:
             ImageDescriptor(VkDescriptorType descriptorType,
                 uint32_t binding) noexcept;
-            void update(std::shared_ptr<const ImageView> imageView,
-                std::shared_ptr<const magma::Sampler> sampler,
+            void update(const ImageView *imageView,
+                const magma::Sampler *sampler,
                 VkImageUsageFlags usage) noexcept;
 
             VkDescriptorImageInfo descriptor;
@@ -56,7 +56,7 @@ namespace magma
         public:
             Sampler(uint32_t binding) noexcept:
                 ImageDescriptor(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
-            Sampler& operator=(std::shared_ptr<const magma::Sampler>) noexcept;
+            Sampler& operator=(lent_ptr<const magma::Sampler>) noexcept;
         };
 
         /* A combined image sampler is a single descriptor type associated
@@ -81,7 +81,7 @@ namespace magma
             CombinedImageImmutableSampler(uint32_t binding) noexcept:
                 ImageDescriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
             CombinedImageImmutableSampler& operator=(const ImageSampler&) noexcept;
-            CombinedImageImmutableSampler& operator=(std::shared_ptr<const ImageView>) noexcept;
+            CombinedImageImmutableSampler& operator=(lent_ptr<const ImageView>) noexcept;
         };
 
         /* A sampled image is a descriptor type associated with
@@ -93,7 +93,7 @@ namespace magma
         public:
             SampledImage(uint32_t binding) noexcept:
                 ImageDescriptor(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
-            SampledImage& operator=(std::shared_ptr<const ImageView>) noexcept;
+            SampledImage& operator=(lent_ptr<const ImageView>) noexcept;
         };
 
         /* A storage image is a descriptor type associated with
@@ -105,7 +105,7 @@ namespace magma
         public:
             StorageImage(uint32_t binding) noexcept:
                 ImageDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
-            StorageImage& operator=(std::shared_ptr<const ImageView>) noexcept;
+            StorageImage& operator=(lent_ptr<const ImageView>) noexcept;
         };
 
         /* An input attachment is a descriptor type associated with
@@ -117,7 +117,7 @@ namespace magma
         public:
             InputAttachment(uint32_t binding) noexcept:
                 ImageDescriptor(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
-            InputAttachment& operator=(std::shared_ptr<const ImageView>) noexcept;
+            InputAttachment& operator=(lent_ptr<const ImageView>) noexcept;
         };
     } // namespace descriptor
 } // namespace magma

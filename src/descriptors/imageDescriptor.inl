@@ -23,7 +23,7 @@ inline bool ImageDescriptor::associatedWithResource() const noexcept
     }
 }
 
-inline Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
+inline Sampler& Sampler::operator=(lent_ptr<const magma::Sampler> sampler) noexcept
 {
     MAGMA_ASSERT(sampler);
     descriptor.sampler = *sampler;
@@ -35,17 +35,16 @@ inline Sampler& Sampler::operator=(std::shared_ptr<const magma::Sampler> sampler
 
 inline CombinedImageSampler& CombinedImageSampler::operator=(const ImageSampler& imageSampler) noexcept
 {
-    std::shared_ptr<const ImageView> imageView = imageSampler.first;
-    MAGMA_ASSERT(imageView);
+    MAGMA_ASSERT(imageSampler.first);
     MAGMA_ASSERT(imageSampler.second);
-    update(imageSampler.first, imageSampler.second, VK_IMAGE_USAGE_SAMPLED_BIT);
+    update(imageSampler.first.get(), imageSampler.second.get(), VK_IMAGE_USAGE_SAMPLED_BIT);
     return *this;
 }
 
 inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(const ImageSampler& imageSampler) noexcept
 {
     MAGMA_ASSERT(!pImmutableSamplers);
-    update(imageSampler.first, nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
+    update(imageSampler.first.get(), nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
     // Immutable sampler must be updated only once
     if (!pImmutableSamplers)
     {   // If pImmutableSamplers is not NULL, then it is a pointer to an array of sampler handles
@@ -57,28 +56,28 @@ inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(c
     return *this;
 }
 
-inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+inline CombinedImageImmutableSampler& CombinedImageImmutableSampler::operator=(lent_ptr<const ImageView> imageView) noexcept
 {   // Check that sampler is already set and stop carrying around it
     MAGMA_ASSERT(pImmutableSamplers);
-    update(std::move(imageView), nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
+    update(imageView.get(), nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
     return *this;
 }
 
-inline SampledImage& SampledImage::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+inline SampledImage& SampledImage::operator=(lent_ptr<const ImageView> imageView) noexcept
 {
-    update(std::move(imageView), nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
+    update(imageView.get(), nullptr, VK_IMAGE_USAGE_SAMPLED_BIT);
     return *this;
 }
 
-inline StorageImage& StorageImage::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+inline StorageImage& StorageImage::operator=(lent_ptr<const ImageView> imageView) noexcept
 {
-    update(std::move(imageView), nullptr, VK_IMAGE_USAGE_STORAGE_BIT);
+    update(imageView.get(), nullptr, VK_IMAGE_USAGE_STORAGE_BIT);
     return *this;
 }
 
-inline InputAttachment& InputAttachment::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+inline InputAttachment& InputAttachment::operator=(lent_ptr<const ImageView> imageView) noexcept
 {
-    update(std::move(imageView), nullptr, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
+    update(imageView.get(), nullptr, VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
     return *this;
 }
 } // namespace magma::descriptor

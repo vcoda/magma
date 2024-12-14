@@ -33,8 +33,7 @@ void ImageDescriptor::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeD
     dirty = false;
 }
 
-void ImageDescriptor::update(std::shared_ptr<const ImageView> imageView, std::shared_ptr<const magma::Sampler> sampler,
-    VkImageUsageFlags usage) noexcept
+void ImageDescriptor::update(const ImageView *imageView, const magma::Sampler *sampler, VkImageUsageFlags usage) noexcept
 {
     MAGMA_ASSERT(imageView);
     auto image = imageView->getImage();
@@ -43,7 +42,7 @@ void ImageDescriptor::update(std::shared_ptr<const ImageView> imageView, std::sh
         (sampler && descriptor.sampler != *sampler))
     {
         setImageType(image->getType());
-        descriptor = imageView->getDescriptor(sampler.get()); // May be null
+        descriptor = imageView->getDescriptor(sampler); // May be null
         if (VK_IMAGE_LAYOUT_UNDEFINED == descriptor.imageLayout)
         {   // Assume that later image layout will be changed,
             // e.g. when a render pass instance ends.

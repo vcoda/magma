@@ -57,8 +57,8 @@ namespace magma
         public:
             CombinedImageSamplerVariableArray(uint32_t binding) noexcept:
                 ImageDescriptorVariableArray(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-            uint32_t add(std::shared_ptr<const ImageView> imageView,
-                std::shared_ptr<const magma::Sampler> sampler);
+            uint32_t add(lent_ptr<const ImageView> imageView,
+                lent_ptr<const magma::Sampler> sampler);
         };
 
         /* A sampled image is a descriptor type associated with
@@ -70,7 +70,7 @@ namespace magma
         public:
             SampledImageVariableArray(uint32_t binding) noexcept:
                 ImageDescriptorVariableArray(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
-            uint32_t add(std::shared_ptr<const ImageView> imageView);
+            uint32_t add(lent_ptr<const ImageView> imageView);
         };
     } // namespace descriptor
 } // namespace magma

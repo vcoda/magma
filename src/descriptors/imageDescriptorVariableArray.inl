@@ -53,13 +53,13 @@ inline void ImageDescriptorVariableArray::write(VkDescriptorSet dstSet, VkWriteD
     dirty = false;
 }
 
-inline uint32_t CombinedImageSamplerVariableArray::add(std::shared_ptr<const ImageView> imageView,
-    std::shared_ptr<const magma::Sampler> sampler)
+inline uint32_t CombinedImageSamplerVariableArray::add(lent_ptr<const ImageView> imageView,
+    lent_ptr<const magma::Sampler> sampler)
 {
     return insert(imageView->getDescriptor(sampler.get()));
 }
 
-inline uint32_t SampledImageVariableArray::add(std::shared_ptr<const ImageView> imageView)
+inline uint32_t SampledImageVariableArray::add(lent_ptr<const ImageView> imageView)
 {
     return insert(imageView->getDescriptor());
 }

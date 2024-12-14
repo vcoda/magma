@@ -4,7 +4,7 @@ inline SamplerArrayElement::SamplerArrayElement(DescriptorSetLayoutBinding *arra
     ArrayElement<VkDescriptorImageInfo>(array, element, 0)
 {}
 
-inline void SamplerArrayElement::operator=(std::shared_ptr<const magma::Sampler> sampler) noexcept
+inline void SamplerArrayElement::operator=(lent_ptr<const magma::Sampler> sampler) noexcept
 {
     MAGMA_ASSERT(sampler);
     this->element.sampler = *sampler;
@@ -17,7 +17,7 @@ inline ImageArrayElement::ImageArrayElement(DescriptorSetLayoutBinding *array, V
     ArrayElement<VkDescriptorImageInfo>(array, element, usage)
 {}
 
-inline void ImageArrayElement::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+inline void ImageArrayElement::operator=(lent_ptr<const ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(imageView);
     MAGMA_ASSERT(MAGMA_BITWISE_AND(imageView->getImage()->getUsage(), this->usage));
@@ -71,7 +71,7 @@ inline void ImageImmutableSamplerArrayElement::operator=(const ImageSampler& ima
     }
 }
 
-inline void ImageImmutableSamplerArrayElement::operator=(std::shared_ptr<const ImageView> imageView) noexcept
+inline void ImageImmutableSamplerArrayElement::operator=(lent_ptr<const ImageView> imageView) noexcept
 {   // Check that sampler is already set and stop carrying around it
     MAGMA_ASSERT(immutableSampler != VK_NULL_HANDLE);
     MAGMA_ASSERT(imageView);
