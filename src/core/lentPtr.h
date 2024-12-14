@@ -21,7 +21,8 @@ namespace magma
 {
     /* Holds a reference to native or shared pointer.
        Don't intend to manage the lifetime of underlying
-       object, but instead is a scoped reference. */
+       object, instead has non-destructible and non-
+       copyable semantics. */
 
     template<class T>
     class lent_ptr
@@ -43,15 +44,18 @@ namespace magma
         {}
 
         lent_ptr(const lent_ptr&) = delete;
-        lent_ptr(lent_ptr&& other) noexcept:
+        lent_ptr& operator=(const lent_ptr&) = delete;
+
+        template<class T2>
+        lent_ptr(lent_ptr<T2>&& other) noexcept:
             ptr(other.ptr),
             ref(std::move(other.ref))
         {
             other.ptr = nullptr;
         }
 
-        lent_ptr& operator=(const lent_ptr&) = delete;
-        lent_ptr& operator=(lent_ptr&& other) noexcept
+        template<class T2>
+        lent_ptr& operator=(lent_ptr<T2>&& other) noexcept
         {
             if (this != &other)
             {
@@ -89,5 +93,8 @@ namespace magma
     private:
         T *ptr;
         std::weak_ptr<T> ref;
+
+        template<class T2>
+        friend class lent_ptr;
     };
 } // namespace magma
