@@ -43,7 +43,7 @@ void AccelerationStructure::write(VkDescriptorSet dstSet, VkWriteDescriptorSet& 
     dirty = false;
 }
 
-AccelerationStructure& AccelerationStructure::operator=(std::shared_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept
+AccelerationStructure& AccelerationStructure::operator=(lent_ptr<const magma::AccelerationStructure> accelerationStructure) noexcept
 {
     const VkAccelerationStructureKHR *handleAddress = accelerationStructure->getHandleAddress();
     if (descriptor.pAccelerationStructures != handleAddress)
