@@ -178,7 +178,7 @@ void LeanCommandBuffer::beginConditionalRendering(const Buffer *buffer, VkDevice
 void LeanCommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, uint32_t counterBufferCount, const Buffer **counterBuffers,
     const VkDeviceSize *counterBufferOffsets /* nullptr */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBufferCount);
+    MAGMA_VLA(VkBuffer, dereferencedCounterBuffers, counterBufferCount);
     for (uint32_t i = 0; i < counterBufferCount; ++i)
     {
         MAGMA_ASSERT(counterBuffers[i]->getUsage() & VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT);
@@ -191,7 +191,7 @@ void LeanCommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, uint
 void LeanCommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, uint32_t counterBufferCount, const Buffer **counterBuffers,
     const VkDeviceSize *counterBufferOffsets /* nullptr */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkBuffer, dereferencedCounterBuffers, counterBufferCount);
+    MAGMA_VLA(VkBuffer, dereferencedCounterBuffers, counterBufferCount);
     for (uint32_t i = 0; i < counterBufferCount; ++i)
     {
         MAGMA_ASSERT(counterBuffers[i]->getUsage() & VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT);
@@ -211,7 +211,7 @@ void LeanCommandBuffer::beginRenderPass(RenderPass *renderPass, ImagelessFramebu
     uint32_t attachmentCount, const ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
     const VkRect2D& renderArea, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachmentCount);
+    MAGMA_VLA(VkImageView, dereferencedAttachments, attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
         dereferencedAttachments.put(*attachments[i]);
     VkRenderPassBeginInfo renderPassBeginInfo;
@@ -236,7 +236,7 @@ void LeanCommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, RenderPa
     uint32_t deviceRenderAreaCount /* 0 */, const VkRect2D *deviceRenderAreas /* nullptr */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachmentCount);
+    MAGMA_VLA(VkImageView, dereferencedAttachments, attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
         dereferencedAttachments.put(*attachments[i]);
     VkRenderPassBeginInfo renderPassBeginInfo;

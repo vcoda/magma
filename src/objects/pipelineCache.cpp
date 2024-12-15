@@ -74,7 +74,7 @@ void PipelineCache::mergeCache(std::shared_ptr<const PipelineCache> srcCache)
 
 void PipelineCache::mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& srcCaches)
 {
-    MAGMA_STACK_ARRAY(VkPipelineCache, dereferencedSrcCaches, srcCaches.size());
+    MAGMA_VLA(VkPipelineCache, dereferencedSrcCaches, srcCaches.size());
     for (auto const& cache: srcCaches)
         dereferencedSrcCaches.put(*cache);
     const VkResult result = vkMergePipelineCaches(getNativeDevice(), handle, dereferencedSrcCaches.count(), dereferencedSrcCaches);

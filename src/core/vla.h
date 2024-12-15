@@ -21,14 +21,16 @@ namespace magma
 {
     namespace core
     {
-        /* An array of elements allocated on the program stack.
-           In debug build, it's always allocated in the heap memory. */
+        /* Variable-length arrays is a C99 (not C++) feature.
+           But as allocation on stack is much faster than in the heap,
+           we implement our own VLA with alloca()/_malloca() functions.
+           In debug build, VLA always allocated in the heap memory. */
 
         template<class T>
-        class StackArray final
+        class VariableLengthArray final
         {
         public:
-            explicit StackArray(void *ptr, std::size_t len) noexcept:
+            explicit VariableLengthArray(void *ptr, std::size_t len) noexcept:
                 ptr(reinterpret_cast<T *>(ptr)),
                 len(static_cast<uint32_t>(len)),
                 cnt(0)
@@ -40,7 +42,7 @@ namespace magma
                 }
             }
 
-            ~StackArray()
+            ~VariableLengthArray()
             {
                 if constexpr (std::is_destructible<T>::value)
                 {
@@ -76,6 +78,6 @@ namespace magma
     } // namespace core
 } // namespace magma
 
-#define MAGMA_STACK_ARRAY(Type, var, count)\
+#define MAGMA_VLA(Type, var, count)\
     MAGMA_ASSERT(sizeof(Type) * count <= MAGMA_STACK_MAX_SIZE);\
-    magma::core::StackArray<Type> var(MAGMA_STACK_ALLOC(sizeof(Type) * count), count)
+    magma::core::VariableLengthArray<Type> var(MAGMA_STACK_ALLOC(sizeof(Type) * count), count)

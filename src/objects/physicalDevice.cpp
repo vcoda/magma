@@ -468,7 +468,7 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
     std::vector<std::shared_ptr<Display>> supportedDisplays;
     if (displayCount)
     {
-        MAGMA_STACK_ARRAY(VkDisplayKHR, displays, displayCount);
+        MAGMA_VLA(VkDisplayKHR, displays, displayCount);
         result = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, displays);
         if (VK_SUCCESS == result)
         {

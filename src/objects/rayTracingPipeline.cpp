@@ -50,7 +50,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     shaderGroups(shaderGroups_),
     maxRecursionDepth(maxRecursionDepth)
 {
-    MAGMA_STACK_ARRAY(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
+    MAGMA_VLA(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
     for (auto const& stage: shaderStages)
         dereferencedStages.put(stage);
     VkRayTracingPipelineCreateInfoKHR pipelineInfo;

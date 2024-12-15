@@ -68,7 +68,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const st
     extent(attachments.front()->getExtent2D()),
     layerCount(attachments.front()->getArrayLayerCount())
 {
-    MAGMA_STACK_ARRAY(VkImageView, dereferencedAttachments, attachments.size());
+    MAGMA_VLA(VkImageView, dereferencedAttachments, attachments.size());
     for (auto& attachment: attachments)
         dereferencedAttachments.put(*attachment);
     VkFramebufferCreateInfo framebufferInfo;

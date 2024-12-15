@@ -91,7 +91,7 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
     pushConstantRanges(pushConstantRanges_),
     flags(flags)
 {
-    MAGMA_STACK_ARRAY(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts_.size());
+    MAGMA_VLA(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts_.size());
     for (auto const& layout: setLayouts_)
         dereferencedSetLayouts.put(*layout);
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;

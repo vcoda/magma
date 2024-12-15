@@ -183,7 +183,7 @@ bool Device::waitIdle() const
 
 bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept
 {
-    MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
+    MAGMA_VLA(VkFence, dereferencedFences, fences.size());
     for (auto const& fence: fences)
         dereferencedFences.put(*fence);
     const VkResult result = vkResetFences(handle, dereferencedFences.count(), dereferencedFences);
@@ -193,7 +193,7 @@ bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noex
 bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bool waitAll,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
-    MAGMA_STACK_ARRAY(VkFence, dereferencedFences, fences.size());
+    MAGMA_VLA(VkFence, dereferencedFences, fences.size());
     for (auto const& fence: fences)
         dereferencedFences.put(*fence);
     const VkResult result = vkWaitForFences(handle, dereferencedFences.count(), dereferencedFences, MAGMA_BOOLEAN(waitAll), timeout);
@@ -207,7 +207,7 @@ bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>
     const std::vector<uint64_t>& values, bool waitAll,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
-    MAGMA_STACK_ARRAY(VkSemaphore, dereferencedSemaphores, semaphores.size());
+    MAGMA_VLA(VkSemaphore, dereferencedSemaphores, semaphores.size());
     for (auto const& semaphore: semaphores)
         dereferencedSemaphores.put(*semaphore);
     VkSemaphoreWaitInfo waitInfo;
@@ -374,7 +374,7 @@ bool Device::getAccelerationStructureCompatibility(const AccelerationStructureHe
 std::vector<uint64_t> Device::getCalibratedTimestamps(const std::vector<VkTimeDomainEXT>& timeDomains,
     uint64_t *maxDeviation /* nullptr */) const
 {
-    MAGMA_STACK_ARRAY(VkCalibratedTimestampInfoEXT, calibratedTimestampInfos, timeDomains.size());
+    MAGMA_VLA(VkCalibratedTimestampInfoEXT, calibratedTimestampInfos, timeDomains.size());
     VkCalibratedTimestampInfoEXT calibratedTimestampInfo;
     calibratedTimestampInfo.sType = VK_STRUCTURE_TYPE_CALIBRATED_TIMESTAMP_INFO_EXT;
     calibratedTimestampInfo.pNext = nullptr;
