@@ -36,9 +36,9 @@ namespace magma
 RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const std::vector<PipelineShaderStage>& shaderStages_,
     const std::vector<RayTracingShaderGroup>& shaderGroups_, uint32_t maxRecursionDepth, core::variant_ptr<PipelineLayout> layout_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
+    lent_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    const std::unique_ptr<PipelineLibrary>& pipelineLibrary /* nullptr */,
+    lent_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
     std::shared_ptr<RayTracingPipeline> basePipeline_ /* nullptr */,
     lent_ptr<DeferredOperation> deferredOperation /* nullptr */,

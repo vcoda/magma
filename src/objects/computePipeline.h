@@ -38,9 +38,9 @@ namespace magma
             const PipelineShaderStage& shaderStage,
             core::variant_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
+            lent_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
-            const std::unique_ptr<PipelineLibrary>& pipelineLibrary = nullptr,
+            lent_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,

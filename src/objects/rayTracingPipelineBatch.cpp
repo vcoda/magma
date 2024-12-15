@@ -120,9 +120,9 @@ uint32_t RayTracingPipelineBatch::batchPipeline(const std::vector<PipelineShader
     return core::countof(pipelineInfos) - 1;
 }
 
-void RayTracingPipelineBatch::buildPipelines(const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
+void RayTracingPipelineBatch::buildPipelines(lent_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    const std::unique_ptr<PipelineLibrary>& pipelineLibrary /* nullptr */,
+    lent_ptr<const PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {

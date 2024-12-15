@@ -50,12 +50,12 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates,
     core::variant_ptr<PipelineLayout> layout,
-    std::shared_ptr<RenderPass> renderPass,
+    lent_ptr<RenderPass> renderPass,
     uint32_t subpass,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
+    lent_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    const std::unique_ptr<PipelineLibrary>& pipelineLibrary /* nullptr */,
+    lent_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
@@ -65,9 +65,9 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
         ViewportState(), // No viewport state (supposed to be dynamic)
         rasterizationState, multisampleState, depthStencilState, colorBlendState, dynamicStates,
         std::move(layout), std::move(renderPass), subpass,
-        std::move(allocator), pipelineCache,
+        std::move(allocator), std::move(pipelineCache),
     #ifdef VK_KHR_pipeline_library
-        pipelineLibrary,
+        std::move(pipelineLibrary),
     #endif
         std::move(basePipeline),
         flags, extendedInfo)
@@ -85,12 +85,12 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates,
     core::variant_ptr<PipelineLayout> layout_,
-    std::shared_ptr<RenderPass> renderPass,
+    lent_ptr<RenderPass> renderPass,
     uint32_t subpass,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
+    lent_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    const std::unique_ptr<PipelineLibrary>& pipelineLibrary /* nullptr */,
+    lent_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
     std::shared_ptr<GraphicsPipeline> basePipeline_ /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,

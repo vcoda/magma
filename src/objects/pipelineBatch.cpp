@@ -26,9 +26,9 @@ PipelineBatch::PipelineBatch(std::shared_ptr<Device> device) noexcept:
     device(std::move(device))
 {}
 
-std::future<void> PipelineBatch::buildPipelinesAsync(const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
+std::future<void> PipelineBatch::buildPipelinesAsync(lent_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    const std::unique_ptr<PipelineLibrary>& pipelineLibrary,
+    lent_ptr<const PipelineLibrary> pipelineLibrary,
 #endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
@@ -39,9 +39,9 @@ std::future<void> PipelineBatch::buildPipelinesAsync(const std::unique_ptr<Pipel
         #endif
             allocator]()
         {
-            buildPipelines(pipelineCache,
+            buildPipelines(std::move(pipelineCache),
             #ifdef VK_KHR_pipeline_library
-                pipelineLibrary,
+                std::move(pipelineLibrary),
             #endif
                 std::move(allocator));
         });

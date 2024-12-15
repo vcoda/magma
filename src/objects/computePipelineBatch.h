@@ -35,9 +35,9 @@ namespace magma
             std::shared_ptr<ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        void buildPipelines(const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
+        void buildPipelines(lent_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
-            const std::unique_ptr<PipelineLibrary>& pipelineLibrary = nullptr,
+            lent_ptr<const PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr) override;
     };

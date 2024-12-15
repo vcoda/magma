@@ -40,14 +40,14 @@ namespace magma
         void setCompilerControlFlags(VkPipelineCompilerControlFlagsAMD flags) noexcept { compilerControlFlags = flags; }
         VkPipelineCompilerControlFlagsAMD getCompilerControlFlags() noexcept { return compilerControlFlags; }
     #endif // VK_AMD_pipeline_compiler_control
-        virtual void buildPipelines(const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
+        virtual void buildPipelines(lent_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
-            const std::unique_ptr<PipelineLibrary>& pipelineLibrary = nullptr,
+            lent_ptr<const PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr) = 0;
-        std::future<void> buildPipelinesAsync(const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
+        std::future<void> buildPipelinesAsync(lent_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
-            const std::unique_ptr<PipelineLibrary>& pipelineLibrary = nullptr,
+            lent_ptr<const PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr);
 
@@ -90,7 +90,7 @@ namespace magma
         BasePipelineBatch(std::shared_ptr<Device> device) noexcept;
         void fixup() noexcept;
     #ifdef VK_KHR_pipeline_library
-        void linkPipelineLibrary(const std::unique_ptr<PipelineLibrary>& pipelineLibrary);
+        void linkPipelineLibrary(lent_ptr<const PipelineLibrary> pipelineLibrary);
     #endif // VK_KHR_pipeline_library
         void postCreate();
         void postBuild();

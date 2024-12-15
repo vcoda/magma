@@ -150,16 +150,16 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     return core::countof(pipelineInfos) - 1;
 }
 
-void GraphicsPipelineBatch::buildPipelines(const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */,
+void GraphicsPipelineBatch::buildPipelines(lent_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    const std::unique_ptr<PipelineLibrary>& pipelineLibrary /* nullptr */,
+    lent_ptr<const PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
     std::shared_ptr<IAllocator> allocator /* nullptr */)
 {
     fixup();
 #ifdef VK_KHR_pipeline_library
     if (device->extensionEnabled(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME))
-        linkPipelineLibrary(pipelineLibrary);
+        linkPipelineLibrary(std::move(pipelineLibrary));
 #endif // VK_KHR_pipeline_library
     std::vector<VkPipeline> handles(pipelineInfos.size(), VK_NULL_HANDLE);
     const VkResult result = vkCreateGraphicsPipelines(getNativeDevice(), MAGMA_OPTIONAL_HANDLE(pipelineCache),
