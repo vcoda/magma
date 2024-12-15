@@ -175,7 +175,7 @@ inline void LeanCommandBuffer::copyImageToBuffer(const Image *srcImage, Buffer *
     vkCmdCopyImageToBuffer(handle, *srcImage, srcImageLayout, *dstBuffer, regionCount, regions);
 }
 
-inline void LeanCommandBuffer::updateBuffer(const Buffer *buffer, VkDeviceSize dataSize, const void *data, VkDeviceSize offset /* 0 */) const noexcept
+inline void LeanCommandBuffer::updateBuffer(Buffer *buffer, VkDeviceSize dataSize, const void *data, VkDeviceSize offset /* 0 */) const noexcept
 {   /* Buffer updates performed with vkCmdUpdateBuffer first copy the data
        into command buffer memory when the command is recorded
        (which requires additional storage and may incur an additional allocation),

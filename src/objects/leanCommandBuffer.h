@@ -102,7 +102,7 @@ namespace magma
         void blitImage(const Image *srcImage, Image *dstImage, const VkImageBlit& region, VkFilter filter) const noexcept;
         void copyBufferToImage(const Buffer *srcBuffer, Image *dstImage, uint32_t regionCount, const VkBufferImageCopy *regions) const noexcept;
         void copyImageToBuffer(const Image *srcImage, Buffer *dstBuffer, uint32_t regionCount, const VkBufferImageCopy *regions) const noexcept;
-        void updateBuffer(const Buffer *buffer, VkDeviceSize dataSize, const void *data, VkDeviceSize offset = 0) const noexcept;
+        void updateBuffer(Buffer *buffer, VkDeviceSize dataSize, const void *data, VkDeviceSize offset = 0) const noexcept;
         void fillBuffer(Buffer *buffer, uint32_t data, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0) const noexcept;
 
         void clearColorImage(Image *image, const VkClearColorValue& color, const VkImageSubresourceRange& range) const noexcept;
