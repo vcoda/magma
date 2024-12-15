@@ -500,14 +500,14 @@ inline void LeanCommandBuffer::endConditionalRendering() noexcept
 #endif // VK_EXT_conditional_rendering
 
 #ifdef VK_EXT_transform_feedback
-inline void LeanCommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, const Buffer *buffer, VkDeviceSize offset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
+inline void LeanCommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding, Buffer *buffer, VkDeviceSize offset /* 0 */, VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
     MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT);
     MAGMA_DEVICE_EXTENSION(vkCmdBindTransformFeedbackBuffersEXT);
     vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, 1, buffer->getHandleAddress(), &offset, &size);
 }
 
-inline void LeanCommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, uint32_t bindingCount, const Buffer **buffers, const VkDeviceSize *offsets, const VkDeviceSize *sizes /* nullptr */) noexcept
+inline void LeanCommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, uint32_t bindingCount, Buffer **buffers, const VkDeviceSize *offsets, const VkDeviceSize *sizes /* nullptr */) noexcept
 {
     MAGMA_VLA(VkBuffer, dereferencedBuffers, bindingCount);
     for (uint32_t i = 0; i < bindingCount; ++i)

@@ -188,7 +188,7 @@ void LeanCommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, uint
     vkCmdBeginTransformFeedbackEXT(handle, firstCounterBuffer, counterBufferCount, dereferencedCounterBuffers, counterBufferOffsets);
 }
 
-void LeanCommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, uint32_t counterBufferCount, const Buffer **counterBuffers,
+void LeanCommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, uint32_t counterBufferCount, Buffer **counterBuffers,
     const VkDeviceSize *counterBufferOffsets /* nullptr */) noexcept
 {
     MAGMA_VLA(VkBuffer, dereferencedCounterBuffers, counterBufferCount);

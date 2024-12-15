@@ -185,10 +185,10 @@ namespace magma
     #endif // VK_EXT_conditional_rendering
 
     #ifdef VK_EXT_transform_feedback
-        void bindTransformFeedbackBuffer(uint32_t firstBinding, const Buffer *buffer, VkDeviceSize offset = 0, VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
-        void bindTransformFeedbackBuffers(uint32_t firstBinding, uint32_t bindingCount, const Buffer **buffers, const VkDeviceSize *offsets, const VkDeviceSize *sizes = nullptr) noexcept;
+        void bindTransformFeedbackBuffer(uint32_t firstBinding, Buffer *buffer, VkDeviceSize offset = 0, VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
+        void bindTransformFeedbackBuffers(uint32_t firstBinding, uint32_t bindingCount, Buffer **buffers, const VkDeviceSize *offsets, const VkDeviceSize *sizes = nullptr) noexcept;
         void beginTransformFeedback(uint32_t firstCounterBuffer, uint32_t counterBufferCount, const Buffer **counterBuffers, const VkDeviceSize *counterBufferOffsets = nullptr) noexcept;
-        void endTransformFeedback(uint32_t firstCounterBuffer, uint32_t counterBufferCount, const Buffer **counterBuffers, const VkDeviceSize *counterBufferOffsets = nullptr) noexcept;
+        void endTransformFeedback(uint32_t firstCounterBuffer, uint32_t counterBufferCount, Buffer **counterBuffers, const VkDeviceSize *counterBufferOffsets = nullptr) noexcept;
         void beginQueryIndexed(QueryPool *queryPool, uint32_t query, uint32_t index) noexcept;
         void endQueryIndexed(QueryPool *queryPool, uint32_t query, uint32_t index) noexcept;
         void drawIndirectByteCount(uint32_t instanceCount, uint32_t firstInstance, const Buffer *counterBuffer, uint32_t vertexStride, VkDeviceSize counterBufferOffset = 0, uint32_t counterOffset = 0) const noexcept;
