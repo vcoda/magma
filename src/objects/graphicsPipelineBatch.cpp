@@ -51,7 +51,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates_,
-    core::variant_ptr<PipelineLayout> layout,
+    variant_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass,
     std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,

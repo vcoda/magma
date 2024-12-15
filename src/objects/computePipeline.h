@@ -36,7 +36,7 @@ namespace magma
     public:
         explicit ComputePipeline(std::shared_ptr<Device> device,
             const PipelineShaderStage& shaderStage,
-            core::variant_ptr<PipelineLayout> layout,
+            variant_ptr<PipelineLayout> layout,
             std::shared_ptr<IAllocator> allocator = nullptr,
             lent_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
@@ -50,7 +50,7 @@ namespace magma
         MAGMA_MAKE_UNIQUE(ComputePipeline)
         ComputePipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
-            core::variant_ptr<PipelineLayout> layout,
+            variant_ptr<PipelineLayout> layout,
             std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
         #ifdef VK_EXT_pipeline_creation_feedback

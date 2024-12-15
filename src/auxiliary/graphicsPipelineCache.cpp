@@ -71,7 +71,7 @@ std::shared_ptr<GraphicsPipeline> GraphicsPipelineCache::lookupPipeline(
     const DepthStencilState& depthStencilState,
     const ColorBlendState& colorBlendState,
     const std::vector<VkDynamicState>& dynamicStates,
-    core::variant_ptr<PipelineLayout> layout,
+    variant_ptr<PipelineLayout> layout,
     std::shared_ptr<RenderPass> renderPass,
     uint32_t subpass /* 0 */,
     VkPipelineCreateFlags flags /* 0 */,

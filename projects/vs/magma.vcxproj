@@ -705,7 +705,6 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\barriers\subpassDependency2.inl" />
     <None Include="..\..\src\core\hash.inl" />
     <None Include="..\..\src\core\memory.inl" />
-    <None Include="..\..\src\core\variantPtr.inl" />
     <None Include="..\..\src\descriptors\bufferArrayElement.inl" />
     <None Include="..\..\src\descriptors\descriptorSetLayoutBinding.inl" />
     <None Include="..\..\src\descriptors\bufferDescriptor.inl" />

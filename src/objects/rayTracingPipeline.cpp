@@ -34,7 +34,7 @@ namespace magma
 {
 #ifdef VK_KHR_ray_tracing_pipeline
 RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const std::vector<PipelineShaderStage>& shaderStages_,
-    const std::vector<RayTracingShaderGroup>& shaderGroups_, uint32_t maxRecursionDepth, core::variant_ptr<PipelineLayout> layout_,
+    const std::vector<RayTracingShaderGroup>& shaderGroups_, uint32_t maxRecursionDepth, variant_ptr<PipelineLayout> layout_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     lent_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
@@ -141,7 +141,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
         extendedInfo);
 }
 
-RayTracingPipeline::RayTracingPipeline(VkPipeline handle_, std::shared_ptr<Device> device, core::variant_ptr<PipelineLayout> layout,
+RayTracingPipeline::RayTracingPipeline(VkPipeline handle_, std::shared_ptr<Device> device, variant_ptr<PipelineLayout> layout,
     std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, const std::vector<PipelineShaderStage>& shaderStages,
     const std::vector<RayTracingShaderGroup>& shaderGroups, uint32_t maxRecursionDepth,
 #ifdef VK_EXT_pipeline_creation_feedback

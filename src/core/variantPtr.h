@@ -19,27 +19,74 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    namespace core
+    /* Variant pointer that can hold unique or shared pointer. */
+
+    template<class T>
+    class variant_ptr
     {
-        template<class Type>
-        class variant_ptr
+    public:
+        variant_ptr(std::nullptr_t) noexcept
+        {}
+
+        variant_ptr(std::unique_ptr<T> shared) noexcept:
+            ptr(std::move(shared))
+        {}
+
+        variant_ptr(std::shared_ptr<T> unique) noexcept:
+            ptr(std::move(unique))
+        {}
+
+        //variant_ptr(const variant_ptr&) = delete;
+
+        T *get() noexcept
         {
-        public:
-            variant_ptr(std::nullptr_t) noexcept {}
-            variant_ptr(std::unique_ptr<Type> ptr) noexcept;
-            variant_ptr(std::shared_ptr<Type> ptr) noexcept;
-            Type *get() noexcept;
-            const Type *get() const noexcept;
-            Type *operator->() noexcept;
-            const Type *operator->() const noexcept;
-            Type& operator*() noexcept;
-            const Type& operator*() const noexcept;
-            operator bool() const;
+            try
+            {
+                auto visitor = [](auto& p) -> T* { return p.get(); };
+                return std::visit(visitor, ptr);
+            }
+            catch (const std::bad_variant_access&)
+            {
+                return nullptr;
+            }
+        }
 
-        private:
-            std::variant<std::unique_ptr<Type>, std::shared_ptr<Type>> ptr;
-        };
-    } // namespace core
+        const T *get() const noexcept
+        {
+            try
+            {
+                auto visitor = [](auto const& p) -> T* { return p.get(); };
+                return std::visit(visitor, ptr);
+            }
+            catch (const std::bad_variant_access&)
+            {
+                return nullptr;
+            }
+        }
+
+        T *operator->() noexcept
+        {
+            return get();
+        }
+
+        const T *operator->() const noexcept
+        {
+            return get();
+        }
+
+        T& operator*() noexcept
+        {
+            return *get();
+        }
+
+        const T& operator*() const noexcept
+        {
+            return *get();
+        }
+
+        operator bool() const noexcept { return get() != nullptr; }
+
+    private:
+        std::variant<std::unique_ptr<T>, std::shared_ptr<T>> ptr;
+    };
 } // namespace magma
-
-#include "variantPtr.inl"

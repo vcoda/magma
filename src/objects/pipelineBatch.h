@@ -58,7 +58,7 @@ namespace magma
 
         std::shared_ptr<Device> device;
         std::forward_list<std::vector<PipelineShaderStage>> stages;
-        std::forward_list<core::variant_ptr<PipelineLayout>> layouts;
+        std::forward_list<variant_ptr<PipelineLayout>> layouts;
         std::forward_list<std::shared_ptr<Pipeline>> basePipelines;
     #ifdef VK_AMD_pipeline_compiler_control
         std::forward_list<VkPipelineCompilerControlCreateInfoAMD> pipelineCompilerControlInfos;
