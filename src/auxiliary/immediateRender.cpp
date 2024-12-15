@@ -173,7 +173,7 @@ bool ImmediateRender::commitPrimitives(lent_ptr<CommandBuffer> cmdBuffer,
             cmdBuffer->setLineStipple(primitive.lineStippleFactor, primitive.lineStipplePattern);
     #endif // VK_EXT_line_rasterization
         memcpy(pushConstants.world, primitive.world, sizeof(primitive.world));
-        cmdBuffer->pushConstantBlock(*sharedLayout, VK_SHADER_STAGE_VERTEX_BIT, pushConstants);
+        cmdBuffer->pushConstantBlock(sharedLayout, VK_SHADER_STAGE_VERTEX_BIT, pushConstants);
         cmdBuffer->draw(primitive.vertexCount, primitive.firstVertex);
         if (primitive.labelName)
         {

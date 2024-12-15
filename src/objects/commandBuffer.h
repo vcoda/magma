@@ -55,13 +55,13 @@ namespace magma
         enum class State : uint8_t;
         ~CommandBuffer();
         bool begin(VkCommandBufferUsageFlags flags = 0) noexcept;
-        bool beginInherited(lent_ptr<RenderPass> renderPass, uint32_t subpass, lent_ptr<Framebuffer> framebuffer,
+        bool beginInherited(lent_ptr<const RenderPass> renderPass, uint32_t subpass, lent_ptr<const Framebuffer> framebuffer,
             bool occlusionQueryEnable = false, VkQueryControlFlags queryFlags = 0, VkQueryPipelineStatisticFlags pipelineStatistics = 0,
             VkCommandBufferUsageFlags flags = 0, const StructureChain& extendedInfo = StructureChain()) noexcept;
         void end();
         bool reset(VkCommandBufferResetFlags flags = 0) noexcept;
 
-        void bindPipeline(lent_ptr<Pipeline> pipeline) noexcept;
+        void bindPipeline(lent_ptr<const Pipeline> pipeline) noexcept;
 
         void setViewport(const VkViewport& viewport) noexcept;
         void setViewport(float x, float y, float width, float height, float minDepth = 0.f, float maxDepth = 1.f) noexcept;
@@ -78,27 +78,27 @@ namespace magma
         void setStencilWriteMask(bool frontFace, bool backFace, uint32_t writeMask) noexcept;
         void setStencilReference(bool frontFace, bool backFace, uint32_t reference) noexcept;
 
-        void bindDescriptorSet(lent_ptr<Pipeline> pipeline, uint32_t firstSet, lent_ptr<DescriptorSet> descriptorSet,
+        void bindDescriptorSet(lent_ptr<const Pipeline> pipeline, uint32_t firstSet, lent_ptr<const DescriptorSet> descriptorSet,
             uint32_t dynamicOffset = std::numeric_limits<uint32_t>::max()) noexcept;
-        void bindDescriptorSet(lent_ptr<Pipeline> pipeline, uint32_t firstSet, lent_ptr<DescriptorSet> descriptorSet,
+        void bindDescriptorSet(lent_ptr<const Pipeline> pipeline, uint32_t firstSet, lent_ptr<const DescriptorSet> descriptorSet,
             const std::initializer_list<uint32_t>& dynamicOffsets) noexcept;
-        void bindDescriptorSets(lent_ptr<Pipeline> pipeline, uint32_t firstSet, const std::initializer_list<lent_ptr<DescriptorSet>>& descriptorSets,
+        void bindDescriptorSets(lent_ptr<const Pipeline> pipeline, uint32_t firstSet, const std::initializer_list<lent_ptr<const DescriptorSet>>& descriptorSets,
             const std::initializer_list<uint32_t>& dynamicOffsets = {}) noexcept;
 
-        void bindIndexBuffer(lent_ptr<BaseIndexBuffer> indexBuffer, VkDeviceSize offset = 0) noexcept;
-        void bindVertexBuffer(uint32_t firstBinding, lent_ptr<Buffer> vertexBuffer, VkDeviceSize offset = 0) noexcept;
-        void bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<lent_ptr<Buffer>>& vertexBuffers, const std::initializer_list<VkDeviceSize>& offsets = {}) noexcept;
+        void bindIndexBuffer(lent_ptr<const BaseIndexBuffer> indexBuffer, VkDeviceSize offset = 0) noexcept;
+        void bindVertexBuffer(uint32_t firstBinding, lent_ptr<const Buffer> vertexBuffer, VkDeviceSize offset = 0) noexcept;
+        void bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<lent_ptr<const Buffer>>& vertexBuffers, const std::initializer_list<VkDeviceSize>& offsets = {}) noexcept;
 
         void draw(uint32_t vertexCount, uint32_t firstVertex = 0) const noexcept;
         void drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex = 0, uint32_t firstInstance = 0) const noexcept;
         void drawIndexed(uint32_t indexCount, uint32_t firstIndex = 0, int32_t vertexOffset = 0) const noexcept;
         void drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset, uint32_t firstInstance) const noexcept;
-        void drawIndirect(lent_ptr<Buffer> buffer, uint32_t drawCount, VkDeviceSize offset = 0) const noexcept;
-        void drawIndirect(lent_ptr<DrawIndirectBuffer> buffer) const noexcept;
-        void drawIndexedIndirect(lent_ptr<Buffer> buffer, uint32_t drawCount, VkDeviceSize offset = 0) const noexcept;
-        void drawIndexedIndirect(lent_ptr<DrawIndexedIndirectBuffer> buffer) const noexcept;
+        void drawIndirect(lent_ptr<const Buffer> buffer, uint32_t drawCount, VkDeviceSize offset = 0) const noexcept;
+        void drawIndirect(lent_ptr<const DrawIndirectBuffer> buffer) const noexcept;
+        void drawIndexedIndirect(lent_ptr<const Buffer> buffer, uint32_t drawCount, VkDeviceSize offset = 0) const noexcept;
+        void drawIndexedIndirect(lent_ptr<const DrawIndexedIndirectBuffer> buffer) const noexcept;
         void dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept;
-        void dispatchIndirect(lent_ptr<Buffer> buffer, VkDeviceSize offset = 0) const noexcept;
+        void dispatchIndirect(lent_ptr<const Buffer> buffer, VkDeviceSize offset = 0) const noexcept;
 
         void copyBuffer(lent_ptr<const Buffer> srcBuffer, lent_ptr<Buffer> dstBuffer,
             VkDeviceSize srcOffset = 0, VkDeviceSize dstOffset = 0, VkDeviceSize size = VK_WHOLE_SIZE) const noexcept;
@@ -117,24 +117,24 @@ namespace magma
         void clearColorImage(lent_ptr<Image> image, const ClearColor& color, const VkImageSubresourceRange& range) const noexcept;
         void clearDepthStencilImage(lent_ptr<Image> image, const ClearDepthStencil& depthStencil, const VkImageSubresourceRange& range) const noexcept;
         void clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept;
-        void resolveImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage) const noexcept;
-        void resolveImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageResolve& region) const noexcept;
+        void resolveImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage) const noexcept;
+        void resolveImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage, const VkImageResolve& region) const noexcept;
 
         void setEvent(lent_ptr<Event> event, VkPipelineStageFlags stageMask) const noexcept;
         void resetEvent(lent_ptr<Event> event, VkPipelineStageFlags stageMask) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept;
-        void waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept;
-        void waitEvents(const std::initializer_list<lent_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers = {},
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) const noexcept;
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier) const noexcept;
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier) const noexcept;
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) const noexcept;
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers) const noexcept;
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers) const noexcept;
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept;
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept;
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept;
+        void waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept;
+        void waitEvents(const std::initializer_list<lent_ptr<const Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers = {},
             const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers = {}, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers = {}) const noexcept;
-        void waitEvents(const std::vector<lent_ptr<Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers,
+        void waitEvents(const std::vector<lent_ptr<const Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers,
             const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept;
 
         void pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags = 0) noexcept;
@@ -157,16 +157,16 @@ namespace magma
         void resetQueryPool(lent_ptr<QueryPool> queryPool, uint32_t firstQuery, uint32_t queryCount) noexcept;
         void writeTimestamp(VkPipelineStageFlagBits pipelineStage, lent_ptr<QueryPool> queryPool, uint32_t query) noexcept;
         template<class Type>
-        void copyQueryResults(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer, bool wait,
+        void copyQueryResults(lent_ptr<const QueryPool> queryPool, lent_ptr<Buffer> dstBuffer, bool wait,
             uint32_t firstQuery = 0, uint32_t queryCount = std::numeric_limits<uint32_t>::max(), VkDeviceSize dstOffset = 0) noexcept;
         template<class Type>
-        void copyQueryResultsWithAvailability(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer,
+        void copyQueryResultsWithAvailability(lent_ptr<const QueryPool> queryPool, lent_ptr<Buffer> dstBuffer,
             uint32_t firstQuery = 0, uint32_t queryCount = std::numeric_limits<uint32_t>::max(), VkDeviceSize dstOffset = 0) noexcept;
 
-        template<class Type> void pushConstant(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const Type& constant, uint32_t offset = 0) noexcept;
-        template<class Type, uint32_t PushConstantCount> void pushConstants(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const Type(&constants)[PushConstantCount], uint32_t offset = 0) noexcept;
-        template<class Type> void pushConstants(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants, uint32_t offset = 0) noexcept;
-        template<class BlockType> void pushConstantBlock(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const BlockType& block, uint32_t offset = 0) noexcept;
+        template<class Type> void pushConstant(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const Type& constant, uint32_t offset = 0) noexcept;
+        template<class Type, uint32_t PushConstantCount> void pushConstants(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const Type(&constants)[PushConstantCount], uint32_t offset = 0) noexcept;
+        template<class Type> void pushConstants(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants, uint32_t offset = 0) noexcept;
+        template<class BlockType> void pushConstantBlock(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const BlockType& block, uint32_t offset = 0) noexcept;
 
         void beginRenderPass(lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer, const std::initializer_list<ClearValue> clearValues = {},
             const VkRect2D& renderArea = {0, 0, 0, 0}, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
@@ -187,7 +187,7 @@ namespace magma
     #endif // VK_EXT_line_rasterization
 
     #ifdef VK_KHR_push_descriptor
-        void pushDescriptorSet(lent_ptr<Pipeline> pipeline, uint32_t set, lent_ptr<DescriptorSet> descriptorSet) noexcept;
+        void pushDescriptorSet(lent_ptr<const Pipeline> pipeline, uint32_t set, lent_ptr<const DescriptorSet> descriptorSet) noexcept;
     #endif // VK_KHR_push_descriptor
 
     #ifdef VK_EXT_multi_draw
@@ -199,34 +199,34 @@ namespace magma
     #endif // VK_EXT_multi_draw
 
     #if defined(VK_KHR_draw_indirect_count) || defined(VK_AMD_draw_indirect_count)
-        void drawIndirectCount(lent_ptr<Buffer> buffer, lent_ptr<Buffer> countBuffer, uint32_t maxDrawCount,
+        void drawIndirectCount(lent_ptr<const Buffer> buffer, lent_ptr<const Buffer> countBuffer, uint32_t maxDrawCount,
             VkDeviceSize offset = 0, VkDeviceSize countBufferOffset = 0) const noexcept;
-        void drawIndexedIndirectCount(lent_ptr<Buffer> buffer, lent_ptr<Buffer> countBuffer, uint32_t maxDrawCount,
+        void drawIndexedIndirectCount(lent_ptr<const Buffer> buffer, lent_ptr<const Buffer> countBuffer, uint32_t maxDrawCount,
             VkDeviceSize offset = 0, VkDeviceSize countBufferOffset = 0) const noexcept;
     #endif // VK_KHR_draw_indirect_count || VK_AMD_draw_indirect_count
 
     #if defined(VK_EXT_mesh_shader) || defined(VK_NV_mesh_shader)
         void drawMeshTasks(uint32_t groupCountX, uint32_t groupCountY = 1, uint32_t groupCountZ = 1) const noexcept;
-        void drawMeshTasksIndirect(lent_ptr<DrawMeshTasksIndirectBuffer> buffer, VkDeviceSize offset = 0) const noexcept;
-        void drawMeshTasksIndirectCount(lent_ptr<DrawMeshTasksIndirectBuffer> buffer, lent_ptr<Buffer> countBuffer,
+        void drawMeshTasksIndirect(lent_ptr<const DrawMeshTasksIndirectBuffer> buffer, VkDeviceSize offset = 0) const noexcept;
+        void drawMeshTasksIndirectCount(lent_ptr<const DrawMeshTasksIndirectBuffer> buffer, lent_ptr<const Buffer> countBuffer,
             VkDeviceSize offset = 0, VkDeviceSize countBufferOffset = 0) const noexcept;
     #endif // VK_EXT_mesh_shader || VK_NV_mesh_shader
 
     #ifdef VK_EXT_conditional_rendering
-        void beginConditionalRendering(lent_ptr<Buffer> buffer, VkDeviceSize offset = 0, bool inverted = false) noexcept;
+        void beginConditionalRendering(lent_ptr<const Buffer> buffer, VkDeviceSize offset = 0, bool inverted = false) noexcept;
         void endConditionalRendering() noexcept;
     #endif // VK_EXT_conditional_rendering
 
     #ifdef VK_EXT_transform_feedback
         void bindTransformFeedbackBuffer(uint32_t firstBinding, lent_ptr<Buffer> transformFeedbackBuffer, VkDeviceSize offset = 0, VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
-        void bindTransformFeedbackBuffers(uint32_t firstBinding, const std::initializer_list<lent_ptr<Buffer>> transformFeedbackBuffers, const std::initializer_list<VkDeviceSize> offsets,
+        void bindTransformFeedbackBuffers(uint32_t firstBinding, const std::initializer_list<lent_ptr<Buffer>>& transformFeedbackBuffers, const std::initializer_list<VkDeviceSize> offsets,
             const std::initializer_list<VkDeviceSize> sizes = {}) noexcept;
-        void beginTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<Buffer>>& counterBuffers, const std::initializer_list<VkDeviceSize>& counterBufferOffsets = {}) noexcept;
-        void endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<Buffer>> counterBuffers, const std::initializer_list<VkDeviceSize> counterBufferOffsets = {}) noexcept;
+        void beginTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<const Buffer>>& counterBuffers, const std::initializer_list<VkDeviceSize>& counterBufferOffsets = {}) noexcept;
+        void endTransformFeedback(uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<Buffer>>& counterBuffers, const std::initializer_list<VkDeviceSize> counterBufferOffsets = {}) noexcept;
         void beginQueryIndexed(lent_ptr<QueryPool> queryPool, uint32_t query, uint32_t index) noexcept;
         void endQueryIndexed(lent_ptr<QueryPool> queryPool, uint32_t query, uint32_t index) noexcept;
-        void drawIndirectByteCount(lent_ptr<Buffer> counterBuffer, uint32_t vertexStride, VkDeviceSize counterBufferOffset = 0, uint32_t counterOffset = 0) const noexcept;
-        void drawIndirectByteCountInstanced(uint32_t instanceCount, uint32_t firstInstance, lent_ptr<Buffer> counterBuffer, uint32_t vertexStride,
+        void drawIndirectByteCount(lent_ptr<const Buffer> counterBuffer, uint32_t vertexStride, VkDeviceSize counterBufferOffset = 0, uint32_t counterOffset = 0) const noexcept;
+        void drawIndirectByteCountInstanced(uint32_t instanceCount, uint32_t firstInstance, lent_ptr<const Buffer> counterBuffer, uint32_t vertexStride,
             VkDeviceSize counterBufferOffset = 0, uint32_t counterOffset = 0) const noexcept;
     #endif // VK_EXT_transform_feedback
 
@@ -254,23 +254,23 @@ namespace magma
         void updateAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureGeometryInstances& instances,
             lent_ptr<Buffer> scratchBuffer) const noexcept;
         void updateAccelerationStructureIndirect(lent_ptr<AccelerationStructure> accelerationStructure, const std::list<AccelerationStructureGeometry> geometries,
-            lent_ptr<Buffer> indirectBuildRanges, lent_ptr<Buffer> scratchBuffer) const noexcept;
-        void copyAccelerationStructure(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept;
-        void compactAccelerationStructure(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept;
-        void copyAccelerationStructureToBuffer(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer) const noexcept;
-        void copyBufferToAccelerationStructure(lent_ptr<Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept;
-        void serializeAccelerationStructure(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer, VkDeviceAddress bufferOffset = 0) const noexcept;
-        void deserializeAccelerationStructure(lent_ptr<Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure, VkDeviceAddress bufferOffset = 0) const noexcept;
-        void writeAccelerationStructureProperties(lent_ptr<AccelerationStructure> accelerationStructure, lent_ptr<QueryPool> queryPool, uint32_t firstQuery = 0) const noexcept;
+            lent_ptr<const Buffer> indirectBuildRanges, lent_ptr<Buffer> scratchBuffer) const noexcept;
+        void copyAccelerationStructure(lent_ptr<const AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept;
+        void compactAccelerationStructure(lent_ptr<const AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept;
+        void copyAccelerationStructureToBuffer(lent_ptr<const AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer) const noexcept;
+        void copyBufferToAccelerationStructure(lent_ptr<const Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept;
+        void serializeAccelerationStructure(lent_ptr<const AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer, VkDeviceAddress bufferOffset = 0) const noexcept;
+        void deserializeAccelerationStructure(lent_ptr<const Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure, VkDeviceAddress bufferOffset = 0) const noexcept;
+        void writeAccelerationStructureProperties(lent_ptr<const AccelerationStructure> accelerationStructure, lent_ptr<QueryPool> queryPool, uint32_t firstQuery = 0) const noexcept;
     #endif // VK_KHR_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline
         void setRayTracingPipelineStackSize(uint32_t pipelineStackSize) const noexcept;
         void traceRays(const ShaderBindingTable& shaderBindingTable, uint32_t width, uint32_t height, uint32_t depth = 1) const noexcept;
-        void traceRaysIndirect(const ShaderBindingTable& shaderBindingTable, lent_ptr<Buffer> indirectBuffer) const noexcept;
+        void traceRaysIndirect(const ShaderBindingTable& shaderBindingTable, lent_ptr<const Buffer> indirectBuffer) const noexcept;
     #endif // VK_KHR_ray_tracing_pipeline
     #ifdef VK_KHR_ray_tracing_maintenance1
-        void traceRaysIndirect(lent_ptr<Buffer> indirectBuffer) const noexcept;
+        void traceRaysIndirect(lent_ptr<const Buffer> indirectBuffer) const noexcept;
     #endif // VK_KHR_ray_tracing_maintenance1
 
     #ifdef VK_EXT_debug_marker
@@ -314,10 +314,10 @@ namespace magma
         #endif // VK_KHR_imageless_framebuffer
     #endif // VK_KHR_device_group
     #ifdef VK_EXT_conditional_rendering
-        void beginConditionalRenderingAnnotated(const char *name, uint32_t color, lent_ptr<Buffer> buffer, VkDeviceSize offset = 0, bool inverted = false) noexcept;
+        void beginConditionalRenderingAnnotated(const char *name, uint32_t color, lent_ptr<const Buffer> buffer, VkDeviceSize offset = 0, bool inverted = false) noexcept;
     #endif // VK_EXT_conditional_rendering
     #ifdef VK_EXT_transform_feedback
-        void beginTransformFeedbackAnnotated(const char *name, uint32_t color, uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<Buffer>>& counterBuffers,
+        void beginTransformFeedbackAnnotated(const char *name, uint32_t color, uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<const Buffer>>& counterBuffers,
             const std::initializer_list<VkDeviceSize>& counterBufferOffsets = {}) noexcept;
     #endif // VK_EXT_transform_feedback
 

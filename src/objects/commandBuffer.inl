@@ -1,6 +1,6 @@
 namespace magma
 {
-inline void CommandBuffer::bindPipeline(lent_ptr<Pipeline> pipeline) noexcept
+inline void CommandBuffer::bindPipeline(lent_ptr<const Pipeline> pipeline) noexcept
 {
     leanCmd.bindPipeline(pipeline.get());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
@@ -85,7 +85,7 @@ inline void CommandBuffer::setStencilReference(bool frontFace, bool backFace, ui
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT);
 }
 
-inline void CommandBuffer::bindDescriptorSet(lent_ptr<Pipeline> pipeline, uint32_t firstSet, lent_ptr<DescriptorSet> descriptorSet,
+inline void CommandBuffer::bindDescriptorSet(lent_ptr<const Pipeline> pipeline, uint32_t firstSet, lent_ptr<const DescriptorSet> descriptorSet,
     uint32_t dynamicOffset /* std::numeric_limits<uint32_t>::max() */) noexcept
 {
     uint32_t dynamicOffsetCount = dynamicOffset < std::numeric_limits<uint32_t>::max() ? 1 : 0;
@@ -95,7 +95,7 @@ inline void CommandBuffer::bindDescriptorSet(lent_ptr<Pipeline> pipeline, uint32
     MAGMA_INUSE(descriptorSet);
 }
 
-inline void CommandBuffer::bindDescriptorSet(lent_ptr<Pipeline> pipeline, uint32_t firstSet, lent_ptr<DescriptorSet> descriptorSet, const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
+inline void CommandBuffer::bindDescriptorSet(lent_ptr<const Pipeline> pipeline, uint32_t firstSet, lent_ptr<const DescriptorSet> descriptorSet, const std::initializer_list<uint32_t>& dynamicOffsets) noexcept
 {
     leanCmd.bindDescriptorSet(pipeline->getBindPoint(), pipeline->getLayout().get(), firstSet, descriptorSet.get(), core::countof(dynamicOffsets), dynamicOffsets.begin());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
@@ -103,7 +103,7 @@ inline void CommandBuffer::bindDescriptorSet(lent_ptr<Pipeline> pipeline, uint32
     MAGMA_INUSE(descriptorSet);
 }
 
-inline void CommandBuffer::bindIndexBuffer(lent_ptr<BaseIndexBuffer> indexBuffer, VkDeviceSize offset /* 0 */) noexcept
+inline void CommandBuffer::bindIndexBuffer(lent_ptr<const BaseIndexBuffer> indexBuffer, VkDeviceSize offset /* 0 */) noexcept
 {
     leanCmd.bindIndexBuffer(indexBuffer.get(), offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
@@ -111,7 +111,7 @@ inline void CommandBuffer::bindIndexBuffer(lent_ptr<BaseIndexBuffer> indexBuffer
     MAGMA_INUSE(indexBuffer);
 }
 
-inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, lent_ptr<Buffer> vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
+inline void CommandBuffer::bindVertexBuffer(uint32_t firstBinding, lent_ptr<const Buffer> vertexBuffer, VkDeviceSize offset /* 0 */) noexcept
 {
     leanCmd.bindVertexBuffer(firstBinding, vertexBuffer.get(), offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
@@ -147,7 +147,7 @@ inline void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t in
     MAGMA_INCR(stats.drawIndexedCount, 1);
 }
 
-inline void CommandBuffer::drawIndirect(lent_ptr<Buffer> buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::drawIndirect(lent_ptr<const Buffer> buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.drawIndirect(buffer.get(), drawCount, offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT);
@@ -155,7 +155,7 @@ inline void CommandBuffer::drawIndirect(lent_ptr<Buffer> buffer, uint32_t drawCo
     MAGMA_INUSE(buffer);
 }
 
-inline void CommandBuffer::drawIndirect(lent_ptr<DrawIndirectBuffer> buffer) const noexcept
+inline void CommandBuffer::drawIndirect(lent_ptr<const DrawIndirectBuffer> buffer) const noexcept
 {
     leanCmd.drawIndirect(buffer.get(), buffer->getDrawCount());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT);
@@ -163,7 +163,7 @@ inline void CommandBuffer::drawIndirect(lent_ptr<DrawIndirectBuffer> buffer) con
     MAGMA_INUSE(buffer);
 }
 
-inline void CommandBuffer::drawIndexedIndirect(lent_ptr<Buffer> buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::drawIndexedIndirect(lent_ptr<const Buffer> buffer, uint32_t drawCount, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.drawIndexedIndirect(buffer.get(), drawCount, offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT);
@@ -171,7 +171,7 @@ inline void CommandBuffer::drawIndexedIndirect(lent_ptr<Buffer> buffer, uint32_t
     MAGMA_INUSE(buffer);
 }
 
-inline void CommandBuffer::drawIndexedIndirect(lent_ptr<DrawIndexedIndirectBuffer> buffer) const noexcept
+inline void CommandBuffer::drawIndexedIndirect(lent_ptr<const DrawIndexedIndirectBuffer> buffer) const noexcept
 {
     leanCmd.drawIndexedIndirect(buffer.get(), buffer->getDrawCount());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT);
@@ -186,7 +186,7 @@ inline void CommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, 
     MAGMA_INCR(stats.dispatchCount, 1);
 }
 
-inline void CommandBuffer::dispatchIndirect(lent_ptr<Buffer> buffer, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::dispatchIndirect(lent_ptr<const Buffer> buffer, VkDeviceSize offset /* 0 */) const noexcept
 {
     leanCmd.dispatchIndirect(buffer.get(), offset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT);
@@ -289,13 +289,13 @@ inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAtt
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 }
 
-inline void CommandBuffer::resolveImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage) const noexcept
+inline void CommandBuffer::resolveImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage) const noexcept
 {
     ImageResolve region(srcImage.get(), dstImage.get());
     resolveImage(std::move(srcImage), std::move(dstImage), region);
 }
 
-inline void CommandBuffer::resolveImage(lent_ptr<Image> srcImage, lent_ptr<Image> dstImage, const VkImageResolve& region) const noexcept
+inline void CommandBuffer::resolveImage(lent_ptr<const Image> srcImage, lent_ptr<Image> dstImage, const VkImageResolve& region) const noexcept
 {
     leanCmd.resolveImage(srcImage.get(), dstImage.get(), region);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
@@ -317,28 +317,28 @@ inline void CommandBuffer::resetEvent(lent_ptr<Event> event, VkPipelineStageFlag
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const MemoryBarrier& barrier) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, barrier);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const BufferMemoryBarrier& barrier) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, barrier);
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const ImageMemoryBarrier& barrier) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, barrier);
     MAGMA_CHECKPOINT(dstStageMask);
@@ -346,35 +346,35 @@ inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<MemoryBarrier>& memoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(memoryBarriers), memoryBarriers.begin());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<MemoryBarrier>& memoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(memoryBarriers), memoryBarriers.data());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers) const noexcept
 {
     leanCmd.waitEvent(event.get(), srcStageMask, dstStageMask, core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data());
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
     MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
@@ -387,7 +387,7 @@ inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags
     MAGMA_INUSE(event);
 }
 
-inline void CommandBuffer::waitEvent(lent_ptr<Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
+inline void CommandBuffer::waitEvent(lent_ptr<const Event> event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
 {
     MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
     for (auto const& barrier: imageMemoryBarriers_)
@@ -517,7 +517,7 @@ inline void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage,
 }
 
 template<class Type>
-inline void CommandBuffer::copyQueryResults(lent_ptr<QueryPool> /* queryPool */, lent_ptr<Buffer> /* dstBuffer */, bool /* wait */,
+inline void CommandBuffer::copyQueryResults(lent_ptr<const QueryPool> /* queryPool */, lent_ptr<Buffer> /* dstBuffer */, bool /* wait */,
     uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
@@ -525,7 +525,7 @@ inline void CommandBuffer::copyQueryResults(lent_ptr<QueryPool> /* queryPool */,
 }
 
 template<>
-inline void CommandBuffer::copyQueryResults<uint32_t>(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer, bool wait,
+inline void CommandBuffer::copyQueryResults<uint32_t>(lent_ptr<const QueryPool> queryPool, lent_ptr<Buffer> dstBuffer, bool wait,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
 {
     if (std::numeric_limits<uint32_t>::max() == queryCount)
@@ -538,7 +538,7 @@ inline void CommandBuffer::copyQueryResults<uint32_t>(lent_ptr<QueryPool> queryP
 }
 
 template<>
-inline void CommandBuffer::copyQueryResults<uint64_t>(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer, bool wait,
+inline void CommandBuffer::copyQueryResults<uint64_t>(lent_ptr<const QueryPool> queryPool, lent_ptr<Buffer> dstBuffer, bool wait,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
 {
     if (std::numeric_limits<uint32_t>::max() == queryCount)
@@ -551,7 +551,7 @@ inline void CommandBuffer::copyQueryResults<uint64_t>(lent_ptr<QueryPool> queryP
 }
 
 template<class Type>
-inline void CommandBuffer::copyQueryResultsWithAvailability(lent_ptr<QueryPool> /* queryPool */, lent_ptr<Buffer> /* dstBuffer */,
+inline void CommandBuffer::copyQueryResultsWithAvailability(lent_ptr<const QueryPool> /* queryPool */, lent_ptr<Buffer> /* dstBuffer */,
     uint32_t /* firstQuery */, uint32_t /* queryCount */, VkDeviceSize /* dstOffset */) noexcept
 {
     static_assert(std::is_same<Type, uint32_t>::value || std::is_same<Type, uint64_t>::value,
@@ -559,7 +559,7 @@ inline void CommandBuffer::copyQueryResultsWithAvailability(lent_ptr<QueryPool> 
 }
 
 template<>
-inline void CommandBuffer::copyQueryResultsWithAvailability<uint32_t>(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer,
+inline void CommandBuffer::copyQueryResultsWithAvailability<uint32_t>(lent_ptr<const QueryPool> queryPool, lent_ptr<Buffer> dstBuffer,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
 {
     if (std::numeric_limits<uint32_t>::max() == queryCount)
@@ -572,7 +572,7 @@ inline void CommandBuffer::copyQueryResultsWithAvailability<uint32_t>(lent_ptr<Q
 }
 
 template<>
-inline void CommandBuffer::copyQueryResultsWithAvailability<uint64_t>(lent_ptr<QueryPool> queryPool, lent_ptr<Buffer> dstBuffer,
+inline void CommandBuffer::copyQueryResultsWithAvailability<uint64_t>(lent_ptr<const QueryPool> queryPool, lent_ptr<Buffer> dstBuffer,
     uint32_t firstQuery /* 0 */, uint32_t queryCount /* std::numeric_limits<uint32_t>::max() */, VkDeviceSize dstOffset /* 0 */) noexcept
 {
     if (std::numeric_limits<uint32_t>::max() == queryCount)
@@ -585,37 +585,37 @@ inline void CommandBuffer::copyQueryResultsWithAvailability<uint64_t>(lent_ptr<Q
 }
 
 template<class Type>
-inline void CommandBuffer::pushConstant(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const Type& constant,
+inline void CommandBuffer::pushConstant(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const Type& constant,
     uint32_t offset /* 0 */) noexcept
 {
-    leanCmd.pushConstants(&layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type)), &constant);
+    leanCmd.pushConstants(layout.get(), stageFlags, offset, static_cast<uint32_t>(sizeof(Type)), &constant);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     MAGMA_INCR(stats.pushConstantCount, 1);
 }
 
 template<class Type, uint32_t PushConstantCount>
-inline void CommandBuffer::pushConstants(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const Type(&constants)[PushConstantCount],
+inline void CommandBuffer::pushConstants(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const Type(&constants)[PushConstantCount],
     uint32_t offset /* 0 */) noexcept
 {
-    leanCmd.pushConstants(&layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * PushConstantCount), constants);
+    leanCmd.pushConstants(layout.get(), stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * PushConstantCount), constants);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     MAGMA_INCR(stats.pushConstantCount, 1);
 }
 
 template<class Type>
-inline void CommandBuffer::pushConstants(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants,
+inline void CommandBuffer::pushConstants(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants,
     uint32_t offset /* 0 */) noexcept
 {
-    leanCmd.pushConstants(&layout, stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * constants.size()), constants.data());
+    leanCmd.pushConstants(layout.get(), stageFlags, offset, static_cast<uint32_t>(sizeof(Type) * constants.size()), constants.data());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     MAGMA_INCR(stats.pushConstantCount, 1);
 }
 
 template<class BlockType>
-inline void CommandBuffer::pushConstantBlock(const PipelineLayout& layout, VkShaderStageFlags stageFlags, const BlockType& block,
+inline void CommandBuffer::pushConstantBlock(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const BlockType& block,
     uint32_t offset /* 0 */) noexcept
 {
-    leanCmd.pushConstants(&layout, stageFlags, offset, static_cast<uint32_t>(sizeof(BlockType)), &block);
+    leanCmd.pushConstants(layout.get(), stageFlags, offset, static_cast<uint32_t>(sizeof(BlockType)), &block);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     MAGMA_INCR(stats.pushConstantCount, 1);
 }
@@ -662,7 +662,7 @@ inline void CommandBuffer::setLineStipple(uint32_t stippleFactor, uint16_t stipp
 #endif // VK_EXT_line_rasterization
 
 #ifdef VK_KHR_push_descriptor
-inline void CommandBuffer::pushDescriptorSet(lent_ptr<Pipeline> pipeline, uint32_t set, lent_ptr<DescriptorSet> descriptorSet) noexcept
+inline void CommandBuffer::pushDescriptorSet(lent_ptr<const Pipeline> pipeline, uint32_t set, lent_ptr<const DescriptorSet> descriptorSet) noexcept
 {
     MAGMA_ASSERT(extensions.KHR_push_descriptor);
     if (extensions.KHR_push_descriptor)
@@ -727,7 +727,7 @@ inline void CommandBuffer::drawMultiIndexedInstanced(const std::vector<VkMultiDr
 #endif // VK_EXT_multi_draw
 
 #if defined(VK_KHR_draw_indirect_count) || defined(VK_AMD_draw_indirect_count)
-inline void CommandBuffer::drawIndirectCount(lent_ptr<Buffer> buffer, lent_ptr<Buffer> countBuffer, uint32_t maxDrawCount,
+inline void CommandBuffer::drawIndirectCount(lent_ptr<const Buffer> buffer, lent_ptr<const Buffer> countBuffer, uint32_t maxDrawCount,
     VkDeviceSize offset /* 0 */, VkDeviceSize countBufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_draw_indirect_count || extensions.AMD_draw_indirect_count);
@@ -741,7 +741,7 @@ inline void CommandBuffer::drawIndirectCount(lent_ptr<Buffer> buffer, lent_ptr<B
     }
 }
 
-inline void CommandBuffer::drawIndexedIndirectCount(lent_ptr<Buffer> buffer, lent_ptr<Buffer> countBuffer, uint32_t maxDrawCount,
+inline void CommandBuffer::drawIndexedIndirectCount(lent_ptr<const Buffer> buffer, lent_ptr<const Buffer> countBuffer, uint32_t maxDrawCount,
     VkDeviceSize offset /* 0 */, VkDeviceSize countBufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_draw_indirect_count || extensions.AMD_draw_indirect_count);
@@ -768,7 +768,7 @@ inline void CommandBuffer::drawMeshTasks(uint32_t groupCountX, uint32_t groupCou
     }
 }
 
-inline void CommandBuffer::drawMeshTasksIndirect(lent_ptr<DrawMeshTasksIndirectBuffer> buffer, VkDeviceSize offset /* 0 */) const noexcept
+inline void CommandBuffer::drawMeshTasksIndirect(lent_ptr<const DrawMeshTasksIndirectBuffer> buffer, VkDeviceSize offset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.EXT_mesh_shader || extensions.NV_mesh_shader);
     if (extensions.EXT_mesh_shader || extensions.NV_mesh_shader)
@@ -780,7 +780,7 @@ inline void CommandBuffer::drawMeshTasksIndirect(lent_ptr<DrawMeshTasksIndirectB
     }
 }
 
-inline void CommandBuffer::drawMeshTasksIndirectCount(lent_ptr<DrawMeshTasksIndirectBuffer> buffer, lent_ptr<Buffer> countBuffer,
+inline void CommandBuffer::drawMeshTasksIndirectCount(lent_ptr<const DrawMeshTasksIndirectBuffer> buffer, lent_ptr<const Buffer> countBuffer,
     VkDeviceSize offset /* 0 */, VkDeviceSize countBufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.EXT_mesh_shader || extensions.NV_mesh_shader);
@@ -835,7 +835,7 @@ inline void CommandBuffer::endQueryIndexed(lent_ptr<QueryPool> queryPool, uint32
     }
 }
 
-inline void CommandBuffer::drawIndirectByteCount(lent_ptr<Buffer> counterBuffer, uint32_t vertexStride,
+inline void CommandBuffer::drawIndirectByteCount(lent_ptr<const Buffer> counterBuffer, uint32_t vertexStride,
     VkDeviceSize counterBufferOffset /* 0 */, uint32_t counterOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
@@ -847,7 +847,7 @@ inline void CommandBuffer::drawIndirectByteCount(lent_ptr<Buffer> counterBuffer,
     }
 }
 
-inline void CommandBuffer::drawIndirectByteCountInstanced(uint32_t instanceCount, uint32_t firstInstance, lent_ptr<Buffer> counterBuffer, uint32_t vertexStride,
+inline void CommandBuffer::drawIndirectByteCountInstanced(uint32_t instanceCount, uint32_t firstInstance, lent_ptr<const Buffer> counterBuffer, uint32_t vertexStride,
     VkDeviceSize counterBufferOffset /* 0 */, uint32_t counterOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
@@ -886,7 +886,7 @@ inline void CommandBuffer::updateAccelerationStructure(lent_ptr<TopLevelAccelera
     }
 }
 
-inline void CommandBuffer::copyAccelerationStructure(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept
+inline void CommandBuffer::copyAccelerationStructure(lent_ptr<const AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -898,7 +898,7 @@ inline void CommandBuffer::copyAccelerationStructure(lent_ptr<AccelerationStruct
     }
 }
 
-inline void CommandBuffer::compactAccelerationStructure(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept
+inline void CommandBuffer::compactAccelerationStructure(lent_ptr<const AccelerationStructure> srcAccelerationStructure, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -910,7 +910,7 @@ inline void CommandBuffer::compactAccelerationStructure(lent_ptr<AccelerationStr
     }
 }
 
-inline void CommandBuffer::copyAccelerationStructureToBuffer(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer) const noexcept
+inline void CommandBuffer::copyAccelerationStructureToBuffer(lent_ptr<const AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -922,7 +922,7 @@ inline void CommandBuffer::copyAccelerationStructureToBuffer(lent_ptr<Accelerati
     }
 }
 
-inline void CommandBuffer::copyBufferToAccelerationStructure(lent_ptr<Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept
+inline void CommandBuffer::copyBufferToAccelerationStructure(lent_ptr<const Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -934,7 +934,7 @@ inline void CommandBuffer::copyBufferToAccelerationStructure(lent_ptr<Buffer> sr
     }
 }
 
-inline void CommandBuffer::serializeAccelerationStructure(lent_ptr<AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer, VkDeviceAddress bufferOffset /* 0 */) const noexcept
+inline void CommandBuffer::serializeAccelerationStructure(lent_ptr<const AccelerationStructure> srcAccelerationStructure, lent_ptr<Buffer> dstBuffer, VkDeviceAddress bufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -946,7 +946,7 @@ inline void CommandBuffer::serializeAccelerationStructure(lent_ptr<AccelerationS
     }
 }
 
-inline void CommandBuffer::deserializeAccelerationStructure(lent_ptr<Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure, VkDeviceAddress bufferOffset /* 0 */) const noexcept
+inline void CommandBuffer::deserializeAccelerationStructure(lent_ptr<const Buffer> srcBuffer, lent_ptr<AccelerationStructure> dstAccelerationStructure, VkDeviceAddress bufferOffset /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -958,7 +958,7 @@ inline void CommandBuffer::deserializeAccelerationStructure(lent_ptr<Buffer> src
     }
 }
 
-inline void CommandBuffer::writeAccelerationStructureProperties(lent_ptr<AccelerationStructure> accelerationStructure, lent_ptr<QueryPool> queryPool, uint32_t firstQuery /* 0 */) const noexcept
+inline void CommandBuffer::writeAccelerationStructureProperties(lent_ptr<const AccelerationStructure> accelerationStructure, lent_ptr<QueryPool> queryPool, uint32_t firstQuery /* 0 */) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -992,7 +992,7 @@ inline void CommandBuffer::traceRays(const ShaderBindingTable& shaderBindingTabl
     }
 }
 
-inline void CommandBuffer::traceRaysIndirect(const ShaderBindingTable& shaderBindingTable, lent_ptr<Buffer> indirectBuffer) const noexcept
+inline void CommandBuffer::traceRaysIndirect(const ShaderBindingTable& shaderBindingTable, lent_ptr<const Buffer> indirectBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_ray_tracing_pipeline);
     if (extensions.KHR_ray_tracing_pipeline)
@@ -1005,7 +1005,7 @@ inline void CommandBuffer::traceRaysIndirect(const ShaderBindingTable& shaderBin
 #endif // VK_KHR_ray_tracing_pipeline
 
 #ifdef VK_KHR_ray_tracing_maintenance1
-inline void CommandBuffer::traceRaysIndirect(lent_ptr<Buffer> indirectBuffer) const noexcept
+inline void CommandBuffer::traceRaysIndirect(lent_ptr<const Buffer> indirectBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_ray_tracing_maintenance1);
     if (extensions.KHR_ray_tracing_maintenance1)
@@ -1102,7 +1102,7 @@ inline void CommandBuffer::beginDeviceGroupRenderPassAnnotated(const char *name,
 #endif // VK_KHR_device_group
 
 #ifdef VK_EXT_conditional_rendering
-inline void CommandBuffer::beginConditionalRenderingAnnotated(const char *name, uint32_t color, lent_ptr<Buffer> buffer, VkDeviceSize offset /* 0 */, bool inverted /* false */) noexcept
+inline void CommandBuffer::beginConditionalRenderingAnnotated(const char *name, uint32_t color, lent_ptr<const Buffer> buffer, VkDeviceSize offset /* 0 */, bool inverted /* false */) noexcept
 {
     beginConditionalRendering(std::move(buffer), offset, inverted);
     if (conditionalRendering)
@@ -1114,7 +1114,7 @@ inline void CommandBuffer::beginConditionalRenderingAnnotated(const char *name, 
 #endif // VK_EXT_conditional_rendering
 
 #ifdef VK_EXT_transform_feedback
-inline void CommandBuffer::beginTransformFeedbackAnnotated(const char *name, uint32_t color, uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<Buffer>>& counterBuffers,
+inline void CommandBuffer::beginTransformFeedbackAnnotated(const char *name, uint32_t color, uint32_t firstCounterBuffer, const std::initializer_list<lent_ptr<const Buffer>>& counterBuffers,
     const std::initializer_list<VkDeviceSize>& counterBufferOffsets /* empty */) noexcept
 {
     beginTransformFeedback(firstCounterBuffer, counterBuffers, counterBufferOffsets);
