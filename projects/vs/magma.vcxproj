@@ -241,7 +241,6 @@
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
     <ClInclude Include="..\..\src\helpers\executeDeferredOperation.h" />
     <ClInclude Include="..\..\src\helpers\layoutTransition.h" />
-    <ClInclude Include="..\..\src\helpers\mapScoped.h" />
     <ClInclude Include="..\..\src\helpers\mapTyped.h" />
     <ClInclude Include="..\..\src\helpers\streamInsertOperators.h" />
     <ClInclude Include="..\..\src\helpers\stringifyFlags.h" />
@@ -261,6 +260,9 @@
     <ClInclude Include="..\..\src\misc\framebufferAttachmentImage.h" />
     <ClInclude Include="..\..\src\misc\imageResolve.h" />
     <ClInclude Include="..\..\src\misc\imageSubresourceRange.h" />
+    <ClInclude Include="..\..\src\misc\mapBuffer.h" />
+    <ClInclude Include="..\..\src\misc\mapImage.h" />
+    <ClInclude Include="..\..\src\misc\mapUniform.h" />
     <ClInclude Include="..\..\src\misc\pipelineExecutable.h" />
     <ClInclude Include="..\..\src\misc\pushConstantRange.h" />
     <ClInclude Include="..\..\src\misc\scissor.h" />
@@ -717,7 +719,6 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\descriptors\inlineUniformBlock.inl" />
     <None Include="..\..\src\helpers\alignedUniformArray.inl" />
     <None Include="..\..\src\helpers\bufferInitializers.inl" />
-    <None Include="..\..\src\helpers\mapScoped.inl" />
     <None Include="..\..\src\helpers\uniformArray.inl" />
     <None Include="..\..\src\misc\borderColor.inl" />
     <None Include="..\..\src\misc\clearAttachment.inl" />

@@ -558,9 +558,6 @@
     <ClInclude Include="..\..\src\helpers\executeDeferredOperation.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\helpers\mapScoped.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\helpers\uniformArray.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
@@ -902,6 +899,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\lentPtr.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\mapUniform.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\mapImage.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc\mapBuffer.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1644,9 +1650,6 @@
     </None>
     <None Include="..\..\src\core\hash.inl">
       <Filter>Header Files\core</Filter>
-    </None>
-    <None Include="..\..\src\helpers\mapScoped.inl">
-      <Filter>Header Files\helpers</Filter>
     </None>
     <None Include="..\..\src\raytracing\address.inl">
       <Filter>Header Files\raytracing</Filter>
