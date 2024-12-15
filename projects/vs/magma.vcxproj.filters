@@ -858,9 +858,6 @@
     <ClInclude Include="..\..\src\shaders\shaderBindingTable.h">
       <Filter>Header Files\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\helpers\bufferInitializers.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\objects\model\deviceChild.h">
       <Filter>Header Files\objects\model</Filter>
     </ClInclude>
@@ -1653,9 +1650,6 @@
     </None>
     <None Include="..\..\src\raytracing\address.inl">
       <Filter>Header Files\raytracing</Filter>
-    </None>
-    <None Include="..\..\src\helpers\bufferInitializers.inl">
-      <Filter>Header Files\helpers</Filter>
     </None>
     <None Include="..\..\src\objects\indexBuffer.inl">
       <Filter>Header Files\objects</Filter>

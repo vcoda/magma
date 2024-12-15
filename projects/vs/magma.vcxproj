@@ -236,7 +236,6 @@
     <ClInclude Include="..\..\src\extensions\deviceExtensions.h" />
     <ClInclude Include="..\..\src\helpers\alignment.h" />
     <ClInclude Include="..\..\src\helpers\alignedUniformArray.h" />
-    <ClInclude Include="..\..\src\helpers\bufferInitializers.h" />
     <ClInclude Include="..\..\src\helpers\enumerationCast.h" />
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
     <ClInclude Include="..\..\src\helpers\executeDeferredOperation.h" />
@@ -718,7 +717,6 @@ $(VK_SDK_PATH)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../
     <None Include="..\..\src\descriptors\imageDescriptorVariableArray.inl" />
     <None Include="..\..\src\descriptors\inlineUniformBlock.inl" />
     <None Include="..\..\src\helpers\alignedUniformArray.inl" />
-    <None Include="..\..\src\helpers\bufferInitializers.inl" />
     <None Include="..\..\src\helpers\uniformArray.inl" />
     <None Include="..\..\src\misc\borderColor.inl" />
     <None Include="..\..\src\misc\clearAttachment.inl" />
