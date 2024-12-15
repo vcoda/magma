@@ -41,7 +41,7 @@ SwapchainImage::SwapchainImage(VkImage handle, std::shared_ptr<Device> device, V
 // These images and bindings have no effect on what memory is presented.
 // Unlike images retrieved from vkGetSwapchainImagesKHR, these images must be destroyed with vkDestroyImage.
 #ifdef VK_VERSION_1_1
-SwapchainImage::SwapchainImage(std::shared_ptr<const Swapchain> swapchain):
+SwapchainImage::SwapchainImage(lent_ptr<const Swapchain> swapchain):
     Image2D(swapchain->getDevice(),
         swapchain->getSurfaceFormat().format,
         swapchain->getExtent(),
