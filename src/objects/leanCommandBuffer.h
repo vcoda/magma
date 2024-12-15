@@ -211,7 +211,7 @@ namespace magma
         void buildAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureGeometryInstances& instances, Buffer *scratchBuffer) const noexcept;
         void updateAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureGeometryInstances& instances, Buffer *scratchBuffer) const noexcept;
         void updateAccelerationStructureIndirect(AccelerationStructure *accelerationStructure, uint32_t geometryCount, const VkAccelerationStructureGeometryKHR **geometries,
-            const uint32_t *maxPrimitiveCounts, const Buffer *indirectBuildRanges, const Buffer *scratchBuffer) const noexcept;
+            const uint32_t *maxPrimitiveCounts, const Buffer *indirectBuildRanges, Buffer *scratchBuffer) const noexcept;
         void copyAccelerationStructure(const AccelerationStructure *srcAccelerationStructure, AccelerationStructure *dstAccelerationStructure) const noexcept;
         void compactAccelerationStructure(const AccelerationStructure *srcAccelerationStructure, AccelerationStructure *dstAccelerationStructure) const noexcept;
         void copyAccelerationStructureToBuffer(const AccelerationStructure *srcAccelerationStructure, Buffer *dstBuffer) const noexcept;

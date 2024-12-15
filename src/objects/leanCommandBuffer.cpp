@@ -271,7 +271,7 @@ void LeanCommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, RenderPa
 
 #ifdef VK_KHR_acceleration_structure
 void LeanCommandBuffer::updateAccelerationStructureIndirect(AccelerationStructure *accelerationStructure, uint32_t geometryCount, const VkAccelerationStructureGeometryKHR **geometries,
-    const uint32_t *maxPrimitiveCounts, const Buffer *indirectBuildRanges, const Buffer *scratchBuffer) const noexcept
+    const uint32_t *maxPrimitiveCounts, const Buffer *indirectBuildRanges, Buffer *scratchBuffer) const noexcept
 {
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
