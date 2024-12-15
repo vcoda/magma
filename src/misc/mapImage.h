@@ -21,12 +21,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 template<class Type>
-inline void map(lent_ptr<Image> image, std::function<void(Type *data)> mapFn,
-    VkDeviceSize offset = 0, VkDeviceSize size = VK_WHOLE_SIZE)
+inline void mapRange(lent_ptr<Image> image, VkDeviceSize offset, VkDeviceSize size,
+    std::function<void(Type *data)> mapFn)
 {
     MAGMA_ASSERT(image);
     MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= image->getSize());
-    const std::unique_ptr<IDeviceMemory>& imageMemory = image->getMemory();
+    auto& imageMemory = image->getMemory();
     if (imageMemory)
     {
         void *data = imageMemory->map(offset, size);
@@ -43,5 +43,11 @@ inline void map(lent_ptr<Image> image, std::function<void(Type *data)> mapFn,
             MAGMA_THROW;
         }
     }
+}
+
+template<class Type>
+inline void map(lent_ptr<Image> image, std::function<void(Type *data)> mapFn)
+{
+    mapRange(std::move(image), 0, VK_WHOLE_SIZE, std::move(mapFn));
 }
 } // namespace magma

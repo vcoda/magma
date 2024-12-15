@@ -42,7 +42,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
 #include "../allocator/allocator.h"
-#include "../helpers/mapScoped.h"
 #include "../helpers/mapTyped.h"
 
 namespace magma::aux
