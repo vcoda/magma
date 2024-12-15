@@ -48,7 +48,7 @@ TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Dev
 {}
 
 void TopLevelAccelerationStructure::build(const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     const VkResult result = rebuild(VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR,
         instances, scratchBuffer, std::move(deferredOperation));
@@ -56,7 +56,7 @@ void TopLevelAccelerationStructure::build(const AccelerationStructureGeometryIns
 }
 
 void TopLevelAccelerationStructure::update(const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     const VkResult result = rebuild(VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR,
         instances, scratchBuffer, std::move(deferredOperation));
@@ -65,7 +65,7 @@ void TopLevelAccelerationStructure::update(const AccelerationStructureGeometryIn
 
 VkResult TopLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureModeKHR mode,
     const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation)
+    lent_ptr<DeferredOperation> deferredOperation)
 {
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;

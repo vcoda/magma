@@ -50,16 +50,16 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         void build(const AccelerationStructureGeometryInstances& instances,
             void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+            lent_ptr<DeferredOperation> deferredOperation = nullptr);
         void update(const AccelerationStructureGeometryInstances& instances,
             void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+            lent_ptr<DeferredOperation> deferredOperation = nullptr);
 
     private:
         VkResult rebuild(VkBuildAccelerationStructureModeKHR mode,
             const AccelerationStructureGeometryInstances& instances,
             void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation);
+            lent_ptr<DeferredOperation> deferredOperation);
     };
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

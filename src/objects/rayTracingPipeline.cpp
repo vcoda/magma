@@ -41,7 +41,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     const std::unique_ptr<PipelineLibrary>& pipelineLibrary /* nullptr */,
 #endif
     std::shared_ptr<RayTracingPipeline> basePipeline_ /* nullptr */,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */,
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */,
     const std::vector<VkDynamicState>& dynamicStates /* empty */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):

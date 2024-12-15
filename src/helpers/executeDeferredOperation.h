@@ -31,7 +31,7 @@ namespace magma
            threads in the system. */
 
     #ifdef VK_KHR_deferred_host_operations
-        VkResult executeDeferredOperation(std::shared_ptr<DeferredOperation> deferredOperation,
+        VkResult executeDeferredOperation(lent_ptr<DeferredOperation> deferredOperation,
             uint32_t maxConcurrency = 0);
     #endif // VK_KHR_deferred_host_operations
     } // namespace helpers

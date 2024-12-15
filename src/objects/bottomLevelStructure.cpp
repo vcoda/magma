@@ -55,7 +55,7 @@ uint64_t BottomLevelAccelerationStructure::getReference() const noexcept
 }
 
 void BottomLevelAccelerationStructure::build(const std::list<AccelerationStructureGeometry>& geometries,
-    void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+    void *scratchBuffer, lent_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
     for (auto const& geometry: geometries)
@@ -65,7 +65,7 @@ void BottomLevelAccelerationStructure::build(const std::list<AccelerationStructu
 
 void BottomLevelAccelerationStructure::build(const std::list<AccelerationStructureGeometry>& geometries,
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, void *scratchBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     const VkResult result = rebuild(VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR,
         geometries, buildRanges, scratchBuffer, std::move(deferredOperation));
@@ -73,7 +73,7 @@ void BottomLevelAccelerationStructure::build(const std::list<AccelerationStructu
 }
 
 void BottomLevelAccelerationStructure::update(const std::list<AccelerationStructureGeometry>& geometries,
-    void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+    void *scratchBuffer, lent_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     std::vector<VkAccelerationStructureBuildRangeInfoKHR> buildRanges;
     for (auto const& geometry: geometries)
@@ -83,7 +83,7 @@ void BottomLevelAccelerationStructure::update(const std::list<AccelerationStruct
 
 void BottomLevelAccelerationStructure::update(const std::list<AccelerationStructureGeometry>& geometries,
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, void *scratchBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */)
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     const VkResult result = rebuild(VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR,
         geometries, buildRanges, scratchBuffer, std::move(deferredOperation));
@@ -93,7 +93,7 @@ void BottomLevelAccelerationStructure::update(const std::list<AccelerationStruct
 VkResult BottomLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureModeKHR mode,
     const std::list<AccelerationStructureGeometry>& geometries,
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
-    void *scratchBuffer, std::shared_ptr<DeferredOperation> deferredOperation)
+    void *scratchBuffer, lent_ptr<DeferredOperation> deferredOperation)
 {
     geometryCount = core::countof(geometries);
     MAGMA_VLA(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);

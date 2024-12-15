@@ -32,7 +32,7 @@ namespace magma
 {
 #ifdef VK_KHR_ray_tracing_pipeline
 RayTracingPipelineBatch::RayTracingPipelineBatch(std::shared_ptr<Device> device,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept:
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept:
     BasePipelineBatch<RayTracingPipeline, VkRayTracingPipelineCreateInfoKHR>(std::move(device)),
     deferredOperation(std::move(deferredOperation))
 {}

@@ -65,17 +65,17 @@ namespace magma
     #endif // VK_KHR_device_group
         VkDeviceAddress getDeviceAddress() const noexcept override;
         bool copy(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
+            lent_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool compact(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
+            lent_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool copyTo(void *dstBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
+            lent_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool copyFrom(const void *srcBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
+            lent_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
         bool serialize(void *dstBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
+            lent_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool deserialize(const void *srcBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
+            lent_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
         void onDefragment() override;
 
     protected:

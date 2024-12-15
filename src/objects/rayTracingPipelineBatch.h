@@ -38,7 +38,7 @@ namespace magma
     {
     public:
         explicit RayTracingPipelineBatch(std::shared_ptr<Device> device,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
+            lent_ptr<DeferredOperation> deferredOperation = nullptr) noexcept;
         uint32_t batchPipeline(const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,
             uint32_t maxRecursionDepth,
@@ -54,7 +54,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr) override;
 
     private:
-        std::shared_ptr<DeferredOperation> deferredOperation;
+        lent_ptr<DeferredOperation> deferredOperation;
         std::forward_list<std::vector<VkShaderStageFlagBits>> shaderStageFlags;
         std::forward_list<std::vector<RayTracingShaderGroup>> groups;
         std::forward_list<uint32_t> maxRecursionDepths;

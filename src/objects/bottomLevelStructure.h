@@ -46,25 +46,25 @@ namespace magma
         uint64_t getReference() const noexcept;
         void build(const std::list<AccelerationStructureGeometry>& geometries,
             void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+            lent_ptr<DeferredOperation> deferredOperation = nullptr);
         void build(const std::list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
             void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+            lent_ptr<DeferredOperation> deferredOperation = nullptr);
         void update(const std::list<AccelerationStructureGeometry>& geometries,
             void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+            lent_ptr<DeferredOperation> deferredOperation = nullptr);
         void update(const std::list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
             void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation = nullptr);
+            lent_ptr<DeferredOperation> deferredOperation = nullptr);
 
     private:
         VkResult rebuild(VkBuildAccelerationStructureModeKHR mode,
             const std::list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
             void *scratchBuffer,
-            std::shared_ptr<DeferredOperation> deferredOperation);
+            lent_ptr<DeferredOperation> deferredOperation);
     };
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

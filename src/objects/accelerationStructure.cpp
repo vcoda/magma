@@ -160,7 +160,7 @@ VkDeviceAddress AccelerationStructure::getDeviceAddress() const noexcept
 }
 
 bool AccelerationStructure::copy(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureInfoKHR copyInfo;
     copyInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR;
@@ -175,7 +175,7 @@ bool AccelerationStructure::copy(std::shared_ptr<AccelerationStructure> dstAccel
 }
 
 bool AccelerationStructure::compact(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureInfoKHR copyInfo;
     copyInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR;
@@ -190,7 +190,7 @@ bool AccelerationStructure::compact(std::shared_ptr<AccelerationStructure> dstAc
 }
 
 bool AccelerationStructure::copyTo(void *dstBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
@@ -205,7 +205,7 @@ bool AccelerationStructure::copyTo(void *dstBuffer,
 }
 
 bool AccelerationStructure::copyFrom(const void *srcBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept
 {
     VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;
@@ -220,7 +220,7 @@ bool AccelerationStructure::copyFrom(const void *srcBuffer,
 }
 
 bool AccelerationStructure::serialize(void *dstBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureToMemoryInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR;
@@ -235,7 +235,7 @@ bool AccelerationStructure::serialize(void *dstBuffer,
 }
 
 bool AccelerationStructure::deserialize(const void *srcBuffer,
-    std::shared_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept
+    lent_ptr<DeferredOperation> deferredOperation /* nullptr */) noexcept
 {
     VkCopyMemoryToAccelerationStructureInfoKHR copyMemoryInfo;
     copyMemoryInfo.sType = VK_STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR;

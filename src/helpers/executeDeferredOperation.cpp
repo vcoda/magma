@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::helpers
 {
 #ifdef VK_KHR_deferred_host_operations
-VkResult executeDeferredOperation(std::shared_ptr<DeferredOperation> deferredOperation,
+VkResult executeDeferredOperation(lent_ptr<DeferredOperation> deferredOperation,
     uint32_t maxConcurrency /* 0 */)
 {
     // The maximum number of threads that can usefully execute a deferred operation concurrently.
