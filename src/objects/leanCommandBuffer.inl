@@ -186,7 +186,7 @@ inline void LeanCommandBuffer::updateBuffer(const Buffer *buffer, VkDeviceSize d
         reinterpret_cast<const uint32_t *>(data)); // Cast to compile with old SDK
 }
 
-inline void LeanCommandBuffer::fillBuffer(const Buffer *buffer, uint32_t data,
+inline void LeanCommandBuffer::fillBuffer(Buffer *buffer, uint32_t data,
     VkDeviceSize size /* VK_WHOLE_SIZE */, VkDeviceSize offset /* 0 */) const noexcept
 {
     vkCmdFillBuffer(handle, *buffer, offset, size, data);
