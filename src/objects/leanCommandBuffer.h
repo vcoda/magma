@@ -195,10 +195,10 @@ namespace magma
     #endif // VK_EXT_transform_feedback
 
     #ifdef VK_KHR_imageless_framebuffer
-        void beginRenderPass(RenderPass *renderPass, ImagelessFramebuffer *framebuffer, uint32_t attachmentCount, const ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
+        void beginRenderPass(RenderPass *renderPass, ImagelessFramebuffer *framebuffer, uint32_t attachmentCount, ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
             const VkRect2D& renderArea, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
     #ifdef VK_KHR_device_group
-        void beginDeviceGroupRenderPass(uint32_t deviceMask, RenderPass *renderPass, ImagelessFramebuffer *framebuffer, uint32_t attachmentCount, const ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
+        void beginDeviceGroupRenderPass(uint32_t deviceMask, RenderPass *renderPass, ImagelessFramebuffer *framebuffer, uint32_t attachmentCount, ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
             uint32_t deviceRenderAreaCount = 0, const VkRect2D *deviceRenderAreas = nullptr, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
     #endif // VK_KHR_device_group
     #endif // VK_KHR_imageless_framebuffer
