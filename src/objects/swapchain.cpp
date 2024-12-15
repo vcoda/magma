@@ -201,7 +201,7 @@ uint32_t Swapchain::getImageCount() const
     return swapchainImageCount;
 }
 
-const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
+const std::unordered_set<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
 {
     if (bindedImages.empty())
     {
@@ -215,7 +215,7 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
             uint32_t imageIndex = 0;
             for (VkImage handle: swapchainImages)
             {   // Image has been created by swapchain internally, so we just passthrough image handle and properties
-                bindedImages.emplace_back(SwapchainImage::makeShared(handle,
+                bindedImages.insert(SwapchainImage::makeShared(handle,
                     device, surfaceFormat.format, extent, arrayLayers, imageUsage, imageIndex));
                 ++imageIndex;
             }
@@ -291,7 +291,8 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult result = vkBindImageMemory2KHR(getNativeDevice(), 1, &bindImageMemoryInfo);
     MAGMA_HANDLE_RESULT(result, "failed to bind image to swapchain");
-    addImage(std::move(image), imageIndex);
+    image->setChainIndex(imageIndex);
+    bindedImages.insert(image);
 }
 
 #ifdef VK_KHR_device_group
@@ -320,7 +321,8 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindImageMemory2KHR, VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     const VkResult result = vkBindImageMemory2KHR(getNativeDevice(), 1, &bindImageMemoryInfo);
     MAGMA_HANDLE_RESULT(result, "failed to bind image to swapchain across the subdevices");
-    addImage(std::move(image), imageIndex);
+    image->setChainIndex(imageIndex);
+    bindedImages.insert(image);
 }
 #endif // VK_KHR_device_group
 #endif // VK_KHR_bind_memory2
@@ -333,15 +335,6 @@ void Swapchain::setLocalDimming(bool enable) noexcept
         vkSetLocalDimmingAMD(getNativeDevice(), handle, MAGMA_BOOLEAN(enable));
 }
 #endif // VK_AMD_display_native_hdr
-
-void Swapchain::addImage(std::shared_ptr<SwapchainImage> image, uint32_t imageIndex)
-{
-    image->setChainIndex(imageIndex);
-    const uint32_t imageCount = imageIndex + 1;
-    if (imageCount > bindedImages.size())
-        bindedImages.resize(imageCount);
-    bindedImages[imageIndex] = std::move(image);
-}
 
 void Swapchain::handleError(VkResult result, const char *message) const
 {
