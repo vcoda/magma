@@ -46,7 +46,7 @@ namespace magma
         uint32_t first;
         uint32_t last;
         Instance *instances;
-        std::shared_ptr<SrcTransferBuffer> srcBuffer;
+        std::unique_ptr<SrcTransferBuffer> srcBuffer;
     };
 } // namespace magma
 

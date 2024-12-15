@@ -45,7 +45,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuf
         optional, sharing, allocator)
 {
     MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_shared<SrcTransferBuffer>(device, size, data, std::move(allocator),
+    auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, data, std::move(allocator),
         Buffer::Initializer(), Sharing(), std::move(copyFn));
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
