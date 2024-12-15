@@ -159,6 +159,7 @@ void LeanCommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, RenderPa
 #ifdef VK_EXT_conditional_rendering
 void LeanCommandBuffer::beginConditionalRendering(const Buffer *buffer, VkDeviceSize offset /* 0 */, bool inverted /* false */) noexcept
 {
+    MAGMA_ASSERT(buffer->getUsage() & VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT);
     VkConditionalRenderingBeginInfoEXT conditionalRenderingBeginInfo;
     conditionalRenderingBeginInfo.sType = VK_STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT;
     conditionalRenderingBeginInfo.pNext = nullptr;
