@@ -47,7 +47,7 @@ namespace magma
             bool reflect = false,
             VkShaderModuleCreateFlags flags = 0,
         #ifdef VK_EXT_validation_cache
-            std::shared_ptr<ValidationCache> validationCache = nullptr,
+            lent_ptr<ValidationCache> validationCache = nullptr,
         #endif
             const StructureChain& extendedInfo = StructureChain());
         explicit ShaderModule(std::shared_ptr<Device> device,
@@ -57,7 +57,7 @@ namespace magma
             bool reflect = false,
             VkShaderModuleCreateFlags flags = 0,
         #ifdef VK_EXT_validation_cache
-            std::shared_ptr<ValidationCache> validationCache = nullptr,
+            lent_ptr<ValidationCache> validationCache = nullptr,
         #endif
             const StructureChain& extendedInfo = StructureChain());
         template<std::size_t SpirvWordCount>
@@ -68,7 +68,7 @@ namespace magma
             bool reflect = false,
             VkShaderModuleCreateFlags flags = 0,
         #ifdef VK_EXT_validation_cache
-            std::shared_ptr<ValidationCache> validationCache = nullptr,
+            lent_ptr<ValidationCache> validationCache = nullptr,
         #endif
             const StructureChain& extendedInfo = StructureChain());
         ~ShaderModule();

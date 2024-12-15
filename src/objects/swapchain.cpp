@@ -241,8 +241,8 @@ VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, lent_ptr<Comm
     return oldLayout;
 }
 
-uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore /* nullptr */,
-    std::shared_ptr<const Fence> fence /* nullptr */,
+uint32_t Swapchain::acquireNextImage(lent_ptr<const Semaphore> semaphore /* nullptr */,
+    lent_ptr<const Fence> fence /* nullptr */,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
 {
     uint32_t imageIndex = 0;
@@ -254,8 +254,8 @@ uint32_t Swapchain::acquireNextImage(std::shared_ptr<const Semaphore> semaphore 
 
 #ifdef VK_KHR_device_group
 uint32_t Swapchain::acquireNextDeviceGroupImage(uint32_t deviceMask,
-    std::shared_ptr<const Semaphore> semaphore /* nullptr */,
-    std::shared_ptr<const Fence> fence /* nullptr */,
+    lent_ptr<const Semaphore> semaphore /* nullptr */,
+    lent_ptr<const Fence> fence /* nullptr */,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
 {
     VkAcquireNextImageInfoKHR aquireNextImageInfo;

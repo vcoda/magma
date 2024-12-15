@@ -32,7 +32,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const SpirvWord *byte
     bool reflect /* false */,
     VkShaderModuleCreateFlags flags /* 0 */,
 #ifdef VK_EXT_validation_cache
-    std::shared_ptr<ValidationCache> validationCache /* nullptr */,
+    lent_ptr<ValidationCache> validationCache /* nullptr */,
 #endif
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_SHADER_MODULE, std::move(device), std::move(allocator)),
@@ -86,7 +86,7 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<Spi
     bool reflect /* false */,
     VkShaderModuleCreateFlags flags /* 0 */,
 #ifdef VK_EXT_validation_cache
-    std::shared_ptr<ValidationCache> validationCache /* nullptr */,
+    lent_ptr<ValidationCache> validationCache /* nullptr */,
 #endif
     const StructureChain& extendedInfo /* default */):
     ShaderModule(std::move(device), bytecode.data(), bytecode.size() * sizeof(SpirvWord), bytecodeHash, std::move(allocator), reflect, flags,

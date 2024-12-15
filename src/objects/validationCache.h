@@ -59,7 +59,7 @@ namespace magma
                 cacheData.data(), std::move(allocator), extendedInfo) {}
         ~ValidationCache();
         std::vector<uint8_t> getData() const;
-        void mergeCaches(const std::vector<std::shared_ptr<const ValidationCache>>& caches);
+        void mergeCaches(const std::vector<lent_ptr<const ValidationCache>>& caches);
     };
 
     struct ValidationCache::Header

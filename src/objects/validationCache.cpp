@@ -70,7 +70,7 @@ std::vector<uint8_t> ValidationCache::getData() const
     return cacheData;
 }
 
-void ValidationCache::mergeCaches(const std::vector<std::shared_ptr<const ValidationCache>>& caches)
+void ValidationCache::mergeCaches(const std::vector<lent_ptr<const ValidationCache>>& caches)
 {
     MAGMA_VLA(VkValidationCacheEXT, dereferencedCaches, caches.size());
     for (auto const& cache: caches)
