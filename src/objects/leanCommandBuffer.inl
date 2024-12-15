@@ -214,12 +214,12 @@ inline void LeanCommandBuffer::resolveImage(const Image *srcImage, Image *dstIma
     vkCmdResolveImage(handle, *srcImage, srcImageLayout, *dstImage, dstImageLayout, 1, &region);
 }
 
-inline void LeanCommandBuffer::setEvent(const Event *event, VkPipelineStageFlags stageMask) const noexcept
+inline void LeanCommandBuffer::setEvent(Event *event, VkPipelineStageFlags stageMask) const noexcept
 {
     vkCmdSetEvent(handle, *event, stageMask);
 }
 
-inline void LeanCommandBuffer::resetEvent(const Event *event, VkPipelineStageFlags stageMask) const noexcept
+inline void LeanCommandBuffer::resetEvent(Event *event, VkPipelineStageFlags stageMask) const noexcept
 {
     vkCmdResetEvent(handle, *event, stageMask);
 }

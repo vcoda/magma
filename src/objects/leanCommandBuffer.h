@@ -110,8 +110,8 @@ namespace magma
         void clearAttachments(uint32_t attachmentCount, const VkClearAttachment *attachments, const VkClearRect& clearRect) const noexcept;
         void resolveImage(const Image *srcImage, Image *dstImage, const VkImageResolve& region) const noexcept;
 
-        void setEvent(const Event *event, VkPipelineStageFlags stageMask) const noexcept;
-        void resetEvent(const Event *event, VkPipelineStageFlags stageMask) const noexcept;
+        void setEvent(Event *event, VkPipelineStageFlags stageMask) const noexcept;
+        void resetEvent(Event *event, VkPipelineStageFlags stageMask) const noexcept;
         void waitEvent(const Event *event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) const noexcept;
         void waitEvent(const Event *event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkMemoryBarrier& barrier) const noexcept;
         void waitEvent(const Event *event, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, const VkBufferMemoryBarrier& barrier) const noexcept;
