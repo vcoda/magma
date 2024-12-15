@@ -735,14 +735,12 @@ CommandBuffer::Extensions::Extensions(lent_ptr<const Device> device):
     MAGMA_DEVICE_EXTENSION_ENABLED(AMD_buffer_marker),
     MAGMA_DEVICE_EXTENSION_ENABLED(AMD_draw_indirect_count),
     MAGMA_DEVICE_EXTENSION_ENABLED(AMD_negative_viewport_height),
-
     MAGMA_DEVICE_EXTENSION_ENABLED(EXT_debug_marker),
     MAGMA_DEVICE_EXTENSION_ENABLED(EXT_conditional_rendering),
     MAGMA_DEVICE_EXTENSION_ENABLED(EXT_line_rasterization),
     MAGMA_DEVICE_EXTENSION_ENABLED(EXT_mesh_shader),
     MAGMA_DEVICE_EXTENSION_ENABLED(EXT_multi_draw),
     MAGMA_DEVICE_EXTENSION_ENABLED(EXT_transform_feedback),
-
     MAGMA_DEVICE_EXTENSION_ENABLED(KHR_acceleration_structure),
     MAGMA_DEVICE_EXTENSION_ENABLED(KHR_device_group),
     MAGMA_DEVICE_EXTENSION_ENABLED(KHR_draw_indirect_count),
@@ -751,10 +749,8 @@ CommandBuffer::Extensions::Extensions(lent_ptr<const Device> device):
     MAGMA_DEVICE_EXTENSION_ENABLED(KHR_push_descriptor),
     MAGMA_DEVICE_EXTENSION_ENABLED(KHR_ray_tracing_pipeline),
     MAGMA_DEVICE_EXTENSION_ENABLED(KHR_ray_tracing_maintenance1),
-
     MAGMA_DEVICE_EXTENSION_ENABLED(NV_device_diagnostic_checkpoints),
     MAGMA_DEVICE_EXTENSION_ENABLED(NV_mesh_shader),
-
     MAGMA_INSTANCE_EXTENSION_ENABLED(EXT_debug_utils)
 {}
 } // namespace magma

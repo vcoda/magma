@@ -377,14 +377,12 @@ namespace magma
             const VkBool32 AMD_buffer_marker: 1;
             const VkBool32 AMD_draw_indirect_count: 1;
             const VkBool32 AMD_negative_viewport_height: 1;
-
             const VkBool32 EXT_debug_marker: 1;
             const VkBool32 EXT_conditional_rendering: 1;
             const VkBool32 EXT_line_rasterization: 1;
             const VkBool32 EXT_mesh_shader: 1;
             const VkBool32 EXT_multi_draw: 1;
             const VkBool32 EXT_transform_feedback: 1;
-
             const VkBool32 KHR_acceleration_structure: 1;
             const VkBool32 KHR_device_group: 1;
             const VkBool32 KHR_draw_indirect_count: 1;
@@ -393,10 +391,8 @@ namespace magma
             const VkBool32 KHR_push_descriptor: 1;
             const VkBool32 KHR_ray_tracing_pipeline: 1;
             const VkBool32 KHR_ray_tracing_maintenance1: 1;
-
             const VkBool32 NV_device_diagnostic_checkpoints: 1;
             const VkBool32 NV_mesh_shader: 1;
-
             const VkBool32 EXT_debug_utils: 1;
 
             explicit Extensions(lent_ptr<const Device> device);
