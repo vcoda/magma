@@ -35,7 +35,7 @@ namespace magma
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
         explicit AccelerationStructureInputBuffer(lent_ptr<CommandBuffer> cmdBuffer,
-            std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+            lent_ptr<const SrcTransferBuffer> srcBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,

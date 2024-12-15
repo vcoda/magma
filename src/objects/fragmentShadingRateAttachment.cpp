@@ -67,7 +67,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuf
 
 FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuffer> cmdBuffer,
     VkFormat format, const VkExtent2D& extent, uint32_t arrayLayers,
-    std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+    lent_ptr<const SrcTransferBuffer> srcBuffer,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,

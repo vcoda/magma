@@ -44,7 +44,7 @@ StorageBuffer::StorageBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkDeviceSize siz
     copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
-StorageBuffer::StorageBuffer(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+StorageBuffer::StorageBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,

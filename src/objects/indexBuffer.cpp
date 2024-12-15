@@ -82,7 +82,7 @@ IndexBuffer::IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkIndexType indexTyp
     copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
-IndexBuffer::IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+IndexBuffer::IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, lent_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,

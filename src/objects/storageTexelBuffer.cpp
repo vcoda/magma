@@ -44,7 +44,7 @@ StorageTexelBuffer::StorageTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkDevi
     copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
 }
 
-StorageTexelBuffer::StorageTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const SrcTransferBuffer> srcBuffer,
+StorageTexelBuffer::StorageTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
