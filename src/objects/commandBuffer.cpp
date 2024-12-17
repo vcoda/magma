@@ -47,7 +47,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle,
     state(State::Initial),
     resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0)
 {
-    resetInternalState();
+    putInitialState();
 }
 
 CommandBuffer::CommandBuffer(VkCommandBufferLevel level, const CommandPool *cmdPool):
@@ -62,7 +62,7 @@ CommandBuffer::CommandBuffer(VkCommandBufferLevel level, const CommandPool *cmdP
     state(State::Initial),
     resetCommandBuffer((cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) != 0)
 {
-    resetInternalState();
+    putInitialState();
 }
 
 CommandBuffer::~CommandBuffer()
@@ -141,7 +141,7 @@ bool CommandBuffer::reset(VkCommandBufferResetFlags flags /* 0 */) noexcept
     if (VK_SUCCESS == result)
     {
         releaseObjectsInUse();
-        resetInternalState();
+        putInitialState();
         return true;
     }
     return false;
@@ -707,7 +707,7 @@ const std::unique_ptr<Buffer>& CommandBuffer::getMarkerBuffer() const noexcept
     return markerBuffer;
 }
 
-void CommandBuffer::resetInternalState() noexcept
+void CommandBuffer::putInitialState() noexcept
 {
     state = State::Initial;
     stats = Statistics();

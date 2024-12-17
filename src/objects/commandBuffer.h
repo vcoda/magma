@@ -411,7 +411,7 @@ namespace magma
         void pushDebugMarker(const char* /* name */, uint32_t /* color */) noexcept MAGMA_NOOP;
         void popDebugMarker() noexcept MAGMA_NOOP;
         void insertDebugCheckpoint(const char *command, VkPipelineStageFlagBits pipelineStage) const noexcept;
-        void resetInternalState() noexcept;
+        void putInitialState() noexcept;
 
         const VkCommandBufferLevel level;
         const VkCommandPool cmdPool;
