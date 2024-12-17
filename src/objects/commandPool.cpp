@@ -55,10 +55,28 @@ bool CommandPool::reset(bool releaseResources /* false */) noexcept
         flags |= VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
     const VkResult result = vkResetCommandPool(getNativeDevice(), handle, flags);
     MAGMA_ASSERT(VK_SUCCESS == result);
+    if (result == VK_SUCCESS)
+    {   // Resetting a command pool recycles all of the resources from all of the
+        // command buffers allocated from the command pool back to the command pool.
+        // All command buffers that have been allocated from the command pool are put
+        // in the initial state.
+        for (auto it = cmdPool.begin(); it != cmdPool.end(); )
+        {
+            if (it->expired())
+                it = cmdPool.erase(it);
+            else
+            {
+                std::shared_ptr<CommandBuffer> cmdBuffer = it->lock();
+                cmdBuffer->putInitialState();
+                cmdBuffer->releaseObjectsInUse();
+                ++it;
+            }
+        }
+    }
     return (VK_SUCCESS == result);
 }
 
-std::vector<std::unique_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t commandBufferCount, bool primaryLevel,
+std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t commandBufferCount, bool primaryLevel,
     const StructureChain& extendedInfo /* default */)
 {
     VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
@@ -70,18 +88,19 @@ std::vector<std::unique_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     MAGMA_VLA(VkCommandBuffer, commandBuffers, commandBufferCount);
     const VkResult result = vkAllocateCommandBuffers(getNativeDevice(), &cmdBufferAllocateInfo, commandBuffers);
     MAGMA_HANDLE_RESULT(result, "failed to allocate command buffers");
-    std::vector<std::unique_ptr<CommandBuffer>> cmdBuffers;
+    std::vector<std::shared_ptr<CommandBuffer>> cmdBuffers;
     for (auto handle: commandBuffers)
     {
         if (primaryLevel)
-            cmdBuffers.emplace_back(PrimaryCommandBuffer::makeUnique(handle, this));
+            cmdBuffers.emplace_back(PrimaryCommandBuffer::makeShared(handle, this));
         else
-            cmdBuffers.emplace_back(SecondaryCommandBuffer::makeUnique(handle, this));
+            cmdBuffers.emplace_back(SecondaryCommandBuffer::makeShared(handle, this));
+        cmdPool.insert(cmdBuffers.back());
     }
     return cmdBuffers;
 }
 
-void CommandPool::freeCommandBuffers(std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers) noexcept
+void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
     MAGMA_VLA(VkCommandBuffer, commandBuffers, cmdBuffers.size());
     for (auto& cmdBuffer: cmdBuffers)
@@ -90,6 +109,7 @@ void CommandPool::freeCommandBuffers(std::vector<std::unique_ptr<CommandBuffer>>
         commandBuffers.put(cmdBuffer->getLean());
         cmdBuffer->releaseObjectsInUse();
         cmdBuffer->getLean().handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in the destructor
+        cmdPool.erase(cmdBuffer);
     }
     vkFreeCommandBuffers(getNativeDevice(), handle, commandBuffers.count(), commandBuffers);
     cmdBuffers.clear();
