@@ -33,7 +33,7 @@ VkPipelineCompilerControlFlagsAMD Pipeline::compilerControlFlags = 0;
 #endif
 
 Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device_, variant_ptr<PipelineLayout> layout_,
-    std::shared_ptr<Pipeline> basePipeline, std::shared_ptr<IAllocator> allocator, uint32_t stageCount,
+    std::shared_ptr<IAllocator> allocator, uint32_t stageCount,
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackEXT creationFeedback /* {} */,
     const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks /* {} */,
@@ -43,7 +43,6 @@ Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device
     bindPoint(bindPoint),
     stageCount(stageCount),
     layout(std::move(layout_)),
-    basePipeline(std::move(basePipeline)),
 #ifdef VK_EXT_pipeline_creation_feedback
     creationFeedback(creationFeedback),
     stageCreationFeedbacks(stageCreationFeedbacks),
@@ -62,7 +61,7 @@ Pipeline::~Pipeline()
 }
 
 #ifdef VK_KHR_pipeline_executable_properties
-std::vector<std::shared_ptr<PipelineExecutable>> Pipeline::getExecutables() const
+std::vector<std::unique_ptr<PipelineExecutable>> Pipeline::getExecutables() const
 {
     VkPipelineInfoKHR pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INFO_KHR;

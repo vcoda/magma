@@ -44,7 +44,7 @@ namespace magma
             VkShaderStageFlags stageFlags,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDescriptorSetLayoutCreateFlags flags = 0,
-            const std::unique_ptr<IShaderReflectionFactory>& shaderReflectionFactory = nullptr,
+            lent_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
             const std::string& shaderFileName = std::string(),
             uint32_t setIndex = 0,
             const StructureChain& extendedInfo = StructureChain());

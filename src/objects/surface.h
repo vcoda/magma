@@ -52,7 +52,7 @@ namespace magma
     {
     public:
         explicit DisplaySurface(std::shared_ptr<Instance> instance,
-            std::shared_ptr<const DisplayMode> displayMode,
+            lent_ptr<const DisplayMode> displayMode,
             uint32_t planeIndex,
             uint32_t planeStackIndex,
             VkSurfaceTransformFlagBitsKHR transform,
@@ -64,7 +64,6 @@ namespace magma
         VkDisplayPlaneAlphaFlagBitsKHR getAlphaMode() const noexcept { return alphaMode; }
 
     private:
-        std::shared_ptr<const DisplayMode> displayMode;
         const uint32_t planeIndex;
         const uint32_t planeStackIndex;
         const VkSurfaceTransformFlagBitsKHR transform;

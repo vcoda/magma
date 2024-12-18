@@ -162,14 +162,14 @@ std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const cha
 }
 
 #ifdef VK_KHR_surface
-bool PhysicalDevice::getSurfaceSupport(const std::unique_ptr<Surface>& surface, uint32_t queueFamilyIndex) const noexcept
+bool PhysicalDevice::getSurfaceSupport(lent_ptr<const Surface> surface, uint32_t queueFamilyIndex) const noexcept
 {
     VkBool32 supported = VK_FALSE;
     const VkResult result = vkGetPhysicalDeviceSurfaceSupportKHR(handle, queueFamilyIndex, *surface, &supported);
     return (VK_SUCCESS == result) && (VK_TRUE == supported);
 }
 
-VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities(const std::unique_ptr<Surface>& surface) const
+VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities(lent_ptr<const Surface> surface) const
 {
     VkSurfaceCapabilitiesKHR surfaceCapabilities;
     const VkResult result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(handle, *surface, &surfaceCapabilities);
@@ -177,7 +177,7 @@ VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities(const std::uniqu
     return surfaceCapabilities;
 }
 
-std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(const std::unique_ptr<Surface>& surface) const
+std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(lent_ptr<const Surface> surface) const
 {
     uint32_t surfaceFormatCount = 0;
     VkResult result = vkGetPhysicalDeviceSurfaceFormatsKHR(handle, *surface, &surfaceFormatCount, nullptr);
@@ -191,7 +191,7 @@ std::vector<VkSurfaceFormatKHR> PhysicalDevice::getSurfaceFormats(const std::uni
     return surfaceFormats;
 }
 
-std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(const std::unique_ptr<Surface>& surface) const
+std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(lent_ptr<const Surface> surface) const
 {
     uint32_t presentModeCount = 0;
     VkResult result = vkGetPhysicalDeviceSurfacePresentModesKHR(handle, *surface, &presentModeCount, nullptr);
@@ -206,7 +206,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getSurfacePresentModes(const std::
 }
 
 #ifdef VK_EXT_full_screen_exclusive
-bool PhysicalDevice::getFullScreenExclusiveSurfaceSupport(const std::unique_ptr<Surface>& surface) const
+bool PhysicalDevice::getFullScreenExclusiveSurfaceSupport(lent_ptr<const Surface> surface) const
 {
     VkSurfaceCapabilitiesFullScreenExclusiveEXT fullScreenExclusiveCapabilities = {};
     fullScreenExclusiveCapabilities.sType = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT;
@@ -216,7 +216,7 @@ bool PhysicalDevice::getFullScreenExclusiveSurfaceSupport(const std::unique_ptr<
     return (VK_TRUE == fullScreenExclusiveCapabilities.fullScreenExclusiveSupported);
 }
 
-std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePresentModes(const std::unique_ptr<Surface>& surface,
+std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePresentModes(lent_ptr<const Surface> surface,
     VkFullScreenExclusiveEXT fullScreenExclusive
 #ifdef VK_KHR_win32_surface
    ,HMONITOR hMonitor /* NULL */
@@ -258,7 +258,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::getFullScreenExclusiveSurfacePrese
 #endif // VK_EXT_full_screen_exclusive
 
 #ifdef VK_KHR_shared_presentable_image
-VkImageUsageFlags PhysicalDevice::getSurfaceSharedPresentFlags(const std::unique_ptr<Surface>& surface) const
+VkImageUsageFlags PhysicalDevice::getSurfaceSharedPresentFlags(lent_ptr<const Surface> surface) const
 {
     VkSharedPresentSurfaceCapabilitiesKHR sharedPresentSurfaceCapabilities = {};
     sharedPresentSurfaceCapabilities.sType = VK_STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR;
@@ -270,7 +270,7 @@ VkImageUsageFlags PhysicalDevice::getSurfaceSharedPresentFlags(const std::unique
 #endif // VK_KHR_shared_presentable_image
 
 #ifdef VK_KHR_device_group
-std::vector<VkRect2D> PhysicalDevice::getPresentRectangles(const std::unique_ptr<Surface>& surface) const
+std::vector<VkRect2D> PhysicalDevice::getPresentRectangles(lent_ptr<const Surface> surface) const
 {
     uint32_t rectCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetPhysicalDevicePresentRectanglesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
@@ -341,7 +341,7 @@ uint32_t PhysicalDevice::getNumQueueFamilyPerformanceQueryPasses(uint32_t queueF
 #endif // VK_KHR_performance_query
 
 #ifdef VK_AMD_display_native_hdr
-bool PhysicalDevice::getSurfaceLocalDimmingSupport(const std::unique_ptr<Surface>& surface) const
+bool PhysicalDevice::getSurfaceLocalDimmingSupport(lent_ptr<const Surface> surface) const
 {
     VkDisplayNativeHdrSurfaceCapabilitiesAMD nativeHdrSurfaceCapabilities = {};
     nativeHdrSurfaceCapabilities.sType = VK_STRUCTURE_TYPE_DISPLAY_NATIVE_HDR_SURFACE_CAPABILITIES_AMD;
@@ -657,7 +657,7 @@ VkPhysicalDeviceProperties PhysicalDevice::getProperties2(void *properties) cons
 }
 
 #ifdef VK_KHR_surface
-VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities2(const std::unique_ptr<Surface>& surface, void *surfaceCapabilities) const
+VkSurfaceCapabilitiesKHR PhysicalDevice::getSurfaceCapabilities2(lent_ptr<const Surface> surface, void *surfaceCapabilities) const
 {
 #ifdef VK_KHR_get_surface_capabilities2
     VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo;

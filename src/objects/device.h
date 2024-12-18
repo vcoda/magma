@@ -97,9 +97,9 @@ namespace magma
     #endif // VK_KHR_performance_query
     #ifdef VK_KHR_device_group
         VkDeviceGroupPresentCapabilitiesKHR getDeviceGroupPresentCapabilitiesKHR() const;
-        VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfacePresentModes(const std::unique_ptr<Surface>& surface) const;
+        VkDeviceGroupPresentModeFlagsKHR getDeviceGroupSurfacePresentModes(lent_ptr<const Surface> surface) const;
     #ifdef VK_EXT_full_screen_exclusive
-        VkDeviceGroupPresentModeFlagsKHR getDeviceGroupFullScreenExclusiveSurfacePresentModes(const std::unique_ptr<Surface>& surface,
+        VkDeviceGroupPresentModeFlagsKHR getDeviceGroupFullScreenExclusiveSurfacePresentModes(lent_ptr<const Surface> surface,
             VkFullScreenExclusiveEXT fullScreenExclusive
         #ifdef VK_KHR_win32_surface
            ,HMONITOR hMonitor = NULL

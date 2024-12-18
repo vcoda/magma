@@ -42,13 +42,12 @@ Surface::~Surface()
 
 #ifdef VK_KHR_display
 DisplaySurface::DisplaySurface(std::shared_ptr<Instance> instance_,
-    std::shared_ptr<const DisplayMode> displayMode_,
+    lent_ptr<const DisplayMode> displayMode,
     uint32_t planeIndex, uint32_t planeStackIndex,
     VkSurfaceTransformFlagBitsKHR transform,
     VkDisplayPlaneAlphaFlagBitsKHR alphaMode,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     Surface(std::move(instance_), std::move(allocator)),
-    displayMode(std::move(displayMode_)),
     planeIndex(planeIndex),
     planeStackIndex(planeStackIndex),
     transform(transform),

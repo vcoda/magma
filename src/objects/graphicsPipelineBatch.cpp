@@ -181,7 +181,6 @@ void GraphicsPipelineBatch::buildPipelines(lent_ptr<PipelineCache> pipelineCache
     {
         auto handle = handles.cbegin();
         auto layout = layouts.begin();
-        auto basePipeline = basePipelines.cbegin();
         auto shaderStages = stages.cbegin();
     #ifdef VK_EXT_pipeline_creation_feedback
         auto creationFeedback = creationFeedbacks.cbegin();
@@ -192,7 +191,7 @@ void GraphicsPipelineBatch::buildPipelines(lent_ptr<PipelineCache> pipelineCache
         while (handle != handles.cend())
         {
             pipelines.emplace_front(GraphicsPipeline::makeUnique(
-                *handle++, device, std::move(*layout++), *basePipeline++, allocator,
+                *handle++, device, std::move(*layout++), allocator,
                 core::countof(*shaderStages++),
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,

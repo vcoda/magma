@@ -142,7 +142,6 @@ void RayTracingPipelineBatch::buildPipelines(lent_ptr<PipelineCache> pipelineCac
     {
         auto handle = handles.cbegin();
         auto layout = layouts.begin();
-        auto basePipeline = basePipelines.cbegin();
         auto pipelineInfo = pipelineInfos.cbegin();
         auto shaderStages = stages.cbegin();
         auto shaderGroups = groups.cbegin();
@@ -155,7 +154,7 @@ void RayTracingPipelineBatch::buildPipelines(lent_ptr<PipelineCache> pipelineCac
         while (handle != handles.cend())
         {
             pipelines.emplace_front(RayTracingPipeline::makeUnique(
-                *handle++, device, std::move(*layout++), *basePipeline++, allocator,
+                *handle++, device, std::move(*layout++), allocator,
                 *shaderStages++, *shaderGroups++, *maxRecursionDepth++,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,

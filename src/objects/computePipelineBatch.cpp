@@ -103,7 +103,6 @@ void ComputePipelineBatch::buildPipelines(lent_ptr<PipelineCache> pipelineCache 
     {
         auto handle = handles.cbegin();
         auto layout = layouts.begin();
-        auto basePipeline = basePipelines.cbegin();
     #ifdef VK_EXT_pipeline_creation_feedback
         auto creationFeedback = creationFeedbacks.cbegin();
         auto stageFeedbacks = stageCreationFeedbacks.cbegin();
@@ -112,7 +111,7 @@ void ComputePipelineBatch::buildPipelines(lent_ptr<PipelineCache> pipelineCache 
         while (handle != handles.cend())
         {
             pipelines.emplace_front(ComputePipeline::makeUnique(
-                *handle++, device, std::move(*layout++), *basePipeline++, allocator,
+                *handle++, device, std::move(*layout++), allocator,
             #ifdef VK_EXT_pipeline_creation_feedback
                 creationFeedbacks.empty() ? VkPipelineCreationFeedbackEXT{} : *creationFeedback++,
                 stageCreationFeedbacks.empty() ? std::vector<VkPipelineCreationFeedbackEXT>{} : *stageFeedbacks++,

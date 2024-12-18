@@ -57,7 +57,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device,
 #ifdef VK_KHR_pipeline_library
     lent_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
-    std::shared_ptr<GraphicsPipeline> basePipeline /* nullptr */,
+    lent_ptr<const GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     GraphicsPipeline(std::move(device), shaderStages, vertexInputState, inputAssemblyState,
@@ -92,10 +92,10 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
 #ifdef VK_KHR_pipeline_library
     lent_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
-    std::shared_ptr<GraphicsPipeline> basePipeline_ /* nullptr */,
+    lent_ptr<const GraphicsPipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), core::countof(shaderStages)),
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout_), std::move(allocator), core::countof(shaderStages)),
     rsHash(0ull)
 {
     MAGMA_VLA(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
@@ -106,7 +106,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = extendedInfo.headNode();
     pipelineInfo.flags = flags;
-    if (!basePipeline.expired())
+    if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stageCount = dereferencedStages.count();
     pipelineInfo.pStages = dereferencedStages;
@@ -211,7 +211,6 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
 GraphicsPipeline::GraphicsPipeline(VkPipeline handle_,
     std::shared_ptr<Device> device,
     variant_ptr<PipelineLayout> layout,
-    std::shared_ptr<Pipeline> basePipeline,
     std::shared_ptr<IAllocator> allocator,
     uint32_t stageCount,
 #ifdef VK_EXT_pipeline_creation_feedback
@@ -220,7 +219,7 @@ GraphicsPipeline::GraphicsPipeline(VkPipeline handle_,
 #endif // VK_EXT_pipeline_creation_feedback
     hash_t hash,
     hash_t rsHash):
-    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator),
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(allocator),
         stageCount,
     #ifdef VK_EXT_pipeline_creation_feedback
         creationFeedback, stageCreationFeedbacks,

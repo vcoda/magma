@@ -63,7 +63,7 @@ namespace magma
         #ifdef VK_KHR_pipeline_library
             lent_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
-            std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
+            lent_ptr<const GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit GraphicsPipeline(std::shared_ptr<Device> device,
@@ -85,7 +85,7 @@ namespace magma
         #ifdef VK_KHR_pipeline_library
             lent_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
-            std::shared_ptr<GraphicsPipeline> basePipeline = nullptr,
+            lent_ptr<const GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         hash_t getRenderStateHash() const noexcept { return rsHash; }
@@ -95,7 +95,6 @@ namespace magma
         GraphicsPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
             variant_ptr<PipelineLayout> layout,
-            std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
             uint32_t stageCount,
         #ifdef VK_EXT_pipeline_creation_feedback

@@ -34,7 +34,7 @@ namespace magma
 {
 #ifdef VK_EXT_full_screen_exclusive
 FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Device> device,
-    const std::unique_ptr<Surface>& surface, uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat,
+    lent_ptr<const Surface> surface, uint32_t minImageCount, VkSurfaceFormatKHR surfaceFormat,
     const VkExtent2D& extent, uint32_t arrayLayers, VkImageUsageFlags imageUsage,
     VkSurfaceTransformFlagBitsKHR preTransform, VkCompositeAlphaFlagBitsKHR compositeAlpha,
     VkPresentModeKHR presentMode, VkFullScreenExclusiveEXT fullScreenExclusive,
@@ -45,11 +45,11 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     HMONITOR hMonitor /* NULL */,
 #endif // VK_KHR_win32_surface
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const std::unique_ptr<Swapchain>& oldSwapchain /* nullptr */,
+    lent_ptr<Swapchain> oldSwapchain /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    Swapchain(std::move(device), surfaceFormat, extent, arrayLayers, imageUsage, presentMode, optional.flags, sharing, oldSwapchain, std::move(allocator)),
+    Swapchain(std::move(device), surfaceFormat, extent, arrayLayers, imageUsage, presentMode, optional.flags, sharing, std::move(allocator)),
 #ifdef VK_KHR_win32_surface
     hMonitor(hMonitor),
 #endif
@@ -110,11 +110,14 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
         linkNode(swapchainInfo, swapchainDeviceGroupInfo);
     }
 #endif // VK_KHR_device_group
-    if (!device->getFeatures()->supportsImageUsage(surface, swapchainInfo.imageUsage))
+    if (oldSwapchain && oldSwapchain->hadRetired())
+        MAGMA_ERROR("old swapchain must be non-retired");
+    const bool displaySurface = dynamic_cast<const DisplaySurface *>(surface.get()) != nullptr;
+    if (!device->getFeatures()->supportsImageUsage(std::move(surface), swapchainInfo.imageUsage))
         MAGMA_ERROR("swapchain usage not supported by surface");
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)
-    if (std::dynamic_pointer_cast<const DisplaySurface>(surface))
+    if (displaySurface)
     {
         MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateSharedSwapchainsKHR, VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME);
         result = vkCreateSharedSwapchainsKHR(getNativeDevice(), 1, &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
@@ -122,6 +125,7 @@ FullScreenExclusiveSwapchain::FullScreenExclusiveSwapchain(std::shared_ptr<Devic
     else
 #endif // VK_KHR_display_swapchain && VK_KHR_display_surface
     {
+        MAGMA_UNUSED(displaySurface);
         result = vkCreateSwapchainKHR(getNativeDevice(), &swapchainInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     }
     if (oldSwapchain)

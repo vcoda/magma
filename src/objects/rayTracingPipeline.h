@@ -52,7 +52,7 @@ namespace magma
         #ifdef VK_KHR_pipeline_library
             lent_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
-            std::shared_ptr<RayTracingPipeline> basePipeline = nullptr,
+            lent_ptr<const RayTracingPipeline> basePipeline = nullptr,
             lent_ptr<DeferredOperation> deferredOperation = nullptr,
             const std::vector<VkDynamicState>& dynamicStates = {},
             VkPipelineCreateFlags flags = 0,
@@ -73,7 +73,6 @@ namespace magma
         RayTracingPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
             variant_ptr<PipelineLayout> layout,
-            std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
             const std::vector<PipelineShaderStage>& shaderStages,
             const std::vector<RayTracingShaderGroup>& shaderGroups,

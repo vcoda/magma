@@ -42,7 +42,7 @@ namespace magma
         #ifdef VK_KHR_pipeline_library
             lent_ptr<PipelineLibrary> pipelineLibrary = nullptr,
         #endif
-            std::shared_ptr<ComputePipeline> basePipeline = nullptr,
+            lent_ptr<const ComputePipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
 
@@ -51,7 +51,6 @@ namespace magma
         ComputePipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
             variant_ptr<PipelineLayout> layout,
-            std::shared_ptr<Pipeline> basePipeline,
             std::shared_ptr<IAllocator> allocator,
         #ifdef VK_EXT_pipeline_creation_feedback
             VkPipelineCreationFeedbackEXT creationFeedback,

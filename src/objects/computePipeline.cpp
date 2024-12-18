@@ -36,16 +36,16 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
 #ifdef VK_KHR_pipeline_library
     lent_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
-    std::shared_ptr<ComputePipeline> basePipeline_ /* nullptr */,
+    lent_ptr<const ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device_), std::move(layout_), std::move(basePipeline_), std::move(allocator), 1)
+    Pipeline(VK_PIPELINE_BIND_POINT_COMPUTE, std::move(device_), std::move(layout_), std::move(allocator), 1)
 {
     VkComputePipelineCreateInfo pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = extendedInfo.headNode();
     pipelineInfo.flags = flags;
-    if (!basePipeline.expired())
+    if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stage = shaderStage;
     pipelineInfo.layout = *layout;
@@ -102,14 +102,13 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
 ComputePipeline::ComputePipeline(VkPipeline handle_,
     std::shared_ptr<Device> device,
     variant_ptr<PipelineLayout> layout,
-    std::shared_ptr<Pipeline> basePipeline,
     std::shared_ptr<IAllocator> allocator,
 #ifdef VK_EXT_pipeline_creation_feedback
     VkPipelineCreationFeedbackEXT creationFeedback,
     const std::vector<VkPipelineCreationFeedbackEXT>& stageCreationFeedbacks,
 #endif
     hash_t hash):
-    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(basePipeline), std::move(allocator),
+    Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device), std::move(layout), std::move(allocator),
         1,
     #ifdef VK_EXT_pipeline_creation_feedback
         creationFeedback, stageCreationFeedbacks,

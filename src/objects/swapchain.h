@@ -49,7 +49,7 @@ namespace magma
     public:
         struct Initializer;
         explicit Swapchain(std::shared_ptr<Device> device,
-            const std::unique_ptr<Surface>& surface,
+            lent_ptr<const Surface> surface,
             uint32_t minImageCount,
             VkSurfaceFormatKHR surfaceFormat,
             const VkExtent2D& extent,
@@ -60,7 +60,7 @@ namespace magma
             VkPresentModeKHR presentMode,
             const Initializer& optional,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const std::unique_ptr<Swapchain>& oldSwapchain = nullptr,
+            lent_ptr<Swapchain> oldSwapchain = nullptr,
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
         ~Swapchain();
@@ -111,7 +111,6 @@ namespace magma
             VkPresentModeKHR presentMode,
             VkSwapchainCreateFlagsKHR flags,
             const Sharing& sharing,
-            const std::unique_ptr<Swapchain>& oldSwapchain,
             std::shared_ptr<IAllocator> allocator);
         void handleError(VkResult result,
             const char *message) const;

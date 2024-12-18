@@ -302,7 +302,7 @@ VkDeviceGroupPresentCapabilitiesKHR Device::getDeviceGroupPresentCapabilitiesKHR
     return deviceGroupPresentCapabitilies;
 }
 
-VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(const std::unique_ptr<Surface>& surface) const
+VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(lent_ptr<const Surface> surface) const
 {
     VkDeviceGroupPresentModeFlagsKHR presentModes = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetDeviceGroupSurfacePresentModesKHR, VK_KHR_DEVICE_GROUP_EXTENSION_NAME);
@@ -312,7 +312,7 @@ VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupSurfacePresentModes(const
 }
 
 #ifdef VK_EXT_full_screen_exclusive
-VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupFullScreenExclusiveSurfacePresentModes(const std::unique_ptr<Surface>& surface,
+VkDeviceGroupPresentModeFlagsKHR Device::getDeviceGroupFullScreenExclusiveSurfacePresentModes(lent_ptr<const Surface> surface,
     VkFullScreenExclusiveEXT fullScreenExclusive
 #ifdef VK_KHR_win32_surface
    ,HMONITOR hMonitor /* NULL */
