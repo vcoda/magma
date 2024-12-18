@@ -28,14 +28,14 @@ namespace magma
            for VK_DESCRIPTOR_TYPE_STORAGE_IMAGE allowed layout is
            VK_IMAGE_LAYOUT_GENERAL, which isn't set by default. */
 
-        void layoutTransition(std::shared_ptr<Image> image,
+        void layoutTransition(lent_ptr<Image> image,
             VkImageLayout newLayout,
             lent_ptr<CommandBuffer> cmdBuffer,
             VkDependencyFlags dependencyFlags = 0);
 
         struct ImageLayoutTransition
         {
-            std::shared_ptr<Image> image;
+            Image *image = nullptr;
             VkImageLayout newLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             uint32_t baseMipLevel = 0;
             uint32_t baseArrayLayer = 0;

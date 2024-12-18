@@ -24,7 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::helpers
 {
-void layoutTransition(std::shared_ptr<Image> image, VkImageLayout newLayout,
+void layoutTransition(lent_ptr<Image> image, VkImageLayout newLayout,
     lent_ptr<CommandBuffer> cmdBuffer,
     VkDependencyFlags dependencyFlags /* 0 */)
 {
@@ -54,7 +54,7 @@ void batchLayoutTransition(const std::vector<ImageLayoutTransition>& imageLayout
         for (const ImageLayoutTransition& it: imageLayouts)
         {
             VkImageSubresourceRange subresourceRange = it.image->getSubresourceRange(it.baseMipLevel, it.baseArrayLayer);
-            imageMemoryBarriers.emplace_back(it.image.get(), it.newLayout, subresourceRange);
+            imageMemoryBarriers.emplace_back(it.image, it.newLayout, subresourceRange);
         }
         // Use single barrier command for all images
         cmdBuffer->pipelineBarrier(

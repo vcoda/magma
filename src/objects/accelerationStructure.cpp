@@ -159,7 +159,7 @@ VkDeviceAddress AccelerationStructure::getDeviceAddress() const noexcept
     return vkGetAccelerationStructureDeviceAddressKHR(getNativeDevice(), &deviceAddressInfo);
 }
 
-bool AccelerationStructure::copy(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
+bool AccelerationStructure::copy(lent_ptr<AccelerationStructure> dstAccelerationStructure,
     lent_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureInfoKHR copyInfo;
@@ -174,7 +174,7 @@ bool AccelerationStructure::copy(std::shared_ptr<AccelerationStructure> dstAccel
     return MAGMA_SUCCEEDED(result);
 }
 
-bool AccelerationStructure::compact(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
+bool AccelerationStructure::compact(lent_ptr<AccelerationStructure> dstAccelerationStructure,
     lent_ptr<DeferredOperation> deferredOperation /* nullptr */) const noexcept
 {
     VkCopyAccelerationStructureInfoKHR copyInfo;

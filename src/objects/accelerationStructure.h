@@ -64,9 +64,9 @@ namespace magma
             VkDeviceSize offset = 0) override;
     #endif // VK_KHR_device_group
         VkDeviceAddress getDeviceAddress() const noexcept override;
-        bool copy(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
+        bool copy(lent_ptr<AccelerationStructure> dstAccelerationStructure,
             lent_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
-        bool compact(std::shared_ptr<AccelerationStructure> dstAccelerationStructure,
+        bool compact(lent_ptr<AccelerationStructure> dstAccelerationStructure,
             lent_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
         bool copyTo(void *dstBuffer,
             lent_ptr<DeferredOperation> deferredOperation = nullptr) const noexcept;
