@@ -44,7 +44,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         ~Framebuffer();
         const std::shared_ptr<const RenderPass>& getRenderPass() const noexcept { return renderPass; }
-        std::vector<ImageView *> getAttachments() const;
+        const std::vector<std::shared_ptr<ImageView>>& getAttachments() const { return attachments; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getArrayLayerCount() const noexcept { return layerCount; }
 
@@ -54,7 +54,7 @@ namespace magma
             uint32_t layerCount,
             std::shared_ptr<IAllocator> allocator);
 
-        std::shared_ptr<const RenderPass> renderPass;
+        std::shared_ptr<RenderPass> renderPass;
         std::vector<std::shared_ptr<ImageView>> attachments;
         const VkExtent2D extent;
         const uint32_t layerCount;

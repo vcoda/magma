@@ -90,12 +90,4 @@ Framebuffer::~Framebuffer()
 {
     vkDestroyFramebuffer(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
-
-std::vector<ImageView *> Framebuffer::getAttachments() const
-{
-    std::vector<ImageView *> views;
-    for (auto const& attachment: attachments)
-        views.push_back(attachment.get());
-    return views;
-}
 } // namespace magma

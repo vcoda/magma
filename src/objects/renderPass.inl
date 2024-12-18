@@ -14,4 +14,28 @@ inline RenderPass::RenderPass(std::shared_ptr<Device> device, std::shared_ptr<IA
     attachments(attachments),
     hash(0ull)
 {}
+
+inline void RenderPass::begin(const std::vector<ImageView *>& imageViews) const noexcept
+{
+    for (size_t i = 0, n = std::min(attachments.size(), imageViews.size()); i < n; ++i)
+        setInitialLayout(imageViews[i], attachments[i]);
+}
+
+inline void RenderPass::end(const std::vector<ImageView *>& imageViews) const noexcept
+{
+    for (size_t i = 0, n = std::min(attachments.size(), imageViews.size()); i < n; ++i)
+        setFinalLayout(imageViews[i], attachments[i]);
+}
+
+inline void RenderPass::begin(const std::vector<std::shared_ptr<ImageView>>& imageViews) const noexcept
+{
+    for (size_t i = 0, n = std::min(attachments.size(), imageViews.size()); i < n; ++i)
+        setInitialLayout(imageViews[i].get(), attachments[i]);
+}
+
+inline void RenderPass::end(const std::vector<std::shared_ptr<ImageView>>& imageViews) const noexcept
+{
+    for (size_t i = 0, n = std::min(attachments.size(), imageViews.size()); i < n; ++i)
+        setFinalLayout(imageViews[i].get(), attachments[i]);
+}
 } // namespace magma

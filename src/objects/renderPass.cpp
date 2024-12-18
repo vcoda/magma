@@ -245,46 +245,35 @@ SubpassDependency RenderPass::subpassEndDependency(bool colorAttachment, bool de
     return subpassDependency;
 }
 
-void RenderPass::begin(const std::vector<ImageView *>& attachments) const noexcept
+void RenderPass::setInitialLayout(ImageView *imageView, const AttachmentDescription& attachment) const noexcept
 {
-    core::forConstEach(attachments, this->attachments,
-        [](auto& attachment, auto& attachmentDesc)
-        {   // initialLayout is the layout the attachment image subresource
-            // will be in when a render pass instance begins
-            auto image = (*attachment)->getImage();
-            image->setLayout(attachmentDesc->initialLayout);
-        });
+    imageView->getImage()->setLayout(attachment.initialLayout);
 }
 
-void RenderPass::end(const std::vector<ImageView *>& attachments) const noexcept
+void RenderPass::setFinalLayout(ImageView *imageView, const AttachmentDescription& attachment) const noexcept
 {
-    core::forConstEach(attachments, this->attachments,
-        [](auto& attachment, auto& attachmentDesc)
-        {   // finalLayout is the layout the attachment image subresource
-            // will be transitioned to when a render pass instance ends.
-            auto image = (*attachment)->getImage();
-            switch (attachmentDesc->finalLayout)
-            {
-            case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
-                MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
-                break;
-            case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
-                MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-                break;
-        #ifdef VK_KHR_maintenance2
-            case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR:
-            case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR:
-                MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-        #endif // VK_KHR_maintenance2
-            case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
-            case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-                MAGMA_ASSERT(image->getUsage() & (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT));
-                break;
-            default:
-                break;
-            }
-            image->setLayout(attachmentDesc->finalLayout);
-        });
+    Image *image = imageView->getImage();
+    switch (attachment.finalLayout)
+    {
+    case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+        break;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+        MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+        break;
+#ifdef VK_KHR_maintenance2
+    case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR:
+    case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR:
+        MAGMA_ASSERT(image->getUsage() & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+#endif // VK_KHR_maintenance2
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
+    case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+        MAGMA_ASSERT(image->getUsage() & (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT));
+        break;
+    default:
+        break;
+    }
+    image->setLayout(attachment.finalLayout);
 }
 
 std::ostream& operator<<(std::ostream& out, const RenderPass& renderPass)

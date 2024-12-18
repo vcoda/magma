@@ -77,8 +77,14 @@ namespace magma
         hash_t hash;
 
     private:
-        void begin(const std::vector<ImageView *>& attachments) const noexcept;
-        void end(const std::vector<ImageView *>& attachments) const noexcept;
+        void setInitialLayout(ImageView *imageView,
+            const AttachmentDescription& attachment) const noexcept;
+        void setFinalLayout(ImageView *imageView,
+            const AttachmentDescription& attachment) const noexcept;
+        void begin(const std::vector<ImageView *>& imageViews) const noexcept;
+        void end(const std::vector<ImageView *>& imageViews) const noexcept;
+        void begin(const std::vector<std::shared_ptr<ImageView>>& imageViews) const noexcept;
+        void end(const std::vector<std::shared_ptr<ImageView>>& imageViews) const noexcept;
         friend class CommandBuffer;
     };
 } // namespace magma
