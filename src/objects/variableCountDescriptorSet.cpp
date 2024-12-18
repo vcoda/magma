@@ -32,11 +32,11 @@ VariableCountDescriptorSet::VariableCountDescriptorSet(std::shared_ptr<Descripto
     DescriptorSetTable& setTable, VkShaderStageFlags stageFlags,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
-    std::shared_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
+    const std::unique_ptr<IShaderReflectionFactory>& shaderReflectionFactory /* nullptr */,
     const std::string& shaderFileName /* default */,
     uint32_t setIndex /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    DescriptorSet(std::move(descriptorPool_), setTable, std::move(allocator))
+    DescriptorSet(std::move(descriptorPool_), setTable, allocator)
 {   // Check that all descriptors have unique layout bindings
     const DescriptorSetTableBindings& reflection = setTable.getReflection();
     std::vector<uint32_t> locations;
