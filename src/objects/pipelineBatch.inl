@@ -41,6 +41,7 @@ inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::linkPipelineLib
 template<class PipelineType, class PipelineCreateInfo>
 inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::postCreate()
 {   // Free storage that had to be preserved until vkCreate*Pipelines() call
+    basePipelines.clear();
     pipelines.clear();
 #ifdef VK_AMD_pipeline_compiler_control
     pipelineCompilerControlInfos.clear();
@@ -58,7 +59,6 @@ inline void BasePipelineBatch<PipelineType, PipelineCreateInfo>::postBuild()
 {   // Free storage that had to be preserved until objects are constructed
     stages.clear();
     layouts.clear();
-    basePipelines.clear();
 #ifdef VK_EXT_pipeline_creation_feedback
     creationFeedbacks.clear();
 #endif
