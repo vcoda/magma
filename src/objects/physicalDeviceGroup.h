@@ -44,7 +44,7 @@ namespace magma
         const std::shared_ptr<PhysicalDevice>& getPhysicalDevice(uint32_t deviceId) const noexcept { return physicalDevices[deviceId]; }
 
     private:
-        MAGMA_MAKE_SHARED(PhysicalDeviceGroup)
+        MAGMA_MAKE_UNIQUE(PhysicalDeviceGroup)
         PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices,
             uint32_t groupId) noexcept;
 

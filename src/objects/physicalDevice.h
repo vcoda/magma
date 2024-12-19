@@ -103,7 +103,7 @@ namespace magma
     #ifdef VK_KHR_display
         std::vector<VkDisplayPropertiesKHR> getDisplayProperties() const;
         std::vector<VkDisplayPlanePropertiesKHR> getDisplayPlaneProperties() const;
-        std::vector<std::shared_ptr<Display>> getSupportedDisplays(uint32_t planeIndex) const;
+        std::vector<std::unique_ptr<Display>> getSupportedDisplays(uint32_t planeIndex) const;
     #endif // VK_KHR_display
     #ifdef VK_KHR_external_memory_capabilities
         VkExternalMemoryPropertiesKHR getExternalBufferProperties(VkExternalMemoryHandleTypeFlagBitsKHR handleType,

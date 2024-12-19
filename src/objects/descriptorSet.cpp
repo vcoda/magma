@@ -65,7 +65,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
             bindings.back().stageFlags = stageFlags;
     }
     // Create descriptor set layout
-    setLayout = std::make_shared<DescriptorSetLayout>(device, bindings, hostAllocator, flags);
+    setLayout = std::make_unique<DescriptorSetLayout>(device, bindings, hostAllocator, flags);
     // Allocate descriptor set
     VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
     descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;

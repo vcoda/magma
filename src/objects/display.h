@@ -38,7 +38,7 @@ namespace magma
         std::vector<VkDisplayModePropertiesKHR> getModeProperties() const;
 
     private:
-        MAGMA_MAKE_SHARED(Display)
+        MAGMA_MAKE_UNIQUE(Display)
         Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
             VkDisplayKHR handle,
             uint32_t planeIndex) noexcept;

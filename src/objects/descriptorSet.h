@@ -50,7 +50,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         ~DescriptorSet();
         const std::shared_ptr<DescriptorPool>& getPool() const noexcept { return descriptorPool; }
-        const std::shared_ptr<DescriptorSetLayout>& getLayout() const noexcept { return setLayout; }
+        const std::unique_ptr<DescriptorSetLayout>& getLayout() const noexcept { return setLayout; }
         std::size_t getDescriptorCount() const;
         bool dirty() const;
         void update();
@@ -64,7 +64,7 @@ namespace magma
             uint32_t setIndex) const;
 
         DescriptorSetTable& setTable; // TODO: Can we avoid that dangerous reference?
-        std::shared_ptr<DescriptorSetLayout> setLayout;
         std::shared_ptr<DescriptorPool> descriptorPool;
+        std::unique_ptr<DescriptorSetLayout> setLayout;
     };
 }

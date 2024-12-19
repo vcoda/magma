@@ -55,7 +55,7 @@ namespace magma
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const;
     #ifdef VK_KHR_device_group
         std::vector<VkPhysicalDeviceGroupPropertiesKHR> enumeratePhysicalDeviceGroups() const;
-        std::shared_ptr<PhysicalDeviceGroup> getPhysicalDeviceGroup(uint32_t groupId) const;
+        std::unique_ptr<PhysicalDeviceGroup> getPhysicalDeviceGroup(uint32_t groupId) const;
     #endif // VK_KHR_device_group
         static uint32_t enumerateVersion() noexcept;
         static std::vector<VkLayerProperties> enumerateLayers();

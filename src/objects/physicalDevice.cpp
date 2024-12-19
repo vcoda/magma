@@ -460,12 +460,12 @@ std::vector<VkDisplayPlanePropertiesKHR> PhysicalDevice::getDisplayPlaneProperti
     return displayPlaneProperties;
 }
 
-std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint32_t planeIndex) const
+std::vector<std::unique_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint32_t planeIndex) const
 {
     uint32_t displayCount = 0;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkGetDisplayPlaneSupportedDisplaysKHR, VK_KHR_DISPLAY_EXTENSION_NAME);
     VkResult result = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, nullptr);
-    std::vector<std::shared_ptr<Display>> supportedDisplays;
+    std::vector<std::unique_ptr<Display>> supportedDisplays;
     if (displayCount)
     {
         MAGMA_VLA(VkDisplayKHR, displays, displayCount);
@@ -473,7 +473,7 @@ std::vector<std::shared_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
         if (VK_SUCCESS == result)
         {
             for (auto handle: displays)
-                supportedDisplays.emplace_back(Display::makeShared(shared_from_this(), handle, planeIndex));
+                supportedDisplays.emplace_back(Display::makeUnique(shared_from_this(), handle, planeIndex));
         }
     }
     MAGMA_HANDLE_RESULT(result, "failed to get supported displays of physical device");

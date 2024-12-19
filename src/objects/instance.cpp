@@ -176,7 +176,7 @@ std::vector<VkPhysicalDeviceGroupPropertiesKHR> Instance::enumeratePhysicalDevic
     return physicalDeviceGroups;
 }
 
-std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t groupId) const
+std::unique_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t groupId) const
 {
     const std::vector<VkPhysicalDeviceGroupPropertiesKHR>& deviceGroups = enumeratePhysicalDeviceGroups();
     MAGMA_ASSERT(groupId < deviceGroups.size());
@@ -190,7 +190,7 @@ std::shared_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
         VkPhysicalDevice physicalDevice = deviceGroupProperties.physicalDevices[deviceId];
         physicalDevices.emplace_back(PhysicalDevice::makeShared(instance, physicalDevice, hostAllocator));
     }
-    return PhysicalDeviceGroup::makeShared(physicalDevices, groupId);
+    return PhysicalDeviceGroup::makeUnique(physicalDevices, groupId);
 }
 #endif // VK_KHR_device_group
 

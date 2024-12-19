@@ -84,7 +84,7 @@ VariableCountDescriptorSet::VariableCountDescriptorSet(std::shared_ptr<Descripto
     descriptorSetLayoutBindingFlagsInfo.pNext = nullptr;
     descriptorSetLayoutBindingFlagsInfo.bindingCount = core::countof(bindingFlags);
     descriptorSetLayoutBindingFlagsInfo.pBindingFlags = bindingFlags.data();
-    setLayout = std::make_shared<DescriptorSetLayout>(device, bindings, hostAllocator, flags,
+    setLayout = std::make_unique<DescriptorSetLayout>(device, bindings, hostAllocator, flags,
         StructureChain(descriptorSetLayoutBindingFlagsInfo));
     // Allocate descriptor set
     VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
