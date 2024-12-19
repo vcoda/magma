@@ -7,7 +7,7 @@ inline Dispatchable<Type>::Dispatchable(VkObjectType objectType, Type handle) no
 
 template<class Type>
 inline Dispatchable<Type>::Dispatchable(VkObjectType objectType, std::shared_ptr<IAllocator> allocator, Type handle) noexcept:
-    Object<Type>(objectType, handle, allocator)
+    Object<Type>(objectType, handle, std::move(allocator))
 {}
 
 template<class Type>
