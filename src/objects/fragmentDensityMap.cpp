@@ -42,7 +42,7 @@ FragmentDensityMap::FragmentDensityMap(lent_ptr<CommandBuffer> cmdBuffer,
         0, // flags
         VK_IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
         VK_IMAGE_TILING_OPTIMAL,
-        optional, sharing, std::move(allocator))
+        optional, sharing, allocator)
 {
     MAGMA_ASSERT(data);
     auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, data, std::move(allocator),
