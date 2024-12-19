@@ -147,5 +147,5 @@ namespace magma
         InstanceLayers();
     };
 
-    MAGMA_TYPEDEF_UNIQUE_PTR(InstanceLayers);
+    MAGMA_TYPEDEF_MANAGED_PTR(InstanceLayers)
 } // namespace magma

@@ -124,8 +124,6 @@ static std::kind##_ptr<Type> method(Args&& ...args)\
 #define MAGMA_MAKE_SHARED(Type) MAGMA_MAKE(Type, shared, makeShared)
 #define MAGMA_MAKE_UNIQUE(Type) MAGMA_MAKE(Type, unique, makeUnique)
 
-#define MAGMA_TYPEDEF_SHARED_PTR(Type) typedef std::shared_ptr<class Type> Type##Ptr
-#define MAGMA_TYPEDEF_TEMPLATE_SHARED_PTR(Type) template<class T> using Type##Ptr = std::shared_ptr<Type<T>>
-#define MAGMA_TYPEDEF_SHARED_PTR_INTERFACE(Type) typedef std::shared_ptr<class I##Type> Type##Ptr
-
-#define MAGMA_TYPEDEF_UNIQUE_PTR(Type) typedef std::unique_ptr<class Type> Type##Ptr
+#define MAGMA_TYPEDEF_MANAGED_PTR(Type)\
+typedef std::unique_ptr<class Type> Type##UPtr;\
+typedef std::shared_ptr<class Type> Type##SPtr;

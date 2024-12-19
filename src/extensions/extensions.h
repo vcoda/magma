@@ -39,7 +39,7 @@ namespace magma
         std::unordered_set<hash_t> hashes;
     };
 
-    MAGMA_TYPEDEF_UNIQUE_PTR(Extensions);
+    MAGMA_TYPEDEF_MANAGED_PTR(Extensions)
 } // namespace magma
 
 #define MAGMA_CHECK_EXTENSION(name)\

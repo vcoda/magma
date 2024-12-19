@@ -89,5 +89,5 @@ namespace magma
         InstanceExtensions(const char *layerName = nullptr);
     };
 
-    MAGMA_TYPEDEF_UNIQUE_PTR(InstanceExtensions);
+    MAGMA_TYPEDEF_MANAGED_PTR(InstanceExtensions)
 } // namespace magma

@@ -20,39 +20,39 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_android_surface
-    MAGMA_TYPEDEF_SHARED_PTR(AndroidSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(AndroidSurface);
 #endif
 #ifdef VK_EXT_directfb_surface
-    MAGMA_TYPEDEF_SHARED_PTR(DirectFBSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(DirectFBSurface);
 #endif
 #ifdef VK_FUCHSIA_imagepipe_surface
-    MAGMA_TYPEDEF_SHARED_PTR(FuchsiaImagePipeSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(FuchsiaImagePipeSurface);
 #endif
 #ifdef VK_MVK_ios_surface
-    MAGMA_TYPEDEF_SHARED_PTR(iOSSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(iOSSurface);
 #endif
 #ifdef VK_MVK_macos_surface
-    MAGMA_TYPEDEF_SHARED_PTR(MacOSSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(MacOSSurface);
 #endif
 #ifdef VK_EXT_metal_surface
-    MAGMA_TYPEDEF_SHARED_PTR(MetalSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(MetalSurface);
 #endif
 #ifdef VK_QNX_screen_surface
-    MAGMA_TYPEDEF_SHARED_PTR(QnxSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(QnxSurface);
 #endif
  #ifdef VK_NN_vi_surface
-    MAGMA_TYPEDEF_SHARED_PTR(ViSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(ViSurface);
 #endif
 #ifdef VK_KHR_wayland_surface
-    MAGMA_TYPEDEF_SHARED_PTR(WaylandSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(WaylandSurface);
 #endif
 #ifdef VK_KHR_win32_surface
-    MAGMA_TYPEDEF_SHARED_PTR(Win32Surface);
+    MAGMA_TYPEDEF_MANAGED_PTR(Win32Surface);
 #endif
 #ifdef VK_KHR_xcb_surface
-    MAGMA_TYPEDEF_SHARED_PTR(XcbSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(XcbSurface);
 #endif
 #ifdef VK_KHR_xlib_surface
-    MAGMA_TYPEDEF_SHARED_PTR(XlibSurface);
+    MAGMA_TYPEDEF_MANAGED_PTR(XlibSurface);
 #endif
 } // namespace magma

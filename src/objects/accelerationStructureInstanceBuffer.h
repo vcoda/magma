@@ -48,6 +48,9 @@ namespace magma
         Instance *instances;
         std::unique_ptr<SrcTransferBuffer> srcBuffer;
     };
+
+    template<class T> using AccelerationStructureInstanceBufferUPtr = std::unique_ptr<AccelerationStructureInstanceBuffer<T>>;
+    template<class T> using AccelerationStructureInstanceBufferSPtr = std::shared_ptr<AccelerationStructureInstanceBuffer<T>>;
 } // namespace magma
 
 #include "accelerationStructureInstanceBuffer.inl"
