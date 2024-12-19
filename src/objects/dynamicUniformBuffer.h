@@ -43,7 +43,7 @@ namespace magma
             bool mappedPersistently);
 
     private:
-        static uint32_t calculateAlignedArraySize(std::shared_ptr<Device> device,
+        static uint32_t calculateAlignedArraySize(const Device *device,
             std::size_t typeSize,
             uint32_t arraySize) noexcept;
 

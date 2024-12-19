@@ -27,8 +27,8 @@ BaseDynamicUniformBuffer::BaseDynamicUniformBuffer(std::shared_ptr<Device> devic
     std::size_t typeSize, uint32_t arraySize, VkMemoryPropertyFlags memoryFlags,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator,
     bool mappedPersistently):
-    BaseUniformBuffer(device, typeSize,
-        calculateAlignedArraySize(device, typeSize, arraySize),
+    BaseUniformBuffer(std::move(device), typeSize,
+        calculateAlignedArraySize(device.get(), typeSize, arraySize),
         VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, memoryFlags,
         optional, sharing, std::move(allocator),
         mappedPersistently)
@@ -51,7 +51,7 @@ VkDescriptorBufferInfo BaseDynamicUniformBuffer::getDescriptor() const noexcept
     return descriptorBufferInfo;
 }
 
-uint32_t BaseDynamicUniformBuffer::calculateAlignedArraySize(std::shared_ptr<Device> device,
+uint32_t BaseDynamicUniformBuffer::calculateAlignedArraySize(const Device *device,
     std::size_t typeSize, uint32_t arraySize) noexcept
 {
     const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
