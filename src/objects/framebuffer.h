@@ -54,7 +54,7 @@ namespace magma
             uint32_t layerCount,
             std::shared_ptr<IAllocator> allocator);
 
-        std::shared_ptr<RenderPass> renderPass;
+        std::shared_ptr<const RenderPass> renderPass;
         std::vector<std::shared_ptr<ImageView>> attachments;
         const VkExtent2D extent;
         const uint32_t layerCount;
