@@ -79,10 +79,10 @@ std::vector<std::unique_ptr<PipelineExecutable>> Pipeline::getExecutables() cons
         result = vkGetPipelineExecutablePropertiesKHR(getNativeDevice(), &pipelineInfo, &executableCount, executableProperties.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to get properties of pipeline executables");
-    std::vector<std::shared_ptr<PipelineExecutable>> executables;
+    std::vector<std::unique_ptr<PipelineExecutable>> executables;
     uint32_t index = 0;
     for (auto const& properties: executableProperties)
-        executables.emplace_back(PipelineExecutable::makeShared(shared_from_this(), properties, index++));
+        executables.emplace_back(PipelineExecutable::makeUnique(shared_from_this(), properties, index++));
     return executables;
 }
 #endif // VK_KHR_pipeline_executable_properties

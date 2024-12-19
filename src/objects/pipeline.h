@@ -43,7 +43,7 @@ namespace magma
         const variant_ptr<PipelineLayout>& getLayout() const noexcept { return layout; }
         hash_t getHash() const noexcept { return hash; }
     #ifdef VK_KHR_pipeline_executable_properties
-        std::vector<std::shared_ptr<PipelineExecutable>> getExecutables() const;
+        std::vector<std::unique_ptr<PipelineExecutable>> getExecutables() const;
     #endif // VK_KHR_pipeline_executable_properties
     #ifdef VK_AMD_shader_info
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;
