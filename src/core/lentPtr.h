@@ -43,6 +43,12 @@ namespace magma
             ptr(unique.get())
         {}
 
+        template<class T2>
+        lent_ptr(const std::weak_ptr<T2>& weak) noexcept:
+            ptr(nullptr),
+            ref(weak)
+        {}
+
         lent_ptr(const lent_ptr&) = delete;
         lent_ptr& operator=(const lent_ptr&) = delete;
 
