@@ -28,7 +28,8 @@ namespace magma
     public:
         explicit PrimaryCommandBuffer(const std::unique_ptr<CommandPool>& cmdPool);
         void executeCommands(lent_ptr<CommandBuffer> cmdBuffer) noexcept;
-        void executeCommands(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers) noexcept;
+        void executeCommands(const std::initializer_list<lent_ptr<CommandBuffer>>& cmdBuffers) noexcept;
+        void executeCommands(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers) noexcept;
 
     private:
         MAGMA_MAKE_SHARED(PrimaryCommandBuffer)

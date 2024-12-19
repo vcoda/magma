@@ -36,7 +36,18 @@ void PrimaryCommandBuffer::executeCommands(lent_ptr<CommandBuffer> cmdBuffer) no
     leanCmd.executeCommands(1, &leanCmdBuffer);
 }
 
-void PrimaryCommandBuffer::executeCommands(const std::vector<std::unique_ptr<CommandBuffer>>& cmdBuffers) noexcept
+void PrimaryCommandBuffer::executeCommands(const std::initializer_list<lent_ptr<CommandBuffer>>& cmdBuffers) noexcept
+{
+    MAGMA_VLA(const LeanCommandBuffer*, leanCmdBuffers, cmdBuffers.size());
+    for (auto const& cmdBuffer: cmdBuffers)
+    {
+        MAGMA_ASSERT(!cmdBuffer->primary());
+        leanCmdBuffers.put(&cmdBuffer->getLean());
+    }
+    leanCmd.executeCommands(leanCmdBuffers.count(), leanCmdBuffers);
+}
+
+void PrimaryCommandBuffer::executeCommands(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
     MAGMA_VLA(const LeanCommandBuffer*, leanCmdBuffers, cmdBuffers.size());
     for (auto const& cmdBuffer: cmdBuffers)
