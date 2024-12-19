@@ -24,8 +24,7 @@ namespace magma
 {
 #ifdef VK_KHR_imageless_framebuffer
 FramebufferAttachmentImage::FramebufferAttachmentImage(VkImageUsageFlags usage,
-    uint32_t width, uint32_t height, uint32_t layerCount,
-    const std::vector<VkFormat>& viewFormats,
+    uint32_t width, uint32_t height, uint32_t layerCount, const std::vector<VkFormat>& viewFormats,
     VkImageCreateFlags flags /* 0 */) noexcept:
     VkFramebufferAttachmentImageInfoKHR{
         VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
@@ -40,7 +39,7 @@ FramebufferAttachmentImage::FramebufferAttachmentImage(VkImageUsageFlags usage,
     }
 {}
 
-FramebufferAttachmentImage::FramebufferAttachmentImage(std::shared_ptr<const Image> image) noexcept:
+FramebufferAttachmentImage::FramebufferAttachmentImage(lent_ptr<const Image> image) noexcept:
     VkFramebufferAttachmentImageInfoKHR{
         VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR,
         nullptr, // pNext

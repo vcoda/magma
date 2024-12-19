@@ -65,7 +65,7 @@ void GraphicsPipelineLibrary::compileVertexInputInterface(const VertexInputState
 void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<PipelineShaderStage>& preRasterizationShaderStages,
     const TesselationState& tesselationState, const ViewportState& viewportState,
     const RasterizationState& rasterizationState, const std::vector<VkDynamicState>& dynamicStates,
-    const std::unique_ptr<PipelineLayout>& layout, VkPipelineCreateFlags flags /* 0 */)
+    lent_ptr<const PipelineLayout> layout, VkPipelineCreateFlags flags /* 0 */)
 {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#pipelines-graphics-subsets-pre-rasterization
     MAGMA_VLA(VkPipelineShaderStageCreateInfo, dereferencedStages, preRasterizationShaderStages.size());
     for (auto const& stage: preRasterizationShaderStages)
@@ -121,7 +121,7 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
 
 void GraphicsPipelineLibrary::compileFragmentShader(const PipelineShaderStage& shaderStage,
     const MultisampleState& multisampleState, const DepthStencilState& depthStencilState,
-    const std::unique_ptr<PipelineLayout>& layout, std::shared_ptr<RenderPass> renderPass, uint32_t subpass,
+    lent_ptr<const PipelineLayout> layout, lent_ptr<const RenderPass> renderPass, uint32_t subpass,
     VkPipelineCreateFlags flags /* 0 */)
 {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#pipelines-graphics-subsets-fragment-shader
     if (shaderStage.stage != VK_SHADER_STAGE_FRAGMENT_BIT)
@@ -151,7 +151,7 @@ void GraphicsPipelineLibrary::compileFragmentShader(const PipelineShaderStage& s
 }
 
 void GraphicsPipelineLibrary::compileFragmentOutputInterface(const MultisampleState& multisampleState,
-    const ColorBlendState& colorBlendState, std::shared_ptr<RenderPass> renderPass, uint32_t subpass,
+    const ColorBlendState& colorBlendState, lent_ptr<const RenderPass> renderPass, uint32_t subpass,
     VkPipelineCreateFlags flags /* 0 */)
 {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#pipelines-graphics-subsets-fragment-output
     VkGraphicsPipelineCreateInfo graphicsPipelineInfo = {};

@@ -32,8 +32,8 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, std::move(device), std::move(allocator)),
-    pushConstantRanges(pushConstantRanges_),
-    flags(flags)
+    flags(flags),
+    pushConstantRanges(pushConstantRanges_)
 {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -54,14 +54,14 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
         hash = core::hashCombine(hash, pushConstantRange.hash());
 }
 
-PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLayout,
+PipelineLayout::PipelineLayout(lent_ptr<const DescriptorSetLayout> setLayout,
     const std::initializer_list<PushConstantRange>& pushConstantRanges_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
     NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, setLayout->getDevice(), std::move(allocator)),
-    setLayouts({setLayout}),
+    flags(flags),
     pushConstantRanges(pushConstantRanges_),
-    flags(flags)
+    layoutHashes{setLayout->getHash()}
 {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -78,21 +78,20 @@ PipelineLayout::PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLay
         pipelineLayoutInfo.flags,
         pipelineLayoutInfo.setLayoutCount,
         pipelineLayoutInfo.pushConstantRangeCount);
-    hash = core::hashCombine(hash, setLayout->getHash());
-    for (auto const& pushConstantRange: pushConstantRanges)
-        hash = core::hashCombine(hash, pushConstantRange.hash());
 }
 
-PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const DescriptorSetLayout>>& setLayouts_,
+PipelineLayout::PipelineLayout(const std::initializer_list<lent_ptr<const DescriptorSetLayout>>& setLayouts,
     const std::initializer_list<PushConstantRange>& pushConstantRanges_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkPipelineLayoutCreateFlags flags /* 0 */):
-    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, (*setLayouts_.begin())->getDevice(), std::move(allocator)),
-    pushConstantRanges(pushConstantRanges_),
-    flags(flags)
+    NonDispatchable(VK_OBJECT_TYPE_PIPELINE_LAYOUT, setLayouts.begin()->get()->getDevice(), std::move(allocator)),
+    flags(flags),
+    pushConstantRanges(pushConstantRanges_)
 {
-    MAGMA_VLA(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts_.size());
-    for (auto const& layout: setLayouts_)
+    for (auto const& layout: setLayouts)
+        layoutHashes.insert(layout->getHash());
+    MAGMA_VLA(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts.size());
+    for (auto const& layout: setLayouts)
         dereferencedSetLayouts.put(*layout);
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -109,12 +108,6 @@ PipelineLayout::PipelineLayout(const std::initializer_list<std::shared_ptr<const
         pipelineLayoutInfo.flags,
         pipelineLayoutInfo.setLayoutCount,
         pipelineLayoutInfo.pushConstantRangeCount);
-    for (auto const& layout: setLayouts_)
-        hash = core::hashCombine(hash, layout->getHash());
-    for (auto const& pushConstantRange: pushConstantRanges)
-        hash = core::hashCombine(hash, pushConstantRange.hash());
-    for (auto const& layout: setLayouts_)
-        setLayouts.push_back(layout);
 }
 
 PipelineLayout::~PipelineLayout()
@@ -122,56 +115,29 @@ PipelineLayout::~PipelineLayout()
     vkDestroyPipelineLayout(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
 }
 
-bool PipelineLayout::hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout) const noexcept
+bool PipelineLayout::hasLayout(lent_ptr<const DescriptorSetLayout> setLayout) const noexcept
 {
-    return std::any_of(setLayouts.begin(), setLayouts.end(),
-        [&setLayout](auto const& weak)
+    return std::any_of(layoutHashes.begin(), layoutHashes.end(),
+        [&setLayout](hash_t layoutHash)
         {
-            if (auto layout = weak.lock())
-                return layout->getHash() == setLayout->getHash();
-            return false;
+            return setLayout->getHash() == layoutHash;
         });
 }
 
 hash_t PipelineLayout::getHash() const noexcept
 {
     hash_t hash = this->hash;
-    for (auto const& layout: setLayouts)
-    {
-        auto setLayout = layout.lock();
-        if (setLayout)
-            hash = core::hashCombine(hash, setLayout->getHash());
-    }
+    for (hash_t layoutHash: layoutHashes)
+        hash = core::hashCombine(hash, layoutHash);
+    for (auto const& pushConstantRange: pushConstantRanges)
+        hash = core::hashCombine(hash, pushConstantRange.hash());
     return hash;
 }
 
 std::ostream& operator<<(std::ostream& out, const PipelineLayout& layout)
 {
     out << "VkPipelineLayoutCreateInfo [" << std::endl
-        << "\tsetLayoutCount: " << layout.setLayouts.size() << std::endl
-        << "\tpSetLayouts: ";
-    if (layout.setLayouts.empty())
-        out << "NULL" << std::endl;
-    else
-    {
-        out << std::endl;
-        for (auto const& it: layout.setLayouts)
-        {
-            auto setLayout = it.lock();
-            if (setLayout)
-            {
-                for (auto const& binding: setLayout->getBindings())
-                {
-                    out << "\t[" << std::endl
-                        << "\t\tbinding: " << binding.binding << std::endl
-                        << "\t\tdescriptorType: " << binding.descriptorType << std::endl
-                        << "\t\tdescriptorCount: " << binding.descriptorCount << std::endl
-                        << "\t\tstageFlags: " << helpers::stringifyShaderStageFlags(binding.stageFlags) << std::endl
-                        << "\t]" << std::endl;
-                }
-            }
-        }
-    }
+        << "\tsetLayoutCount: " << layout.layoutHashes.size() << std::endl;
     out << "\tpushConstantRangeCount: " << layout.pushConstantRanges.size() << std::endl
         << "\tpPushConstantRanges: ";
     if (layout.pushConstantRanges.empty())

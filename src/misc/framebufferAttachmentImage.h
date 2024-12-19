@@ -32,7 +32,7 @@ namespace magma
             uint32_t layerCount,
             const std::vector<VkFormat>& viewFormats,
             VkImageCreateFlags flags = 0) noexcept;
-        explicit FramebufferAttachmentImage(std::shared_ptr<const Image> image) noexcept;
+        explicit FramebufferAttachmentImage(lent_ptr<const Image> image) noexcept;
         FramebufferAttachmentImage(const FramebufferAttachmentImage&) noexcept;
         FramebufferAttachmentImage(FramebufferAttachmentImage&&) noexcept;
         ~FramebufferAttachmentImage() { delete[] pViewFormats; }

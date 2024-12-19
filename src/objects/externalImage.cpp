@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_ANDROID_external_memory_android_hardware_buffer
-ExternalImage2D::ExternalImage2D(std::shared_ptr<Device> device, std::shared_ptr<AndroidHardwareBuffer> hardwareBuffer,
+ExternalImage2D::ExternalImage2D(std::shared_ptr<Device> device, lent_ptr<AndroidHardwareBuffer> hardwareBuffer,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* Sharing() */):
     Image2D(std::move(device), VK_NULL_HANDLE, hardwareBuffer->getFormat(), hardwareBuffer->getExtent())

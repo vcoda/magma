@@ -39,18 +39,18 @@ namespace magma
         explicit PipelineLayout(std::shared_ptr<Device> device,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineLayoutCreateFlags flags = 0);
-        explicit PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLayout,
+        explicit PipelineLayout(lent_ptr<const DescriptorSetLayout> setLayout,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineLayoutCreateFlags flags = 0);
         explicit PipelineLayout(std::shared_ptr<Device> device,
             const PushConstantRange& pushConstantRange,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineLayoutCreateFlags flags = 0);
-        explicit PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLayout,
+        explicit PipelineLayout(lent_ptr<const DescriptorSetLayout> setLayout,
             const PushConstantRange& pushConstantRange,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineLayoutCreateFlags flags = 0);
-        explicit PipelineLayout(const std::initializer_list<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
+        explicit PipelineLayout(const std::initializer_list<lent_ptr<const DescriptorSetLayout>>& setLayouts,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineLayoutCreateFlags flags = 0);
         // Implementation
@@ -58,24 +58,24 @@ namespace magma
             const std::initializer_list<PushConstantRange>& pushConstantRanges,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineLayoutCreateFlags flags = 0);
-        explicit PipelineLayout(std::shared_ptr<const DescriptorSetLayout> setLayout,
+        explicit PipelineLayout(lent_ptr<const DescriptorSetLayout> setLayout,
             const std::initializer_list<PushConstantRange>& pushConstantRanges,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineLayoutCreateFlags flags = 0);
-        explicit PipelineLayout(const std::initializer_list<std::shared_ptr<const DescriptorSetLayout>>& setLayouts,
+        explicit PipelineLayout(const std::initializer_list<lent_ptr<const DescriptorSetLayout>>& setLayouts,
             const std::initializer_list<PushConstantRange>& pushConstantRanges,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkPipelineLayoutCreateFlags flags = 0);
         ~PipelineLayout();
         VkPipelineLayoutCreateFlags getFlags() const noexcept { return flags; }
-        bool hasLayout(std::shared_ptr<const DescriptorSetLayout> setLayout) const noexcept;
+        bool hasLayout(lent_ptr<const DescriptorSetLayout> setLayout) const noexcept;
         hash_t getHash() const noexcept;
         friend std::ostream& operator<<(std::ostream&, const PipelineLayout&);
 
     private:
-        std::vector<std::weak_ptr<const DescriptorSetLayout>> setLayouts;
-        std::vector<PushConstantRange> pushConstantRanges;
         const VkPipelineLayoutCreateFlags flags;
+        std::vector<PushConstantRange> pushConstantRanges;
+        std::unordered_set<hash_t> layoutHashes;
         hash_t hash;
     };
 } // namespace magma

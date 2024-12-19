@@ -55,18 +55,18 @@ namespace magma
             const ViewportState& viewportState,
             const RasterizationState& rasterizationState,
             const std::vector<VkDynamicState>& dynamicStates,
-            const std::unique_ptr<PipelineLayout>& layout,
+            lent_ptr<const PipelineLayout> layout,
             VkPipelineCreateFlags flags = 0);
         void compileFragmentShader(const PipelineShaderStage& shaderStage,
             const MultisampleState& multisampleState,
             const DepthStencilState& depthStencilState,
-            const std::unique_ptr<PipelineLayout>& layout,
-            std::shared_ptr<RenderPass> renderPass,
+            lent_ptr<const PipelineLayout> layout,
+            lent_ptr<const RenderPass> renderPass,
             uint32_t subpass,
             VkPipelineCreateFlags flags = 0);
         void compileFragmentOutputInterface(const MultisampleState& multisampleState,
             const ColorBlendState& colorBlendState,
-            std::shared_ptr<RenderPass> renderPass,
+            lent_ptr<const RenderPass> renderPass,
             uint32_t subpass,
             VkPipelineCreateFlags flags = 0);
     };

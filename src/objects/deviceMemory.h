@@ -41,7 +41,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_ANDROID_external_memory_android_hardware_buffer
         explicit DeviceMemory(std::shared_ptr<Device> device,
-            std::shared_ptr<AndroidHardwareBuffer> hardwareBuffer,
+            lent_ptr<AndroidHardwareBuffer> hardwareBuffer,
             VkMemoryPropertyFlags flags,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());

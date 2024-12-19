@@ -47,7 +47,7 @@ namespace magma
             const StructureChain& extendedInfo = StructureChain());
         ~PipelineCache();
         std::vector<uint8_t> getData() const;
-        void mergeCache(std::shared_ptr<const PipelineCache> srcCache);
-        void mergeCaches(const std::vector<std::shared_ptr<const PipelineCache>>& srcCaches);
+        void mergeCache(lent_ptr<const PipelineCache> srcCache);
+        void mergeCaches(const std::vector<lent_ptr<const PipelineCache>>& srcCaches);
     };
 } // namespace magma

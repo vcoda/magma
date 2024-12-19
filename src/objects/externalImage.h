@@ -32,7 +32,7 @@ namespace magma
     public:
     #ifdef VK_ANDROID_external_memory_android_hardware_buffer
         explicit ExternalImage2D(std::shared_ptr<Device> device,
-            std::shared_ptr<AndroidHardwareBuffer> hardwareBuffer,
+            lent_ptr<AndroidHardwareBuffer> hardwareBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing());
     #endif // VK_ANDROID_external_memory_android_hardware_buffer
