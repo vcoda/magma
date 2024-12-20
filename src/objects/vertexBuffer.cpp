@@ -26,11 +26,7 @@ namespace magma
 BaseVertexBuffer::BaseVertexBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Buffer(std::move(device), size,
-        0, // flags
-        usage,
-        memoryFlags,
-        optional, sharing, std::move(allocator)),
+    Buffer(std::move(device), size, 0, usage, memoryFlags, optional, sharing, std::move(allocator)),
     vertexCount(0)
 {}
 
