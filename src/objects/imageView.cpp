@@ -110,7 +110,7 @@ VkDescriptorImageInfo ImageView::getDescriptor(const Sampler *sampler /* nullptr
 {
     MAGMA_ASSERT(getImage()->hasUniformLayout());
     VkDescriptorImageInfo imageDescriptorInfo;
-    imageDescriptorInfo.sampler = sampler ? sampler->getHandle() : VK_NULL_HANDLE;
+    imageDescriptorInfo.sampler = sampler ? *sampler : VK_NULL_HANDLE;
     imageDescriptorInfo.imageView = handle;
     imageDescriptorInfo.imageLayout = getImage()->getLayout(0);
     return imageDescriptorInfo;

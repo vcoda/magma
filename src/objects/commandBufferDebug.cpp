@@ -122,7 +122,7 @@ void CommandBuffer::writeBufferMarker(VkPipelineStageFlagBits pipelineStage, len
     if (extensions.AMD_buffer_marker)
     {
         MAGMA_DEVICE_EXTENSION(vkCmdWriteBufferMarkerAMD);
-        vkCmdWriteBufferMarkerAMD(leanCmd, pipelineStage, dstBuffer->getHandle(), dstOffset, marker);
+        vkCmdWriteBufferMarkerAMD(leanCmd, pipelineStage, *dstBuffer, dstOffset, marker);
     }
 }
 #endif // VK_AMD_buffer_marker

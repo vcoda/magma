@@ -72,7 +72,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     accelerationStructureInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
     accelerationStructureInfo.pNext = extendedInfo.headNode();
     accelerationStructureInfo.createFlags = flags;
-    accelerationStructureInfo.buffer = buffer->getHandle();
+    accelerationStructureInfo.buffer = *buffer;
     accelerationStructureInfo.offset = 0ull;
     accelerationStructureInfo.size = buildSizesInfo.accelerationStructureSize;
     accelerationStructureInfo.type = structureType;
@@ -105,7 +105,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     accelerationStructureInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
     accelerationStructureInfo.pNext = extendedInfo.headNode();
     accelerationStructureInfo.createFlags = flags;
-    accelerationStructureInfo.buffer = buffer->getHandle();
+    accelerationStructureInfo.buffer = *buffer;
     accelerationStructureInfo.offset = 0ull;
     accelerationStructureInfo.size = deserializedSize;
     accelerationStructureInfo.type = structureType;
