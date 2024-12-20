@@ -41,7 +41,7 @@ namespace magma
         PipelineShaderStage& operator=(const PipelineShaderStage&) noexcept;
         virtual ~PipelineShaderStage();
         const std::shared_ptr<ShaderModule>& getShaderModule() const noexcept { return shaderModule; }
-        bool specialized() const noexcept { return specialization != nullptr; }
+        const std::shared_ptr<Specialization>& getSpecialization() const noexcept { return specialization; }
         hash_t getHash() const noexcept;
         friend std::ostream& operator<<(std::ostream&, const PipelineShaderStage&);
 
