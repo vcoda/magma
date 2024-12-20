@@ -33,19 +33,19 @@ namespace magma
     class Display : public NonDispatchable<VkDisplayKHR>
     {
     public:
-        const std::shared_ptr<const PhysicalDevice>& getPhysicalDevice() const noexcept { return physicalDevice; }
+        const std::shared_ptr<PhysicalDevice>& getPhysicalDevice() const noexcept { return physicalDevice; }
         uint32_t getPlaneIndex() const noexcept { return planeIndex; }
         std::vector<VkDisplayModePropertiesKHR> getModeProperties() const;
 
     private:
         MAGMA_MAKE_UNIQUE(Display)
-        Display(std::shared_ptr<const PhysicalDevice> physicalDevice,
+        Display(std::shared_ptr<PhysicalDevice> physicalDevice,
             VkDisplayKHR handle,
             uint32_t planeIndex) noexcept;
         VkInstance getNativeInstance() const noexcept override;
         VkPhysicalDevice getNativePhysicalDevice() const noexcept override;
 
-        std::shared_ptr<const PhysicalDevice> physicalDevice;
+        std::shared_ptr<PhysicalDevice> physicalDevice;
         const uint32_t planeIndex;
         friend PhysicalDevice;
     };

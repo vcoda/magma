@@ -472,8 +472,9 @@ std::vector<std::unique_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
         result = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, displays);
         if (VK_SUCCESS == result)
         {
-            for (auto handle: displays)
-                supportedDisplays.emplace_back(Display::makeUnique(shared_from_this(), handle, planeIndex));
+            std::shared_ptr<PhysicalDevice> physicalDevice = std::const_pointer_cast<PhysicalDevice>(shared_from_this());
+            for (VkDisplayKHR handle: displays)
+                supportedDisplays.emplace_back(Display::makeUnique(physicalDevice, handle, planeIndex));
         }
     }
     MAGMA_HANDLE_RESULT(result, "failed to get supported displays of physical device");
