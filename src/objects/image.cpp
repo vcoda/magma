@@ -165,7 +165,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling):
-    Resource(VK_OBJECT_TYPE_IMAGE, std::move(device), 0, Sharing(), std::shared_ptr<Allocator>() /* FIX IT */),
+    Resource(VK_OBJECT_TYPE_IMAGE, std::move(device), 0, Sharing(), nullptr),
     flags(flags),
     imageType(imageType),
     format(format),
