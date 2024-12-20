@@ -23,8 +23,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_device_group
-PhysicalDeviceGroup::PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices, uint32_t groupId) noexcept:
-    physicalDevices(physicalDevices),
+PhysicalDeviceGroup::PhysicalDeviceGroup(std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices, uint32_t groupId) noexcept:
+    physicalDevices(std::move(physicalDevices)),
     groupId(groupId)
 {}
 

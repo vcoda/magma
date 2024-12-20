@@ -45,7 +45,7 @@ namespace magma
 
     private:
         MAGMA_MAKE_UNIQUE(PhysicalDeviceGroup)
-        PhysicalDeviceGroup(const std::vector<std::shared_ptr<PhysicalDevice>>& physicalDevices,
+        PhysicalDeviceGroup(std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices,
             uint32_t groupId) noexcept;
 
         std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;

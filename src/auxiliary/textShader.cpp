@@ -97,9 +97,10 @@ constexpr
 #include "spirv/output/fontf"
     constexpr hash_t fsFontHash = core::hashArray(fsFont);
     std::shared_ptr<ShaderModule> fragmentShader = std::make_shared<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, true);
+    const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     const std::vector<PipelineShaderStage> shaderStages = {
         VertexShaderStage(vertexShader->getShader(), vertexShader->getEntryPointName()),
-        FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main")
+        FragmentShaderStage(std::move(fragmentShader), entryPointName)
     };
     // Create font pipeline
     constexpr push::FragmentConstantRange<PushConstants> pushConstantRange;
