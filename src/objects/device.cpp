@@ -181,7 +181,7 @@ bool Device::waitIdle() const
     return true;
 }
 
-bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept
+bool Device::resetFences(std::vector<lent_ptr<Fence>>& fences) const noexcept
 {
     MAGMA_VLA(VkFence, dereferencedFences, fences.size());
     for (auto const& fence: fences)
@@ -190,7 +190,7 @@ bool Device::resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noex
     return (VK_SUCCESS == result);
 }
 
-bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bool waitAll,
+bool Device::waitForFences(const std::vector<lent_ptr<Fence>>& fences, bool waitAll,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
     MAGMA_VLA(VkFence, dereferencedFences, fences.size());
@@ -203,7 +203,7 @@ bool Device::waitForFences(const std::vector<std::shared_ptr<Fence>>& fences, bo
 }
 
 #ifdef VK_KHR_timeline_semaphore
-bool Device::waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>>& semaphores,
+bool Device::waitSemaphores(const std::vector<lent_ptr<TimelineSemaphore>>& semaphores,
     const std::vector<uint64_t>& values, bool waitAll,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {

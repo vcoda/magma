@@ -70,12 +70,12 @@ namespace magma
         void updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descriptorWrites,
             const std::vector<VkCopyDescriptorSet>& descriptorCopies = {}) const noexcept;
         bool waitIdle() const;
-        bool resetFences(std::vector<std::shared_ptr<Fence>>& fences) const noexcept;
-        bool waitForFences(const std::vector<std::shared_ptr<Fence>>& fences,
+        bool resetFences(std::vector<lent_ptr<Fence>>& fences) const noexcept;
+        bool waitForFences(const std::vector<lent_ptr<Fence>>& fences,
             bool waitAll,
             uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
     #ifdef VK_KHR_timeline_semaphore
-        bool waitSemaphores(const std::vector<std::shared_ptr<TimelineSemaphore>>& semaphores,
+        bool waitSemaphores(const std::vector<lent_ptr<TimelineSemaphore>>& semaphores,
             const std::vector<uint64_t>& values,
             bool waitAll,
             uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;

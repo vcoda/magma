@@ -24,7 +24,7 @@ namespace magma
 namespace helpers
 {
 template<class Type>
-inline Type *map(std::shared_ptr<Buffer> buffer,
+inline Type *map(lent_ptr<Buffer> buffer,
     VkDeviceSize offset = 0,
     VkDeviceSize size = VK_WHOLE_SIZE,
     VkMemoryMapFlags flags = 0) noexcept
@@ -39,7 +39,7 @@ inline Type *map(std::shared_ptr<Buffer> buffer,
     return reinterpret_cast<Type *>(ptr);
 }
 
-inline void unmap(std::shared_ptr<Buffer> buffer) noexcept
+inline void unmap(lent_ptr<Buffer> buffer) noexcept
 {
     if (buffer->getMemory()->mapped())
         buffer->getMemory()->unmap();
