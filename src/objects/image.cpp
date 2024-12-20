@@ -145,7 +145,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     std::unique_ptr<IDeviceMemory> memory;
     if (MAGMA_DEVICE_ALLOCATOR(allocator))
     {
-        memory = std::make_unique<ManagedDeviceMemory>(device,
+        memory = std::make_unique<ManagedDeviceMemory>(std::move(device),
             VK_OBJECT_TYPE_IMAGE, handle,
             memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
@@ -154,7 +154,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     }
     else
     {
-        memory = std::make_unique<DeviceMemory>(device,
+        memory = std::make_unique<DeviceMemory>(std::move(device),
             memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
             extendedMemoryInfo);

@@ -32,10 +32,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
+Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     VkBufferCreateFlags flags_, VkBufferUsageFlags usage_, VkMemoryPropertyFlags memoryFlags,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Resource(VK_OBJECT_TYPE_BUFFER, std::move(device_), size, sharing, allocator),
+    Resource(VK_OBJECT_TYPE_BUFFER, device, size, sharing, allocator),
     flags(flags_| optional.flags),
     usage(usage_| (optional.srcTransfer ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0) |
     #if defined(VK_KHR_buffer_device_address)
@@ -123,7 +123,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     std::unique_ptr<IDeviceMemory> memory;
     if (MAGMA_DEVICE_ALLOCATOR(allocator))
     {
-        memory = std::make_unique<ManagedDeviceMemory>(device,
+        memory = std::make_unique<ManagedDeviceMemory>(std::move(device),
             VK_OBJECT_TYPE_BUFFER, handle,
             memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
@@ -132,7 +132,7 @@ Buffer::Buffer(std::shared_ptr<Device> device_, VkDeviceSize size,
     }
     else
     {
-        memory = std::make_unique<DeviceMemory>(device,
+        memory = std::make_unique<DeviceMemory>(std::move(device),
             memoryRequirements, memoryFlags,
             MAGMA_HOST_ALLOCATOR(allocator),
             extendedMemoryInfo);
