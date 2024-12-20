@@ -26,7 +26,7 @@ Sharing::Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept:
     queueFamilyIndices(std::move(queueFamilyIndices))
 {}
 
-Sharing::Sharing(std::shared_ptr<const PhysicalDevice> device,
+Sharing::Sharing(const std::shared_ptr<PhysicalDevice>& device,
     const std::initializer_list<VkQueueFlagBits>& queueTypes)
 {
     const auto queueFamilyProperties = device->getQueueFamilyProperties();

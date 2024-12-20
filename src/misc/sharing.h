@@ -35,7 +35,7 @@ namespace magma
     public:
         Sharing() = default;
         explicit Sharing(const std::vector<uint32_t>& queueFamilyIndices) noexcept;
-        explicit Sharing(std::shared_ptr<const PhysicalDevice> device,
+        explicit Sharing(const std::shared_ptr<PhysicalDevice>& device,
             const std::initializer_list<VkQueueFlagBits>& queueTypes);
         VkSharingMode getMode() const noexcept;
         uint32_t getQueueFamiliesCount() const noexcept;

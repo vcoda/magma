@@ -40,7 +40,7 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device_,
     allocator(VK_NULL_HANDLE),
     defragmentationContext(VK_NULL_HANDLE)
 {
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
     VmaAllocatorCreateInfo allocatorInfo = {};
     allocatorInfo.flags = 0;
 #if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)

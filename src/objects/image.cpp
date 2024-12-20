@@ -724,7 +724,7 @@ VkSampleCountFlagBits Image::getSampleCountBit(uint32_t samples) noexcept
 
 VkFormat Image::checkFormatFeature(std::shared_ptr<Device> device, VkFormat format, VkFormatFeatureFlags requiredFeature)
 {
-    std::shared_ptr<PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
     const VkFormatProperties properties = physicalDevice->getFormatProperties(format);
     const bool hasFeature = (properties.optimalTilingFeatures & requiredFeature);
     if (!hasFeature)

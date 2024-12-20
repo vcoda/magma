@@ -418,7 +418,7 @@ namespace magma
         const VkBool32 VALVE_descriptor_set_host_mapping : 1;
         const VkBool32 VALVE_mutable_descriptor_type : 1;
 
-        explicit DeviceExtensions(std::shared_ptr<const PhysicalDevice> device);
+        explicit DeviceExtensions(const std::shared_ptr<PhysicalDevice>&);
     };
 
     MAGMA_TYPEDEF_MANAGED_PTR(DeviceExtensions)

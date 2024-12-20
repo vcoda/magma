@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DeviceExtensions::DeviceExtensions(std::shared_ptr<const PhysicalDevice> device):
+DeviceExtensions::DeviceExtensions(const std::shared_ptr<PhysicalDevice>& device):
     Extensions(device->enumerateExtensions()),
 
     MAGMA_CHECK_EXTENSION(AMD_buffer_marker),
