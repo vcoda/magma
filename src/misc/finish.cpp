@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-void finish(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<Queue> queue,
+void finish(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Queue> queue,
     bool waitIdle /* false */)
 {
     if (waitIdle)
@@ -50,6 +50,6 @@ void finish(lent_ptr<CommandBuffer> cmdBuffer, bool waitIdle /* false */)
     const uint32_t queueFamilyIndex = cmdBuffer->getQueueFamilyIndex();
     std::shared_ptr<Queue> queue = cmdBuffer->getDevice()->getQueueByFamily(queueFamilyIndex);
     MAGMA_ASSERT(queue);
-    finish(std::move(cmdBuffer), queue, waitIdle);
+    finish(std::move(cmdBuffer), std::move(queue), waitIdle);
 }
 } // namespace magma

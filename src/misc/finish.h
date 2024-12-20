@@ -28,7 +28,7 @@ namespace magma
        glFinish() function in OpenGL. */
 
     void finish(lent_ptr<CommandBuffer> cmdBuffer,
-        lent_ptr<Queue> queue,
+        std::shared_ptr<Queue> queue,
         bool waitIdle = false);
     void finish(lent_ptr<CommandBuffer> cmdBuffer,
         bool waitIdle = false);
