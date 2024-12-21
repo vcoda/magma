@@ -75,7 +75,7 @@ namespace magma
                 const ColorBlendState& colorBlendState,
                 const std::vector<VkDynamicState>& dynamicStates,
                 variant_ptr<PipelineLayout> layout,
-                std::shared_ptr<RenderPass> renderPass,
+                lent_ptr<RenderPass> renderPass,
                 uint32_t subpass = 0,
                 VkPipelineCreateFlags flags = 0,
                 const StructureChain& extendedInfo = StructureChain());
