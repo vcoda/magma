@@ -18,20 +18,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "pipelineShaderStage.h"
 
+namespace magma
+{
 #define MAGMA_DEFINE_PIPELINE_SHADER_STAGE(ShaderStage, stage)\
     class ShaderStage : public PipelineShaderStage\
     {\
     public:\
-        explicit ShaderStage(std::shared_ptr<ShaderModule> module,\
+        explicit ShaderStage(std::unique_ptr<ShaderModule> module,\
             const char *entrypoint,\
-            std::shared_ptr<Specialization> specialization = nullptr,\
+            std::unique_ptr<Specialization> specialization = nullptr,\
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:\
             PipelineShaderStage(stage, std::move(module), entrypoint, std::move(specialization), flags)\
         {}\
     };
 
-namespace magma
-{
     MAGMA_DEFINE_PIPELINE_SHADER_STAGE(VertexShaderStage, VK_SHADER_STAGE_VERTEX_BIT)
     MAGMA_DEFINE_PIPELINE_SHADER_STAGE(TesselationControlShaderStage, VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT)
     MAGMA_DEFINE_PIPELINE_SHADER_STAGE(TesselationEvaluationShaderStage, VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT)
