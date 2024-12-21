@@ -78,10 +78,8 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     maxStrings(16),
     maxChars(maxChars),
     allocator(std::move(allocator_))
-{
+{   // Create storage buffers
     std::shared_ptr<Device> device = renderPass->getDevice();
-    std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
-    // Create storage buffers
     stringBuffer = std::make_shared<DynamicStorageBuffer>(device, maxStrings * sizeof(String), false, allocator);
     charBuffer = std::make_shared<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, allocator);
     // Define descriptor set layout
@@ -89,19 +87,19 @@ TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
     setTable->stringBuffer = stringBuffer;
     setTable->charBuffer = charBuffer;
     // Create descriptor set
+    std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
     descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageBufferPool(2), hostAllocator);
     descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *setTable, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
-    // Load fullscreen vertex shader
-    auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
+    // Setup shader stages
+    FillRectangleVertexShader vertexShaderStage(device, hostAllocator);
 constexpr
 #include "spirv/output/fontf"
     constexpr hash_t fsFontHash = core::hashArray(fsFont);
     std::shared_ptr<ShaderModule> fragmentShader = std::make_shared<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, true);
     const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
-    const std::vector<PipelineShaderStage> shaderStages = {
-        VertexShaderStage(vertexShader->getShader(), vertexShader->getEntryPointName()),
-        FragmentShaderStage(std::move(fragmentShader), entryPointName)
-    };
+    std::vector<PipelineShaderStage> shaderStages;
+    shaderStages.push_back(std::move(vertexShaderStage));
+    shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName);
     // Create font pipeline
     constexpr push::FragmentConstantRange<PushConstants> pushConstantRange;
     std::unique_ptr<PipelineLayout> pipelineLayout = std::make_unique<PipelineLayout>(

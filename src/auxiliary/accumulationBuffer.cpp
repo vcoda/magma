@@ -79,12 +79,13 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     // Create descriptor set for fragment shader
     descriptorSet = std::make_shared<ImageDescriptorSet>(device, reflection, hostAllocator);
     nearestSampler = std::make_shared<Sampler>(device, sampler::magMinMipNearestClampToEdge, hostAllocator);
-    // Load fullscreen vertex shader
-    auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, hostAllocator);
-    const std::vector<PipelineShaderStage> shaderStages = {
-        VertexShaderStage(vertexShader->getShader(), vertexShader->getEntryPointName()),
-        FragmentShaderStage(fragmentShader, reflection->getEntryPointName(0))
-    };
+    // Setup shader stages
+    FillRectangleVertexShader vertexShaderStage(device, hostAllocator);
+    const RasterizationState rasterizationState = vertexShaderStage.getRasterizationState();
+    const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
+    std::vector<PipelineShaderStage> shaderStages;
+    shaderStages.push_back(std::move(vertexShaderStage));
+    shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName);
     // Create blending pipeline
     const uint8_t componentCount = Format(format).componentCount();
     constexpr push::FragmentConstantRange<float> pushConstantRange;
@@ -96,7 +97,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         renderstate::triangleList,
         TesselationState(),
         ViewportState(extent),
-        vertexShader->getRasterizationState(),
+        rasterizationState,
         renderstate::dontMultisample,
         renderstate::depthAlwaysDontWrite,
         (1 == componentCount) ? renderstate::blendNormalR :

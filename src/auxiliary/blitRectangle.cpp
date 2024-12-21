@@ -91,12 +91,14 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     if (hasCubicFilter)
         cubicSampler = std::make_shared<Sampler>(device, sampler::magCubicMinLinearMipNearestClampToEdge, allocator);
 #endif // VK_EXT_filter_cubic
-    // Load fullscreen vertex shader
-    auto vertexShader = std::make_unique<FillRectangleVertexShader>(device, allocator);
-    const std::vector<PipelineShaderStage> shaderStages = {
-        VertexShaderStage(vertexShader->getShader(), vertexShader->getEntryPointName()),
-        FragmentShaderStage(fragmentShader, fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main", std::move(specialization))
-    };
+    // Setup shader stages
+    FillRectangleVertexShader vertexShaderStage(device, allocator);
+    const RasterizationState rasterizationState = vertexShaderStage.getRasterizationState();
+    const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
+    std::vector<PipelineShaderStage> shaderStages;
+    shaderStages.push_back(std::move(vertexShaderStage));
+    shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName);
+    // Setup multisample state
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
     const MultisampleState multisampleState =
         (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstate::multisampleTwo :
@@ -113,7 +115,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         shaderStages,
         renderstate::nullVertexInput,
         renderstate::triangleList,
-        vertexShader->getRasterizationState(),
+        rasterizationState,
         multisampleState,
         renderstate::depthAlwaysDontWrite,
         renderstate::dontBlendRgba,

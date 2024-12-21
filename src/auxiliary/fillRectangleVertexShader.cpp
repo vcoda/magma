@@ -20,48 +20,35 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fillRectangleVertexShader.h"
 #include "../objects/device.h"
 #include "../objects/shaderModule.h"
-#include "../shaders/shaderReflection.h"
 #include "../states/rasterizationState.h"
+
+#ifndef VK_NV_FILL_RECTANGLE_EXTENSION_NAME
+#define VK_NV_FILL_RECTANGLE_EXTENSION_NAME "VK_NV_fill_rectangle"
+#endif
 
 namespace magma::aux
 {
 FillRectangleVertexShader::FillRectangleVertexShader(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-#ifdef VK_NV_fill_rectangle
-    supportsFillRectangle(device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME))
-#else
-    supportsFillRectangle(false)
-#endif
-{
-    if (supportsFillRectangle)
-    {
-        constexpr
-        #include "spirv/output/blitv_nv"
-        constexpr hash_t hash = core::hashArray(vsBlitNV);
-        shader = std::make_shared<ShaderModule>(std::move(device), vsBlitNV, hash, std::move(allocator), true);
-    }
-    else
-    {
-        constexpr
-        #include "spirv/output/blitv"
-        constexpr hash_t hash = core::hashArray(vsBlit);
-        shader = std::make_shared<ShaderModule>(std::move(device), vsBlit, hash, std::move(allocator), true);
-    }
-}
-
-const char *FillRectangleVertexShader::getEntryPointName() const noexcept
-{
-    if (shader->getReflection())
-        return shader->getReflection()->getEntryPointName(0);
-    return "main";
-}
-
-const RasterizationState& FillRectangleVertexShader::getRasterizationState() const noexcept
-{
-#ifdef VK_NV_fill_rectangle
-    if (supportsFillRectangle)
-        return renderstate::fillRectangleCullNoneCcw;
-#endif
-    return renderstate::fillCullNoneCcw;
-}
+    PipelineShaderStage(VK_SHADER_STAGE_VERTEX_BIT,
+        [&]() ->std::shared_ptr<ShaderModule>
+        {
+            constexpr
+            #include "spirv/output/blitv"
+            constexpr
+            #include "spirv/output/blitv_nv"
+            constexpr hash_t hash = core::hashArray(vsBlit);
+            constexpr hash_t hashNV = core::hashArray(vsBlitNV);
+            const bool NV_fill_rectangle = device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME);
+            return std::make_shared<ShaderModule>(std::move(device),
+                NV_fill_rectangle ? vsBlitNV : vsBlit,
+                NV_fill_rectangle ? sizeof(vsBlitNV) : sizeof(vsBlit),
+                NV_fill_rectangle ? hashNV : hash,
+                std::move(allocator));
+        }(),
+        "main"),
+    rasterizationState(device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME)
+        ? renderstate::fillRectangleCullNoneCcw
+        : renderstate::fillCullNoneCcw)
+{}
 } // namespace magma::aux

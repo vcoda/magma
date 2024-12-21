@@ -66,16 +66,16 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
         constexpr push::VertexConstantRange<PushConstants> pushConstantRange;
         sharedLayout = std::make_shared<PipelineLayout>(device, pushConstantRange, MAGMA_HOST_ALLOCATOR(allocator));
     }
-constexpr
-#include "spirv/output/immv"
-constexpr
-#include "spirv/output/immf"
+    constexpr
+    #include "spirv/output/immv"
+    constexpr
+    #include "spirv/output/immf"
     constexpr hash_t vsImmHash = core::hashArray(vsImm);
     constexpr hash_t fsImmHash = core::hashArray(fsImm);
     std::shared_ptr<ShaderModule> vertexShader = std::make_shared<ShaderModule>(device, vsImm, vsImmHash, MAGMA_HOST_ALLOCATOR(allocator), false);
     std::shared_ptr<ShaderModule> fragmentShader = std::make_shared<ShaderModule>(device, fsImm, fsImmHash, MAGMA_HOST_ALLOCATOR(allocator), false);
-    shaderStages.push_back(VertexShaderStage(vertexShader, "main"));
-    shaderStages.push_back(FragmentShaderStage(fragmentShader, "main"));
+    shaderStages.emplace_back(VK_SHADER_STAGE_VERTEX_BIT, std::move(vertexShader), "main");
+    shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), "main");
 }
 
 const std::unique_ptr<PipelineCache>& ImmediateRender::getPipelineCache() const noexcept
