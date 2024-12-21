@@ -78,10 +78,10 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
         descriptor::CombinedImageSamplerPool(maxDescriptorSets), allocator);
     static DescriptorSetTable setTable;
-    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setTable, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
+    descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, setTable, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
     // Create texture samplers
-    nearestSampler = std::make_shared<Sampler>(device, sampler::magMinMipNearestClampToEdge, allocator);
-    bilinearSampler = std::make_shared<Sampler>(device, sampler::magMinLinearMipNearestClampToEdge, allocator);
+    nearestSampler = std::make_unique<Sampler>(device, sampler::magMinMipNearestClampToEdge, allocator);
+    bilinearSampler = std::make_unique<Sampler>(device, sampler::magMinLinearMipNearestClampToEdge, allocator);
     // Check for cubic filtering support
 #ifdef VK_EXT_filter_cubic
     bool hasCubicFilter = device->extensionEnabled(VK_EXT_FILTER_CUBIC_EXTENSION_NAME);
@@ -89,7 +89,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     hasCubicFilter |= device->extensionEnabled(VK_IMG_FILTER_CUBIC_EXTENSION_NAME);
     #endif
     if (hasCubicFilter)
-        cubicSampler = std::make_shared<Sampler>(device, sampler::magCubicMinLinearMipNearestClampToEdge, allocator);
+        cubicSampler = std::make_unique<Sampler>(device, sampler::magCubicMinLinearMipNearestClampToEdge, allocator);
 #endif // VK_EXT_filter_cubic
     // Setup shader stages
     FillRectangleVertexShader vertexShaderStage(device, allocator);
@@ -111,7 +111,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     // Create blit pipeline
     std::unique_ptr<PipelineLayout> pipelineLayout = std::make_unique<PipelineLayout>(
         descriptorSet->getLayout(), allocator);
-    pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
+    pipeline = std::make_unique<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstate::nullVertexInput,
         renderstate::triangleList,
@@ -147,7 +147,7 @@ void BlitRectangle::blit(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<cons
         imageDescriptorSet = it->second;
     else
     {
-        std::shared_ptr<Sampler> sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
+        const std::unique_ptr<Sampler>& sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
             ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
         setTables.emplace_front();
         setTables.front().image = {imageView, sampler};

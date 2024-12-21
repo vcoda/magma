@@ -60,7 +60,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
     memcpy(viewProj, world, sizeof(world));
     const VkDeviceSize vertexBufferSize = sizeof(Vertex) * maxVertexCount;
     const bool stagedPool = device->getFeatures()->supportsDeviceLocalHostVisibleMemory();
-    vertexBuffer = std::make_shared<DynamicVertexBuffer>(device, vertexBufferSize, stagedPool, allocator);
+    vertexBuffer = std::make_unique<DynamicVertexBuffer>(device, vertexBufferSize, stagedPool, allocator);
     if (!sharedLayout)
     {   // If layout hasn't been specified, create a default one
         constexpr push::VertexConstantRange<PushConstants> pushConstantRange;

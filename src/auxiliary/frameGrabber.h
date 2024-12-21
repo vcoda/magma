@@ -48,7 +48,7 @@ namespace magma
         private:
             std::shared_ptr<Device> device;
             std::shared_ptr<Allocator> allocator;
-            std::shared_ptr<LinearTiledImage2D> dstImage;
+            std::unique_ptr<LinearTiledImage2D> dstImage;
             bool swizzleBgra = false;
         };
     } // namespace aux

@@ -60,12 +60,12 @@ namespace magma
             const uint32_t maxStrings;
             const uint32_t maxChars;
             std::shared_ptr<Allocator> allocator;
-            std::shared_ptr<Buffer> stringBuffer;
-            std::shared_ptr<Buffer> charBuffer;
+            std::unique_ptr<Buffer> stringBuffer;
+            std::unique_ptr<Buffer> charBuffer;
             std::shared_ptr<DescriptorPool> descriptorPool;
-            std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
-            std::shared_ptr<DescriptorSet> descriptorSet;
-            std::shared_ptr<GraphicsPipeline> pipeline;
+            std::unique_ptr<DescriptorSetLayout> descriptorSetLayout;
+            std::unique_ptr<DescriptorSet> descriptorSet;
+            std::unique_ptr<GraphicsPipeline> pipeline;
             std::unique_ptr<DescriptorSetTable> setTable;
             String *strings = nullptr;
             uint32_t stringCount = 0;

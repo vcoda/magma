@@ -106,7 +106,7 @@ namespace magma
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<PipelineLayout> sharedLayout;
             std::unique_ptr<GraphicsPipelineCache> pipelineCache;
-            std::shared_ptr<DynamicVertexBuffer> vertexBuffer;
+            std::unique_ptr<DynamicVertexBuffer> vertexBuffer;
             std::list<Primitive> primitives;
             std::vector<PipelineShaderStage> shaderStages;
             RasterizationState rasterizationState;

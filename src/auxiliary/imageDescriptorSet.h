@@ -42,8 +42,8 @@ namespace magma
                 const std::unique_ptr<const ShaderReflection>& reflection,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             ~ImageDescriptorSet();
-            const std::shared_ptr<DescriptorSetLayout>& getLayout() const noexcept { return descriptorSetLayout; }
-            const std::shared_ptr<DescriptorSet>& getSet() const noexcept { return descriptorSet; }
+            const std::unique_ptr<DescriptorSetLayout>& getLayout() const noexcept { return descriptorSetLayout; }
+            const std::unique_ptr<DescriptorSet>& getSet() const noexcept { return descriptorSet; }
             void writeDescriptor(lent_ptr<const ImageView> imageView,
                 lent_ptr<const Sampler> sampler);
 
@@ -51,8 +51,8 @@ namespace magma
             struct ImageTable;
             struct StorageImageTable;
             std::shared_ptr<DescriptorPool> descriptorPool;
-            std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
-            std::shared_ptr<DescriptorSet> descriptorSet;
+            std::unique_ptr<DescriptorSetLayout> descriptorSetLayout;
+            std::unique_ptr<DescriptorSet> descriptorSet;
             std::unique_ptr<ImageTable> imageTable;
             std::unique_ptr<StorageImageTable> storageImageTable;
             uint32_t binding;

@@ -62,11 +62,11 @@ namespace magma
             struct DescriptorSetTable;
             std::shared_ptr<RenderPass> renderPass;
             std::shared_ptr<DescriptorPool> descriptorPool;
-            std::shared_ptr<DescriptorSet> descriptorSet;
-            std::shared_ptr<Sampler> nearestSampler;
-            std::shared_ptr<Sampler> bilinearSampler;
-            std::shared_ptr<Sampler> cubicSampler;
-            std::shared_ptr<GraphicsPipeline> pipeline;
+            std::unique_ptr<DescriptorSet> descriptorSet;
+            std::unique_ptr<Sampler> nearestSampler;
+            std::unique_ptr<Sampler> bilinearSampler;
+            std::unique_ptr<Sampler> cubicSampler;
+            std::unique_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
             mutable std::forward_list<DescriptorSetTable> setTables;
             mutable std::map<std::shared_ptr<const ImageView>, std::shared_ptr<DescriptorSet>> descriptorSets;

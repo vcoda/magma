@@ -80,8 +80,8 @@ TextShader::TextShader(std::shared_ptr<const RenderPass> renderPass,
     allocator(std::move(allocator_))
 {   // Create storage buffers
     std::shared_ptr<Device> device = renderPass->getDevice();
-    stringBuffer = std::make_shared<DynamicStorageBuffer>(device, maxStrings * sizeof(String), false, allocator);
-    charBuffer = std::make_shared<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, allocator);
+    stringBuffer = std::make_unique<DynamicStorageBuffer>(device, maxStrings * sizeof(String), false, allocator);
+    charBuffer = std::make_unique<DynamicStorageBuffer>(device, maxChars * sizeof(Glyph), false, allocator);
     // Define descriptor set layout
     setTable = std::make_unique<DescriptorSetTable>();
     setTable->stringBuffer = stringBuffer;
@@ -89,13 +89,13 @@ TextShader::TextShader(std::shared_ptr<const RenderPass> renderPass,
     // Create descriptor set
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
     descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageBufferPool(2), hostAllocator);
-    descriptorSet = std::make_shared<DescriptorSet>(descriptorPool, *setTable, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
+    descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, *setTable, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
     // Setup shader stages
     FillRectangleVertexShader vertexShaderStage(device, hostAllocator);
 constexpr
 #include "spirv/output/fontf"
     constexpr hash_t fsFontHash = core::hashArray(fsFont);
-    std::shared_ptr<ShaderModule> fragmentShader = std::make_shared<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, true);
+    std::shared_ptr<ShaderModule> fragmentShader = std::make_unique<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, true);
     const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     std::vector<PipelineShaderStage> shaderStages;
     shaderStages.push_back(std::move(vertexShaderStage));
@@ -104,7 +104,7 @@ constexpr
     constexpr push::FragmentConstantRange<PushConstants> pushConstantRange;
     std::unique_ptr<PipelineLayout> pipelineLayout = std::make_unique<PipelineLayout>(
         descriptorSet->getLayout(), pushConstantRange);
-    pipeline = std::make_shared<GraphicsPipeline>(std::move(device),
+    pipeline = std::make_unique<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstate::nullVertexInput,
         renderstate::triangleList,

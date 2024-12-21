@@ -71,7 +71,7 @@ namespace magma
             const VkQueueFlags queueType;
             float timestampPeriod = 0.f;
             uint64_t timestampMask = 0ull;
-            std::shared_ptr<TimestampQuery> queryPool;
+            std::unique_ptr<TimestampQuery> queryPool;
             uint32_t queryCount = 0;
             uint32_t frameIndex = 0;
             std::forward_list<Section> sections;

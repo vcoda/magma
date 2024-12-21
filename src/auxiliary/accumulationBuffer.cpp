@@ -66,7 +66,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         op::dontCare,
         VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    renderPass = std::make_shared<RenderPass>(device, attachment, hostAllocator);
+    std::shared_ptr<const RenderPass> renderPass = std::make_shared<RenderPass>(device, attachment, hostAllocator);
     // Let it know what view format will be paired with the image
     Image::Initializer imageFormatList;
     imageFormatList.viewFormats.push_back(format);
@@ -75,10 +75,10 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     std::unique_ptr<ColorAttachment> accumBuffer = std::make_unique<ColorAttachment>(
         device, format, extent, 1, 1, sampled, allocator, false, imageFormatList);
     bufferView = std::make_shared<UniqueImageView>(std::move(accumBuffer));
-    framebuffer = std::make_shared<Framebuffer>(renderPass, bufferView, hostAllocator, 0);
+    framebuffer = std::make_unique<Framebuffer>(std::move(renderPass), std::move(bufferView), hostAllocator, 0);
     // Create descriptor set for fragment shader
-    descriptorSet = std::make_shared<ImageDescriptorSet>(device, reflection, hostAllocator);
-    nearestSampler = std::make_shared<Sampler>(device, sampler::magMinMipNearestClampToEdge, hostAllocator);
+    descriptorSet = std::make_unique<ImageDescriptorSet>(device, reflection, hostAllocator);
+    nearestSampler = std::make_unique<Sampler>(device, sampler::magMinMipNearestClampToEdge, hostAllocator);
     // Setup shader stages
     FillRectangleVertexShader vertexShaderStage(device, hostAllocator);
     const RasterizationState rasterizationState = vertexShaderStage.getRasterizationState();
@@ -91,7 +91,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     constexpr push::FragmentConstantRange<float> pushConstantRange;
     std::unique_ptr<PipelineLayout> pipelineLayout = std::make_unique<PipelineLayout>(
         descriptorSet->getLayout(), pushConstantRange, hostAllocator);
-    blendPipeline = std::make_shared<GraphicsPipeline>(std::move(device),
+    blendPipeline = std::make_unique<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstate::nullVertexInput,
         renderstate::triangleList,
@@ -107,7 +107,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         renderstate::dontBlendRgba,
         std::vector<VkDynamicState>{},
         std::move(pipelineLayout),
-        renderPass, 0,
+        framebuffer->getRenderPass(), 0,
         std::move(hostAllocator),
         std::move(pipelineCache),
         nullptr); // basePipeline
@@ -120,7 +120,7 @@ void AccumulationBuffer::accumulate(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<
     if (count < maxCount)
     {
         descriptorSet->writeDescriptor(std::move(imageView), nearestSampler);
-        cmdBuffer->beginRenderPass(renderPass, framebuffer);
+        cmdBuffer->beginRenderPass(framebuffer->getRenderPass(), framebuffer);
         {   // Calculate blend weight
             const float weight = 1.f - count / (1.f + count);
             cmdBuffer->pushConstant(blendPipeline->getLayout().get(), VK_SHADER_STAGE_FRAGMENT_BIT, weight);
