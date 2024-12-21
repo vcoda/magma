@@ -26,9 +26,9 @@ namespace magma
         class ScopedProfile final : NonCopyable
         {
         public:
-            explicit ScopedProfile(const char *name, const std::unique_ptr<CommandBuffer>& cmdBuffer,
+            explicit ScopedProfile(const char *name, std::shared_ptr<CommandBuffer> cmdBuffer,
                 uint32_t color = 0xFFFFFFFF):
-                cmdBuffer(cmdBuffer),
+                cmdBuffer(std::move(cmdBuffer)),
                 profiler(Profiler::get(Profiler::Queue::Graphics))
             {
                 if (profiler)
@@ -42,7 +42,7 @@ namespace magma
             }
 
         private:
-            const std::unique_ptr<CommandBuffer>& cmdBuffer;
+            std::shared_ptr<CommandBuffer> cmdBuffer;
             Profiler *profiler;
         };
     } // namespace aux
