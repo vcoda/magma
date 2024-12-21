@@ -37,13 +37,13 @@ GraphicsPipelineCache::GraphicsPipelineCache(std::shared_ptr<Device> device_,
     bool useDerivativePipelines,
     bool disablePipelineOptimization,
 #ifdef VK_KHR_pipeline_library
-    const std::unique_ptr<PipelineLibrary>& pipelineLibrary_ /* nullptr */,
+    std::shared_ptr<PipelineLibrary> pipelineLibrary_ /* nullptr */,
 #endif
     std::shared_ptr<IAllocator> allocator_ /* nullptr */):
     device(std::move(device_)),
     pipelineCache(std::make_unique<PipelineCache>(device, allocator)),
 #ifdef VK_KHR_pipeline_library
-    pipelineLibrary(pipelineLibrary_),
+    pipelineLibrary(std::move(pipelineLibrary_)),
 #endif
     allocator(std::move(allocator_)),
     psoFlags(0)

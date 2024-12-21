@@ -57,7 +57,7 @@ namespace magma
                 bool useDerivativePipelines,
                 bool disablePipelineOptimization,
             #ifdef VK_KHR_pipeline_library
-                const std::unique_ptr<PipelineLibrary>& pipelineLibrary = nullptr,
+                std::shared_ptr<PipelineLibrary> pipelineLibrary = nullptr,
             #endif
                 std::shared_ptr<IAllocator> allocator = nullptr);
             const std::shared_ptr<Device>& getDevice() const noexcept { return device; }
@@ -84,7 +84,7 @@ namespace magma
             std::shared_ptr<Device> device;
             std::unique_ptr<PipelineCache> pipelineCache;
         #ifdef VK_KHR_pipeline_library
-            const std::unique_ptr<PipelineLibrary>& pipelineLibrary;
+            std::shared_ptr<PipelineLibrary> pipelineLibrary;
         #endif
             std::shared_ptr<IAllocator> allocator;
             VkPipelineCreateFlags psoFlags;
