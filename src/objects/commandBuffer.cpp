@@ -336,7 +336,7 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
 
-void CommandBuffer::beginRenderPass(lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
+void CommandBuffer::beginRenderPass(lent_ptr<const RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
     const std::initializer_list<ClearValue> clearValues /* empty */, const VkRect2D& renderArea_ /* {0, 0, 0, 0} */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -398,7 +398,7 @@ bool CommandBuffer::beginDeviceGroup(uint32_t deviceMask, VkCommandBufferUsageFl
     return false;
 }
 
-void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<const RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
     const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -519,7 +519,7 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
 #endif // VK_EXT_transform_feedback
 
 #ifdef VK_KHR_imageless_framebuffer
-void CommandBuffer::beginRenderPass(lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
+void CommandBuffer::beginRenderPass(lent_ptr<const RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
     const std::vector<lent_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue> clearValues /* empty */,
     const VkRect2D& renderArea_ /* {0, 0, 0, 0} */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -558,7 +558,7 @@ void CommandBuffer::beginRenderPass(lent_ptr<RenderPass> renderPass, lent_ptr<Im
 }
 
 #ifdef VK_KHR_device_group
-void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<RenderPass> renderPass,
+void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<const RenderPass> renderPass,
     lent_ptr<ImagelessFramebuffer> framebuffer, const std::vector<lent_ptr<ImageView>>& attachments,
     const std::initializer_list<ClearValue> clearValues /* empty */, const std::initializer_list<VkRect2D> deviceRenderAreas /* empty */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept

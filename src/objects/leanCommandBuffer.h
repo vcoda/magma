@@ -140,7 +140,7 @@ namespace magma
 
         void pushConstants(const PipelineLayout *layout, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size, const void *values) noexcept;
 
-        void beginRenderPass(RenderPass *renderPass, Framebuffer *framebuffer, uint32_t clearValueCount, const VkClearValue *clearValues, const VkRect2D& renderArea,
+        void beginRenderPass(const RenderPass *renderPass, Framebuffer *framebuffer, uint32_t clearValueCount, const VkClearValue *clearValues, const VkRect2D& renderArea,
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
@@ -149,7 +149,7 @@ namespace magma
 
     #ifdef VK_KHR_device_group
         VkResult beginDeviceGroup(uint32_t deviceMask, VkCommandBufferUsageFlags flags = 0) noexcept;
-        void beginDeviceGroupRenderPass(uint32_t deviceMask, RenderPass *renderPass, Framebuffer *framebuffer, uint32_t clearValueCount, const VkClearValue *clearValues,
+        void beginDeviceGroupRenderPass(uint32_t deviceMask, const RenderPass *renderPass, Framebuffer *framebuffer, uint32_t clearValueCount, const VkClearValue *clearValues,
             uint32_t deviceRenderAreaCount = 0, const VkRect2D *deviceRenderAreas = nullptr, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void setDeviceMask(uint32_t deviceMask) noexcept;
         void dispatchBase(uint32_t baseGroupX, uint32_t baseGroupY, uint32_t baseGroupZ, uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ) const noexcept;
@@ -195,10 +195,10 @@ namespace magma
     #endif // VK_EXT_transform_feedback
 
     #ifdef VK_KHR_imageless_framebuffer
-        void beginRenderPass(RenderPass *renderPass, ImagelessFramebuffer *framebuffer, uint32_t attachmentCount, ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
+        void beginRenderPass(const RenderPass *renderPass, ImagelessFramebuffer *framebuffer, uint32_t attachmentCount, ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
             const VkRect2D& renderArea, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
     #ifdef VK_KHR_device_group
-        void beginDeviceGroupRenderPass(uint32_t deviceMask, RenderPass *renderPass, ImagelessFramebuffer *framebuffer, uint32_t attachmentCount, ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
+        void beginDeviceGroupRenderPass(uint32_t deviceMask, const RenderPass *renderPass, ImagelessFramebuffer *framebuffer, uint32_t attachmentCount, ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
             uint32_t deviceRenderAreaCount = 0, const VkRect2D *deviceRenderAreas = nullptr, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
     #endif // VK_KHR_device_group
     #endif // VK_KHR_imageless_framebuffer

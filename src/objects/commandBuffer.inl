@@ -1028,7 +1028,7 @@ inline bool CommandBuffer::beginAnnotated(const char *name, uint32_t color, VkCo
     return false;
 }
 
-inline bool CommandBuffer::beginInheritedAnnotated(const char *name, uint32_t color, lent_ptr<RenderPass> renderPass, uint32_t subpass,
+inline bool CommandBuffer::beginInheritedAnnotated(const char *name, uint32_t color, lent_ptr<const RenderPass> renderPass, uint32_t subpass,
     lent_ptr<Framebuffer> framebuffer, bool occlusionQueryEnable, VkQueryControlFlags queryFlags /* 0 */, VkQueryPipelineStatisticFlags pipelineStatistics /* 0 */,
     VkCommandBufferUsageFlags flags /* 0 */, const StructureChain& extendedInfo /* default */) noexcept
 {
@@ -1041,7 +1041,7 @@ inline bool CommandBuffer::beginInheritedAnnotated(const char *name, uint32_t co
     return false;
 }
 
-inline void CommandBuffer::beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
+inline void CommandBuffer::beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<const RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
     const std::initializer_list<ClearValue>& clearValues /* empty */, const VkRect2D& renderArea /* {0, 0, 0, 0} */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     beginRenderPass(std::move(renderPass), std::move(framebuffer), clearValues, renderArea, contents);
@@ -1050,7 +1050,7 @@ inline void CommandBuffer::beginRenderPassAnnotated(const char *name, uint32_t c
 }
 
 #ifdef VK_KHR_imageless_framebuffer
-inline void CommandBuffer::beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
+inline void CommandBuffer::beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<const RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
     const std::vector<lent_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue>& clearValues /* empty */,
     const VkRect2D& renderArea /* {0, 0, 0, 0} */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -1074,7 +1074,7 @@ inline bool CommandBuffer::beginDeviceGroupAnnotated(const char *name, uint32_t 
 }
 
 inline void CommandBuffer::beginDeviceGroupRenderPassAnnotated(const char *name, uint32_t color, uint32_t deviceMask,
-    lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer, const std::initializer_list<ClearValue>& clearValues /* empty */,
+    lent_ptr<const RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer, const std::initializer_list<ClearValue>& clearValues /* empty */,
     const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     if (extensions.KHR_device_group)
@@ -1087,7 +1087,7 @@ inline void CommandBuffer::beginDeviceGroupRenderPassAnnotated(const char *name,
 
 #ifdef VK_KHR_imageless_framebuffer
 inline void CommandBuffer::beginDeviceGroupRenderPassAnnotated(const char *name, uint32_t color, uint32_t deviceMask,
-    lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer, const std::vector<lent_ptr<ImageView>>& attachments,
+    lent_ptr<const RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer, const std::vector<lent_ptr<ImageView>>& attachments,
     const std::initializer_list<ClearValue>& clearValues /* empty */, const std::initializer_list<VkRect2D>& deviceRenderAreas /* empty */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {

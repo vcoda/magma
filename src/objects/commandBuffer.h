@@ -168,14 +168,14 @@ namespace magma
         template<class Type> void pushConstants(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const std::vector<Type>& constants, uint32_t offset = 0) noexcept;
         template<class BlockType> void pushConstantBlock(lent_ptr<const PipelineLayout> layout, VkShaderStageFlags stageFlags, const BlockType& block, uint32_t offset = 0) noexcept;
 
-        void beginRenderPass(lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer, const std::initializer_list<ClearValue> clearValues = {},
+        void beginRenderPass(lent_ptr<const RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer, const std::initializer_list<ClearValue> clearValues = {},
             const VkRect2D& renderArea = {0, 0, 0, 0}, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void nextSubpass(VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void endRenderPass() noexcept;
 
     #ifdef VK_KHR_device_group
         bool beginDeviceGroup(uint32_t deviceMask, VkCommandBufferUsageFlags flags = 0) noexcept;
-        void beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
+        void beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<const RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
             const std::initializer_list<ClearValue>& clearValues = {}, const std::initializer_list<VkRect2D>& deviceRenderAreas = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         void setDeviceMask(uint32_t deviceMask) noexcept;
@@ -231,10 +231,10 @@ namespace magma
     #endif // VK_EXT_transform_feedback
 
     #ifdef VK_KHR_imageless_framebuffer
-        void beginRenderPass(lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer, const std::vector<lent_ptr<ImageView>>& attachments,
+        void beginRenderPass(lent_ptr<const RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer, const std::vector<lent_ptr<ImageView>>& attachments,
             const std::initializer_list<ClearValue> clearValues = {}, const VkRect2D& renderArea = {0, 0, 0, 0}, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
     #ifdef VK_KHR_device_group
-        void beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
+        void beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<const RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
             const std::vector<lent_ptr<ImageView>>& attachments,  const std::initializer_list<ClearValue> clearValues = {}, const std::initializer_list<VkRect2D> deviceRenderAreas = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
     #endif // VK_KHR_device_group
@@ -291,24 +291,24 @@ namespace magma
     #endif
 
         bool beginAnnotated(const char *name, uint32_t color, VkCommandBufferUsageFlags flags = 0) noexcept;
-        bool beginInheritedAnnotated(const char *name, uint32_t color, lent_ptr<RenderPass> renderPass, uint32_t subpass, lent_ptr<Framebuffer> framebuffer,
+        bool beginInheritedAnnotated(const char *name, uint32_t color, lent_ptr<const RenderPass> renderPass, uint32_t subpass, lent_ptr<Framebuffer> framebuffer,
             bool occlusionQueryEnable = false, VkQueryControlFlags queryFlags = 0, VkQueryPipelineStatisticFlags pipelineStatistics = 0, VkCommandBufferUsageFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain()) noexcept;
-        void beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
+        void beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<const RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
             const std::initializer_list<ClearValue>& clearValues = {}, const VkRect2D& renderArea = {0, 0, 0, 0}, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
     #ifdef VK_KHR_imageless_framebuffer
-        void beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
+        void beginRenderPassAnnotated(const char *name, uint32_t color, lent_ptr<const RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
             const std::vector<lent_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue>& clearValues = {}, const VkRect2D& renderArea = {0, 0, 0, 0},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
     #endif // VK_KHR_imageless_framebuffer
     #ifdef VK_KHR_device_group
         bool beginDeviceGroupAnnotated(const char *name, uint32_t color, uint32_t deviceMask, VkCommandBufferUsageFlags flags = 0) noexcept;
         void beginDeviceGroupRenderPassAnnotated(const char *name, uint32_t color, uint32_t deviceMask,
-            lent_ptr<RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
+            lent_ptr<const RenderPass> renderPass, lent_ptr<Framebuffer> framebuffer,
             const std::initializer_list<ClearValue>& clearValues = {}, const std::initializer_list<VkRect2D>& deviceRenderAreas = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         #ifdef VK_KHR_imageless_framebuffer
-        void beginDeviceGroupRenderPassAnnotated(const char *name, uint32_t color, uint32_t deviceMask, lent_ptr<RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
+        void beginDeviceGroupRenderPassAnnotated(const char *name, uint32_t color, uint32_t deviceMask, lent_ptr<const RenderPass> renderPass, lent_ptr<ImagelessFramebuffer> framebuffer,
             const std::vector<lent_ptr<ImageView>>& attachments, const std::initializer_list<ClearValue>& clearValues = {}, const std::initializer_list<VkRect2D>& deviceRenderAreas = {},
             VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE) noexcept;
         #endif // VK_KHR_imageless_framebuffer
@@ -400,8 +400,8 @@ namespace magma
 
         struct RenderPassState
         {
-            RenderPass *renderPass = nullptr;
-            Framebuffer *framebuffer = nullptr;
+            const RenderPass *renderPass = nullptr;
+            const Framebuffer *framebuffer = nullptr;
             std::vector<ImageView *> attachments;
         };
 

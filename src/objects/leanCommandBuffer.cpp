@@ -94,7 +94,7 @@ VkResult LeanCommandBuffer::beginInherited(const RenderPass *renderPass, uint32_
     return vkBeginCommandBuffer(handle, &cmdBufferBeginInfo);
 }
 
-void LeanCommandBuffer::beginRenderPass(RenderPass *renderPass, Framebuffer *framebuffer, uint32_t clearValueCount, const VkClearValue *clearValues,
+void LeanCommandBuffer::beginRenderPass(const RenderPass *renderPass, Framebuffer *framebuffer, uint32_t clearValueCount, const VkClearValue *clearValues,
     const VkRect2D& renderArea, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     VkRenderPassBeginInfo renderPassBeginInfo;
@@ -123,7 +123,7 @@ VkResult LeanCommandBuffer::beginDeviceGroup(uint32_t deviceMask, VkCommandBuffe
     return vkBeginCommandBuffer(handle, &cmdBufferBeginInfo);
 }
 
-void LeanCommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, RenderPass *renderPass, Framebuffer *framebuffer, uint32_t clearValueCount, const VkClearValue *clearValues,
+void LeanCommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const RenderPass *renderPass, Framebuffer *framebuffer, uint32_t clearValueCount, const VkClearValue *clearValues,
     uint32_t deviceRenderAreaCount /* 0 */, const VkRect2D *deviceRenderAreas /* nullptr */, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
     VkRenderPassBeginInfo renderPassBeginInfo;
@@ -208,7 +208,7 @@ void LeanCommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, uint32
 // inline void LeanCommandBuffer::drawIndirectByteCount
 
 #ifdef VK_KHR_imageless_framebuffer
-void LeanCommandBuffer::beginRenderPass(RenderPass *renderPass, ImagelessFramebuffer *framebuffer,
+void LeanCommandBuffer::beginRenderPass(const RenderPass *renderPass, ImagelessFramebuffer *framebuffer,
     uint32_t attachmentCount, ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
     const VkRect2D& renderArea, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
@@ -232,7 +232,7 @@ void LeanCommandBuffer::beginRenderPass(RenderPass *renderPass, ImagelessFramebu
 }
 
 #ifdef VK_KHR_device_group
-void LeanCommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, RenderPass *renderPass, ImagelessFramebuffer *framebuffer,
+void LeanCommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const RenderPass *renderPass, ImagelessFramebuffer *framebuffer,
     uint32_t attachmentCount, ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
     uint32_t deviceRenderAreaCount /* 0 */, const VkRect2D *deviceRenderAreas /* nullptr */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
