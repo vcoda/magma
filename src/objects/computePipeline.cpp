@@ -34,7 +34,7 @@ ComputePipeline::ComputePipeline(std::shared_ptr<Device> device_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     lent_ptr<PipelineCache> pipelineCache /* nullptr */,
 #ifdef VK_KHR_pipeline_library
-    lent_ptr<PipelineLibrary> pipelineLibrary /* nullptr */,
+    lent_ptr<const PipelineLibrary> pipelineLibrary /* nullptr */,
 #endif
     lent_ptr<const ComputePipeline> basePipeline /* nullptr */,
     VkPipelineCreateFlags flags /* 0 */,

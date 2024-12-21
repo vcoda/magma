@@ -56,12 +56,12 @@ namespace magma
             const ColorBlendState& colorBlendState,
             const std::vector<VkDynamicState>& dynamicStates,
             variant_ptr<PipelineLayout> layout,
-            lent_ptr<RenderPass> renderPass,
+            lent_ptr<const RenderPass> renderPass,
             uint32_t subpass,
             std::shared_ptr<IAllocator> allocator = nullptr,
             lent_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
-            lent_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+            lent_ptr<const PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             lent_ptr<const GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,
@@ -78,12 +78,12 @@ namespace magma
             const ColorBlendState& colorBlendState,
             const std::vector<VkDynamicState>& dynamicStates,
             variant_ptr<PipelineLayout> layout,
-            lent_ptr<RenderPass> renderPass,
+            lent_ptr<const RenderPass> renderPass,
             uint32_t subpass,
             std::shared_ptr<IAllocator> allocator = nullptr,
             lent_ptr<PipelineCache> pipelineCache = nullptr,
         #ifdef VK_KHR_pipeline_library
-            lent_ptr<PipelineLibrary> pipelineLibrary = nullptr,
+            lent_ptr<const PipelineLibrary> pipelineLibrary = nullptr,
         #endif
             lent_ptr<const GraphicsPipeline> basePipeline = nullptr,
             VkPipelineCreateFlags flags = 0,

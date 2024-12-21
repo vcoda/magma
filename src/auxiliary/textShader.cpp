@@ -71,7 +71,7 @@ struct TextShader::PushConstants
     uint32_t stringCount;
 };
 
-TextShader::TextShader(const std::shared_ptr<RenderPass> renderPass,
+TextShader::TextShader(std::shared_ptr<const RenderPass> renderPass,
     const uint32_t maxChars /* 1024 */,
     std::shared_ptr<Allocator> allocator_ /* nullptr */,
     const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */):
