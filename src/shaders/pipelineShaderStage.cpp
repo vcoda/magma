@@ -91,6 +91,28 @@ PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& o
     return *this;
 }
 
+PipelineShaderStage& PipelineShaderStage::operator=(PipelineShaderStage&& other) noexcept
+{
+    if (this != &other)
+    {
+        pNext = other.pNext;
+        flags = other.flags;
+        stage = other.stage;
+        module = other.module;
+        pName = other.pName;
+        pSpecializationInfo = other.pSpecializationInfo,
+        shaderModule = std::move(other.shaderModule);
+        specialization = std::move(other.specialization);
+        other.pNext = nullptr;
+        other.flags = 0;
+        other.stage = (VkShaderStageFlagBits)0;
+        other.module = VK_NULL_HANDLE;
+        other.pName = nullptr;
+        other.pSpecializationInfo = nullptr;
+    }
+    return *this;
+}
+
 PipelineShaderStage::~PipelineShaderStage()
 {
     delete[] pName;
