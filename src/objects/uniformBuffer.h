@@ -43,7 +43,6 @@ namespace magma
 
     protected:
         TBaseUniformBuffer(std::shared_ptr<Device> device,
-            std::size_t typeSize,
             uint32_t arraySize,
             VkBufferUsageFlags usage,
             VkMemoryPropertyFlags memoryFlags,
@@ -51,7 +50,7 @@ namespace magma
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator,
             bool mappedPersistently):
-            BaseUniformBuffer(std::move(device), typeSize, arraySize, usage, memoryFlags,
+            BaseUniformBuffer(std::move(device), arraySize * sizeof(Type), sizeof(Type), arraySize, usage, memoryFlags,
                 optional, sharing, std::move(allocator), mappedPersistently)
             {
                 static_assert(std::alignment_of<Type>() == 16, "uniform type should have 16-byte alignment");
@@ -73,7 +72,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
-            TBaseUniformBuffer<Type>(std::move(device), sizeof(Type), arraySize,
+            TBaseUniformBuffer<Type>(std::move(device), arraySize,
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, // Make it compatible with vkCmdUpdateBuffer
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
                     (stagedPool ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT : 0),
@@ -97,7 +96,7 @@ namespace magma
             uint32_t arraySize = 1,
             const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
-            TBaseUniformBuffer<Type>(std::move(device), sizeof(Type), arraySize,
+            TBaseUniformBuffer<Type>(std::move(device), arraySize,
                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
                 optional, sharing, std::move(allocator), mappedPersistently)
