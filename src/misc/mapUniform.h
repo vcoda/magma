@@ -161,4 +161,66 @@ inline void map(const std::shared_ptr<NonCoherentUniformBuffer<Type>>& uniformBu
 {
     map(uniformBuffer.get(), std::move(mapFn));
 }
+
+template<class Type>
+inline void map(NonCoherentDynamicUniformBuffer<Type> *uniformBuffer,
+    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapFn)
+{
+    MAGMA_ASSERT(uniformBuffer);
+    MAGMA_ASSERT(sizeof(Type) <= uniformBuffer->getSize());
+    auto& memory = uniformBuffer->getMemory();
+    const uint32_t arraySize = uniformBuffer->getArraySize();
+    const VkDeviceSize alignment = uniformBuffer->getAlignment();
+    VkDeviceSize offset = 0, size = 0;
+    if (uniformBuffer->mappedPersistently())
+    {
+        helpers::AlignedUniformArray<Type> array(memory->getMapPointer(), arraySize, alignment);
+        MAGMA_ASSERT(mapFn);
+        mapFn(array);
+        offset = array.getFirstIndex() * alignment;
+        size = array.getUpdatedRange() * alignment;
+    }
+    else
+    {
+        void *data = uniformBuffer->map();
+        MAGMA_ASSERT(data);
+        if (data) try
+        {
+            helpers::AlignedUniformArray<Type> array(data, arraySize, alignment);
+            MAGMA_ASSERT(mapFn);
+            mapFn(array);
+            offset = array.getFirstIndex() * alignment;
+            size = array.getUpdatedRange() * alignment;
+        }
+        catch (...)
+        {
+            uniformBuffer->unmap();
+            MAGMA_THROW;
+        }
+    }
+    if (size && !memory->getFlags().hostCoherent)
+    {
+        const VkDeviceSize nonCoherentAtomSize = uniformBuffer->getNonCoherentAtomSize();
+        if (offset % nonCoherentAtomSize)
+            offset = offset / nonCoherentAtomSize * nonCoherentAtomSize;
+        const VkDeviceSize minFlushSize = std::min(memory->getSize(), nonCoherentAtomSize);
+        size = std::max(size, minFlushSize);
+        memory->flushMappedRange(offset, size);
+    }
+    uniformBuffer->unmap();
+}
+
+template<class Type>
+inline void map(const std::unique_ptr<NonCoherentDynamicUniformBuffer<Type>>& uniformBuffer,
+    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapFn)
+{
+    map(uniformBuffer.get(), std::move(mapFn));
+}
+
+template<class Type>
+inline void map(const std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>>& uniformBuffer,
+    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapFn)
+{
+    map(uniformBuffer.get(), std::move(mapFn));
+}
 } // namespace magma
