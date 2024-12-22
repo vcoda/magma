@@ -129,7 +129,7 @@ inline void map(NonCoherentUniformBuffer<Type> *uniformBuffer,
             MAGMA_THROW;
         }
     }
-    if (size)
+    if (size && !memory->getFlags().hostCoherent)
     {
         const VkDeviceSize nonCoherentAtomSize = uniformBuffer->getNonCoherentAtomSize();
         if (offset % nonCoherentAtomSize)
