@@ -38,14 +38,15 @@ VkResult executeDeferredOperation(lent_ptr<DeferredOperation> deferredOperation,
                                     : deferredOpConcurrency;
     std::vector<std::future<void>> tasks;
     tasks.reserve(maxConcurrency);
+    DeferredOperation *operation = deferredOperation.get();
     for (uint32_t i = 0; i < maxConcurrency; ++i)
     {
         tasks.emplace_back(
             std::async(std::launch::async,
-                [&deferredOperation]()
+                [operation]()
                 {   // Applications can join multiple threads to the same deferred operation,
                     // enabling concurrent execution of subtasks within that operation.
-                    const VkResult result = deferredOperation->join();
+                    const VkResult result = operation->join();
                     // Future calls to vkDeferredOperationJoinKHR are not necessary and will simply harm performance.
                     MAGMA_ASSERT(result != VK_THREAD_DONE_KHR);
                     MAGMA_UNUSED(result);
