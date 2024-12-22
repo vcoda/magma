@@ -25,13 +25,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 BaseUniformBuffer::BaseUniformBuffer(std::shared_ptr<Device> device_,
-    std::size_t typeSize, uint32_t arraySize,
+    VkDeviceSize size, std::size_t typeSize, uint32_t arraySize,
     VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags,
     const Initializer& optional, const Sharing& sharing,
     std::shared_ptr<Allocator> allocator, bool mappedPersistently):
-    Buffer(std::move(device_), typeSize * arraySize, 0, // flags
+    Buffer(std::move(device_), size, 0, // flags
         usage, memoryFlags, optional, sharing, std::move(allocator)),
-    typeSize((VkDeviceSize)typeSize),
+    typeSize(typeSize),
     arraySize(arraySize),
     persistent(mappedPersistently),
     mapOffset(0)

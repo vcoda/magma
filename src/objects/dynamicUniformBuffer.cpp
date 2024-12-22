@@ -27,16 +27,18 @@ BaseDynamicUniformBuffer::BaseDynamicUniformBuffer(std::shared_ptr<Device> devic
     std::size_t typeSize, uint32_t arraySize, VkMemoryPropertyFlags memoryFlags,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator,
     bool mappedPersistently):
-    BaseUniformBuffer(std::move(device), typeSize,
-        calculateAlignedArraySize(device.get(), typeSize, arraySize),
-        VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, memoryFlags,
-        optional, sharing, std::move(allocator),
-        mappedPersistently)
+    BaseUniformBuffer(std::move(device),
+        [&]() -> VkDeviceSize
+        {   // Calculate the buffer size taking into account alignment of each element
+            const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
+            const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
+            const VkPhysicalDeviceLimits& limits = properties.limits;
+            alignment = core::alignUp(static_cast<VkDeviceSize>(typeSize), limits.minUniformBufferOffsetAlignment);
+            return arraySize * alignment;
+        }(),
+        typeSize, arraySize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, memoryFlags,
+        optional, sharing, std::move(allocator), mappedPersistently)
 {
-    const std::shared_ptr<PhysicalDevice>& physicalDevice = getDevice()->getPhysicalDevice();
-    const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
-    const VkPhysicalDeviceLimits& limits = properties.limits;
-    alignment = std::max(limits.minUniformBufferOffsetAlignment, getTypeSize());
 }
 
 VkDescriptorBufferInfo BaseDynamicUniformBuffer::getDescriptor() const noexcept
@@ -49,18 +51,5 @@ VkDescriptorBufferInfo BaseDynamicUniformBuffer::getDescriptor() const noexcept
     descriptorBufferInfo.offset = 0;
     descriptorBufferInfo.range = getTypeSize();
     return descriptorBufferInfo;
-}
-
-uint32_t BaseDynamicUniformBuffer::calculateAlignedArraySize(const Device *device,
-    std::size_t typeSize, uint32_t arraySize) noexcept
-{
-    const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
-    const VkPhysicalDeviceProperties& properties = physicalDevice->getProperties();
-    const VkPhysicalDeviceLimits& limits = properties.limits;
-    const VkDeviceSize minAlignment = limits.minUniformBufferOffsetAlignment;
-    if (typeSize >= minAlignment)
-        return arraySize;
-    const VkDeviceSize multiplier = minAlignment / typeSize;
-    return static_cast<uint32_t>(arraySize * multiplier);
 }
 } // namespace magma

@@ -26,7 +26,7 @@ namespace magma
     {
     public:
         ~BaseUniformBuffer();
-        VkDeviceSize getTypeSize() const noexcept { return typeSize; }
+        std::size_t getTypeSize() const noexcept { return typeSize; }
         uint32_t getArraySize() const noexcept { return arraySize; }
         VkDeviceSize getMapOffset() const noexcept
             { return persistent ? mapOffset : memory->getMapOffset(); }
@@ -42,6 +42,7 @@ namespace magma
 
     protected:
         BaseUniformBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
             std::size_t typeSize,
             uint32_t arraySize,
             VkBufferUsageFlags usage,
@@ -52,7 +53,7 @@ namespace magma
             bool mappedPersistently);
 
     private:
-        const VkDeviceSize typeSize;
+        const std::size_t typeSize;
         const uint32_t arraySize;
         const bool persistent;
         VkDeviceSize mapOffset;
