@@ -176,8 +176,8 @@ constexpr T alignDown(T value, T alignment) noexcept
 #include "macros.h"
 #include "hash.h"
 #include "memory.h"
-#include "lentPtr.h"
 #include "variantPtr.h"
+#include "lentPtr.h"
 #include "vla.h"
 
 namespace magma::core

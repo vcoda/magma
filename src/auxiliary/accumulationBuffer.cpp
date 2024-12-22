@@ -123,7 +123,7 @@ void AccumulationBuffer::accumulate(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<
         cmdBuffer->beginRenderPass(framebuffer->getRenderPass(), framebuffer);
         {   // Calculate blend weight
             const float weight = 1.f - count / (1.f + count);
-            cmdBuffer->pushConstant(blendPipeline->getLayout().get(), VK_SHADER_STAGE_FRAGMENT_BIT, weight);
+            cmdBuffer->pushConstant(blendPipeline->getLayout(), VK_SHADER_STAGE_FRAGMENT_BIT, weight);
             // Do normal blending
             cmdBuffer->bindDescriptorSet(blendPipeline, 0, descriptorSet->getSet());
             cmdBuffer->bindPipeline(blendPipeline);

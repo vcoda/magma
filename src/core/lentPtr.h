@@ -40,13 +40,18 @@ namespace magma
 
         template<class T2>
         lent_ptr(const std::unique_ptr<T2>& unique) noexcept:
-            ptr(unique.get())
+            lent_ptr(unique.get())
         {}
 
         template<class T2>
         lent_ptr(const std::weak_ptr<T2>& weak) noexcept:
             ptr(nullptr),
             ref(weak)
+        {}
+
+        template<class T2>
+        lent_ptr(const variant_ptr<T2>& variant) noexcept:
+            lent_ptr(variant.get())
         {}
 
         lent_ptr(const lent_ptr&) = delete;

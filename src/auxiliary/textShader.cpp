@@ -121,7 +121,7 @@ constexpr
 
 void TextShader::draw(lent_ptr<CommandBuffer> cmdBuffer) const noexcept
 {
-    cmdBuffer->pushConstant(pipeline->getLayout().get(), VK_SHADER_STAGE_FRAGMENT_BIT, stringCount);
+    cmdBuffer->pushConstant(pipeline->getLayout(), VK_SHADER_STAGE_FRAGMENT_BIT, stringCount);
     cmdBuffer->bindDescriptorSet(pipeline, 0, descriptorSet);
     cmdBuffer->bindPipeline(pipeline);
     cmdBuffer->draw(3);
