@@ -24,9 +24,9 @@ namespace magma
     class ShaderStage : public PipelineShaderStage\
     {\
     public:\
-        explicit ShaderStage(std::unique_ptr<ShaderModule> module,\
+        explicit ShaderStage(std::shared_ptr<ShaderModule> module,\
             const char *entrypoint,\
-            std::unique_ptr<Specialization> specialization = nullptr,\
+            std::shared_ptr<Specialization> specialization = nullptr,\
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:\
             PipelineShaderStage(stage, std::move(module), entrypoint, std::move(specialization), flags)\
         {}\
