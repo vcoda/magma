@@ -33,8 +33,7 @@ namespace magma
        allows the optimization of shaders based on their input/outputs
        and eliminates expensive draw time state validation. */
 
-    class Pipeline : public NonDispatchable<VkPipeline>,
-        public std::enable_shared_from_this<Pipeline>
+    class Pipeline : public NonDispatchable<VkPipeline>
     {
     public:
         ~Pipeline();
@@ -43,7 +42,7 @@ namespace magma
         const variant_ptr<PipelineLayout>& getLayout() const noexcept { return layout; }
         hash_t getHash() const noexcept { return hash; }
     #ifdef VK_KHR_pipeline_executable_properties
-        std::vector<std::unique_ptr<PipelineExecutable>> getExecutables() const;
+        std::list<PipelineExecutable> getExecutables() const;
     #endif // VK_KHR_pipeline_executable_properties
     #ifdef VK_AMD_shader_info
         VkShaderStatisticsInfoAMD getShaderStatistics(VkShaderStageFlagBits stage) const;

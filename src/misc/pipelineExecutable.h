@@ -19,8 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Pipeline;
-
     /* When a pipeline is created, its state and shaders are
        compiled into zero or more device-specific executables,
        which are used when executing commands against that pipeline.
@@ -37,23 +35,23 @@ namespace magma
     class PipelineExecutable : NonCopyable
     {
     public:
+        PipelineExecutable(std::shared_ptr<Device> device,
+            VkPipeline pipeline,
+            const VkPipelineExecutablePropertiesKHR& properties,
+            uint32_t executableIndex) noexcept;
         const VkPipelineExecutablePropertiesKHR& getProperties() const noexcept { return properties; }
         uint32_t getIndex() const noexcept { return executableIndex; }
         std::vector<VkPipelineExecutableStatisticKHR> getStatistics() const;
         std::vector<VkPipelineExecutableInternalRepresentationKHR> getInternalRepresentations() const;
 
     private:
-        MAGMA_MAKE_UNIQUE(PipelineExecutable)
-        PipelineExecutable(std::shared_ptr<const Pipeline> pipeline,
-            const VkPipelineExecutablePropertiesKHR& properties,
-            uint32_t executableIndex) noexcept;
-        VkDevice getNativeDevice() const noexcept;
+        VkDevice getNativeDevice() const noexcept { return device->getHandle(); }
 
-        std::shared_ptr<const Pipeline> pipeline;
+        std::shared_ptr<Device> device;
+        const VkPipeline pipeline;
         const VkPipelineExecutablePropertiesKHR properties;
         const uint32_t executableIndex;
         mutable std::vector<std::unique_ptr<char[]>> data;
-        friend Pipeline;
     };
 #endif // VK_KHR_pipeline_executable_properties
 } // namespace magma

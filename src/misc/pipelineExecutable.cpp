@@ -26,9 +26,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_pipeline_executable_properties
-PipelineExecutable::PipelineExecutable(std::shared_ptr<const Pipeline> pipeline,
+PipelineExecutable::PipelineExecutable(std::shared_ptr<Device> device, VkPipeline pipeline,
     const VkPipelineExecutablePropertiesKHR& properties, uint32_t executableIndex) noexcept:
-    pipeline(std::move(pipeline)),
+    device(std::move(device)),
+    pipeline(pipeline),
     properties(properties),
     executableIndex(executableIndex)
 {}
@@ -38,7 +39,7 @@ std::vector<VkPipelineExecutableStatisticKHR> PipelineExecutable::getStatistics(
     VkPipelineExecutableInfoKHR pipelineExecutableInfo;
     pipelineExecutableInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_INFO_KHR;
     pipelineExecutableInfo.pNext = nullptr;
-    pipelineExecutableInfo.pipeline = *pipeline;
+    pipelineExecutableInfo.pipeline = pipeline;
     pipelineExecutableInfo.executableIndex = executableIndex;
     uint32_t statisticCount = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPipelineExecutableStatisticsKHR, VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME);
@@ -60,7 +61,7 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
     VkPipelineExecutableInfoKHR pipelineExecutableInfo;
     pipelineExecutableInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_EXECUTABLE_INFO_KHR;
     pipelineExecutableInfo.pNext = nullptr;
-    pipelineExecutableInfo.pipeline = *pipeline;
+    pipelineExecutableInfo.pipeline = pipeline;
     pipelineExecutableInfo.executableIndex = executableIndex;
     uint32_t internalRepresentationCount = 0;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetPipelineExecutableInternalRepresentationsKHR, VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME);
@@ -89,11 +90,6 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
     }
     MAGMA_HANDLE_RESULT(result, "failed to get internal representations of pipeline executable");
     return internalRepresentations;
-}
-
-inline VkDevice PipelineExecutable::getNativeDevice() const noexcept
-{
-    return pipeline->getDevice()->getHandle();
 }
 #endif // VK_KHR_pipeline_executable_properties
 } // namespace magma

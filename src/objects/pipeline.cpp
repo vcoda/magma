@@ -61,7 +61,7 @@ Pipeline::~Pipeline()
 }
 
 #ifdef VK_KHR_pipeline_executable_properties
-std::vector<std::unique_ptr<PipelineExecutable>> Pipeline::getExecutables() const
+std::list<PipelineExecutable> Pipeline::getExecutables() const
 {
     VkPipelineInfoKHR pipelineInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INFO_KHR;
@@ -79,10 +79,10 @@ std::vector<std::unique_ptr<PipelineExecutable>> Pipeline::getExecutables() cons
         result = vkGetPipelineExecutablePropertiesKHR(getNativeDevice(), &pipelineInfo, &executableCount, executableProperties.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to get properties of pipeline executables");
-    std::vector<std::unique_ptr<PipelineExecutable>> executables;
+    std::list<PipelineExecutable> executables;
     uint32_t index = 0;
     for (auto const& properties: executableProperties)
-        executables.emplace_back(PipelineExecutable::makeUnique(shared_from_this(), properties, index++));
+        executables.emplace_back(device, handle, properties, index++);
     return executables;
 }
 #endif // VK_KHR_pipeline_executable_properties
