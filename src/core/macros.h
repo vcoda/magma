@@ -45,7 +45,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_IMAGE_HANDLE(obj) core::reinterpret<VkImage>(obj)
 
-#define MAGMA_OPTIONAL_HANDLE(p) core::dereference(p)
+#define MAGMA_OPTIONAL_HANDLE(p) core::dereference(p.get())
 
 #define MAGMA_OPTIONAL_INSTANCE(p) (this->p ? this->p.get() : nullptr)
 

@@ -28,10 +28,7 @@ namespace magma
 
     namespace core
     {
-    #ifdef MAGMA_CXX17
-        [[nodiscard]]
-    #endif
-        constexpr hash_t hashCombine(const hash_t seed, const hash_t hash) noexcept
+        [[nodiscard]] constexpr hash_t hashCombine(const hash_t seed, const hash_t hash) noexcept
         {   // https://www.boost.org/doc/libs/1_46_1/doc/html/hash/reference.html#boost.hash_combine
             return seed ^ (hash + 0x9e3779b9 + (seed << 6) + (seed >> 2));
         }

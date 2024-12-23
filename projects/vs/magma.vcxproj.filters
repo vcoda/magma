@@ -477,16 +477,10 @@
     <ClInclude Include="..\..\src\core\foreach.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\hash.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\linearAllocator.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\macros.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\memory.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\pch.h">
@@ -904,6 +898,9 @@
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\vla.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\defines.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1677,6 +1674,9 @@
     </None>
     <None Include="..\..\src\objects\leanCommandBuffer.inl">
       <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\core\core.inl">
+      <Filter>Header Files\core</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -198,12 +198,11 @@
     <ClInclude Include="..\..\src\barriers\subpassDependency.h" />
     <ClInclude Include="..\..\src\barriers\subpassDependency2.h" />
     <ClInclude Include="..\..\src\core\core.h" />
+    <ClInclude Include="..\..\src\core\defines.h" />
     <ClInclude Include="..\..\src\core\foreach.h" />
-    <ClInclude Include="..\..\src\core\hash.h" />
     <ClInclude Include="..\..\src\core\lentPtr.h" />
     <ClInclude Include="..\..\src\core\linearAllocator.h" />
     <ClInclude Include="..\..\src\core\macros.h" />
-    <ClInclude Include="..\..\src\core\memory.h" />
     <ClInclude Include="..\..\src\core\pch.h" />
     <ClInclude Include="..\..\src\core\popcount.h" />
     <ClInclude Include="..\..\src\core\refCountChecker.h" />
@@ -703,6 +702,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\barriers\bufferMemoryBarrier.inl" />
     <None Include="..\..\src\barriers\subpassDependency.inl" />
     <None Include="..\..\src\barriers\subpassDependency2.inl" />
+    <None Include="..\..\src\core\core.inl" />
     <None Include="..\..\src\core\hash.inl" />
     <None Include="..\..\src\core\memory.inl" />
     <None Include="..\..\src\descriptors\bufferArrayElement.inl" />

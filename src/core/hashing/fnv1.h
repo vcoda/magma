@@ -32,13 +32,13 @@ namespace magma
 
             namespace fnv
             {
-#ifdef MAGMA_X64
+            #ifdef MAGMA_X64
                 constexpr uint64_t prime = 1099511628211ULL;
                 constexpr uint64_t basis = 14695981039346656037ULL;
-#else
+            #else
                 constexpr uint32_t prime = 16777619U;
                 constexpr uint32_t basis = 2166136261U;
-#endif // MAGMA_X64
+            #endif // MAGMA_X64
             }
 
             /* FNV-1 hash algorithm. */

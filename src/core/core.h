@@ -16,175 +16,88 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-
-#if !defined(VK_USE_64_BIT_PTR_DEFINES)
-    #if defined(__LP64__) || defined(_WIN64) || (defined(__x86_64__) && !defined(__ILP32__) ) || defined(_M_X64) || defined(__ia64) || defined (_M_IA64) || defined(__aarch64__) || defined(__powerpc64__)
-        #define VK_USE_64_BIT_PTR_DEFINES 1
-    #else
-        #define VK_USE_64_BIT_PTR_DEFINES 0
-    #endif
-#endif
-
-#if defined(_DEBUG) || defined(DEBUG)
-    #define MAGMA_DEBUG
-#endif
-
-#if defined(VK_KHR_buffer_device_address) || defined(VK_EXT_buffer_device_address)
-    #define MAGMA_NULL (VkDeviceAddress)0ull
-#endif
-
-#define MAGMA_ALIGNMENT 16
-#define MAGMA_DEVICE_ADDRESS_ALIGNMENT 256
-
-#define MAGMA_MAX_STRING 4096
-
-#define MAGMA_MAX_BUFFER_MARKERS 1024
-
-#define MAGMA_BAD_CODE 0xBAADC0DE
-
-#define MAGMA_EXTENSION_PREFIX "VK_"
-#define MAGMA_LAYER_PREFIX "VK_LAYER_"
-
-#if defined(_M_AMD64) || defined(__x86_64__)
-  #define MAGMA_XMM_REGISTERS 16
-#else
-  #define MAGMA_XMM_REGISTERS 8
-#endif
-#define MAGMA_XMM_BLOCK_SIZE (sizeof(__m128i) * MAGMA_XMM_REGISTERS)
-#define MAGMA_CONCURRENT_COPY_THREADS 4
-#define MAGMA_COPY_PAGE_SIZE (MAGMA_XMM_BLOCK_SIZE * MAGMA_CONCURRENT_COPY_THREADS)
-
-#ifdef MAGMA_SSE
-  #define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
-#endif
-
-namespace magma
-{
-typedef std::vector<const char *> NullTerminatedStringArray;
-
-#if (VK_USE_64_BIT_PTR_DEFINES == 1)
-typedef void *NonDispatchableHandle;
-#else
-typedef uint64_t NonDispatchableHandle;
-#endif
-
-/* Base class with virtual destructor. */
-
-class IClass
-{
-public:
-    virtual ~IClass() = default;
-};
-
-/* Prevents objects of a class from being copy-
-   constructed or assigned to each other. */
-
-class NonCopyable
-{
-    NonCopyable(const NonCopyable&) = delete;
-    const NonCopyable& operator=(const NonCopyable&) = delete;
-
-protected:
-    NonCopyable() = default;
-    ~NonCopyable() = default;
-};
-
-template<class Parent, class Child>
-inline void linkNode(Parent& parent, Child& child) noexcept
-{
-    child.pNext = const_cast<void *>(parent.pNext);
-    parent.pNext = &child;
-}
-
-namespace core
-{
-template<class Type>
-inline typename Type::NativeHandle dereference(const Type *obj) noexcept
-{
-    return obj ? obj->getHandle() : VK_NULL_HANDLE;
-}
-
-template<class Type>
-inline typename Type::NativeHandle dereference(const std::shared_ptr<Type>& obj) noexcept
-{
-    return obj ? obj->getHandle() : VK_NULL_HANDLE;
-}
-
-template<class Type>
-inline typename Type::NativeHandle dereference(const std::unique_ptr<Type>& obj) noexcept
-{
-    return obj ? obj->getHandle() : VK_NULL_HANDLE;
-}
-
-template<class Type>
-inline typename Type::NativeHandle dereference(const std::weak_ptr<Type>& obj) noexcept
-{
-    return obj.expired() ? VK_NULL_HANDLE : obj.lock()->getHandle();
-}
-
-template<class VkObject>
-inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
-{
-    if (handle)
-    {
-    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        return reinterpret_cast<VkObject>(handle);
-    #else
-        return static_cast<VkObject>(handle);
-    #endif
-    }
-    return VK_NULL_HANDLE;
-}
-
-template<class T>
-inline uint32_t countof(const T& container) noexcept
-{
-    return static_cast<uint32_t>(container.size());
-}
-
-template<class Type>
-inline const std::unique_ptr<Type>& null() noexcept
-{
-    static std::unique_ptr<Type> ptr;
-    return ptr;
-}
-
-template<class Int>
-inline Int roundUp(Int value, Int multiple) noexcept
-{
-    if (Int(0) == multiple)
-        return Int(0);
-    if (Int(1) == multiple)
-        return value;
-    return ((value + multiple - Int(1)) / multiple) * multiple;
-}
-
-template<class T>
-constexpr T alignUp(T value, T alignment) noexcept
-{
-    return (value + alignment - 1) & ~(alignment - 1);
-}
-
-template<class T>
-constexpr T alignDown(T value, T alignment) noexcept
-{
-    return value & ~(alignment - 1);
-}
-} // namespace core
-} // namespace magma
-
+#include "defines.h"
 #include "macros.h"
-#include "hash.h"
-#include "memory.h"
 #include "variantPtr.h"
 #include "lentPtr.h"
 #include "vla.h"
+#include "hashing/constexpr.h"
+#include "hashing/fnv1.h"
+#include "hashing/fnv1string.h"
 
-namespace magma::core
+namespace magma
 {
-template<class Type>
-inline typename Type::NativeHandle dereference(const lent_ptr<Type>& obj) noexcept
-{
-    return obj ? obj->getHandle() : VK_NULL_HANDLE;
-}
-} // namespace magma::core
+    typedef std::vector<const char *> NullTerminatedStringArray;
+
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
+    typedef void *NonDispatchableHandle;
+#else
+    typedef uint64_t NonDispatchableHandle;
+#endif
+
+    class IClass
+    {
+    public:
+        virtual ~IClass() = default;
+    };
+
+    class NonCopyable
+    {
+        NonCopyable(const NonCopyable&) = delete;
+        const NonCopyable& operator=(const NonCopyable&) = delete;
+
+    protected:
+        NonCopyable() = default;
+        ~NonCopyable() = default;
+    };
+
+    template<class Parent, class Child>
+    inline void linkNode(Parent& parent, Child& child) noexcept
+    {
+        child.pNext = const_cast<void *>(parent.pNext);
+        parent.pNext = &child;
+    }
+
+    namespace core
+    {
+        template<class T> constexpr bool powerOfTwo(T x) noexcept;
+        template<class T> constexpr T alignUp(T value, T alignment) noexcept;
+        template<class T> constexpr T alignDown(T value, T alignment) noexcept;
+        template<class T> constexpr T roundUp(T value, T multiple) noexcept;
+
+        template<class T> uint32_t countof(const T& container) noexcept;
+        template<class T> typename T::NativeHandle dereference(T *p) noexcept;
+        template<class VkObject> VkObject reinterpret(NonDispatchableHandle handle) noexcept;
+
+        template<class T> constexpr hash_t hash(T x) noexcept;
+        template<class T> constexpr hash_t hash(T *p) noexcept;
+        template<class T> constexpr hash_t hashArg(hash_t seed, const T& arg) noexcept;
+        template<class T, typename... Args> constexpr hash_t hashArgs(const T& arg, Args... args) noexcept;
+        template<class T, std::size_t N> constexpr hash_t hashArray(const T (&arr)[N]) noexcept;
+        template<class T> hash_t hashArray(const T arr[], std::size_t count) noexcept;
+        template<class T> constexpr hash_t hashString(const T *str) noexcept;
+        template<class T> hash_t hashString(const std::basic_string<T>& str) noexcept;
+        hash_t combineHashList(const std::initializer_list<hash_t>& hashes) noexcept;
+
+        template<class T> T *copy(const T *src) noexcept;
+        template<class T> T *copy(T *dst, const T *src) noexcept;
+        template<class T> T *copyArray(const T *src, std::size_t size) noexcept;
+        template<class T> T *copyVector(const std::vector<T>& src) noexcept;
+        template<class T1, class T2> T1 *copyVector(const std::vector<T2>& src) noexcept;
+        template<class T> T *copyInitializerList(const std::initializer_list<T>& src) noexcept;
+        template<class T1, class T2> T1 *copyInitializerList(const std::initializer_list<T2>& src) noexcept;
+        char *copyString(const char *src) noexcept;
+        char *copyString(char *dst, std::size_t size, const char *src) noexcept;
+        uint8_t *copyBinaryData(const void *src, std::size_t size) noexcept;
+        template<class T> uint8_t *copyBinaryData(const T& src) noexcept;
+        template<class T> bool compare(const void *p1, const void *p2) noexcept;
+        template<class T> bool compare(const T *p1, const T *p2) noexcept;
+        template<class T> bool compareArrays(const T *p1, const T *p2, std::size_t count) noexcept;
+        template<class T> void zeroMemory(T& var) noexcept;
+        template<class T, std::size_t N> void zeroMemory(T (&array)[N]) noexcept;
+    } // namespace core
+} // namespace magma
+
+#include "core.inl"
+#include "hash.inl"
+#include "memory.inl"

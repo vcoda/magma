@@ -87,7 +87,7 @@ VkResult LeanCommandBuffer::beginInherited(const RenderPass *renderPass, uint32_
     cmdBufferInheritanceInfo.subpass = subpass;
     // NOTE: Specifying the exact framebuffer that the secondary command buffer will be
     // executed with may result in better performance at command buffer execution time.
-    cmdBufferInheritanceInfo.framebuffer = MAGMA_OPTIONAL_HANDLE(framebuffer);
+    cmdBufferInheritanceInfo.framebuffer = core::dereference(framebuffer);
     cmdBufferInheritanceInfo.occlusionQueryEnable = MAGMA_BOOLEAN(occlusionQueryEnable);
     cmdBufferInheritanceInfo.queryFlags = queryFlags;
     cmdBufferInheritanceInfo.pipelineStatistics = pipelineStatistics;
