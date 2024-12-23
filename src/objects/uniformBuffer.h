@@ -53,7 +53,8 @@ namespace magma
             BaseUniformBuffer(std::move(device), arraySize * sizeof(Type), sizeof(Type), arraySize, usage, memoryFlags,
                 optional, sharing, std::move(allocator), mappedPersistently)
             {
-                static_assert(std::alignment_of<Type>() == 16, "uniform type should have 16-byte alignment");
+                static_assert(std::alignment_of<Type>() == MAGMA_UNIFORM_ALIGNMENT,
+                    "uniform type should have 16-byte alignment");
             }
     };
 
