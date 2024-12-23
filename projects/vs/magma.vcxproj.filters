@@ -444,16 +444,10 @@
     <ClInclude Include="..\..\src\allocator\allocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\allocator\cxxAllocator.h">
-      <Filter>Header Files\allocator</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\allocator\debugAlignedAllocator.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\allocator\deviceMemoryAllocator.h">
-      <Filter>Header Files\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\allocator\linearPlacementPool.h">
       <Filter>Header Files\allocator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\barriers\bufferMemoryBarrier.h">
@@ -1142,9 +1136,6 @@
     <ClCompile Include="..\..\src\allocator\allocationCallbacks.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\allocator\cxxAllocator.cpp">
-      <Filter>Source Files\allocator</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\allocator\debugAlignedAllocator.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
@@ -1437,9 +1428,6 @@
     </None>
     <None Include="..\..\src\auxiliary\shaderCompiler.inl">
       <Filter>Header Files\auxiliary</Filter>
-    </None>
-    <None Include="..\..\src\allocator\cxxAllocator.inl">
-      <Filter>Header Files\allocator</Filter>
     </None>
     <None Include="..\..\src\barriers\subpassDependency.inl">
       <Filter>Header Files\barriers</Filter>

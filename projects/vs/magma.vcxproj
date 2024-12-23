@@ -167,10 +167,8 @@
     <ClInclude Include="..\..\magma.h" />
     <ClInclude Include="..\..\src\allocator\alignedAllocator.h" />
     <ClInclude Include="..\..\src\allocator\allocator.h" />
-    <ClInclude Include="..\..\src\allocator\cxxAllocator.h" />
     <ClInclude Include="..\..\src\allocator\debugAlignedAllocator.h" />
     <ClInclude Include="..\..\src\allocator\deviceMemoryAllocator.h" />
-    <ClInclude Include="..\..\src\allocator\linearPlacementPool.h" />
     <ClInclude Include="..\..\src\auxiliary\accumulationBuffer.h" />
     <ClInclude Include="..\..\src\auxiliary\base.h" />
     <ClInclude Include="..\..\src\auxiliary\baseFramebuffer.h" />
@@ -425,7 +423,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\allocator\alignedAllocator.cpp" />
     <ClCompile Include="..\..\src\allocator\allocationCallbacks.cpp" />
-    <ClCompile Include="..\..\src\allocator\cxxAllocator.cpp" />
     <ClCompile Include="..\..\src\allocator\debugAlignedAllocator.cpp" />
     <ClCompile Include="..\..\src\allocator\deviceMemoryAllocator.cpp" />
     <ClCompile Include="..\..\src\allocator\vmaImplementation.cpp" />
@@ -617,7 +614,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\allocator\cxxAllocator.inl" />
     <None Include="..\..\src\auxiliary\immediateRender.inl" />
     <None Include="..\..\src\auxiliary\shaderCompiler.inl" />
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">

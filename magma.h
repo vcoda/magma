@@ -19,8 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "src/core/pch.h"
 
+#include "src/allocator/allocator.h"
 #include "src/allocator/alignedAllocator.h"
-#include "src/allocator/cxxAllocator.h"
 #include "src/allocator/debugAlignedAllocator.h"
 #include "src/allocator/deviceMemoryAllocator.h"
 

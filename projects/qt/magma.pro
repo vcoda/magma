@@ -18,7 +18,6 @@ PRECOMPILED_HEADER = ../../src/core/pch.h
 SOURCES += \
     ../../src/allocator/alignedAllocator.cpp \
     ../../src/allocator/allocationCallbacks.cpp \
-    ../../src/allocator/cxxAllocator.cpp \
     ../../src/allocator/debugAlignedAllocator.cpp \
     ../../src/allocator/deviceMemoryAllocator.cpp \
     ../../src/allocator/vmaImplementation.cpp \
@@ -199,10 +198,8 @@ SOURCES += \
 HEADERS += \
     ../../src/allocator/alignedAllocator.h \
     ../../src/allocator/allocator.h \
-    ../../src/allocator/cxxAllocator.h \
     ../../src/allocator/debugAlignedAllocator.h \
     ../../src/allocator/deviceMemoryAllocator.h \
-    ../../src/allocator/linearPlacementPool.h \
     ../../src/auxiliary/accumulationBuffer.h \
     ../../src/auxiliary/base.h \
     ../../src/auxiliary/baseFramebuffer.h \
@@ -237,7 +234,6 @@ HEADERS += \
     ../../src/core/core.h \
     ../../src/core/foreach.h \
     ../../src/core/hash.h \
-    ../../src/core/linearAllocator.h \
     ../../src/core/macros.h \
     ../../src/core/memory.h \
     ../../src/core/pch.h \
