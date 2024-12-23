@@ -73,10 +73,10 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType obje
 void DebugReportCallback::messageFormat(VkDebugReportFlagsEXT flags, VkObjectType objectType,
     uint64_t object, std::size_t location, int32_t messageCode, const char *layerPrefix, const char *format, ...) const noexcept
 {
-    char buffer[MAGMA_MAX_STRING];
+    char buffer[MaxStringLength];
     va_list args;
     va_start(args, format);
-    vsnprintf(buffer, MAGMA_MAX_STRING, format, args);
+    vsnprintf(buffer, MaxStringLength, format, args);
     va_end(args);
     message(flags, objectType, object, location, messageCode, layerPrefix, buffer);
 }

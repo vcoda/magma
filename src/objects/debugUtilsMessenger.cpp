@@ -88,10 +88,10 @@ void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT message
 void DebugUtilsMessenger::messageFormat(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes,
     const char *messageIdName, int32_t messageIdNumber, const char *format, ...) const noexcept
 {
-    char buffer[MAGMA_MAX_STRING];
+    char buffer[MaxStringLength];
     va_list args;
     va_start(args, format);
-    vsnprintf(buffer, MAGMA_MAX_STRING, format, args);
+    vsnprintf(buffer, MaxStringLength, format, args);
     va_end(args);
     message(messageSeverity, messageTypes, messageIdName, messageIdNumber, buffer);
 }

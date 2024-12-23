@@ -701,7 +701,7 @@ const std::unique_ptr<Buffer>& CommandBuffer::getMarkerBuffer() const noexcept
            pipelined marker write operations in flight at a given time,
            thus excessive number of marker write operations may degrade
            command execution performance. */
-        constexpr VkDeviceSize size = MAGMA_MAX_BUFFER_MARKERS * sizeof(uint32_t);
+        constexpr VkDeviceSize size = MaxBufferMarkers * sizeof(uint32_t);
         markerBuffer = std::make_unique<DynamicStorageBuffer>(device, size, false);
     } catch (...) {}
     return markerBuffer;

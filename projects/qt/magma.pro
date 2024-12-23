@@ -231,6 +231,7 @@ HEADERS += \
     ../../src/core/hashing/fnv1.h \
     ../../src/core/hashing/fnv1string.h \
     ../../src/core/copyMemory.h \
+    ../../src/core/constants.h \
     ../../src/core/core.h \
     ../../src/core/hash.h \
     ../../src/core/macros.h \

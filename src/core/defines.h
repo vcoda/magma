@@ -17,18 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#define MAGMA_ALIGNMENT 16
-
-#define MAGMA_UNIFORM_ALIGNMENT 16
-
-#define MAGMA_DEVICE_ADDRESS_ALIGNMENT 256
-
-#define MAGMA_BAD_CODE 0xBAADC0DE
-
-#define MAGMA_MAX_BUFFER_MARKERS 1024
-
-#define MAGMA_MAX_STRING 4096
-
 #define MAGMA_EXTENSION_PREFIX "VK_"
 
 #define MAGMA_LAYER_PREFIX "VK_LAYER_"
@@ -37,15 +25,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_NULL VkDeviceAddress(0ull)
 #endif
 
+#if defined(_DEBUG) || defined(DEBUG)
+    #define MAGMA_DEBUG
+#endif
+
 #if defined(__LP64__) || defined(_WIN64) ||\
     (defined(__x86_64__) && !defined(__ILP32__)) ||\
     defined(_M_X64) || defined(__ia64) || defined (_M_IA64) ||\
     defined(__aarch64__) || defined(__powerpc64__)
     #define MAGMA_X64
-#endif
-
-#if defined(_DEBUG) || defined(DEBUG)
-    #define MAGMA_DEBUG
 #endif
 
 #ifndef VK_USE_64_BIT_PTR_DEFINES

@@ -195,6 +195,7 @@
     <ClInclude Include="..\..\src\barriers\memoryBarrier.h" />
     <ClInclude Include="..\..\src\barriers\subpassDependency.h" />
     <ClInclude Include="..\..\src\barriers\subpassDependency2.h" />
+    <ClInclude Include="..\..\src\core\constants.h" />
     <ClInclude Include="..\..\src\core\core.h" />
     <ClInclude Include="..\..\src\core\defines.h" />
     <ClInclude Include="..\..\src\core\lentPtr.h" />
