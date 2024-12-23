@@ -230,17 +230,17 @@ HEADERS += \
     ../../src/core/hashing/constexpr.h \
     ../../src/core/hashing/fnv1.h \
     ../../src/core/hashing/fnv1string.h \
-    ../../src/core/copyMemory.h \
     ../../src/core/constants.h \
     ../../src/core/core.h \
-    ../../src/core/hash.h \
+    ../../src/core/defines.h \
+    ../../src/core/lentPtr.h \
     ../../src/core/macros.h \
-    ../../src/core/memory.h \
     ../../src/core/pch.h \
     ../../src/core/popcount.h \
     ../../src/core/refCountChecker.h \
     ../../src/core/typedefs.h \
-    ../../src/core/zeroMemory.h \
+    ../../src/core/variantPtr.h \
+    ../../src/core/vla.h \
     ../../src/descriptors/accelerationStructure.h \
     ../../src/descriptors/arrayElement.h \
     ../../src/descriptors/bufferArrayElement.h \

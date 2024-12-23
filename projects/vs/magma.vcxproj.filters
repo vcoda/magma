@@ -468,9 +468,6 @@
     <ClInclude Include="..\..\src\core\core.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\linearAllocator.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\macros.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
