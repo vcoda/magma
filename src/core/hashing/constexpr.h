@@ -16,11 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef MAGMA_CXX17
-  #ifdef _MSC_VER
-    #pragma warning(disable : 4127) // conditional expression is constant
-  #endif
-#endif
 
 namespace magma
 {
