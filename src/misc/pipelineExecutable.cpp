@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../objects/pipeline.h"
 #include "../exceptions/errorResult.h"
-#include "../core/foreach.h"
 #include "../misc/extension.h"
 
 namespace magma
@@ -80,10 +79,10 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
             for (auto const& ir: internalRepresentations)
                 data.emplace_back(ir.dataSize ? MAGMA_NEW char[ir.dataSize] : nullptr);
         }
-        core::forEach(internalRepresentations, data,
+        core::foreach(internalRepresentations, data,
             [](auto& ir, auto& data)
             {   // Assign cached pointer
-                ir->pData = data->get();
+                ir.pData = data.get();
             });
         result = vkGetPipelineExecutableInternalRepresentationsKHR(getNativeDevice(), &pipelineExecutableInfo,
             &internalRepresentationCount, internalRepresentations.data());

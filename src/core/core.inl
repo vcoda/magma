@@ -63,4 +63,16 @@ inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
     }
     return VK_NULL_HANDLE;
 }
+
+template<class T1, class T2, class L>
+inline void foreach(T1& container1, T2& container2, L&& fn)
+{
+    auto i = container1.begin(), ie = container1.end();
+    auto j = container2.begin(), je = container2.end();
+    while ((i != ie) && (j != je))
+    {
+        fn(*i, *j);
+        ++i; ++j;
+    }
+}
 } // namespace magma::core

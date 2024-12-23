@@ -24,7 +24,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/instance.h"
 #include "../objects/commandBuffer.h"
 #include "../exceptions/errorResult.h"
-#include "../core/foreach.h"
 
 static_assert(sizeof(magma::MemoryBudget) == sizeof(VmaBudget),
     "VmaBudget structure size mismatch");
@@ -130,15 +129,15 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
     std::vector<float> defaultPriorities;
     if (priorities.empty())
         defaultPriorities.resize(memoryFlags.size(), MemoryPriorityDefault);
-    core::forConstEach(memoryFlags, priorities.empty() ? defaultPriorities : priorities,
+    core::foreach(memoryFlags, priorities.empty() ? defaultPriorities : priorities,
         [&allocInfos](auto& flags, auto& priority)
         {
             VmaAllocationCreateInfo allocInfo;
             allocInfo.flags = VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT;
-            allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(*flags);
-            if (*flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+            allocInfo.usage = (VmaMemoryUsage)chooseMemoryUsage(flags);
+            if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
                 allocInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-            else if (*flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+            else if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
                 allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
             else
                 allocInfo.requiredFlags = 0;
@@ -149,8 +148,8 @@ std::vector<DeviceMemoryBlock> DeviceMemoryAllocator::allocPages(const std::vect
             allocInfo.memoryTypeBits = 0;
             allocInfo.pool = VK_NULL_HANDLE;
             allocInfo.pUserData = nullptr;
-            MAGMA_ASSERT((*priority >= MemoryPriorityLowest) && (*priority <= MemoryPriorityHighest));
-            allocInfo.priority = *priority;
+            MAGMA_ASSERT((priority >= MemoryPriorityLowest) && (priority <= MemoryPriorityHighest));
+            allocInfo.priority = priority;
             allocInfos.push_back(allocInfo);
         });
     std::vector<VmaAllocation> allocations(core::countof(allocInfos));

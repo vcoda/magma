@@ -69,6 +69,8 @@ namespace magma
         template<class T> typename T::NativeHandle dereference(T *p) noexcept;
         template<class VkObject> VkObject reinterpret(NonDispatchableHandle handle) noexcept;
 
+        template<class T1, class T2, class L> void foreach(T1& container1, T2& container2, L&& fn);
+
         template<class T> constexpr hash_t hash(T x) noexcept;
         template<class T> constexpr hash_t hash(T *p) noexcept;
         template<class T> constexpr hash_t hashArg(hash_t seed, const T& arg) noexcept;

@@ -32,7 +32,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/finish.h"
 #include "../misc/mapBuffer.h"
 #include "../exceptions/errorResult.h"
-#include "../core/foreach.h"
 
 #define MAGMA_ENABLE_VALID_MIP_EXTENTS 1
 
@@ -644,10 +643,10 @@ void Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
         {
             if (!copyFn)
                 copyFn = std::memcpy;
-            core::forConstEach(mipChain, mipMaps,
-                [buffer, copyFn](auto dstMip, auto srcMip)
+            core::foreach(mipChain, mipMaps,
+                [buffer, copyFn](auto& dstMip, auto& srcMip)
                 {   // Copy mip texels to buffer
-                    copyFn(buffer + dstMip->bufferOffset, srcMip->texels, (size_t)srcMip->size);
+                    copyFn(buffer + dstMip.bufferOffset, srcMip.texels, (size_t)srcMip.size);
                 });
         });
     MAGMA_ASSERT(cmdBuffer->allowsReset());

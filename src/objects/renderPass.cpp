@@ -28,7 +28,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../exceptions/errorResult.h"
 #include "../helpers/streamInsertOperators.h"
 #include "../helpers/stringifyFlags.h"
-#include "../core/foreach.h"
 
 namespace magma
 {
