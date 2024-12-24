@@ -19,9 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/compatibility.h"
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 
-namespace magma
-{
-namespace helpers
+namespace magma::helpers
 {
 constexpr VkDebugReportObjectTypeEXT objectToDebugReportType(const VkObjectType objectType) noexcept
 {
@@ -189,5 +187,4 @@ constexpr VkImageType spirvDimToImageType(const SpvDim dim) noexcept
         return VK_IMAGE_TYPE_MAX_ENUM;
     }
 }
-} // namespace helpers
-} // namespace magma
+} // namespace magma::helpers

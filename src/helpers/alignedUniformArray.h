@@ -21,8 +21,8 @@ namespace magma
 {
     namespace helpers
     {
-        /* Helper class that allows to iterate and access the
-           elements  of DynamicUniformBuffer object. Takes into
+        /* Proxy array that allows to iterate and access the
+           elements of DynamicUniformBuffer object. Takes into
            account an alignment of elements which is determined
            by hardware requirements. */
 

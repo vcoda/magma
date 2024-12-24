@@ -19,9 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/deviceMemory.h"
 #include "../objects/buffer.h"
 
-namespace magma
-{
-namespace helpers
+namespace magma::helpers
 {
 template<class Type>
 inline Type *map(lent_ptr<Buffer> buffer,
@@ -44,5 +42,4 @@ inline void unmap(lent_ptr<Buffer> buffer) noexcept
     if (buffer->getMemory()->mapped())
         buffer->getMemory()->unmap();
 }
-} // namespace helpers
-} // namespace magma
+} // namespace magma::helpers
