@@ -30,6 +30,8 @@ namespace magma
         static constexpr uint32_t Alignment = 16;
 
     public:
+        typedef Type UniformType;
+
         VkDeviceSize getAlignment() const noexcept override { return std::alignment_of<Type>(); }
         bool dynamic() const noexcept override { return false; }
 
