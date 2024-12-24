@@ -30,11 +30,9 @@ constexpr TransformMatrix::TransformMatrix(const float (&mat)[M][N]) noexcept
 template<class Matrix>
 inline TransformMatrix::TransformMatrix(const Matrix& mat) noexcept
 {
-    float affine[3][4];
-    mat.store(affine); // Type must have store() method
     for (int i = 0; i < 3; ++i)
         for (int j = 0; j < 4; ++j)
-            matrix[i][j] = affine[i][j];
+            matrix[i][j] = mat[i][j];
 }
 
 constexpr AccelerationStructureInstance::AccelerationStructureInstance() noexcept:
