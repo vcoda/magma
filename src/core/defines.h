@@ -45,9 +45,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // !VK_USE_64_BIT_PTR_DEFINES
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
-    #define MAGMA_STACK_MAX_SIZE _ALLOCA_S_THRESHOLD
+    #define MAGMA_MAX_STACK_SIZE _ALLOCA_S_THRESHOLD
 #else
-    #define MAGMA_STACK_MAX_SIZE 1024
+    #define MAGMA_MAX_STACK_SIZE 1024
 #endif
 
 #ifdef MAGMA_SSE

@@ -79,5 +79,5 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_VLA(Type, var, count)\
-    MAGMA_ASSERT(sizeof(Type) * count <= MAGMA_STACK_MAX_SIZE);\
+    MAGMA_ASSERT(sizeof(Type) * count <= MAGMA_MAX_STACK_SIZE);\
     magma::core::VariableLengthArray<Type> var(MAGMA_STACK_ALLOC(sizeof(Type) * count), count)
