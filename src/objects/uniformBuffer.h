@@ -27,7 +27,7 @@ namespace magma
     template<class Type>
     class TBaseUniformBuffer : public BaseUniformBuffer
     {
-        constexpr uint32_t Alignment = 16;
+        static constexpr uint32_t Alignment = 16;
 
     public:
         VkDeviceSize getAlignment() const noexcept override { return std::alignment_of<Type>(); }
