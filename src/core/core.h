@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "constants.h"
 #include "defines.h"
 #include "macros.h"
 #include "variantPtr.h"
@@ -28,6 +27,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    constexpr uint32_t MaxStringLength = 4096;
+
     typedef std::vector<const char *> NullTerminatedStringArray;
 
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)

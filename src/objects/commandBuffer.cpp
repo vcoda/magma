@@ -696,6 +696,7 @@ void CommandBuffer::updateAccelerationStructureIndirect(lent_ptr<AccelerationStr
 
 const std::unique_ptr<Buffer>& CommandBuffer::getMarkerBuffer() const noexcept
 {
+    constexpr uint32_t MaxBufferMarkers = 1024;
     if (!markerBuffer) try
     {   /* Implementations may only support a limited number of
            pipelined marker write operations in flight at a given time,

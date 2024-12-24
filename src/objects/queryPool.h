@@ -29,8 +29,8 @@ namespace magma
     };
 
 #ifdef MAGMA_DEBUG
-    template<> struct BadQueryResult<uint32_t> { static constexpr uint32_t value = BadCode; };
-    template<> struct BadQueryResult<uint64_t> { static constexpr uint64_t value = BadCode | uint64_t(BadCode) << 32; };
+    template<> struct BadQueryResult<uint32_t> { static constexpr uint32_t value = 0xBAADC0DE; };
+    template<> struct BadQueryResult<uint64_t> { static constexpr uint64_t value = 0xBAADC0DEBAADC0DE; };
 #else
     template<> struct BadQueryResult<uint32_t> { static constexpr uint32_t value = 0u; };
     template<> struct BadQueryResult<uint64_t> { static constexpr uint64_t value = 0ull; };

@@ -27,8 +27,9 @@ namespace magma
     template<class Type>
     class TBaseUniformBuffer : public BaseUniformBuffer
     {
+        constexpr uint32_t Alignment = 16;
+
     public:
-        typedef Type UniformType;
         VkDeviceSize getAlignment() const noexcept override { return std::alignment_of<Type>(); }
         bool dynamic() const noexcept override { return false; }
 
@@ -53,7 +54,7 @@ namespace magma
             BaseUniformBuffer(std::move(device), arraySize * sizeof(Type), sizeof(Type), arraySize, usage, memoryFlags,
                 optional, sharing, std::move(allocator), mappedPersistently)
             {
-                static_assert(std::alignment_of<Type>() == UniformAlignment,
+                static_assert(std::alignment_of<Type>() == Alignment,
                     "uniform type should have 16-byte alignment");
             }
     };

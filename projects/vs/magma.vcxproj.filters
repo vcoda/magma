@@ -891,9 +891,6 @@
     <ClInclude Include="..\..\src\core\defines.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\constants.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
