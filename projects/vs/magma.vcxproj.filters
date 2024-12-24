@@ -801,9 +801,6 @@
     <ClInclude Include="..\..\src\raytracing\accelerationStructureInstance.h">
       <Filter>Header Files\raytracing</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\helpers\alignment.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\objects\accelerationStructureInputBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>

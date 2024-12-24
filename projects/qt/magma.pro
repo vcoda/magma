@@ -264,7 +264,6 @@ HEADERS += \
     ../../src/extensions/instanceLayers.h \
     ../../src/extensions/layers.h \
     ../../src/helpers/alignedUniformArray.h \
-    ../../src/helpers/alignment.h \
     ../../src/helpers/enumerationCast.h \
     ../../src/helpers/executeCommandBuffer.h \
     ../../src/helpers/executeDeferredOperation.h \

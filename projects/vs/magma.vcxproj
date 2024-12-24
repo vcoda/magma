@@ -229,7 +229,6 @@
     <ClInclude Include="..\..\src\extensions\instanceLayers.h" />
     <ClInclude Include="..\..\src\extensions\layers.h" />
     <ClInclude Include="..\..\src\extensions\deviceExtensions.h" />
-    <ClInclude Include="..\..\src\helpers\alignment.h" />
     <ClInclude Include="..\..\src\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\src\helpers\enumerationCast.h" />
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
