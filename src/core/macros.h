@@ -74,11 +74,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
-    #define MAGMA_STACK_MAX_SIZE _ALLOCA_S_THRESHOLD
     #define MAGMA_STACK_ALLOC(size) (size) ? _malloca(size) : nullptr
     #define MAGMA_STACK_FREE(p) _freea(p)
 #else
-    #define MAGMA_STACK_MAX_SIZE 1024
     #define MAGMA_STACK_ALLOC(size) (size) ? alloca(size) : nullptr
     #define MAGMA_STACK_FREE(p)
 #endif // _MSC_VER || __MINGW32__

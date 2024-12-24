@@ -44,6 +44,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // MAGMA_X64
 #endif // !VK_USE_64_BIT_PTR_DEFINES
 
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    #define MAGMA_STACK_MAX_SIZE _ALLOCA_S_THRESHOLD
+#else
+    #define MAGMA_STACK_MAX_SIZE 1024
+#endif
+
 #ifdef MAGMA_SSE
     #define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
 #endif
