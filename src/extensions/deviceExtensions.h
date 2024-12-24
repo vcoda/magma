@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "extensions.h"
+#include "extensionMap.h"
 
 namespace magma
 {
@@ -27,7 +27,7 @@ namespace magma
        of extensions see: https://registry.khronos.org/vulkan/
        Keep list of extensions in alphabetical order! */
 
-    class DeviceExtensions : public Extensions
+    class DeviceExtensions : public ExtensionMap<VkExtensionProperties>
     {
     public:
         // Advanced Micro Devices, Inc.

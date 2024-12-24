@@ -224,11 +224,10 @@
     <ClInclude Include="..\..\src\exceptions\reflectionErrorResult.h" />
     <ClInclude Include="..\..\src\exceptions\sourcelocation.h" />
     <ClInclude Include="..\..\src\exceptions\unsupportedExtension.h" />
-    <ClInclude Include="..\..\src\extensions\extensions.h" />
     <ClInclude Include="..\..\src\extensions\instanceExtensions.h" />
     <ClInclude Include="..\..\src\extensions\instanceLayers.h" />
-    <ClInclude Include="..\..\src\extensions\layers.h" />
     <ClInclude Include="..\..\src\extensions\deviceExtensions.h" />
+    <ClInclude Include="..\..\src\extensions\extensionMap.h" />
     <ClInclude Include="..\..\src\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\src\helpers\enumerationCast.h" />
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
@@ -458,10 +457,8 @@
     <ClCompile Include="..\..\src\exceptions\errorResult.cpp" />
     <ClCompile Include="..\..\src\exceptions\exception.cpp" />
     <ClCompile Include="..\..\src\exceptions\reflectionErrorResult.cpp" />
-    <ClCompile Include="..\..\src\extensions\extensions.cpp" />
     <ClCompile Include="..\..\src\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\src\extensions\instanceLayers.cpp" />
-    <ClCompile Include="..\..\src\extensions\layers.cpp" />
     <ClCompile Include="..\..\src\extensions\deviceExtensions.cpp" />
     <ClCompile Include="..\..\src\helpers\executeCommandBuffer.cpp" />
     <ClCompile Include="..\..\src\helpers\executeDeferredOperation.cpp" />

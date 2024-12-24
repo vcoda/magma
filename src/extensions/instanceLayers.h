@@ -16,14 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "layers.h"
+#include "extensionMap.h"
 
 namespace magma
 {
     /* https://vulkan.gpuinfo.org/listinstancelayers.php
        Keep list of layers in alphabetical order! */
 
-    class InstanceLayers : public Layers
+    class InstanceLayers : public ExtensionMap<VkLayerProperties>
     {
     public:
         const VkBool32 GalaxyOverlayVkLayer: 1;

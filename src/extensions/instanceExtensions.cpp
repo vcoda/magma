@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 InstanceExtensions::InstanceExtensions(const char *layerName /* nullptr */):
-    Extensions(Instance::enumerateExtensions(layerName)),
+    ExtensionMap<VkExtensionProperties>(Instance::enumerateExtensions(layerName)),
 
     MAGMA_CHECK_EXTENSION(ANDROID_native_buffer),
 

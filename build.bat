@@ -93,10 +93,8 @@ src\exceptions\errorResult.cpp ^
 src\exceptions\exception.cpp ^
 src\exceptions\reflectionErrorResult.cpp ^
 src\extensions\deviceExtensions.cpp ^
-src\extensions\extensions.cpp ^
 src\extensions\instanceExtensions.cpp ^
 src\extensions\instanceLayers.cpp ^
-src\extensions\layers.cpp ^
 src\helpers\executeCommandBuffer.cpp ^
 src\helpers\executeDeferredOperation.cpp ^
 src\helpers\layoutTransition.cpp ^
@@ -291,10 +289,8 @@ errorResult.obj ^
 exception.obj ^
 reflectionErrorResult.obj ^
 deviceExtensions.obj ^
-extensions.obj ^
 instanceExtensions.obj ^
 instanceLayers.obj ^
-layers.obj ^
 executeCommandBuffer.obj ^
 executeDeferredOperation.obj ^
 layoutTransition.obj ^

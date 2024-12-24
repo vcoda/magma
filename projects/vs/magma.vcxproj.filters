@@ -519,16 +519,10 @@
     <ClInclude Include="..\..\src\exceptions\unsupportedExtension.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\extensions\extensions.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\extensions\instanceExtensions.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\extensions\instanceLayers.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\extensions\layers.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\helpers\alignedUniformArray.h">
@@ -888,6 +882,9 @@
     <ClInclude Include="..\..\src\core\defines.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\extensions\extensionMap.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1157,16 +1154,10 @@
     <ClCompile Include="..\..\src\exceptions\exception.cpp">
       <Filter>Source Files\exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\extensions\extensions.cpp">
-      <Filter>Source Files\extensions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\extensions\instanceExtensions.cpp">
       <Filter>Source Files\extensions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\extensions\instanceLayers.cpp">
-      <Filter>Source Files\extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\extensions\layers.cpp">
       <Filter>Source Files\extensions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\helpers\executeCommandBuffer.cpp">

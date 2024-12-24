@@ -23,14 +23,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #define MAGMA_CHECK_LAYER(name)\
-    name(hasLayer(core::hashString(MAGMA_LAYER_PREFIX #name)))
+    name(find(MAGMA_LAYER_PREFIX #name))
 #define MAGMA_CHECK_LAYER_NOPREFIX(name)\
-    name(hasLayer(core::hashString(#name)))
+    name(find(#name))
 #define MAGMA_HAS_LAYER(name)\
-    hasLayer(core::hashString(name))
+    find(name)
 
 InstanceLayers::InstanceLayers():
-    Layers(Instance::enumerateLayers()),
+    ExtensionMap<VkLayerProperties>(Instance::enumerateLayers()),
 
     MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer),
     MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer_DEBUG),

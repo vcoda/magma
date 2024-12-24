@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "extensions.h"
+#include "extensionMap.h"
 
 namespace magma
 {
@@ -25,7 +25,7 @@ namespace magma
        objects and commands, should be an instance extension.
        Keep list of extensions in alphabetical order! */
 
-    class InstanceExtensions : public Extensions
+    class InstanceExtensions : public ExtensionMap<VkExtensionProperties>
     {
     public:
         // ANDROID (Google LLC)
