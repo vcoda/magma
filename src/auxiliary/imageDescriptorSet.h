@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "base.h"
 #include "../objects/descriptorSetLayout.h"
 
 namespace magma
@@ -35,7 +34,7 @@ namespace magma
         /* Allocates descriptor set for the first image binding
            found in the shader reflection. */
 
-        class ImageDescriptorSet : public Base
+        class ImageDescriptorSet final
         {
         public:
             explicit ImageDescriptorSet(std::shared_ptr<Device> device,

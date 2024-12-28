@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <stack>
-#include "base.h"
 
 namespace magma
 {
@@ -37,7 +36,7 @@ namespace magma
            to avoid performance impact due to synchronizations
            inside command list. */
 
-        class Profiler : public Base
+        class Profiler : public IClass
         {
         public:
             enum Queue : uint8_t;

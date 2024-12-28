@@ -196,7 +196,6 @@ HEADERS += \
     ../../src/allocator/debugAlignedAllocator.h \
     ../../src/allocator/deviceMemoryAllocator.h \
     ../../src/auxiliary/accumulationBuffer.h \
-    ../../src/auxiliary/base.h \
     ../../src/auxiliary/blitRectangle.h \
     ../../src/auxiliary/fillRectangleVertexShader.h \
     ../../src/auxiliary/framebuffer.h \

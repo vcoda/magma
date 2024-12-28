@@ -378,9 +378,6 @@
     <ClInclude Include="..\..\src\auxiliary\accumulationBuffer.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\auxiliary\base.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\auxiliary\blitRectangle.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>

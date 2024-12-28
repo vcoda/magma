@@ -170,7 +170,6 @@
     <ClInclude Include="..\..\src\allocator\debugAlignedAllocator.h" />
     <ClInclude Include="..\..\src\allocator\deviceMemoryAllocator.h" />
     <ClInclude Include="..\..\src\auxiliary\accumulationBuffer.h" />
-    <ClInclude Include="..\..\src\auxiliary\base.h" />
     <ClInclude Include="..\..\src\auxiliary\blitRectangle.h" />
     <ClInclude Include="..\..\src\auxiliary\fillRectangleVertexShader.h" />
     <ClInclude Include="..\..\src\auxiliary\frameGrabber.h" />

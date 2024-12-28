@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "base.h"
 
 namespace magma
 {
@@ -31,7 +30,7 @@ namespace magma
     {
         /* Auxiliary frame grabber with purpose of taking screenshots. */
 
-        class FrameGrabber : public Base
+        class FrameGrabber : public IClass
         {
         public:
             explicit FrameGrabber(std::shared_ptr<Device> device,

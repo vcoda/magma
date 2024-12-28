@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <shaderc/shaderc.h>
-#include "base.h"
 
 namespace magma
 {
@@ -44,7 +43,7 @@ namespace magma
            to compile GLSL shaders in run-time. Can be useful in case
            if shader code is generated dynamically. */
 
-        class ShaderCompiler : public Base
+        class ShaderCompiler : public IClass
         {
         public:
             ShaderCompiler(std::shared_ptr<Device> device,

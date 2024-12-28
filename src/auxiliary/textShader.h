@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "base.h"
 
 namespace magma
 {
@@ -38,7 +37,7 @@ namespace magma
            Supports only ASCII printable characters (32 - 127).
            See: https://www.shadertoy.com/view/Mt2GWD. */
 
-        class TextShader : public Base
+        class TextShader : public IClass
         {
         public:
             explicit TextShader(std::shared_ptr<const RenderPass> renderPass,

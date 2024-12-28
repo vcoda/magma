@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "base.h"
 #include "../objects/pipelineCache.h"
 #include "../shaders/pipelineShaderStage.h"
 #include "../misc/structureChain.h"
@@ -50,7 +49,7 @@ namespace magma
            object along with lookup of base pipeline and lookup
            of existing pipeline by computing its hash. */
 
-        class GraphicsPipelineCache : public Base
+        class GraphicsPipelineCache : public IClass
         {
         public:
             explicit GraphicsPipelineCache(std::shared_ptr<Device> device,

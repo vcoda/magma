@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "base.h"
 #include "../objects/descriptorSetLayout.h"
 #include "../misc/clearValue.h"
 
@@ -41,7 +40,7 @@ namespace magma
         /* Auxiliary object that helps to quickly blit
            source texture into destination framebuffer. */
 
-        class BlitRectangle : public Base
+        class BlitRectangle : public IClass
         {
         public:
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
