@@ -28,22 +28,17 @@ SRC_OBJS= \
 	src/allocator/vmaImplementation.o \
 	\
 	src/auxiliary/accumulationBuffer.o \
-	src/auxiliary/baseFramebuffer.o \
+	src/auxiliary/auxframebuffer.o \
 	src/auxiliary/blitRectangle.o \
-	src/auxiliary/colorFramebuffer.o \
-	src/auxiliary/colorMultisampleFramebuffer.o \
-	src/auxiliary/depthFramebuffer.o \
 	src/auxiliary/fillRectangleVertexShader.o \
 	src/auxiliary/frameGrabber.o \
 	src/auxiliary/generateMipmap.o \
 	src/auxiliary/graphicsPipelineCache.o \
 	src/auxiliary/imageDescriptorSet.o \
 	src/auxiliary/immediateRender.o \
-	src/auxiliary/multiAttachmentFramebuffer.o \
 	src/auxiliary/profiler.o \
 	src/auxiliary/shaderCompiler.o \
 	src/auxiliary/sprite.o \
-	src/auxiliary/swapchainFramebuffer.o \
 	src/auxiliary/textShader.o \
 	\
 	src/barriers/imageMemoryBarrier.o \

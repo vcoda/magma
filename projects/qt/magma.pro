@@ -22,22 +22,17 @@ SOURCES += \
     ../../src/allocator/deviceMemoryAllocator.cpp \
     ../../src/allocator/vmaImplementation.cpp \
     ../../src/auxiliary/accumulationBuffer.cpp \
-    ../../src/auxiliary/baseFramebuffer.cpp \
+    ../../src/auxiliary/auxframebuffer.cpp \
     ../../src/auxiliary/blitRectangle.cpp \
-    ../../src/auxiliary/colorFramebuffer.cpp \
-    ../../src/auxiliary/colorMultisampleFramebuffer.cpp \
-    ../../src/auxiliary/depthFramebuffer.cpp \
     ../../src/auxiliary/fillRectangleVertexShader.cpp \
     ../../src/auxiliary/frameGrabber.cpp \
     ../../src/auxiliary/generateMipmap.cpp \
     ../../src/auxiliary/graphicsPipelineCache.cpp \
     ../../src/auxiliary/imageDescriptorSet.cpp \
     ../../src/auxiliary/immediateRender.cpp \
-    ../../src/auxiliary/multiAttachmentFramebuffer.cpp \
     ../../src/auxiliary/profiler.cpp \
     ../../src/auxiliary/shaderCompiler.cpp \
     ../../src/auxiliary/sprite.cpp \
-    ../../src/auxiliary/swapchainFramebuffer.cpp \
     ../../src/auxiliary/textShader.cpp \
     ../../src/barriers/imageMemoryBarrier.cpp \
     ../../src/core/pch.cpp \
@@ -202,23 +197,18 @@ HEADERS += \
     ../../src/allocator/deviceMemoryAllocator.h \
     ../../src/auxiliary/accumulationBuffer.h \
     ../../src/auxiliary/base.h \
-    ../../src/auxiliary/baseFramebuffer.h \
     ../../src/auxiliary/blitRectangle.h \
-    ../../src/auxiliary/colorFramebuffer.h \
-    ../../src/auxiliary/colorMultisampleFramebuffer.h \
-    ../../src/auxiliary/depthFramebuffer.h \
     ../../src/auxiliary/fillRectangleVertexShader.h \
+    ../../src/auxiliary/framebuffer.h \
     ../../src/auxiliary/frameGrabber.h \
     ../../src/auxiliary/generateMipmap.h \
     ../../src/auxiliary/graphicsPipelineCache.h \
     ../../src/auxiliary/imageDescriptorSet.h \
     ../../src/auxiliary/immediateRender.h \
-    ../../src/auxiliary/multiAttachmentFramebuffer.h \
     ../../src/auxiliary/profiler.h \
     ../../src/auxiliary/scopedProfile.h \
     ../../src/auxiliary/shaderCompiler.h \
     ../../src/auxiliary/sprite.h \
-    ../../src/auxiliary/swapchainFramebuffer.h \
     ../../src/auxiliary/textShader.h \
     ../../src/auxiliary/typedefs.h \
     ../../src/barriers/bufferMemoryBarrier.h \

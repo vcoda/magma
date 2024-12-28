@@ -381,19 +381,7 @@
     <ClInclude Include="..\..\src\auxiliary\base.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\auxiliary\baseFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\auxiliary\blitRectangle.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\auxiliary\colorFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\auxiliary\colorMultisampleFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\auxiliary\depthFramebuffer.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\auxiliary\fillRectangleVertexShader.h">
@@ -414,9 +402,6 @@
     <ClInclude Include="..\..\src\auxiliary\immediateRender.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\auxiliary\multiAttachmentFramebuffer.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\auxiliary\profiler.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
@@ -427,9 +412,6 @@
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\auxiliary\sprite.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\auxiliary\swapchainFramebuffer.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\auxiliary\textShader.h">
@@ -885,6 +867,9 @@
     <ClInclude Include="..\..\src\extensions\extensionMap.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\auxiliary\framebuffer.h">
+      <Filter>Header Files\auxiliary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1235,19 +1220,7 @@
     <ClCompile Include="..\..\src\auxiliary\accumulationBuffer.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\auxiliary\baseFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\auxiliary\blitRectangle.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\auxiliary\colorFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\auxiliary\colorMultisampleFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\auxiliary\depthFramebuffer.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\auxiliary\fillRectangleVertexShader.cpp">
@@ -1268,9 +1241,6 @@
     <ClCompile Include="..\..\src\auxiliary\immediateRender.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\auxiliary\multiAttachmentFramebuffer.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\auxiliary\profiler.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
@@ -1278,9 +1248,6 @@
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\auxiliary\sprite.cpp">
-      <Filter>Source Files\auxiliary</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\auxiliary\swapchainFramebuffer.cpp">
       <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\auxiliary\textShader.cpp">
@@ -1378,6 +1345,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\objects\leanCommandBuffer.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\auxiliary\auxframebuffer.cpp">
+      <Filter>Source Files\auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
