@@ -54,7 +54,7 @@ namespace magma
             uint32_t levelCount,
             uint32_t baseArrayLayer,
             uint32_t layerCount,
-            const VkComponentMapping& swizzle,
+            const VkComponentMapping& swizzling,
             VkImageViewCreateFlags flags,
             VkImageUsageFlags usage,
             const StructureChain& extendedInfo);
@@ -91,7 +91,7 @@ namespace magma
             VkImageUsageFlags usage = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit TImageView(Pointer image,
-            const VkComponentMapping& swizzle,
+            const VkComponentMapping& swizzling,
             VkImageViewCreateFlags flags = 0,
             VkImageUsageFlags usage = 0,
             const StructureChain& extendedInfo = StructureChain());
@@ -100,7 +100,7 @@ namespace magma
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
             uint32_t baseArrayLayer = 0,
             uint32_t layerCount = VK_REMAINING_ARRAY_LAYERS,
-            const VkComponentMapping& swizzle = {
+            const VkComponentMapping& swizzling = {
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY,

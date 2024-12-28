@@ -31,7 +31,7 @@ SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
     VkFormat format,
     const SamplerYcbcrConversionState& state,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    const VkComponentMapping& swizzle /* VK_COMPONENT_SWIZZLE_IDENTITY */,
+    const VkComponentMapping& swizzling /* VK_COMPONENT_SWIZZLE_IDENTITY */,
     VkChromaLocationKHR xChromaOffset /* VK_CHROMA_LOCATION_MIDPOINT_KHR */,
     VkChromaLocationKHR yChromaOffset /* VK_CHROMA_LOCATION_MIDPOINT_KHR */,
     bool forceExplicitReconstruction /* false */,
@@ -44,7 +44,7 @@ SamplerYcbcrConversion::SamplerYcbcrConversion(std::shared_ptr<Device> device,
     samplerYcbcrConversionInfo.format = format;
     samplerYcbcrConversionInfo.ycbcrModel = state.ycbcrModel;
     samplerYcbcrConversionInfo.ycbcrRange = state.ycbcrRange;
-    samplerYcbcrConversionInfo.components = swizzle;
+    samplerYcbcrConversionInfo.components = swizzling;
     samplerYcbcrConversionInfo.xChromaOffset = xChromaOffset;
     samplerYcbcrConversionInfo.yChromaOffset = yChromaOffset;
     samplerYcbcrConversionInfo.chromaFilter = state.chromaFilter;

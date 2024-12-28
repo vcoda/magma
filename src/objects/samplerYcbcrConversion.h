@@ -34,7 +34,7 @@ namespace magma
             VkFormat format,
             const SamplerYcbcrConversionState& state,
             std::shared_ptr<IAllocator> allocator = nullptr,
-            const VkComponentMapping& swizzle = {
+            const VkComponentMapping& swizzling = {
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY,

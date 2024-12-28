@@ -28,7 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t levelCount, uint32_t baseArrayLayer, uint32_t layerCount_,
-    const VkComponentMapping& swizzle, VkImageViewCreateFlags flags, VkImageUsageFlags usage, const StructureChain& extendedInfo):
+    const VkComponentMapping& swizzling, VkImageViewCreateFlags flags, VkImageUsageFlags usage, const StructureChain& extendedInfo):
     NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image->getDevice(), image->getHostAllocator()),
     flags(flags),
     viewType(imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags())),
@@ -50,7 +50,7 @@ ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t levelCo
     imageViewInfo.format = image->getFormat();
     const Format format(imageViewInfo.format);
     if (!(format.depth() || format.stencil() || format.depthStencil()))
-        imageViewInfo.components = swizzle;
+        imageViewInfo.components = swizzling;
     else
     {   // Depth/stencil shouldn't have swizzling
         imageViewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
