@@ -21,17 +21,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-MultiColorBlendState::MultiColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+MultiColorBlendState::MultiColorBlendState(const std::initializer_list<ColorBlendAttachmentState>& attachments,
     VkPipelineColorBlendStateCreateFlags flags /* 0 */,
     const std::initializer_list<float>& blendConstants_ /* {1, 1, 1, 1} */) noexcept
 {
     flags = flags;
     attachmentCount = core::countof(attachments);
-    pAttachments = core::copyArray<VkPipelineColorBlendAttachmentState>(attachments.data(), attachments.size());
+    pAttachments = core::copyInitializerList(attachments);
     MAGMA_ASSERT(blendConstants_.size() == 4);
-    float *blendConstant = blendConstants;
-    for (auto value: blendConstants_)
-        *blendConstant++ = value;
+    auto it = blendConstants_.begin();
+    blendConstants[0] = *it++;
+    blendConstants[1] = *it++;
+    blendConstants[2] = *it++;
+    blendConstants[3] = *it;
 }
 
 MultiColorBlendState::MultiColorBlendState(const ColorBlendState& other) noexcept:
