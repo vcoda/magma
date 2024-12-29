@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "frameGrabber.h"
 #include "../objects/device.h"
 #include "../objects/physicalDevice.h"
-#include "../objects/swapchainImage.h"
+#include "../objects/image2D.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
@@ -36,10 +36,10 @@ FrameGrabber::FrameGrabber(std::shared_ptr<Device> device,
     allocator(std::move(allocator))
 {}
 
-void FrameGrabber::captureFrame(std::shared_ptr<SwapchainImage> srcImage, lent_ptr<CommandBuffer> cmdBuffer)
+void FrameGrabber::captureFrame(std::shared_ptr<Image2D> srcImage, lent_ptr<CommandBuffer> cmdBuffer)
 {   // Allocate linear tiled image to copy pixels to
     dstImage = std::make_unique<LinearTiledImage2D>(device, VK_FORMAT_R8G8B8A8_UNORM,
-        srcImage->getExtent(), allocator);
+        srcImage->getExtent2D(), allocator);
     const std::unique_ptr<DeviceFeatures>& deviceFeatures = device->getFeatures();
     const bool srcBlit = deviceFeatures->supportsFormatFeatures(srcImage->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal;
     const bool dstBlit = deviceFeatures->supportsFormatFeatures(dstImage->getFormat(), VK_FORMAT_FEATURE_BLIT_DST_BIT).linear;
