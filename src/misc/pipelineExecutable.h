@@ -36,7 +36,7 @@ namespace magma
     class PipelineExecutable : NonCopyable
     {
     public:
-        PipelineExecutable(std::shared_ptr<Device> device,
+        PipelineExecutable(VkDevice device,
             VkPipeline pipeline,
             const VkPipelineExecutablePropertiesKHR& properties,
             uint32_t executableIndex) noexcept;
@@ -46,9 +46,9 @@ namespace magma
         std::vector<VkPipelineExecutableInternalRepresentationKHR> getInternalRepresentations() const;
 
     private:
-        VkDevice getNativeDevice() const noexcept { return device->getHandle(); }
+        VkDevice getNativeDevice() const noexcept { return device; }
 
-        std::shared_ptr<Device> device;
+        const VkDevice device;
         const VkPipeline pipeline;
         const VkPipelineExecutablePropertiesKHR properties;
         const uint32_t executableIndex;

@@ -82,7 +82,7 @@ std::list<PipelineExecutable> Pipeline::getExecutables() const
     std::list<PipelineExecutable> executables;
     uint32_t index = 0;
     for (auto const& properties: executableProperties)
-        executables.emplace_back(device, handle, properties, index++);
+        executables.emplace_back(*device, handle, properties, index++);
     return executables;
 }
 #endif // VK_KHR_pipeline_executable_properties
