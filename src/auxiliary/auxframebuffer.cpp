@@ -48,7 +48,7 @@ Framebuffer::Framebuffer(std::shared_ptr<Device> device, VkFormat colorFormat, V
         const bool sampled = (sampleCount == 1) ? true : false;
         std::unique_ptr<Image> colorAttachment = std::make_unique<ColorAttachment>(device,
             colorFormat, extent, 1, sampleCount, sampled, allocator, explicitResolve, initializer);
-        std::shared_ptr<UniqueImageView> colorView = std::make_shared<UniqueImageView>(std::move(colorAttachment), swizzling);
+        std::shared_ptr<ImageView> colorView = std::make_shared<UniqueImageView>(std::move(colorAttachment), swizzling);
         colorViews.emplace_back(std::move(colorView));
         if (sampleCount > 1)
         {   // Create multisample resolve attachment
@@ -146,7 +146,7 @@ Framebuffer::Framebuffer(std::shared_ptr<Device> device, const std::initializer_
         constexpr bool sampled = true;
         std::unique_ptr<Image> colorAttachment = std::make_unique<ColorAttachment>(device,
             colorFormat, extent, 1, 1, sampled, allocator, explicitResolve, initializer);
-        std::shared_ptr<UniqueImageView> colorView;
+        std::shared_ptr<ImageView> colorView;
         if (index < swizzles.size())
             colorView = std::make_shared<UniqueImageView>(std::move(colorAttachment), swizzles[index++]);
         else
@@ -210,7 +210,7 @@ Framebuffer::Framebuffer(std::shared_ptr<SwapchainImage> colorAttachment,
     depthStencilView(std::move(sharedDepthStencilView))
 {
     std::shared_ptr<Device> device = colorAttachment->getDevice();
-    std::shared_ptr<SharedImageView> colorView = std::make_shared<SharedImageView>(std::move(colorAttachment), swizzling);
+    std::shared_ptr<ImageView> colorView = std::make_shared<SharedImageView>(std::move(colorAttachment), swizzling);
     colorViews.emplace_back(colorView);
     std::vector<AttachmentDescription> attachments;
     attachments.emplace_back(
