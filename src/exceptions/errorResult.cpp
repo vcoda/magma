@@ -59,7 +59,17 @@ void handleResult(VkResult result, const char *message, const source_location& l
 #ifdef VK_KHR_swapchain
     case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
         throw NativeWindowInUse(message);
+    case VK_ERROR_OUT_OF_DATE_KHR:
+        throw OutOfDate(message);
 #endif // VK_KHR_swapchain
+#ifdef VK_KHR_surface
+    case VK_ERROR_SURFACE_LOST_KHR:
+        throw SurfaceLost(message);
+#endif
+#ifdef VK_EXT_full_screen_exclusive
+    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
+        throw FullScreenExclusiveModeLost(message);
+#endif
     default:
         throw ErrorResult(result, message, location);
 #else

@@ -381,25 +381,7 @@ void Queue::present(const std::unique_ptr<Swapchain>& swapchain, uint32_t imageI
     MAGMA_UNUSED(presentFence);
 #endif // VK_EXT_swapchain_maintenance1
     const VkResult result = vkQueuePresentKHR(handle, &presentInfo);
-#ifndef MAGMA_NO_EXCEPTIONS
-    switch (result)
-    {
-#ifdef VK_KHR_swapchain
-    case VK_ERROR_OUT_OF_DATE_KHR:
-        throw exception::OutOfDate("queue present failed");
-#endif
-#ifdef VK_KHR_surface
-    case VK_ERROR_SURFACE_LOST_KHR:
-        throw exception::SurfaceLost("queue present failed");
-#endif
-#ifdef VK_EXT_full_screen_exclusive
-    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
-        throw exception::FullScreenExclusiveModeLost("queue present failed");
-#endif
-    default:
-        break;
-    }
-#endif // !MAGMA_NO_EXCEPTIONS
+    MAGMA_ASSERT(MAGMA_PRESENT_SUCCEEDED(result));
     MAGMA_HANDLE_RESULT(result, "queue present failed");
 }
 
