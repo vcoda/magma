@@ -91,10 +91,12 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     std::vector<std::shared_ptr<CommandBuffer>> cmdBuffers;
     for (auto handle: commandBuffers)
     {
+        std::shared_ptr<CommandBuffer> cmdBuffer;
         if (primaryLevel)
-            cmdBuffers.emplace_back(PrimaryCommandBuffer::makeShared(handle, this));
+            cmdBuffer = PrimaryCommandBuffer::makeShared(handle, this);
         else
-            cmdBuffers.emplace_back(SecondaryCommandBuffer::makeShared(handle, this));
+            cmdBuffer = SecondaryCommandBuffer::makeShared(handle, this);
+        cmdBuffers.emplace_back(std::move(cmdBuffer));
         cmdPool.insert(cmdBuffers.back());
     }
     return cmdBuffers;

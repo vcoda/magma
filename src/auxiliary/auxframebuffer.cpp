@@ -211,11 +211,11 @@ Framebuffer::Framebuffer(std::shared_ptr<SwapchainImage> colorAttachment,
 {
     std::shared_ptr<Device> device = colorAttachment->getDevice();
     std::shared_ptr<ImageView> colorView = std::make_shared<SharedImageView>(std::move(colorAttachment), swizzling);
-    colorViews.emplace_back(colorView);
+    colorViews.emplace_back(std::move(colorView));
     std::vector<AttachmentDescription> attachments;
     attachments.emplace_back(
-        colorView->getImage()->getFormat(),
-        colorView->getImage()->getSamples(),
+        colorViews.front()->getImage()->getFormat(),
+        colorViews.front()->getImage()->getSamples(),
         op::clearStore, // Clear color, store
         op::dontCare, // Stencil not applicable
         VK_IMAGE_LAYOUT_UNDEFINED, // Don't care

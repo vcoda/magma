@@ -187,8 +187,9 @@ std::unique_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
     std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
     for (uint32_t deviceId = 0; deviceId < deviceGroupProperties.physicalDeviceCount; ++deviceId)
     {
-        VkPhysicalDevice physicalDevice = deviceGroupProperties.physicalDevices[deviceId];
-        physicalDevices.emplace_back(PhysicalDevice::makeShared(instance, physicalDevice, hostAllocator));
+        VkPhysicalDevice handle = deviceGroupProperties.physicalDevices[deviceId];
+        std::shared_ptr<PhysicalDevice> physicalDevice = PhysicalDevice::makeShared(instance, handle, hostAllocator);
+        physicalDevices.emplace_back(std::move(physicalDevice));
     }
     return PhysicalDeviceGroup::makeUnique(std::move(physicalDevices), groupId);
 }

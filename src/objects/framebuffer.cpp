@@ -56,7 +56,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, std::sha
     framebufferInfo.layers = layerCount;
     const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create framebuffer");
-    attachments.push_back(attachment);
+    attachments.emplace_back(std::move(attachment));
 }
 
 Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const std::vector<std::shared_ptr<ImageView>>& attachments,
