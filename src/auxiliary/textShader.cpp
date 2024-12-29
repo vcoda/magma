@@ -98,7 +98,7 @@ constexpr
     std::shared_ptr<ShaderModule> fragmentShader = std::make_unique<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, true);
     const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     std::vector<PipelineShaderStage> shaderStages;
-    shaderStages.push_back(std::move(vertexShaderStage));
+    shaderStages.emplace_back(std::move(vertexShaderStage));
     shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName);
     // Create font pipeline
     constexpr push::FragmentConstantRange<PushConstants> pushConstantRange;

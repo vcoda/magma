@@ -84,7 +84,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     const RasterizationState rasterizationState = vertexShaderStage.getRasterizationState();
     const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     std::vector<PipelineShaderStage> shaderStages;
-    shaderStages.push_back(std::move(vertexShaderStage));
+    shaderStages.emplace_back(std::move(vertexShaderStage));
     shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName);
     // Create blending pipeline
     const uint8_t componentCount = Format(format).componentCount();
