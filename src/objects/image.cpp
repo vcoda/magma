@@ -624,7 +624,7 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
 }
 
 void Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<MipData>& mipMaps,
-    std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn,
+    std::shared_ptr<Allocator> allocator, CopyMemoryFn copyMemFn,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {   // Setup mip chain for buffer copy
     std::vector<Mip> mipChain;
@@ -641,12 +641,12 @@ void Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
     map<uint8_t>(srcBuffer,
         [&](uint8_t *buffer)
         {
-            if (!copyFn)
-                copyFn = std::memcpy;
+            if (!copyMemFn)
+                copyMemFn = std::memcpy;
             core::foreach(mipChain, mipMaps,
-                [buffer, copyFn](auto& dstMip, auto& srcMip)
+                [buffer, copyMemFn](auto& dstMip, auto& srcMip)
                 {   // Copy mip texels to buffer
-                    copyFn(buffer + dstMip.bufferOffset, srcMip.texels, (size_t)srcMip.size);
+                    copyMemFn(buffer + dstMip.bufferOffset, srcMip.texels, (size_t)srcMip.size);
                 });
         });
     MAGMA_ASSERT(cmdBuffer->allowsReset());

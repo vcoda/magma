@@ -226,7 +226,6 @@ HEADERS += \
     ../../src/core/pch.h \
     ../../src/core/popcount.h \
     ../../src/core/refCountChecker.h \
-    ../../src/core/typedefs.h \
     ../../src/core/variantPtr.h \
     ../../src/core/vla.h \
     ../../src/descriptors/accelerationStructure.h \

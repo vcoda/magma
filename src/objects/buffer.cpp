@@ -328,7 +328,7 @@ void Buffer::copyHost(const void *srcBuffer, VkDeviceSize srcBufferSize,
     VkDeviceSize srcOffset /* 0 */,
     VkDeviceSize dstOffset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,
-    CopyMemoryFunction copyFn /* nullptr */) noexcept
+    CopyMemoryFn copyMemFn /* nullptr */) noexcept
 {
     if (VK_WHOLE_SIZE == size)
         MAGMA_ASSERT(0 == dstOffset);
@@ -338,10 +338,10 @@ void Buffer::copyHost(const void *srcBuffer, VkDeviceSize srcBufferSize,
     void *dstBuffer = memory->map(dstOffset, size);
     if (dstBuffer)
     {
-        if (!copyFn)
-            copyFn = std::memcpy;
+        if (!copyMemFn)
+            copyMemFn = std::memcpy;
         const VkDeviceSize copySize = (VK_WHOLE_SIZE == size) ? wholeSize : size;
-        copyFn(dstBuffer, (uint8_t *)srcBuffer + srcOffset, static_cast<std::size_t>(copySize));
+        copyMemFn(dstBuffer, (uint8_t *)srcBuffer + srcOffset, static_cast<std::size_t>(copySize));
         memory->unmap();
     }
 }
@@ -361,12 +361,12 @@ void Buffer::copyTransfer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcT
 }
 
 void Buffer::copyStaged(lent_ptr<CommandBuffer> cmdBuffer, const void *data,
-    std::shared_ptr<Allocator> allocator, CopyMemoryFunction copyFn /* nullptr */)
+    std::shared_ptr<Allocator> allocator, CopyMemoryFn copyMemFn /* nullptr */)
 {
     MAGMA_ASSERT(data);
     // Allocate temporary staged buffer
     auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, data,
-        std::move(allocator), Initializer(), Sharing(), std::move(copyFn));
+        std::move(allocator), Initializer(), Sharing(), std::move(copyMemFn));
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     cmdBuffer->reset();

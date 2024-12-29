@@ -61,7 +61,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
-            CopyMemoryFunction copyFn = nullptr);
+            CopyMemoryFn copyMemFn = nullptr);
         explicit IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer,
             VkIndexType indexType,
             lent_ptr<const SrcTransferBuffer> srcBuffer,
@@ -91,7 +91,7 @@ namespace magma
             const void *initialData = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
-            CopyMemoryFunction copyFn = nullptr);
+            CopyMemoryFn copyMemFn = nullptr);
     };
 
     template<class T>

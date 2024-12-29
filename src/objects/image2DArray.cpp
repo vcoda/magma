@@ -59,14 +59,14 @@ Image2DArray::Image2DArray(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, u
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFunction copyFn /* nullptr */):
+    CopyMemoryFn copyMemFn /* nullptr */):
     Image2DArray(cmdBuffer->getDevice(), format, mipMaps.front().extent,
         core::countof(mipMaps) / arrayLayers, arrayLayers,
         allocator, optional, sharing)
 {
     MAGMA_ASSERT(core::countof(mipMaps) % arrayLayers == 0);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer->getQueueFamilyIndex());
-    copyMipmapStaged(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyFn),
+    copyMipmapStaged(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyMemFn),
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 } // namespace magma

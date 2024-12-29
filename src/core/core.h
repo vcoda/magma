@@ -60,6 +60,8 @@ namespace magma
         parent.pNext = &child;
     }
 
+    typedef std::function<void *(void *, const void *, std::size_t)> CopyMemoryFn;
+
     namespace core
     {
         template<class T> constexpr bool powerOfTwo(T x) noexcept;

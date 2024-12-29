@@ -198,7 +198,6 @@
     <ClInclude Include="..\..\src\core\refCountChecker.h" />
     <ClInclude Include="..\..\src\core\vla.h" />
     <ClInclude Include="..\..\src\core\variantPtr.h" />
-    <ClInclude Include="..\..\src\core\typedefs.h" />
     <ClInclude Include="..\..\src\descriptors\accelerationStructure.h" />
     <ClInclude Include="..\..\src\descriptors\arrayElement.h" />
     <ClInclude Include="..\..\src\descriptors\bufferArrayElement.h" />

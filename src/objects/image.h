@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "resource.h"
 #include "ideviceMemory.h"
-#include "../core/typedefs.h"
 
 namespace magma
 {
@@ -142,7 +141,7 @@ namespace magma
         void copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer,
             const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator,
-            CopyMemoryFunction copyFn,
+            CopyMemoryFn copyMemFn,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
         VkExtent3D calculateValidMipExtent(uint32_t mipLevel) const noexcept;

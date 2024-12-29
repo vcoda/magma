@@ -750,9 +750,6 @@
     <ClInclude Include="..\..\src\objects\deviceResourcePool.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\typedefs.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\descriptors\descriptorSetLayoutBinding.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>

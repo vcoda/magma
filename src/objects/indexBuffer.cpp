@@ -76,10 +76,10 @@ IndexBuffer::IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkIndexType indexTyp
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFunction copyFn /* nullptr */):
+    CopyMemoryFn copyMemFn /* nullptr */):
     IndexBuffer(cmdBuffer->getDevice(), indexType, size, allocator, optional, sharing)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMemFn));
 }
 
 IndexBuffer::IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, lent_ptr<const SrcTransferBuffer> srcBuffer,
@@ -100,7 +100,7 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexTy
     const void *initialData /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFunction copyFn /* nullptr */):
+    CopyMemoryFn copyMemFn /* nullptr */):
     BaseIndexBuffer(std::move(device), indexType, size,
         VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
@@ -108,6 +108,6 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexTy
         optional, sharing, std::move(allocator))
 {
     if (initialData)
-        copyHost(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyFn));
+        copyHost(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMemFn));
 }
 } // namespace magma

@@ -38,7 +38,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
-            CopyMemoryFunction copyFn = nullptr);
+            CopyMemoryFn copyMemFn = nullptr);
         explicit StorageBuffer(lent_ptr<CommandBuffer> cmdBuffer,
             lent_ptr<const SrcTransferBuffer> srcBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
@@ -46,7 +46,7 @@ namespace magma
             VkDeviceSize srcOffset = 0,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
-            CopyMemoryFunction copyFn = nullptr);
+            CopyMemoryFn copyMemFn = nullptr);
     };
 
     /* Major GPU vendors expose a 256MiB-ish staging buffer
@@ -67,7 +67,7 @@ namespace magma
             const void *initialData = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
-            CopyMemoryFunction copyFn = nullptr);
+            CopyMemoryFn copyMemFn = nullptr);
     };
 
     /* Storage buffer for acceleration structure placement. */

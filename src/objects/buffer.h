@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "resource.h"
 #include "ideviceMemory.h"
-#include "../core/typedefs.h"
 
 namespace magma
 {
@@ -64,7 +63,7 @@ namespace magma
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
-            CopyMemoryFunction copyFn = nullptr) noexcept;
+            CopyMemoryFn copyMemFn = nullptr) noexcept;
         void copyTransfer(lent_ptr<CommandBuffer> cmdBuffer,
             lent_ptr<const SrcTransferBuffer> srcBuffer,
             VkDeviceSize srcOffset = 0,
@@ -83,7 +82,7 @@ namespace magma
         void copyStaged(lent_ptr<CommandBuffer> cmdBuffer,
             const void *data,
             std::shared_ptr<Allocator> allocator,
-            CopyMemoryFunction copyFn = nullptr);
+            CopyMemoryFn copyMemFn = nullptr);
 
         const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;

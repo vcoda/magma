@@ -38,10 +38,10 @@ UniformTexelBuffer::UniformTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkDevi
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFunction copyFn /* nullptr */):
+    CopyMemoryFn copyMemFn /* nullptr */):
     UniformTexelBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMemFn));
 }
 
 UniformTexelBuffer::UniformTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,

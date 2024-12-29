@@ -32,7 +32,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuf
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFunction copyFn /* nullptr */):
+    CopyMemoryFn copyMemFn /* nullptr */):
     Image2D(cmdBuffer->getDevice(),
         checkFormatFeature(cmdBuffer->getDevice(), format, VK_FORMAT_FEATURE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR),
         extent,
@@ -46,7 +46,7 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuf
 {
     MAGMA_ASSERT(data);
     auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, data, std::move(allocator),
-        Buffer::Initializer(), Sharing(), std::move(copyFn));
+        Buffer::Initializer(), Sharing(), std::move(copyMemFn));
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     cmdBuffer->reset();
