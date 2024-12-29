@@ -41,7 +41,6 @@ namespace magma
         explicit SwapchainImage(lent_ptr<const Swapchain> swapchain);
     #endif
         ~SwapchainImage();
-        VkExtent2D getExtent() const noexcept { return {extent.width, extent.height}; }
         int32_t getChainIndex() const noexcept { return chainIndex; }
         bool chained() const noexcept { return chainIndex >= 0; }
         void bindMemory(std::unique_ptr<IDeviceMemory> memory,

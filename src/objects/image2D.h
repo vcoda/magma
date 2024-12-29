@@ -48,6 +48,7 @@ namespace magma
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
             CopyMemoryFunction copyFn = nullptr);
+        VkExtent2D getExtent2D() const noexcept { return {extent.width, extent.height}; }
 
     protected:
         Image2D(std::shared_ptr<Device> device,
