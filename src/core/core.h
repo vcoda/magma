@@ -97,8 +97,6 @@ namespace magma
         template<class T> bool compare(const void *p1, const void *p2) noexcept;
         template<class T> bool compare(const T *p1, const T *p2) noexcept;
         template<class T> bool compareArrays(const T *p1, const T *p2, std::size_t count) noexcept;
-        template<class T> void zeroMemory(T& var) noexcept;
-        template<class T, std::size_t N> void zeroMemory(T (&array)[N]) noexcept;
     } // namespace core
 } // namespace magma
 

@@ -178,16 +178,4 @@ inline bool compareArrays(const T *p1, const T *p2, std::size_t count) noexcept
         return false;
     return !memcmp(p1, p2, sizeof(T) * count);
 }
-
-template<class T>
-inline void zeroMemory(T& var) noexcept
-{
-    memset(&var, 0, sizeof(T));
-}
-
-template<class T, std::size_t N>
-inline void zeroMemory(T (&array)[N]) noexcept
-{
-    memset(array, 0, sizeof(T) * N);
-}
 } // namespace magma::core
