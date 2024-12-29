@@ -90,10 +90,10 @@ bool ImmediateRender::beginPrimitive(VkPrimitiveTopology topology,
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive)
         return false;
-    if (!current)
+    if (!v)
     {
-        current = (Vertex *)vertexBuffer->getMemory()->map();
-        if (!current)
+        v = (Vertex *)vertexBuffer->getMemory()->map();
+        if (!v)
             return false;
         // Set attributes to initial state
         normal(0.f, 0.f, 0.f);
@@ -125,8 +125,8 @@ bool ImmediateRender::endPrimitive(bool loop /* false */) noexcept
         return false;
     if (loop && (primitives.back().vertexCount > 0))
     {   // Copy first to last
-        const Vertex *first = current - primitives.back().vertexCount;
-        *current++ = *first;
+        const Vertex *first = v - primitives.back().vertexCount;
+        *v++ = *first;
         ++primitives.back().vertexCount;
         ++vertexCount;
     }
@@ -194,10 +194,10 @@ bool ImmediateRender::reset() noexcept
     MAGMA_ASSERT(!insidePrimitive);
     if (insidePrimitive)
         return false;
-    if (current)
+    if (vertexBuffer->getMemory()->mapped())
     {
         vertexBuffer->getMemory()->unmap();
-        current = nullptr;
+        v = nullptr;
     }
     primitives.clear();
     vertexCount = 0;

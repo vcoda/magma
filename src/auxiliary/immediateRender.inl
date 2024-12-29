@@ -87,9 +87,9 @@ inline void ImmediateRender::setViewProjTransform(const float matrix[4][4]) noex
 
 inline void ImmediateRender::normal(float x, float y, float z) noexcept
 {
-    current->normalPSize.v[0] = x;
-    current->normalPSize.v[1] = y;
-    current->normalPSize.v[2] = z;
+    v->normalPSize.v[0] = x;
+    v->normalPSize.v[1] = y;
+    v->normalPSize.v[2] = z;
 }
 
 inline void ImmediateRender::normal(const float n[3]) noexcept
@@ -99,10 +99,10 @@ inline void ImmediateRender::normal(const float n[3]) noexcept
 
 inline void ImmediateRender::color(float r, float g, float b, float a /* 1 */) noexcept
 {
-    current->color.v[0] = r;
-    current->color.v[1] = g;
-    current->color.v[2] = b;
-    current->color.v[3] = a;
+    v->color.v[0] = r;
+    v->color.v[1] = g;
+    v->color.v[2] = b;
+    v->color.v[3] = a;
 }
 
 inline void ImmediateRender::color(const float c[4]) noexcept
@@ -120,10 +120,10 @@ inline void ImmediateRender::color(const uint8_t c[4]) noexcept
     color(c[0], c[1], c[2], c[3]);
 }
 
-inline void ImmediateRender::texCoord(float u, float v) noexcept
+inline void ImmediateRender::texCoord(float s, float t) noexcept
 {
-    current->texCoord.v[0] = u;
-    current->texCoord.v[1] = v;
+    v->texCoord.v[0] = s;
+    v->texCoord.v[1] = t;
 }
 
 inline void ImmediateRender::texCoord(const float uv[2]) noexcept
@@ -134,7 +134,7 @@ inline void ImmediateRender::texCoord(const float uv[2]) noexcept
 inline void ImmediateRender::pointSize(float size) noexcept
 {
     MAGMA_ASSERT(size >= 1.f);
-    current->normalPSize.v[3] = size;
+    v->normalPSize.v[3] = size;
 }
 
 inline void ImmediateRender::vertex(float x, float y, float z /* 0 */, float w /* 1 */) noexcept
@@ -143,13 +143,13 @@ inline void ImmediateRender::vertex(float x, float y, float z /* 0 */, float w /
     MAGMA_ASSERT(vertexCount < maxVertexCount);
     if (insidePrimitive && vertexCount < maxVertexCount)
     {
-        current->position.v[0] = x;
-        current->position.v[1] = y;
-        current->position.v[2] = z;
-        current->position.v[3] = w;
-        // Propagate current state to the next vertex
-        const Vertex *last = current;
-        *++current = *last;
+        v->position.v[0] = x;
+        v->position.v[1] = y;
+        v->position.v[2] = z;
+        v->position.v[3] = w;
+        // Propagate v state to the next vertex
+        const Vertex *last = v;
+        *++v = *last;
         ++primitives.back().vertexCount;
         ++vertexCount;
     }

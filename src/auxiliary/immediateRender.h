@@ -85,7 +85,7 @@ namespace magma
             void color(const float c[4]) noexcept;
             void color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = std::numeric_limits<uint8_t>::max()) noexcept;
             void color(const uint8_t c[4]) noexcept;
-            void texCoord(float u, float v) noexcept;
+            void texCoord(float s, float t) noexcept;
             void texCoord(const float uv[2]) noexcept;
             void pointSize(float size) noexcept;
             void vertex(float x, float y, float z = 0.f, float w = 1.f) noexcept;
@@ -118,7 +118,7 @@ namespace magma
             uint16_t lineStipplePattern = 0b1111111111111111;
             float world[4][4];
             float viewProj[4][4];
-            Vertex *current = nullptr;
+            Vertex *v = nullptr;
             bool insidePrimitive = false;
             uint32_t vertexCount = 0;
         };
