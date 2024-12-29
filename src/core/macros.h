@@ -27,27 +27,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_FAILURE(message) MAGMA_ASSERT(!message)
 
-#define MAGMA_CONCAT(a, b) a ## b
-
 #define MAGMA_STRINGIZE(name) #name
-
-#define MAGMA_STRINGIZE_ENUMERATION(identifier) case identifier: return MAGMA_STRINGIZE(identifier); // comma-ended
 
 #define MAGMA_BITWISE_AND(usage, flags) ((usage & (flags)) == (flags))
 
-#define MAGMA_ALIGN(size) (((size) + 0xF) & ~(0xF))
-
-#define MAGMA_ALIGNED(p) (((uintptr_t)(const void *)(p)) % (MAGMA_ALIGNMENT) == 0)
-
-#define MAGMA_DEVICE_ADDRESS_ALIGNED(addr) ((addr) % MAGMA_DEVICE_ADDRESS_ALIGNMENT == 0)
-
-#define MAGMA_BUFFER_HANDLE(obj) core::reinterpret<VkBuffer>(obj)
-
-#define MAGMA_IMAGE_HANDLE(obj) core::reinterpret<VkImage>(obj)
+#define MAGMA_OPTIONAL(p) (this->p ? this->p.get() : nullptr)
 
 #define MAGMA_OPTIONAL_HANDLE(p) core::dereference(p.get())
-
-#define MAGMA_OPTIONAL_INSTANCE(p) (this->p ? this->p.get() : nullptr)
 
 #define MAGMA_SUCCEEDED(result)\
     ((VK_SUCCESS == result) ||\
@@ -67,27 +53,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     b = ((packed >> 8) & 0xFF) / float(0xFF);\
     a = (packed & 0xFF) / float(0xFF);
 
+#ifdef MAGMA_DEBUG
+    #define MAGMA_NOOP
+#else
+    #define MAGMA_NOOP {}
+#endif // MAGMA_DEBUG
+
 #ifdef MAGMA_NO_EXCEPTIONS
     #define MAGMA_THROW return
 #else
     #define MAGMA_THROW throw
 #endif
-
-#if defined(_MSC_VER) || defined(__MINGW32__)
-    #define MAGMA_STACK_ALLOC(size) (size) ? _malloca(size) : nullptr
-    #define MAGMA_STACK_FREE(p) _freea(p)
-#else
-    #define MAGMA_STACK_ALLOC(size) (size) ? alloca(size) : nullptr
-    #define MAGMA_STACK_FREE(p)
-#endif // _MSC_VER || __MINGW32__
-
-#ifdef MAGMA_DEBUG
-    #define MAGMA_NOOP
-    #define MAGMA_ASSERT_FOR_EACH(arr, it, expr) for (auto const& it: arr) MAGMA_ASSERT(expr)
-#else
-    #define MAGMA_NOOP {}
-    #define MAGMA_ASSERT_FOR_EACH(arr, it, expr)
-#endif // MAGMA_DEBUG
 
 #if defined(MAGMA_DIAGNOSTIC) && defined(MAGMA_DEBUG)
     #define MAGMA_CHECKPOINT(stage) magma::CommandBuffer::insertDebugCheckpoint(__FUNCTION__, (VkPipelineStageFlagBits)stage)
@@ -106,6 +82,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #else
     #define MAGMA_INUSE(obj)
 #endif // MAGMA_RETAIN_OBJECTS_IN_USE
+
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    #define MAGMA_STACK_ALLOC(size) (size) ? _malloca(size) : nullptr
+    #define MAGMA_STACK_FREE(p) _freea(p)
+#else
+    #define MAGMA_STACK_ALLOC(size) (size) ? alloca(size) : nullptr
+    #define MAGMA_STACK_FREE(p)
+#endif // _MSC_VER || __MINGW32__
 
 #define MAGMA_MAKE(Type, kind, method)\
 template<typename ...Args>\

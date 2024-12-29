@@ -43,7 +43,7 @@ PipelineLayout::PipelineLayout(std::shared_ptr<Device> device,
     pipelineLayoutInfo.pSetLayouts = nullptr;
     pipelineLayoutInfo.pushConstantRangeCount = core::countof(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
-    const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
     hash = core::hashArgs(
         pipelineLayoutInfo.sType,
@@ -71,7 +71,7 @@ PipelineLayout::PipelineLayout(lent_ptr<const DescriptorSetLayout> setLayout,
     pipelineLayoutInfo.pSetLayouts = setLayout->getHandleAddress();
     pipelineLayoutInfo.pushConstantRangeCount = core::countof(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
-    const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
     hash = core::hashArgs(
         pipelineLayoutInfo.sType,
@@ -101,7 +101,7 @@ PipelineLayout::PipelineLayout(const std::initializer_list<lent_ptr<const Descri
     pipelineLayoutInfo.pSetLayouts = dereferencedSetLayouts;
     pipelineLayoutInfo.pushConstantRangeCount = core::countof(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
-    const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreatePipelineLayout(getNativeDevice(), &pipelineLayoutInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline layout");
     hash = core::hashArgs(
         pipelineLayoutInfo.sType,
@@ -112,7 +112,7 @@ PipelineLayout::PipelineLayout(const std::initializer_list<lent_ptr<const Descri
 
 PipelineLayout::~PipelineLayout()
 {
-    vkDestroyPipelineLayout(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyPipelineLayout(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 bool PipelineLayout::hasLayout(lent_ptr<const DescriptorSetLayout> setLayout) const noexcept

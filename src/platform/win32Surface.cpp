@@ -42,7 +42,7 @@ Win32Surface::Win32Surface(std::shared_ptr<Instance> instance_,
     surfaceInfo.hinstance = hInstance;
     surfaceInfo.hwnd = hWnd;
     const VkResult result = vkCreateWin32SurfaceKHR(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Win32 surface");
 }
 #endif // VK_KHR_win32_surface

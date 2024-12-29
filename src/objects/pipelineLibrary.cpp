@@ -32,7 +32,7 @@ PipelineLibrary::PipelineLibrary(std::shared_ptr<Device> device, std::shared_ptr
 PipelineLibrary::~PipelineLibrary()
 {
     for (auto handle: libraries)
-        vkDestroyPipeline(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(allocator));
+        vkDestroyPipeline(getNativeDevice(), handle, MAGMA_OPTIONAL(allocator));
 }
 
 VkDevice PipelineLibrary::getNativeDevice() const noexcept

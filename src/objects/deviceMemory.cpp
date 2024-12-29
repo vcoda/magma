@@ -41,7 +41,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(flags).value();
     const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to allocate device memory");
     ++allocationCount;
 }
@@ -64,7 +64,7 @@ DeviceMemory::DeviceMemory(std::shared_ptr<Device> device,
     importAndroidHardwareBufferInfo.pNext = extendedInfo.headNode();
     importAndroidHardwareBufferInfo.buffer = hardwareBuffer->getBuffer();
     const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to import memory from android hardware buffer");
     ++allocationCount;
 }
@@ -74,7 +74,7 @@ DeviceMemory::~DeviceMemory()
 {
     if (mapPointer)
         vkUnmapMemory(getNativeDevice(), handle);
-    vkFreeMemory(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkFreeMemory(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
     --allocationCount;
 }
 
@@ -118,7 +118,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
         vkUnmapMemory(getNativeDevice(), handle);
         mapPointer = nullptr;
     }
-    vkFreeMemory(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkFreeMemory(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
     handle = VK_NULL_HANDLE;
     --allocationCount;
     memoryRequirements = memoryRequirements_;
@@ -128,7 +128,7 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(memoryType.propertyFlags).value();
     const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to reallocate device memory");
     ++allocationCount;
 }

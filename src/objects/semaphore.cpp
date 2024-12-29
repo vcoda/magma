@@ -39,12 +39,12 @@ Semaphore::Semaphore(std::shared_ptr<Device> device,
     semaphoreInfo.pNext = extendedInfo.headNode();
     semaphoreInfo.flags = flags;
     const VkResult result = vkCreateSemaphore(getNativeDevice(), &semaphoreInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create semaphore");
 }
 
 Semaphore::~Semaphore()
 {
-    vkDestroySemaphore(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroySemaphore(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 } // namespace magma

@@ -82,7 +82,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
         linkNode(imageInfo, imageFormatListInfo);
     }
 #endif // VK_KHR_image_format_list
-    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create image");
     // Allocate image memory
     StructureChain extendedMemoryInfo;
@@ -180,7 +180,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 
 Image::~Image()
 {
-    vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 VkImageAspectFlags Image::getAspectMask() const noexcept
@@ -403,8 +403,8 @@ void Image::onDefragment()
     imageInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     imageInfo.initialLayout = mipLayouts[0];
-    vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
+    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to recreate defragmented image");
     bindMemory(std::move(memory), offset);
 }
@@ -633,7 +633,7 @@ void Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
     for (auto const& mip: mipMaps)
     {
         mipChain.emplace_back(mip.extent, bufferOffset);
-        bufferOffset += MAGMA_ALIGN(mip.size);
+        bufferOffset += core::alignUp(mip.size, 16ull);
     }
     // Allocate staged buffer for mip data
     auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, bufferOffset, nullptr,

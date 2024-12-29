@@ -58,7 +58,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
         0;
     #endif // VK_KHR_external_fence_fd
     const VkResult result = vkCreateFence(getNativeDevice(), &fenceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create external fence");
 }
 
@@ -85,7 +85,7 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     fenceInfo.pNext = extendedInfo.headNode();
     fenceInfo.flags = flags;
     VkResult result = vkCreateFence(getNativeDevice(), &fenceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create fence");
 #if defined(VK_KHR_external_fence_win32)
     VkImportFenceWin32HandleInfoKHR importWin32HandleInfo;

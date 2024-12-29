@@ -60,7 +60,7 @@ ExternalImage2D::ExternalImage2D(std::shared_ptr<Device> device, lent_ptr<Androi
         externalFormat.pNext = nullptr;
         externalFormat.externalFormat = hardwareBuffer->getFormatProperties().externalFormat;
     }
-    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create external image");
     std::unique_ptr<IDeviceMemory> memory = std::make_unique<DeviceMemory>(
         std::move(device), std::move(hardwareBuffer),

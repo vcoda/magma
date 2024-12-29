@@ -38,7 +38,7 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
     descriptorSetLayoutInfo.flags = flags;
     descriptorSetLayoutInfo.bindingCount = core::countof(bindings);
     descriptorSetLayoutInfo.pBindings = bindings.data();
-    const VkResult result = vkCreateDescriptorSetLayout(getNativeDevice(), &descriptorSetLayoutInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDescriptorSetLayout(getNativeDevice(), &descriptorSetLayoutInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create descriptor set layout");
     hash = core::hashArgs(
         descriptorSetLayoutInfo.sType,
@@ -57,6 +57,6 @@ DescriptorSetLayout::DescriptorSetLayout(std::shared_ptr<Device> device, const s
 
 DescriptorSetLayout::~DescriptorSetLayout()
 {
-    vkDestroyDescriptorSetLayout(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyDescriptorSetLayout(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 } // namespace magma

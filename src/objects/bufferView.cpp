@@ -40,12 +40,12 @@ BufferView::BufferView(const Buffer *buffer, VkFormat format,
     bufferViewInfo.format = format;
     bufferViewInfo.offset = offset;
     bufferViewInfo.range = range;
-    const VkResult result = vkCreateBufferView(getNativeDevice(), &bufferViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateBufferView(getNativeDevice(), &bufferViewInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create buffer view");
 }
 
 BufferView::~BufferView()
 {
-    vkDestroyBufferView(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyBufferView(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 } // namespace magma

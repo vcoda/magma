@@ -54,7 +54,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     bufferInfo.sharingMode = sharing.getMode();
     bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create buffer");
     // Allocate buffer memory
     StructureChain extendedMemoryInfo;
@@ -142,7 +142,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
 
 Buffer::~Buffer()
 {
-    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 VkMemoryRequirements Buffer::getMemoryRequirements() const noexcept
@@ -202,8 +202,8 @@ void Buffer::realloc(VkDeviceSize newSize)
     bufferInfo.sharingMode = sharing.getMode();
     bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
+    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to reallocate buffer");
     // Reallocate buffer memory
     StructureChain extendedMemoryInfo;
@@ -318,8 +318,8 @@ void Buffer::onDefragment()
     bufferInfo.sharingMode = sharing.getMode();
     bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
-    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
-    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
+    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to recreate defragmented buffer");
     bindMemory(std::move(memory), offset);
 }

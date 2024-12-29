@@ -79,7 +79,7 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     accelerationStructureInfo.deviceAddress = MAGMA_NULL;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureKHR, VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
     const VkResult result = vkCreateAccelerationStructureKHR(getNativeDevice(), &accelerationStructureInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create acceleration structure");
     size = buildSizesInfo.accelerationStructureSize;
     buildScratchSize = buildSizesInfo.buildScratchSize;
@@ -112,14 +112,14 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     accelerationStructureInfo.deviceAddress = MAGMA_NULL;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateAccelerationStructureKHR, VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
     const VkResult result = vkCreateAccelerationStructureKHR(getNativeDevice(), &accelerationStructureInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create acceleration structure");
 }
 
 AccelerationStructure::~AccelerationStructure()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyAccelerationStructureKHR);
-    vkDestroyAccelerationStructureKHR(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyAccelerationStructureKHR(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 VkDeviceSize AccelerationStructure::getProperty(AccelerationStructureQuery::Type queryType) const noexcept

@@ -43,13 +43,13 @@ QueryPool::QueryPool(VkQueryType queryType, std::shared_ptr<Device> device, uint
     queryPoolInfo.queryType = queryType;
     queryPoolInfo.queryCount = queryCount;
     queryPoolInfo.pipelineStatistics = pipelineStatistics;
-    const VkResult result = vkCreateQueryPool(getNativeDevice(), &queryPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateQueryPool(getNativeDevice(), &queryPoolInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create query pool");
 }
 
 QueryPool::~QueryPool()
 {
-    vkDestroyQueryPool(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyQueryPool(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 #ifdef VK_EXT_host_query_reset

@@ -39,13 +39,13 @@ CommandPool::CommandPool(std::shared_ptr<Device> device, uint32_t queueFamilyInd
     cmdPoolInfo.pNext = extendedInfo.headNode();
     cmdPoolInfo.flags = flags;
     cmdPoolInfo.queueFamilyIndex = queueFamilyIndex;
-    const VkResult result = vkCreateCommandPool(getNativeDevice(), &cmdPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateCommandPool(getNativeDevice(), &cmdPoolInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create command pool");
 }
 
 CommandPool::~CommandPool()
 {
-    vkDestroyCommandPool(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyCommandPool(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 bool CommandPool::reset(bool releaseResources /* false */) noexcept

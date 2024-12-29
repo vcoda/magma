@@ -31,14 +31,14 @@ DeferredOperation::DeferredOperation(std::shared_ptr<Device> device,
     NonDispatchable(VK_OBJECT_TYPE_DEFERRED_OPERATION_KHR, std::move(device), std::move(allocator))
 {
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateDeferredOperationKHR, VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
-    const VkResult result = vkCreateDeferredOperationKHR(getNativeDevice(), MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDeferredOperationKHR(getNativeDevice(), MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create deferred operation");
 }
 
 DeferredOperation::~DeferredOperation()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyDeferredOperationKHR);
-    vkDestroyDeferredOperationKHR(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyDeferredOperationKHR(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 uint32_t DeferredOperation::getMaxConcurrency() const noexcept

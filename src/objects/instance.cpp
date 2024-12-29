@@ -100,7 +100,7 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
         linkNode(instanceInfo, debugUtilsMessengerInfo);
     }
 #endif // VK_EXT_debug_utils
-    const VkResult result = vkCreateInstance(&instanceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateInstance(&instanceInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
 #ifndef MAGMA_NO_EXCEPTIONS
     switch (result)
     {
@@ -129,7 +129,7 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
 
 Instance::~Instance()
 {
-    vkDestroyInstance(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyInstance(handle, MAGMA_OPTIONAL(hostAllocator));
 #ifdef MAGMA_DEBUG
     _refCountChecker.release();
 #endif

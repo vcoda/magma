@@ -38,14 +38,14 @@ PrivateDataSlot::PrivateDataSlot(std::shared_ptr<Device> device,
     privateDataSlotInfo.flags = flags;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreatePrivateDataSlotEXT, VK_EXT_PRIVATE_DATA_EXTENSION_NAME);
     const VkResult result = vkCreatePrivateDataSlotEXT(getNativeDevice(),
-        &privateDataSlotInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        &privateDataSlotInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create private data slot");
 }
 
 PrivateDataSlot::~PrivateDataSlot()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyPrivateDataSlotEXT);
-    vkDestroyPrivateDataSlotEXT(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyPrivateDataSlotEXT(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 void PrivateDataSlot::setPrivateData(const IObject *object, uint64_t data)

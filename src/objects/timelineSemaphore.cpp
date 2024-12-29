@@ -46,7 +46,7 @@ TimelineSemaphore::TimelineSemaphore(std::shared_ptr<Device> device, uint64_t in
     semaphoreTypeInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE_KHR;
     semaphoreTypeInfo.initialValue = initialValue;
     const VkResult result = vkCreateSemaphore(getNativeDevice(), &semaphoreInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create timeline semaphore");
 }
 

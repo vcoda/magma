@@ -45,14 +45,14 @@ ValidationCache::ValidationCache(std::shared_ptr<Device> device,
     validationCacheInfo.initialDataSize = dataSize;
     validationCacheInfo.pInitialData = cacheData;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateValidationCacheEXT, VK_EXT_VALIDATION_CACHE_EXTENSION_NAME);
-    const VkResult result = vkCreateValidationCacheEXT(getNativeDevice(), &validationCacheInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateValidationCacheEXT(getNativeDevice(), &validationCacheInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create validation cache");
 }
 
 ValidationCache::~ValidationCache()
 {
     MAGMA_DEVICE_EXTENSION(vkDestroyValidationCacheEXT);
-    vkDestroyValidationCacheEXT(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyValidationCacheEXT(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 std::vector<uint8_t> ValidationCache::getData() const

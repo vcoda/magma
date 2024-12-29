@@ -168,7 +168,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     }
 #endif // VK_KHR_pipeline_library
     const VkResult result = vkCreateGraphicsPipelines(getNativeDevice(), MAGMA_OPTIONAL_HANDLE(pipelineCache),
-        1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        1, &pipelineInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     if (result != VK_SUCCESS)
     {
     #ifdef MAGMA_DEBUG

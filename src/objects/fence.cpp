@@ -38,13 +38,13 @@ Fence::Fence(std::shared_ptr<Device> device,
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.pNext = extendedInfo.headNode();
     fenceInfo.flags = flags;
-    const VkResult result = vkCreateFence(getNativeDevice(), &fenceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateFence(getNativeDevice(), &fenceInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create fence");
 }
 
 Fence::~Fence()
 {
-    vkDestroyFence(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyFence(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 bool Fence::reset() noexcept

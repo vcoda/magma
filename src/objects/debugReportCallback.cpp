@@ -47,7 +47,7 @@ DebugReportCallback::DebugReportCallback(std::shared_ptr<Instance> instance_,
         debugReportCallbackInfo.flags = flags;
         debugReportCallbackInfo.pfnCallback = userCallback;
         debugReportCallbackInfo.pUserData = userData;
-        const VkResult result = vkCreateDebugReportCallbackEXT(*instance, &debugReportCallbackInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        const VkResult result = vkCreateDebugReportCallbackEXT(*instance, &debugReportCallbackInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
         MAGMA_HANDLE_RESULT(result, "failed to create debug report callback");
     }
 }
@@ -56,7 +56,7 @@ DebugReportCallback::~DebugReportCallback()
 {
     MAGMA_INSTANCE_EXTENSION(vkDestroyDebugReportCallbackEXT);
     if (vkDestroyDebugReportCallbackEXT)
-        vkDestroyDebugReportCallbackEXT(*instance, handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+        vkDestroyDebugReportCallbackEXT(*instance, handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType objectType,

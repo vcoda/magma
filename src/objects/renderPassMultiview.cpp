@@ -115,7 +115,7 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     renderPassMultiviewInfo.pViewOffsets = this->viewOffsets.data();
     renderPassMultiviewInfo.correlationMaskCount = core::countof(this->correlationMasks);
     renderPassMultiviewInfo.pCorrelationMasks = this->correlationMasks.data();
-    const VkResult result = vkCreateRenderPass(getNativeDevice(), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateRenderPass(getNativeDevice(), &renderPassInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create multiview render pass");
     hash = core::hashArgs(
         renderPassInfo.sType,

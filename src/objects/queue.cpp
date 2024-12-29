@@ -317,7 +317,6 @@ void Queue::submitDeviceGroup(const std::vector<lent_ptr<CommandBuffer>>& cmdBuf
     const std::initializer_list<uint32_t>& signalSemaphoreDeviceIndices /* void */,
     lent_ptr<Fence> fence  /* nullptr */)
 {
-    MAGMA_ASSERT_FOR_EACH(cmdBuffers, cmdBuffer, cmdBuffer->primary());
     VkDeviceGroupSubmitInfo deviceGroupSubmitInfo;
     deviceGroupSubmitInfo.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO;
     deviceGroupSubmitInfo.pNext = nullptr;

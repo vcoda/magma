@@ -120,7 +120,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkCreateRayTracingPipelinesKHR, VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
     const VkResult result = vkCreateRayTracingPipelinesKHR(getNativeDevice(),
         MAGMA_OPTIONAL_HANDLE(deferredOperation), MAGMA_OPTIONAL_HANDLE(pipelineCache),
-        1, &pipelineInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        1, &pipelineInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     if (result != VK_SUCCESS)
     {
     #ifdef MAGMA_DEBUG

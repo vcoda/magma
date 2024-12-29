@@ -43,13 +43,13 @@ PipelineCache::PipelineCache(std::shared_ptr<Device> device,
     pipelineCacheInfo.flags = flags;
     pipelineCacheInfo.initialDataSize = dataSize;
     pipelineCacheInfo.pInitialData = initialData;
-    const VkResult result = vkCreatePipelineCache(getNativeDevice(), &pipelineCacheInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreatePipelineCache(getNativeDevice(), &pipelineCacheInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create pipeline cache");
 }
 
 PipelineCache::~PipelineCache()
 {
-    vkDestroyPipelineCache(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyPipelineCache(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 std::vector<uint8_t> PipelineCache::getData() const

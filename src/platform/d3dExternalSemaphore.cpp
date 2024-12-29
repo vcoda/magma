@@ -42,7 +42,7 @@ D3d12ExternalSemaphore::D3d12ExternalSemaphore(std::shared_ptr<Device> device,
     exportSemaphoreInfo.pNext = extendedInfo.headNode();
     exportSemaphoreInfo.handleTypes = handleType;
     const VkResult result = vkCreateSemaphore(getNativeDevice(), &semaphoreInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create D3D external semaphore");
 }
 
@@ -82,7 +82,7 @@ D3d12ExternalTimelineSemaphore::D3d12ExternalTimelineSemaphore(std::shared_ptr<D
     exportSemaphoreInfo.pNext = extendedInfo.headNode();
     exportSemaphoreInfo.handleTypes = handleType;
     const VkResult result = vkCreateSemaphore(getNativeDevice(), &semaphoreInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create D3D external timeline semaphore");
 }
 

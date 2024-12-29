@@ -54,7 +54,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, std::sha
     framebufferInfo.width = extent.width;
     framebufferInfo.height = extent.height;
     framebufferInfo.layers = layerCount;
-    const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create framebuffer");
     attachments.emplace_back(std::move(attachment));
 }
@@ -81,13 +81,13 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const st
     framebufferInfo.width = extent.width;
     framebufferInfo.height = extent.height;
     framebufferInfo.layers = layerCount;
-    const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create multi-attachment framebuffer");
     this->attachments = attachments;
 }
 
 Framebuffer::~Framebuffer()
 {
-    vkDestroyFramebuffer(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyFramebuffer(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 } // namespace magma

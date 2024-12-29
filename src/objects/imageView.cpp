@@ -73,7 +73,7 @@ ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t levelCo
         linkNode(imageViewInfo, imageViewUsageInfo);
     }
 #endif // VK_KHR_maintenance2
-    const VkResult result = vkCreateImageView(getNativeDevice(), &imageViewInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateImageView(getNativeDevice(), &imageViewInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create image view");
 }
 
@@ -92,7 +92,7 @@ ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t baseArr
 
 ImageView::~ImageView()
 {
-    vkDestroyImageView(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyImageView(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 VkExtent2D ImageView::getExtent2D() const noexcept

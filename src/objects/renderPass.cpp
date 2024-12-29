@@ -99,7 +99,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     renderPassInfo.pSubpasses = &subpassDescription;
     renderPassInfo.dependencyCount = 2;
     renderPassInfo.pDependencies = dependencies;
-    const VkResult result = vkCreateRenderPass(getNativeDevice(), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateRenderPass(getNativeDevice(), &renderPassInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create render pass");
     hash = core::hashArgs(
         renderPassInfo.sType,
@@ -135,7 +135,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     renderPassInfo.pSubpasses = subpasses.data();
     renderPassInfo.dependencyCount = core::countof(dependencies);
     renderPassInfo.pDependencies = dependencies.data();
-    const VkResult result = vkCreateRenderPass(getNativeDevice(), &renderPassInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateRenderPass(getNativeDevice(), &renderPassInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create render pass");
     hash = core::hashArgs(
         renderPassInfo.sType,
@@ -154,7 +154,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
 
 RenderPass::~RenderPass()
 {
-    vkDestroyRenderPass(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyRenderPass(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 VkExtent2D RenderPass::getRenderAreaGranularity() const noexcept

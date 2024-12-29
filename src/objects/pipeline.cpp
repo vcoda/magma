@@ -57,7 +57,7 @@ Pipeline::Pipeline(VkPipelineBindPoint bindPoint, std::shared_ptr<Device> device
 
 Pipeline::~Pipeline()
 {
-    vkDestroyPipeline(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyPipeline(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 #ifdef VK_KHR_pipeline_executable_properties

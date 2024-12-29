@@ -78,7 +78,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
         }
     }
 #endif // VK_KHR_get_physical_device_properties2
-    const VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
 #ifndef MAGMA_NO_EXCEPTIONS
     if (VK_ERROR_INITIALIZATION_FAILED == result)
     {
@@ -106,7 +106,7 @@ Device::~Device()
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
     MAGMA_ASSERT(!resourcePool->hasUnreleasedResources());
 #endif
-    vkDestroyDevice(handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyDevice(handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 const std::unique_ptr<DeviceFeatures>& Device::getFeatures() const

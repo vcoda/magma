@@ -65,7 +65,7 @@ ExternalSemaphore::ExternalSemaphore(std::shared_ptr<Device> device,
         0;
     #endif // VK_KHR_external_semaphore_fd
     const VkResult result = vkCreateSemaphore(getNativeDevice(), &semaphoreInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create external semaphore");
 }
 

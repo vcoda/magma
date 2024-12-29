@@ -45,13 +45,13 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     descriptorPoolInfo.maxSets = maxSets;
     descriptorPoolInfo.poolSizeCount = core::countof(descriptorPools);
     descriptorPoolInfo.pPoolSizes = descriptorPools.data();
-    const VkResult result = vkCreateDescriptorPool(getNativeDevice(), &descriptorPoolInfo, MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+    const VkResult result = vkCreateDescriptorPool(getNativeDevice(), &descriptorPoolInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create descriptor pool");
 }
 
 DescriptorPool::~DescriptorPool()
 {
-    vkDestroyDescriptorPool(getNativeDevice(), handle, MAGMA_OPTIONAL_INSTANCE(hostAllocator));
+    vkDestroyDescriptorPool(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 void DescriptorPool::reset(VkDescriptorPoolResetFlags flags /* 0 */)
