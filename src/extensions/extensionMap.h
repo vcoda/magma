@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    template<class T>
+    template<class Properties>
     class ExtensionMap
     {
     public:
@@ -29,19 +29,19 @@ namespace magma
         }
 
     protected:
-        ExtensionMap(const std::vector<T>& properties)
+        ExtensionMap(const std::vector<Properties>& properties)
         {
             for (auto const& property: properties)
             {
-                if constexpr (std::is_same<T, VkExtensionProperties>::value)
+                if constexpr (std::is_same<Properties, VkExtensionProperties>::value)
                     map.emplace(std::string(property.extensionName), property);
-                else if constexpr (std::is_same<T, VkLayerProperties>::value)
+                else if constexpr (std::is_same<Properties, VkLayerProperties>::value)
                     map.emplace(std::string(property.layerName), property);
             }
         }
 
     private:
-        std::map<std::string, T> map;
+        std::map<std::string, Properties> map;
     };
 } // namespace magma
 
