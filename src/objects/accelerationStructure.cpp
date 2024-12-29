@@ -124,10 +124,23 @@ AccelerationStructure::~AccelerationStructure()
 
 VkDeviceSize AccelerationStructure::getProperty(AccelerationStructureQuery::Type queryType) const noexcept
 {
+    auto queryTypeVk = [queryType]() -> VkQueryType
+    {
+        switch (queryType)
+        {
+        case AccelerationStructureQuery::Type::CompactedSize: return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR;
+        case AccelerationStructureQuery::Type::SerializationSize: return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR;
+    #ifdef VK_KHR_ray_tracing_maintenance1
+        case AccelerationStructureQuery::Type::Size: return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SIZE_KHR;
+        case AccelerationStructureQuery::Type::BottomLevelPointers: return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR;
+    #endif // VK_KHR_ray_tracing_maintenance1
+        default: return VK_QUERY_TYPE_MAX_ENUM;
+        }
+    };
     VkDeviceSize property = 0ull;
     MAGMA_DEVICE_EXTENSION(vkWriteAccelerationStructuresPropertiesKHR);
     const VkResult result = vkWriteAccelerationStructuresPropertiesKHR(getNativeDevice(),
-        1, &handle, castType(queryType), sizeof(VkDeviceSize), &property, sizeof(VkDeviceSize));
+        1, &handle, queryTypeVk(), sizeof(VkDeviceSize), &property, sizeof(VkDeviceSize));
     MAGMA_ASSERT(VK_SUCCESS == result);
     MAGMA_UNUSED(result);
     return property;
@@ -252,26 +265,6 @@ bool AccelerationStructure::deserialize(const void *srcBuffer,
 void AccelerationStructure::onDefragment()
 {
     buffer->onDefragment();
-}
-
-VkQueryType AccelerationStructure::castType(AccelerationStructureQuery::Type queryType) noexcept
-{
-    switch (queryType)
-    {
-    case AccelerationStructureQuery::Type::CompactedSize:
-        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR;
-    case AccelerationStructureQuery::Type::SerializationSize:
-        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR;
-#ifdef VK_KHR_ray_tracing_maintenance1
-    case AccelerationStructureQuery::Type::Size:
-        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SIZE_KHR;
-    case AccelerationStructureQuery::Type::BottomLevelPointers:
-        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR;
-#endif // VK_KHR_ray_tracing_maintenance1
-    default:
-        MAGMA_FAILURE("invalid query type");
-        return VK_QUERY_TYPE_MAX_ENUM;
-    }
 }
 
 GenericAccelerationStructure::GenericAccelerationStructure(std::shared_ptr<Device> device,

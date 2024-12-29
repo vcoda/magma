@@ -225,27 +225,21 @@ std::vector<QueryPool::Result<TransformFeedbackQuery::Result, uint64_t>> Transfo
 AccelerationStructureQuery::AccelerationStructureQuery(std::shared_ptr<Device> device, Type queryType, uint32_t queryCount,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    IntegerQueryPool(castType(queryType), std::move(device), queryCount, 0, std::move(allocator), extendedInfo)
+    IntegerQueryPool(
+        [queryType]() -> VkQueryType
+        {
+            switch (queryType)
+            {
+            case Type::CompactedSize: return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR;
+            case Type::SerializationSize: return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR;
+        #ifdef VK_KHR_ray_tracing_maintenance1
+            case Type::Size: return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SIZE_KHR;
+            case Type::BottomLevelPointers: return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR;
+        #endif // VK_KHR_ray_tracing_maintenance1
+            default: return VK_QUERY_TYPE_MAX_ENUM;
+            }
+        }(),
+        std::move(device), queryCount, 0, std::move(allocator), extendedInfo)
 {}
-
-VkQueryType AccelerationStructureQuery::castType(Type queryType) noexcept
-{
-    switch (queryType)
-    {
-    case Type::CompactedSize:
-        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR;
-    case Type::SerializationSize:
-        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR;
-#ifdef VK_KHR_ray_tracing_maintenance1
-    case Type::Size:
-        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SIZE_KHR;
-    case Type::BottomLevelPointers:
-        return VK_QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_BOTTOM_LEVEL_POINTERS_KHR;
-#endif // VK_KHR_ray_tracing_maintenance1
-    default:
-        MAGMA_FAILURE("invalid query type");
-        return VK_QUERY_TYPE_MAX_ENUM;
-    }
-}
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

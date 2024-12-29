@@ -97,7 +97,6 @@ namespace magma
             std::shared_ptr<Allocator> allocator,
             const Sharing& sharing,
             const StructureChain& extendedInfo);
-        static VkQueryType castType(AccelerationStructureQuery::Type queryType) noexcept;
 
         VkAccelerationStructureTypeKHR structureType;
         const VkAccelerationStructureCreateFlagsKHR flags;

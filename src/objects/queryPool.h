@@ -260,9 +260,6 @@ namespace magma
             uint32_t queryCount,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-
-    private:
-        static VkQueryType castType(Type queryType) noexcept;
     };
 
     /* The following values are used when writing acceleration structure
