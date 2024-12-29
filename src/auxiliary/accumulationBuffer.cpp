@@ -75,7 +75,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     std::unique_ptr<ColorAttachment> accumBuffer = std::make_unique<ColorAttachment>(
         device, format, extent, 1, 1, sampled, allocator, false, imageFormatList);
     bufferView = std::make_shared<UniqueImageView>(std::move(accumBuffer));
-    framebuffer = std::make_unique<Framebuffer>(std::move(renderPass), std::move(bufferView), hostAllocator, 0);
+    framebuffer = std::make_unique<Framebuffer>(std::move(renderPass), bufferView, hostAllocator, 0);
     // Create descriptor set for fragment shader
     descriptorSet = std::make_unique<ImageDescriptorSet>(device, reflection, hostAllocator);
     nearestSampler = std::make_unique<Sampler>(device, sampler::magMinMipNearestClampToEdge, hostAllocator);
