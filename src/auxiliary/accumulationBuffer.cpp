@@ -90,7 +90,7 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     const uint8_t componentCount = Format(format).componentCount();
     constexpr push::FragmentConstantRange<float> pushConstantRange;
     std::unique_ptr<PipelineLayout> pipelineLayout = std::make_unique<PipelineLayout>(
-        descriptorSet->getLayout(), pushConstantRange, hostAllocator);
+        descriptorSet->getDescriptorSet()->getLayout(), pushConstantRange, hostAllocator);
     blendPipeline = std::make_unique<GraphicsPipeline>(std::move(device),
         shaderStages,
         renderstate::nullVertexInput,
@@ -127,7 +127,7 @@ void AccumulationBuffer::accumulate(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<
             const float weight = 1.f - count / (1.f + count);
             cmdBuffer->pushConstant(blendPipeline->getLayout(), VK_SHADER_STAGE_FRAGMENT_BIT, weight);
             // Do normal blending
-            cmdBuffer->bindDescriptorSet(blendPipeline, 0, descriptorSet->getSet());
+            cmdBuffer->bindDescriptorSet(blendPipeline, 0, descriptorSet->getDescriptorSet());
             cmdBuffer->bindPipeline(blendPipeline);
             cmdBuffer->draw(3);
         }
