@@ -30,7 +30,7 @@ inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, int32_t w /
     this->x = int32_t(x) & 0x3FF;
     this->y = int32_t(y) & 0x3FF;
     this->z = int32_t(z) & 0x3FF;
-    this->w = w;
+    this->w = w & 0x3;
 #endif // FPU
 }
 } // namespace magma::packed
