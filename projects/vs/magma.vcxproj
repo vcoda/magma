@@ -359,6 +359,7 @@
     <ClInclude Include="..\..\src\packed\expPow2.h" />
     <ClInclude Include="..\..\src\packed\ieee754.h" />
     <ClInclude Include="..\..\src\packed\rcpExpPow2.h" />
+    <ClInclude Include="..\..\src\packed\horzor.inl" />
     <ClInclude Include="..\..\src\packed\vector.h" />
     <ClInclude Include="..\..\src\platform\d3dExternalSemaphore.h" />
     <ClInclude Include="..\..\src\platform\externalFence.h" />

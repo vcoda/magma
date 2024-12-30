@@ -864,6 +864,9 @@
     <ClInclude Include="..\..\src\auxiliary\framebuffer.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\packed\horzor.inl">
+      <Filter>Header Files\packed</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
