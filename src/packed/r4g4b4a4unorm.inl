@@ -12,7 +12,7 @@ inline R4g4b4a4Unorm::R4g4b4a4Unorm(float r, float g, float b, float a) noexcept
     v = _mm_mul_ps(v, bitshift);
     __m128i iv = _mm_cvtps_epi32(v);
     iv = _mm_horizontal_or(iv);
-    this->v = _mm_extract_epi16(iv, 0);
+    this->v = (uint16_t)_mm_extract_epi16(iv, 0);
 #elif defined(MAGMA_NEON)
     #error NEON codepath not implemented
 #else
