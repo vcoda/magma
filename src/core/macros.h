@@ -78,7 +78,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // MAGMA_STATS
 
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-    #define MAGMA_INUSE(obj) if (obj) try { inUse.insert(obj); } catch(...) {}
+    #define MAGMA_INUSE(obj) if (obj && obj.shared()) try { inUse.insert(obj.get_shared()); } catch(...) {}
 #else
     #define MAGMA_INUSE(obj)
 #endif // MAGMA_RETAIN_OBJECTS_IN_USE
