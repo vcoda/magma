@@ -15,7 +15,7 @@ inline B5g6r5Unorm::B5g6r5Unorm(float b, float g, float r) noexcept
     this->v = (uint16_t)_mm_extract_epi16(iv, 0);
 #elif defined(MAGMA_NEON)
     #error NEON codepath not implemented
-#else
+#else // FPU
     b = std::min(std::max(0.f, b), 1.f);
     g = std::min(std::max(0.f, g), 1.f);
     r = std::min(std::max(0.f, r), 1.f);
@@ -25,7 +25,7 @@ inline B5g6r5Unorm::B5g6r5Unorm(float b, float g, float r) noexcept
     v = (((uint16_t)b & 0x1F) << 11) |
         (((uint16_t)g & 0x3F) << 5) |
         ((uint16_t)r & 0x1F);
-#endif // MAGMA_NEON
+#endif // FPU
 }
 
 inline B5g6r5Unorm::B5g6r5Unorm(uint8_t b, uint8_t g, uint8_t r) noexcept:
