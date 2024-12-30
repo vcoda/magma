@@ -113,6 +113,8 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
         nullptr); // basePipeline
 }
 
+AccumulationBuffer::~AccumulationBuffer() {}
+
 void AccumulationBuffer::accumulate(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<ImageView> imageView) noexcept
 {
     MAGMA_ASSERT(cmdBuffer);
