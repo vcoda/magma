@@ -37,12 +37,13 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     if (MAX_MANTISSA + 1 == maxm) ++exp;
     scale = _mm_set_ps1(rcpExpPow2[exp]);
     v = _mm_mul_ps(v, scale);
-    __m128i iv = _mm_cvtps_epi32(v); // Convert to int with rounding
-    this->v =
-        (((uint32_t)exp & 0x1F) << 27) |
-        (((uint32_t)_mm_extract_epi32(iv, 2) & 0x1FF) << 18) |
-        (((uint32_t)_mm_extract_epi32(iv, 1) & 0x1FF) << 9) |
-        ((uint32_t)_mm_extract_epi32(iv, 0) & 0x1FF);
+    v = _mm_round_ps(v, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+    __m128 bitshift = _mm_set_ps(0.f, 512.f * 512.f, 512.f, 1.f); // -, 18, 9, 0
+    v = _mm_mul_ps(v, bitshift);
+    __m128i iv = _mm_cvtps_epi32(v);
+    iv = _mm_horizontal_or(iv);
+    this->v = _mm_cvtsi128_si32(iv);
+    e = uint32_t(exp) & 0x1F;
 #elif defined(MAGMA_NEON)
     #error NEON codepath not implemented
 #else
