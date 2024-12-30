@@ -198,7 +198,7 @@ uint32_t Swapchain::getImageCount() const
     return swapchainImageCount;
 }
 
-const std::unordered_set<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
+const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
 {
     if (bindedImages.empty())
     {
@@ -211,9 +211,10 @@ const std::unordered_set<std::shared_ptr<SwapchainImage>>& Swapchain::getImages(
             MAGMA_HANDLE_RESULT(result, "failed to get swapchain images");
             uint32_t imageIndex = 0;
             for (VkImage handle: swapchainImages)
-            {   // Image has been created by swapchain internally, so we just passthrough image handle and properties
-                bindedImages.insert(SwapchainImage::makeShared(handle,
-                    device, surfaceFormat.format, extent, arrayLayers, imageUsage, imageIndex));
+            {   // Image has been allocated by swapchain internally, so construct through image handle and it's roperties
+                std::shared_ptr<SwapchainImage> image = SwapchainImage::makeShared(handle, device,
+                    surfaceFormat.format, extent, arrayLayers, imageUsage, imageIndex);
+                bindedImages.emplace_back(std::move(image));
                 ++imageIndex;
             }
         }
@@ -289,7 +290,7 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     const VkResult result = vkBindImageMemory2KHR(getNativeDevice(), 1, &bindImageMemoryInfo);
     MAGMA_HANDLE_RESULT(result, "failed to bind image to swapchain");
     image->setChainIndex(imageIndex);
-    bindedImages.insert(image);
+    bindedImages.emplace_back(std::move(image));
 }
 
 #ifdef VK_KHR_device_group
@@ -319,7 +320,7 @@ void Swapchain::bindImage(std::shared_ptr<SwapchainImage> image, uint32_t imageI
     const VkResult result = vkBindImageMemory2KHR(getNativeDevice(), 1, &bindImageMemoryInfo);
     MAGMA_HANDLE_RESULT(result, "failed to bind image to swapchain across the subdevices");
     image->setChainIndex(imageIndex);
-    bindedImages.insert(image);
+    bindedImages.emplace_back(std::move(image));
 }
 #endif // VK_KHR_device_group
 #endif // VK_KHR_bind_memory2

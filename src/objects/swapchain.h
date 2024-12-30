@@ -75,7 +75,7 @@ namespace magma
         bool hadRetired() const noexcept { return retired; }
         uint32_t getImageIndex() const noexcept { return imageIndex; }
         uint32_t getImageCount() const;
-        const std::unordered_set<std::shared_ptr<SwapchainImage>>& getImages() const;
+        const std::vector<std::shared_ptr<SwapchainImage>>& getImages() const;
         VkImageLayout layoutTransition(VkImageLayout newLayout,
             lent_ptr<CommandBuffer> cmdBuffer,
             VkPipelineStageFlags shaderStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT) noexcept;
@@ -123,7 +123,7 @@ namespace magma
         const VkSwapchainCreateFlagsKHR flags;
         const Sharing sharing;
         bool retired;
-        mutable std::unordered_set<std::shared_ptr<SwapchainImage>> bindedImages;
+        mutable std::vector<std::shared_ptr<SwapchainImage>> bindedImages;
         uint32_t imageIndex;
         friend class FullScreenExclusiveSwapchain;
     };
