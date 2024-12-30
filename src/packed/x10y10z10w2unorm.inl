@@ -9,8 +9,8 @@ inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, uint32_t w 
     __m128 scale = _mm_set_ps(1.f, 1023.f, 1023.f, 1023.f);
     v = _mm_mul_ps(v, scale);
     v = _mm_round_ps(v, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
-    scale = _mm_set_ps(1024.f * 1024.f * 1024.f, 1024.f * 1024.f, 1024.f, 1.f);
-    v = _mm_mul_ps(v, scale);
+    __m128 bitshift = _mm_set_ps(1024.f * 1024.f * 1024.f, 1024.f * 1024.f, 1024.f, 1.f);
+    v = _mm_mul_ps(v, bitshift);
     __m128i iv = _mm_cvtps_epi32(v);
     // horizontal OR
     __m128i iv2 = _mm_shuffle_epi32(iv, _MM_SHUFFLE(3, 2, 3, 2));
@@ -20,7 +20,7 @@ inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, uint32_t w 
     this->v = _mm_cvtsi128_si32(iv);
 #elif defined(MAGMA_NEON)
     #error NEON codepath not implemented
-#else
+#else // FPU
     x = std::min(std::max(0.f, x), 1.f);
     y = std::min(std::max(0.f, y), 1.f);
     z = std::min(std::max(0.f, z), 1.f);
@@ -31,6 +31,6 @@ inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, uint32_t w 
     this->y = uint32_t(y) & 0x3FF;
     this->z = uint32_t(z) & 0x3FF;
     this->w = w & 0x3;
-#endif // MAGMA_NEON
+#endif // FPU
 }
 } // namespace magma::packed
