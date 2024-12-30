@@ -35,7 +35,7 @@ Profiler *Profiler::profilers[2];
 Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::shared_ptr<IAllocator> allocator):
     queueType(queueType)
 {
-    std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
+    const std::shared_ptr<PhysicalDevice>& physicalDevice = device->getPhysicalDevice();
     const VkPhysicalDeviceProperties properties = physicalDevice->getProperties();
     const VkPhysicalDeviceLimits& limits = properties.limits;
     timestampPeriod = limits.timestampPeriod; // The number of nanoseconds it takes for a timestamp value to be incremented by 1
