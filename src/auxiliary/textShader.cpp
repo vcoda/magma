@@ -95,8 +95,9 @@ TextShader::TextShader(std::shared_ptr<const RenderPass> renderPass,
 constexpr
 #include "spirv/output/fontf"
     constexpr hash_t fsFontHash = core::hashArray(fsFont);
-    std::shared_ptr<ShaderModule> fragmentShader = std::make_unique<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, true);
-    const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
+    constexpr bool reflect = true;
+    std::shared_ptr<ShaderModule> fragmentShader = std::make_unique<ShaderModule>(device, fsFont, fsFontHash, hostAllocator, reflect);
+    const char *entryPointName = fragmentShader->getReflection()->getEntryPointName(0);
     std::vector<PipelineShaderStage> shaderStages;
     shaderStages.emplace_back(std::move(vertexShaderStage));
     shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName);
