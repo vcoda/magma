@@ -82,10 +82,9 @@ AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat 
     // Setup shader stages
     FillRectangleVertexShader vertexShaderStage(device, hostAllocator);
     const RasterizationState rasterizationState = vertexShaderStage.getRasterizationState();
-    const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     std::vector<PipelineShaderStage> shaderStages;
     shaderStages.emplace_back(std::move(vertexShaderStage));
-    shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName);
+    shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), reflection->getEntryPointName(0));
     // Create blending pipeline
     const uint8_t componentCount = Format(format).componentCount();
     constexpr push::FragmentConstantRange<float> pushConstantRange;
