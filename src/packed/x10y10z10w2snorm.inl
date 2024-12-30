@@ -15,11 +15,7 @@ inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, int32_t w /
     // mask off any fraction
     __m128i mask = _mm_set_epi32(0xC0000000, 0x3FF << 20, 0x3FF << 10, 0x3FF);
     iv = _mm_and_si128(iv, mask);
-    // horizontal OR
-    __m128i iv2 = _mm_shuffle_epi32(iv, _MM_SHUFFLE(3, 2, 3, 2));
-    iv = _mm_or_si128(iv, iv2); // x = x|z, y = y|w
-    iv2 = _mm_shuffle_epi32(iv, _MM_SHUFFLE(1, 1, 1, 1)); // move z to the x
-    iv = _mm_or_si128(iv, iv2); // x|y|z|w
+    iv = _mm_horizontal_or(iv);
     this->v = _mm_cvtsi128_si32(iv);
 #elif defined(MAGMA_NEON)
     #error NEON codepath not implemented

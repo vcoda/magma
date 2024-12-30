@@ -12,11 +12,7 @@ inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, uint32_t w 
     __m128 bitshift = _mm_set_ps(1024.f * 1024.f * 1024.f, 1024.f * 1024.f, 1024.f, 1.f);
     v = _mm_mul_ps(v, bitshift);
     __m128i iv = _mm_cvtps_epi32(v);
-    // horizontal OR
-    __m128i iv2 = _mm_shuffle_epi32(iv, _MM_SHUFFLE(3, 2, 3, 2));
-    iv = _mm_or_si128(iv, iv2); // x = x|z, y = y|w
-    iv2 = _mm_shuffle_epi32(iv, _MM_SHUFFLE(1, 1, 1, 1)); // move z to the x
-    iv = _mm_or_si128(iv, iv2); // x|y|z|w
+    iv = _mm_horizontal_or(iv);
     this->v = _mm_cvtsi128_si32(iv);
 #elif defined(MAGMA_NEON)
     #error NEON codepath not implemented
