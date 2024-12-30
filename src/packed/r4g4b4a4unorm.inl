@@ -14,7 +14,17 @@ inline R4g4b4a4Unorm::R4g4b4a4Unorm(float r, float g, float b, float a) noexcept
     iv = _mm_horizontal_or(iv);
     this->v = (uint16_t)_mm_extract_epi16(iv, 0);
 #elif defined(MAGMA_NEON)
-    #error NEON codepath not implemented
+    float32x4_t v = {r, g, b, a};
+    v = vmaxq_f32(v, vdupq_n_f32(0.f));
+    v = vminq_f32(v, vdupq_n_f32(1.f));
+    v = vmulq_f32(v, vdupq_n_f32(15.0f));
+    v = vrndnq_f32(v);
+    uint32x4_t iv = vcvtnq_u32_f32(v);
+    this->v =
+        (((uint16_t)vgetq_lane_u32(iv, 0) & 0xF) << 12) |
+        (((uint16_t)vgetq_lane_u32(iv, 1) & 0xF) << 8) |
+        (((uint16_t)vgetq_lane_u32(iv, 2) & 0xF) << 4) |
+        ((uint16_t)vgetq_lane_u32(iv, 3) & 0xF);
 #else // FPU
     r = std::min(std::max(0.f, r), 1.f);
     g = std::min(std::max(0.f, g), 1.f);
