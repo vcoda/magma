@@ -104,14 +104,14 @@ void FrameGrabber::captureFrame(std::shared_ptr<Image2D> srcImage, lent_ptr<Comm
     }
 }
 
-void FrameGrabber::readPixels(std::function<void(uint32_t col, uint32_t row, uint32_t rgba)> forEachPixel) const
+void FrameGrabber::readPixels(std::function<void(uint32_t col, uint32_t row, uint32_t rgba)> eachPixel) const
 {   // Get image row pitch
     const VkSubresourceLayout subresourceLayout = dstImage->getSubresourceLayout(0);
     const VkDeviceSize rowPitch = subresourceLayout.rowPitch;
     const uint32_t width = dstImage->getWidth();
     const uint32_t height = dstImage->getHeight();
     mapImageRange<uint8_t>(dstImage, subresourceLayout.offset, VK_WHOLE_SIZE,
-        [this, width, height, rowPitch, forEachPixel](const uint8_t *data)
+        [this, width, height, rowPitch, &eachPixel](const uint8_t *data)
         {
             for (uint32_t y = 0; y < height; ++y)
             {
@@ -129,7 +129,7 @@ void FrameGrabber::readPixels(std::function<void(uint32_t col, uint32_t row, uin
                         const uint32_t b = argb & 0xFF;
                         abgr = (argb & 0xFF000000) | (b << 16) | (g << 8) | r;
                     }
-                    forEachPixel(x, y, abgr);
+                    eachPixel(x, y, abgr);
                 }
                 data += rowPitch;
             }
@@ -137,14 +137,14 @@ void FrameGrabber::readPixels(std::function<void(uint32_t col, uint32_t row, uin
     );
 }
 
-void FrameGrabber::readPixels(std::function<void(uint32_t row, const std::vector<uint32_t>& rowPixels)> forEachRow) const
+void FrameGrabber::readPixels(std::function<void(uint32_t row, const std::vector<uint32_t>& rowPixels)> eachRow) const
 {   // Get image row pitch
     const VkSubresourceLayout subresourceLayout = dstImage->getSubresourceLayout(0);
     const VkDeviceSize rowPitch = subresourceLayout.rowPitch;
     const uint32_t width = dstImage->getWidth();
     const uint32_t height = dstImage->getHeight();
     mapImageRange<uint8_t>(dstImage, subresourceLayout.offset, VK_WHOLE_SIZE,
-        [this, width, height, rowPitch, forEachRow](const uint8_t *data)
+        [this, width, height, rowPitch, &eachRow](const uint8_t *data)
         {
             std::vector<uint32_t> rowPixels(width);
             for (uint32_t y = 0; y < height; ++y)
@@ -160,7 +160,7 @@ void FrameGrabber::readPixels(std::function<void(uint32_t row, const std::vector
                     const uint32_t b = argb & 0xFF;
                     rowPixels[x] = (argb & 0xFF000000) | (b << 16) | (g << 8) | r;
                 }
-                forEachRow(y, rowPixels);
+                eachRow(y, rowPixels);
                 data += rowPitch;
             }
         }

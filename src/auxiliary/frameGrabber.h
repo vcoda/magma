@@ -37,11 +37,8 @@ namespace magma
                 std::shared_ptr<Allocator> allocator = nullptr);
             void captureFrame(std::shared_ptr<Image2D> srcImage,
                 lent_ptr<CommandBuffer> cmdBuffer);
-            void readPixels(std::function<void(uint32_t col,
-                uint32_t row,
-                uint32_t rgba)> forEachPixel) const;
-            void readPixels(std::function<void(uint32_t row,
-                const std::vector<uint32_t>& rowPixels)> forEachRow) const;
+            void readPixels(std::function<void(uint32_t col, uint32_t row, uint32_t rgba)> eachPixel) const;
+            void readPixels(std::function<void(uint32_t row, const std::vector<uint32_t>& rowPixels)> eachRow) const;
             VkExtent2D getImageExtent() const;
 
         private:
