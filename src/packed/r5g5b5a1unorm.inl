@@ -3,16 +3,16 @@ namespace magma::packed
 inline R5g5b5a1Unorm::R5g5b5a1Unorm(float r, float g, float b, float a) noexcept
 {
 #ifdef MAGMA_SSE
-    __m128 v = _mm_set_ps(r, g, b, a); // Most to least significant bit order
+    __m128 v = _mm_set_ps(r, g, b, a);
     v = _mm_max_ps(v, _mm_setzero_ps());
     v = _mm_min_ps(v, _mm_set_ps1(1.f));
     v = _mm_mul_ps(v, _mm_set_ps(31.f, 31.f, 31.f, 1.f));
-    __m128i iv = _mm_cvtps_epi32(v); // Convert to int with rounding
-    this->v =
-        (((uint16_t)_mm_extract_epi16(iv, 6) & 0x1F) << 11) |
-        (((uint16_t)_mm_extract_epi16(iv, 4) & 0x1F) << 6) |
-        (((uint16_t)_mm_extract_epi16(iv, 2) & 0x1F) << 1) |
-        ((uint16_t)_mm_extract_epi16(iv, 0) & 0x1);
+    v = _mm_round_ps(v, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+    __m128 bitshift = _mm_set_ps(2048.f, 64.f, 2.f, 1.f); // 11, 6, 1, 0
+    v = _mm_mul_ps(v, bitshift);
+    __m128i iv = _mm_cvtps_epi32(v);
+    iv = _mm_horizontal_or(iv);
+    this->v = (uint16_t)_mm_extract_epi16(iv, 0);
 #elif defined(MAGMA_NEON)
     #error NEON codepath not implemented
 #else
