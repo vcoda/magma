@@ -15,4 +15,4 @@ rem GNU General Public License for more details.
 rem You should have received a copy of the GNU General Public License
 rem along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-cl /std:c++17 /EHsc /I%VK_SDK_PATH%\Include /I..\..\src /I..\..\src\core unittest.cpp ../../src/misc/structureChain.cpp /link
+cl /std:c++17 /EHsc /I%VULKAN_SDK%\Include /I..\..\src /I..\..\src\core unittest.cpp ../../src/misc/structureChain.cpp /link
