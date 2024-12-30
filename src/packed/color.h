@@ -224,6 +224,7 @@ namespace magma
     } // namespace packed
 } // namespace magma
 
+#include "horzor.inl"
 #include "r4g4b4a4unorm.inl"
 #include "b4g4r4a4unorm.inl"
 #include "r5g6b5unorm.inl"
