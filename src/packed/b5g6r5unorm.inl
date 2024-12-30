@@ -22,9 +22,9 @@ inline B5g6r5Unorm::B5g6r5Unorm(float b, float g, float r) noexcept
     b = std::roundf(b * 31.f);
     g = std::roundf(g * 63.f);
     r = std::roundf(r * 31.f);
-    v = (((uint16_t)b & 0x1F) << 11) |
-        (((uint16_t)g & 0x3F) << 5) |
-        ((uint16_t)r & 0x1F);
+    this->r = uint16_t(r) & 0x1F;
+    this->g = uint16_t(g) & 0x3F;
+    this->b = uint16_t(b) & 0x1F;
 #endif // FPU
 }
 

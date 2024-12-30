@@ -24,10 +24,10 @@ inline R4g4b4a4Unorm::R4g4b4a4Unorm(float r, float g, float b, float a) noexcept
     g = std::roundf(g * 15.f);
     b = std::roundf(b * 15.f);
     a = std::roundf(a * 15.f);
-    v = (((uint16_t)r & 0xF) << 12) |
-        (((uint16_t)g & 0xF) << 8) |
-        (((uint16_t)b & 0xF) << 4) |
-        ((uint16_t)a & 0xF);
+    this->a = uint16_t(a) & 0xF;
+    this->b = uint16_t(b) & 0xF;
+    this->g = uint16_t(g) & 0xF;
+    this->r = uint16_t(r) & 0xF;
 #endif // FPU
 }
 
