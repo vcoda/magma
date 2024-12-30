@@ -63,15 +63,15 @@ namespace magma
                     int32_t x: 10; // [-511,511]
                     int32_t y: 10; // [-511,511]
                     int32_t z: 10; // [-511,511]
-                    uint32_t w: 2; // [0,3]
+                    int32_t w: 2;  // [-1, 1]
                 };
                 uint32_t v;
             };
 
             X10y10z10w2Snorm() noexcept = default;
             explicit X10y10z10w2Snorm(uint32_t v) noexcept: v(v) {}
-            explicit X10y10z10w2Snorm(float x, float y, float z, uint32_t w = 0) noexcept;
-            explicit X10y10z10w2Snorm(const float v[3], uint32_t w = 0) noexcept:
+            explicit X10y10z10w2Snorm(float x, float y, float z, int32_t w = 0) noexcept;
+            explicit X10y10z10w2Snorm(const float v[3], int32_t w = 0) noexcept:
                 X10y10z10w2Snorm(v[0], v[1], v[2], w) {}
 
             static constexpr auto format = VK_FORMAT_A2B10G10R10_SNORM_PACK32;

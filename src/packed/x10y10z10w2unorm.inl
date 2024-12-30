@@ -27,10 +27,10 @@ inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, uint32_t w 
     x = std::roundf(x * 1023.f);
     y = std::roundf(y * 1023.f);
     z = std::roundf(z * 1023.f);
-    v = ((w & 0x3) << 30) |
-        (((uint32_t)z & 0x3FF) << 20) |
-        (((uint32_t)y & 0x3FF) << 10) |
-        ((uint32_t)x & 0x3FF);
+    this->x = uint32_t(x) & 0x3FF;
+    this->y = uint32_t(y) & 0x3FF;
+    this->z = uint32_t(z) & 0x3FF;
+    this->w = w & 0x3;
 #endif // MAGMA_NEON
 }
 } // namespace magma::packed

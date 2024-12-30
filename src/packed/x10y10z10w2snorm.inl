@@ -1,6 +1,6 @@
 namespace magma::packed
 {
-inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, uint32_t w /* 0 */) noexcept
+inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, int32_t w /* 0 */) noexcept
 {
 #ifdef MAGMA_SSE
     __m128 v = _mm_set_ps(0.f, z, y, x);
@@ -22,13 +22,14 @@ inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, uint32_t w 
     x = std::min(std::max(-1.f, x), 1.f);
     y = std::min(std::max(-1.f, y), 1.f);
     z = std::min(std::max(-1.f, z), 1.f);
+    w = std::min(std::max(-1, w), 1);
     x = std::roundf(x * 511.f);
     y = std::roundf(y * 511.f);
     z = std::roundf(z * 511.f);
-    v = ((w & 0x3) << 30) |
-        (((int32_t)z & 0x3FF) << 20) |
-        (((int32_t)y & 0x3FF) << 10) |
-        ((int32_t)x & 0x3FF);
+    this->x = int32_t(x) & 0x3FF;
+    this->y = int32_t(y) & 0x3FF;
+    this->z = int32_t(z) & 0x3FF;
+    this->w = w;
 #endif // MAGMA_NEON
 }
 } // namespace magma::packed
