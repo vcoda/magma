@@ -40,7 +40,7 @@ FillRectangleVertexShader::FillRectangleVertexShader(std::shared_ptr<Device> dev
             constexpr hash_t hash = core::hashArray(vsBlit);
             constexpr hash_t hashNV = core::hashArray(vsBlitNV);
             const bool NV_fill_rectangle = device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME);
-            return std::make_shared<ShaderModule>(std::move(device),
+            return std::make_shared<ShaderModule>(device,
                 NV_fill_rectangle ? vsBlitNV : vsBlit,
                 NV_fill_rectangle ? sizeof(vsBlitNV) : sizeof(vsBlit),
                 NV_fill_rectangle ? hashNV : hash,
