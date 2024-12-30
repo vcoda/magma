@@ -3,19 +3,21 @@ namespace magma::packed
 inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, uint32_t w /* 0 */) noexcept
 {
 #ifdef MAGMA_SSE
-    __m128 v = _mm_set_ps(0.f, z, y, x);
+    __m128 v = _mm_set_ps(float(w), z, y, x);
     v = _mm_max_ps(v, _mm_setzero_ps());
-    v = _mm_min_ps(v, _mm_set_ps1(1.f));
-    v = _mm_mul_ps(v, _mm_set_ps(3.f * 536870912.f, 1023.f * 1048576.f, 1023.f * 1024.f, 1023.f)); // 2^10, 2^20, 2^30
+    v = _mm_min_ps(v, _mm_set_ps(3.f, 1.f, 1.f, 1.f));
+    __m128 scale = _mm_set_ps(1.f, 1023.f, 1023.f, 1023.f);
+    v = _mm_mul_ps(v, scale);
+    v = _mm_round_ps(v, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+    scale = _mm_set_ps(1024.f * 1024.f * 1024.f, 1024.f * 1024.f, 1024.f, 1.f);
+    v = _mm_mul_ps(v, scale);
     __m128i iv = _mm_cvtps_epi32(v);
-    iv = _mm_and_si128(iv, _mm_set_epi32(0x0, 0x3FF << 20, 0x3FF << 10, 0x3FF)); // Mask off any fraction
-    v = _mm_castsi128_ps(iv);
-    // Horizontal bitwise OR
-    v = mm_permute_ps(v, _MM_SHUFFLE(0, 3, 2, 1));
-    iv = _mm_or_si128(iv, _mm_castps_si128(v));
-    v = mm_permute_ps(v, _MM_SHUFFLE(0, 3, 2, 1));
-    iv = _mm_or_si128(iv, _mm_castps_si128(v));
-    this->v = ((w & 0x3) << 30) | _mm_cvtsi128_si32(iv);
+    // horizontal OR
+    __m128i iv2 = _mm_shuffle_epi32(iv, _MM_SHUFFLE(3, 2, 3, 2));
+    iv = _mm_or_si128(iv, iv2); // x = x|z, y = y|w
+    iv2 = _mm_shuffle_epi32(iv, _MM_SHUFFLE(1, 1, 1, 1)); // move z to the x
+    iv = _mm_or_si128(iv, iv2); // x|y|z|w
+    this->v = _mm_cvtsi128_si32(iv);
 #elif defined(MAGMA_NEON)
     #error NEON codepath not implemented
 #else
