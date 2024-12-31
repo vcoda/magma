@@ -1615,6 +1615,9 @@
     <None Include="..\..\src\core\core.inl">
       <Filter>Header Files\core</Filter>
     </None>
+    <None Include="..\..\src\states\stencilOpState.inl">
+      <Filter>Header Files\states</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">

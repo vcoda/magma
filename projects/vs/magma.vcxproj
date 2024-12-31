@@ -760,6 +760,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\states\rasterizationState.inl" />
     <None Include="..\..\src\states\samplerState.inl" />
     <None Include="..\..\src\states\samplerYcbcrConversionState.inl" />
+    <None Include="..\..\src\states\stencilOpState.inl" />
     <None Include="..\..\src\states\streamRasterizationState.inl" />
     <None Include="..\..\src\states\tesselationState.inl" />
     <None Include="..\..\src\states\vertexAttributeType.inl" />

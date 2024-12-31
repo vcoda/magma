@@ -23,18 +23,23 @@ namespace magma
 
     struct StencilOpState : VkStencilOpState
     {
-        constexpr StencilOpState(const VkStencilOp failOp,
-            const VkStencilOp passOp,
-            const VkStencilOp depthFailOp,
-            const VkCompareOp compareOp,
-            const uint32_t compareMask = 0x0,
-            const uint32_t writeMask = 0x0,
-            const uint32_t reference = 0) noexcept:
-            VkStencilOpState{failOp, passOp, depthFailOp, compareOp, compareMask, writeMask, reference} {}
+        constexpr StencilOpState(VkStencilOp failOp,
+            VkStencilOp passOp,
+            VkStencilOp depthFailOp,
+            VkCompareOp compareOp,
+            uint32_t compareMask = 0,
+            uint32_t writeMask = 0,
+            uint32_t reference = 0) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const StencilOpState&) const noexcept;
     };
 
+} // namespace magma
+
+#include "stencilOpState.inl"
+
+namespace magma
+{
     namespace renderstate
     {
         constexpr StencilOpState stencilAlwaysDontWrite(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0x0, 0x0, 0);
