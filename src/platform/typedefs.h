@@ -55,4 +55,11 @@ namespace magma
 #ifdef VK_KHR_xlib_surface
     MAGMA_TYPEDEF_MANAGED_PTR(XlibSurface);
 #endif
+
+#ifdef VK_KHR_external_semaphore_win32
+    MAGMA_TYPEDEF_MANAGED_PTR(D3d12ExternalSemaphore)
+    #ifdef VK_KHR_timeline_semaphore
+    MAGMA_TYPEDEF_MANAGED_PTR(D3d12ExternalTimelineSemaphore)
+    #endif
+#endif // VK_KHR_external_semaphore_win32
 } // namespace magma

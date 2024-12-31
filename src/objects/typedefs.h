@@ -159,9 +159,6 @@ namespace magma
 #endif
 #ifdef VK_KHR_external_semaphore
     MAGMA_TYPEDEF_MANAGED_PTR(ExternalSemaphore)
-    #ifdef VK_KHR_external_semaphore_win32
-    MAGMA_TYPEDEF_MANAGED_PTR(D3d12ExternalSemaphore)
-    #endif
 #endif
 #ifdef VK_KHR_fragment_shading_rate
     MAGMA_TYPEDEF_MANAGED_PTR(FragmentShadingRateAttachment)
