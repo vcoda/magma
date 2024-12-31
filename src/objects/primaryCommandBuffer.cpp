@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PrimaryCommandBuffer::PrimaryCommandBuffer(const std::unique_ptr<CommandPool>& cmdPool):
+PrimaryCommandBuffer::PrimaryCommandBuffer(lent_ptr<CommandPool> cmdPool):
     CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, cmdPool.get())
 {}
 
