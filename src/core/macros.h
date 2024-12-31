@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_NEW new(std::nothrow)
 
-#define MAGMA_UNUSED(variable) variable
+#define MAGMA_UNUSED(variable) ((void)(variable))
 
 #define MAGMA_BOOLEAN(condition) (condition) ? VkBool32(VK_TRUE) : VkBool32(VK_FALSE)
 

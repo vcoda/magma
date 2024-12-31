@@ -24,7 +24,7 @@ template<class... Descriptor>
 inline void DescriptorSetTable::setReflection(Descriptor&&... args)
 {   // Use "temporary array" idiom
     // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
-    std::initializer_list<int>{
+    auto unused = std::initializer_list<int>{
         (reflection.push_back(std::forward<Descriptor&>(args)), void(), 0)...
     };
 }
