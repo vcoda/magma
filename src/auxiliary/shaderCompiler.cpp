@@ -44,8 +44,8 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     const std::unordered_map<std::string, std::string>& macroDefinitions /* {} */,
     const std::string& srcFileName  /* "" */)
 {
-    MAGMA_ASSERT(source.length() > 0);
-    MAGMA_ASSERT(strlen(entrypoint) > 0);
+    MAGMA_ASSERT(source.length());
+    MAGMA_ASSERT(strlen(entrypoint));
     shaderc_compile_options_t options = shaderc_compile_options_initialize();
     for (auto const& [name, value]: macroDefinitions)
     {   // Add preprocessor definitions

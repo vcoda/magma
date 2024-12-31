@@ -35,8 +35,8 @@ Application::Application(const char *applicationName, uint32_t applicationVersio
     }
 {
     MAGMA_ASSERT(applicationName);
-    MAGMA_ASSERT(strlen(applicationName) > 0);
+    MAGMA_ASSERT(strlen(applicationName));
     MAGMA_ASSERT(engineName);
-    MAGMA_ASSERT(strlen(engineName) > 0);
+    MAGMA_ASSERT(strlen(engineName));
 }
 } // namespace magma

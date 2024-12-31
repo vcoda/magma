@@ -124,7 +124,7 @@ bool Profiler::endFrame()
 void Profiler::beginSection(lent_ptr<CommandBuffer> cmdBuffer, const char *name, uint32_t color)
 {
     MAGMA_ASSERT(insideFrame);
-    MAGMA_ASSERT(strlen(name) > 0);
+    MAGMA_ASSERT(strlen(name));
     if (useLabels)
     {
         float r, g, b, a;
