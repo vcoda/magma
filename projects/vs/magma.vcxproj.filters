@@ -855,9 +855,6 @@
     <ClInclude Include="..\..\src\objects\multiviewRenderPass.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\hashing\combine.h">
-      <Filter>Header Files\core\hashing</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\hashing\constexpr.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
