@@ -40,7 +40,7 @@ ViSurface::ViSurface(std::shared_ptr<Instance> instance_,
     surfaceInfo.flags = flags;
     surfaceInfo.window = window;
     const VkResult result = vkCreateViSurfaceNN(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Vi surface");
 }
 #endif // VK_NN_vi_surface

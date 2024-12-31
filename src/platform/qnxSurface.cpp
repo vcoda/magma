@@ -42,7 +42,7 @@ QnxSurface::QnxSurface(std::shared_ptr<Instance> instance_,
     surfaceInfo.context = context;
     surfaceInfo.window = window;
     const VkResult result = vkCreateScreenSurfaceQNX(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create QNX surface");
 }
 #endif // VK_QNX_screen_surface

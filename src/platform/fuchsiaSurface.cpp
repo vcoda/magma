@@ -40,7 +40,7 @@ FuchsiaImagePipeSurface::FuchsiaImagePipeSurface(std::shared_ptr<Instance> insta
     surfaceInfo.flags = flags;
     surfaceInfo.imagePipeHandle = imagePipeHandle;
     const VkResult result = vkCreateImagePipeSurfaceFUCHSIA(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Fuchsia image pipe surface");
 }
 #endif // VK_FUCHSIA_imagepipe_surface

@@ -42,7 +42,7 @@ XcbSurface::XcbSurface(std::shared_ptr<Instance> instance_,
     surfaceInfo.connection = connection;
     surfaceInfo.window = window;
     const VkResult result = vkCreateXcbSurfaceKHR(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Xcb surface");
 }
 #endif // VK_KHR_xcb_surface

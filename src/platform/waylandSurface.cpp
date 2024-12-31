@@ -42,7 +42,7 @@ WaylandSurface::WaylandSurface(std::shared_ptr<Instance> instance_,
     surfaceInfo.display = display;
     surfaceInfo.surface = surface;
     const VkResult result = vkCreateWaylandSurfaceKHR(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Wayland surface");
 }
 #endif // VK_KHR_wayland_surface

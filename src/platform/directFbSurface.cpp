@@ -41,7 +41,7 @@ DirectFBSurface::DirectFBSurface(std::shared_ptr<Instance> instance_,
     surfaceInfo.surface = surface;
     MAGMA_REQUIRED_INSTANCE_EXTENSION(vkCreateDirectFBSurfaceEXT, VK_EXT_DIRECTFB_SURFACE_EXTENSION_NAME);
     const VkResult result = vkCreateDirectFBSurfaceEXT(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create DirectFB surface");
 }
 #endif // VK_EXT_directfb_surface

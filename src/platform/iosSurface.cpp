@@ -40,7 +40,7 @@ iOSSurface::iOSSurface(std::shared_ptr<Instance> instance_,
     surfaceInfo.flags = flags;
     surfaceInfo.pView = view;
     const VkResult result = vkCreateIOSSurfaceMVK(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create iOS surface");
 }
 #endif // VK_MVK_ios_surface

@@ -40,7 +40,7 @@ MacOSSurface::MacOSSurface(std::shared_ptr<Instance> instance_,
     surfaceInfo.flags = flags;
     surfaceInfo.pView = view;
     const VkResult result = vkCreateMacOSSurfaceMVK(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create macOS surface");
 }
 #endif // VK_MVK_macos_surface

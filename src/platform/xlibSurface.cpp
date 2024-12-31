@@ -42,7 +42,7 @@ XlibSurface::XlibSurface(std::shared_ptr<Instance> instance_,
     surfaceInfo.dpy = dpy;
     surfaceInfo.window = window;
     const VkResult result = vkCreateXlibSurfaceKHR(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Xlib surface");
 }
 #endif // VK_KHR_xlib_surface

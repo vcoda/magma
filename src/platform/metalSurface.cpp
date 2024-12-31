@@ -40,7 +40,7 @@ MetalSurface::MetalSurface(std::shared_ptr<Instance> instance_,
     surfaceInfo.flags = flags;
     surfaceInfo.pLayer = layer;
     const VkResult result = vkCreateMetalSurfaceEXT(*instance, &surfaceInfo,
-        MAGMA_OPTIONAL_INSTANCE(hostAllocator), &handle);
+        MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create Metal surface");
 }
 #endif // VK_EXT_metal_surface
