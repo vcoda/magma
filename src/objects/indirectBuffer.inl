@@ -1,6 +1,6 @@
 namespace magma
 {
-    template<class DrawCommandType>
+    template<class DrawCommand>
     class DrawIndirectCommand final
     {
     public:
@@ -9,12 +9,12 @@ namespace magma
         {
             MAGMA_ASSERT(buffer->getDrawCount() < buffer->getMaxDrawCount());
             if (buffer->persistentlyMapped())
-                drawCmd = reinterpret_cast<DrawCommandType *>(mappedData) + buffer->getDrawCount();
+                drawCmd = reinterpret_cast<DrawCommand *>(mappedData) + buffer->getDrawCount();
             else
             {
-                drawCmd = (DrawCommandType *)buffer->getMemory()->map(
-                    sizeof(DrawCommandType) * buffer->getDrawCount(),
-                    sizeof(DrawCommandType));
+                drawCmd = (DrawCommand *)buffer->getMemory()->map(
+                    sizeof(DrawCommand) * buffer->getDrawCount(),
+                    sizeof(DrawCommand));
                 MAGMA_ASSERT(drawCmd);
             }
         }
@@ -25,13 +25,13 @@ namespace magma
                 buffer->getMemory()->unmap();
         }
 
-        DrawCommandType *operator->() { return drawCmd; }
-        DrawCommandType& operator*() { return *drawCmd; }
+        DrawCommand *operator->() { return drawCmd; }
+        DrawCommand& operator*() { return *drawCmd; }
 
         operator bool() const { return drawCmd != nullptr; }
 
     private:
         IndirectBuffer *const buffer;
-        DrawCommandType *drawCmd;
+        DrawCommand *drawCmd;
     };
 } // namespace magma
