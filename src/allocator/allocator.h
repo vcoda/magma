@@ -105,8 +105,9 @@ namespace magma
     class IResource;
     class StructureChain;
 
-    /* Opaque handle to memory sub-allocation.
-       Each device memory allocator hides the implementation details under it. */
+    /* Opaque handle to memory sub-allocation. Each device memory
+       allocator hides the native implementation details under it. */
+
     typedef void *DeviceMemoryBlock;
 
     /* Previous generation APIs (OpenGL, DirectX 11) manage memory
