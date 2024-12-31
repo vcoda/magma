@@ -82,9 +82,6 @@
     <Filter Include="Source Files\core">
       <UniqueIdentifier>{788fe0f5-46b7-45db-86d9-6ca8cc0ff5a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\core\hashing">
-      <UniqueIdentifier>{04d644f9-6aee-43bf-877d-32661cf831db}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\exceptions">
       <UniqueIdentifier>{7859cd49-d97f-4f21-9c77-038bf5c5ed15}</UniqueIdentifier>
     </Filter>
@@ -118,20 +115,11 @@
     <Filter Include="Source Files\objects\model">
       <UniqueIdentifier>{c815a3f0-8bcf-465b-802b-0439b54a0abf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\hashing">
+      <UniqueIdentifier>{9f739dc1-07f6-470e-ba56-79f2fa41b932}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\core\hashing\fnv1.h">
-      <Filter>Header Files\core\hashing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\hashing\fnv1string.h">
-      <Filter>Header Files\core\hashing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\hashing\combine.h">
-      <Filter>Header Files\core\hashing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\hashing\constexpr.h">
-      <Filter>Header Files\core\hashing</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\magma.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -866,6 +854,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\objects\multiviewRenderPass.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\hashing\combine.h">
+      <Filter>Header Files\core\hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\hashing\constexpr.h">
+      <Filter>Header Files\core\hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\hashing\fnv1.h">
+      <Filter>Header Files\core\hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\hashing\fnv1string.h">
+      <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

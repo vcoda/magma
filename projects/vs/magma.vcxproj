@@ -160,10 +160,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\core\hashing\combine.h" />
-    <ClInclude Include="..\..\core\hashing\fnv1.h" />
-    <ClInclude Include="..\..\core\hashing\fnv1string.h" />
-    <ClInclude Include="..\..\core\hashing\constexpr.h" />
     <ClInclude Include="..\..\magma.h" />
     <ClInclude Include="..\..\src\allocator\alignedAllocator.h" />
     <ClInclude Include="..\..\src\allocator\allocator.h" />
@@ -191,6 +187,10 @@
     <ClInclude Include="..\..\src\barriers\subpassDependency2.h" />
     <ClInclude Include="..\..\src\core\core.h" />
     <ClInclude Include="..\..\src\core\defines.h" />
+    <ClInclude Include="..\..\src\core\hashing\combine.h" />
+    <ClInclude Include="..\..\src\core\hashing\constexpr.h" />
+    <ClInclude Include="..\..\src\core\hashing\fnv1.h" />
+    <ClInclude Include="..\..\src\core\hashing\fnv1string.h" />
     <ClInclude Include="..\..\src\core\lentPtr.h" />
     <ClInclude Include="..\..\src\core\macros.h" />
     <ClInclude Include="..\..\src\core\pch.h" />
