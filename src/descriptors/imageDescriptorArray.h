@@ -30,7 +30,7 @@ namespace magma
         {
         public:
             constexpr uint32_t getSize() const noexcept { return Size; }
-            bool associatedWithResource() const noexcept override;
+            bool resourceBinded() const noexcept override;
 
         protected:
             ImageDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
@@ -77,7 +77,7 @@ namespace magma
         {
         public:
             CombinedImageImmutableSamplerArray(uint32_t binding) noexcept;
-            bool associatedWithResource() const noexcept override;
+            bool resourceBinded() const noexcept override;
             ImageImmutableSamplerArrayElement operator[](uint32_t index) noexcept;
 
         private:

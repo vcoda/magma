@@ -30,7 +30,7 @@ namespace magma
         {
         public:
             constexpr uint32_t getSize() const noexcept { return Size; }
-            bool associatedWithResource() const noexcept override;
+            bool resourceBinded() const noexcept override;
 
         protected:
             BufferDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;
@@ -50,7 +50,7 @@ namespace magma
         {
         public:
             constexpr uint32_t getSize() const noexcept { return Size; }
-            bool associatedWithResource() const noexcept override;
+            bool resourceBinded() const noexcept override;
 
         protected:
             TexelBufferDescriptorArray(VkDescriptorType descriptorType, uint32_t binding) noexcept;

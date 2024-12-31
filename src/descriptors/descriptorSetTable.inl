@@ -6,7 +6,7 @@ inline bool DescriptorSetTable::valid()
     return std::all_of(list.begin(), list.end(),
         [](auto const& it)
         {
-            return it.get().associatedWithResource();
+            return it.get().resourceBinded();
         });
 }
 

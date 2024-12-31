@@ -33,7 +33,7 @@ namespace magma
         class ImageDescriptor : public DescriptorSetLayoutBinding
         {
         public:
-            bool associatedWithResource() const noexcept override;
+            bool resourceBinded() const noexcept override;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 

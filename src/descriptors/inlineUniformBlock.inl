@@ -12,7 +12,7 @@ inline InlineUniformBlock<UniformBlockType>::InlineUniformBlock(uint32_t binding
 {}
 
 template<class UniformBlockType>
-inline bool InlineUniformBlock<UniformBlockType>::associatedWithResource() const noexcept
+inline bool InlineUniformBlock<UniformBlockType>::resourceBinded() const noexcept
 {
     return (descriptor.pData != nullptr);
 }

@@ -35,7 +35,7 @@ namespace magma
             uint32_t getSize() const noexcept { return core::countof(descriptors); }
             void remove(uint32_t index);
             void clear();
-            bool associatedWithResource() const noexcept override { return true; }
+            bool resourceBinded() const noexcept override { return true; }
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 

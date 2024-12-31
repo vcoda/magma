@@ -30,7 +30,7 @@ namespace magma
         class BufferDescriptor : public DescriptorSetLayoutBinding
         {
         public:
-            bool associatedWithResource() const noexcept override;
+            bool resourceBinded() const noexcept override;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 
@@ -49,7 +49,7 @@ namespace magma
         class TexelBufferDescriptor : public DescriptorSetLayoutBinding
         {
         public:
-            bool associatedWithResource() const noexcept override;
+            bool resourceBinded() const noexcept override;
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 

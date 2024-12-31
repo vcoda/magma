@@ -23,7 +23,7 @@ inline void DescriptorSetLayoutBinding::setImageType(VkImageType imageType_) noe
 
 inline void DescriptorSetLayoutBinding::writeDescriptor(VkDescriptorSet dstSet, VkWriteDescriptorSet& writeDescriptorSet) const noexcept
 {
-    MAGMA_ASSERT(associatedWithResource());
+    MAGMA_ASSERT(resourceBinded());
     writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorSet.pNext = nullptr;
     writeDescriptorSet.dstSet = dstSet;

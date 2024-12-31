@@ -5,7 +5,7 @@ inline BufferDescriptor::BufferDescriptor(VkDescriptorType descriptorType, uint3
     descriptor{VK_NULL_HANDLE, 0, 0}
 {}
 
-inline bool BufferDescriptor::associatedWithResource() const noexcept
+inline bool BufferDescriptor::resourceBinded() const noexcept
 {
     return (descriptor.buffer != VK_NULL_HANDLE);
 }
@@ -15,7 +15,7 @@ inline TexelBufferDescriptor::TexelBufferDescriptor(VkDescriptorType descriptorT
     descriptor(VK_NULL_HANDLE)
 {}
 
-inline bool TexelBufferDescriptor::associatedWithResource() const noexcept
+inline bool TexelBufferDescriptor::resourceBinded() const noexcept
 {
     return (descriptor != VK_NULL_HANDLE);
 }

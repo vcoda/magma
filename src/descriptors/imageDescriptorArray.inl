@@ -6,7 +6,7 @@ inline ImageDescriptorArray<Size>::ImageDescriptorArray(VkDescriptorType descrip
 {}
 
 template<uint32_t Size>
-inline bool ImageDescriptorArray<Size>::associatedWithResource() const noexcept
+inline bool ImageDescriptorArray<Size>::resourceBinded() const noexcept
 {
     switch (descriptorType)
     {
@@ -64,7 +64,7 @@ inline ImageSamplerArrayElement CombinedImageSamplerArray<Size>::operator[](uint
 }
 
 template<uint32_t Size>
-inline bool CombinedImageImmutableSamplerArray<Size>::associatedWithResource() const noexcept
+inline bool CombinedImageImmutableSamplerArray<Size>::resourceBinded() const noexcept
 {
     const bool associatedWithSamplers = std::all_of(this->descriptors.begin(), this->descriptors.end(),
         [](auto const& it)

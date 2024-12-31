@@ -34,7 +34,7 @@ namespace magma
         {
         public:
             AccelerationStructure(uint32_t binding) noexcept;
-            bool associatedWithResource() const noexcept override { return descriptor.pAccelerationStructures != nullptr; }
+            bool resourceBinded() const noexcept override { return descriptor.pAccelerationStructures != nullptr; }
             void write(VkDescriptorSet dstSet,
                 VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
             AccelerationStructure& operator=(lent_ptr<const magma::AccelerationStructure>) noexcept;

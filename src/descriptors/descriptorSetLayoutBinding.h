@@ -41,7 +41,7 @@ namespace magma
         VkDescriptorBindingFlagsEXT getBindingFlags() const noexcept { return bindingFlags; }
     #endif
         bool modified() const noexcept { return dirty; }
-        virtual bool associatedWithResource() const noexcept = 0;
+        virtual bool resourceBinded() const noexcept = 0;
         virtual void write(VkDescriptorSet dstSet,
             VkWriteDescriptorSet& writeDescriptorSet) const noexcept = 0;
 

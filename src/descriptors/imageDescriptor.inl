@@ -5,7 +5,7 @@ inline ImageDescriptor::ImageDescriptor(VkDescriptorType descriptorType, uint32_
     descriptor{VK_NULL_HANDLE, VK_NULL_HANDLE, VK_IMAGE_LAYOUT_UNDEFINED}
 {}
 
-inline bool ImageDescriptor::associatedWithResource() const noexcept
+inline bool ImageDescriptor::resourceBinded() const noexcept
 {
     switch (descriptorType)
     {

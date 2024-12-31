@@ -6,7 +6,7 @@ inline BufferDescriptorArray<Size>::BufferDescriptorArray(VkDescriptorType descr
 {}
 
 template<uint32_t Size>
-inline bool BufferDescriptorArray<Size>::associatedWithResource() const noexcept
+inline bool BufferDescriptorArray<Size>::resourceBinded() const noexcept
 {
     return std::all_of(descriptors.begin(), descriptors.end(),
         [](auto const& it)
@@ -37,7 +37,7 @@ inline TexelBufferDescriptorArray<Size>::TexelBufferDescriptorArray(VkDescriptor
 {}
 
 template<uint32_t Size>
-inline bool TexelBufferDescriptorArray<Size>::associatedWithResource() const noexcept
+inline bool TexelBufferDescriptorArray<Size>::resourceBinded() const noexcept
 {
     return std::all_of(descriptors.begin(), descriptors.end(),
         [](auto view)
