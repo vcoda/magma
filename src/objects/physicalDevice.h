@@ -604,6 +604,6 @@ namespace magma
 
         std::shared_ptr<Instance> instance;
         std::set<std::string> extensions;
-        friend class Instance;
+        friend Instance;
     };
 } // namespace magma

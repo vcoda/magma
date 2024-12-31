@@ -442,8 +442,8 @@ namespace magma
         // derived from DeviceChild can be stored in the in-use list.
         mutable std::unordered_set<std::shared_ptr<const DeviceChild>> inUse;
     #endif
-        friend class CommandPool;
-        friend class Queue;
+        friend CommandPool;
+        friend Queue;
     };
 
     /* See 6.1. Command Buffer Lifecycle

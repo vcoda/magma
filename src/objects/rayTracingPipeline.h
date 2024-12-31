@@ -68,7 +68,6 @@ namespace magma
         std::vector<uint8_t> getCaptureReplayShaderGroupHandles() const;
 
     private:
-        friend class RayTracingPipelineBatch;
         MAGMA_MAKE_UNIQUE(RayTracingPipeline)
         RayTracingPipeline(VkPipeline handle,
             std::shared_ptr<Device> device,
@@ -88,6 +87,7 @@ namespace magma
         const std::vector<PipelineShaderStage> shaderStages;
         const std::vector<RayTracingShaderGroup> shaderGroups;
         const uint32_t maxRecursionDepth;
+        friend class RayTracingPipelineBatch;
     };
 
     /* Calculates hash of ray tracing pipeline. This function

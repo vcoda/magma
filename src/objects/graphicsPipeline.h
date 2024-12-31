@@ -103,9 +103,9 @@ namespace magma
         #endif // VK_EXT_pipeline_creation_feedback
             hash_t hash,
             hash_t rsHash);
-        friend class GraphicsPipelineBatch;
 
         hash_t rsHash;
+        friend class GraphicsPipelineBatch;
     };
 
     /* Calculates hash of render states and full hash of graphics

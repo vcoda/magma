@@ -26,7 +26,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "queryPool.h"
 #include "../misc/extension.h"
 
-
 namespace magma
 {
     class CommandPool;
@@ -245,8 +244,8 @@ namespace magma
 
         VkDevice device;
         VkCommandPool cmdPool;
-        friend class CommandPool;
-        friend class CommandBuffer;
+        friend CommandPool;
+        friend CommandBuffer;
     };
 } // namespace magma
 
