@@ -135,6 +135,8 @@ void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflect
     for (auto const& descriptor: setTable.getReflection())
     {
         const DescriptorSetLayoutBinding& binding = descriptor.get();
+        if (!binding.resourceBinded())
+            std::cout << "warning: binding #" << binding.binding << " has no binded resource" << std::endl;
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
         for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)
         {
