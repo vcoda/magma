@@ -22,7 +22,6 @@ SRC_OBJS= \
 	\
 	src/allocator/alignedAllocator.o \
 	src/allocator/allocationCallbacks.o \
-	src/allocator/cxxAllocator.o \
 	src/allocator/debugAlignedAllocator.o \
 	src/allocator/deviceMemoryAllocator.o \
 	src/allocator/vmaImplementation.o \
