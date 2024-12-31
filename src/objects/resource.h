@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "ideviceMemory.h"
 #include "model/iresource.h"
 #include "model/nondispatchable.h"
+#include "ideviceMemory.h"
 #include "../misc/sharing.h"
 #include "../allocator/allocator.h"
 
@@ -40,20 +40,14 @@ namespace magma
         const std::unique_ptr<IDeviceMemory>& getMemory() const noexcept override { return memory; }
 
     protected:
-        Resource(VkObjectType objectType,
-            std::shared_ptr<Device> device,
-            VkDeviceSize size,
-            const Sharing& sharing,
-            std::shared_ptr<Allocator> allocator) noexcept:
+        Resource(VkObjectType objectType, std::shared_ptr<Device> device, VkDeviceSize size,
+            const Sharing& sharing, std::shared_ptr<Allocator> allocator) noexcept:
             NonDispatchable<Type>(objectType, std::move(device), MAGMA_HOST_ALLOCATOR(allocator)),
-            sharing(sharing),
-            size(size),
-            offset(0ull)
+            sharing(sharing), size(size), offset(0ull)
         {}
 
         const Sharing sharing;
-        VkDeviceSize size;
-        VkDeviceSize offset;
+        VkDeviceSize size, offset;
         std::unique_ptr<IDeviceMemory> memory;
     };
 } // namespace magma
