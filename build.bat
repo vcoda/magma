@@ -1,6 +1,6 @@
 @echo off
 rem Magma - Abstraction layer over Khronos Vulkan API.
-rem Copyright (C) 2018-2023 Victor Coda.
+rem Copyright (C) 2018-2024 Victor Coda.
 
 rem This program is free software: you can redistribute it and/or modify
 rem it under the terms of the GNU General Public License as published by
