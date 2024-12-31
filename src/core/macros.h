@@ -84,10 +84,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // MAGMA_RETAIN_OBJECTS_IN_USE
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
-    #define MAGMA_STACK_ALLOC(size) (size) ? _malloca(size) : nullptr
+    #define MAGMA_STACK_ALLOC(size) (size > 0) ? _malloca(size) : nullptr
     #define MAGMA_STACK_FREE(p) _freea(p)
 #else
-    #define MAGMA_STACK_ALLOC(size) (size) ? alloca(size) : nullptr
+    #define MAGMA_STACK_ALLOC(size) (size > 0) ? alloca(size) : nullptr
     #define MAGMA_STACK_FREE(p)
 #endif // _MSC_VER || __MINGW32__
 
