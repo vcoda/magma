@@ -113,11 +113,6 @@ PipelineShaderStage& PipelineShaderStage::operator=(PipelineShaderStage&& other)
     return *this;
 }
 
-PipelineShaderStage::~PipelineShaderStage()
-{
-    delete[] pName;
-}
-
 hash_t PipelineShaderStage::getHash() const noexcept
 {   // Compute complex hash on demand
     hash_t hash = core::hashArgs(
