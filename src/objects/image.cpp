@@ -634,7 +634,7 @@ void Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
     for (auto const& mip: mipMaps)
     {
         mipChain.emplace_back(mip.extent, bufferOffset);
-        bufferOffset += core::alignUp(mip.size, 16ull);
+        bufferOffset += core::alignUp(mip.size, (VkDeviceSize)16);
     }
     // Allocate staged buffer for mip data
     auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, bufferOffset, nullptr,
