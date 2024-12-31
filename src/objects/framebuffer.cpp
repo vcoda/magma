@@ -59,17 +59,17 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, std::sha
     attachments.emplace_back(std::move(attachment));
 }
 
-Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const std::vector<std::shared_ptr<ImageView>>& attachments,
+Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const std::vector<std::shared_ptr<ImageView>>& attachments_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass_->getDevice(), std::move(allocator)),
     renderPass(std::move(renderPass_)),
-    extent(attachments.front()->getExtent2D()),
-    layerCount(attachments.front()->getArrayLayerCount())
+    extent(attachments_.front()->getExtent2D()),
+    layerCount(attachments_.front()->getArrayLayerCount())
 {
-    MAGMA_VLA(VkImageView, dereferencedAttachments, attachments.size());
-    for (auto& attachment: attachments)
+    MAGMA_VLA(VkImageView, dereferencedAttachments, attachments_.size());
+    for (auto& attachment: attachments_)
         dereferencedAttachments.put(*attachment);
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -83,7 +83,7 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const st
     framebufferInfo.layers = layerCount;
     const VkResult result = vkCreateFramebuffer(getNativeDevice(), &framebufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create multi-attachment framebuffer");
-    this->attachments = attachments;
+    attachments = attachments_;
 }
 
 Framebuffer::~Framebuffer()

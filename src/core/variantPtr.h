@@ -36,8 +36,6 @@ namespace magma
             ptr(std::move(unique))
         {}
 
-        //variant_ptr(const variant_ptr&) = delete;
-
         T *get() noexcept
         {
             try

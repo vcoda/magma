@@ -704,7 +704,8 @@ const std::unique_ptr<Buffer>& CommandBuffer::getMarkerBuffer() const noexcept
            command execution performance. */
         constexpr VkDeviceSize size = MaxBufferMarkers * sizeof(uint32_t);
         markerBuffer = std::make_unique<DynamicStorageBuffer>(device, size, false);
-    } catch (...) {}
+    }
+    catch (...) {}
     return markerBuffer;
 }
 

@@ -31,7 +31,7 @@ namespace magma::aux
 FillRectangleVertexShader::FillRectangleVertexShader(std::shared_ptr<Device> device,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
     PipelineShaderStage(VK_SHADER_STAGE_VERTEX_BIT,
-        [&]() ->std::shared_ptr<ShaderModule>
+        [&]() -> std::shared_ptr<ShaderModule>
         {
             constexpr
             #include "spirv/output/blitv"

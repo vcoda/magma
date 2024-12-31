@@ -192,7 +192,8 @@ void CommandBuffer::insertDebugCheckpoint(const char *command, VkPipelineStageFl
         offset += sizeof(uint32_t);
         markerBuffer->setPrivateData(offset);
         checkpoints.push_back(command);
-    } catch (...) {}
+    }
+    catch (...) {}
 }
 } // namespace magma
 #endif // MAGMA_DEBUG

@@ -38,8 +38,7 @@ BaseDynamicUniformBuffer::BaseDynamicUniformBuffer(std::shared_ptr<Device> devic
         }(),
         typeSize, arraySize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, memoryFlags,
         optional, sharing, std::move(allocator), mappedPersistently)
-{
-}
+{}
 
 VkDescriptorBufferInfo BaseDynamicUniformBuffer::getDescriptor() const noexcept
 {

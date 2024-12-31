@@ -72,8 +72,7 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
         MAGMA_ERROR("image binding not found");
 }
 
-ImageDescriptorSet::~ImageDescriptorSet()
-{}
+ImageDescriptorSet::~ImageDescriptorSet() {}
 
 void ImageDescriptorSet::writeDescriptor(lent_ptr<const ImageView> imageView, lent_ptr<const Sampler> sampler)
 {

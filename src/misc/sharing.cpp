@@ -65,7 +65,8 @@ uint32_t Sharing::chooseFamilyIndex(VkQueueFlagBits queueType,
             }
             ++queueFamilyIndex;
         }
-    } else if ((VK_QUEUE_TRANSFER_BIT == queueType) || (VK_QUEUE_SPARSE_BINDING_BIT == queueType))
+    }
+    else if ((VK_QUEUE_TRANSFER_BIT == queueType) || (VK_QUEUE_SPARSE_BINDING_BIT == queueType))
     {   // Try to find dedicated transfer/sparse queue
         for (auto const& property: queueFamilyProperties)
         {

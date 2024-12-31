@@ -195,7 +195,8 @@ VkImageAspectFlags Image::getAspectMask() const noexcept
             if (req.formatProperties.aspectMask == VK_IMAGE_ASPECT_METADATA_BIT)
                 return VK_IMAGE_ASPECT_METADATA_BIT;
         }
-    } catch (...) {}
+    }
+    catch (...) {}
 #ifdef VK_KHR_sampler_ycbcr_conversion
     if (imageFormat.multiPlanar())
     {

@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #if defined(_MSC_VER) || defined(__MINGW32__)
-#include <intrin.h>
+    #include <intrin.h>
 #endif
 
 /* std::popcount() is not available until C++20.
