@@ -19,6 +19,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+#ifdef VK_ANDROID_external_memory_android_hardware_buffer
+    MAGMA_TYPEDEF_MANAGED_PTR(AndroidHardwareBuffer)
+#endif
+
 #ifdef VK_KHR_android_surface
     MAGMA_TYPEDEF_MANAGED_PTR(AndroidSurface);
 #endif
