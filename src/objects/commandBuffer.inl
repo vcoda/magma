@@ -91,7 +91,7 @@ inline void CommandBuffer::bindDescriptorSet(lent_ptr<const Pipeline> pipeline, 
     uint32_t dynamicOffsetCount = dynamicOffset < std::numeric_limits<uint32_t>::max() ? 1 : 0;
     leanCmd.bindDescriptorSet(pipeline->getBindPoint(), pipeline->getLayout().get(), firstSet, descriptorSet.get(), dynamicOffsetCount, &dynamicOffset);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
-    MAGMA_INCR(bindStats.bindDescriptorSetCount, 1);
+    MAGMA_INCR(stats.bindDescriptorSetCount, 1);
     MAGMA_INUSE(descriptorSet);
 }
 

@@ -79,7 +79,7 @@ bool CommandBuffer::begin(VkCommandBufferUsageFlags flags /* 0 */) noexcept
     {
         state = State::Recording;
     #ifdef MAGMA_STATS
-        stats = DrawStatistics();
+        stats = Statistics();
     #endif
     }
     usage = flags;
@@ -99,7 +99,7 @@ bool CommandBuffer::beginInherited(lent_ptr<const RenderPass> renderPass, uint32
     {
         state = State::Recording;
     #ifdef MAGMA_STATS
-        stats = DrawStatistics();
+        stats = Statistics();
     #endif
     }
     usage = flags;
@@ -183,7 +183,7 @@ void CommandBuffer::bindDescriptorSets(lent_ptr<const Pipeline> pipeline, uint32
     leanCmd.bindDescriptorSets(pipeline->getBindPoint(), pipeline->getLayout().get(), firstSet, unmanagedDescriptorSets.count(), unmanagedDescriptorSets,
         core::countof(dynamicOffsets), dynamicOffsets.begin());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
-    MAGMA_INCR(bindStats.bindDescriptorSetCount, 1);
+    MAGMA_INCR(stats.bindDescriptorSetCount, 1);
 }
 
 void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<lent_ptr<const Buffer>>& vertexBuffers,
