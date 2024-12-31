@@ -21,20 +21,20 @@ namespace magma
 {
     namespace aux
     {
-        MAGMA_TYPEDEF_MANAGED_PTR(AccumulationBuffer);
-        MAGMA_TYPEDEF_MANAGED_PTR(Base);
-        MAGMA_TYPEDEF_MANAGED_PTR(BlitRectangle);
-        MAGMA_TYPEDEF_MANAGED_PTR(ComputeProfiler);
-        MAGMA_TYPEDEF_MANAGED_PTR(FillRectangleVertexShader);
-        MAGMA_TYPEDEF_MANAGED_PTR(Framebuffer);
-        MAGMA_TYPEDEF_MANAGED_PTR(FrameGrabber);
-        MAGMA_TYPEDEF_MANAGED_PTR(GraphicsPipelineCache);
-        MAGMA_TYPEDEF_MANAGED_PTR(GraphicsProfiler);
-        MAGMA_TYPEDEF_MANAGED_PTR(ImmediateRender);
-        MAGMA_TYPEDEF_MANAGED_PTR(IShaderInclude);
-        MAGMA_TYPEDEF_MANAGED_PTR(Profiler);
-        MAGMA_TYPEDEF_MANAGED_PTR(ShaderCompiler);
-        MAGMA_TYPEDEF_MANAGED_PTR(Sprite);
-        MAGMA_TYPEDEF_MANAGED_PTR(TextShader);
+        MAGMA_TYPEDEF_MANAGED_PTR(AccumulationBuffer)
+        MAGMA_TYPEDEF_MANAGED_PTR(BlitRectangle)
+        MAGMA_TYPEDEF_MANAGED_PTR(ComputeProfiler)
+        MAGMA_TYPEDEF_MANAGED_PTR(FillRectangleVertexShader)
+        MAGMA_TYPEDEF_MANAGED_PTR(Framebuffer)
+        MAGMA_TYPEDEF_MANAGED_PTR(FrameGrabber)
+        MAGMA_TYPEDEF_MANAGED_PTR(GraphicsPipelineCache)
+        MAGMA_TYPEDEF_MANAGED_PTR(GraphicsProfiler)
+        MAGMA_TYPEDEF_MANAGED_PTR(ImageDescriptorSet)
+        MAGMA_TYPEDEF_MANAGED_PTR(ImmediateRender)
+        MAGMA_TYPEDEF_MANAGED_PTR(IShaderInclude)
+        MAGMA_TYPEDEF_MANAGED_PTR(Profiler)
+        MAGMA_TYPEDEF_MANAGED_PTR(ShaderCompiler)
+        MAGMA_TYPEDEF_MANAGED_PTR(Sprite)
+        MAGMA_TYPEDEF_MANAGED_PTR(TextShader)
     } // namespace aux
 } // namespace magma

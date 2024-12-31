@@ -82,7 +82,7 @@ namespace magma
     MAGMA_TYPEDEF_MANAGED_PTR(ShaderModule)
     MAGMA_TYPEDEF_MANAGED_PTR(SrcTransferBuffer)
     MAGMA_TYPEDEF_MANAGED_PTR(StorageBuffer)
-    MAGMA_TYPEDEF_MANAGED_PTR(StorageImage2D);
+    MAGMA_TYPEDEF_MANAGED_PTR(StorageImage2D)
     MAGMA_TYPEDEF_MANAGED_PTR(StorageTexelBuffer)
     MAGMA_TYPEDEF_MANAGED_PTR(TimestampQuery)
     MAGMA_TYPEDEF_MANAGED_PTR(UniformTexelBuffer)
