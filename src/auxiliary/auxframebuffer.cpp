@@ -259,12 +259,12 @@ const MultisampleState& Framebuffer::getMultisampleState() const noexcept
     switch (sampleCount)
     {
     case 1: return renderstate::dontMultisample;
-    case 2: return renderstate::multisampleTwo;
-    case 4: return renderstate::multisampleFour;
-    case 8: return renderstate::multisampleEight;
-    case 16: return renderstate::multisampleSixteen;
-    case 32: return renderstate::multisampleThirtyTwo;
-    case 64: return renderstate::multisampleSixtyFour;
+    case 2: return renderstate::msaa2x;
+    case 4: return renderstate::msaa4x;
+    case 8: return renderstate::msaa8x;
+    case 16: return renderstate::msaa16x;
+    case 32: return renderstate::msaa32x;
+    case 64: return renderstate::msaa64x;
     default: return renderstate::dontMultisample;
     }
 }

@@ -49,10 +49,12 @@ namespace magma
 namespace magma
 {
 #define MAGMA_MULTISAMPLE_COVERAGE_REDUCTION_STATE_PERMUTATIONS(ReductionMode, coverageReductionMode)\
-    constexpr MultisampleCoverageReductionState multisampleTwo##ReductionMode(multisampleTwo, coverageReductionMode);\
-    constexpr MultisampleCoverageReductionState multisampleFour##ReductionMode(multisampleFour, coverageReductionMode);\
-    constexpr MultisampleCoverageReductionState multisampleEight##ReductionMode(multisampleEight, coverageReductionMode);\
-    constexpr MultisampleCoverageReductionState multisampleSixteen##ReductionMode(multisampleSixteen, coverageReductionMode);
+    constexpr MultisampleCoverageReductionState msaa2x##ReductionMode(msaa2x, coverageReductionMode);\
+    constexpr MultisampleCoverageReductionState msaa4x##ReductionMode(msaa4x, coverageReductionMode);\
+    constexpr MultisampleCoverageReductionState msaa8x##ReductionMode(msaa8x, coverageReductionMode);\
+    constexpr MultisampleCoverageReductionState msaa16x##ReductionMode(msaa16x, coverageReductionMode);\
+    constexpr MultisampleCoverageReductionState msaa32x##ReductionMode(msaa32x, coverageReductionMode);\
+    constexpr MultisampleCoverageReductionState msaa64x##ReductionMode(msaa64x, coverageReductionMode);
 
     namespace renderstate
     {

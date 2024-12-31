@@ -71,18 +71,18 @@ namespace renderstate
 {
 static constexpr uint64_t coverageMask = 0xFFFFFFFFFFFFFFFFULL;
 
-const MultisampleCoverageState alphaToCoverageMultisampleTwo(VK_SAMPLE_COUNT_2_BIT, coverageMask, true, false);
-const MultisampleCoverageState alphaToCoverageMultisampleFour(VK_SAMPLE_COUNT_4_BIT, coverageMask, true, false);
-const MultisampleCoverageState alphaToCoverageMultisampleEight(VK_SAMPLE_COUNT_8_BIT, coverageMask, true, false);
-const MultisampleCoverageState alphaToCoverageMultisampleSixteen(VK_SAMPLE_COUNT_16_BIT, coverageMask, true, false);
-const MultisampleCoverageState alphaToCoverageMultisampleThirtyTwo(VK_SAMPLE_COUNT_32_BIT, coverageMask, true, false);
-const MultisampleCoverageState alphaToCoverageMultisampleSixtyFour(VK_SAMPLE_COUNT_64_BIT, coverageMask, false);
+const MultisampleCoverageState alphaToCoverageMsaa2x(VK_SAMPLE_COUNT_2_BIT, coverageMask, true, false);
+const MultisampleCoverageState alphaToCoverageMsaa4x(VK_SAMPLE_COUNT_4_BIT, coverageMask, true, false);
+const MultisampleCoverageState alphaToCoverageMsaa8x(VK_SAMPLE_COUNT_8_BIT, coverageMask, true, false);
+const MultisampleCoverageState alphaToCoverageMsaa16x(VK_SAMPLE_COUNT_16_BIT, coverageMask, true, false);
+const MultisampleCoverageState alphaToCoverageMsaa32x(VK_SAMPLE_COUNT_32_BIT, coverageMask, true, false);
+const MultisampleCoverageState alphaToCoverageMsaa64x(VK_SAMPLE_COUNT_64_BIT, coverageMask, false);
 
-const MultisampleCoverageState alphaToOneMultisampleTwo(VK_SAMPLE_COUNT_2_BIT, coverageMask, false, true);
-const MultisampleCoverageState alphaToOneMultisampleFour(VK_SAMPLE_COUNT_4_BIT, coverageMask, false, true);
-const MultisampleCoverageState alphaToOneMultisampleEight(VK_SAMPLE_COUNT_8_BIT, coverageMask, false, true);
-const MultisampleCoverageState alphaToOneMultisampleSixteen(VK_SAMPLE_COUNT_16_BIT, coverageMask, false, true);
-const MultisampleCoverageState alphaToOneMultisampleThirtyTwo(VK_SAMPLE_COUNT_32_BIT, coverageMask, false, true);
-const MultisampleCoverageState alphaToOneMultisampleSixtyFour(VK_SAMPLE_COUNT_64_BIT, coverageMask, false, true);
+const MultisampleCoverageState alphaToOneMsaa2x(VK_SAMPLE_COUNT_2_BIT, coverageMask, false, true);
+const MultisampleCoverageState alphaToOneMsaa4x(VK_SAMPLE_COUNT_4_BIT, coverageMask, false, true);
+const MultisampleCoverageState alphaToOneMsaa8x(VK_SAMPLE_COUNT_8_BIT, coverageMask, false, true);
+const MultisampleCoverageState alphaToOneMsaa16x(VK_SAMPLE_COUNT_16_BIT, coverageMask, false, true);
+const MultisampleCoverageState alphaToOneMsaa32x(VK_SAMPLE_COUNT_32_BIT, coverageMask, false, true);
+const MultisampleCoverageState alphaToOneMsaa64x(VK_SAMPLE_COUNT_64_BIT, coverageMask, false, true);
 } // namespace renderstate
 } // namespace magma

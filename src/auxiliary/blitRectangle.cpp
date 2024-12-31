@@ -101,12 +101,13 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     // Setup multisample state
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
     const MultisampleState multisampleState =
-        (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstate::multisampleTwo :
-        (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstate::multisampleFour :
-        (samples & VK_SAMPLE_COUNT_8_BIT) ? renderstate::multisampleEight :
-        (samples & VK_SAMPLE_COUNT_16_BIT) ? renderstate::multisampleSixteen :
-        (samples & VK_SAMPLE_COUNT_32_BIT) ? renderstate::multisampleThirtyTwo :
-        (samples & VK_SAMPLE_COUNT_64_BIT) ? renderstate::multisampleSixtyFour :
+        (samples & VK_SAMPLE_COUNT_1_BIT) ? renderstate::dontMultisample :
+        (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstate::msaa2x :
+        (samples & VK_SAMPLE_COUNT_4_BIT) ? renderstate::msaa4x :
+        (samples & VK_SAMPLE_COUNT_8_BIT) ? renderstate::msaa8x :
+        (samples & VK_SAMPLE_COUNT_16_BIT) ? renderstate::msaa16x :
+        (samples & VK_SAMPLE_COUNT_32_BIT) ? renderstate::msaa32x :
+        (samples & VK_SAMPLE_COUNT_64_BIT) ? renderstate::msaa64x :
         renderstate::dontMultisample;
     // Create blit pipeline
     std::unique_ptr<PipelineLayout> pipelineLayout = std::make_unique<PipelineLayout>(
