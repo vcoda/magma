@@ -30,7 +30,7 @@ namespace magma
           access to any range or image subresource of the object
           from multiple queue families is supported. */
 
-    class Sharing
+    class Sharing final
     {
     public:
         Sharing() = default;
