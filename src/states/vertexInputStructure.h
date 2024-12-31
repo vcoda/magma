@@ -28,7 +28,7 @@ namespace magma
     class VertexInputStructure : public VertexInputState
     {
     public:
-        VertexInputStructure() = default;
+        VertexInputStructure() {}
         ~VertexInputStructure();
         explicit VertexInputStructure(uint32_t binding,
             const VertexInputAttribute& attribute,
