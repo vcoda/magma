@@ -128,6 +128,7 @@ SRC_OBJS= \
 	src/objects/instance.o \
 	src/objects/leanCommandBuffer.o \
 	src/objects/managedDeviceMemory.o \
+	src/objects/multiviewRenderPass.o \
 	src/objects/mutableImage.o \
 	src/objects/mutableImageView.o \
 	src/objects/physicalDevice.o \
@@ -145,7 +146,6 @@ SRC_OBJS= \
 	src/objects/rayTracingPipeline.o \
 	src/objects/rayTracingPipelineBatch.o \
 	src/objects/renderPass.o \
-	src/objects/renderPassMultiview.o \
 	src/objects/sampler.o \
 	src/objects/samplerYcbcrConversion.o \
 	src/objects/semaphore.o \

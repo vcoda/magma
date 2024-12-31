@@ -119,6 +119,7 @@ SOURCES += \
     ../../src/objects/instance.cpp \
     ../../src/objects/leanCommandBuffer.cpp \
     ../../src/objects/managedDeviceMemory.cpp \
+    ../../src/objects/multiviewRenderPass.cpp \
     ../../src/objects/mutableImage.cpp \
     ../../src/objects/mutableImageView.cpp \
     ../../src/objects/physicalDevice.cpp \
@@ -136,7 +137,6 @@ SOURCES += \
     ../../src/objects/rayTracingPipeline.cpp \
     ../../src/objects/rayTracingPipelineBatch.cpp \
     ../../src/objects/renderPass.cpp \
-    ../../src/objects/renderPassMultiview.cpp \
     ../../src/objects/sampler.cpp \
     ../../src/objects/samplerYcbcrConversion.cpp \
     ../../src/objects/semaphore.cpp \
@@ -346,6 +346,7 @@ HEADERS += \
     ../../src/objects/iresource.h \
     ../../src/objects/leanCommandBuffer.h \
     ../../src/objects/managedDeviceMemory.h \
+    ../../src/objects/multiviewRenderPass.h \
     ../../src/objects/mutableImage.h \
     ../../src/objects/mutableImageView.h \
     ../../src/objects/physicalDevice.h \
@@ -362,7 +363,6 @@ HEADERS += \
     ../../src/objects/rayTracingPipeline.h \
     ../../src/objects/rayTracingPipelineBatch.h \
     ../../src/objects/renderPass.h \
-    ../../src/objects/renderPassMultiview.h \
     ../../src/objects/resource.h \
     ../../src/objects/sampler.h \
     ../../src/objects/samplerYcbcrConversion.h \

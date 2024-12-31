@@ -315,9 +315,6 @@
     <ClInclude Include="..\..\src\objects\renderPass.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\renderPassMultiview.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\objects\resource.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -867,6 +864,9 @@
     <ClInclude Include="..\..\src\packed\horzor.inl">
       <Filter>Header Files\packed</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\multiviewRenderPass.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1050,9 +1050,6 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\renderPass.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\objects\renderPassMultiview.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\sampler.cpp">
@@ -1345,6 +1342,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\auxiliary\auxframebuffer.cpp">
       <Filter>Source Files\auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\multiviewRenderPass.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

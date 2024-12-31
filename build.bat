@@ -163,6 +163,7 @@ src\objects\indirectBuffer.cpp ^
 src\objects\instance.cpp ^
 src\objects\leanCommandBuffer.cpp ^
 src\objects\managedDeviceMemory.cpp ^
+src\objects\multiviewRenderPass.cpp ^
 src\objects\mutableImage.cpp ^
 src\objects\mutableImageView.cpp ^
 src\objects\physicalDevice.cpp ^
@@ -180,7 +181,6 @@ src\objects\queue.cpp ^
 src\objects\rayTracingPipeline.cpp ^
 src\objects\rayTracingPipelineBatch.cpp ^
 src\objects\renderPass.cpp ^
-src\objects\renderPassMultiview.cpp ^
 src\objects\sampler.cpp ^
 src\objects\samplerYcbcrConversion.cpp ^
 src\objects\semaphore.cpp ^
@@ -355,6 +355,7 @@ indirectBuffer.obj ^
 instance.obj ^
 leanCommandBuffer.obj ^
 managedDeviceMemory.obj ^
+multiviewRenderPass.obj ^
 mutableImage.obj ^
 mutableImageView.obj ^
 physicalDevice.obj ^
@@ -372,7 +373,6 @@ queue.obj ^
 rayTracingPipeline.obj ^
 rayTracingPipelineBatch.obj ^
 renderPass.obj ^
-renderPassMultiview.obj ^
 sampler.obj ^
 samplerYcbcrConversion.obj ^
 semaphore.obj ^

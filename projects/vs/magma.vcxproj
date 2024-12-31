@@ -332,7 +332,7 @@
     <ClInclude Include="..\..\src\objects\rayTracingPipeline.h" />
     <ClInclude Include="..\..\src\objects\rayTracingPipelineBatch.h" />
     <ClInclude Include="..\..\src\objects\renderPass.h" />
-    <ClInclude Include="..\..\src\objects\renderPassMultiview.h" />
+    <ClInclude Include="..\..\src\objects\multiviewRenderPass.h" />
     <ClInclude Include="..\..\src\objects\resource.h" />
     <ClInclude Include="..\..\src\objects\deviceResourcePool.h" />
     <ClInclude Include="..\..\src\objects\sampler.h" />
@@ -541,7 +541,7 @@
     <ClCompile Include="..\..\src\objects\rayTracingPipeline.cpp" />
     <ClCompile Include="..\..\src\objects\rayTracingPipelineBatch.cpp" />
     <ClCompile Include="..\..\src\objects\renderPass.cpp" />
-    <ClCompile Include="..\..\src\objects\renderPassMultiview.cpp" />
+    <ClCompile Include="..\..\src\objects\multiviewRenderPass.cpp" />
     <ClCompile Include="..\..\src\objects\deviceResourcePool.cpp" />
     <ClCompile Include="..\..\src\objects\sampler.cpp" />
     <ClCompile Include="..\..\src\objects\samplerYcbcrConversion.cpp" />

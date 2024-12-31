@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "renderPassMultiview.h"
+#include "multiviewRenderPass.h"
 #include "device.h"
 #include "../allocator/allocator.h"
 #include "../misc/format.h"
