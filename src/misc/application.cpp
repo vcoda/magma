@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,6 +21,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+Application::Application(const char *applicationName) noexcept:
+    VkApplicationInfo{
+        VK_STRUCTURE_TYPE_APPLICATION_INFO,
+        nullptr, // pNext
+        applicationName, 1,
+        "Magma", 1,
+        VK_API_VERSION_1_0
+    }
+{
+    MAGMA_ASSERT(applicationName);
+    MAGMA_ASSERT(strlen(applicationName));
+}
+
 Application::Application(const char *applicationName, uint32_t applicationVersion,
     const char *engineName, uint32_t engineVersion, uint32_t apiVersion,
     const StructureChain& extendedInfo /* default */) noexcept:
