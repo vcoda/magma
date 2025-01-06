@@ -150,10 +150,10 @@ chmod +x glslangValidator
 Download and install [Xcode IDE](https://developer.apple.com/xcode/). Apple ID may be required to use it.<br><br>
 * [Getting Started with the macOS Vulkan SDK](https://vulkan.lunarg.com/doc/view/1.3.283.0/mac/getting_started.html)<br>
 
-You need to properly configure VK_SDK_PATH environment variable and make it visible to Xcode.<br>
-Open **Terminal**, check that VK_SDK_PATH environment variable is present:
+You need to properly configure VULKAN_SDK environment variable and make it visible to Xcode.<br>
+Open **Terminal**, check that environment variable is present:
 ```
-echo $VK_SDK_PATH
+echo $VULKAN_SDK
 ```
 If not, open zshrc file in Nano:
 ```
@@ -161,9 +161,9 @@ nano ~/.zshrc
 ```
 Add environment variable:
 ```
-export VK_SDK_PATH=<you_path/VulkanSDK/1.x.xxx.x/macOS>
+export VULKAN_SDK=<you_path/VulkanSDK/1.x.xxx.x/macOS>
 ```
-Press Ctrl-O to save changes.<br>
+Press Ctrl-O/Ctrl-X to save changes and exit editor.<br>
 With Xcode versions 7 and later, you may need to enable this behavior:
 ```
 defaults write com.apple.dt.Xcode UseSanitizedBuildSystemEnvironment -bool NO
@@ -243,7 +243,7 @@ Other compositors like Wayland or XRANDR have not been tested.
 
 ### MacOS
 
-**Xcode** project is located in the `magma/projects/xcode` directory. Open the project, go to `Build Settings`, find `System Header Search Paths` and check that VK_SDK_PATH environment variable is resolved to actual path to Vulkan SDK.
+**Xcode** project is located in the `magma/projects/xcode` directory. Open the project, go to `Build Settings`, find `System Header Search Paths` and check that VULKAN_SDK environment variable is resolved to actual path to Vulkan SDK.
 
 ## Examples
 
