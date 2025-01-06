@@ -35,10 +35,10 @@ namespace magma
             VkFenceCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit ExternalFence(std::shared_ptr<Device> device,
-        #if defined(VK_KHR_external_fence_win32)
+        #if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
             HANDLE hFence,
             LPCWSTR name = nullptr,
-        #elif defined(VK_KHR_external_fence_fd)
+        #else
             int fd,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr,
@@ -46,16 +46,16 @@ namespace magma
             VkFenceImportFlagsKHR importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~ExternalFence();
-    #if defined(VK_KHR_external_fence_win32)
+    #if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
         HANDLE getNtHandle() const;
-    #elif defined(VK_KHR_external_fence_fd)
+    #elif defined(__unix__) || defined(__unix)
         int getFd() const;
     #endif
 
     private:
-    #if defined(VK_KHR_external_fence_win32)
+    #if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
         mutable HANDLE hFence;
-    #elif defined(VK_KHR_external_fence_fd)
+    #else
         mutable int fd;
     #endif
     };

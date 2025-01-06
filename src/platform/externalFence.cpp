@@ -31,9 +31,9 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     VkFenceCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     Fence(std::move(allocator), std::move(device)),
-#if defined(VK_KHR_external_fence_win32)
+#if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
     hFence(NULL)
-#elif defined(VK_KHR_external_fence_fd)
+#else
     fd(0)
 #endif
 {
@@ -63,10 +63,10 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
 }
 
 ExternalFence::ExternalFence(std::shared_ptr<Device> device,
-#if defined(VK_KHR_external_fence_win32)
+#if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
     HANDLE hFence,
     LPCWSTR name /* nullptr */,
-#elif defined(VK_KHR_external_fence_fd)
+#else
     int fd,
 #endif
     std::shared_ptr<IAllocator> allocator /* nullptr */,
@@ -74,9 +74,9 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
     VkFenceImportFlagsKHR importFlags /* 0 */,
     const StructureChain& extendedInfo /* default */):
     Fence(std::move(allocator), std::move(device)),
-#if defined(VK_KHR_external_fence_win32)
+#if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
     hFence(NULL)
-#elif defined(VK_KHR_external_fence_fd)
+#else
     fd(0)
 #endif
 {
@@ -124,14 +124,14 @@ ExternalFence::ExternalFence(std::shared_ptr<Device> device,
 
 ExternalFence::~ExternalFence()
 {
-#if defined(VK_KHR_external_fence_win32)
+#if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
     CloseHandle(hFence);
-#elif defined(VK_KHR_external_fence_fd)
+#elif defined(__unix__) || defined(__unix)
     close(fd);
 #endif
 }
 
-#if defined(VK_KHR_external_fence_win32)
+#if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
 HANDLE ExternalFence::getNtHandle() const
 {
     VkFenceGetWin32HandleInfoKHR win32HandleInfo;
@@ -145,7 +145,7 @@ HANDLE ExternalFence::getNtHandle() const
     return hFence;
 }
 
-#elif defined(VK_KHR_external_fence_fd)
+#elif defined(__unix__) || defined(__unix)
 int ExternalFence::getFd() const
 {
     VkFenceGetFdInfoKHR fdInfo;
@@ -167,6 +167,6 @@ int ExternalFence::getFd() const
     #endif
     return fd;
 }
-#endif // VK_KHR_external_fence_fd
+#endif // __unix__ || __unix
 #endif // VK_KHR_external_fence
 } // namespace magma
