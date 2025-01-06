@@ -41,12 +41,12 @@ namespace magma
             VkSemaphoreCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit ExternalSemaphore(std::shared_ptr<Device> device,
-        #ifdef VK_KHR_external_semaphore_win32
+        #if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
             HANDLE hSemaphore,
             LPCWSTR name = nullptr,
-        #elif defined(VK_FUCHSIA_external_semaphore)
+        #elif defined(__Fuchsia__)
             zx_handle_t zirconHandle,
-        #elif defined(VK_KHR_external_semaphore_fd)
+        #else
             int fd,
         #endif
             std::shared_ptr<IAllocator> allocator = nullptr,
@@ -54,20 +54,18 @@ namespace magma
             VkSemaphoreImportFlagsKHR importFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~ExternalSemaphore();
-    #ifdef VK_KHR_external_semaphore_win32
-        // HANDLE Win32ExternalSemaphore::getNtHandle() const;
-    #elif defined(VK_FUCHSIA_external_semaphore)
+    #if defined(__Fuchsia__)
         zx_handle_t getEvent() const;
-    #elif defined(VK_KHR_external_semaphore_fd)
+    #elif defined(__unix__) || defined(__unix)
         int getFd() const;
     #endif
 
     private:
     #ifdef VK_KHR_external_semaphore_win32
         // Win32ExternalSemaphore::hSemaphore;
-    #elif defined(VK_FUCHSIA_external_semaphore)
+    #elif defined(__Fuchsia__)
         mutable zx_handle_t zirconHandle;
-    #elif defined(VK_KHR_external_semaphore_fd)
+    #else
         mutable int fd;
     #endif
     };
