@@ -312,9 +312,6 @@
     <ClInclude Include="..\..\src\objects\samplerYcbcrConversion.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objects\secondaryCommandBuffer.h">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\objects\semaphore.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>

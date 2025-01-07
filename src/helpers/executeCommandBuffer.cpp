@@ -18,13 +18,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "../objects/commandPool.h"
-#include "../objects/primaryCommandBuffer.h"
+#include "../objects/commandBuffer.h"
 #include "../misc/finish.h"
 
 namespace magma::helpers
 {
 void executeCommandBuffer(lent_ptr<CommandPool> cmdPool,
-    std::function<void(const std::unique_ptr<CommandBuffer>&)> cmdFn,
+    std::function<void(const std::shared_ptr<CommandBuffer>&)> cmdFn,
     const char *blockName /* magma::helpers::executeCommandBuffer */,
     uint32_t blockColor /* 0x0 */)
 {   /* VK_COMMAND_POOL_CREATE_TRANSIENT_BIT specifies that command
@@ -33,13 +33,13 @@ void executeCommandBuffer(lent_ptr<CommandPool> cmdPool,
        This flag may be used by the implementation to control memory
        allocation behavior within the pool. */
     MAGMA_ASSERT(cmdPool->getFlags() & VK_COMMAND_POOL_CREATE_TRANSIENT_BIT);
-    std::unique_ptr<CommandBuffer> cmdBuffer = std::make_unique<PrimaryCommandBuffer>(std::move(cmdPool));
+    auto cmdBuffer = cmdPool->allocateCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
     if (cmdBuffer->beginAnnotated(blockName, blockColor, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
     {
         try
         {   /* Callback function may optionally throw an exception.
-               We should catch throwed exception and finish command
-               buffer ahead of exeption handler. */
+               In this case we should catch thrown exception and
+               end command buffer recording ahead of exeption handler. */
             cmdFn(cmdBuffer);
         }
         catch (...)

@@ -21,7 +21,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* Primary command buffer, which can execute secondary
-       command buffers, and which is submitted to the queue. */
+       command buffers, and which is submitted to the queue.
+       As CommanPool allocates only objects of base CommandBuffer
+       class, PrimaryCommandBuffer has its own constructor. */
 
     class PrimaryCommandBuffer : public CommandBuffer
     {
@@ -30,11 +32,5 @@ namespace magma
         void executeCommands(lent_ptr<CommandBuffer> cmdBuffer) noexcept;
         void executeCommands(const std::initializer_list<lent_ptr<CommandBuffer>>& cmdBuffers) noexcept;
         void executeCommands(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers) noexcept;
-
-    private:
-        MAGMA_MAKE_SHARED(PrimaryCommandBuffer)
-        PrimaryCommandBuffer(VkCommandBuffer handle,
-            const CommandPool *cmdPool);
-        friend CommandPool;
     };
 } // namespace magma

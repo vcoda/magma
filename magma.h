@@ -98,7 +98,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/resource.h"
 #include "src/objects/sampler.h"
 #include "src/objects/samplerYcbcrConversion.h"
-#include "src/objects/secondaryCommandBuffer.h"
 #include "src/objects/semaphore.h"
 #include "src/objects/shaderModule.h"
 #include "src/objects/srcTransferBuffer.h"

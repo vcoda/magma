@@ -25,10 +25,6 @@ PrimaryCommandBuffer::PrimaryCommandBuffer(lent_ptr<CommandPool> cmdPool):
     CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, cmdPool.get())
 {}
 
-PrimaryCommandBuffer::PrimaryCommandBuffer(VkCommandBuffer handle, const CommandPool *cmdPool):
-    CommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, handle, cmdPool)
-{}
-
 void PrimaryCommandBuffer::executeCommands(lent_ptr<CommandBuffer> cmdBuffer) noexcept
 {
     MAGMA_ASSERT(!cmdBuffer->primary());

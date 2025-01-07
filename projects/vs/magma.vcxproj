@@ -336,7 +336,6 @@
     <ClInclude Include="..\..\src\objects\deviceResourcePool.h" />
     <ClInclude Include="..\..\src\objects\sampler.h" />
     <ClInclude Include="..\..\src\objects\samplerYcbcrConversion.h" />
-    <ClInclude Include="..\..\src\objects\secondaryCommandBuffer.h" />
     <ClInclude Include="..\..\src\objects\semaphore.h" />
     <ClInclude Include="..\..\src\objects\shaderModule.h" />
     <ClInclude Include="..\..\src\objects\srcTransferBuffer.h" />

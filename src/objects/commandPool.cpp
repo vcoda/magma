@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,8 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "commandPool.h"
-#include "primaryCommandBuffer.h"
-#include "secondaryCommandBuffer.h"
+#include "commandBuffer.h"
 #include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
@@ -45,6 +44,20 @@ CommandPool::CommandPool(std::shared_ptr<Device> device, uint32_t queueFamilyInd
 
 CommandPool::~CommandPool()
 {
+    MAGMA_VLA(VkCommandBuffer, commandBuffers, cmdPool.size());
+    for (auto& weakRef: cmdPool)
+    {
+        if (!weakRef.expired())
+        {
+            std::shared_ptr<CommandBuffer> cmdBuffer = weakRef.lock();
+            MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Pending);
+            commandBuffers.put(cmdBuffer->getLean().getHandle());
+            cmdBuffer->getLean().handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in the destructor
+            cmdBuffer->releaseObjectsInUse();
+        }
+    }
+    if (commandBuffers.count())
+        vkFreeCommandBuffers(getNativeDevice(), handle, commandBuffers.count(), commandBuffers);
     vkDestroyCommandPool(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
@@ -76,14 +89,31 @@ bool CommandPool::reset(bool releaseResources /* false */) noexcept
     return (VK_SUCCESS == result);
 }
 
-std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(uint32_t commandBufferCount, bool primaryLevel,
+std::shared_ptr<CommandBuffer> CommandPool::allocateCommandBuffer(VkCommandBufferLevel level,
     const StructureChain& extendedInfo /* default */)
 {
     VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
     cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     cmdBufferAllocateInfo.pNext = extendedInfo.headNode();
     cmdBufferAllocateInfo.commandPool = handle;
-    cmdBufferAllocateInfo.level = primaryLevel ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+    cmdBufferAllocateInfo.level = level;
+    cmdBufferAllocateInfo.commandBufferCount = 1;
+    VkCommandBuffer commandBuffer;
+    const VkResult result = vkAllocateCommandBuffers(getNativeDevice(), &cmdBufferAllocateInfo, &commandBuffer);
+    MAGMA_HANDLE_RESULT(result, "failed to allocate command buffer");
+    std::shared_ptr<CommandBuffer> cmdBuffer = CommandBuffer::makeShared(level, commandBuffer, this);
+    cmdPool.insert(cmdBuffer);
+    return cmdBuffer;
+}
+
+std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(VkCommandBufferLevel level, uint32_t commandBufferCount,
+    const StructureChain& extendedInfo /* default */)
+{
+    VkCommandBufferAllocateInfo cmdBufferAllocateInfo;
+    cmdBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    cmdBufferAllocateInfo.pNext = extendedInfo.headNode();
+    cmdBufferAllocateInfo.commandPool = handle;
+    cmdBufferAllocateInfo.level = level;
     cmdBufferAllocateInfo.commandBufferCount = commandBufferCount;
     MAGMA_VLA(VkCommandBuffer, commandBuffers, commandBufferCount);
     const VkResult result = vkAllocateCommandBuffers(getNativeDevice(), &cmdBufferAllocateInfo, commandBuffers);
@@ -91,30 +121,11 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     std::vector<std::shared_ptr<CommandBuffer>> cmdBuffers;
     for (auto handle: commandBuffers)
     {
-        std::shared_ptr<CommandBuffer> cmdBuffer;
-        if (primaryLevel)
-            cmdBuffer = PrimaryCommandBuffer::makeShared(handle, this);
-        else
-            cmdBuffer = SecondaryCommandBuffer::makeShared(handle, this);
+        std::shared_ptr<CommandBuffer> cmdBuffer = CommandBuffer::makeShared(level, handle, this);
         cmdBuffers.emplace_back(std::move(cmdBuffer));
         cmdPool.insert(cmdBuffers.back());
     }
     return cmdBuffers;
-}
-
-void CommandPool::freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept
-{
-    MAGMA_VLA(VkCommandBuffer, commandBuffers, cmdBuffers.size());
-    for (auto& cmdBuffer: cmdBuffers)
-    {
-        MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Pending);
-        commandBuffers.put(cmdBuffer->getLean());
-        cmdBuffer->releaseObjectsInUse();
-        cmdBuffer->getLean().handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in the destructor
-        cmdPool.erase(cmdBuffer);
-    }
-    vkFreeCommandBuffers(getNativeDevice(), handle, commandBuffers.count(), commandBuffers);
-    cmdBuffers.clear();
 }
 
 #ifdef VK_KHR_maintenance1

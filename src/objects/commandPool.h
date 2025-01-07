@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -44,10 +44,11 @@ namespace magma
         uint32_t getQueueFamilyIndex() const noexcept { return queueFamilyIndex; }
         VkCommandPoolCreateFlags getFlags() const noexcept { return flags; }
         bool reset(bool releaseResources = false) noexcept;
-        std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(uint32_t commandBufferCount,
-            bool primaryLevel,
+        std::shared_ptr<CommandBuffer> allocateCommandBuffer(VkCommandBufferLevel level,
             const StructureChain& extendedInfo = StructureChain());
-        void freeCommandBuffers(std::vector<std::shared_ptr<CommandBuffer>>& cmdBuffers) noexcept;
+        std::vector<std::shared_ptr<CommandBuffer>> allocateCommandBuffers(VkCommandBufferLevel level,
+            uint32_t commandBufferCount,
+            const StructureChain& extendedInfo = StructureChain());
     #ifdef VK_KHR_maintenance1
         void trim(VkCommandPoolTrimFlagsKHR flags = 0);
     #endif

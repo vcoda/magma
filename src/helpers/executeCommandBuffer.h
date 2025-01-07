@@ -29,7 +29,7 @@ namespace magma
            to the graphics queue. */
 
         void executeCommandBuffer(const std::unique_ptr<CommandPool>& cmdPool,
-            std::function<void(const std::unique_ptr<CommandBuffer>&)> cmdFn,
+            std::function<void(const std::shared_ptr<CommandBuffer>&)> cmdFn,
             const char *blockName = "magma::helpers::executeCommandBuffer",
             uint32_t blockColor = 0x0);
     } // namespace helpers

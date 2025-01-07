@@ -366,6 +366,7 @@ namespace magma
         void releaseObjectsInUse() noexcept;
 
     protected:
+        MAGMA_MAKE_SHARED(CommandBuffer)
         CommandBuffer(VkCommandBufferLevel level, VkCommandBuffer handle, const CommandPool *cmdPool);
         CommandBuffer(VkCommandBufferLevel level, const CommandPool *cmdPool);
 
