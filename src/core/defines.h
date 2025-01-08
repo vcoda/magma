@@ -53,3 +53,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef MAGMA_SSE
     #define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
 #endif
+
+// Qt defines this as macro
+#ifdef foreach
+#undef foreach
+#endif
