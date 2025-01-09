@@ -5,30 +5,6 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG += precompile_header
 
-INCLUDEPATH += $(VULKAN_SDK)/include
-INCLUDEPATH += ../../src/core/
-
-QMAKE_CXXFLAGS += -std=c++17 -msse4 -ftemplate-depth=2048 -fconstexpr-depth=2048
-
-QMAKE_CXXFLAGS += -Wno-unused-parameter
-QMAKE_CXXFLAGS += -Wno-unused-variable
-QMAKE_CXXFLAGS += -Wno-unused-but-set-variable
-QMAKE_CXXFLAGS += -Wno-missing-field-initializers
-QMAKE_CXXFLAGS += -Wno-deprecated-copy
-QMAKE_CXXFLAGS += -Wno-unknown-pragmas
-
-win32 {
-    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_WIN32_KHR
-} else:macx {
-    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_MACOS_MVK
-} else:unix {
-    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_XCB_KHR
-} else:android {
-    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_ANDROID_KHR
-} else:ios {
-    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_IOS_MVK
-}
-
 PRECOMPILED_HEADER = ../../src/core/pch.h
 
 SOURCES += \
@@ -497,6 +473,30 @@ win32 {
 
 QMAKE_EXTRA_TARGETS = make_spirv_dir compile_shaders
 PRE_TARGETDEPS = make_spirv_dir compile_shaders
+
+INCLUDEPATH += $(VULKAN_SDK)/include
+INCLUDEPATH += ../../src/core/
+
+QMAKE_CXXFLAGS += -std=c++17 -msse4 -ftemplate-depth=2048 -fconstexpr-depth=2048
+
+QMAKE_CXXFLAGS += -Wno-unused-parameter
+QMAKE_CXXFLAGS += -Wno-unused-variable
+QMAKE_CXXFLAGS += -Wno-unused-but-set-variable
+QMAKE_CXXFLAGS += -Wno-missing-field-initializers
+QMAKE_CXXFLAGS += -Wno-deprecated-copy
+QMAKE_CXXFLAGS += -Wno-unknown-pragmas
+
+win32 {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_WIN32_KHR
+} else:macx {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_MACOS_MVK
+} else:unix {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_XCB_KHR
+} else:android {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_ANDROID_KHR
+} else:ios {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_IOS_MVK
+}
 
 unix {
     target.path = /usr/lib
