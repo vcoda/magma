@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_NULL VkDeviceAddress(0ull)
 #endif
 
-#if defined(_DEBUG) || defined(DEBUG)
+#if defined(_DEBUG) || defined(DEBUG) || defined(QT_DEBUG)
     #define MAGMA_DEBUG
 #endif
 
