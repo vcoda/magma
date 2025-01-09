@@ -13,6 +13,18 @@ QMAKE_CXXFLAGS += -Wno-unused-variable -Wno-unused-value -Wno-unused-parameter
 QMAKE_CXXFLAGS += -Wno-unknown-pragmas -Wno-switch -Wno-missing-field-initializers
 QMAKE_CXXFLAGS += -Wno-implicit-fallthrough -Wno-deprecated-copy
 
+win32 {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_WIN32_KHR
+} else:macx {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_MACOS_MVK
+} else:unix {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_XCB_KHR
+} else:android {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_ANDROID_KHR
+} else:ios {
+    QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_IOS_MVK
+}
+
 PRECOMPILED_HEADER = ../../src/core/pch.h
 
 SOURCES += \
