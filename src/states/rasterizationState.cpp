@@ -38,6 +38,7 @@ hash_t RasterizationState::chainedHash() const noexcept
                     rasterizationOrderInfo->sType,
                     rasterizationOrderInfo->rasterizationOrder));
             }
+            break;
     #endif // VK_AMD_rasterization_order
     #ifdef VK_EXT_conservative_rasterization
         case VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT:
