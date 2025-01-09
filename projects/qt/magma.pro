@@ -465,6 +465,39 @@ HEADERS += \
     ../../src/third-party/SPIRV-Reflect/spirv_reflect.h \
     ../../src/third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h
 
+GLSLC=$(VULKAN_SDK)/bin/glslangValidator
+
+GLSL_DIR = $$PWD/../../src/auxiliary/spirv
+SPIRV_DIR = $$GLSL_DIR/output/
+win32 {
+    GLSLC = $$replace(GLSLC, '/', '\\')
+    GLSL_DIR = $$replace(GLSL_DIR, '/', '\\')
+    SPIRV_DIR = $$replace(SPIRV_DIR, '/', '\\')
+}
+
+make_spirv_dir.target = make_spirv_dir
+win32 {
+    make_spirv_dir.commands = if not exist $$SPIRV_DIR mkdir $$SPIRV_DIR
+} else {
+    make_spirv_dir.commands = rm -rf $$SPIRV_DIR && mkdir $$SPIRV_DIR
+}
+
+compile_shaders.target = compile_shaders
+compile_shaders.commands = \
+    $$GLSLC -V --vn fsBlit $$GLSL_DIR/blit.frag -o $$SPIRV_DIR/blitf && \
+    $$GLSLC -V --vn vsBlit $$GLSL_DIR/blit.vert -o $$SPIRV_DIR/blitv && \
+    $$GLSLC -V -DNV --vn vsBlitNV $$GLSL_DIR/blit.vert -o $$SPIRV_DIR/blitv_nv && \
+    $$GLSLC -V --vn fsFont $$GLSL_DIR/font.frag -o $$SPIRV_DIR/fontf && \
+    $$GLSLC -V --vn vsImm $$GLSL_DIR/imm.vert -o $$SPIRV_DIR/immv && \
+    $$GLSLC -V --vn fsImm $$GLSL_DIR/imm.frag -o $$SPIRV_DIR/immf
+
+win32 {
+    compile_shaders.commands = $$replace(compile_shaders.commands, '/', '\\')
+}
+
+QMAKE_EXTRA_TARGETS = make_spirv_dir compile_shaders
+PRE_TARGETDEPS = make_spirv_dir compile_shaders
+
 unix {
     target.path = /usr/lib
     INSTALLS += target
