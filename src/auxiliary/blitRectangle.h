@@ -52,7 +52,7 @@ namespace magma
                 const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             void blit(lent_ptr<CommandBuffer> cmdBuffer,
-                std::shared_ptr<const ImageView> imageView,
+                lent_ptr<const ImageView> imageView,
                 VkFilter filter,
                 const VkRect2D& rc,
                 bool negativeViewportHeight = false) const noexcept;
@@ -68,7 +68,7 @@ namespace magma
             std::unique_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
             mutable std::forward_list<DescriptorSetTable> setTables;
-            mutable std::map<std::shared_ptr<const ImageView>, std::shared_ptr<DescriptorSet>> descriptorSets;
+            mutable std::map<const ImageView *, std::unique_ptr<DescriptorSet>> descriptorSets;
         };
     } // namespace aux
 } // namespace magma

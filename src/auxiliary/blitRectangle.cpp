@@ -137,31 +137,33 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     }
 }
 
-void BlitRectangle::blit(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<const ImageView> imageView, VkFilter filter, const VkRect2D& rc,
+void BlitRectangle::blit(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const ImageView> imageView, VkFilter filter, const VkRect2D& rc,
     bool negativeViewportHeight /* false */) const noexcept
 {
     MAGMA_ASSERT(imageView);
     MAGMA_ASSERT(cmdBuffer);
-    std::shared_ptr<DescriptorSet> imageDescriptorSet;
-    auto it = descriptorSets.find(imageView);
+    auto it = descriptorSets.find(imageView.get());
     if (it != descriptorSets.end())
-        imageDescriptorSet = it->second;
+        cmdBuffer->bindDescriptorSet(pipeline, 0, it->second);
     else
     {
-        const std::unique_ptr<Sampler>& sampler = (VK_FILTER_NEAREST == filter) ? nearestSampler :
-            ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler);
+        const descriptor::ImageSampler imageSampler{
+            std::move(imageView),
+            (VK_FILTER_NEAREST == filter) ? nearestSampler :
+            ((VK_FILTER_LINEAR == filter) ? bilinearSampler : cubicSampler)
+        };
         setTables.emplace_front();
-        setTables.front().image = {imageView, sampler};
+        setTables.front().image = imageSampler;
         // Allocate each descriptor set per unique image
-        imageDescriptorSet = std::make_shared<DescriptorSet>(descriptorPool, setTables.front(), VK_SHADER_STAGE_FRAGMENT_BIT, descriptorPool->getHostAllocator());
-        descriptorSets[imageView] = imageDescriptorSet;
+        auto descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, setTables.front(), VK_SHADER_STAGE_FRAGMENT_BIT, descriptorPool->getHostAllocator());
+        cmdBuffer->bindDescriptorSet(pipeline, 0, descriptorSet);
+        descriptorSets[imageSampler.first.get()] = std::move(descriptorSet);
     }
     int32_t height = static_cast<int32_t>(rc.extent.height);
     if (negativeViewportHeight)
         height = -height;
     cmdBuffer->setViewport(rc.offset.x, rc.offset.y, rc.extent.width, height);
     cmdBuffer->setScissor(rc);
-    cmdBuffer->bindDescriptorSet(pipeline, 0, imageDescriptorSet);
     cmdBuffer->bindPipeline(pipeline);
     cmdBuffer->draw(3);
 }
