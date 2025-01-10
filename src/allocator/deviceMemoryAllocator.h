@@ -21,6 +21,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class IResource;
+
     /* The Vulkan Memory Allocator provides a simple and easy way
        to integrate API to help you allocate memory for Vulkan buffer
        and image storage. See: https://gpuopen.com/vulkan-memory-allocator */

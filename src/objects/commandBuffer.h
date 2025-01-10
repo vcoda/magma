@@ -29,6 +29,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Queue;
     class Fence;
 #ifdef VK_KHR_acceleration_structure
     struct AccelerationStructureGeometry;

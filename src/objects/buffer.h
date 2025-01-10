@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class SrcTransferBuffer;
+    class CommandBuffer;
 
     /* Buffers represent linear arrays of data which are used
        for various purposes by binding them to a graphics or
