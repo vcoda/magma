@@ -144,7 +144,6 @@
 		C3B1AAEF2D04985B00BB4644 /* xcbSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B1A61E2D04985B00BB4644 /* xcbSurface.cpp */; };
 		C3B1AAF02D04985B00BB4644 /* win32ExternalSemaphore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B1A61A2D04985B00BB4644 /* win32ExternalSemaphore.cpp */; };
 		C3B1AAF12D04985B00BB4644 /* validationCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B1A5E82D04985B00BB4644 /* validationCache.cpp */; };
-		C3B1AAF52D04985B00BB4644 /* vmaImplementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B1A4482D04985B00BB4644 /* vmaImplementation.cpp */; };
 		C3B1AAF62D04985B00BB4644 /* xlibSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B1A6202D04985B00BB4644 /* xlibSurface.cpp */; };
 		C3B1AAF72D04985B00BB4644 /* instanceExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B1A4CD2D04985B00BB4644 /* instanceExtensions.cpp */; };
 		C3B1AAF82D04985B00BB4644 /* imageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B1A58E2D04985B00BB4644 /* imageView.cpp */; };
@@ -457,7 +456,6 @@
 		C3B1A4442D04985B00BB4644 /* debugAlignedAllocator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debugAlignedAllocator.cpp; sourceTree = "<group>"; };
 		C3B1A4452D04985B00BB4644 /* deviceMemoryAllocator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deviceMemoryAllocator.h; sourceTree = "<group>"; };
 		C3B1A4462D04985B00BB4644 /* deviceMemoryAllocator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = deviceMemoryAllocator.cpp; sourceTree = "<group>"; };
-		C3B1A4482D04985B00BB4644 /* vmaImplementation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vmaImplementation.cpp; sourceTree = "<group>"; };
 		C3B1A44A2D04985B00BB4644 /* glyphs */ = {isa = PBXFileReference; lastKnownFileType = text; path = glyphs; sourceTree = "<group>"; };
 		C3B1A44C2D04985B00BB4644 /* blitf */ = {isa = PBXFileReference; lastKnownFileType = text; path = blitf; sourceTree = "<group>"; };
 		C3B1A44D2D04985B00BB4644 /* blitv */ = {isa = PBXFileReference; lastKnownFileType = text; path = blitv; sourceTree = "<group>"; };
@@ -1050,7 +1048,6 @@
 				C3B1A4442D04985B00BB4644 /* debugAlignedAllocator.cpp */,
 				C3B1A4452D04985B00BB4644 /* deviceMemoryAllocator.h */,
 				C3B1A4462D04985B00BB4644 /* deviceMemoryAllocator.cpp */,
-				C3B1A4482D04985B00BB4644 /* vmaImplementation.cpp */,
 			);
 			name = allocator;
 			path = /Users/administrator/dev/magma/src/allocator;
@@ -2252,7 +2249,6 @@
 				C3B1AAEF2D04985B00BB4644 /* xcbSurface.cpp in Sources */,
 				C3B1AAF02D04985B00BB4644 /* win32ExternalSemaphore.cpp in Sources */,
 				C3B1AAF12D04985B00BB4644 /* validationCache.cpp in Sources */,
-				C3B1AAF52D04985B00BB4644 /* vmaImplementation.cpp in Sources */,
 				C3B1AAF62D04985B00BB4644 /* xlibSurface.cpp in Sources */,
 				C3B1AAF72D04985B00BB4644 /* instanceExtensions.cpp in Sources */,
 				C3B1AAF82D04985B00BB4644 /* imageView.cpp in Sources */,

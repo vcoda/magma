@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,7 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "allocator.h"
-#include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"
+
+VK_DEFINE_HANDLE(VmaAllocator)
+VK_DEFINE_HANDLE(VmaAllocation)
+VK_DEFINE_HANDLE(VmaDefragmentationContext)
+
+struct VmaDefragmentationPassMoveInfo;
 
 namespace magma
 {
@@ -80,7 +85,7 @@ namespace magma
         std::shared_ptr<IAllocator> hostAllocator;
         VmaAllocator allocator;
         VmaDefragmentationContext defragmentationContext;
-        VmaDefragmentationPassMoveInfo passInfo;// = {};
+        std::unique_ptr<VmaDefragmentationPassMoveInfo> passInfo;
         std::vector<std::shared_ptr<IResource>> defragmentationResources;
         std::vector<VkBool32> allocationsChanged;
     };

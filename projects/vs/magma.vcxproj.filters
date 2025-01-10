@@ -1103,9 +1103,6 @@
     <ClCompile Include="..\..\src\allocator\deviceMemoryAllocator.cpp">
       <Filter>Source Files\allocator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\allocator\vmaImplementation.cpp">
-      <Filter>Source Files\allocator</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\barriers\imageMemoryBarrier.cpp">
       <Filter>Source Files\barriers</Filter>
     </ClCompile>

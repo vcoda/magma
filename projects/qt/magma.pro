@@ -12,7 +12,6 @@ SOURCES += \
     ../../src/allocator/allocationCallbacks.cpp \
     ../../src/allocator/debugAlignedAllocator.cpp \
     ../../src/allocator/deviceMemoryAllocator.cpp \
-    ../../src/allocator/vmaImplementation.cpp \
     ../../src/auxiliary/accumulationBuffer.cpp \
     ../../src/auxiliary/auxframebuffer.cpp \
     ../../src/auxiliary/blitRectangle.cpp \

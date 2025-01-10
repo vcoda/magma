@@ -413,7 +413,6 @@
     <ClCompile Include="..\..\src\allocator\allocationCallbacks.cpp" />
     <ClCompile Include="..\..\src\allocator\debugAlignedAllocator.cpp" />
     <ClCompile Include="..\..\src\allocator\deviceMemoryAllocator.cpp" />
-    <ClCompile Include="..\..\src\allocator\vmaImplementation.cpp" />
     <ClCompile Include="..\..\src\auxiliary\accumulationBuffer.cpp" />
     <ClCompile Include="..\..\src\auxiliary\blitRectangle.cpp" />
     <ClCompile Include="..\..\src\auxiliary\fillRectangleVertexShader.cpp" />

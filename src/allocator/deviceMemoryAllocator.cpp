@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,6 +24,40 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/instance.h"
 #include "../objects/commandBuffer.h"
 #include "../exceptions/errorResult.h"
+#include "../misc/compatibility.h"
+
+#if defined(_MSC_VER)
+    #pragma warning(push, 0)
+    #pragma warning(disable: 4100) // unreferenced formal parameter
+    #pragma warning(disable: 4127) // conditional expression is constant
+    #pragma warning(disable: 4189) // local variable is initialized but not referenced
+    #pragma warning(disable: 4324) // structure was padded due to alignment specifier
+    #pragma warning(disable: 4505) // unreferenced local function has been removed
+#elif defined(__GNUC__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wunused-variable"
+    #pragma GCC diagnostic ignored "-Wunused-parameter"
+    #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#elif defined(__clang__)
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wunused-variable"
+    #pragma clang diagnostic ignored "-Wunused-parameter"
+    #pragma clang diagnostic ignored "-Wunused-private-field"
+    #pragma clang diagnostic ignored "-Wmissing-field-initializers"
+    #pragma clang diagnostic ignored "-Wnullability-completeness"
+    #pragma clang diagnostic ignored "-Wcast-align"
+#endif // __clang__
+
+#define VMA_IMPLEMENTATION
+#include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"
+
+#if defined(_MSC_VER)
+    #pragma warning(pop)
+#elif defined(__GNUC__)
+    #pragma GCC diagnostic pop
+#elif defined(__clang__)
+    #pragma clang diagnostic pop
+#endif // __clang__
 
 static_assert(sizeof(magma::MemoryBudget) == sizeof(VmaBudget),
     "VmaBudget structure size mismatch");
@@ -239,12 +273,14 @@ VkResult DeviceMemoryAllocator::beginDefragmentation(VkFlags flags) noexcept
 
 VkResult DeviceMemoryAllocator::beginDefragmentationPass()
 {
-    const VkResult result = vmaBeginDefragmentationPass(allocator, defragmentationContext, &passInfo);
+    if (!passInfo)
+        passInfo = std::make_unique<VmaDefragmentationPassMoveInfo>();
+    const VkResult result = vmaBeginDefragmentationPass(allocator, defragmentationContext, passInfo.get());
     if (VK_SUCCESS == result)
     {
-        for (uint32_t i = 0; i < passInfo.moveCount; ++i)
+        for (uint32_t i = 0; i < passInfo->moveCount; ++i)
         {
-            const VmaDefragmentationMove& move = passInfo.pMoves[i];
+            const VmaDefragmentationMove& move = passInfo->pMoves[i];
             VmaAllocationInfo allocInfo;
             vmaGetAllocationInfo(allocator, move.srcAllocation, &allocInfo);
             // TODO: https://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/defragmentation.html
@@ -255,7 +291,7 @@ VkResult DeviceMemoryAllocator::beginDefragmentationPass()
 
 VkResult DeviceMemoryAllocator::endDefragmentationPass() noexcept
 {
-    return vmaEndDefragmentationPass(allocator, defragmentationContext, &passInfo);
+    return vmaEndDefragmentationPass(allocator, defragmentationContext, passInfo.get());
 }
 
 void DeviceMemoryAllocator::endDefragmentation(DefragmentationStats* stats /* nullptr */) noexcept

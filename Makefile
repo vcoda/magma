@@ -17,6 +17,7 @@
 .DEFAULT_GOAL := magma
 
 PCH_HEADER=src/core/pch.h
+
 SRC_OBJS= \
 	src/magma.o \
 	\
@@ -24,7 +25,6 @@ SRC_OBJS= \
 	src/allocator/allocationCallbacks.o \
 	src/allocator/debugAlignedAllocator.o \
 	src/allocator/deviceMemoryAllocator.o \
-	src/allocator/vmaImplementation.o \
 	\
 	src/auxiliary/accumulationBuffer.o \
 	src/auxiliary/auxframebuffer.o \
