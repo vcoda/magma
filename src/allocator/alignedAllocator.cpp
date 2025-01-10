@@ -33,11 +33,11 @@ void *AlignedAllocator::alloc(std::size_t size, std::size_t alignment,
     if (result != 0)
 #endif // _MSC_VER
     {
-    #ifndef MAGMA_NO_EXCEPTIONS
-        throw std::bad_alloc();
-    #else
+    #ifdef MAGMA_NO_EXCEPTIONS
         return nullptr;
-    #endif // MAGMA_NO_EXCEPTIONS
+    #else
+        throw std::bad_alloc();
+    #endif
     }
     return ptr;
 }
@@ -52,10 +52,14 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
     void *ptr = ::realloc(original, size);
     // TODO: check alignment, use posix_memalign/memcpy if not aligned!
 #endif // _MSC_VER
-#ifndef MAGMA_NO_EXCEPTIONS
     if (!ptr)
+    {
+    #ifdef MAGMA_NO_EXCEPTIONS
+        return nullptr;
+    #else
         throw std::bad_alloc();
-#endif // MAGMA_NO_EXCEPTIONS
+    #endif
+    }
     return ptr;
 }
 

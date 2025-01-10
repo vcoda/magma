@@ -61,7 +61,7 @@ void *DebugAlignedAllocator::alloc(std::size_t size,
         return nullptr;
     #else
         throw std::bad_alloc();
-    #endif // MAGMA_NO_EXCEPTIONS
+    #endif
     }
     std::lock_guard<std::mutex> lock(mtx);
     // Add allocation
@@ -87,7 +87,7 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
         return nullptr;
     #else
         throw std::bad_alloc();
-    #endif // MAGMA_NO_EXCEPTIONS
+    #endif
     }
     std::lock_guard<std::mutex> lock(mtx);
     // Replace old allocation with a new one
