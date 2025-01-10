@@ -97,7 +97,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     const char *entryPointName = fragmentShader->getReflection() ? fragmentShader->getReflection()->getEntryPointName(0) : "main";
     std::vector<PipelineShaderStage> shaderStages;
     shaderStages.emplace_back(std::move(vertexShaderStage));
-    shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName);
+    shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName, std::move(specialization));
     // Setup multisample state
     const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
     const MultisampleState multisampleState =
