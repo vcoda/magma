@@ -445,14 +445,10 @@ GLSLC=$(VULKAN_SDK)/bin/glslangValidator
 
 GLSL_DIR = $$PWD/../../src/auxiliary/spirv
 SPIRV_DIR = $$GLSL_DIR/output/
-win32 {
-    GLSLC = $$replace(GLSLC, '/', '\\')
-    GLSL_DIR = $$replace(GLSL_DIR, '/', '\\')
-    SPIRV_DIR = $$replace(SPIRV_DIR, '/', '\\')
-}
 
 make_spirv_dir.target = make_spirv_dir
 win32 {
+    SPIRV_DIR = $$replace(SPIRV_DIR, '/', '\\')
     make_spirv_dir.commands = if not exist $$SPIRV_DIR mkdir $$SPIRV_DIR
 } else {
     make_spirv_dir.commands = rm -rf $$SPIRV_DIR && mkdir $$SPIRV_DIR
