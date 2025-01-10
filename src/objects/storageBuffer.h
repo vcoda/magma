@@ -45,8 +45,7 @@ namespace magma
             VkDeviceSize size = 0,
             VkDeviceSize srcOffset = 0,
             const Initializer& optional = Initializer(),
-            const Sharing& sharing = Sharing(),
-            CopyMemoryFn copyMemFn = nullptr);
+            const Sharing& sharing = Sharing());
     };
 
     /* Major GPU vendors expose a 256MiB-ish staging buffer

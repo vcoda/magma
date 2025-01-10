@@ -49,8 +49,7 @@ StorageBuffer::StorageBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const S
     VkDeviceSize size /* 0 */,
     VkDeviceSize srcOffset /* 0 */,
     const Initializer& optional /* default */,
-    const Sharing& sharing /* default */,
-    CopyMemoryFn copyMemFn /* nullptr */):
+    const Sharing& sharing /* default */):
     StorageBuffer(cmdBuffer->getDevice(),
         size ? size : srcBuffer->getSize(),
         std::move(allocator), optional, sharing)
