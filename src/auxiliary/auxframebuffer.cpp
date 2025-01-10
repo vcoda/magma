@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "framebuffer.h"
+#include "../objects/device.h"
 #include "../objects/imageAttachment.h"
 #include "../objects/swapchainImage.h"
 #include "../objects/imageView.h"
