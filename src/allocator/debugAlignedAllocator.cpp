@@ -57,10 +57,10 @@ void *DebugAlignedAllocator::alloc(std::size_t size,
     if (result != 0)
 #endif // _MSC_VER || __MINGW32__
     {
-    #ifndef MAGMA_NO_EXCEPTIONS
-        throw std::bad_alloc();
-    #else
+    #ifdef MAGMA_NO_EXCEPTIONS
         return nullptr;
+    #else
+        throw std::bad_alloc();
     #endif // MAGMA_NO_EXCEPTIONS
     }
     std::lock_guard<std::mutex> lock(mtx);
@@ -83,10 +83,10 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
 #endif // _MSC_VER || __MINGW32__
     if (!ptr)
     {
-    #ifndef MAGMA_NO_EXCEPTIONS
-        throw std::bad_alloc();
-    #else
+    #ifdef MAGMA_NO_EXCEPTIONS
         return nullptr;
+    #else
+        throw std::bad_alloc();
     #endif // MAGMA_NO_EXCEPTIONS
     }
     std::lock_guard<std::mutex> lock(mtx);
