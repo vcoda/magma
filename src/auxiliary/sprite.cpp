@@ -80,8 +80,8 @@ Sprite::Sprite(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExten
     x(0), y(0),
     width(extent.width),
     height(extent.height),
-    topLeft{0, 0},
-    bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height)}
+    topLeft{0, 0, 0},
+    bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height), 1}
 {
     const std::unique_ptr<DeviceFeatures>& deviceFeatures = device->getFeatures();
     if (!deviceFeatures->supportsFormatFeatures(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
