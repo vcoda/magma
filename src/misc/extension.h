@@ -32,7 +32,7 @@ namespace magma
     public:
         operator Fn() const noexcept { return procAddr; }
         operator bool() const noexcept { return procAddr != nullptr; }
-        bool instanceExtension() const noexcept { return instance; }
+        bool instance() const noexcept { return Instance; }
 
     protected:
         Extension(PFN_vkVoidFunction procAddr) noexcept:
