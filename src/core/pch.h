@@ -68,6 +68,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #include <unistd.h>
 #endif // __unix__ || __unix || __APPLE__
 
+#ifdef QT_CORE_LIB
+    #include <QtGlobal>
+#endif
+
 /*
  * Vulkan SDK
  */
