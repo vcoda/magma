@@ -10,11 +10,11 @@ inline void Extension<Fn, instance>::checkProcAddress(const char *extensionName)
 {
     if (!procAddr)
     {
-    #ifndef MAGMA_NO_EXCEPTIONS
-        throw exception::UnsupportedExtension(extensionName, instance);
-    #else
+    #ifdef MAGMA_NO_EXCEPTIONS
         MAGMA_HANDLE_RESULT(VK_ERROR_EXTENSION_NOT_PRESENT, extensionName);
-    #endif // !MAGMA_NO_EXCEPTIONS
+    #else
+        throw exception::UnsupportedExtension(extensionName, Instance);
+    #endif
     }
 }
 

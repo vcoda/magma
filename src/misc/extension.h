@@ -16,10 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef MAGMA_NO_EXCEPTIONS
-#include "../exceptions/unsupportedExtension.h"
+#ifdef MAGMA_NO_EXCEPTIONS
+    #include "../exceptions/errorResult.h"
 #else
-#include "../exceptions/errorResult.h"
+    #include "../exceptions/unsupportedExtension.h"
 #endif
 
 namespace magma
