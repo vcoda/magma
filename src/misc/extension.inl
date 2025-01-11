@@ -1,12 +1,7 @@
 namespace magma
 {
-template<class Fn, bool instance>
-inline Extension<Fn, instance>::Extension(PFN_vkVoidFunction procAddr) noexcept:
-    procAddr(reinterpret_cast<Fn>(procAddr))
-{}
-
-template<class Fn, bool instance>
-inline void Extension<Fn, instance>::checkProcAddress(const char *extensionName) const
+template<class Fn, bool Instance>
+inline void Extension<Fn, Instance>::checkProcAddress(const char *extensionName) const
 {
     if (!procAddr)
     {

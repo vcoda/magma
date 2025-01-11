@@ -26,7 +26,7 @@ namespace magma
 {
     /* Holds a pointer to the Vulkan ICD proc address. */
 
-    template<class Fn, bool instance>
+    template<class Fn, bool Instance>
     class Extension
     {
     public:
@@ -35,7 +35,8 @@ namespace magma
         bool instanceExtension() const noexcept { return instance; }
 
     protected:
-        Extension(PFN_vkVoidFunction procAddr) noexcept;
+        Extension(PFN_vkVoidFunction procAddr) noexcept:
+            procAddr(reinterpret_cast<Fn>(procAddr)) {}
         void checkProcAddress(const char *extensionName) const;
 
     private:
