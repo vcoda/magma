@@ -94,10 +94,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include "core.h"
+#include "../allocator/allocator.h"
 #include "../objects/model/dispatchable.h"
 #include "../objects/model/nondispatchable.h"
 #include "../objects/device.h"
-#include "../allocator/allocator.h"
 #include "../misc/extension.h"
 #include "../misc/structureChain.h"
 #include "../exceptions/errorResult.h"
