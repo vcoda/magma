@@ -27,20 +27,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass, const VkExtent2D& extent,
-    uint32_t layerCount, std::shared_ptr<IAllocator> allocator):
-    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
-    renderPass(std::move(renderPass)),
+Framebuffer::Framebuffer(std::shared_ptr<Device> device, const VkExtent2D& extent, uint32_t layerCount,
+    std::shared_ptr<IAllocator> allocator):
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, std::move(device), std::move(allocator)),
     extent(extent),
     layerCount(layerCount)
 {}
 
-Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, std::shared_ptr<ImageView> attachment,
+Framebuffer::Framebuffer(lent_ptr<const RenderPass> renderPass, std::shared_ptr<ImageView> attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass_->getDevice(), std::move(allocator)),
-    renderPass(std::move(renderPass_)),
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     extent(attachment->getExtent2D()),
     layerCount(attachment->getArrayLayerCount())
 {
@@ -59,12 +57,11 @@ Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, std::sha
     attachments.emplace_back(std::move(attachment));
 }
 
-Framebuffer::Framebuffer(std::shared_ptr<const RenderPass> renderPass_, const std::vector<std::shared_ptr<ImageView>>& attachments_,
+Framebuffer::Framebuffer(lent_ptr<const RenderPass> renderPass, const std::vector<std::shared_ptr<ImageView>>& attachments_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkFramebufferCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass_->getDevice(), std::move(allocator)),
-    renderPass(std::move(renderPass_)),
+    NonDispatchable(VK_OBJECT_TYPE_FRAMEBUFFER, renderPass->getDevice(), std::move(allocator)),
     extent(attachments_.front()->getExtent2D()),
     layerCount(attachments_.front()->getArrayLayerCount())
 {

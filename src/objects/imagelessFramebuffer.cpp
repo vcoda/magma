@@ -27,13 +27,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_imageless_framebuffer
-ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass_,
+ImagelessFramebuffer::ImagelessFramebuffer(lent_ptr<const RenderPass> renderPass,
     uint32_t width, uint32_t height, uint32_t layerCount, VkImageUsageFlags usage,
     const std::vector<VkFormat>& viewFormats,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkImageCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass_), VkExtent2D{width, height}, layerCount, std::move(allocator))
+    Framebuffer(renderPass->getDevice(), VkExtent2D{width, height}, layerCount, std::move(allocator))
 {
     VkFramebufferCreateInfo framebufferInfo;
     VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
@@ -64,10 +64,10 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     MAGMA_HANDLE_RESULT(result, "failed to create imageless framebuffer");
 }
 
-ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass_, const FramebufferAttachmentImage& attachment,
+ImagelessFramebuffer::ImagelessFramebuffer(lent_ptr<const RenderPass> renderPass, const FramebufferAttachmentImage& attachment,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass_), attachment.getExtent(), attachment.layerCount, std::move(allocator))
+    Framebuffer(renderPass->getDevice(), attachment.getExtent(), attachment.layerCount, std::move(allocator))
 {
     VkFramebufferCreateInfo framebufferInfo;
     VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;
@@ -88,10 +88,10 @@ ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> ren
     MAGMA_HANDLE_RESULT(result, "failed to create imageless framebuffer");
 }
 
-ImagelessFramebuffer::ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass_, const std::vector<FramebufferAttachmentImage>& attachments,
+ImagelessFramebuffer::ImagelessFramebuffer(lent_ptr<const RenderPass> renderPass, const std::vector<FramebufferAttachmentImage>& attachments,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const StructureChain& extendedInfo /* default */):
-    Framebuffer(std::move(renderPass_), attachments.front().getExtent(), attachments.front().layerCount, std::move(allocator))
+    Framebuffer(renderPass->getDevice(), attachments.front().getExtent(), attachments.front().layerCount, std::move(allocator))
 {
     VkFramebufferCreateInfo framebufferInfo;
     VkFramebufferAttachmentsCreateInfoKHR framebufferAttachmentsInfo;

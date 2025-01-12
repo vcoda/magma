@@ -32,31 +32,29 @@ namespace magma
     class Framebuffer : public NonDispatchable<VkFramebuffer>
     {
     public:
-        explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+        explicit Framebuffer(lent_ptr<const RenderPass> renderPass,
             std::shared_ptr<ImageView> attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkFramebufferCreateFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        explicit Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+        explicit Framebuffer(lent_ptr<const RenderPass> renderPass,
             const std::vector<std::shared_ptr<ImageView>>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkFramebufferCreateFlags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~Framebuffer();
-        const std::shared_ptr<const RenderPass>& getRenderPass() const noexcept { return renderPass; }
-        const std::vector<std::shared_ptr<ImageView>>& getAttachments() const { return attachments; }
         const VkExtent2D& getExtent() const noexcept { return extent; }
         uint32_t getArrayLayerCount() const noexcept { return layerCount; }
+        const std::vector<std::shared_ptr<ImageView>>& getAttachments() const { return attachments; }
 
     protected:
-        Framebuffer(std::shared_ptr<const RenderPass> renderPass,
+        Framebuffer(std::shared_ptr<Device> device,
             const VkExtent2D& extent,
             uint32_t layerCount,
             std::shared_ptr<IAllocator> allocator);
 
-        std::shared_ptr<const RenderPass> renderPass;
-        std::vector<std::shared_ptr<ImageView>> attachments;
         const VkExtent2D extent;
         const uint32_t layerCount;
+        std::vector<std::shared_ptr<ImageView>> attachments;
     };
 } // namespace magma

@@ -31,7 +31,7 @@ namespace magma
     class ImagelessFramebuffer : public Framebuffer
     {
     public:
-        explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
+        explicit ImagelessFramebuffer(lent_ptr<const RenderPass> renderPass,
             uint32_t width,
             uint32_t height,
             uint32_t layerCount,
@@ -40,11 +40,11 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkImageCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
-        explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
+        explicit ImagelessFramebuffer(lent_ptr<const RenderPass> renderPass,
             const FramebufferAttachmentImage& attachment,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-        explicit ImagelessFramebuffer(std::shared_ptr<const RenderPass> renderPass,
+        explicit ImagelessFramebuffer(lent_ptr<const RenderPass> renderPass,
             const std::vector<FramebufferAttachmentImage>& attachments,
             std::shared_ptr<IAllocator> allocator = nullptr,
             const StructureChain& extendedInfo = StructureChain());

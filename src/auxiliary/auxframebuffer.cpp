@@ -112,9 +112,9 @@ Framebuffer::Framebuffer(std::shared_ptr<Device> device, VkFormat colorFormat, V
     }
     // Create render pass and framebuffer
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
-    std::shared_ptr<RenderPass> renderPass = std::make_shared<RenderPass>(device, attachments, hostAllocator, renderPassFlags);
+    renderPass = std::make_unique<RenderPass>(std::move(device), attachments, hostAllocator, renderPassFlags);
     if (!depthStencilView && !resolveView)
-        framebuffer = std::make_unique<magma::Framebuffer>(std::move(renderPass), colorViews, std::move(hostAllocator), framebufferFlags);
+        framebuffer = std::make_unique<magma::Framebuffer>(renderPass, colorViews, std::move(hostAllocator), framebufferFlags);
     else
     {
         std::vector<std::shared_ptr<ImageView>> imageViews;
@@ -123,7 +123,7 @@ Framebuffer::Framebuffer(std::shared_ptr<Device> device, VkFormat colorFormat, V
             imageViews.push_back(depthStencilView);
         if ((colorFormat != VK_FORMAT_UNDEFINED) && (sampleCount > 1) && !explicitResolve)
             imageViews.push_back(resolveView);
-        framebuffer = std::make_unique<magma::Framebuffer>(std::move(renderPass), imageViews, std::move(hostAllocator), framebufferFlags);
+        framebuffer = std::make_unique<magma::Framebuffer>(renderPass, imageViews, std::move(hostAllocator), framebufferFlags);
     }
 }
 
@@ -186,14 +186,14 @@ Framebuffer::Framebuffer(std::shared_ptr<Device> device, const std::initializer_
     }
     // Create render pass and framebuffer
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
-    std::shared_ptr<RenderPass> renderPass = std::make_shared<RenderPass>(device, attachments, hostAllocator, renderPassFlags);
+    renderPass = std::make_unique<RenderPass>(std::move(device), attachments, hostAllocator, renderPassFlags);
     if (!depthStencilView)
-        framebuffer = std::make_unique<magma::Framebuffer>(std::move(renderPass), colorViews, std::move(hostAllocator), framebufferFlags);
+        framebuffer = std::make_unique<magma::Framebuffer>(renderPass, colorViews, std::move(hostAllocator), framebufferFlags);
     else
     {
         std::vector<std::shared_ptr<ImageView>> imageViews = colorViews;
         imageViews.push_back(depthStencilView);
-        framebuffer = std::make_unique<magma::Framebuffer>(std::move(renderPass), imageViews, std::move(hostAllocator), framebufferFlags);
+        framebuffer = std::make_unique<magma::Framebuffer>(renderPass, imageViews, std::move(hostAllocator), framebufferFlags);
     }
 }
 
@@ -237,12 +237,12 @@ Framebuffer::Framebuffer(std::shared_ptr<SwapchainImage> colorAttachment,
     }
     // Create render pass and framebuffer
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
-    std::shared_ptr<RenderPass> renderPass = std::make_shared<RenderPass>(std::move(device), attachments, hostAllocator, renderPassFlags);
+    renderPass = std::make_unique<RenderPass>(std::move(device), attachments, hostAllocator, renderPassFlags);
     if (!depthStencilView)
-        framebuffer = std::make_unique<magma::Framebuffer>(std::move(renderPass), colorViews.front(), std::move(hostAllocator), framebufferFlags);
+        framebuffer = std::make_unique<magma::Framebuffer>(renderPass, colorViews.front(), std::move(hostAllocator), framebufferFlags);
     else
     {
-        framebuffer = std::make_unique<magma::Framebuffer>(std::move(renderPass),
+        framebuffer = std::make_unique<magma::Framebuffer>(renderPass,
             std::vector<std::shared_ptr<ImageView>>{colorViews.front(), depthStencilView},
             std::move(hostAllocator), framebufferFlags);
     }
@@ -268,11 +268,6 @@ const MultisampleState& Framebuffer::getMultisampleState() const noexcept
     case 64: return renderstate::msaa64x;
     default: return renderstate::dontMultisample;
     }
-}
-
-const std::shared_ptr<const RenderPass>& Framebuffer::getRenderPass() const noexcept
-{
-    return framebuffer->getRenderPass();
 }
 
 VkImageLayout Framebuffer::optimalDepthStencilLayout(std::shared_ptr<Device> device,

@@ -63,6 +63,7 @@ namespace magma
 
         private:
             std::shared_ptr<ImageView> bufferView;
+            std::unique_ptr<RenderPass> renderPass;
             std::unique_ptr<Framebuffer> framebuffer;
             std::unique_ptr<ImageDescriptorSet> descriptorSet;
             std::unique_ptr<Sampler> nearestSampler;

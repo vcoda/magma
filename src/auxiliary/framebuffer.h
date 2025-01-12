@@ -86,7 +86,7 @@ namespace magma
             const std::shared_ptr<ImageView>& getResolveView() const noexcept { return resolveView; }
             const std::shared_ptr<ImageView>& getDepthStencilView() const noexcept { return depthStencilView; }
             const std::vector<std::shared_ptr<ImageView>>& getColorViews() const noexcept { return colorViews; }
-            const std::shared_ptr<const RenderPass>& getRenderPass() const noexcept;
+            const std::unique_ptr<RenderPass>& getRenderPass() const noexcept { return renderPass; }
             const std::unique_ptr<magma::Framebuffer>& getFramebuffer() const noexcept { return framebuffer; }
 
         private:
@@ -102,6 +102,7 @@ namespace magma
             std::vector<std::shared_ptr<ImageView>> colorViews;
             std::shared_ptr<ImageView> resolveView;
             std::shared_ptr<ImageView> depthStencilView;
+            std::unique_ptr<RenderPass> renderPass;
             std::unique_ptr<magma::Framebuffer> framebuffer;
         };
     } // namespace aux
