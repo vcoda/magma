@@ -70,8 +70,8 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     dynamicStates.push_front(dynamicStates_);
     if (!layout)
         layout = std::make_unique<PipelineLayout>(device);
-    renderPasses.push_front(renderPass);
-    basePipelines.push_front(basePipeline);
+    renderPasses.emplace_front(std::move(renderPass));
+    basePipelines.emplace_front(std::move(basePipeline));
     VkPipelineDynamicStateCreateInfo dynamicStateInfo;
     dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
     dynamicStateInfo.pNext = nullptr;
@@ -83,7 +83,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipelineInfo.pNext = extendedInfo.headNode();
     pipelineInfo.flags = flags;
-    if (basePipeline)
+    if (basePipelines.front())
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     pipelineInfo.stageCount = core::countof(shaderStages);
     pipelineInfo.pStages = nullptr; // Fixup later
@@ -97,7 +97,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
     pipelineInfo.pColorBlendState = &colorBlendStates.front();
     pipelineInfo.pDynamicState = &dynamicStateInfos.front();
     pipelineInfo.layout = *layout;
-    pipelineInfo.renderPass = *renderPass;
+    pipelineInfo.renderPass = *renderPasses.front();
     pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = MAGMA_OPTIONAL_HANDLE(basePipelines.front());
     pipelineInfo.basePipelineIndex = -1;
@@ -141,7 +141,7 @@ uint32_t GraphicsPipelineBatch::batchPipeline(const std::vector<PipelineShaderSt
         colorBlendState,
         dynamicStates_,
         layout.get(),
-        renderPass.get(),
+        renderPasses.front().get(),
         subpass,
         extendedInfo);
     hashes.push_front(hash.first);
