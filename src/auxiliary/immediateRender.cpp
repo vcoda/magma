@@ -38,19 +38,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::aux
 {
-ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<RenderPass> renderPass,
+ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::unique_ptr<RenderPass> renderPass,
     std::shared_ptr<PipelineLayout> layout, std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     wideLinesEnabled(renderPass->getDevice()->getEnabledFeatures().wideLines),
     stippledLinesEnabled(renderPass->getDevice()->checkFeatures()->stippledLinesEnabled()),
-    device(renderPass->getDevice()),
-    renderPass(std::move(renderPass)),
     sharedLayout(std::move(layout)),
-    pipelineCache(std::make_unique<GraphicsPipelineCache>(device, true, false,
+    pipelineCache(std::make_unique<GraphicsPipelineCache>(renderPass->getDevice(), true, false,
     #ifdef VK_KHR_pipeline_library
         nullptr,
     #endif
         MAGMA_HOST_ALLOCATOR(allocator))),
+    renderPass(std::move(renderPass)),
     rasterizationState(renderstate::fillCullBackCcw),
     multisampleState(renderstate::dontMultisample),
     depthStencilState(renderstate::depthAlwaysDontWrite),
@@ -58,6 +57,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::shared_ptr<
 {
     setIdentity();
     memcpy(viewProj, world, sizeof(world));
+    const std::shared_ptr<Device>& device = pipelineCache->getDevice();
     const VkDeviceSize vertexBufferSize = sizeof(Vertex) * maxVertexCount;
     const bool stagedPool = device->getFeatures()->supportsDeviceLocalHostVisibleMemory();
     vertexBuffer = std::make_unique<DynamicVertexBuffer>(device, vertexBufferSize, stagedPool, allocator);
