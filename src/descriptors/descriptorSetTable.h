@@ -46,8 +46,8 @@ namespace magma
         bool dirty();
 
     protected:
-        template<class... Descriptor>
-        inline void setReflection(Descriptor&&... args);
+        template<class... Args>
+        inline void setReflection(Args&&... args);
 
         DescriptorSetTableBindings reflection;
     };

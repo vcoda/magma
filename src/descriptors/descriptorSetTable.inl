@@ -20,12 +20,15 @@ inline bool DescriptorSetTable::dirty()
         });
 }
 
-template<class... Descriptor>
-inline void DescriptorSetTable::setReflection(Descriptor&&... args)
-{   // Use "temporary array" idiom
+template<class... Args>
+inline void DescriptorSetTable::setReflection(Args&&... args)
+{
+    static_assert(sizeof...(Args) > 0,
+        "invalid count of reflected descriptor table members");
+    // Use "temporary array" idiom
     // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
     auto list = std::initializer_list<int>{
-        (reflection.push_back(std::forward<Descriptor&>(args)), void(), 0)...
+        (reflection.push_back(std::forward<Args&>(args)), void(), 0)...
     };
     MAGMA_UNUSED(list);
 }
