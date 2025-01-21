@@ -40,14 +40,14 @@ namespace magma
     class DescriptorSetTable : NonCopyable
     {
     public:
-        virtual const DescriptorSetTableBindings& getReflection() = 0;
-        std::size_t getSize() { return getReflection().size(); }
-        bool valid();
-        bool dirty();
+        virtual const DescriptorSetTableBindings& getReflection() noexcept = 0;
+        std::size_t getSize() noexcept { return getReflection().size(); }
+        bool valid() noexcept;
+        bool dirty() noexcept;
 
     protected:
         template<class... Args>
-        inline void setReflection(Args&&... args);
+        inline void setReflection(Args&&... args) noexcept;
 
         DescriptorSetTableBindings reflection;
     };

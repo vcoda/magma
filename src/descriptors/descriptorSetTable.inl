@@ -1,6 +1,6 @@
 namespace magma
 {
-inline bool DescriptorSetTable::valid()
+inline bool DescriptorSetTable::valid() noexcept
 {
     auto const& list = getReflection();
     return std::all_of(list.begin(), list.end(),
@@ -10,7 +10,7 @@ inline bool DescriptorSetTable::valid()
         });
 }
 
-inline bool DescriptorSetTable::dirty()
+inline bool DescriptorSetTable::dirty() noexcept
 {
     auto const& list = getReflection();
     return std::any_of(list.begin(), list.end(),
@@ -21,16 +21,19 @@ inline bool DescriptorSetTable::dirty()
 }
 
 template<class... Args>
-inline void DescriptorSetTable::setReflection(Args&&... args)
+inline void DescriptorSetTable::setReflection(Args&&... args) noexcept
 {
     static_assert(sizeof...(Args) > 0,
         "invalid count of reflected descriptor table members");
-    // Use "temporary array" idiom
-    // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
-    auto list = std::initializer_list<int>{
-        (reflection.push_back(std::forward<Args&>(args)), void(), 0)...
-    };
-    MAGMA_UNUSED(list);
+    try
+    {   // Use "temporary array" idiom
+        // https://stackoverflow.com/questions/28866559/writing-variadic-template-constructor
+        auto list = std::initializer_list<int>{
+            (reflection.push_back(std::forward<Args&>(args)), void(), 0)...
+        };
+        MAGMA_UNUSED(list);
+    }
+    catch (...) {}
 }
 } // namespace magma
 
@@ -39,7 +42,7 @@ inline void DescriptorSetTable::setReflection(Args&&... args)
    variadic template method to populate the list of descriptor set bindings. */
 
 #define MAGMA_REFLECT(...)\
-const magma::DescriptorSetTableBindings& getReflection() override\
+const magma::DescriptorSetTableBindings& getReflection() noexcept override\
 {\
     if (reflection.empty())\
         setReflection(__VA_ARGS__);\
