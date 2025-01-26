@@ -149,11 +149,11 @@ namespace magma
     /* Helper type that wraps VkBool32 and
        outputs VK_TRUE/VK_FALSE instead of 0/1. */
 
-    struct Bool
+    struct Boolean
     {
         VkBool32 value;
-        Bool(VkBool32 value): value(value) {}
-        friend std::ostream& operator<<(std::ostream& out, Bool boolean)
+        Boolean(VkBool32 value): value(value) {}
+        friend std::ostream& operator<<(std::ostream& out, Boolean boolean)
         {
             return boolean.value ?
                 (out << MAGMA_STRINGIZE(VK_TRUE)) :

@@ -397,7 +397,7 @@ std::ostream& operator<<(std::ostream& out, const VkSwapchainCreateInfoKHR& info
         << "\tpreTransform: " << info.preTransform << std::endl
         << "\tcompositeAlpha: " << info.compositeAlpha << std::endl
         << "\tpresentMode: " << info.presentMode << std::endl
-        << "\tclipped: " << magma::Bool(info.clipped) << std::endl
+        << "\tclipped: " << magma::Boolean(info.clipped) << std::endl
         << "\toldSwapchain: 0x" << std::hex << info.oldSwapchain << std::dec << std::endl
         << "]";
     return out;
