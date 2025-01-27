@@ -68,7 +68,7 @@ std::ostream& operator<<(std::ostream& out, const InputAssemblyState& state)
     out << "VkPipelineInputAssemblyStateCreateInfo [" << std::endl
         << "\tflags: " << state.flags << std::endl
         << "\ttopology: " << state.topology << std::endl
-        << "\tprimitiveRestartEnable: " << Bool(state.primitiveRestartEnable) << std::endl
+        << "\tprimitiveRestartEnable: " << Boolean(state.primitiveRestartEnable) << std::endl
         << "]";
     return out;
 }
@@ -129,8 +129,8 @@ std::ostream& operator<<(std::ostream& out, const RasterizationState& state)
 {
     out << "VkPipelineRasterizationStateCreateInfo [" << std::endl
         << "\tflags: " << state.flags << std::endl
-        << "\tdepthClampEnable: " << Bool(state.depthClampEnable) << std::endl
-        << "\trasterizerDiscardEnable: " << Bool(state.rasterizerDiscardEnable) << std::endl
+        << "\tdepthClampEnable: " << Boolean(state.depthClampEnable) << std::endl
+        << "\trasterizerDiscardEnable: " << Boolean(state.rasterizerDiscardEnable) << std::endl
         << "\tpolygonMode: " << state.polygonMode << std::endl
         << "\tcullMode: " << VkCullModeFlagBits(state.cullMode) << std::endl
         << "\tfrontFace: " << state.frontFace << std::endl
@@ -148,15 +148,15 @@ std::ostream& operator<<(std::ostream& out, const MultisampleState& state)
     out << "VkPipelineMultisampleStateCreateInfo [" << std::endl
         << "\tflags: " << state.flags << std::endl
         << "\trasterizationSamples: " << state.rasterizationSamples << std::endl
-        << "\tsampleShadingEnable: " << Bool(state.sampleShadingEnable) << std::endl
+        << "\tsampleShadingEnable: " << Boolean(state.sampleShadingEnable) << std::endl
         << "\tminSampleShading: " << state.minSampleShading << std::endl
         << "\tsampleMask: ";
         if (!state.pSampleMask)
             out << "NULL";
         else for (int i = state.rasterizationSamples - 1; i >= 0; --i)
             out << (*state.pSampleMask & (1 << i) ? 1 : 0);
-        out << std::endl << "\talphaToCoverageEnable: " << Bool(state.alphaToCoverageEnable) << std::endl
-        << "\talphaToOneEnable: " << Bool(state.alphaToOneEnable) << std::endl
+        out << std::endl << "\talphaToCoverageEnable: " << Boolean(state.alphaToCoverageEnable) << std::endl
+        << "\talphaToOneEnable: " << Boolean(state.alphaToOneEnable) << std::endl
         << "]";
     return out;
 }
@@ -165,11 +165,11 @@ std::ostream& operator<<(std::ostream& out, const DepthStencilState& state)
 {
     out << "VkPipelineDepthStencilStateCreateInfo [" << std::endl
         << "\tflags: " << state.flags << std::endl
-        << "\tdepthTestEnable: " << Bool(state.depthTestEnable) << std::endl
-        << "\tdepthWriteEnable: " << Bool(state.depthWriteEnable) << std::endl
+        << "\tdepthTestEnable: " << Boolean(state.depthTestEnable) << std::endl
+        << "\tdepthWriteEnable: " << Boolean(state.depthWriteEnable) << std::endl
         << "\tdepthCompareOp: " << state.depthCompareOp << std::endl
-        << "\tdepthBoundsTestEnable " << Bool(state.depthBoundsTestEnable)  << std::endl
-        << "\tstencilTestEnable: " << Bool(state.stencilTestEnable) << std::endl
+        << "\tdepthBoundsTestEnable " << Boolean(state.depthBoundsTestEnable)  << std::endl
+        << "\tstencilTestEnable: " << Boolean(state.stencilTestEnable) << std::endl
         << "\tfront: [" << std::endl
         << "\t\tfailOp: " << state.front.failOp << std::endl
         << "\t\tpassOp: " << state.front.passOp << std::endl
@@ -198,7 +198,7 @@ std::ostream& operator<<(std::ostream& out, const ColorBlendState& state)
 {
     out << "VkPipelineColorBlendStateCreateInfo [" << std::endl
         << "\tflags: " << state.flags << std::endl
-        << "\tlogicOpEnable: " << Bool(state.logicOpEnable) << std::endl
+        << "\tlogicOpEnable: " << Boolean(state.logicOpEnable) << std::endl
         << "\tlogicOp: " << state.logicOp << std::endl
         << "\tattachmentCount: " << state.attachmentCount << std::endl
         << "\tpAttachments:" << std::endl;
@@ -206,7 +206,7 @@ std::ostream& operator<<(std::ostream& out, const ColorBlendState& state)
     {
         auto const& attachment = state.pAttachments[i];
         out << "\t[" << std::endl
-            << "\t\tblendEnable: " << Bool(attachment.blendEnable) << std::endl
+            << "\t\tblendEnable: " << Boolean(attachment.blendEnable) << std::endl
             << "\t\tsrcColorBlendFactor: " << attachment.srcColorBlendFactor << std::endl
             << "\t\tdstColorBlendFactor: " << attachment.dstColorBlendFactor << std::endl
             << "\t\tcolorBlendOp: " << attachment.colorBlendOp << std::endl
