@@ -103,6 +103,7 @@ Supported compilers:
 
 * MSVC
 * GCC
+* Clang
 * MinGW
 
 ## Build tools and SDK
