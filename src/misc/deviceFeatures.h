@@ -33,6 +33,8 @@ namespace magma
         struct ExternalFeatures;
         struct ExternalMemoryFeatures;
         enum class Vendor : uint32_t;
+
+        bool isUmaArchitecture() const noexcept;
         FormatFeatures supportsFormatFeatures(VkFormat format,
             VkFormatFeatureFlags flags) const noexcept;
     #ifdef VK_KHR_external_memory_capabilities

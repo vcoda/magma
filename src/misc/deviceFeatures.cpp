@@ -28,6 +28,29 @@ DeviceFeatures::DeviceFeatures(const PhysicalDevice *physicalDevice) noexcept:
     physicalDevice(physicalDevice)
 {}
 
+bool DeviceFeatures::isUmaArchitecture() const noexcept
+{
+    const VkPhysicalDeviceProperties deviceProperties = physicalDevice->getProperties();
+    if (VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU == deviceProperties.deviceType)
+    {
+        const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
+        if (1 == memoryProperties.memoryHeapCount)
+        {   // Usually integrated GPU with a single memory heap means that it has UMA architecture.
+            return true;
+        }
+        uint32_t deviceLocalHeapCount = 0;
+        for (uint32_t i = 0; i < memoryProperties.memoryHeapCount; ++i)
+        {
+            const VkMemoryHeap& memoryHeap = memoryProperties.memoryHeaps[i];
+            if (memoryHeap.flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+                ++deviceLocalHeapCount;
+        }
+        // Report device as UMA if all of its heaps share DEVICE_LOCAL flag.
+        return (deviceLocalHeapCount == memoryProperties.memoryHeapCount);
+    }
+    return false;
+}
+
 DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat format, VkFormatFeatureFlags flags) const noexcept
 {
     FormatFeatures features = {};
