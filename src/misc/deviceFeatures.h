@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Device;
     class PhysicalDevice;
     class Surface;
 
@@ -60,10 +59,10 @@ namespace magma
 
     private:
         MAGMA_MAKE_UNIQUE(DeviceFeatures)
-        DeviceFeatures(std::shared_ptr<const PhysicalDevice>) noexcept;
-        friend Device;
+        DeviceFeatures(const PhysicalDevice *physicalDevice) noexcept;
+        friend PhysicalDevice;
 
-        std::weak_ptr<const PhysicalDevice> parent;
+        const PhysicalDevice *physicalDevice;
     };
 
     struct DeviceFeatures::FormatFeatures

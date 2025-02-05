@@ -40,8 +40,8 @@ bool generateMipmap(lent_ptr<Image> image, uint32_t baseMipLevel, VkFilter filte
         return false;
     if (!cmdBuffer || cmdBuffer->getState() != CommandBuffer::State::Recording)
         return false;
-    const std::unique_ptr<DeviceFeatures>& deviceFeatures = image->getDevice()->getFeatures();
-    if (!deviceFeatures->supportsFormatFeatures(image->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT).optimal)
+    const std::unique_ptr<DeviceFeatures>& features = image->getDevice()->getPhysicalDevice()->features();
+    if (!features->supportsFormatFeatures(image->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT).optimal)
         return false;
     // Store image layouts of mip chain
     const bool hadUniformLayout = image->hasUniformLayout();

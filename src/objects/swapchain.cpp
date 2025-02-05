@@ -111,7 +111,8 @@ Swapchain::Swapchain(std::shared_ptr<Device> device_, lent_ptr<const Surface> su
     if (oldSwapchain && oldSwapchain->hadRetired())
         MAGMA_ERROR("old swapchain must be non-retired");
     const bool displaySurface = dynamic_cast<const DisplaySurface *>(surface.get()) != nullptr;
-    if (!device->getFeatures()->supportsImageUsage(std::move(surface), swapchainInfo.imageUsage))
+    const std::unique_ptr<DeviceFeatures>& features = device->getPhysicalDevice()->features();
+    if (!features->supportsImageUsage(std::move(surface), swapchainInfo.imageUsage))
         MAGMA_ERROR("swapchain usage not supported by surface");
     VkResult result;
 #if defined(VK_KHR_display_swapchain) && defined(VK_KHR_display_surface)

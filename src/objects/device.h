@@ -34,7 +34,6 @@ namespace magma
 #ifdef VK_KHR_timeline_semaphore
     class TimelineSemaphore;
 #endif
-    class DeviceFeatures;
     class FeatureQuery;
     class DeviceResourcePool;
 #ifdef VK_KHR_acceleration_structure
@@ -57,7 +56,6 @@ namespace magma
         const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
         const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
-        const std::unique_ptr<DeviceFeatures>& getFeatures() const;
         const std::unique_ptr<FeatureQuery>& checkFeatures() const;
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits flags,
             uint32_t queueIndex = 0) const;
@@ -159,7 +157,6 @@ namespace magma
     #ifdef VK_EXT_private_data
         std::unique_ptr<PrivateDataSlot> privateDataSlot;
     #endif
-        mutable std::unique_ptr<DeviceFeatures> features;
         mutable std::unique_ptr<FeatureQuery> featureQuery;
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         std::unique_ptr<DeviceResourcePool> resourcePool;

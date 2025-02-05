@@ -24,20 +24,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DeviceFeatures::DeviceFeatures(std::shared_ptr<const PhysicalDevice> parent) noexcept:
-    parent(std::move(parent))
+DeviceFeatures::DeviceFeatures(const PhysicalDevice *physicalDevice) noexcept:
+    physicalDevice(physicalDevice)
 {}
 
 DeviceFeatures::FormatFeatures DeviceFeatures::supportsFormatFeatures(VkFormat format, VkFormatFeatureFlags flags) const noexcept
 {
     FormatFeatures features = {};
-    if (auto physicalDevice = parent.lock())
-    {
-        const VkFormatProperties formatProperties = physicalDevice->getFormatProperties(format);
-        features.linear = MAGMA_BITWISE_AND(formatProperties.linearTilingFeatures, flags);
-        features.optimal= MAGMA_BITWISE_AND(formatProperties.optimalTilingFeatures, flags);
-        features.buffer = MAGMA_BITWISE_AND(formatProperties.bufferFeatures, flags);
-    }
+    const VkFormatProperties formatProperties = physicalDevice->getFormatProperties(format);
+    features.linear = MAGMA_BITWISE_AND(formatProperties.linearTilingFeatures, flags);
+    features.optimal= MAGMA_BITWISE_AND(formatProperties.optimalTilingFeatures, flags);
+    features.buffer = MAGMA_BITWISE_AND(formatProperties.bufferFeatures, flags);
     return features;
 }
 
@@ -46,19 +43,16 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(Vk
     VkBufferUsageFlags usage, VkBufferCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    if (auto physicalDevice = parent.lock())
+    const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
+    if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
+        instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
-        const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
-        if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
-            instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
-        {
-            const VkExternalMemoryPropertiesKHR externalMemoryProperties =
-                physicalDevice->getExternalBufferProperties(handleType, usage, flags);
-            const VkExternalMemoryFeatureFlagsKHR& externalMemoryFeatures = externalMemoryProperties.externalMemoryFeatures;
-            features.dedicatedOnly = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_KHR);
-            features.exportable = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT_KHR);
-            features.importable = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_IMPORTABLE_BIT_KHR);
-        }
+        const VkExternalMemoryPropertiesKHR externalMemoryProperties =
+            physicalDevice->getExternalBufferProperties(handleType, usage, flags);
+        const VkExternalMemoryFeatureFlagsKHR& externalMemoryFeatures = externalMemoryProperties.externalMemoryFeatures;
+        features.dedicatedOnly = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_KHR);
+        features.exportable = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT_KHR);
+        features.importable = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_IMPORTABLE_BIT_KHR);
     }
     return features;
 }
@@ -68,19 +62,16 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
     VkImageCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    if (auto physicalDevice = parent.lock())
+    const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
+    if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
+        instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
-        const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
-        if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
-            instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
-        {
-            const VkExternalMemoryPropertiesKHR externalMemoryProperties =
-                physicalDevice->getExternalImageFormatProperties(handleType, format, imageType, optimalTiling, usage, flags);
-            const VkExternalMemoryFeatureFlagsKHR& externalMemoryFeatures = externalMemoryProperties.externalMemoryFeatures;
-            features.dedicatedOnly = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_KHR);
-            features.exportable = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT_KHR);
-            features.importable = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_IMPORTABLE_BIT_KHR);
-        }
+        const VkExternalMemoryPropertiesKHR externalMemoryProperties =
+            physicalDevice->getExternalImageFormatProperties(handleType, format, imageType, optimalTiling, usage, flags);
+        const VkExternalMemoryFeatureFlagsKHR& externalMemoryFeatures = externalMemoryProperties.externalMemoryFeatures;
+        features.dedicatedOnly = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_KHR);
+        features.exportable = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT_KHR);
+        features.importable = MAGMA_BITWISE_AND(externalMemoryFeatures, VK_EXTERNAL_MEMORY_FEATURE_IMPORTABLE_BIT_KHR);
     }
     return features;
 }
@@ -90,17 +81,14 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    if (auto physicalDevice = parent.lock())
+    const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
+    if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME) &&
+        instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
-        const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
-        if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME) &&
-            instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
-        {
-            const VkExternalFencePropertiesKHR externalFenceProperties = physicalDevice->getExternalFenceProperties(handleType);
-            const VkExternalFenceFeatureFlagsKHR& externalFenceFeatures = externalFenceProperties.externalFenceFeatures;
-            features.exportable = MAGMA_BITWISE_AND(externalFenceFeatures, VK_EXTERNAL_FENCE_FEATURE_EXPORTABLE_BIT_KHR);
-            features.importable = MAGMA_BITWISE_AND(externalFenceFeatures, VK_EXTERNAL_FENCE_FEATURE_IMPORTABLE_BIT_KHR);
-        }
+        const VkExternalFencePropertiesKHR externalFenceProperties = physicalDevice->getExternalFenceProperties(handleType);
+        const VkExternalFenceFeatureFlagsKHR& externalFenceFeatures = externalFenceProperties.externalFenceFeatures;
+        features.exportable = MAGMA_BITWISE_AND(externalFenceFeatures, VK_EXTERNAL_FENCE_FEATURE_EXPORTABLE_BIT_KHR);
+        features.importable = MAGMA_BITWISE_AND(externalFenceFeatures, VK_EXTERNAL_FENCE_FEATURE_IMPORTABLE_BIT_KHR);
     }
     return features;
 }
@@ -110,17 +98,14 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExterna
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    if (auto physicalDevice = parent.lock())
+    const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
+    if (instance->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME) &&
+        instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
-        const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
-        if (instance->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME) &&
-            instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
-        {
-            const VkExternalSemaphorePropertiesKHR externalSemaphoreProperties = physicalDevice->getExternalSemaphoreProperties(handleType);
-            const VkExternalSemaphoreFeatureFlagsKHR& externalSemaphoreFeatures = externalSemaphoreProperties.externalSemaphoreFeatures;
-            features.exportable = MAGMA_BITWISE_AND(externalSemaphoreFeatures, VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT_KHR);
-            features.importable = MAGMA_BITWISE_AND(externalSemaphoreFeatures, VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT_KHR);
-        }
+        const VkExternalSemaphorePropertiesKHR externalSemaphoreProperties = physicalDevice->getExternalSemaphoreProperties(handleType);
+        const VkExternalSemaphoreFeatureFlagsKHR& externalSemaphoreFeatures = externalSemaphoreProperties.externalSemaphoreFeatures;
+        features.exportable = MAGMA_BITWISE_AND(externalSemaphoreFeatures, VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT_KHR);
+        features.importable = MAGMA_BITWISE_AND(externalSemaphoreFeatures, VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT_KHR);
     }
     return features;
 }
@@ -128,12 +113,8 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExt
 
 bool DeviceFeatures::supportsImageUsage(lent_ptr<const Surface> surface, VkImageUsageFlags flags) const
 {
-    if (auto physicalDevice = parent.lock())
-    {
-        const VkSurfaceCapabilitiesKHR surfaceCapabilities = physicalDevice->getSurfaceCapabilities(std::move(surface));
-        return MAGMA_BITWISE_AND(surfaceCapabilities.supportedUsageFlags, flags);
-    }
-    return false;
+    const VkSurfaceCapabilitiesKHR surfaceCapabilities = physicalDevice->getSurfaceCapabilities(std::move(surface));
+    return MAGMA_BITWISE_AND(surfaceCapabilities.supportedUsageFlags, flags);
 }
 
 /* Usually a CPU can only access 256MB of VRAM. If Resizable BAR
@@ -141,45 +122,37 @@ bool DeviceFeatures::supportsImageUsage(lent_ptr<const Surface> surface, VkImage
    access the GPU's entire framebuffer. */
 bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 {
-    if (auto physicalDevice = parent.lock())
+    const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
+    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
     {
-        const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
-        for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
-        {
-            const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
-            if (MAGMA_BITWISE_AND(memoryType.propertyFlags,
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT))
-                return true;
-        }
+        const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
+        if (MAGMA_BITWISE_AND(memoryType.propertyFlags,
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT))
+            return true;
     }
     return false;
 }
 
 DeviceFeatures::Vendor DeviceFeatures::getVendor() const noexcept
 {
-    if (auto physicalDevice = parent.lock())
-    {
-        const VkPhysicalDeviceProperties properties = physicalDevice->getProperties();
-        // https://pcisig.com/membership/member-companies
-        switch (properties.vendorID)
-        {
-        case 0x1002: return Vendor::AMD;
-        case 0x1010: return Vendor::ImaginationTechnologies;
-        case 0x102B: return Vendor::Matrox;
-        case 0x106B: return Vendor::Apple;
-        case 0x10DE: return Vendor::Nvidia;
-        case 0x1106: return Vendor::VIA;
-        case 0x13B5: return Vendor::ARM;
-        case 0x14E4: return Vendor::Broadcom;
-        case 0x1EB1: return Vendor::VeriSilicon;
-        case 0x5143: return Vendor::Qualcomm;
-        case 0x5333: return Vendor::S3Graphics;
-        case 0x8086: return Vendor::Intel;
-        default:     return Vendor::Unknown;
-        }
+    const VkPhysicalDeviceProperties properties = physicalDevice->getProperties();
+    switch (properties.vendorID)
+    { // https://pcisig.com/membership/member-companies
+    case 0x1002: return Vendor::AMD;
+    case 0x1010: return Vendor::ImaginationTechnologies;
+    case 0x102B: return Vendor::Matrox;
+    case 0x106B: return Vendor::Apple;
+    case 0x10DE: return Vendor::Nvidia;
+    case 0x1106: return Vendor::VIA;
+    case 0x13B5: return Vendor::ARM;
+    case 0x14E4: return Vendor::Broadcom;
+    case 0x1EB1: return Vendor::VeriSilicon;
+    case 0x5143: return Vendor::Qualcomm;
+    case 0x5333: return Vendor::S3Graphics;
+    case 0x8086: return Vendor::Intel;
+    default:     return Vendor::Unknown;
     }
-    return Vendor::Unknown;
 }
 } // namespace magma

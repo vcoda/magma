@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "sprite.h"
 #include "../objects/device.h"
+#include "../objects/physicalDevice.h"
 #include "../objects/srcTransferBuffer.h"
 #include "../objects/commandBuffer.h"
 #include "../misc/deviceFeatures.h"
@@ -46,8 +47,8 @@ Sprite::Sprite(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExten
     topLeft{0, 0, 0},
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height), 1}
 {
-    const std::unique_ptr<DeviceFeatures>& deviceFeatures = device->getFeatures();
-    if (!deviceFeatures->supportsFormatFeatures(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
+    const std::unique_ptr<DeviceFeatures>& features = device->getPhysicalDevice()->features();
+    if (!features->supportsFormatFeatures(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
         MAGMA_ERROR("image format doesn't support source blit operations");
     const Format imageFormat(format);
     if (imageFormat.blockCompressed())
@@ -83,8 +84,8 @@ Sprite::Sprite(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExten
     topLeft{0, 0, 0},
     bottomRight{static_cast<int32_t>(width), static_cast<int32_t>(height), 1}
 {
-    const std::unique_ptr<DeviceFeatures>& deviceFeatures = device->getFeatures();
-    if (!deviceFeatures->supportsFormatFeatures(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
+    const std::unique_ptr<DeviceFeatures>& features = device->getPhysicalDevice()->features();
+    if (!features->supportsFormatFeatures(format, VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal)
         MAGMA_ERROR("image format doesn't support source blit operations");
     const Format imageFormat(format);
     if (imageFormat.blockCompressed())

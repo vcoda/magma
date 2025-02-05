@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "surface.h"
 #include "display.h"
 #include "pipelineCache.h"
+#include "../misc/deviceFeatures.h"
 #include "../misc/compatibility.h"
 #include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
@@ -38,6 +39,8 @@ PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDev
     for (auto const& properties: enumerateExtensions())
         extensions.emplace(properties.extensionName);
 }
+
+PhysicalDevice::~PhysicalDevice() {}
 
 std::shared_ptr<Device> PhysicalDevice::createDevice(const std::set<DeviceQueueDescriptor>& queueDescriptors_,
     const NullTerminatedStringArray& enabledLayers, const NullTerminatedStringArray& enabledExtensions,
@@ -600,6 +603,13 @@ std::shared_ptr<Device> PhysicalDevice::createDefaultDevice() const
     const VkPhysicalDeviceFeatures noDeviceFeatures = {};
     StructureChain emptyStructureChain;
     return createDevice(queueDescriptors, noLayers, swapchainExtension, noDeviceFeatures, emptyStructureChain, emptyStructureChain);
+}
+
+const std::unique_ptr<DeviceFeatures>& PhysicalDevice::features() const
+{
+    if (!deviceFeatures)
+        deviceFeatures = DeviceFeatures::makeUnique(this);
+    return deviceFeatures;
 }
 
 bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcept

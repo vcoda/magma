@@ -25,7 +25,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "fence.h"
 #include "timelineSemaphore.h"
 #include "deviceResourcePool.h"
-#include "../misc/deviceFeatures.h"
 #include "../misc/featureQuery.h"
 #include "../raytracing/accelerationStructureHeader.h"
 #include "../allocator/allocator.h"
@@ -107,13 +106,6 @@ Device::~Device()
     MAGMA_ASSERT(!resourcePool->hasUnreleasedResources());
 #endif
     vkDestroyDevice(handle, MAGMA_OPTIONAL(hostAllocator));
-}
-
-const std::unique_ptr<DeviceFeatures>& Device::getFeatures() const
-{
-    if (!features)
-        features = DeviceFeatures::makeUnique(physicalDevice);
-    return features;
 }
 
 const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
