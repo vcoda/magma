@@ -52,11 +52,8 @@ hash_t StructureChain::hash() const noexcept
     hash_t hash = 0ull;
     for (auto node = head; node; node = node->pNext)
     {
-        VkBaseOutStructure *next = node->pNext;
-        node->pNext = nullptr; // Should not affect hash
-        hash = core::hashCombine(hash, core::hashArray(
-            (uint8_t *)node, getNodeSize(node->sType)));
-        node->pNext = next;
+        hash_t nodeHash = getNodeHash(node);
+        hash = core::hashCombine(hash, nodeHash);
     }
     return hash;
 }

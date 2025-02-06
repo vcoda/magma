@@ -60,6 +60,16 @@ inline size_t StructureChain::size() const noexcept
     return size;
 }
 
+inline hash_t StructureChain::getNodeHash(VkBaseOutStructure *node) const noexcept
+{
+    auto nextNode = node->pNext;
+    node->pNext = nullptr; // Should not affect hash
+    size_t size = getNodeSize(node->sType);
+    hash_t hash = core::hashArray(reinterpret_cast<const uint8_t *>(node), size);
+    node->pNext = nextNode;
+    return hash;
+}
+
 #define MAGMA_SPECIALIZE_STRUCTURE_CHAIN_NODE(StructureType, structureType)\
 template<>\
 inline StructureType *magma::StructureChain::findNode<StructureType>() noexcept\

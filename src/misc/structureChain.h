@@ -52,6 +52,7 @@ namespace magma
     private:
         VkBaseOutStructure *getNode(VkStructureType) noexcept;
         const VkBaseInStructure *getNode(VkStructureType) const noexcept;
+        hash_t getNodeHash(VkBaseOutStructure *node) const noexcept;
         static VkBaseOutStructure *copyNode(const VkBaseOutStructure *node) noexcept;
         static size_t getNodeSize(VkStructureType) noexcept;
 
