@@ -95,7 +95,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 template<typename ...Args>\
 static std::kind##_ptr<Type> method(Args&& ...args)\
 {\
-    struct Type##_ : Type\
+    struct Type##_ final : Type\
     {\
         Type##_(Args&& ...args):\
             Type(std::forward<Args>(args)...) {}\
