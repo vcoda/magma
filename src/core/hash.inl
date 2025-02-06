@@ -42,10 +42,10 @@ template<class T>
 inline hash_t hashArray(const T arr[], std::size_t count) noexcept
 {
     std::hash<T> hasher;
-    hash_t value = 0ull;
-    for (std::size_t i = 0; i < count; ++i)
-        value = hashCombine(value, hasher(arr[i]));
-    return value;
+    hash_t hash = hasher(arr[0]);
+    for (std::size_t i = 1; i < count; ++i)
+        hash = hashCombine(hash, hasher(arr[i]));
+    return hash;
 }
 
 template<class T>
