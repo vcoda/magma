@@ -49,8 +49,10 @@ void StructureChain::clear() noexcept
 
 hash_t StructureChain::hash() const noexcept
 {
-    hash_t hash = 0ull;
-    for (auto node = head; node; node = node->pNext)
+    if (!head)
+        return 0ull;
+    hash_t hash = getNodeHash(head);
+    for (auto node = head->pNext; node; node = node->pNext)
     {
         hash_t nodeHash = getNodeHash(node);
         hash = core::hashCombine(hash, nodeHash);
