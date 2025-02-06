@@ -1,5 +1,5 @@
 /*
-Magma - abstraction layer to facilitate usage of Khronos Vulkan API.
+Magma - Abstraction layer over Khronos Vulkan API.
 Copyright (C) 2018-2024 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
@@ -26,9 +26,9 @@ namespace magma
     {
         namespace hashing
         {
-            // Fowler-Noll-Vo hash function is a non-cryptographic hash function
-            // created by Glenn Fowler, Landon Curt Noll, and Kiem-Phong Vo.
-            // https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
+            /* Fowler-Noll-Vo hash function is a non-cryptographic hash
+               function created by Glenn Fowler, Landon Curt Noll, and Kiem-Phong Vo.
+               See: https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function */
 
             namespace fnv
             {
@@ -61,7 +61,8 @@ namespace magma
                 }
             };
 
-            /* The FNV-1a hash differs from the FNV-1 hash by only the order in which the multiply and xor is performed. */
+            /* The FNV-1a hash differs from the FNV-1 hash by only the order
+               in which the multiply and xor is performed. */
 
             template<class T, std::size_t N, std::size_t I>
             struct Fnv1a
