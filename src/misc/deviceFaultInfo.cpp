@@ -105,6 +105,27 @@ DeviceFaultInfo& DeviceFaultInfo::operator=(const DeviceFaultInfo& other) noexce
     return *this;
 }
 
+DeviceFaultInfo& DeviceFaultInfo::operator=(DeviceFaultInfo&& other) noexcept
+{
+    this->~DeviceFaultInfo();
+    pNext = other.pNext;
+    core::copyString(description, VK_MAX_DESCRIPTION_SIZE, other.description);
+    pAddressInfos = other.pAddressInfos;
+    pVendorInfos = other.pVendorInfos;
+    pVendorBinaryData = other.pVendorBinaryData;
+    addressInfoCount = other.addressInfoCount;
+    vendorInfoCount = other.vendorInfoCount;
+    vendorBinarySize = other.vendorBinarySize;
+    other.pNext = nullptr;
+    other.pAddressInfos = nullptr;
+    other.pVendorInfos = nullptr;
+    other.pVendorBinaryData = nullptr;
+    other.addressInfoCount = 0;
+    other.vendorInfoCount = 0;
+    other.vendorBinarySize = 0;
+    return *this;
+}
+
 DeviceFaultInfo::~DeviceFaultInfo()
 {
     delete[] pAddressInfos;

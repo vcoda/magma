@@ -40,6 +40,7 @@ namespace magma
         DeviceFaultInfo(const DeviceFaultInfo&) noexcept;
         DeviceFaultInfo(DeviceFaultInfo&&) noexcept;
         DeviceFaultInfo& operator=(const DeviceFaultInfo&) noexcept;
+        DeviceFaultInfo& operator=(DeviceFaultInfo&&) noexcept;
         ~DeviceFaultInfo();
 
     private:
