@@ -26,16 +26,13 @@ FeatureQuery::FeatureQuery(const Device *device) noexcept:
     device(device)
 {}
 
-bool FeatureQuery::maintenanceEnabled(uint8_t index) const noexcept
+bool FeatureQuery::maintenanceEnabled(uint8_t versionIndex) const noexcept
 {
-    MAGMA_ASSERT((index > 0) && (index < 10));
-    if ((index < 1) || (index > 9))
-        return false;
-    const char extensionName[] = {
-        'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
-        char('0' + index), '\0'
-    };
-    return device->extensionEnabled(extensionName);
+    static char VK_KHR_maintenance[] = "VK_KHR_maintenance0";
+    constexpr std::size_t Length = sizeof(VK_KHR_maintenance);
+    MAGMA_ASSERT((versionIndex > 0) && (versionIndex < 10));
+    VK_KHR_maintenance[Length - 2] = '0' + versionIndex;
+    return device->extensionEnabled(VK_KHR_maintenance);
 }
 
 bool FeatureQuery::negativeViewportHeightEnabled() const noexcept

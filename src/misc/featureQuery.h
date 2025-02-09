@@ -27,7 +27,7 @@ namespace magma
     class FeatureQuery : NonCopyable
     {
     public:
-        bool maintenanceEnabled(uint8_t index) const noexcept;
+        bool maintenanceEnabled(uint8_t versionIndex) const noexcept;
         bool negativeViewportHeightEnabled() const noexcept;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
         bool extendedLinesEnabled() const noexcept;
