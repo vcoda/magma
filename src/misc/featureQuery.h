@@ -35,9 +35,9 @@ namespace magma
 
     private:
         MAGMA_MAKE_UNIQUE(FeatureQuery)
-        FeatureQuery(std::shared_ptr<const Device>) noexcept;
+        FeatureQuery(const Device *device) noexcept;
         friend Device;
 
-        std::weak_ptr<const Device> parent;
+        const Device *device;
     };
 } // namespace magma

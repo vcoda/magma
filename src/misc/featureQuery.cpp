@@ -22,8 +22,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-FeatureQuery::FeatureQuery(std::shared_ptr<const Device> device) noexcept:
-    parent(std::move(device))
+FeatureQuery::FeatureQuery(const Device *device) noexcept:
+    device(device)
 {}
 
 bool FeatureQuery::maintenanceEnabled(uint8_t index) const noexcept
@@ -31,46 +31,36 @@ bool FeatureQuery::maintenanceEnabled(uint8_t index) const noexcept
     MAGMA_ASSERT((index > 0) && (index < 10));
     if ((index < 1) || (index > 9))
         return false;
-    if (auto device = parent.lock())
-    {
-        const char extensionName[] = {
-            'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
-            char('0' + index), '\0'
-        };
-        return device->extensionEnabled(extensionName);
-    }
-    return false;
+    const char extensionName[] = {
+        'V','K','_','K','H','R','_','m','a','i','n','t','e','n','a','n','c','e',
+        char('0' + index), '\0'
+    };
+    return device->extensionEnabled(extensionName);
 }
 
 bool FeatureQuery::negativeViewportHeightEnabled() const noexcept
 {
-    if (auto device = parent.lock())
-    {
-    #ifdef VK_KHR_maintenance1
-        if (device->extensionEnabled(VK_KHR_MAINTENANCE1_EXTENSION_NAME))
-            return true;
-    #endif // VK_KHR_maintenance1
-    #ifdef VK_AMD_negative_viewport_height
-        if (device->extensionEnabled(VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME))
-            return true;
-    #endif // VK_AMD_negative_viewport_height
-        MAGMA_UNUSED(device);
-    }
+#ifdef VK_KHR_maintenance1
+    if (device->extensionEnabled(VK_KHR_MAINTENANCE1_EXTENSION_NAME))
+        return true;
+#endif // VK_KHR_maintenance1
+#ifdef VK_AMD_negative_viewport_height
+    if (device->extensionEnabled(VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME))
+        return true;
+#endif // VK_AMD_negative_viewport_height
+    MAGMA_UNUSED(device);
     return false;
 }
 
 bool FeatureQuery::separateDepthStencilLayoutsEnabled() const noexcept
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (auto device = parent.lock())
+    if (device->extensionEnabled(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME))
     {
-        if (device->extensionEnabled(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME))
-        {
-            const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *separateDepthStencilFeatures =
-                device->getEnabledExtendedFeatures<VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR>();
-            if (separateDepthStencilFeatures)
-                return separateDepthStencilFeatures->separateDepthStencilLayouts;
-        }
+        const VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR *separateDepthStencilFeatures =
+            device->getEnabledExtendedFeatures<VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR>();
+        if (separateDepthStencilFeatures)
+            return separateDepthStencilFeatures->separateDepthStencilLayouts;
     }
 #endif // VK_KHR_separate_depth_stencil_layouts
     return false;
@@ -79,18 +69,15 @@ bool FeatureQuery::separateDepthStencilLayoutsEnabled() const noexcept
 bool FeatureQuery::extendedLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization
-    if (auto device = parent.lock())
+    if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
     {
-        if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
+        const VkPhysicalDeviceLineRasterizationFeaturesEXT *lineRasterizationFeatures =
+            device->getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
+        if (lineRasterizationFeatures)
         {
-            const VkPhysicalDeviceLineRasterizationFeaturesEXT *lineRasterizationFeatures =
-                device->getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
-            if (lineRasterizationFeatures)
-            {
-                return lineRasterizationFeatures->rectangularLines ||
-                    lineRasterizationFeatures->bresenhamLines ||
-                    lineRasterizationFeatures->smoothLines;
-            }
+            return lineRasterizationFeatures->rectangularLines ||
+                lineRasterizationFeatures->bresenhamLines ||
+                lineRasterizationFeatures->smoothLines;
         }
     }
 #endif // VK_EXT_line_rasterization
@@ -100,18 +87,15 @@ bool FeatureQuery::extendedLinesEnabled() const noexcept
 bool FeatureQuery::stippledLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization
-    if (auto device = parent.lock())
+    if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
     {
-        if (device->extensionEnabled(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME))
+        const VkPhysicalDeviceLineRasterizationFeaturesEXT *lineRasterizationFeatures =
+            device->getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
+        if (lineRasterizationFeatures)
         {
-            const VkPhysicalDeviceLineRasterizationFeaturesEXT *lineRasterizationFeatures =
-                device->getEnabledExtendedFeatures<VkPhysicalDeviceLineRasterizationFeaturesEXT>();
-            if (lineRasterizationFeatures)
-            {
-                return lineRasterizationFeatures->stippledRectangularLines ||
-                    lineRasterizationFeatures->stippledBresenhamLines ||
-                    lineRasterizationFeatures->stippledSmoothLines;
-            }
+            return lineRasterizationFeatures->stippledRectangularLines ||
+                lineRasterizationFeatures->stippledBresenhamLines ||
+                lineRasterizationFeatures->stippledSmoothLines;
         }
     }
 #endif // VK_EXT_line_rasterization

@@ -111,7 +111,7 @@ Device::~Device()
 const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
 {
     if (!featureQuery)
-        featureQuery = FeatureQuery::makeUnique(shared_from_this());
+        featureQuery = FeatureQuery::makeUnique(this);
     return featureQuery;
 }
 

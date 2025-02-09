@@ -47,8 +47,7 @@ namespace magma
        use. The created logical device is then the primary interface
        to the physical device. */
 
-    class Device : public Dispatchable<VkDevice>,
-        public std::enable_shared_from_this<Device>
+    class Device : public Dispatchable<VkDevice>
     {
     public:
         ~Device();
