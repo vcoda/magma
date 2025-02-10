@@ -36,7 +36,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     lent_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
-    const std::string& shaderFileName /* default */,
+    std::string_view shaderFileName /* empty */,
     uint32_t setIndex /* 0 */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DESCRIPTOR_SET, descriptorPool_->getDevice(), std::move(allocator)),
@@ -52,7 +52,7 @@ DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
         MAGMA_ERROR("elements of descriptor set layout should have unique binding locations");
     if (shaderReflectionFactory && !shaderFileName.empty())
     {   // Validate descriptors through shader reflection
-        auto& shaderReflection = shaderReflectionFactory->getReflection(shaderFileName);
+        auto& shaderReflection = shaderReflectionFactory->getReflection(std::move(shaderFileName));
         validateReflection(shaderReflection, setIndex);
     }
     // Prepare list of native bindings

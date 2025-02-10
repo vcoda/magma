@@ -53,11 +53,11 @@ namespace magma
             void setGenerateDebugInfo(bool generateDebugInfo) noexcept;
             void setSuppressWarnings(bool suppressWarnings) noexcept;
             void setWarningsAsErrors(bool warningsAsErrors) noexcept;
-            std::shared_ptr<ShaderModule> compileShader(const std::string& source,
-                const char *entrypoint,
+            std::shared_ptr<ShaderModule> compileShader(std::string_view source,
+                std::string_view entrypoint,
                 shaderc_shader_kind shaderKind = shaderc_glsl_infer_from_source,
-                const std::unordered_map<std::string, std::string>& macroDefinitions = {},
-                const std::string& srcFileName = "");
+                const std::unordered_map<std::string_view, std::string_view>& macroDefinitions = {},
+                std::string_view srcFileName = {});
 
         private:
             std::shared_ptr<Device> device;

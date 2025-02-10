@@ -34,6 +34,8 @@ namespace magma
                 error(error), location{} {}
             explicit Exception(const char *error, const source_location& location) noexcept:
                 error(error), location(location) {}
+            explicit Exception(std::string_view error, const source_location& location) noexcept:
+                error(error.data()), location(location) {}
             Exception(const Exception& other) noexcept:
                 error(other.error), location(other.location) {}
             const char* what() const noexcept override { return error; }
@@ -50,11 +52,11 @@ namespace magma
            called when library tries to throw an exception. */
 
     #ifdef MAGMA_NO_EXCEPTIONS
-        typedef std::function<void(const char *, const source_location&)> ExceptionHandler;
+        typedef std::function<void(std::string_view, const source_location&)> ExceptionHandler;
         void setExceptionHandler(ExceptionHandler exceptionHandler) noexcept;
     #endif // MAGMA_NO_EXCEPTIONS
 
-        void handleException(const char *message, const source_location& location);
+        void handleException(std::string_view message, const source_location& location);
     } // namespace exception
 } // namespace magma
 

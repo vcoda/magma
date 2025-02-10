@@ -39,19 +39,19 @@ ShaderCompiler::~ShaderCompiler()
     shaderc_compiler_release(compiler);
 }
 
-std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& source, const char *entrypoint,
+std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view source, std::string_view entrypoint,
     shaderc_shader_kind shaderKind /* shaderc_glsl_infer_from_source */,
-    const std::unordered_map<std::string, std::string>& macroDefinitions /* {} */,
-    const std::string& srcFileName  /* "" */)
+    const std::unordered_map<std::string_view, std::string_view>& macroDefinitions /* empty */,
+    std::string_view srcFileName  /* empty */)
 {
-    MAGMA_ASSERT(source.length());
-    MAGMA_ASSERT(strlen(entrypoint));
+    MAGMA_ASSERT(!source.empty());
+    MAGMA_ASSERT(!entrypoint.empty());
     shaderc_compile_options_t options = shaderc_compile_options_initialize();
     for (auto const& [name, value]: macroDefinitions)
     {   // Add preprocessor definitions
         shaderc_compile_options_add_macro_definition(options,
-            name.c_str(), name.length(),
-            value.c_str(), value.length());
+            name.data(), name.length(),
+            value.data(), value.length());
     }
     // Define compiler behavior
     shaderc_compile_options_set_optimization_level(options, optimizationLevel);
@@ -90,7 +90,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(const std::string& s
     }
     // Compile GLSL to SPIR-V
     const shaderc_compilation_result_t result = shaderc_compile_into_spv(compiler,
-        source.c_str(), source.size(), shaderKind, srcFileName.c_str(), entrypoint, options);
+        source.data(), source.length(), shaderKind, srcFileName.data(), entrypoint.data(), options);
     shaderc_compile_options_release(options);
     const shaderc_compilation_status status = shaderc_result_get_compilation_status(result);
     if (status != shaderc_compilation_status_success)

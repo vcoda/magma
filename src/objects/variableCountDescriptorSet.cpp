@@ -33,7 +33,7 @@ VariableCountDescriptorSet::VariableCountDescriptorSet(std::shared_ptr<Descripto
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDescriptorSetLayoutCreateFlags flags /* 0 */,
     lent_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
-    const std::string& shaderFileName /* default */,
+    std::string_view shaderFileName /* empty */,
     uint32_t setIndex /* 0 */,
     const StructureChain& extendedInfo /* default */):
     DescriptorSet(std::move(descriptorPool_), setTable, allocator)
@@ -47,7 +47,7 @@ VariableCountDescriptorSet::VariableCountDescriptorSet(std::shared_ptr<Descripto
         MAGMA_ERROR("elements of descriptor set layout should have unique binding locations");
     if (shaderReflectionFactory && !shaderFileName.empty())
     {   // Validate descriptors through shader reflection
-        auto& shaderReflection = shaderReflectionFactory->getReflection(shaderFileName);
+        auto& shaderReflection = shaderReflectionFactory->getReflection(std::move(shaderFileName));
         validateReflection(shaderReflection, setIndex);
     }
     // Sort bindings by order

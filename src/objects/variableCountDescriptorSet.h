@@ -47,7 +47,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDescriptorSetLayoutCreateFlags flags = 0,
             lent_ptr<IShaderReflectionFactory> shaderReflectionFactory = nullptr,
-            const std::string& shaderFileName = std::string(),
+            std::string_view shaderFileName = {},
             uint32_t setIndex = 0,
             const StructureChain& extendedInfo = StructureChain());
     };

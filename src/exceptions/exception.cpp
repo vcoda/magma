@@ -23,7 +23,7 @@ namespace magma::exception
 {
 #ifdef MAGMA_NO_EXCEPTIONS
 static ExceptionHandler exceptionHandler =
-    [](const char *message, const source_location&)
+    [](std::string_view message, const source_location&)
     {   // If no exception handler is provided, simply call abort()
         std::cerr << message << std::endl;
         abort();
@@ -35,12 +35,12 @@ void setExceptionHandler(ExceptionHandler exceptionHandler_) noexcept
 }
 #endif // MAGMA_NO_EXCEPTIONS
 
-void handleException(const char *message, const source_location& location)
+void handleException(std::string_view message, const source_location& location)
 {
-#ifndef MAGMA_NO_EXCEPTIONS
-    throw Exception(message, location);
+#ifdef MAGMA_NO_EXCEPTIONS
+    exceptionHandler(std::move(message), location);
 #else
-    exceptionHandler(message, location);
+    throw Exception(std::move(message), location);
 #endif
 }
 } // namespace magma::exception
