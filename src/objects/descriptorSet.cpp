@@ -192,9 +192,8 @@ void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflect
         default:
             break;
         }
-        const std::string error = out.str();
-        if (!error.empty())
-            MAGMA_ERROR(error.c_str());
+        if (out.tellp() > 0)
+            MAGMA_ERROR(out.str());
     }
 }
 } // namespace magma
