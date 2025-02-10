@@ -40,7 +40,7 @@ void layoutTransition(lent_ptr<Image> image, VkImageLayout newLayout,
     finish(std::move(cmdBuffer));
 }
 
-void batchLayoutTransition(const std::vector<ImageLayoutTransition>& imageLayouts,
+void batchLayoutTransition(const std::unordered_map<lent_ptr<Image>, LayoutTransition>& imageLayouts,
     lent_ptr<CommandBuffer> cmdBuffer,
     VkDependencyFlags dependencyFlags /* 0 */)
 {
@@ -51,10 +51,11 @@ void batchLayoutTransition(const std::vector<ImageLayoutTransition>& imageLayout
     {
         std::vector<ImageMemoryBarrier> imageMemoryBarriers;
         imageMemoryBarriers.reserve(imageLayouts.size());
-        for (const ImageLayoutTransition& it: imageLayouts)
+        for (auto const& [image, transition]: imageLayouts)
         {
-            VkImageSubresourceRange subresourceRange = it.image->getSubresourceRange(it.baseMipLevel, it.baseArrayLayer);
-            imageMemoryBarriers.emplace_back(it.image, it.newLayout, subresourceRange);
+            const VkImageSubresourceRange subresourceRange = image->getSubresourceRange(
+                transition.baseMipLevel, transition.baseArrayLayer);
+            imageMemoryBarriers.emplace_back(image.get(), transition.newLayout, subresourceRange);
         }
         // Use single barrier command for all images
         cmdBuffer->pipelineBarrier(

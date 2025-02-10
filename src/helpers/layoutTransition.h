@@ -33,15 +33,14 @@ namespace magma
             lent_ptr<CommandBuffer> cmdBuffer,
             VkDependencyFlags dependencyFlags = 0);
 
-        struct ImageLayoutTransition
+        struct LayoutTransition
         {
-            Image *image = nullptr;
             VkImageLayout newLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             uint32_t baseMipLevel = 0;
             uint32_t baseArrayLayer = 0;
         };
 
-        void batchLayoutTransition(const std::vector<ImageLayoutTransition>& imageLayouts,
+        void batchLayoutTransition(const std::unordered_map<lent_ptr<Image>, LayoutTransition>& imageLayouts,
             lent_ptr<CommandBuffer> cmdBuffer,
             VkDependencyFlags dependencyFlags = 0);
     } // namespace helpers
