@@ -36,6 +36,7 @@ namespace magma
                 const source_location& location) noexcept:
                 Exception(message, location), result(result) {}
             VkResult error() const noexcept { return result; }
+            const char *description() const noexcept;
 
         private:
             const VkResult result;
