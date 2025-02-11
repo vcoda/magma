@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ namespace magma
                 const source_location& location) noexcept:
                 Exception(message, location), result(result) {}
             SpvReflectResult error() const noexcept { return result; }
+            const char *description() const noexcept;
 
         private:
             const SpvReflectResult result;
