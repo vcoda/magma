@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "sourcelocation.h"
 
 enum SpvReflectResult : int;
 
@@ -48,6 +49,8 @@ namespace magma
             const source_location& location);
     } // namespace exception
 } // namespace magma
+
+#define MAGMA_ERROR(message) magma::exception::handleException(message, MAGMA_SOURCE_LOCATION)
 
 #define MAGMA_HANDLE_RESULT(result, message) magma::exception::handleResult(result, message, MAGMA_SOURCE_LOCATION)
 

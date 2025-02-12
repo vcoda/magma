@@ -48,5 +48,3 @@ namespace magma
     #endif // !MAGMA_NO_EXCEPTIONS
     } // namespace exception
 } // namespace magma
-
-#define MAGMA_ERROR(message) magma::exception::handleException(message, MAGMA_SOURCE_LOCATION)
