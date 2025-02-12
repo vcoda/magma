@@ -84,6 +84,7 @@ src\barriers\imageMemoryBarrier.cpp ^
 src\descriptors\accelerationStructureDescriptor.cpp ^
 src\descriptors\bufferDescriptor.cpp ^
 src\descriptors\imageDescriptor.cpp ^
+src\exceptions\errorHandler.cpp ^
 src\exceptions\errorResult.cpp ^
 src\exceptions\exception.cpp ^
 src\exceptions\reflectionErrorResult.cpp ^
@@ -275,6 +276,7 @@ pch.obj ^
 accelerationStructureDescriptor.obj ^
 bufferDescriptor.obj ^
 imageDescriptor.obj ^
+errorHandler.obj ^
 errorResult.obj ^
 exception.obj ^
 reflectionErrorResult.obj ^

@@ -21,26 +21,4 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::exception
 {
-#ifdef MAGMA_NO_EXCEPTIONS
-static ExceptionHandler exceptionHandler =
-    [](std::string_view message, const source_location&)
-    {   // If no exception handler is provided, simply call abort()
-        std::cerr << message << std::endl;
-        abort();
-    };
-
-void setExceptionHandler(ExceptionHandler exceptionHandler_) noexcept
-{
-    exceptionHandler = std::move(exceptionHandler_);
-}
-#endif // MAGMA_NO_EXCEPTIONS
-
-void handleException(std::string_view message, const source_location& location)
-{
-#ifdef MAGMA_NO_EXCEPTIONS
-    exceptionHandler(std::move(message), location);
-#else
-    throw Exception(std::move(message), location);
-#endif
-}
 } // namespace magma::exception

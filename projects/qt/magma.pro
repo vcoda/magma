@@ -30,6 +30,7 @@ SOURCES += \
     ../../src/descriptors/accelerationStructureDescriptor.cpp \
     ../../src/descriptors/bufferDescriptor.cpp \
     ../../src/descriptors/imageDescriptor.cpp \
+    ../../src/exceptions/errorHandler.cpp \
     ../../src/exceptions/errorResult.cpp \
     ../../src/exceptions/exception.cpp \
     ../../src/exceptions/reflectionErrorResult.cpp \
@@ -230,6 +231,7 @@ HEADERS += \
     ../../src/descriptors/imageDescriptorArray.h \
     ../../src/descriptors/inlineUniformBlock.h \
     ../../src/exceptions/compileError.h \
+    ../../src/exceptions/errorHandler.h \
     ../../src/exceptions/errorResult.h \
     ../../src/exceptions/exception.h \
     ../../src/exceptions/reflectionErrorResult.h \

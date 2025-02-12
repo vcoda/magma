@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::exception
 {
+#ifndef MAGMA_NO_EXCEPTIONS
 const char *ErrorResult::description() const noexcept
 {   // https://registry.khronos.org/vulkan/specs/latest/man/html/VkResult.html
     switch (result)
@@ -88,62 +89,5 @@ const char *ErrorResult::description() const noexcept
         return "Unknown error code";
     }
 }
-
-#ifdef MAGMA_NO_EXCEPTIONS
-static ErrorHandler errorHandler =
-    [](VkResult, const char *message, const source_location&)
-    {   // If no error handler is provided, abort program
-        std::cerr << message << std::endl;
-        abort();
-    };
-
-void setErrorHandler(ErrorHandler errorHandler_) noexcept
-{
-    errorHandler = std::move(errorHandler_);
-}
-#endif // MAGMA_NO_EXCEPTIONS
-
-void handleResult(VkResult result, const char *message, const source_location& location)
-{
-    switch (result)
-    {
-    case VK_SUCCESS:
-    case VK_NOT_READY:
-    case VK_TIMEOUT:
-    case VK_EVENT_SET:
-    case VK_EVENT_RESET:
-    case VK_INCOMPLETE:
-#ifdef VK_KHR_swapchain
-    case VK_SUBOPTIMAL_KHR:
-#endif
-        break;
-#ifndef MAGMA_NO_EXCEPTIONS
-    case VK_ERROR_OUT_OF_HOST_MEMORY:
-        throw OutOfHostMemory(message, location);
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-        throw OutOfDeviceMemory(message, location);
-    case VK_ERROR_DEVICE_LOST:
-        throw DeviceLost(message, location);
-#ifdef VK_KHR_swapchain
-    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
-        throw NativeWindowInUse(message);
-    case VK_ERROR_OUT_OF_DATE_KHR:
-        throw OutOfDate(message);
-#endif // VK_KHR_swapchain
-#ifdef VK_KHR_surface
-    case VK_ERROR_SURFACE_LOST_KHR:
-        throw SurfaceLost(message);
-#endif
-#ifdef VK_EXT_full_screen_exclusive
-    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
-        throw FullScreenExclusiveModeLost(message);
-#endif
-    default:
-        throw ErrorResult(result, message, location);
-#else
-    default:
-        errorHandler(result, message, location);
 #endif // !MAGMA_NO_EXCEPTIONS
-    }
-}
 } // namespace magma::exception

@@ -51,35 +51,5 @@ const char *ReflectionErrorResult::description() const noexcept
     default: return "Unknown error code";
     }
 }
-
-#ifdef MAGMA_NO_EXCEPTIONS
-static ReflectionErrorHandler errorHandler =
-    [](SpvReflectResult, const char *message, const source_location&)
-    {   // If no error handler is provided, abort program
-        std::cerr << message << std::endl;
-        abort();
-    };
-
-void setReflectionErrorHandler(ReflectionErrorHandler errorHandler_) noexcept
-{
-    errorHandler = std::move(errorHandler_);
-}
-#endif // MAGMA_NO_EXCEPTIONS
-
-void handleReflectionResult(SpvReflectResult result, const char *message, const source_location& location)
-{
-    switch (result)
-    {
-    case SPV_REFLECT_RESULT_SUCCESS:
-    case SPV_REFLECT_RESULT_NOT_READY:
-        break;
-    default:
-    #ifdef MAGMA_NO_EXCEPTIONS
-        errorHandler(result, message, location);
-    #else
-        throw ReflectionErrorResult(result, message, location);
-    #endif // MAGMA_NO_EXCEPTIONS
-    }
-}
 #endif // !MAGMA_NO_EXCEPTIONS
 } // namespace magma::exception

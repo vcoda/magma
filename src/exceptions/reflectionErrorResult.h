@@ -16,8 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "exception.h"
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
+#include "exception.h"
+#include "errorHandler.h"
 
 namespace magma
 {
@@ -29,7 +30,7 @@ namespace magma
         class ReflectionErrorResult : public Exception
         {
         public:
-            ReflectionErrorResult(SpvReflectResult result,
+            explicit ReflectionErrorResult(SpvReflectResult result,
                 const char *message,
                 const source_location& location) noexcept:
                 Exception(message, location), result(result) {}
@@ -40,20 +41,5 @@ namespace magma
             const SpvReflectResult result;
         };
     #endif // !MAGMA_NO_EXCEPTIONS
-
-        /* If C++ exceptions are not enabled, application has an
-           option to provide custom error handler which will be
-           called when the SpvReflect error is encountered. */
-
-    #ifdef MAGMA_NO_EXCEPTIONS
-        typedef std::function<void(SpvReflectResult, const char *, const source_location&)> ReflectionErrorHandler;
-        void setReflectionErrorHandler(ReflectionErrorHandler errorHandler) noexcept;
-    #endif // MAGMA_NO_EXCEPTIONS
-
-        void handleReflectionResult(SpvReflectResult result,
-            const char *message,
-            const source_location& location);
     } // namespace exception
 } // namespace magma
-
-#define MAGMA_HANDLE_REFLECTION_RESULT(result, message) magma::exception::handleReflectionResult(result, message, MAGMA_SOURCE_LOCATION)

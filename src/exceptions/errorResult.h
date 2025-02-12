@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "exception.h"
+#include "errorHandler.h"
 
 namespace magma
 {
@@ -156,20 +157,6 @@ namespace magma
         };
     #endif // VK_EXT_full_screen_exclusive
     #endif // !MAGMA_NO_EXCEPTIONS
-
-        /* If C++ exceptions are not enabled, application has an
-           option to provide custom error handler which will be
-           called when a Vulkan error is encountered. */
-
-    #ifdef MAGMA_NO_EXCEPTIONS
-        typedef std::function<void(VkResult, const char *, const source_location&)> ErrorHandler;
-        void setErrorHandler(ErrorHandler errorHandler) noexcept;
-    #endif // MAGMA_NO_EXCEPTIONS
-
-        void handleResult(VkResult result,
-            const char *message,
-            const source_location& location);
     } // namespace exception
 } // namespace magma
 
-#define MAGMA_HANDLE_RESULT(result, message) magma::exception::handleResult(result, message, MAGMA_SOURCE_LOCATION)

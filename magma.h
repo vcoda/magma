@@ -254,6 +254,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/packed/vector.h"
 
 #include "src/exceptions/compileError.h"
+#include "src/exceptions/errorHandler.h"
 #include "src/exceptions/errorResult.h"
 #include "src/exceptions/reflectionErrorResult.h"
 #include "src/exceptions/unsupportedExtension.h"

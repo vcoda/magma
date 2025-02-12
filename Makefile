@@ -46,6 +46,7 @@ SRC_OBJS= \
 	src/descriptors/bufferDescriptor.o \
 	src/descriptors/imageDescriptor.o \
 	\
+	src/exceptions/errorHandler.o \
 	src/exceptions/errorResult.o \
 	src/exceptions/exception.o \
 	src/exceptions/reflectionErrorResult.o \

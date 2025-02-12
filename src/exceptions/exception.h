@@ -46,17 +46,6 @@ namespace magma
             source_location location;
         };
     #endif // !MAGMA_NO_EXCEPTIONS
-
-        /* If C++ exceptions are not enabled, application has an
-           option to provide custom exception handler which will be
-           called when library tries to throw an exception. */
-
-    #ifdef MAGMA_NO_EXCEPTIONS
-        typedef std::function<void(std::string_view, const source_location&)> ExceptionHandler;
-        void setExceptionHandler(ExceptionHandler exceptionHandler) noexcept;
-    #endif // MAGMA_NO_EXCEPTIONS
-
-        void handleException(std::string_view message, const source_location& location);
     } // namespace exception
 } // namespace magma
 

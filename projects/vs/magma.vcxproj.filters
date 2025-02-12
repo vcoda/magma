@@ -861,6 +861,9 @@
     <ClInclude Include="..\..\src\core\hashing\fnv1string.h">
       <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\errorHandler.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1336,6 +1339,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\objects\multiviewRenderPass.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\exceptions\errorHandler.cpp">
+      <Filter>Source Files\exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -211,6 +211,7 @@
     <ClInclude Include="..\..\src\descriptors\imageDescriptorVariableArray.h" />
     <ClInclude Include="..\..\src\descriptors\inlineUniformBlock.h" />
     <ClInclude Include="..\..\src\exceptions\compileError.h" />
+    <ClInclude Include="..\..\src\exceptions\errorHandler.h" />
     <ClInclude Include="..\..\src\exceptions\errorResult.h" />
     <ClInclude Include="..\..\src\exceptions\exception.h" />
     <ClInclude Include="..\..\src\exceptions\reflectionErrorResult.h" />
@@ -440,6 +441,7 @@
     <ClCompile Include="..\..\src\descriptors\accelerationStructureDescriptor.cpp" />
     <ClCompile Include="..\..\src\descriptors\bufferDescriptor.cpp" />
     <ClCompile Include="..\..\src\descriptors\imageDescriptor.cpp" />
+    <ClCompile Include="..\..\src\exceptions\errorHandler.cpp" />
     <ClCompile Include="..\..\src\exceptions\errorResult.cpp" />
     <ClCompile Include="..\..\src\exceptions\exception.cpp" />
     <ClCompile Include="..\..\src\exceptions\reflectionErrorResult.cpp" />
