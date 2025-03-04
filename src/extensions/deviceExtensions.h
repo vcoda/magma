@@ -439,7 +439,6 @@ namespace magma
 
         // BlackBerry Limited
         const VkBool32 QNX_external_memory_screen_buffer: 1;
-        const VkBool32 QNX_screen_surface: 1;
 
         // Valve Corporation
         const VkBool32 VALVE_descriptor_set_host_mapping: 1;

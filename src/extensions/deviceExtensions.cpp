@@ -416,7 +416,6 @@ DeviceExtensions::DeviceExtensions(const std::shared_ptr<PhysicalDevice>& device
     MAGMA_CHECK_EXTENSION(QCOM_ycbcr_degamma),
 
     MAGMA_CHECK_EXTENSION(QNX_external_memory_screen_buffer),
-    MAGMA_CHECK_EXTENSION(QNX_screen_surface),
 
     MAGMA_CHECK_EXTENSION(VALVE_descriptor_set_host_mapping),
     MAGMA_CHECK_EXTENSION(VALVE_mutable_descriptor_type)
