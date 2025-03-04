@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 DeviceExtensions::DeviceExtensions(const std::shared_ptr<PhysicalDevice>& device):
-    ExtensionMap<VkExtensionProperties>(device->enumerateExtensions()),
+    ExtensionRegistry<VkExtensionProperties>(device->enumerateExtensions()),
 
     MAGMA_CHECK_EXTENSION(AMD_anti_lag),
     MAGMA_CHECK_EXTENSION(AMD_buffer_marker),

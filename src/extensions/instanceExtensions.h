@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "extensionMap.h"
+#include "extensionRegistry.h"
 
 namespace magma
 {
@@ -25,7 +25,7 @@ namespace magma
        objects and commands, should be an instance extension.
        Keep list of extensions in alphabetical order! */
 
-    class InstanceExtensions : public ExtensionMap<VkExtensionProperties>
+    class InstanceExtensions : public ExtensionRegistry<VkExtensionProperties>
     {
     public:
         // ANDROID (Google LLC)

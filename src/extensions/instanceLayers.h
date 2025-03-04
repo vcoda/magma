@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "extensionMap.h"
+#include "extensionRegistry.h"
 
 namespace magma
 {
     /* https://vulkan.gpuinfo.org/listinstancelayers.php
        Keep list of layers in alphabetical order! */
 
-    class InstanceLayers : public ExtensionMap<VkLayerProperties>
+    class InstanceLayers : public ExtensionRegistry<VkLayerProperties>
     {
     public:
         const VkBool32 GalaxyOverlayVkLayer: 1;

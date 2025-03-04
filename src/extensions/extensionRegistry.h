@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,30 +19,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    /* A registry of instance-level or device-level extensions. */
+
     template<class Properties>
-    class ExtensionMap
+    class ExtensionRegistry
     {
     public:
-        bool find(const char *name) const noexcept
-        {
-            return map.find(name) != map.end();
-        }
+        uint32_t getCount() const noexcept { return count; }
+        uint32_t getSupportedCount() const noexcept { return supportedCount; }
 
     protected:
-        ExtensionMap(const std::vector<Properties>& properties)
-        {
-            for (auto const& property: properties)
-            {
-                if constexpr (std::is_same<Properties, VkExtensionProperties>::value)
-                    map.emplace(std::string(property.extensionName), property);
-                else if constexpr (std::is_same<Properties, VkLayerProperties>::value)
-                    map.emplace(std::string(property.layerName), property);
-            }
-        }
+        ExtensionRegistry(const std::vector<Properties>& properties);
+        bool supported(const char *name) noexcept;
 
     private:
         std::map<std::string, Properties> map;
+        uint32_t count;
+        uint32_t supportedCount;
     };
 } // namespace magma
 
-#define MAGMA_CHECK_EXTENSION(name) name(find(MAGMA_EXTENSION_PREFIX #name))
+#include "extensionRegistry.inl"
+
+#define MAGMA_CHECK_EXTENSION(name) name(supported(MAGMA_EXTENSION_PREFIX #name))

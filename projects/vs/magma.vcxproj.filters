@@ -840,9 +840,6 @@
     <ClInclude Include="..\..\src\core\defines.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\extensions\extensionMap.h">
-      <Filter>Header Files\extensions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\auxiliary\framebuffer.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
@@ -863,6 +860,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\exceptions\errorHandler.h">
       <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\extensions\extensionRegistry.h">
+      <Filter>Header Files\extensions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1614,6 +1614,9 @@
     </None>
     <None Include="..\..\src\states\stencilOpState.inl">
       <Filter>Header Files\states</Filter>
+    </None>
+    <None Include="..\..\src\extensions\extensionRegistry.inl">
+      <Filter>Header Files\extensions</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -220,7 +220,7 @@
     <ClInclude Include="..\..\src\extensions\instanceExtensions.h" />
     <ClInclude Include="..\..\src\extensions\instanceLayers.h" />
     <ClInclude Include="..\..\src\extensions\deviceExtensions.h" />
-    <ClInclude Include="..\..\src\extensions\extensionMap.h" />
+    <ClInclude Include="..\..\src\extensions\extensionRegistry.h" />
     <ClInclude Include="..\..\src\helpers\alignedUniformArray.h" />
     <ClInclude Include="..\..\src\helpers\enumerationCast.h" />
     <ClInclude Include="..\..\src\helpers\executeCommandBuffer.h" />
@@ -693,6 +693,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\descriptors\imageDescriptorArray.inl" />
     <None Include="..\..\src\descriptors\imageDescriptorVariableArray.inl" />
     <None Include="..\..\src\descriptors\inlineUniformBlock.inl" />
+    <None Include="..\..\src\extensions\extensionRegistry.inl" />
     <None Include="..\..\src\helpers\alignedUniformArray.inl" />
     <None Include="..\..\src\helpers\uniformArray.inl" />
     <None Include="..\..\src\misc\borderColor.inl" />
