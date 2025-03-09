@@ -32,6 +32,8 @@ namespace magma
 
         T *get() const noexcept;
 
+        variant_ptr& operator=(std::unique_ptr<T>&& p) noexcept;
+        variant_ptr& operator=(std::shared_ptr<T>&& p) noexcept;
         variant_ptr& operator=(variant_ptr<T>&& other) noexcept;
 
         T *operator->() const noexcept;

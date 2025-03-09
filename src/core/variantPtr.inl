@@ -34,6 +34,20 @@ inline T *variant_ptr<T>::get() const noexcept
 }
 
 template<class T>
+inline variant_ptr<T>& variant_ptr<T>::operator=(std::unique_ptr<T>&& p) noexcept
+{
+    var = std::move(p);
+    return *this;
+}
+
+template<class T>
+inline variant_ptr<T>& variant_ptr<T>::operator=(std::shared_ptr<T>&& p) noexcept
+{
+    var = std::move(p);
+    return *this;
+}
+
+template<class T>
 inline variant_ptr<T>& variant_ptr<T>::operator=(variant_ptr<T>&& other) noexcept
 {
     if (this != &other)
