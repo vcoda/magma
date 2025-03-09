@@ -86,37 +86,37 @@ inline lent_ptr<T>::operator bool() const noexcept
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator<(const lent_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator<(const lent_ptr<T>& p) noexcept
 {
     return (pointer < p.pointer);
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator>(const lent_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator>(const lent_ptr<T>& p) noexcept
 {
     return (pointer > p.pointer);
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator<=(const lent_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator<=(const lent_ptr<T>& p) noexcept
 {
     return (pointer <= p.pointer);
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator>=(const lent_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator>=(const lent_ptr<T>& p) noexcept
 {
     return (pointer >= p.pointer);
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator==(const lent_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator==(const lent_ptr<T>& p) noexcept
 {
     return (pointer == p.pointer);
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator!=(const lent_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator!=(const lent_ptr<T>& p) noexcept
 {
     return (pointer != p.pointer);
 }
@@ -158,109 +158,109 @@ inline bool lent_ptr<T>::operator!=(const T *p) noexcept
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator<(const std::shared_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator<(const std::shared_ptr<T>& p) noexcept
 {
     return (pointer < p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator>(const std::shared_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator>(const std::shared_ptr<T>& p) noexcept
 {
     return (pointer > p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator<=(const std::shared_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator<=(const std::shared_ptr<T>& p) noexcept
 {
     return (pointer <= p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator>=(const std::shared_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator>=(const std::shared_ptr<T>& p) noexcept
 {
     return (pointer >= p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator==(const std::shared_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator==(const std::shared_ptr<T>& p) noexcept
 {
     return (pointer == p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator!=(const std::shared_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator!=(const std::shared_ptr<T>& p) noexcept
 {
     return (pointer != p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator<(const std::unique_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator<(const std::unique_ptr<T>& p) noexcept
 {
     return (pointer < p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator>(const std::unique_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator>(const std::unique_ptr<T>& p) noexcept
 {
     return (pointer > p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator<=(const std::unique_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator<=(const std::unique_ptr<T>& p) noexcept
 {
     return (pointer <= p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator>=(const std::unique_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator>=(const std::unique_ptr<T>& p) noexcept
 {
     return (pointer >= p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator==(const std::unique_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator==(const std::unique_ptr<T>& p) noexcept
 {
     return (pointer == p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator!=(const std::unique_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator!=(const std::unique_ptr<T>& p) noexcept
 {
     return (pointer != p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator<(const variant_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator<(const variant_ptr<T>& p) noexcept
 {
     return (pointer < p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator>(const variant_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator>(const variant_ptr<T>& p) noexcept
 {
     return (pointer > p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator<=(const variant_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator<=(const variant_ptr<T>& p) noexcept
 {
     return (pointer <= p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator>=(const variant_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator>=(const variant_ptr<T>& p) noexcept
 {
     return (pointer >= p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator==(const variant_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator==(const variant_ptr<T>& p) noexcept
 {
     return (pointer == p.get());
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator!=(const variant_ptr<T>&p) noexcept
+inline bool lent_ptr<T>::operator!=(const variant_ptr<T>& p) noexcept
 {
     return (pointer != p.get());
 }
