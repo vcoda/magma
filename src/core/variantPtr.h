@@ -54,19 +54,19 @@ namespace magma
         bool operator==(const T *p) noexcept;
         bool operator!=(const T *p) noexcept;
 
-        bool operator<(const std::shared_ptr<T>& p) noexcept;
-        bool operator>(const std::shared_ptr<T>& p) noexcept;
-        bool operator<=(const std::shared_ptr<T>& p) noexcept;
-        bool operator>=(const std::shared_ptr<T>& p) noexcept;
-        bool operator==(const std::shared_ptr<T>& p) noexcept;
-        bool operator!=(const std::shared_ptr<T>& p) noexcept;
-
         bool operator<(const std::unique_ptr<T>& p) noexcept;
         bool operator>(const std::unique_ptr<T>& p) noexcept;
         bool operator<=(const std::unique_ptr<T>& p) noexcept;
         bool operator>=(const std::unique_ptr<T>& p) noexcept;
         bool operator==(const std::unique_ptr<T>& p) noexcept;
         bool operator!=(const std::unique_ptr<T>& p) noexcept;
+
+        bool operator<(const std::shared_ptr<T>& p) noexcept;
+        bool operator>(const std::shared_ptr<T>& p) noexcept;
+        bool operator<=(const std::shared_ptr<T>& p) noexcept;
+        bool operator>=(const std::shared_ptr<T>& p) noexcept;
+        bool operator==(const std::shared_ptr<T>& p) noexcept;
+        bool operator!=(const std::shared_ptr<T>& p) noexcept;
 
     private:
         std::variant<std::unique_ptr<T>, std::shared_ptr<T>> var;

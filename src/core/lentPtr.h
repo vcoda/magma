@@ -30,8 +30,8 @@ namespace magma
     public:
         lent_ptr(T *p) noexcept;
         lent_ptr(std::nullptr_t) noexcept;
-        template<class T2> lent_ptr(const std::shared_ptr<T2>& p) noexcept;
         template<class T2> lent_ptr(const std::unique_ptr<T2>& p) noexcept;
+        template<class T2> lent_ptr(const std::shared_ptr<T2>& p) noexcept;
         template<class T2> lent_ptr(const std::weak_ptr<T2>& ref) noexcept;
         template<class T2> lent_ptr(const variant_ptr<T2>& p) noexcept;
         lent_ptr(const lent_ptr&) = delete;
@@ -63,19 +63,19 @@ namespace magma
         bool operator==(const T *p) noexcept;
         bool operator!=(const T *p) noexcept;
 
-        bool operator<(const std::shared_ptr<T>& p) noexcept;
-        bool operator>(const std::shared_ptr<T>& p) noexcept;
-        bool operator<=(const std::shared_ptr<T>& p) noexcept;
-        bool operator>=(const std::shared_ptr<T>& p) noexcept;
-        bool operator==(const std::shared_ptr<T>& p) noexcept;
-        bool operator!=(const std::shared_ptr<T>& p) noexcept;
-
         bool operator<(const std::unique_ptr<T>& p) noexcept;
         bool operator>(const std::unique_ptr<T>& p) noexcept;
         bool operator<=(const std::unique_ptr<T>& p) noexcept;
         bool operator>=(const std::unique_ptr<T>& p) noexcept;
         bool operator==(const std::unique_ptr<T>& p) noexcept;
         bool operator!=(const std::unique_ptr<T>& p) noexcept;
+
+        bool operator<(const std::shared_ptr<T>& p) noexcept;
+        bool operator>(const std::shared_ptr<T>& p) noexcept;
+        bool operator<=(const std::shared_ptr<T>& p) noexcept;
+        bool operator>=(const std::shared_ptr<T>& p) noexcept;
+        bool operator==(const std::shared_ptr<T>& p) noexcept;
+        bool operator!=(const std::shared_ptr<T>& p) noexcept;
 
         bool operator<(const variant_ptr<T>& p) noexcept;
         bool operator>(const variant_ptr<T>& p) noexcept;

@@ -153,42 +153,6 @@ inline bool variant_ptr<T>::operator!=(const T *p) noexcept
 }
 
 template<class T>
-inline bool variant_ptr<T>::operator<(const std::shared_ptr<T>& p) noexcept
-{
-    return (get() < p.get());
-}
-
-template<class T>
-inline bool variant_ptr<T>::operator>(const std::shared_ptr<T>& p) noexcept
-{
-    return (get() > p.get());
-}
-
-template<class T>
-inline bool variant_ptr<T>::operator<=(const std::shared_ptr<T>& p) noexcept
-{
-    return (get() <= p.get());
-}
-
-template<class T>
-inline bool variant_ptr<T>::operator>=(const std::shared_ptr<T>& p) noexcept
-{
-    return (get() >= p.get());
-}
-
-template<class T>
-inline bool variant_ptr<T>::operator==(const std::shared_ptr<T>& p) noexcept
-{
-    return (get() == p.get());
-}
-
-template<class T>
-inline bool variant_ptr<T>::operator!=(const std::shared_ptr<T>& p) noexcept
-{
-    return (get() != p.get());
-}
-
-template<class T>
 inline bool variant_ptr<T>::operator<(const std::unique_ptr<T>& p) noexcept
 {
     return (get() < p.get());
@@ -220,6 +184,42 @@ inline bool variant_ptr<T>::operator==(const std::unique_ptr<T>& p) noexcept
 
 template<class T>
 inline bool variant_ptr<T>::operator!=(const std::unique_ptr<T>& p) noexcept
+{
+    return (get() != p.get());
+}
+
+template<class T>
+inline bool variant_ptr<T>::operator<(const std::shared_ptr<T>& p) noexcept
+{
+    return (get() < p.get());
+}
+
+template<class T>
+inline bool variant_ptr<T>::operator>(const std::shared_ptr<T>& p) noexcept
+{
+    return (get() > p.get());
+}
+
+template<class T>
+inline bool variant_ptr<T>::operator<=(const std::shared_ptr<T>& p) noexcept
+{
+    return (get() <= p.get());
+}
+
+template<class T>
+inline bool variant_ptr<T>::operator>=(const std::shared_ptr<T>& p) noexcept
+{
+    return (get() >= p.get());
+}
+
+template<class T>
+inline bool variant_ptr<T>::operator==(const std::shared_ptr<T>& p) noexcept
+{
+    return (get() == p.get());
+}
+
+template<class T>
+inline bool variant_ptr<T>::operator!=(const std::shared_ptr<T>& p) noexcept
 {
     return (get() != p.get());
 }

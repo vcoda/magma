@@ -11,14 +11,14 @@ inline lent_ptr<T>::lent_ptr(std::nullptr_t) noexcept:
 {}
 
 template<class T> template<class T2>
-inline lent_ptr<T>::lent_ptr(const std::shared_ptr<T2>& p) noexcept:
-    pointer(p.get()),
-    ref(p)
+inline lent_ptr<T>::lent_ptr(const std::unique_ptr<T2>& p) noexcept:
+    pointer(p.get())
 {}
 
 template<class T> template<class T2>
-inline lent_ptr<T>::lent_ptr(const std::unique_ptr<T2>& p) noexcept:
-    pointer(p.get())
+inline lent_ptr<T>::lent_ptr(const std::shared_ptr<T2>& p) noexcept:
+    pointer(p.get()),
+    ref(p)
 {}
 
 template<class T> template<class T2>
@@ -158,42 +158,6 @@ inline bool lent_ptr<T>::operator!=(const T *p) noexcept
 }
 
 template<class T>
-inline bool lent_ptr<T>::operator<(const std::shared_ptr<T>& p) noexcept
-{
-    return (pointer < p.get());
-}
-
-template<class T>
-inline bool lent_ptr<T>::operator>(const std::shared_ptr<T>& p) noexcept
-{
-    return (pointer > p.get());
-}
-
-template<class T>
-inline bool lent_ptr<T>::operator<=(const std::shared_ptr<T>& p) noexcept
-{
-    return (pointer <= p.get());
-}
-
-template<class T>
-inline bool lent_ptr<T>::operator>=(const std::shared_ptr<T>& p) noexcept
-{
-    return (pointer >= p.get());
-}
-
-template<class T>
-inline bool lent_ptr<T>::operator==(const std::shared_ptr<T>& p) noexcept
-{
-    return (pointer == p.get());
-}
-
-template<class T>
-inline bool lent_ptr<T>::operator!=(const std::shared_ptr<T>& p) noexcept
-{
-    return (pointer != p.get());
-}
-
-template<class T>
 inline bool lent_ptr<T>::operator<(const std::unique_ptr<T>& p) noexcept
 {
     return (pointer < p.get());
@@ -225,6 +189,42 @@ inline bool lent_ptr<T>::operator==(const std::unique_ptr<T>& p) noexcept
 
 template<class T>
 inline bool lent_ptr<T>::operator!=(const std::unique_ptr<T>& p) noexcept
+{
+    return (pointer != p.get());
+}
+
+template<class T>
+inline bool lent_ptr<T>::operator<(const std::shared_ptr<T>& p) noexcept
+{
+    return (pointer < p.get());
+}
+
+template<class T>
+inline bool lent_ptr<T>::operator>(const std::shared_ptr<T>& p) noexcept
+{
+    return (pointer > p.get());
+}
+
+template<class T>
+inline bool lent_ptr<T>::operator<=(const std::shared_ptr<T>& p) noexcept
+{
+    return (pointer <= p.get());
+}
+
+template<class T>
+inline bool lent_ptr<T>::operator>=(const std::shared_ptr<T>& p) noexcept
+{
+    return (pointer >= p.get());
+}
+
+template<class T>
+inline bool lent_ptr<T>::operator==(const std::shared_ptr<T>& p) noexcept
+{
+    return (pointer == p.get());
+}
+
+template<class T>
+inline bool lent_ptr<T>::operator!=(const std::shared_ptr<T>& p) noexcept
 {
     return (pointer != p.get());
 }
