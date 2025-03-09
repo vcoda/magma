@@ -1621,6 +1621,9 @@
     <None Include="..\..\src\core\lentPtr.inl">
       <Filter>Header Files\core</Filter>
     </None>
+    <None Include="..\..\src\core\variantPtr.inl">
+      <Filter>Header Files\core</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
