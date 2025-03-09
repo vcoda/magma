@@ -685,6 +685,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\core\lentPtr.inl" />
     <None Include="..\..\src\core\memory.inl" />
     <None Include="..\..\src\core\variantPtr.inl" />
+    <None Include="..\..\src\core\vla.inl" />
     <None Include="..\..\src\descriptors\bufferArrayElement.inl" />
     <None Include="..\..\src\descriptors\descriptorSetLayoutBinding.inl" />
     <None Include="..\..\src\descriptors\bufferDescriptor.inl" />

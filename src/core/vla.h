@@ -30,54 +30,28 @@ namespace magma
         class VariableLengthArray final
         {
         public:
-            explicit VariableLengthArray(void *ptr, std::size_t len) noexcept:
-                ptr(reinterpret_cast<T *>(ptr)),
-                len(static_cast<uint32_t>(len)),
-                cnt(0)
-            {
-                if constexpr (std::is_default_constructible<T>::value)
-                {
-                    for (T *p = begin(); p != end(); ++p)
-                        new(p) T();
-                }
-            }
-
-            ~VariableLengthArray()
-            {
-                if constexpr (std::is_destructible<T>::value)
-                {
-                    for (T *p = begin(); p != end(); ++p)
-                        p->~T();
-                }
-                MAGMA_STACK_FREE(ptr);
-            }
-
-            T *begin() noexcept { return ptr; }
-            const T *begin() const noexcept { return ptr; }
-            T *end() noexcept { return ptr + len; }
-            const T *end() const noexcept { return ptr + len; }
+            explicit VariableLengthArray(void *ptr, std::size_t len) noexcept;
+            ~VariableLengthArray();
+            T *begin() noexcept { return array; }
+            const T *begin() const noexcept { return array; }
+            T *end() noexcept { return array + len; }
+            const T *end() const noexcept { return array + len; }
             uint32_t length() const noexcept { return len; }
             uint32_t count() const noexcept { return cnt; }
+            void put(const T& element) noexcept;
 
-            void put(const T& element) noexcept
-            {
-                MAGMA_ASSERT(cnt < len);
-                ptr[cnt++] = element;
-            }
+            operator T *() noexcept { return array; }
+            operator const T *() const noexcept { return array; }
 
-            T& operator[](int i) noexcept { return ptr[i]; }
-            const T& operator[](int i) const noexcept { return ptr[i]; }
-            operator T*() noexcept { return ptr; }
-            operator const T*() const noexcept { return ptr; }
+            T& operator[](int i) noexcept { return array[i]; }
+            const T& operator[](int i) const noexcept { return array[i]; }
 
         private:
-            T *const ptr;
+            T *const array;
             const uint32_t len;
             uint32_t cnt;
         };
     } // namespace core
 } // namespace magma
 
-#define MAGMA_VLA(Type, var, count)\
-    MAGMA_ASSERT(sizeof(Type) * count <= MAGMA_MAX_STACK_SIZE);\
-    magma::core::VariableLengthArray<Type> var(MAGMA_STACK_ALLOC(sizeof(Type) * count), count)
+#include "vla.inl"
