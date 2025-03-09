@@ -30,6 +30,12 @@ namespace magma
         class VariableLengthArray final
         {
         public:
+            static constexpr std::size_t MaxSize =
+            #if defined(_MSC_VER) || defined(__MINGW32__)
+                _ALLOCA_S_THRESHOLD;
+            #else
+                1024;
+            #endif
             explicit VariableLengthArray(void *ptr, std::size_t len) noexcept;
             ~VariableLengthArray();
             T *begin() noexcept { return array; }

@@ -33,5 +33,5 @@ void VariableLengthArray<T>::put(const T& element) noexcept
 } // namespace magma::core
 
 #define MAGMA_VLA(Type, var, count)\
-    MAGMA_ASSERT(sizeof(Type) * count <= MAGMA_MAX_STACK_SIZE);\
+    MAGMA_ASSERT(sizeof(Type) * count <= magma::core::VariableLengthArray<Type>::MaxSize);\
     magma::core::VariableLengthArray<Type> var(MAGMA_STACK_ALLOC(sizeof(Type) * count), count)
