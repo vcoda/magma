@@ -1618,6 +1618,9 @@
     <None Include="..\..\src\extensions\extensionRegistry.inl">
       <Filter>Header Files\extensions</Filter>
     </None>
+    <None Include="..\..\src\core\lentPtr.inl">
+      <Filter>Header Files\core</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">

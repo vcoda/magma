@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,92 +20,76 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     /* Holds a reference to native or shared pointer.
-       Don't intend to manage the lifetime of underlying
-       object, instead has non-destructible and non-
-       copyable semantics. */
+       It is not intended to manage the lifetime of the
+       underlying object, but instead has non-destructive
+       and non-copyable semantics. */
 
     template<class T>
-    class lent_ptr
+    class lent_ptr final
     {
     public:
-        lent_ptr(T *native) noexcept:
-            ptr(native)
-        {}
-
-        template<class T2>
-        lent_ptr(const std::shared_ptr<T2>& shared) noexcept:
-            ptr(shared.get()),
-            ref(shared)
-        {}
-
-        template<class T2>
-        lent_ptr(const std::unique_ptr<T2>& unique) noexcept:
-            lent_ptr(unique.get())
-        {}
-
-        template<class T2>
-        lent_ptr(const std::weak_ptr<T2>& weak) noexcept:
-            ptr(nullptr),
-            ref(weak)
-        {}
-
-        template<class T2>
-        lent_ptr(const variant_ptr<T2>& variant) noexcept:
-            lent_ptr(variant.get())
-        {}
-
+        lent_ptr(T *p) noexcept;
+        lent_ptr(std::nullptr_t) noexcept;
+        template<class T2> lent_ptr(const std::shared_ptr<T2>& p) noexcept;
+        template<class T2> lent_ptr(const std::unique_ptr<T2>& p) noexcept;
+        template<class T2> lent_ptr(const std::weak_ptr<T2>& ref) noexcept;
+        template<class T2> lent_ptr(const variant_ptr<T2>& p) noexcept;
         lent_ptr(const lent_ptr&) = delete;
-        lent_ptr& operator=(const lent_ptr&) = delete;
+        template<class T2> lent_ptr(lent_ptr<T2>&& other) noexcept;
 
-        template<class T2>
-        lent_ptr(lent_ptr<T2>&& other) noexcept:
-            ptr(other.ptr),
-            ref(std::move(other.ref))
-        {
-            other.ptr = nullptr;
-        }
-
-        template<class T2>
-        lent_ptr& operator=(lent_ptr<T2>&& other) noexcept
-        {
-            if (this != &other)
-            {
-                ptr = other.ptr;
-                ref = std::move(other.ref);
-                other.ptr = nullptr;
-            }
-            return *this;
-        }
-
-        bool shared() const noexcept { return !ref.expired(); }
-        T *get() const noexcept { return ptr; }
+        T *get() const noexcept { return pointer; }
         std::shared_ptr<T> get_shared() const noexcept { return ref.lock(); }
+        bool shareable() const noexcept;
+        void reset() noexcept;
 
-        void reset() noexcept
-        {
-            ptr = nullptr;
-            ref.reset();
-        }
+        lent_ptr& operator=(const lent_ptr&) = delete;
+        template<class T2> lent_ptr& operator=(lent_ptr<T2>&& other) noexcept;
 
-        T *operator->() const noexcept
-        {
-            MAGMA_ASSERT(ptr);
-            return ptr;
-        }
+        T *operator->() const noexcept;
+        T& operator*() const noexcept;
+        explicit operator bool() const noexcept;
 
-        T& operator*() const noexcept
-        {
-            MAGMA_ASSERT(ptr);
-            return *ptr;
-        }
+        bool operator<(const lent_ptr<T>& p) noexcept;
+        bool operator>(const lent_ptr<T>& p) noexcept;
+        bool operator<=(const lent_ptr<T>& p) noexcept;
+        bool operator>=(const lent_ptr<T>& p) noexcept;
+        bool operator==(const lent_ptr<T>& p) noexcept;
+        bool operator!=(const lent_ptr<T>& p) noexcept;
 
-        operator bool() const noexcept { return ptr != nullptr; }
+        bool operator<(const T *p) noexcept;
+        bool operator>(const T *p) noexcept;
+        bool operator<=(const T *p) noexcept;
+        bool operator>=(const T *p) noexcept;
+        bool operator==(const T *p) noexcept;
+        bool operator!=(const T *p) noexcept;
+
+        bool operator<(const std::shared_ptr<T>& p) noexcept;
+        bool operator>(const std::shared_ptr<T>& p) noexcept;
+        bool operator<=(const std::shared_ptr<T>& p) noexcept;
+        bool operator>=(const std::shared_ptr<T>& p) noexcept;
+        bool operator==(const std::shared_ptr<T>& p) noexcept;
+        bool operator!=(const std::shared_ptr<T>& p) noexcept;
+
+        bool operator<(const std::unique_ptr<T>& p) noexcept;
+        bool operator>(const std::unique_ptr<T>& p) noexcept;
+        bool operator<=(const std::unique_ptr<T>& p) noexcept;
+        bool operator>=(const std::unique_ptr<T>& p) noexcept;
+        bool operator==(const std::unique_ptr<T>& p) noexcept;
+        bool operator!=(const std::unique_ptr<T>& p) noexcept;
+
+        bool operator<(const variant_ptr<T>& p) noexcept;
+        bool operator>(const variant_ptr<T>& p) noexcept;
+        bool operator<=(const variant_ptr<T>& p) noexcept;
+        bool operator>=(const variant_ptr<T>& p) noexcept;
+        bool operator==(const variant_ptr<T>& p) noexcept;
+        bool operator!=(const variant_ptr<T>& p) noexcept;
 
     private:
-        T *ptr;
-        std::weak_ptr<T> ref;
+        template<class T2> friend class lent_ptr;
 
-        template<class T2>
-        friend class lent_ptr;
+        T *pointer;
+        std::weak_ptr<T> ref;
     };
 } // namespace magma
+
+#include "lentPtr.inl"
