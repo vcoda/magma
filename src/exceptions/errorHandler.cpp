@@ -124,7 +124,7 @@ void handleReflectionResult(SpvReflectResult result, const char *message, const 
         break;
     default:
     #ifdef MAGMA_NO_EXCEPTIONS
-        errorHandler(result, message, location);
+        reflectionErrorHandler(result, message, location);
     #else
         throw ReflectionErrorResult(result, message, location);
     #endif // MAGMA_NO_EXCEPTIONS
