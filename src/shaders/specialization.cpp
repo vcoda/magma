@@ -48,11 +48,10 @@ Specialization& Specialization::operator=(const Specialization& other) noexcept
 {
     if (this != &other)
     {
+        this->~Specialization();
         mapEntryCount = other.mapEntryCount;
-        delete[] pMapEntries;
         pMapEntries = core::copyArray(other.pMapEntries, other.mapEntryCount);
         dataSize = other.dataSize;
-        delete[] reinterpret_cast<const char *>(pData);
         pData = core::copyBinaryData(other.pData, other.dataSize);
     }
     return *this;
@@ -78,7 +77,7 @@ Specialization& Specialization::operator=(Specialization&& other) noexcept
 Specialization::~Specialization()
 {
     delete[] pMapEntries;
-    delete[] reinterpret_cast<const char *>(pData);
+    delete[] reinterpret_cast<const uint8_t *>(pData);
 }
 
 hash_t Specialization::getHash() const noexcept
