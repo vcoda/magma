@@ -58,6 +58,23 @@ Specialization& Specialization::operator=(const Specialization& other) noexcept
     return *this;
 }
 
+Specialization& Specialization::operator=(Specialization&& other) noexcept
+{
+    if (this != &other)
+    {
+        this->~Specialization();
+        mapEntryCount = other.mapEntryCount;
+        pMapEntries = other.pMapEntries;
+        dataSize = other.dataSize;
+        pData = other.pData;
+        other.mapEntryCount = 0;
+        other.pMapEntries = nullptr;
+        other.dataSize = 0;
+        other.pData = nullptr;
+    }
+    return *this;
+}
+
 Specialization::~Specialization()
 {
     delete[] pMapEntries;
