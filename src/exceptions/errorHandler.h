@@ -30,7 +30,7 @@ namespace magma
            error is encountered. */
 
     #ifdef MAGMA_NO_EXCEPTIONS
-        typedef std::function<void(std::string_view, const source_location&)> ExceptionHandler;
+        typedef std::function<void(const char *, const source_location&)> ExceptionHandler;
         typedef std::function<void(VkResult, const char *, const source_location&)> ErrorHandler;
         typedef std::function<void(SpvReflectResult, const char *, const source_location&)> ReflectionErrorHandler;
 
