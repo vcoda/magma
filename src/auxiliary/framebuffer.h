@@ -35,7 +35,7 @@ namespace magma
            descriptors and creates render pass and framebuffer. Can be
            created on top of front and back images of swapchain. */
 
-        class Framebuffer
+        class Framebuffer : public IClass
         {
         public:
             explicit Framebuffer(std::shared_ptr<Device> device,
@@ -74,7 +74,7 @@ namespace magma
                     VK_COMPONENT_SWIZZLE_IDENTITY},
                 VkRenderPassCreateFlags renderPassFlags = 0,
                 VkFramebufferCreateFlags framebufferFlags = 0);
-            virtual ~Framebuffer();
+            ~Framebuffer();
             const std::vector<VkFormat>& getColorFormats() const noexcept { return colorFormats; }
             VkFormat getDepthStencilFormat() const noexcept { return depthStencilFormat; }
             const VkExtent2D& getExtent() const noexcept;
