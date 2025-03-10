@@ -41,7 +41,7 @@ set TARGET=%LIBRARY%.lib
 set BASE_CFLAGS=/c /std:c++17 /EHsc /GS /Gd /permissive- /MP /nologo ^
   /W4 /WX /wd"4307" /wd"4324" /wd"4458" ^
   /constexpr:depth2048 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /errorReport:prompt ^
-  /I%VK_SDK_PATH%\Include /Icore ^
+  /I%VULKAN_SDK%\Include /Icore ^
   /D %PLATFORM% /D "_UNICODE" /D "UNICODE" ^
   /Fo%BUILD_DIR%"\\" /Fd%PDB_FILE%
 
@@ -59,12 +59,11 @@ if %DEBUG%==1 (
   set LDFLAGS=%BASE_LDFLAGS% /LTCG
 )
 
-set glslc=%VK_SDK_PATH%\Bin\glslangValidator
+set glslc=%VULKAN_SDK%\Bin\glslangValidator
 
 set MAGMA_SRC= ^
 src\allocator\alignedAllocator.cpp ^
 src\allocator\allocationCallbacks.cpp ^
-src\allocator\cxxAllocator.cpp ^
 src\allocator\debugAlignedAllocator.cpp ^
 src\allocator\deviceMemoryAllocator.cpp ^
 src\auxiliary\accumulationBuffer.cpp ^
@@ -198,23 +197,11 @@ src\objects\uniformTexelBuffer.cpp ^
 src\objects\validationCache.cpp ^
 src\objects\variableCountDescriptorSet.cpp ^
 src\objects\vertexBuffer.cpp ^
-src\platform\androidHardwareBuffer.cpp ^
-src\platform\androidSurface.cpp ^
 src\platform\d3dExternalSemaphore.cpp ^
-src\platform\directFbSurface.cpp ^
 src\platform\externalFence.cpp ^
 src\platform\externalSemaphore.cpp ^
-src\platform\fuchsiaSurface.cpp ^
-src\platform\iosSurface.cpp ^
-src\platform\macosSurface.cpp ^
-src\platform\metalSurface.cpp ^
-src\platform\qnxSurface.cpp ^
-src\platform\viSurface.cpp ^
-src\platform\waylandSurface.cpp ^
 src\platform\win32ExternalSemaphore.cpp ^
 src\platform\win32Surface.cpp ^
-src\platform\xcbSurface.cpp ^
-src\platform\xlibSurface.cpp ^
 src\raytracing\accelerationStructureGeometry.cpp ^
 src\renderpass\subpass.cpp ^
 src\shaders\pipelineShaderStage.cpp ^
@@ -255,7 +242,6 @@ cl %CFLAGS% src\third-party\SPIRV-Reflect\spirv_reflect.c
 set MAGMA_OBJS= ^
 alignedAllocator.obj ^
 allocationCallbacks.obj ^
-cxxAllocator.obj ^
 debugAlignedAllocator.obj ^
 deviceMemoryAllocator.obj ^
 accumulationBuffer.obj ^
@@ -390,23 +376,11 @@ uniformTexelBuffer.obj ^
 validationCache.obj ^
 variableCountDescriptorSet.obj ^
 vertexBuffer.obj ^
-androidHardwareBuffer.obj ^
-androidSurface.obj ^
 d3dExternalSemaphore.obj ^
-directFbSurface.obj ^
 externalFence.obj ^
 externalSemaphore.obj ^
-fuchsiaSurface.obj ^
-iosSurface.obj ^
-macosSurface.obj ^
-metalSurface.obj ^
-qnxSurface.obj ^
-viSurface.obj ^
-waylandSurface.obj ^
 win32ExternalSemaphore.obj ^
 win32Surface.obj ^
-xcbSurface.obj ^
-xlibSurface.obj ^
 accelerationStructureGeometry.obj ^
 subpass.obj ^
 pipelineShaderStage.obj ^
