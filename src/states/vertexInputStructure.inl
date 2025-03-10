@@ -78,12 +78,12 @@ inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(con
 {
     if (this != &other)
     {
+        this->~VertexInputStructure();
         flags = other.flags;
         vertexBindingDescription = other.vertexBindingDescription;
         vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
         pVertexBindingDescriptions = &vertexBindingDescription;
         vertexAttributeDescriptionCount = other.vertexAttributeDescriptionCount;
-        delete[] pVertexAttributeDescriptions;
         pVertexAttributeDescriptions = core::copyArray(other.pVertexAttributeDescriptions, vertexAttributeDescriptionCount);
     }
     return *this;

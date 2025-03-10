@@ -136,20 +136,16 @@ SubpassDescription& SubpassDescription::operator=(const SubpassDescription& othe
 {
     if (this != &other)
     {
+        this->~SubpassDescription();
         flags = other.flags;
         pipelineBindPoint = other.pipelineBindPoint;
         inputAttachmentCount = other.inputAttachmentCount;
-        delete[] pInputAttachments;
         pInputAttachments = core::copyArray(other.pInputAttachments, other.inputAttachmentCount);
         colorAttachmentCount = other.colorAttachmentCount;
-        delete[] pColorAttachments;
         pColorAttachments = core::copyArray(other.pColorAttachments, other.colorAttachmentCount);
-        delete[] pResolveAttachments;
         pResolveAttachments = core::copyArray(other.pResolveAttachments, other.colorAttachmentCount);
-        delete pDepthStencilAttachment;
         pDepthStencilAttachment = core::copy(other.pDepthStencilAttachment);
         preserveAttachmentCount = other.preserveAttachmentCount;
-        delete[] pPreserveAttachments;
         pPreserveAttachments = core::copyArray(other.pPreserveAttachments, other.preserveAttachmentCount);
     }
     return *this;

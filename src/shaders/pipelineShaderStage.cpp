@@ -80,12 +80,12 @@ PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& o
 {
     if (this != &other)
     {
+        this->~PipelineShaderStage();
         shaderModule = other.shaderModule;
         specialization = other.specialization;
         flags = other.flags;
         stage = other.stage;
         module = other.module;
-        delete[] pName;
         pName = core::copyString(other.pName);
         pSpecializationInfo = specialization.get();
     }
@@ -96,6 +96,7 @@ PipelineShaderStage& PipelineShaderStage::operator=(PipelineShaderStage&& other)
 {
     if (this != &other)
     {
+        this->~PipelineShaderStage();
         pNext = other.pNext;
         flags = other.flags;
         stage = other.stage;
