@@ -39,7 +39,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma::aux
 {
 ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::unique_ptr<RenderPass> renderPass,
-    std::shared_ptr<PipelineLayout> layout, std::shared_ptr<Allocator> allocator /* nullptr */):
+    std::shared_ptr<PipelineLayout> layout /* nullptr */,
+    std::shared_ptr<Allocator> allocator /* nullptr */):
     maxVertexCount(maxVertexCount),
     wideLinesEnabled(renderPass->getDevice()->getEnabledFeatures().wideLines),
     stippledLinesEnabled(renderPass->getDevice()->checkFeatures()->stippledLinesEnabled()),

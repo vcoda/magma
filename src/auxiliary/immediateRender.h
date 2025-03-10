@@ -50,7 +50,7 @@ namespace magma
         public:
             explicit ImmediateRender(const uint32_t maxVertexCount,
                 std::unique_ptr<RenderPass> renderPass,
-                std::shared_ptr<PipelineLayout> layout,
+                std::shared_ptr<PipelineLayout> layout = nullptr,
                 std::shared_ptr<Allocator> allocator = nullptr);
             const std::unique_ptr<RenderPass>& getRenderPass() const noexcept { return renderPass; }
             const std::unique_ptr<PipelineCache>& getPipelineCache() const noexcept;
