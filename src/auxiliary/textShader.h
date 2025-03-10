@@ -40,7 +40,7 @@ namespace magma
         class TextShader : public IClass
         {
         public:
-            explicit TextShader(std::shared_ptr<const RenderPass> renderPass,
+            explicit TextShader(lent_ptr<const RenderPass> renderPass,
                 uint32_t maxChars = 1024,
                 std::shared_ptr<Allocator> allocator = nullptr,
                 lent_ptr<PipelineCache> pipelineCache = nullptr);

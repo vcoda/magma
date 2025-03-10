@@ -38,7 +38,7 @@ namespace magma
         {
         public:
             explicit ImageDescriptorSet(std::shared_ptr<Device> device,
-                const std::unique_ptr<const ShaderReflection>& reflection,
+                lent_ptr<const ShaderReflection> reflection,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             ~ImageDescriptorSet();
             const std::unique_ptr<DescriptorSet>& getDescriptorSet() const noexcept { return descriptorSet; }
