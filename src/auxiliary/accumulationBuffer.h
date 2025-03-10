@@ -52,7 +52,7 @@ namespace magma
                 const VkExtent2D& extent,
                 std::shared_ptr<ShaderModule> fragmentShader,
                 std::shared_ptr<Allocator> allocator = nullptr,
-                const std::unique_ptr<PipelineCache>& pipelineCache = nullptr);
+                lent_ptr<PipelineCache> pipelineCache = nullptr);
             ~AccumulationBuffer();
             const std::shared_ptr<ImageView>& getBufferView() const noexcept { return bufferView; }
             uint32_t getCount() const noexcept { return count; }

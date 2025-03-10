@@ -74,7 +74,7 @@ struct TextShader::PushConstants
 TextShader::TextShader(std::shared_ptr<const RenderPass> renderPass,
     const uint32_t maxChars /* 1024 */,
     std::shared_ptr<Allocator> allocator_ /* nullptr */,
-    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */):
+    lent_ptr<PipelineCache> pipelineCache /* nullptr */):
     maxStrings(16),
     maxChars(maxChars),
     allocator(std::move(allocator_))
@@ -117,7 +117,7 @@ constexpr
         std::move(pipelineLayout),
         std::move(renderPass), 0,
         std::move(hostAllocator),
-        pipelineCache);
+        std::move(pipelineCache));
 }
 
 void TextShader::draw(lent_ptr<CommandBuffer> cmdBuffer) const noexcept

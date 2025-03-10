@@ -44,12 +44,12 @@ namespace magma
         {
         public:
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
-                const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
+                lent_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             explicit BlitRectangle(std::shared_ptr<RenderPass> renderPass,
                 std::shared_ptr<ShaderModule> fragmentShader,
                 std::shared_ptr<Specialization> specialization = nullptr,
-                const std::unique_ptr<PipelineCache>& pipelineCache = nullptr,
+                lent_ptr<PipelineCache> pipelineCache = nullptr,
                 std::shared_ptr<IAllocator> allocator = nullptr);
             void blit(lent_ptr<CommandBuffer> cmdBuffer,
                 lent_ptr<const ImageView> imageView,

@@ -53,7 +53,7 @@ namespace magma::aux
 AccumulationBuffer::AccumulationBuffer(std::shared_ptr<Device> device, VkFormat format, const VkExtent2D& extent,
     std::shared_ptr<ShaderModule> fragmentShader,
     std::shared_ptr<Allocator> allocator /* nullptr */,
-    const std::unique_ptr<PipelineCache>& pipelineCache /* nullptr */):
+    lent_ptr<PipelineCache> pipelineCache /* nullptr */):
     count(0),
     maxCount(std::numeric_limits<uint32_t>::max())
 {
