@@ -36,7 +36,7 @@ FrameGrabber::FrameGrabber(std::shared_ptr<Device> device,
     allocator(std::move(allocator))
 {}
 
-void FrameGrabber::captureFrame(std::shared_ptr<Image2D> srcImage, lent_ptr<CommandBuffer> cmdBuffer)
+void FrameGrabber::captureFrame(lent_ptr<Image2D> srcImage, lent_ptr<CommandBuffer> cmdBuffer)
 {   // Allocate linear tiled image to copy pixels to
     dstImage = std::make_unique<LinearTiledImage2D>(device, VK_FORMAT_R8G8B8A8_UNORM,
         srcImage->getExtent2D(), allocator);
@@ -44,13 +44,14 @@ void FrameGrabber::captureFrame(std::shared_ptr<Image2D> srcImage, lent_ptr<Comm
     const bool srcBlit = features->supportsFormatFeatures(srcImage->getFormat(), VK_FORMAT_FEATURE_BLIT_SRC_BIT).optimal;
     const bool dstBlit = features->supportsFormatFeatures(dstImage->getFormat(), VK_FORMAT_FEATURE_BLIT_DST_BIT).linear;
     const VkImageLayout oldLayout = srcImage->getLayout(0);
+    const VkFormat format = srcImage->getFormat();
     MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Recording);
     // Transition of destination image to transfer dest optimal layout
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        ImageMemoryBarrier(dstImage.get(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL));
-    // Transition of swapchain image to transfer source optimal layout
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        ImageMemoryBarrier(srcImage.get(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL));
+    ImageMemoryBarrier dstImageBarrier(dstImage.get(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, dstImageBarrier);
+    // Transition of source image to transfer source optimal layout
+    ImageMemoryBarrier srcImageBarrier(srcImage.get(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, srcImageBarrier);
     if (srcBlit && dstBlit)
     {   // Use image blitting, format swizzle will be performed automatically
         VkOffset3D blitSize;
@@ -70,7 +71,7 @@ void FrameGrabber::captureFrame(std::shared_ptr<Image2D> srcImage, lent_ptr<Comm
         blitRegion.dstSubresource.layerCount = 1;
         blitRegion.dstOffsets[0] = VkOffset3D{0, 0, 0};
         blitRegion.dstOffsets[1] = blitSize;
-        cmdBuffer->blitImage(srcImage, dstImage, blitRegion, VK_FILTER_NEAREST);
+        cmdBuffer->blitImage(std::move(srcImage), dstImage, blitRegion, VK_FILTER_NEAREST);
     }
     else
     {   // Use image copy, format swizzle will be performed later manually
@@ -86,19 +87,18 @@ void FrameGrabber::captureFrame(std::shared_ptr<Image2D> srcImage, lent_ptr<Comm
         copyRegion.dstSubresource.layerCount = 1;
         copyRegion.dstOffset = VkOffset3D{0, 0, 0};
         copyRegion.extent = dstImage->calculateMipExtent(0);
-        cmdBuffer->copyImage(srcImage, dstImage, copyRegion);
+        cmdBuffer->copyImage(std::move(srcImage), dstImage, copyRegion);
     }
     // Transition of destination image to general layout, which is the required layout for mapping
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        ImageMemoryBarrier(dstImage.get(), VK_IMAGE_LAYOUT_GENERAL));
+    dstImageBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, dstImageBarrier);
     // Transition of swapchain image back to old layout
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        ImageMemoryBarrier(srcImage.get(), oldLayout));
+    srcImageBarrier.newLayout = oldLayout;
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, srcImageBarrier);
     // Do we need to handle swizzling?
     swizzleBgra = false;
     if (!srcBlit || !dstBlit)
     {
-        const VkFormat format = srcImage->getFormat();
         if ((VK_FORMAT_B8G8R8A8_UNORM == format) || (VK_FORMAT_B8G8R8A8_SRGB == format))
             swizzleBgra = true;
     }

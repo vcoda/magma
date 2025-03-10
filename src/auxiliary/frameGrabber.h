@@ -35,7 +35,7 @@ namespace magma
         public:
             explicit FrameGrabber(std::shared_ptr<Device> device,
                 std::shared_ptr<Allocator> allocator = nullptr);
-            void captureFrame(std::shared_ptr<Image2D> srcImage,
+            void captureFrame(lent_ptr<Image2D> srcImage,
                 lent_ptr<CommandBuffer> cmdBuffer);
             void readPixels(std::function<void(uint32_t col, uint32_t row, uint32_t rgba)> eachPixel) const;
             void readPixels(std::function<void(uint32_t row, const std::vector<uint32_t>& rowPixels)> eachRow) const;
