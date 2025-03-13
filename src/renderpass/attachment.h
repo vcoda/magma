@@ -37,6 +37,7 @@ namespace magma
             const LoadStoreOp& stencilOp,
             VkImageLayout initialLayout,
             VkImageLayout finalLayout) noexcept;
+        constexpr uint32_t sampleCount() const noexcept { return static_cast<uint32_t>(samples); }
         constexpr hash_t hash() const noexcept;
     };
 } // namespace magma
