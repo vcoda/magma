@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* A registry of instance-level or device-level extensions. */
+    /* A registry of instance- or device-level extensions. */
 
     template<class Properties>
     class ExtensionRegistry
@@ -33,7 +33,7 @@ namespace magma
         bool supported(const char *name) noexcept;
 
     private:
-        std::map<std::string, Properties> map;
+        std::map<std::string, Properties> registry;
         uint32_t count;
         uint32_t supportedCount;
     };
