@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -70,6 +70,41 @@ namespace magma
             VkDeviceSize srcOffset = 0,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing());
+    };
+
+    /* Template index buffer that uses an "array of known bound"
+       parameter to determine VkIndexType and size of index array
+       at compile-time to minimize count of constructor's arguments.
+
+       Usage example:
+
+       uint16_t indices[] = {0, 1, 2};
+       auto indexBuffer = std::make_unique<magma::TIndexBuffer<uint16_t>>(
+           cmdBuffer, indices); */
+
+    template<class IndexType>
+    class TIndexBuffer : public IndexBuffer
+    {
+        static_assert(
+        #if defined(VK_KHR_index_type_uint8) || defined(VK_EXT_index_type_uint8)
+            std::is_same<IndexType, uint8_t>::value ||
+        #endif
+            std::is_same<IndexType, uint16_t>::value ||
+            std::is_same<IndexType, uint32_t>::value,
+        #if defined(VK_KHR_index_type_uint8) || defined(VK_EXT_index_type_uint8)
+            "index buffer must contain indices of unsigned char, short or int type"
+        #else
+            "index buffer must contain indices of unsigned short or int type"
+        #endif
+            );
+    public:
+        template<std::size_t IndexCount>
+        explicit TIndexBuffer(lent_ptr<CommandBuffer> cmdBuffer,
+            const IndexType (&indices)[IndexCount],
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Initializer& optional = Initializer(),
+            const Sharing& sharing = Sharing(),
+            CopyMemoryFn copyMemFn = nullptr);
     };
 
     /* Major GPU vendors expose a 256MiB-ish staging buffer
