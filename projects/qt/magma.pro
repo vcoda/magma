@@ -475,6 +475,7 @@ QMAKE_EXTRA_TARGETS = make_spirv_dir compile_shaders
 PRE_TARGETDEPS = make_spirv_dir compile_shaders
 
 INCLUDEPATH += $(VULKAN_SDK)/include
+INCLUDEPATH += ../../src/third-party/pfr/include
 INCLUDEPATH += ../../src/core/
 
 QMAKE_CXXFLAGS += -std=c++17 -msse4 -ftemplate-depth=2048 -fconstexpr-depth=2048

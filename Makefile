@@ -200,7 +200,7 @@ GLSLC=$(VULKAN_SDK)/bin/glslangValidator
 
 PLATFORM=VK_USE_PLATFORM_XCB_KHR
 
-INCLUDE_DIR=-I$(VULKAN_SDK)/include -Isrc/core
+INCLUDE_DIR=-I$(VULKAN_SDK)/include -Isrc/third-party/pfr/include -Isrc/core
 GLSL_DIR=src/auxiliary/spirv
 SPIRV_DIR=$(GLSL_DIR)/output
 
