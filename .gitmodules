@@ -6,3 +6,7 @@
 	path = src/third-party/SPIRV-Reflect
 	url = https://github.com/KhronosGroup/SPIRV-Reflect.git
 	branch = master
+[submodule "src/third-party/pfr"]
+	path = src/third-party/pfr
+	url = https://github.com/boostorg/pfr.git
+	branch = master
