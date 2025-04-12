@@ -450,9 +450,6 @@
     <ClInclude Include="..\..\src\descriptors\descriptorPool.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\descriptors\descriptorSetTable.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\descriptors\imageDescriptor.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
@@ -1387,9 +1384,6 @@
     <None Include="..\..\src\descriptors\bufferDescriptorArray.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\src\descriptors\descriptorSetTable.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
     <None Include="..\..\src\descriptors\imageDescriptor.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
@@ -1626,6 +1620,12 @@
     </None>
     <None Include="..\..\src\core\vla.inl">
       <Filter>Header Files\core</Filter>
+    </None>
+    <None Include="..\..\src\objects\descriptorSet.inl">
+      <Filter>Header Files\objects</Filter>
+    </None>
+    <None Include="..\..\src\objects\variableCountDescriptorSet.inl">
+      <Filter>Header Files\objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

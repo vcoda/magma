@@ -67,6 +67,7 @@ namespace magma
             std::unique_ptr<Sampler> cubicSampler;
             std::unique_ptr<GraphicsPipeline> pipeline;
             std::vector<ClearValue> clearValues;
+            static DescriptorSetTable setTableTemplate;
             mutable std::forward_list<DescriptorSetTable> setTables;
             mutable std::map<const ImageView *, std::unique_ptr<DescriptorSet>> descriptorSets;
         };

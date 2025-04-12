@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflection.h"
 #include "../shaders/shaderReflectionFactory.h"
 #include "../descriptors/bufferDescriptor.h"
-#include "../descriptors/descriptorSetTable.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
@@ -59,11 +58,10 @@ struct alignas(16) TextShader::Glyph
     uint32_t data[4];
 };
 
-struct TextShader::DescriptorSetTable : magma::DescriptorSetTable
+struct TextShader::DescriptorSetTable
 {
     descriptor::StorageBuffer stringBuffer = 0;
     descriptor::StorageBuffer charBuffer = 1;
-    MAGMA_REFLECT(stringBuffer, charBuffer)
 };
 
 struct TextShader::PushConstants

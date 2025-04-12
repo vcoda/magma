@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#ifdef VK_EXT_descriptor_indexing
 #include "descriptorSet.h"
 
 namespace magma
@@ -37,10 +38,10 @@ namespace magma
         * The final binding in a descriptor set layout can have a
           variable size. */
 
-#ifdef VK_EXT_descriptor_indexing
     class VariableCountDescriptorSet : public DescriptorSet
     {
     public:
+        template<class DescriptorSetTable>
         explicit VariableCountDescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
             DescriptorSetTable& setTable,
             VkShaderStageFlags stageFlags,
@@ -50,6 +51,12 @@ namespace magma
             std::string_view shaderFileName = {},
             uint32_t setIndex = 0,
             const StructureChain& extendedInfo = StructureChain());
+
+    private:
+        void allocate(VkDescriptorSetLayoutCreateFlags flags,
+            const StructureChain& extendedInfo);
     };
+} // namespace magma
+
+#include "variableCountDescriptorSet.inl"
 #endif // VK_EXT_descriptor_indexing
-}

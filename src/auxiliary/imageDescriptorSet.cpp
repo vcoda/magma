@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,21 +25,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflection.h"
 #include "../shaders/shaderReflectionFactory.h"
 #include "../descriptors/imageDescriptor.h"
-#include "../descriptors/descriptorSetTable.h"
 #include "../exceptions/exception.h"
 
 namespace magma::aux
 {
-struct ImageDescriptorSet::ImageTable : DescriptorSetTable
+struct ImageDescriptorSet::ImageTable
 {
     descriptor::CombinedImageSampler image = 0;
-    MAGMA_REFLECT(image)
 };
 
-struct ImageDescriptorSet::StorageImageTable : DescriptorSetTable
+struct ImageDescriptorSet::StorageImageTable
 {
     descriptor::StorageImage image = 0;
-    MAGMA_REFLECT(image)
 };
 
 ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,

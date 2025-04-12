@@ -78,9 +78,9 @@
       <MinimalRebuild>false</MinimalRebuild>
       <AdditionalOptions>/MP16 /constexpr:depth2048 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;..\..\src\third-party\pfr\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <DisableSpecificWarnings>4458</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4458;4348</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -96,10 +96,10 @@
       <SDLCheck>true</SDLCheck>
       <MinimalRebuild>false</MinimalRebuild>
       <AdditionalOptions>/MP16 /constexpr:depth2048 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;..\..\src\third-party\pfr\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <DisableSpecificWarnings>4458</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4458;4348</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ConformanceMode>true</ConformanceMode>
@@ -116,11 +116,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;..\..\src\third-party\pfr\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP16 /constexpr:depth2048 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4458</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4458;4348</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -141,10 +141,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;..\..\src\third-party\pfr\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4458</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4458;4348</DisableSpecificWarnings>
       <AdditionalOptions>/MP16 /constexpr:depth2048 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -204,7 +204,6 @@
     <ClInclude Include="..\..\src\descriptors\bufferDescriptor.h" />
     <ClInclude Include="..\..\src\descriptors\bufferDescriptorArray.h" />
     <ClInclude Include="..\..\src\descriptors\descriptorPool.h" />
-    <ClInclude Include="..\..\src\descriptors\descriptorSetTable.h" />
     <ClInclude Include="..\..\src\descriptors\imageArrayElement.h" />
     <ClInclude Include="..\..\src\descriptors\imageDescriptor.h" />
     <ClInclude Include="..\..\src\descriptors\imageDescriptorArray.h" />
@@ -690,7 +689,6 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\descriptors\descriptorSetLayoutBinding.inl" />
     <None Include="..\..\src\descriptors\bufferDescriptor.inl" />
     <None Include="..\..\src\descriptors\bufferDescriptorArray.inl" />
-    <None Include="..\..\src\descriptors\descriptorSetTable.inl" />
     <None Include="..\..\src\descriptors\imageArrayElement.inl" />
     <None Include="..\..\src\descriptors\imageDescriptor.inl" />
     <None Include="..\..\src\descriptors\imageDescriptorArray.inl" />
@@ -714,6 +712,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\objects\accelerationStructureInstanceBuffer.inl" />
     <None Include="..\..\src\objects\bufferView.inl" />
     <None Include="..\..\src\objects\commandBuffer.inl" />
+    <None Include="..\..\src\objects\descriptorSet.inl" />
     <None Include="..\..\src\objects\device.inl" />
     <None Include="..\..\src\objects\image.inl" />
     <None Include="..\..\src\objects\imageView.inl" />
@@ -730,6 +729,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\objects\renderPass.inl" />
     <None Include="..\..\src\objects\deviceResourcePool.inl" />
     <None Include="..\..\src\objects\shaderModule.inl" />
+    <None Include="..\..\src\objects\variableCountDescriptorSet.inl" />
     <None Include="..\..\src\packed\b4g4r4a4unorm.inl" />
     <None Include="..\..\src\packed\b5g5r5a1unorm.inl" />
     <None Include="..\..\src\packed\b5g6r5unorm.inl" />

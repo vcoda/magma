@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,14 +17,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "model/nondispatchable.h"
+#include "../descriptors/descriptorSetLayoutBinding.h"
+#include "../shaders/shaderReflectionFactory.h"
+#include "../exceptions/errorHandler.h"
 
 namespace magma
 {
     class DescriptorPool;
     class DescriptorSetLayout;
-    class DescriptorSetTable;
     class ShaderReflection;
-    class IShaderReflectionFactory;
     class IAllocator;
 
     /* A descriptor set object is an opaque object that contains
@@ -39,6 +40,7 @@ namespace magma
     class DescriptorSet : public NonDispatchable<VkDescriptorSet>
     {
     public:
+        template<class DescriptorSetTable>
         explicit DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
             DescriptorSetTable& setTable,
             VkShaderStageFlags stageFlags,
@@ -51,20 +53,25 @@ namespace magma
         ~DescriptorSet();
         const std::shared_ptr<DescriptorPool>& getPool() const noexcept { return descriptorPool; }
         const std::unique_ptr<DescriptorSetLayout>& getLayout() const noexcept { return setLayout; }
-        std::size_t getDescriptorCount() const;
+        std::size_t getDescriptorCount() const { return descriptors.size(); }
         bool dirty() const;
         void update();
         uint32_t writeDescriptors(VkWriteDescriptorSet *descriptorWrites) const;
 
     protected:
         DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool,
-            DescriptorSetTable& setTable,
-            std::shared_ptr<IAllocator> allocator);
+            std::shared_ptr<IAllocator> allocator) noexcept;
         void validateReflection(const std::unique_ptr<const ShaderReflection>& shaderReflection,
             uint32_t setIndex) const;
 
-        DescriptorSetTable& setTable; // TODO: Can we avoid that dangerous reference?
+        std::vector<DescriptorSetLayoutBinding *> descriptors;
         std::shared_ptr<DescriptorPool> descriptorPool;
         std::unique_ptr<DescriptorSetLayout> setLayout;
+
+    private:
+        void allocate(VkDescriptorSetLayoutCreateFlags flags,
+            const StructureChain& extendedInfo);
     };
 }
+
+#include "descriptorSet.inl"

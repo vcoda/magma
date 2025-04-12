@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflectionFactory.h"
 #include "../shaders/specialization.h"
 #include "../descriptors/imageDescriptor.h"
-#include "../descriptors/descriptorSetTable.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
 #include "../states/rasterizationState.h"
@@ -50,11 +49,12 @@ namespace magma::aux
 constexpr
 #include "spirv/output/blitf"
 
-struct BlitRectangle::DescriptorSetTable : magma::DescriptorSetTable
+struct BlitRectangle::DescriptorSetTable
 {
     descriptor::CombinedImageSampler image = 0;
-    MAGMA_REFLECT(image)
 };
+
+BlitRectangle::DescriptorSetTable BlitRectangle::setTableTemplate;
 
 BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     lent_ptr<PipelineCache> pipelineCache /* nullptr */,
@@ -77,8 +77,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     constexpr uint32_t maxDescriptorSets = 10;
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
         descriptor::CombinedImageSamplerPool(maxDescriptorSets), allocator);
-    static DescriptorSetTable templateSetTable;
-    descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, templateSetTable, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
+    descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, setTableTemplate, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
     // Create texture samplers
     nearestSampler = std::make_unique<Sampler>(device, sampler::magMinMipNearestClampToEdge, allocator);
     bilinearSampler = std::make_unique<Sampler>(device, sampler::magMinLinearMipNearestClampToEdge, allocator);

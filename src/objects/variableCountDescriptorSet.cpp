@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,60 +20,28 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "variableCountDescriptorSet.h"
 #include "descriptorSetLayout.h"
 #include "descriptorPool.h"
-#include "device.h"
-#include "../descriptors/descriptorSetTable.h"
-#include "../shaders/shaderReflectionFactory.h"
-#include "../exceptions/errorResult.h"
 
 namespace magma
 {
 #ifdef VK_EXT_descriptor_indexing
-VariableCountDescriptorSet::VariableCountDescriptorSet(std::shared_ptr<DescriptorPool> descriptorPool_,
-    DescriptorSetTable& setTable, VkShaderStageFlags stageFlags,
-    std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkDescriptorSetLayoutCreateFlags flags /* 0 */,
-    lent_ptr<IShaderReflectionFactory> shaderReflectionFactory /* nullptr */,
-    std::string_view shaderFileName /* empty */,
-    uint32_t setIndex /* 0 */,
-    const StructureChain& extendedInfo /* default */):
-    DescriptorSet(std::move(descriptorPool_), setTable, allocator)
-{   // Check that all descriptors have unique layout bindings
-    const DescriptorSetTableBindings& reflection = setTable.getReflection();
-    std::vector<uint32_t> locations;
-    for (auto const& descriptor: reflection)
-        locations.push_back(descriptor.get().binding);
-    std::sort(locations.begin(), locations.end());
-    if (std::unique(locations.begin(), locations.end()) != locations.end())
-        MAGMA_ERROR("elements of descriptor set layout should have unique binding locations");
-    if (shaderReflectionFactory && !shaderFileName.empty())
-    {   // Validate descriptors through shader reflection
-        auto& shaderReflection = shaderReflectionFactory->getReflection(std::move(shaderFileName));
-        validateReflection(shaderReflection, setIndex);
-    }
-    // Sort bindings by order
-    std::map<uint32_t, const DescriptorSetLayoutBinding *> sortedBindings;
-    for (auto const& descriptor: reflection)
-    {
-        const DescriptorSetLayoutBinding& binding = descriptor.get();
-        sortedBindings[binding.binding] = &binding;
-    }
-    // Prepare list of native bindings
+void VariableCountDescriptorSet::allocate(VkDescriptorSetLayoutCreateFlags flags, const StructureChain& extendedInfo)
+{   // Sort descriptors by binding order
+    std::map<uint32_t, const DescriptorSetLayoutBinding *> sortedDescriptors;
+    for (auto descriptor: descriptors)
+        sortedDescriptors[descriptor->binding] = descriptor;
     std::vector<VkDescriptorSetLayoutBinding> bindings;
     std::vector<VkDescriptorBindingFlagsEXT> bindingFlags;
-    for (auto const& [index, binding]: sortedBindings)
+    for (auto const& [index, descriptor]: sortedDescriptors)
     {
         MAGMA_UNUSED(index);
-        bindings.push_back(*binding);
-        // Set global stage flags if they have not been assigned for descriptor binding
-        if (!bindings.back().stageFlags)
-            bindings.back().stageFlags = stageFlags;
-        if (binding->getBindingFlags() & VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT)
+        bindings.push_back(*descriptor);
+        if (descriptor->getBindingFlags() & VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT)
         {
             bool canUpdateAfterBind = descriptorPool->getFlags() & VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
             if (!canUpdateAfterBind)
                 MAGMA_ERROR("descriptor with update-after-bind flag can't be allocated from this pool");
         }
-        bindingFlags.push_back(binding->getBindingFlags());
+        bindingFlags.push_back(descriptor->getBindingFlags());
     }
     // If an element of pBindingFlags includes VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT,
     // then it must be the element with the highest binding number.
@@ -100,10 +68,6 @@ VariableCountDescriptorSet::VariableCountDescriptorSet(std::shared_ptr<Descripto
     descriptorSetVariableDescriptorCountAllocateInfo.pDescriptorCounts = &bindings.back().descriptorCount;
     const VkResult result = vkAllocateDescriptorSets(getNativeDevice(), &descriptorSetAllocateInfo, &handle);
     MAGMA_HANDLE_RESULT(result, "failed to allocate variable count descriptor set");
-    if (dirty())
-    {   // Once allocated, descriptor set can be updated
-        update();
-    }
 }
 #endif // VK_EXT_descriptor_indexing
 } // namespace magma
