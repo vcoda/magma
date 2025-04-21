@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-INCLUDE_DIR=-I$(VULKAN_SDK)/include -I../../src
+INCLUDE_DIR=-I$(VULKAN_SDK)/include -I../../src/third-party/pfr/include -I../../src
 CFLAGS=-std=c++17 -m64 $(INCLUDE_DIR)
 
 unittest: unittest.cpp
