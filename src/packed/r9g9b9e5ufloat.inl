@@ -20,30 +20,36 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     __m128 v = _mm_set_ps(0.f, b, g, r);
     v = _mm_max_ps(v, _mm_setzero_ps());
     v = _mm_min_ps(v, _mm_set_ps1(MAX_RGB9E5));
-    // Horizontal max3
+    // max(r, g, b)
     __m128 v1 = _mm_movehl_ps(v, v);
     __m128 v2 = _mm_max_ps(v, v1);
     v1 = mm_permute_ps(v, _MM_SHUFFLE(3, 1, 1, 1));
-    __m128 max3 = _mm_max_ps(v1, v2);
-    // TODO: begin vectorize
-    float maxRgb;
-    _mm_store_ss(&maxRgb, max3);
-    int fl = floorLog2(maxRgb);
-    int exp = (-EXP_BIAS - 1 > fl ? -EXP_BIAS - 1 : fl) + 1 + EXP_BIAS;
-    // TODO: end vectorize
-    __m128 scale = _mm_set_ss(rcpExpPow2[exp]);
-    v2 = _mm_mul_ss(max3, scale); // max(r, g, b) / (2^(exp - EXP_BIAS - MANTISSA_BITS))
-    int maxm = _mm_extract_epi32(_mm_cvtps_epi32(v2), 0); // Convert to int with rounding
-    if (MAX_MANTISSA + 1 == maxm) ++exp;
-    scale = _mm_set_ps1(rcpExpPow2[exp]);
-    v = _mm_mul_ps(v, scale);
-    v = _mm_round_ps(v, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
-    __m128 bitshift = _mm_set_ps(0.f, 512.f * 512.f, 512.f, 1.f); // -, 18, 9, 0
-    v = _mm_mul_ps(v, bitshift);
-    __m128i iv = _mm_cvtps_epi32(v);
-    iv = _mm_horizontal_or(iv);
+    __m128 max = _mm_max_ps(v1, v2);
+    max = _mm_shuffle_ps(max, max, _MM_SHUFFLE(0, 0, 0, 0)); // splat to all
+    // floorLog2(max(r, g, b))
+    __m128i bits = _mm_castps_si128(max);
+    __m128i bias = _mm_set1_epi32(Float32::bias);
+    __m128i fl2 = _mm_sub_epi32(_mm_srli_epi32(bits, 23), bias);
+    // e = max(-EXP_BIAS - 1, floorLog2(max(r, g, b))) + 1 + EXP_BIAS;
+    __m128i e = _mm_max_epi32(fl2, _mm_set1_epi32(-EXP_BIAS - 1));
+    e = _mm_add_epi32(e, _mm_set1_epi32(+EXP_BIAS + 1));
+    // scale = exp2f(EXP_BIAS + MANTISSA_BITS - e)
+    __m128i shift = _mm_sub_epi32(_mm_set1_epi32(EXP_BIAS + MANTISSA_BITS), e);
+    __m128i scale = _mm_slli_epi32(_mm_add_epi32(shift, bias), 23);
+    // round([r, g, b] * scale)
+    __m128i mantissas = _mm_cvtps_epi32(_mm_mul_ps(v, _mm_castsi128_ps(scale)));
+    // split mantissas
+    __m128i rm = _mm_shuffle_epi32(mantissas, _MM_SHUFFLE(3, 3, 3, 0));
+    __m128i gm = _mm_shuffle_epi32(mantissas, _MM_SHUFFLE(3, 3, 3, 1));
+    __m128i bm = _mm_shuffle_epi32(mantissas, _MM_SHUFFLE(3, 3, 3, 2));
+    // mask & l-shift
+    rm = _mm_and_si128(rm, _mm_set1_epi32(0x1FF));
+    gm = _mm_slli_epi32(_mm_and_si128(gm, _mm_set1_epi32(0x1FF)), 9);
+    bm = _mm_slli_epi32(_mm_and_si128(bm, _mm_set1_epi32(0x1FF)), 18);
+    e = _mm_slli_epi32(_mm_and_si128(e, _mm_set1_epi32(0x1F)), 27);
+    // rm | gm | bm | e
+    __m128i iv = _mm_or_si128(_mm_or_si128(rm, gm), _mm_or_si128(bm, e));
     this->v = _mm_cvtsi128_si32(iv);
-    e = uint32_t(exp) & 0x1F;
 #elif defined(MAGMA_NEON)
     float32x4_t v = {r, g, b, 0.f};
     v = vmaxq_f32(v, vdupq_n_f32(0.f));
