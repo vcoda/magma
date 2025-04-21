@@ -20,7 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "baseUniformBuffer.h"
 #include "device.h"
 #include "physicalDevice.h"
-#include "../exceptions/exception.h"
+#include "../exceptions/errorHandler.h"
 
 namespace magma
 {
