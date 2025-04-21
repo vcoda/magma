@@ -130,7 +130,7 @@ namespace magma
 #endif // MAGMA_VERIFY_CONSTEXPR
 
 #ifdef MAGMA_VERIFY_DESCRIPTORS
-    struct BufferSetTable : DescriptorSetTable
+    struct BufferSetTable
     {
         descriptor::UniformTexelBuffer uniformTexelBuffer = 0;
         descriptor::StorageTexelBuffer storageTexelBuffer = 1;
@@ -144,13 +144,9 @@ namespace magma
         descriptor::StorageBufferArray<4> storageBufferArray = 9;
         descriptor::DynamicUniformBufferArray<4> dynamicUniformBufferArray = 10;
         descriptor::DynamicStorageBufferArray<4> dynamicStorageBufferArray = 11;
-        MAGMA_REFLECT(uniformTexelBuffer, storageTexelBuffer, uniformBuffer,
-            storageBuffer, dynamicUniformBuffer, dynamicStorageBuffer,
-            uniformTexelBufferArray, storageTexelBufferArray, uniformBufferArray,
-            storageBufferArray, dynamicUniformBufferArray, dynamicStorageBufferArray)
     };
 
-    struct ImageSetTable : DescriptorSetTable
+    struct ImageSetTable
     {
         descriptor::Sampler sampler = 0;
         descriptor::CombinedImageSampler combinedImageSampler = 1;
@@ -164,13 +160,9 @@ namespace magma
         descriptor::SampledImageArray<4> sampledImageArray = 9;
         descriptor::StorageImageArray<4> storageImageArray = 10;
         descriptor::InputAttachmentArray<4> inputAttachmentArray = 11;
-        MAGMA_REFLECT(sampler, combinedImageSampler, combinedImageImmutableSampler,
-            sampledImage, storageImage, inputAttachment, samplerArray,
-            combinedImageSamplerArray, combinedImageImmutableSamplerArray,
-            sampledImageArray, storageImageArray, inputAttachmentArray)
     };
 
-    struct ExtSetTable : DescriptorSetTable
+    struct ExtSetTable
     {
     #ifdef VK_EXT_inline_uniform_block
         struct Uniforms
