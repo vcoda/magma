@@ -59,10 +59,12 @@ void testSharedExponentFormat()
 {
     constexpr float r = .2f, g = .3f, b = .5f;
     float rgb[3];
-    magma::packed::R9g9b9e5Ufloat(r, g, b).unpack(rgb);
+    const magma::packed::R9g9b9e5Ufloat color(r, g, b);
+    color.unpack(rgb);
     std::cout << "R delta: " << std::abs(rgb[0] - r) << std::endl;
     std::cout << "G delta: " << std::abs(rgb[1] - g) << std::endl;
     std::cout << "B delta: " << std::abs(rgb[2] - b) << std::endl;
+    std::cout << "Binary: " << color.v << std::endl;
 }
 
 int main()
