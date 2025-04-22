@@ -56,29 +56,38 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     float32x4_t v = {r, g, b, 0.f};
     v = vmaxq_f32(v, vdupq_n_f32(0.f));
     v = vminq_f32(v, vdupq_n_f32(MAX_RGB9E5));
-    // Horizontal max3
+    // max(r, g, b)
     float32x2_t v1 = vget_low_f32(v);
     float32x2_t v2 = vget_high_f32(v);
-    float32x2_t max3 = vmax_f32(v1, v2);
-    max3 = vpmax_f32(max3, max3);
-    // TODO: begin vectorize
-    float maxRgb = vget_lane_f32(max3, 0);
-    int fl = floorLog2(maxRgb);
-    int exp = (-EXP_BIAS - 1 > fl ? -EXP_BIAS - 1 : fl) + 1 + EXP_BIAS;
-    // TODO: end vectorize
-    float32x2_t scale = vdup_n_f32(rcpExpPow2[exp]);
-    v1 = vmul_f32(max3, scale); // max(r, g, b) / (2^(exp - EXP_BIAS - MANTISSA_BITS))
-    int maxm = vget_lane_s32(vcvt_s32_f32(v1), 0);
-    if (MAX_MANTISSA + 1 == maxm) ++exp;
-    float32x4_t scaleq = vdupq_n_f32(rcpExpPow2[exp]);
-    v = vmulq_f32(v, scaleq);
-    v = vrndnq_f32(v);
-    uint32x4_t iv = vcvtnq_u32_f32(v);
-    this->v =
-        (((uint32_t)exp & 0x1F) << 27) |
-        (((uint32_t)vgetq_lane_u32(iv, 2) & 0x1FF) << 18) |
-        (((uint32_t)vgetq_lane_u32(iv, 1) & 0x1FF) << 9) |
-        ((uint32_t)vgetq_lane_u32(iv, 0) & 0x1FF);
+    float32x2_t max = vmax_f32(v1, v2);
+    max = vpmax_f32(max, max);
+    // floorLog2(max(r, g, b))
+    uint32x2_t bits64 = vreinterpret_u32_f32(max);
+    uint32x4_t bits = vcombine_u32(bits64, vdup_n_u32(0)); // splat to all
+    uint32x4_t bias = vdupq_n_u32(Float32::bias);
+    uint32x4_t fl2 = vsubq_u32(vshrq_n_u32(bits, 23), bias);
+    // e = max(-EXP_BIAS - 1, floorLog2(max(r, g, b))) + 1 + EXP_BIAS;
+    uint32x4_t e = vmaxq_u32(fl2, vdupq_n_u32(-EXP_BIAS - 1));
+    e = vaddq_u32(e, vdupq_n_u32(EXP_BIAS + 1));
+    // scale = exp2f(EXP_BIAS + MANTISSA_BITS - e)
+    uint32x4_t shift = vsubq_u32(vdupq_n_u32(EXP_BIAS + MANTISSA_BITS), e);
+    uint32x4_t scale = vshlq_n_u32(vaddq_u32(shift, bias), 23);
+    // round([r, g, b] * scale)
+    uint32x4_t mantissas = vcvtq_u32_f32(vmulq_f32(v, vreinterpretq_f32_u32(scale)));
+    // split mantissas
+    uint32x4_t rm = vdupq_lane_u32(mantissas, 0);
+    uint32x4_t gm = vdupq_lane_u32(mantissas, 1);
+    uint32x4_t bm = vdupq_lane_u32(mantissas, 2);
+    // mask & l-shift
+    uint32x4_t mask9 = vdupq_n_u32(0x1FF);
+    uint32x4_t mask5 = vdupq_n_u32(0x1F);
+    rm = vandq_u32(rm, mask9);
+    gm = vshlq_n_u32(vandq_u32(gm, mask9), 9);
+    bm = vshlq_n_u32(vandq_u32(bm, mask9), 18);
+    e = vshlq_n_u32(vandq_u32(e, mask5), 27);
+    // rm | gm | bm | e
+    uint32x4_t iv = vorrq_u32(vorrq_u32(rm, gm), vorrq_u32(bm, e));
+    this->v = vgetq_lane_u32(iv, 0);
 #else // FPU
     r = std::min(std::max(0.f, r), MAX_RGB9E5);
     g = std::min(std::max(0.f, g), MAX_RGB9E5);
