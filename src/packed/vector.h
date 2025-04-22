@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ namespace magma
            Z component in bits 20..29, a 10-bit Y component in bits 10..19,
            and a 10-bit X component in bits 0..9. */
 
-        struct X10y10z10w2Unorm
+        struct X10y10z10w2Unorm : Vector<VK_FORMAT_A2B10G10R10_UNORM_PACK32>
         {
             union
             {
@@ -45,8 +45,6 @@ namespace magma
             explicit X10y10z10w2Unorm(float x, float y, float z, uint32_t w = 0) noexcept;
             explicit X10y10z10w2Unorm(const float v[3], uint32_t w = 0) noexcept:
                 X10y10z10w2Unorm(v[0], v[1], v[2], w) {}
-
-            static constexpr auto format = VK_FORMAT_A2B10G10R10_UNORM_PACK32;
         };
 
         /* Specifies a four-component, 32-bit packed signed normalized
@@ -54,7 +52,7 @@ namespace magma
            Z component in bits 20..29, a 10-bit Y component in bits 10..19,
            and a 10-bit X component in bits 0..9. */
 
-        struct X10y10z10w2Snorm
+        struct X10y10z10w2Snorm : Vector<VK_FORMAT_A2B10G10R10_SNORM_PACK32>
         {
             union
             {
@@ -73,8 +71,6 @@ namespace magma
             explicit X10y10z10w2Snorm(float x, float y, float z, int32_t w = 0) noexcept;
             explicit X10y10z10w2Snorm(const float v[3], int32_t w = 0) noexcept:
                 X10y10z10w2Snorm(v[0], v[1], v[2], w) {}
-
-            static constexpr auto format = VK_FORMAT_A2B10G10R10_SNORM_PACK32;
         };
 
         /* Specifies a three-component, 32-bit packed unsigned floating-
@@ -88,7 +84,7 @@ namespace magma
            https://www.khronos.org/registry/DataFormat/specs/1.3/dataformat.1.3.html#11bitfp
            https://www.khronos.org/registry/DataFormat/specs/1.3/dataformat.1.3.html#10bitfp */
 
-        struct X11y11z10Ufloat
+        struct X11y11z10Ufloat : Vector<VK_FORMAT_B10G11R11_UFLOAT_PACK32>
         {
             union
             {
@@ -109,8 +105,6 @@ namespace magma
             explicit X11y11z10Ufloat(float x, float y, float z) noexcept;
             explicit X11y11z10Ufloat(const float v[3]) noexcept:
                 X11y11z10Ufloat(v[0], v[1], v[2]) {}
-
-            static constexpr auto format = VK_FORMAT_B10G11R11_UFLOAT_PACK32;
         };
     } // namespace packed
 } // namespace magma
