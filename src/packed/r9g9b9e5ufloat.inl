@@ -43,10 +43,12 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     __m128i gm = _mm_shuffle_epi32(mantissas, _MM_SHUFFLE(3, 3, 3, 1));
     __m128i bm = _mm_shuffle_epi32(mantissas, _MM_SHUFFLE(3, 3, 3, 2));
     // mask & l-shift
-    rm = _mm_and_si128(rm, _mm_set1_epi32(0x1FF));
-    gm = _mm_slli_epi32(_mm_and_si128(gm, _mm_set1_epi32(0x1FF)), 9);
-    bm = _mm_slli_epi32(_mm_and_si128(bm, _mm_set1_epi32(0x1FF)), 18);
-    e = _mm_slli_epi32(_mm_and_si128(e, _mm_set1_epi32(0x1F)), 27);
+    __m128i mask9 = _mm_set1_epi32(0x1FF);
+    __m128i mask5 = _mm_set1_epi32(0x1F);
+    rm = _mm_and_si128(rm, mask9);
+    gm = _mm_slli_epi32(_mm_and_si128(gm, mask9), 9);
+    bm = _mm_slli_epi32(_mm_and_si128(bm, mask9), 18);
+    e = _mm_slli_epi32(_mm_and_si128(e, mask5), 27);
     // rm | gm | bm | e
     __m128i iv = _mm_or_si128(_mm_or_si128(rm, gm), _mm_or_si128(bm, e));
     this->v = _mm_cvtsi128_si32(iv);
