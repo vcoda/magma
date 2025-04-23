@@ -15,7 +15,6 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     constexpr int MAX_EXP = MAX_VALID_BIASED_EXP - EXP_BIAS;
     constexpr int MAX_MANTISSA = (1 << MANTISSA_BITS) - 1;
     constexpr float MAX_RGB9E5 = float(MAX_MANTISSA) / (1 << MANTISSA_BITS) * (1 << MAX_EXP);
-    #include "rcpExpPow2.h"
 #ifdef MAGMA_SSE
     __m128 v = _mm_set_ps(0.f, b, g, r);
     v = _mm_max_ps(v, _mm_setzero_ps());
@@ -96,6 +95,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     int exp = std::max(-EXP_BIAS - 1, floorLog2(maxRgb)) + 1 + EXP_BIAS;
     MAGMA_ASSERT(exp >= 0);
     MAGMA_ASSERT(exp <= MAX_VALID_BIASED_EXP);
+    #include "rcpExpPow2.h"
     float scale = rcpExpPow2[exp];
     int maxm = (int)std::roundf(maxRgb * scale); // max(r, g, b) / (2^(exp - EXP_BIAS - MANTISSA_BITS))
     MAGMA_ASSERT(maxm <= MAX_MANTISSA);
@@ -115,8 +115,8 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
 inline void R9g9b9e5Ufloat::unpack(float v[3]) const noexcept
 {
     constexpr int MAX_VALID_BIASED_EXP = 31;
-    #include "expPow2.h"
     MAGMA_ASSERT(e <= MAX_VALID_BIASED_EXP);
+    #include "expPow2.h"
     float scale = expPow2[e];
     v[0] = rm * scale;
     v[1] = gm * scale;
