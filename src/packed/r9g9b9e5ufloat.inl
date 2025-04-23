@@ -63,7 +63,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     max = vpmax_f32(max, max);
     // floorLog2(max(r, g, b))
     uint32x2_t bits64 = vreinterpret_u32_f32(max);
-    uint32x4_t bits = vcombine_u32(bits64, vdup_n_u32(0)); // splat to all
+    uint32x4_t bits = vcombine_u32(bits64, bits64); // splat to all
     uint32x4_t bias = vdupq_n_u32(Float32::bias);
     uint32x4_t fl2 = vsubq_u32(vshrq_n_u32(bits, 23), bias);
     // e = max(-EXP_BIAS - 1, floorLog2(max(r, g, b))) + 1 + EXP_BIAS;
@@ -73,11 +73,11 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     uint32x4_t shift = vsubq_u32(vdupq_n_u32(EXP_BIAS + MANTISSA_BITS), e);
     uint32x4_t scale = vshlq_n_u32(vaddq_u32(shift, bias), 23);
     // round([r, g, b] * scale)
-    uint32x4_t mantissas = vcvtq_u32_f32(vmulq_f32(v, vreinterpretq_f32_u32(scale)));
+    uint32x4_t mantissas = vcvtnq_u32_f32(vmulq_f32(v, vreinterpretq_f32_u32(scale)));
     // split mantissas
-    uint32x4_t rm = vdupq_lane_u32(mantissas, 0);
-    uint32x4_t gm = vdupq_lane_u32(mantissas, 1);
-    uint32x4_t bm = vdupq_lane_u32(mantissas, 2);
+    uint32x4_t rm = vdupq_lane_u32(vget_low_u32(mantissas), 0);
+    uint32x4_t gm = vdupq_lane_u32(vget_low_u32(mantissas), 1);
+    uint32x4_t bm = vdupq_lane_u32(vget_high_u32(mantissas), 0);
     // mask & l-shift
     uint32x4_t mask9 = vdupq_n_u32(0x1FF);
     uint32x4_t mask5 = vdupq_n_u32(0x1F);
