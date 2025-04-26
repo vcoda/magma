@@ -442,8 +442,8 @@ namespace magma
         // deferred release of resources bound to command buffer.
         // Only arguments passed as std::shared_ptr<T> where T is
         // derived from DeviceChild can be stored in the in-use list.
-        mutable std::unordered_set<std::shared_ptr<const DeviceChild>> inUse;
-    #endif
+        mutable std::vector<std::shared_ptr<const DeviceChild>> inUse;
+    #endif // MAGMA_RETAIN_OBJECTS_IN_USE
         friend CommandPool;
         friend Queue;
     };

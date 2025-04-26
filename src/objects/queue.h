@@ -143,7 +143,7 @@ namespace magma
     #endif
         std::vector<CommandBuffer *> submittedCommandBuffers;
     #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-        std::unordered_set<std::shared_ptr<const IObject>> inUse;
+        std::vector<std::shared_ptr<const IObject>> inUse;
     #endif
         friend Device;
     };

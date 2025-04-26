@@ -81,7 +81,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_INUSE(obj)\
     if (obj.shareable()) try\
     {\
-        inUse.insert(obj.get_shared());\
+        inUse.push_back(obj.get_shared());\
     }\
     catch(...) {}
 #else

@@ -1137,7 +1137,8 @@ inline uint32_t CommandBuffer::inUseObjectCount() const noexcept
 inline void CommandBuffer::releaseObjectsInUse() noexcept
 {
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-    inUse.clear();
+    while (!inUse.empty())
+        inUse.pop_back();
 #endif
 }
 

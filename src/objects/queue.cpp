@@ -442,7 +442,8 @@ void Queue::onIdle()
         cmdBuffer->executionFinished();
     submittedCommandBuffers.clear();
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-    inUse.clear();
+    while (!inUse.empty())
+        inUse.pop_back();
 #endif
 }
 } // namespace magma
