@@ -31,7 +31,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     __m128i fl2 = _mm_sub_epi32(_mm_srli_epi32(bits, 23), bias);
     // e = max(-EXP_BIAS - 1, floorLog2(max(r, g, b))) + 1 + EXP_BIAS;
     __m128i e = _mm_max_epi32(fl2, _mm_set1_epi32(-EXP_BIAS - 1));
-    e = _mm_add_epi32(e, _mm_set1_epi32(+EXP_BIAS + 1));
+    e = _mm_add_epi32(e, _mm_set1_epi32(EXP_BIAS + 1));
     // scale = exp2f(EXP_BIAS + MANTISSA_BITS - e)
     __m128i shift = _mm_sub_epi32(_mm_set1_epi32(EXP_BIAS + MANTISSA_BITS), e);
     __m128i scale = _mm_slli_epi32(_mm_add_epi32(shift, bias), 23);

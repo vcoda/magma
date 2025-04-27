@@ -17,5 +17,14 @@ inline int32x2_t vhorizontal_or(int32x4_t v)
     v2 = vext_s32(v1, v1, 1); // move y to x
     return vorr_s32(v1, v2); // x = x|y|z|w
 }
+
+inline uint32x2_t vhorizontal_or(uint32x4_t v)
+{
+    uint32x2_t v1 = vget_low_u32(v);
+    uint32x2_t v2 = vget_high_u32(v);
+    v1 = vorr_u32(v1, v2); // x = x|z, y = y|w
+    v2 = vext_u32(v1, v1, 1); // move y to x
+    return vorr_u32(v1, v2); // x = x|y|z|w
+}
 #endif // MAGMA_NEON
 } // namespace magma::packed

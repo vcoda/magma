@@ -14,17 +14,16 @@ inline B4g4r4a4Unorm::B4g4r4a4Unorm(float b, float g, float r, float a) noexcept
     iv = _mm_horizontal_or(iv);
     this->v = (uint16_t)_mm_extract_epi16(iv, 0);
 #elif defined(MAGMA_NEON)
-    float32x4_t v = {b, g, r, a};
+    float32x4_t v = {a, r, g, b};
     v = vmaxq_f32(v, vdupq_n_f32(0.f));
     v = vminq_f32(v, vdupq_n_f32(1.f));
-    v = vmulq_f32(v, vdupq_n_f32(15.0f));
+    v = vmulq_f32(v, vdupq_n_f32(15.f));
     v = vrndnq_f32(v);
-    uint32x4_t iv = vcvtnq_u32_f32(v);
-    this->v =
-        (((uint16_t)vgetq_lane_u32(iv, 0) & 0xF) << 12) |
-        (((uint16_t)vgetq_lane_u32(iv, 1) & 0xF) << 8) |
-        (((uint16_t)vgetq_lane_u32(iv, 2) & 0xF) << 4) |
-        ((uint16_t)vgetq_lane_u32(iv, 3) & 0xF);
+    float32x4_t bitshift = {1.f, 16.f, 256.f, 4096.f}; // 0, 4, 8, 12
+    v = vmulq_f32(v, bitshift);
+    int32x4_t iv = vcvtq_s32_f32(v);
+    int32x2_t ored = vhorizontal_or(iv);
+    this->v = (uint16_t)vget_lane_s32(ored, 0);
 #else // FPU
     b = std::min(std::max(0.f, b), 1.f);
     g = std::min(std::max(0.f, g), 1.f);

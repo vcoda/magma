@@ -14,18 +14,17 @@ inline B5g5r5a1Unorm::B5g5r5a1Unorm(float b, float g, float r, float a) noexcept
     iv = _mm_horizontal_or(iv);
     this->v = (uint16_t)_mm_extract_epi16(iv, 0);
 #elif defined(MAGMA_NEON)
-    float32x4_t v = {b, g, r, a};
+    float32x4_t v = {a, r, g, b};
     v = vmaxq_f32(v, vdupq_n_f32(0.f));
     v = vminq_f32(v, vdupq_n_f32(1.f));
-    float32x4_t scale = {31.f, 31.f, 31.f, 1.f};
+    float32x4_t scale = {1.f, 31.f, 31.f, 31.f};
     v = vmulq_f32(v, scale);
     v = vrndnq_f32(v);
-    uint32x4_t iv = vcvtnq_u32_f32(v);
-    this->v =
-        (((uint16_t)vgetq_lane_u32(iv, 0) & 0x1F) << 11) |
-        (((uint16_t)vgetq_lane_u32(iv, 1) & 0x1F) << 6) |
-        (((uint16_t)vgetq_lane_u32(iv, 2) & 0x1F) << 1) |
-        ((uint16_t)vgetq_lane_u32(iv, 3) & 0x1);
+    float32x4_t bitshift = {1.f, 2.f, 64.f, 2048.f}; // 0, 1, 6, 11
+    v = vmulq_f32(v, bitshift);
+    int32x4_t iv = vcvtq_s32_f32(v);
+    int32x2_t ored = vhorizontal_or(iv);
+    this->v = (uint16_t)vget_lane_s32(ored, 0);
 #else // FPU
     b = std::min(std::max(0.f, b), 1.f);
     g = std::min(std::max(0.f, g), 1.f);
