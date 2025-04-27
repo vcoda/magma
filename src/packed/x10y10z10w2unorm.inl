@@ -31,9 +31,9 @@ inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, uint32_t w 
     uint32x2_t ored = vhorizontal_or(iv);
     this->v = vget_lane_u32(ored, 0);
 #else // FPU
-    x = std::min(std::max(0.f, x), 1.f);
-    y = std::min(std::max(0.f, y), 1.f);
-    z = std::min(std::max(0.f, z), 1.f);
+    x = std::clamp(x, 0.f, 1.f);
+    y = std::clamp(y, 0.f, 1.f);
+    z = std::clamp(z, 0.f, 1.f);
     x = std::roundf(x * 1023.f);
     y = std::roundf(y * 1023.f);
     z = std::roundf(z * 1023.f);

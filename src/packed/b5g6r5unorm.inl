@@ -26,9 +26,9 @@ inline B5g6r5Unorm::B5g6r5Unorm(float b, float g, float r) noexcept
     int32x2_t ored = vhorizontal_or(iv);
     this->v = (uint16_t)vget_lane_s32(ored, 0);
 #else // FPU
-    b = std::min(std::max(0.f, b), 1.f);
-    g = std::min(std::max(0.f, g), 1.f);
-    r = std::min(std::max(0.f, r), 1.f);
+    b = std::clamp(b, 0.f, 1.f);
+    g = std::clamp(g, 0.f, 1.f);
+    r = std::clamp(r, 0.f, 1.f);
     b = std::roundf(b * 31.f);
     g = std::roundf(g * 63.f);
     r = std::roundf(r * 31.f);
