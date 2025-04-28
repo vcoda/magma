@@ -21,9 +21,9 @@ inline R4g4b4a4Unorm::R4g4b4a4Unorm(float r, float g, float b, float a) noexcept
     v = vrndnq_f32(v);
     float32x4_t bitshift = {1.f, 16.f, 256.f, 4096.f}; // 0, 4, 8, 12
     v = vmulq_f32(v, bitshift);
-    int32x4_t iv = vcvtq_s32_f32(v);
-    int32x2_t ored = vhorizontal_or(iv);
-    this->v = (uint16_t)vget_lane_s32(ored, 0);
+    uint32x4_t iv = vcvtq_u32_f32(v);
+    uint32x2_t ored = vhorizontal_or(iv);
+    this->v = (uint16_t)vget_lane_u32(ored, 0);
 #else // FPU
     r = std::clamp(r, 0.f, 1.f);
     g = std::clamp(g, 0.f, 1.f);
