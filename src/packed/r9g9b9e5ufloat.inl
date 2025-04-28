@@ -72,7 +72,8 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     uint32x4_t shift = vsubq_u32(vdupq_n_u32(EXP_BIAS + MANTISSA_BITS), e);
     uint32x4_t scale = vshlq_n_u32(vaddq_u32(shift, bias), 23);
     // round([r, g, b] * scale)
-    uint32x4_t mantissas = vcvtnq_u32_f32(vmulq_f32(v, vreinterpretq_f32_u32(scale)));
+    v = vmulq_f32(v, vreinterpretq_f32_u32(scale));
+    uint32x4_t mantissas = vcvtnq_u32_f32(v);
     // split mantissas
     uint32x4_t rm = vdupq_lane_u32(vget_low_u32(mantissas), 0);
     uint32x4_t gm = vdupq_lane_u32(vget_low_u32(mantissas), 1);
