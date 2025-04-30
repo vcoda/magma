@@ -89,9 +89,9 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     uint32x4_t iv = vorrq_u32(vorrq_u32(rm, gm), vorrq_u32(bm, e));
     this->v = vgetq_lane_u32(iv, 0);
 #else // FPU
-    r = std::min(std::max(0.f, r), MAX_RGB9E5);
-    g = std::min(std::max(0.f, g), MAX_RGB9E5);
-    b = std::min(std::max(0.f, b), MAX_RGB9E5);
+    r = std::clamp(r, 0.f, MAX_RGB9E5);
+    g = std::clamp(g, 0.f, MAX_RGB9E5);
+    b = std::clamp(b, 0.f, MAX_RGB9E5);
     float maxRgb = std::max(std::max(r, g), b);
     int exp = std::max(-EXP_BIAS - 1, floorLog2(maxRgb)) + 1 + EXP_BIAS;
     MAGMA_ASSERT(exp >= 0);

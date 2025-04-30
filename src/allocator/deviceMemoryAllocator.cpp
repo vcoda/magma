@@ -135,7 +135,7 @@ DeviceMemoryBlock DeviceMemoryAllocator::allocate(VkObjectType objectType, NonDi
     {
         const VkMemoryPriorityAllocateInfoEXT *memoryPriorityAllocateInfo = extendedInfo.findNode<VkMemoryPriorityAllocateInfoEXT>();
         if (memoryPriorityAllocateInfo)
-            allocInfo.priority = std::max(0.f, std::min(memoryPriorityAllocateInfo->priority, 1.f));
+            allocInfo.priority = std::clamp(memoryPriorityAllocateInfo->priority, 0.f, 1.f);
     }
 #endif // VK_EXT_memory_priority
     VmaAllocation allocation;

@@ -107,8 +107,7 @@ std::optional<uint32_t> BaseDeviceMemory::findTypeIndex(VkMemoryPropertyFlags pr
 
 float BaseDeviceMemory::clampPriority(float value) noexcept
 {
-    priority = std::max(MemoryPriorityLowest, value);
-    priority = std::min(MemoryPriorityHighest, priority);
+    priority = std::clamp(value, MemoryPriorityLowest, MemoryPriorityHighest);
     return priority;
 }
 } // namespace magma

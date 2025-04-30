@@ -39,8 +39,10 @@ Sampler::Sampler(std::shared_ptr<Device> device_, const SamplerState& state,
 {
     VkSamplerCreateInfo samplerInfo = state;
     if (samplerInfo.anisotropyEnable)
-    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
-        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, getMaxAnisotropy()));
+    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between
+        // 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
+        const float maxSamplerAnisotropy = getMaxAnisotropy();
+        samplerInfo.maxAnisotropy = std::clamp(state.maxAnisotropy, 1.f, maxSamplerAnisotropy);
     }
     samplerInfo.borderColor = borderColor.getColor();
 #ifdef VK_EXT_custom_border_color
@@ -101,8 +103,10 @@ LodSampler::LodSampler(std::shared_ptr<Device> device_, const SamplerState& stat
     samplerInfo.borderColor = borderColor.getColor();
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
     if (samplerInfo.anisotropyEnable)
-    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
-        samplerInfo.maxAnisotropy = std::max(1.f, std::min(state.maxAnisotropy, getMaxAnisotropy()));
+    {   // If anisotropyEnable is VK_TRUE, maxAnisotropy must be between
+        // 1.0 and VkPhysicalDeviceLimits::maxSamplerAnisotropy, inclusive
+        const float maxSamplerAnisotropy = getMaxAnisotropy();
+        samplerInfo.maxAnisotropy = std::clamp(state.maxAnisotropy, 1.f, maxSamplerAnisotropy);
     }
 #ifdef VK_EXT_custom_border_color
     VkSamplerCustomBorderColorCreateInfoEXT samplerCustomBorderInfo;
