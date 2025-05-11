@@ -21,8 +21,7 @@ inline X10y10z10w2Unorm::X10y10z10w2Unorm(float x, float y, float z, uint32_t w 
     v = vminq_f32(v, max);
     float32x4_t scale = {1023.f, 1023.f, 1023.f, 1.f};
     v = vmulq_f32(v, scale);
-    v = vrndnq_f32(v);
-    uint32x4_t iv = vcvtq_u32_f32(v);
+    uint32x4_t iv = vcvtnq_u32_f32(v);
     // mask off any fraction
     uint32x4_t mask = {0x3FF, 0x3FF, 0x3FF, 0x3};
     iv = vandq_u32(iv, mask);

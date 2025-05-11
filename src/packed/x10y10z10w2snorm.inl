@@ -23,8 +23,7 @@ inline X10y10z10w2Snorm::X10y10z10w2Snorm(float x, float y, float z, int32_t w /
     v = vminq_f32(v, vdupq_n_f32(1.f));
     float32x4_t scale = {511.f, 511.f, 511.f, 1.f};
     v = vmulq_f32(v, scale);
-    v = vrndnq_f32(v);
-    int32x4_t iv = vcvtq_s32_f32(v);
+    int32x4_t iv = vcvtnq_s32_f32(v);
     // mask off any fraction
     int32x4_t mask = {0x3FF, 0x3FF, 0x3FF, 0x3};
     iv = vandq_s32(iv, mask);
