@@ -41,7 +41,7 @@ The library was designed with (almost) zero overhead in mind. While C++ exceptio
 numerous methods are marked with the  `noexcept` specifier to minimize compiler-generated stack unwinding code.
 
 * Most of run-time methods don't throw any exceptions.
-* A lot of arguments are passed through `lent_ptr` type that doesn't manage lifetime of the object and can accepts native, unique of shared pointer.
+* A lot of arguments are passed through `lent_ptr` type that doesn't manage lifetime of the object and can accepts native, unique or shared pointer.
 * The command buffer has a "lean and mean" implementation, designed for cases where near-zero overhead is essential.
 * Thin methods around API calls are made inline.
 
