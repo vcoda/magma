@@ -44,7 +44,7 @@ namespace magma
             { return reinterpret_cast<const VkBaseInStructure *>(head); }
         VkBaseOutStructure *tailNode() noexcept;
         const VkBaseInStructure *tailNode() const noexcept;
-        size_t size() const noexcept;
+        size_t length() const noexcept;
         void clear() noexcept;
         bool empty() const noexcept { return !head; }
         hash_t hash() const noexcept;

@@ -52,12 +52,12 @@ inline const VkBaseInStructure *StructureChain::tailNode() const noexcept
     return nullptr;
 }
 
-inline size_t StructureChain::size() const noexcept
+inline size_t StructureChain::length() const noexcept
 {
-    size_t size = 0;
+    size_t count = 0;
     for (auto node = head; node; node = node->pNext)
-        ++size;
-    return size;
+        ++count;
+    return count;
 }
 
 inline hash_t StructureChain::getNodeHash(VkBaseOutStructure *node) const noexcept
