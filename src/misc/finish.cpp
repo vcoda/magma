@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-void finish(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Queue> queue,
+void finish(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<Queue> queue,
     bool waitIdle /* false */)
 {
     if (waitIdle)

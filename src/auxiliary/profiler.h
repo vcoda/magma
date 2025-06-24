@@ -55,7 +55,7 @@ namespace magma
             void endSection(lent_ptr<CommandBuffer> cmdBuffer);
             std::vector<Sample> collectSamples(bool wait) const;
             void copyTimestamps(lent_ptr<CommandBuffer> cmdBuffer,
-                std::shared_ptr<Buffer> buffer, VkDeviceSize bufferOffset = 0,
+                lent_ptr<Buffer> buffer, VkDeviceSize bufferOffset = 0,
                 bool hostRead = true) const noexcept;
 
         protected:

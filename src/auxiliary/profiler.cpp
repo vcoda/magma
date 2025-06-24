@@ -206,19 +206,19 @@ std::vector<Profiler::Sample> Profiler::collectSamples(bool wait) const
     return samples;
 }
 
-void Profiler::copyTimestamps(lent_ptr<CommandBuffer> cmdBuffer, std::shared_ptr<Buffer> buffer,
+void Profiler::copyTimestamps(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<Buffer> buffer,
     VkDeviceSize bufferOffset /* 0 */, bool hostRead /* true */) const noexcept
 {
     constexpr bool wait = true;
     const uint32_t count = std::min(queryCount, queryPool->getQueryCount());
     // vkCmdCopyQueryPoolResults command must only be called outside of a render pass instance!
     MAGMA_ASSERT(!cmdBuffer->insideRenderPass());
-    cmdBuffer->copyQueryResults<uint64_t>(queryPool, buffer, wait, 0, count, bufferOffset);
+    const BufferMemoryBarrier transferWriteHostReadBarrier(buffer.get(), barrier::buffer::transferWriteHostRead);
+    cmdBuffer->copyQueryResults<uint64_t>(queryPool, std::move(buffer), wait, 0, count, bufferOffset);
     if (hostRead)
     {   // vkCmdCopyQueryPoolResults is considered to be a transfer operation, and its writes to buffer memory
         // must be synchronized using VK_PIPELINE_STAGE_TRANSFER_BIT and VK_ACCESS_TRANSFER_WRITE_BIT before using the results.
-        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_HOST_BIT,
-            BufferMemoryBarrier(buffer.get(), barrier::buffer::transferWriteHostRead));
+        cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_HOST_BIT, transferWriteHostReadBarrier);
     }
 }
 
