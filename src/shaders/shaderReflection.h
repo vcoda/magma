@@ -28,11 +28,11 @@ namespace magma
        a C/C++ reflection API for SPIR-V shader bytecode in
        Vulkan applications. See https://github.com/chaoticbob/SPIRV-Reflect */
 
-    class ShaderReflection
+    class ShaderReflection final : NonCopyable
     {
     public:
         explicit ShaderReflection(const SpirvWord *bytecode, std::size_t bytecodeSize);
-        virtual ~ShaderReflection();
+        ~ShaderReflection();
         const SpirvWord *getCode() const noexcept;
         std::size_t getCodeSize() const noexcept;
         uint32_t getEntryPointCount() const noexcept { return module.entry_point_count; }
