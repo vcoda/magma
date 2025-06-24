@@ -44,10 +44,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // MAGMA_X64
 #endif // !VK_USE_64_BIT_PTR_DEFINES
 
-#ifdef MAGMA_SSE
-    #define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
-#endif
-
 // Qt defines this as macro
 #ifdef foreach
 #undef foreach

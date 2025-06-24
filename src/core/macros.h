@@ -96,6 +96,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_STACK_FREE(p)
 #endif // _MSC_VER || __MINGW32__
 
+#ifdef MAGMA_SSE
+    #define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
+#endif
+
 #define MAGMA_MAKE(Type, kind, method)\
 template<typename ...Args>\
 static std::kind##_ptr<Type> method(Args&& ...args)\
