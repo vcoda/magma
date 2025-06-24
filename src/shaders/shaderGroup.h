@@ -66,7 +66,7 @@ namespace magma
        aligned according to alignment properties described by
        VkPhysicalDeviceRayTracingPipelinePropertiesKHR structure. */
 
-    class ShaderGroup : NonCopyable
+    class ShaderGroup
     {
     public:
         ShaderGroup() noexcept;
