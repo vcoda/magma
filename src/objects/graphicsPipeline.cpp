@@ -253,8 +253,16 @@ std::pair<hash_t, hash_t> psoHash(VkPipelineCreateFlags flags,
     hash_t hash = core::hash(flags);
     for (auto const& stage: shaderStages)
         hash = core::hashCombine(hash, stage.getHash());
-    hash_t rsHash = core::combineHashList(
-        {   // Compute hash of render states
+    auto combine = [](const std::initializer_list<hash_t>& hashes) -> hash_t
+    {
+        hash_t result = 0ull;
+        for (auto hash: hashes)
+            result = core::hashCombine(result, hash);
+        return result;
+    };
+    // Compute hash of render states
+    hash_t rsHash = combine(
+        {
             vertexInputState.hash(),
             inputAssemblyState.hash(),
             tesselationState.hash(),

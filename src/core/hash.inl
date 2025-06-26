@@ -60,12 +60,4 @@ inline hash_t hashString(const std::basic_string<T>& str) noexcept
     std::hash<std::basic_string<T>> hasher;
     return hasher(str);
 }
-
-inline hash_t combineHashList(const std::initializer_list<hash_t>& hashes) noexcept
-{
-    hash_t value = 0ull;
-    for (auto hash: hashes)
-        value = hashCombine(value, hash);
-    return value;
-}
 } // namespace magma::core

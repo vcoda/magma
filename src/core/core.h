@@ -83,7 +83,6 @@ namespace magma
         template<class T> hash_t hashArray(const T arr[], std::size_t count) noexcept;
         template<class T> constexpr hash_t hashString(const T *str) noexcept;
         template<class T> hash_t hashString(const std::basic_string<T>& str) noexcept;
-        hash_t combineHashList(const std::initializer_list<hash_t>& hashes) noexcept;
 
         template<class T> T *copy(const T *src) noexcept;
         template<class T> T *copy(T *dst, const T *src) noexcept;
