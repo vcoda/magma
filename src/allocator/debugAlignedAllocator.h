@@ -25,7 +25,7 @@ namespace magma
     class DebugAlignedAllocator : public IAllocator
     {
     public:
-        DebugAlignedAllocator();
+        DebugAlignedAllocator() noexcept;
         ~DebugAlignedAllocator();
         void *alloc(std::size_t size,
             std::size_t alignment,

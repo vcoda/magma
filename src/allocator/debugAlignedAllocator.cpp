@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DebugAlignedAllocator::DebugAlignedAllocator():
+DebugAlignedAllocator::DebugAlignedAllocator() noexcept:
     allocatedMemorySize(0ull),
     internalAllocatedMemorySize(0ull)
 {
