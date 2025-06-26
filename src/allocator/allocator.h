@@ -73,30 +73,30 @@ namespace magma
 
     struct MemoryBlockInfo
     {
-        VkDeviceMemory deviceMemory;
-        VkDeviceSize offset;
-        VkDeviceSize size;
+        VkDeviceMemory deviceMemory = VK_NULL_HANDLE;
+        VkDeviceSize offset = 0ull;
+        VkDeviceSize size = 0ull;
     };
 
     struct MemoryBudget
     {
         struct Statistics
         {
-            uint32_t blockCount;
-            uint32_t allocationCount;
-            VkDeviceSize blockBytes;
-            VkDeviceSize allocationBytes;
+            uint32_t blockCount = 0;
+            uint32_t allocationCount = 0;
+            VkDeviceSize blockBytes = 0ull;
+            VkDeviceSize allocationBytes = 0ull;
         } statistics;
-        VkDeviceSize usage;
-        VkDeviceSize budget;
+        VkDeviceSize usage = 0ull;
+        VkDeviceSize budget = 0ull;
     };
 
     struct DefragmentationStats
     {
-        VkDeviceSize bytesMoved;
-        VkDeviceSize bytesFreed;
-        uint32_t allocationsMoved;
-        uint32_t deviceMemoryBlocksFreed;
+        VkDeviceSize bytesMoved = 0ull;
+        VkDeviceSize bytesFreed = 0ull;
+        uint32_t allocationsMoved = 0;
+        uint32_t deviceMemoryBlocksFreed = 0;
     };
 
     class Device;
