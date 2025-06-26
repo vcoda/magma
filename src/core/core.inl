@@ -13,7 +13,6 @@ constexpr T alignUp(T value, T alignment) noexcept
 {
     static_assert(std::is_integral<T>::value,
         "alignUp() requires an integral type");
-    MAGMA_ASSERT(powerOfTwo(alignment));
     return (value + alignment - 1) & ~(alignment - 1);
 }
 
@@ -22,7 +21,6 @@ constexpr T alignDown(T value, T alignment) noexcept
 {
     static_assert(std::is_integral<T>::value,
         "alignDown() requires an integral type");
-    MAGMA_ASSERT(powerOfTwo(alignment));
     return value & ~(alignment - 1);
 }
 
@@ -65,10 +63,10 @@ inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
 }
 
 template<class T1, class T2, class L>
-inline void foreach(T1& container1, T2& container2, L&& fn)
+inline void foreach(T1& a, T2& b, L&& fn)
 {
-    auto i = container1.begin(), ie = container1.end();
-    auto j = container2.begin(), je = container2.end();
+    auto i = a.begin(), ie = a.end();
+    auto j = b.begin(), je = b.end();
     while ((i != ie) && (j != je))
     {
         fn(*i, *j);

@@ -23,7 +23,8 @@ constexpr hash_t hashArg(hash_t seed, const T& arg) noexcept
 template<class T, typename... Args>
 constexpr hash_t hashArg(hash_t seed, const T& arg, Args... args) noexcept
 {
-    return hashArg(hashCombine(seed, hash(arg)), args...);
+    hash_t value = hashCombine(seed, hash(arg));
+    return hashArg(value, args...);
 }
 
 template<class T, typename... Args>
