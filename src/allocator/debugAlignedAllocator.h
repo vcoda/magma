@@ -45,9 +45,11 @@ namespace magma
 
     private:
         std::unordered_map<void*, std::pair<std::size_t, VkSystemAllocationScope>> allocations;
-        std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1>
-            numAllocations, numReallocations, numFrees,
-            numInternalAllocations, numInternalFrees;
+        std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1> numAllocations;
+        std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1> numReallocations;
+        std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1> numFrees;
+        std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1> numInternalAllocations;
+        std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1> numInternalFrees;
         std::size_t allocatedMemorySize;
         std::size_t internalAllocatedMemorySize;
         mutable std::mutex mtx;
