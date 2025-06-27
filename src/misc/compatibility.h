@@ -30,6 +30,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define VK_API_VERSION_1_0 VK_API_VERSION
 #endif
 
+#ifndef VK_NV_FILL_RECTANGLE_EXTENSION_NAME
+#define VK_NV_FILL_RECTANGLE_EXTENSION_NAME "VK_NV_fill_rectangle"
+#endif
+
 #if VK_HEADER_VERSION < 59
 typedef enum VkObjectType {
     VK_OBJECT_TYPE_UNKNOWN = 0,

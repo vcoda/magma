@@ -21,10 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/device.h"
 #include "../objects/shaderModule.h"
 #include "../states/rasterizationState.h"
-
-#ifndef VK_NV_FILL_RECTANGLE_EXTENSION_NAME
-#define VK_NV_FILL_RECTANGLE_EXTENSION_NAME "VK_NV_fill_rectangle"
-#endif
+#include "../misc/compatibility.h"
 
 namespace magma::aux
 {
