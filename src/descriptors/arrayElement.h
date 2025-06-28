@@ -18,28 +18,25 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "descriptorSetLayoutBinding.h"
 
-namespace magma
+namespace magma::descriptor
 {
-    namespace descriptor
+    /* Base element of array of buffer or image descriptors.
+       Allows to mark array of descriptors as dirty if
+       single element of this array has been updated. */
+
+    template<class Type>
+    class ArrayElement
     {
-        /* Base element of array of buffer or image descriptors.
-           Allows to mark array of descriptors as dirty if
-           single element of this array has been updated. */
+    protected:
+        ArrayElement(DescriptorSetLayoutBinding *binding, Type& element, VkFlags usage) noexcept:
+            element(element), usage(usage), binding(binding) {}
+        void setImageType(VkImageType imageType) noexcept { binding->setImageType(imageType); }
+        void setDirty() noexcept { binding->dirty = true; }
 
-        template<class Type>
-        class ArrayElement
-        {
-        protected:
-            ArrayElement(DescriptorSetLayoutBinding *binding, Type& element, VkFlags usage) noexcept:
-                element(element), usage(usage), binding(binding) {}
-            void setImageType(VkImageType imageType) noexcept { binding->setImageType(imageType); }
-            void setDirty() noexcept { binding->dirty = true; }
+        Type& element;
+        const VkFlags usage;
 
-            Type& element;
-            const VkFlags usage;
-
-        private:
-            DescriptorSetLayoutBinding *binding;
-        };
-    } // namespace descriptor
-} // namespace magma
+    private:
+        DescriptorSetLayoutBinding *binding;
+    };
+} // namespace magma::descriptor

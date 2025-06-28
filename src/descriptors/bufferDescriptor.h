@@ -22,125 +22,125 @@ namespace magma
 {
     class Buffer;
     class BufferView;
+}
 
-    namespace descriptor
+namespace magma::descriptor
+{
+    /* Base class of buffer descriptor. */
+
+    class BufferDescriptor : public magma::DescriptorSetLayoutBinding
     {
-        /* Base class of buffer descriptor. */
+    public:
+        bool resourceBinded() const noexcept override;
+        void write(VkDescriptorSet dstSet,
+            VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 
-        class BufferDescriptor : public DescriptorSetLayoutBinding
-        {
-        public:
-            bool resourceBinded() const noexcept override;
-            void write(VkDescriptorSet dstSet,
-                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+    protected:
+        BufferDescriptor(VkDescriptorType descriptorType,
+            uint32_t binding) noexcept;
+        void update(lent_ptr<const Buffer> buffer,
+            VkBufferUsageFlags usage) noexcept;
 
-        protected:
-            BufferDescriptor(VkDescriptorType descriptorType,
-                uint32_t binding) noexcept;
-            void update(lent_ptr<const Buffer> buffer,
-                VkBufferUsageFlags usage) noexcept;
+    private:
+        VkDescriptorBufferInfo descriptor;
+    };
 
-        private:
-            VkDescriptorBufferInfo descriptor;
-        };
+    /* Base class of texel buffer descriptor. */
 
-        /* Base class of texel buffer descriptor. */
+    class TexelBufferDescriptor : public magma::DescriptorSetLayoutBinding
+    {
+    public:
+        bool resourceBinded() const noexcept override;
+        void write(VkDescriptorSet dstSet,
+            VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 
-        class TexelBufferDescriptor : public DescriptorSetLayoutBinding
-        {
-        public:
-            bool resourceBinded() const noexcept override;
-            void write(VkDescriptorSet dstSet,
-                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+    protected:
+        TexelBufferDescriptor(VkDescriptorType descriptorType,
+            uint32_t binding) noexcept;
+        void update(lent_ptr<const BufferView> bufferView,
+            VkBufferUsageFlags usage) noexcept;
 
-        protected:
-            TexelBufferDescriptor(VkDescriptorType descriptorType,
-                uint32_t binding) noexcept;
-            void update(lent_ptr<const BufferView> bufferView,
-                VkBufferUsageFlags usage) noexcept;
+    private:
+        VkBufferView descriptor;
+    };
 
-        private:
-            VkBufferView descriptor;
-        };
+    /* A uniform texel buffer is a descriptor type associated with
+        a buffer resource via a buffer view that formatted load
+        operations can be performed on. */
 
-        /* A uniform texel buffer is a descriptor type associated with
-           a buffer resource via a buffer view that formatted load
-           operations can be performed on. */
+    class UniformTexelBuffer : public TexelBufferDescriptor
+    {
+    public:
+        UniformTexelBuffer(uint32_t binding) noexcept:
+            TexelBufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
+        UniformTexelBuffer& operator=(lent_ptr<const BufferView>) noexcept;
+    };
 
-        class UniformTexelBuffer : public TexelBufferDescriptor
-        {
-        public:
-            UniformTexelBuffer(uint32_t binding) noexcept:
-                TexelBufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, binding) {}
-            UniformTexelBuffer& operator=(lent_ptr<const BufferView>) noexcept;
-        };
+    /* A storage texel buffer is a descriptor type associated with
+        a buffer resource via a buffer view that formatted load,
+        store, and atomic operations can be performed on. */
 
-        /* A storage texel buffer is a descriptor type associated with
-           a buffer resource via a buffer view that formatted load,
-           store, and atomic operations can be performed on. */
+    class StorageTexelBuffer : public TexelBufferDescriptor
+    {
+    public:
+        StorageTexelBuffer(uint32_t binding) noexcept:
+            TexelBufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
+        StorageTexelBuffer& operator=(lent_ptr<const BufferView>) noexcept;
+    };
 
-        class StorageTexelBuffer : public TexelBufferDescriptor
-        {
-        public:
-            StorageTexelBuffer(uint32_t binding) noexcept:
-                TexelBufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, binding) {}
-            StorageTexelBuffer& operator=(lent_ptr<const BufferView>) noexcept;
-        };
+    /* A uniform buffer is a descriptor type associated with
+        a buffer resource directly, described in a shader as
+        a structure with various members that load operations
+        can be performed on. */
 
-        /* A uniform buffer is a descriptor type associated with
-           a buffer resource directly, described in a shader as
-           a structure with various members that load operations
-           can be performed on. */
+    class UniformBuffer : public BufferDescriptor
+    {
+    public:
+        UniformBuffer(uint32_t binding) noexcept:
+            BufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
+        UniformBuffer& operator=(lent_ptr<const Buffer>) noexcept;
+    };
 
-        class UniformBuffer : public BufferDescriptor
-        {
-        public:
-            UniformBuffer(uint32_t binding) noexcept:
-                BufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding) {}
-            UniformBuffer& operator=(lent_ptr<const Buffer>) noexcept;
-        };
+    /* A storage buffer is a descriptor type associated with
+        a buffer resource directly, described in a shader as
+        a structure with various members that load, store, and
+        atomic operations can be performed on. */
 
-        /* A storage buffer is a descriptor type associated with
-           a buffer resource directly, described in a shader as
-           a structure with various members that load, store, and
-           atomic operations can be performed on. */
+    class StorageBuffer : public BufferDescriptor
+    {
+    public:
+        StorageBuffer(uint32_t binding) noexcept:
+            BufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
+        StorageBuffer& operator=(lent_ptr<const Buffer>) noexcept;
+    };
 
-        class StorageBuffer : public BufferDescriptor
-        {
-        public:
-            StorageBuffer(uint32_t binding) noexcept:
-                BufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding) {}
-            StorageBuffer& operator=(lent_ptr<const Buffer>) noexcept;
-        };
+    /* A dynamic uniform buffer is almost identical to a uniform buffer,
+        and differs only in how the offset into the buffer is specified.
+        The base offset calculated by the VkDescriptorBufferInfo when
+        initially updating the descriptor set is added to a dynamic
+        offset when binding the descriptor set. */
 
-        /* A dynamic uniform buffer is almost identical to a uniform buffer,
-           and differs only in how the offset into the buffer is specified.
-           The base offset calculated by the VkDescriptorBufferInfo when
-           initially updating the descriptor set is added to a dynamic
-           offset when binding the descriptor set. */
+    class DynamicUniformBuffer : public BufferDescriptor
+    {
+    public:
+        DynamicUniformBuffer(uint32_t binding) noexcept:
+            BufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
+        DynamicUniformBuffer& operator=(lent_ptr<const Buffer>) noexcept;
+    };
 
-        class DynamicUniformBuffer : public BufferDescriptor
-        {
-        public:
-            DynamicUniformBuffer(uint32_t binding) noexcept:
-                BufferDescriptor(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, binding) {}
-            DynamicUniformBuffer& operator=(lent_ptr<const Buffer>) noexcept;
-        };
+    /* A dynamic storage buffer is almost identical to a storage buffer,
+        and differs only in how the offset into the buffer is specified.
+        The base offset calculated by the VkDescriptorBufferInfo when
+        initially updating the descriptor set is added to a dynamic
+        offset when binding the descriptor set. */
 
-        /* A dynamic storage buffer is almost identical to a storage buffer,
-           and differs only in how the offset into the buffer is specified.
-           The base offset calculated by the VkDescriptorBufferInfo when
-           initially updating the descriptor set is added to a dynamic
-           offset when binding the descriptor set. */
-
-        class DynamicStorageBuffer : public BufferDescriptor
-        {
-        public:
-            DynamicStorageBuffer(uint32_t binding) noexcept:
-                BufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
-            DynamicStorageBuffer& operator=(lent_ptr<const Buffer>) noexcept;
-        };
-    } // namespace descriptor
-} // namespace magma
+    class DynamicStorageBuffer : public BufferDescriptor
+    {
+    public:
+        DynamicStorageBuffer(uint32_t binding) noexcept:
+            BufferDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, binding) {}
+        DynamicStorageBuffer& operator=(lent_ptr<const Buffer>) noexcept;
+    };
+} // namespace magma::descriptor
 
 #include "bufferDescriptor.inl"

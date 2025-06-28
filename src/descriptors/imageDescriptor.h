@@ -22,104 +22,104 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
     class ImageView;
+}
 
-    namespace descriptor
+namespace magma::descriptor
+{
+    typedef std::pair<lent_ptr<const ImageView>,
+        lent_ptr<const magma::Sampler>> ImageSampler;
+
+    /* Base class of image/sampler descriptor. */
+
+    class ImageDescriptor : public magma::DescriptorSetLayoutBinding
     {
-        typedef std::pair<lent_ptr<const ImageView>,
-            lent_ptr<const magma::Sampler>> ImageSampler;
+    public:
+        bool resourceBinded() const noexcept override;
+        void write(VkDescriptorSet dstSet,
+            VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 
-        /* Base class of image/sampler descriptor. */
+    protected:
+        ImageDescriptor(VkDescriptorType descriptorType,
+            uint32_t binding) noexcept;
+        void update(const ImageView *imageView,
+            const magma::Sampler *sampler,
+            VkImageUsageFlags usage) noexcept;
 
-        class ImageDescriptor : public DescriptorSetLayoutBinding
-        {
-        public:
-            bool resourceBinded() const noexcept override;
-            void write(VkDescriptorSet dstSet,
-                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+        VkDescriptorImageInfo descriptor;
+    };
 
-        protected:
-            ImageDescriptor(VkDescriptorType descriptorType,
-                uint32_t binding) noexcept;
-            void update(const ImageView *imageView,
-                const magma::Sampler *sampler,
-                VkImageUsageFlags usage) noexcept;
+    /* A sampler descriptor is a descriptor type associated with
+        a sampler object, used to control the behavior of sampling
+        operations performed on a sampled image. */
 
-            VkDescriptorImageInfo descriptor;
-        };
+    class Sampler : public ImageDescriptor
+    {
+    public:
+        Sampler(uint32_t binding) noexcept:
+            ImageDescriptor(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
+        Sampler& operator=(lent_ptr<const magma::Sampler>) noexcept;
+    };
 
-        /* A sampler descriptor is a descriptor type associated with
-           a sampler object, used to control the behavior of sampling
-           operations performed on a sampled image. */
+    /* A combined image sampler is a single descriptor type associated
+        with both a sampler and an image resource, combining both
+        a sampler and sampled image descriptor into a single descriptor. */
 
-        class Sampler : public ImageDescriptor
-        {
-        public:
-            Sampler(uint32_t binding) noexcept:
-                ImageDescriptor(VK_DESCRIPTOR_TYPE_SAMPLER, binding) {}
-            Sampler& operator=(lent_ptr<const magma::Sampler>) noexcept;
-        };
+    class CombinedImageSampler : public ImageDescriptor
+    {
+    public:
+        CombinedImageSampler(uint32_t binding) noexcept:
+            ImageDescriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
+        CombinedImageSampler& operator=(const ImageSampler&) noexcept;
+    };
 
-        /* A combined image sampler is a single descriptor type associated
-           with both a sampler and an image resource, combining both
-           a sampler and sampled image descriptor into a single descriptor. */
+    /* Immutable samplers are permanently bound into the set layout;
+        later binding a sampler into an immutable sampler slot in a
+        descriptor set is not allowed. */
 
-        class CombinedImageSampler : public ImageDescriptor
-        {
-        public:
-            CombinedImageSampler(uint32_t binding) noexcept:
-                ImageDescriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-            CombinedImageSampler& operator=(const ImageSampler&) noexcept;
-        };
+    class CombinedImageImmutableSampler : public ImageDescriptor
+    {
+    public:
+        CombinedImageImmutableSampler(uint32_t binding) noexcept:
+            ImageDescriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
+        CombinedImageImmutableSampler& operator=(const ImageSampler&) noexcept;
+        CombinedImageImmutableSampler& operator=(lent_ptr<const ImageView>) noexcept;
+    };
 
-        /* Immutable samplers are permanently bound into the set layout;
-           later binding a sampler into an immutable sampler slot in a
-           descriptor set is not allowed. */
+    /* A sampled image is a descriptor type associated with
+        an image resource via an image view that sampling
+        operations can be performed on. */
 
-        class CombinedImageImmutableSampler : public ImageDescriptor
-        {
-        public:
-            CombinedImageImmutableSampler(uint32_t binding) noexcept:
-                ImageDescriptor(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-            CombinedImageImmutableSampler& operator=(const ImageSampler&) noexcept;
-            CombinedImageImmutableSampler& operator=(lent_ptr<const ImageView>) noexcept;
-        };
+    class SampledImage : public ImageDescriptor
+    {
+    public:
+        SampledImage(uint32_t binding) noexcept:
+            ImageDescriptor(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
+        SampledImage& operator=(lent_ptr<const ImageView>) noexcept;
+    };
 
-        /* A sampled image is a descriptor type associated with
-           an image resource via an image view that sampling
-           operations can be performed on. */
+    /* A storage image is a descriptor type associated with
+        an image resource via an image view that load, store,
+        and atomic operations can be performed on. */
 
-        class SampledImage : public ImageDescriptor
-        {
-        public:
-            SampledImage(uint32_t binding) noexcept:
-                ImageDescriptor(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
-            SampledImage& operator=(lent_ptr<const ImageView>) noexcept;
-        };
+    class StorageImage : public ImageDescriptor
+    {
+    public:
+        StorageImage(uint32_t binding) noexcept:
+            ImageDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
+        StorageImage& operator=(lent_ptr<const ImageView>) noexcept;
+    };
 
-        /* A storage image is a descriptor type associated with
-           an image resource via an image view that load, store,
-           and atomic operations can be performed on. */
+    /* An input attachment is a descriptor type associated with
+        an image resource via an image view that can be used for
+        framebuffer local load operations in fragment shaders. */
 
-        class StorageImage : public ImageDescriptor
-        {
-        public:
-            StorageImage(uint32_t binding) noexcept:
-                ImageDescriptor(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, binding) {}
-            StorageImage& operator=(lent_ptr<const ImageView>) noexcept;
-        };
-
-        /* An input attachment is a descriptor type associated with
-           an image resource via an image view that can be used for
-           framebuffer local load operations in fragment shaders. */
-
-        class InputAttachment : public ImageDescriptor
-        {
-        public:
-            InputAttachment(uint32_t binding) noexcept:
-                ImageDescriptor(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
-            InputAttachment& operator=(lent_ptr<const ImageView>) noexcept;
-        };
-    } // namespace descriptor
-} // namespace magma
+    class InputAttachment : public ImageDescriptor
+    {
+    public:
+        InputAttachment(uint32_t binding) noexcept:
+            ImageDescriptor(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, binding) {}
+        InputAttachment& operator=(lent_ptr<const ImageView>) noexcept;
+    };
+} // namespace magma::descriptor
 
 #include "imageDescriptor.inl"

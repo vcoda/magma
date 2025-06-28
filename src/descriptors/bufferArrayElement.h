@@ -18,32 +18,29 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "arrayElement.h"
 
-namespace magma
+namespace magma::descriptor
 {
-    namespace descriptor
+    /* Element of array of buffer descriptors. */
+
+    class BufferArrayElement final : ArrayElement<VkDescriptorBufferInfo>
     {
-        /* Element of array of buffer descriptors. */
+    public:
+        explicit BufferArrayElement(DescriptorSetLayoutBinding *array,
+            VkDescriptorBufferInfo& element,
+            VkBufferUsageFlags usage) noexcept;
+        void operator=(lent_ptr<const Buffer>) noexcept;
+    };
 
-        class BufferArrayElement final : ArrayElement<VkDescriptorBufferInfo>
-        {
-        public:
-            explicit BufferArrayElement(DescriptorSetLayoutBinding *array,
-                VkDescriptorBufferInfo& element,
-                VkBufferUsageFlags usage) noexcept;
-            void operator=(lent_ptr<const Buffer>) noexcept;
-        };
+    /* Element of array of texel buffer descriptors. */
 
-        /* Element of array of texel buffer descriptors. */
-
-        class TexelBufferArrayElement final : ArrayElement<VkBufferView>
-        {
-        public:
-            explicit TexelBufferArrayElement(DescriptorSetLayoutBinding *array,
-                VkBufferView& element,
-                VkBufferUsageFlags usage) noexcept;
-            void operator=(lent_ptr<const BufferView>) noexcept;
-        };
-    } // namespace descriptor
-} // namespace magma
+    class TexelBufferArrayElement final : ArrayElement<VkBufferView>
+    {
+    public:
+        explicit TexelBufferArrayElement(DescriptorSetLayoutBinding *array,
+            VkBufferView& element,
+            VkBufferUsageFlags usage) noexcept;
+        void operator=(lent_ptr<const BufferView>) noexcept;
+    };
+} // namespace magma::descriptor
 
 #include "bufferArrayElement.inl"

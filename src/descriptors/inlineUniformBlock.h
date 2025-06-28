@@ -19,36 +19,33 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifdef VK_EXT_inline_uniform_block
 #include "descriptorSetLayoutBinding.h"
 
-namespace magma
+namespace magma::descriptor
 {
-    namespace descriptor
+    /* An inline uniform block is almost identical to a uniform buffer,
+       and differs only in taking its storage directly from the
+       encompassing descriptor set instead of being backed by buffer
+       memory. It is typically used to access a small set of constant
+       data that does not require the additional flexibility provided
+       by the indirection enabled when using a uniform buffer where
+       the descriptor and the referenced buffer memory are decoupled.
+       Compared to push constants, they allow reusing the same set of
+       constant data across multiple disjoint sets of drawing and
+       dispatching commands. */
+
+    template<class UniformBlockType>
+    class InlineUniformBlock : public magma::DescriptorSetLayoutBinding
     {
-        /* An inline uniform block is almost identical to a uniform buffer,
-           and differs only in taking its storage directly from the
-           encompassing descriptor set instead of being backed by buffer
-           memory. It is typically used to access a small set of constant
-           data that does not require the additional flexibility provided
-           by the indirection enabled when using a uniform buffer where
-           the descriptor and the referenced buffer memory are decoupled.
-           Compared to push constants, they allow reusing the same set of
-           constant data across multiple disjoint sets of drawing and
-           dispatching commands. */
+    public:
+        InlineUniformBlock(uint32_t binding) noexcept;
+        bool resourceBinded() const noexcept override;
+        void write(VkDescriptorSet dstSet,
+            VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
+        InlineUniformBlock<UniformBlockType>& operator=(const UniformBlockType&) noexcept;
 
-        template<class UniformBlockType>
-        class InlineUniformBlock : public DescriptorSetLayoutBinding
-        {
-        public:
-            InlineUniformBlock(uint32_t binding) noexcept;
-            bool resourceBinded() const noexcept override;
-            void write(VkDescriptorSet dstSet,
-                VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
-            InlineUniformBlock<UniformBlockType>& operator=(const UniformBlockType&) noexcept;
-
-        private:
-            VkWriteDescriptorSetInlineUniformBlockEXT descriptor;
-        };
-    } // namespace descriptor
-} // namespace magma
+    private:
+        VkWriteDescriptorSetInlineUniformBlockEXT descriptor;
+    };
+} // namespace magma::descriptor
 
 #include "inlineUniformBlock.inl"
 #endif // VK_EXT_inline_uniform_block

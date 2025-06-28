@@ -21,16 +21,16 @@ namespace magma
 {
     class CommandPool;
     class CommandBuffer;
+}
 
-    namespace helpers
-    {
-        /* Helper function to execute a number of calls to command buffer.
-           It allocates command buffer, calls begin/end() and submits it
-           to the graphics queue. */
+namespace magma::helpers
+{
+    /* Helper function to execute a number of calls to command buffer.
+       It allocates command buffer, calls begin/end() and submits it
+       to the graphics queue. */
 
-        void executeCommandBuffer(lent_ptr<CommandPool> cmdPool,
-            std::function<void(const std::shared_ptr<CommandBuffer>&)> cmdFn,
-            const char *blockName = "magma::helpers::executeCommandBuffer",
-            uint32_t blockColor = 0x0);
-    } // namespace helpers
-} // namespace magma
+    void executeCommandBuffer(lent_ptr<CommandPool> cmdPool,
+        std::function<void(const std::shared_ptr<CommandBuffer>&)> cmdFn,
+        const char *blockName = "magma::helpers::executeCommandBuffer",
+        uint32_t blockColor = 0x0);
+} // namespace magma::helpers

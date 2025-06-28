@@ -21,61 +21,58 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/image.h"
 #include "../objects/imageView.h"
 
-namespace magma
+namespace magma::descriptor
 {
-    namespace descriptor
+    typedef std::pair<lent_ptr<const ImageView>,
+        lent_ptr<const magma::Sampler>> ImageSampler;
+
+    /* Element of array of sampler descriptors. */
+
+    class SamplerArrayElement final : ArrayElement<VkDescriptorImageInfo>
     {
-        typedef std::pair<lent_ptr<const ImageView>,
-            lent_ptr<const magma::Sampler>> ImageSampler;
+    public:
+        explicit SamplerArrayElement(DescriptorSetLayoutBinding *array,
+            VkDescriptorImageInfo& element) noexcept;
+        void operator=(lent_ptr<const magma::Sampler>) noexcept;
+    };
 
-        /* Element of array of sampler descriptors. */
+    /* Element of array of image descriptors. */
 
-        class SamplerArrayElement final : ArrayElement<VkDescriptorImageInfo>
-        {
-        public:
-            explicit SamplerArrayElement(DescriptorSetLayoutBinding *array,
-                VkDescriptorImageInfo& element) noexcept;
-            void operator=(lent_ptr<const magma::Sampler>) noexcept;
-        };
+    class ImageArrayElement final : ArrayElement<VkDescriptorImageInfo>
+    {
+    public:
+        explicit ImageArrayElement(DescriptorSetLayoutBinding *array,
+            VkDescriptorImageInfo& element,
+            VkImageUsageFlags usage) noexcept;
+        void operator=(lent_ptr<const ImageView>) noexcept;
+    };
 
-        /* Element of array of image descriptors. */
+    /* Element of array of combined image/sampler descriptors. */
 
-        class ImageArrayElement final : ArrayElement<VkDescriptorImageInfo>
-        {
-        public:
-            explicit ImageArrayElement(DescriptorSetLayoutBinding *array,
-                VkDescriptorImageInfo& element,
-                VkImageUsageFlags usage) noexcept;
-            void operator=(lent_ptr<const ImageView>) noexcept;
-        };
+    class ImageSamplerArrayElement final : ArrayElement<VkDescriptorImageInfo>
+    {
+    public:
+        explicit ImageSamplerArrayElement(DescriptorSetLayoutBinding *array,
+            VkDescriptorImageInfo& element,
+            VkImageUsageFlags usage) noexcept;
+        void operator=(const ImageSampler&) noexcept;
+    };
 
-        /* Element of array of combined image/sampler descriptors. */
+    /* Element of array of combined image and (immutable) sampler descriptors. */
 
-        class ImageSamplerArrayElement final : ArrayElement<VkDescriptorImageInfo>
-        {
-        public:
-            explicit ImageSamplerArrayElement(DescriptorSetLayoutBinding *array,
-                VkDescriptorImageInfo& element,
-                VkImageUsageFlags usage) noexcept;
-            void operator=(const ImageSampler&) noexcept;
-        };
+    class ImageImmutableSamplerArrayElement final : ArrayElement<VkDescriptorImageInfo>
+    {
+    public:
+        explicit ImageImmutableSamplerArrayElement(DescriptorSetLayoutBinding *array,
+            VkDescriptorImageInfo& element,
+            VkSampler& immutableSampler,
+            VkImageUsageFlags usage) noexcept;
+        void operator=(const ImageSampler&) noexcept;
+        void operator=(lent_ptr<const ImageView>) noexcept;
 
-        /* Element of array of combined image and (immutable) sampler descriptors. */
-
-        class ImageImmutableSamplerArrayElement final : ArrayElement<VkDescriptorImageInfo>
-        {
-        public:
-            explicit ImageImmutableSamplerArrayElement(DescriptorSetLayoutBinding *array,
-                VkDescriptorImageInfo& element,
-                VkSampler& immutableSampler,
-                VkImageUsageFlags usage) noexcept;
-            void operator=(const ImageSampler&) noexcept;
-            void operator=(lent_ptr<const ImageView>) noexcept;
-
-        private:
-            VkSampler& immutableSampler;
-        };
-    } // namespace descriptor
-} // namespace magma
+    private:
+        VkSampler& immutableSampler;
+    };
+} // namespace magma::descriptor
 
 #include "imageArrayElement.inl"

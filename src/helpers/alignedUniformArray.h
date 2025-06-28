@@ -17,38 +17,35 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-namespace magma
+namespace magma::helpers
 {
-    namespace helpers
+    /* Proxy array that allows to iterate and access the
+       elements of DynamicUniformBuffer object. Takes into
+       account an alignment of elements which is determined
+       by hardware requirements. */
+
+    template<class Type>
+    class AlignedUniformArray
     {
-        /* Proxy array that allows to iterate and access the
-           elements of DynamicUniformBuffer object. Takes into
-           account an alignment of elements which is determined
-           by hardware requirements. */
+    public:
+        class Iterator;
+        explicit AlignedUniformArray(void *const buffer, const uint32_t arraySize,
+            const VkDeviceSize alignment) noexcept;
+        uint32_t getArraySize() const noexcept { return arraySize; }
+        uint32_t getFirstIndex() const noexcept { return minIndex; }
+        uint32_t getUpdatedRange() const noexcept { return maxIndex - minIndex + 1; }
+        constexpr std::size_t getElementSize() const noexcept { return sizeof(Type); }
+        VkDeviceSize getElementAlignment() const noexcept { return alignment; }
+        Iterator begin() const noexcept { return Iterator(buffer, alignment); }
+        Iterator end() const noexcept { return Iterator(buffer + arraySize * alignment, alignment); }
+        Type& operator[](uint32_t index) noexcept;
 
-        template<class Type>
-        class AlignedUniformArray
-        {
-        public:
-            class Iterator;
-            explicit AlignedUniformArray(void *const buffer, const uint32_t arraySize,
-                const VkDeviceSize alignment) noexcept;
-            uint32_t getArraySize() const noexcept { return arraySize; }
-            uint32_t getFirstIndex() const noexcept { return minIndex; }
-            uint32_t getUpdatedRange() const noexcept { return maxIndex - minIndex + 1; }
-            constexpr std::size_t getElementSize() const noexcept { return sizeof(Type); }
-            VkDeviceSize getElementAlignment() const noexcept { return alignment; }
-            Iterator begin() const noexcept { return Iterator(buffer, alignment); }
-            Iterator end() const noexcept { return Iterator(buffer + arraySize * alignment, alignment); }
-            Type& operator[](uint32_t index) noexcept;
-
-        private:
-            char *const buffer;
-            const uint32_t arraySize;
-            const VkDeviceSize alignment;
-            uint32_t minIndex, maxIndex;
-        };
-    } // namespace helpers
-} // namespace magma
+    private:
+        char *const buffer;
+        const uint32_t arraySize;
+        const VkDeviceSize alignment;
+        uint32_t minIndex, maxIndex;
+    };
+} // namespace magma::helpers
 
 #include "alignedUniformArray.inl"

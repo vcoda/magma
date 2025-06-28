@@ -17,25 +17,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-namespace magma
+namespace magma::helpers
 {
-    namespace helpers
-    {
-        std::string stringifyMask(uint32_t mask);
-        std::string stringifyImageFlags(VkImageCreateFlags flags);
-        std::string stringifyImageUsage(VkImageUsageFlags flags);
-        std::string stringifyBufferFlags(VkBufferCreateFlags flags);
-        std::string stringifyBufferUsage(VkBufferUsageFlags flags);
-        std::string stringifyPipelineShaderStageFlags(VkPipelineShaderStageCreateFlags flags);
-        std::string stringifyShaderStageFlags(VkShaderStageFlags flags);
-        std::string strinfigyRenderPassFlags(VkRenderPassCreateFlags flags);
-        std::string strinfigyAttachmentDescriptionFlags(VkAttachmentDescriptionFlags flags);
-        std::string stringifyColorMask(VkColorComponentFlags flags);
-    #if defined(VK_KHR_swapchain) && (VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70)
-        std::string stringifySwapchainFlags(VkSwapchainCreateFlagsKHR flags);
-    #endif
-    #ifdef VK_KHR_device_group
-        std::string stringifyDeviceGroupPresentMode(VkDeviceGroupPresentModeFlagsKHR flags);
-    #endif
-    } // namespace helpers
-} // namespace magma
+    std::string stringifyMask(uint32_t mask);
+    std::string stringifyImageFlags(VkImageCreateFlags flags);
+    std::string stringifyImageUsage(VkImageUsageFlags flags);
+    std::string stringifyBufferFlags(VkBufferCreateFlags flags);
+    std::string stringifyBufferUsage(VkBufferUsageFlags flags);
+    std::string stringifyPipelineShaderStageFlags(VkPipelineShaderStageCreateFlags flags);
+    std::string stringifyShaderStageFlags(VkShaderStageFlags flags);
+    std::string strinfigyRenderPassFlags(VkRenderPassCreateFlags flags);
+    std::string strinfigyAttachmentDescriptionFlags(VkAttachmentDescriptionFlags flags);
+    std::string stringifyColorMask(VkColorComponentFlags flags);
+#if defined(VK_KHR_swapchain) && (VK_KHR_SWAPCHAIN_SPEC_VERSION >= 70)
+    std::string stringifySwapchainFlags(VkSwapchainCreateFlagsKHR flags);
+#endif
+#ifdef VK_KHR_device_group
+    std::string stringifyDeviceGroupPresentMode(VkDeviceGroupPresentModeFlagsKHR flags);
+#endif
+} // namespace magma::helpers

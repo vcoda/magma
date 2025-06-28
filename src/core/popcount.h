@@ -23,9 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 /* std::popcount() is not available until C++20.
    https://stackoverflow.com/questions/109023/count-the-number-of-set-bits-in-a-32-bit-integer */
 
-namespace magma
-{
-namespace core
+namespace magma::core
 {
 inline uint32_t popcount(uint32_t x) noexcept
 {
@@ -62,5 +60,5 @@ inline uint64_t popcount(uint64_t x) noexcept
     return x >> 56;
 #endif
 }
-} // namespace core
-} // namespace magma
+} // namespace magma::core
+

@@ -21,27 +21,27 @@ namespace magma
 {
     class Image;
     class CommandBuffer;
+}
 
-    namespace helpers
+namespace magma::helpers
+{
+    /* Helper function to change layout of the image. As example,
+       for VK_DESCRIPTOR_TYPE_STORAGE_IMAGE allowed layout is
+       VK_IMAGE_LAYOUT_GENERAL, which isn't set by default. */
+
+    void layoutTransition(lent_ptr<Image> image,
+        VkImageLayout newLayout,
+        lent_ptr<CommandBuffer> cmdBuffer,
+        VkDependencyFlags dependencyFlags = 0);
+
+    struct LayoutTransition
     {
-        /* Helper function to change layout of the image. As example,
-           for VK_DESCRIPTOR_TYPE_STORAGE_IMAGE allowed layout is
-           VK_IMAGE_LAYOUT_GENERAL, which isn't set by default. */
+        VkImageLayout newLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        uint32_t baseMipLevel = 0;
+        uint32_t baseArrayLayer = 0;
+    };
 
-        void layoutTransition(lent_ptr<Image> image,
-            VkImageLayout newLayout,
-            lent_ptr<CommandBuffer> cmdBuffer,
-            VkDependencyFlags dependencyFlags = 0);
-
-        struct LayoutTransition
-        {
-            VkImageLayout newLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            uint32_t baseMipLevel = 0;
-            uint32_t baseArrayLayer = 0;
-        };
-
-        void batchLayoutTransition(const std::unordered_map<lent_ptr<Image>, LayoutTransition>& imageLayouts,
-            lent_ptr<CommandBuffer> cmdBuffer,
-            VkDependencyFlags dependencyFlags = 0);
-    } // namespace helpers
-} // namespace magma
+    void batchLayoutTransition(const std::unordered_map<lent_ptr<Image>, LayoutTransition>& imageLayouts,
+        lent_ptr<CommandBuffer> cmdBuffer,
+        VkDependencyFlags dependencyFlags = 0);
+} // namespace magma::helpers
