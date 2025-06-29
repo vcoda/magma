@@ -40,7 +40,7 @@ namespace magma::descriptor
             VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
         AccelerationStructure& operator=(lent_ptr<const magma::AccelerationStructure>) noexcept;
 
-    private:
+    protected:
         VkWriteDescriptorSetAccelerationStructureKHR descriptor;
     };
 
@@ -52,7 +52,6 @@ namespace magma::descriptor
         AccelerationStructureArray& operator=(const std::initializer_list<const magma::AccelerationStructure *>&) noexcept;
 
     private:
-        VkWriteDescriptorSetAccelerationStructureKHR descriptor;
         std::vector<VkAccelerationStructureKHR> accelerationStructures;
     };
 } // namespace magma::descriptor
