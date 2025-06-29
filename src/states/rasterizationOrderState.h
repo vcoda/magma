@@ -39,8 +39,6 @@ namespace magma
 
 #include "rasterizationOrderState.inl"
 
-namespace magma
-{
 #define MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(polygonMode, Order, rasterizationOrder)\
     constexpr RasterizationOrderState polygonMode##CullNoneCcw##Order(polygonMode##CullNoneCcw, rasterizationOrder);\
     constexpr RasterizationOrderState polygonMode##CullFrontCcw##Order(polygonMode##CullFrontCcw, rasterizationOrder);\
@@ -51,14 +49,13 @@ namespace magma
     constexpr RasterizationOrderState polygonMode##CullBackCw##Order(polygonMode##CullBackCw, rasterizationOrder);\
     constexpr RasterizationOrderState polygonMode##CullFrontAndBackCw##Order(polygonMode##CullFrontAndBackCw, rasterizationOrder);
 
-    namespace renderstate
-    {
-        MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(fill, Strict, VK_RASTERIZATION_ORDER_STRICT_AMD)
-        MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(line, Strict, VK_RASTERIZATION_ORDER_STRICT_AMD)
-        MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(point, Strict, VK_RASTERIZATION_ORDER_STRICT_AMD)
-        MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(fill, Relaxed, VK_RASTERIZATION_ORDER_RELAXED_AMD)
-        MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(line, Relaxed, VK_RASTERIZATION_ORDER_RELAXED_AMD)
-        MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(point, Relaxed, VK_RASTERIZATION_ORDER_RELAXED_AMD)
-    } // namespace renderstate
-} // namespace magma
+namespace magma::renderstate
+{
+    MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(fill, Strict, VK_RASTERIZATION_ORDER_STRICT_AMD)
+    MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(line, Strict, VK_RASTERIZATION_ORDER_STRICT_AMD)
+    MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(point, Strict, VK_RASTERIZATION_ORDER_STRICT_AMD)
+    MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(fill, Relaxed, VK_RASTERIZATION_ORDER_RELAXED_AMD)
+    MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(line, Relaxed, VK_RASTERIZATION_ORDER_RELAXED_AMD)
+    MAGMA_RASTERIZATION_ORDER_STATE_PERMUTATIONS(point, Relaxed, VK_RASTERIZATION_ORDER_RELAXED_AMD)
+} // namespace magma::renderstate
 #endif // VK_AMD_rasterization_order

@@ -42,8 +42,6 @@ namespace magma
 
 #include "conservativeRasterizationState.inl"
 
-namespace magma
-{
 #define MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(polygonMode, ConservativeMode, conservativeRasterizationMode)\
     constexpr ConservativeRasterizationState polygonMode##CullNoneCcw##ConservativeMode(polygonMode##CullNoneCcw, conservativeRasterizationMode);\
     constexpr ConservativeRasterizationState polygonMode##CullFrontCcw##ConservativeMode(polygonMode##CullFrontCcw, conservativeRasterizationMode);\
@@ -54,18 +52,17 @@ namespace magma
     constexpr ConservativeRasterizationState polygonMode##CullBackCw##ConservativeMode(polygonMode##CullBackCw, conservativeRasterizationMode);\
     constexpr ConservativeRasterizationState polygonMode##CullFrontAndBackCw##ConservativeMode(polygonMode##CullFrontAndBackCw, conservativeRasterizationMode);
 
-    namespace renderstate
-    {
-        MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fill, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
-        MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(line, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
-        MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(point, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
-        MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fill, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
-        MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(line, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
-        MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(point, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
-    #ifdef VK_NV_fill_rectangle
-        MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
-        MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
-    #endif // VK_NV_fill_rectangle
-    } // namespace renderstate
-} // namespace magma
+namespace magma::renderstate
+{
+    MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fill, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
+    MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(line, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
+    MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(point, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
+    MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fill, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
+    MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(line, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
+    MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(point, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
+#ifdef VK_NV_fill_rectangle
+    MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Overestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT)
+    MAGMA_CONSERVATIVE_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Underestimate, VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT)
+#endif // VK_NV_fill_rectangle
+} // namespace magma::renderstate
 #endif // VK_EXT_conservative_rasterization

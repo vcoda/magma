@@ -39,7 +39,7 @@ namespace magma
        parameters are used to distinguish numeric formats such as
        UNORM/SNORM, USCALED/SSCALED, UINT/SINT and SFLOAT. */
 
-    template<class PodType, 
+    template<class PodType,
         std::size_t Components,
         bool Normalized = false,
         bool Scaled = false>

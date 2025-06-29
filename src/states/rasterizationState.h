@@ -78,8 +78,6 @@ namespace magma
 
 #include "rasterizationState.inl"
 
-namespace magma
-{
 #define MAGMA_RASTERIZATION_STATE_PERMUTATIONS(name, polygonMode)\
     constexpr RasterizationState name##CullNoneCcw(polygonMode, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
     constexpr RasterizationState name##CullFrontCcw(polygonMode, VK_CULL_MODE_FRONT_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);\
@@ -90,13 +88,12 @@ namespace magma
     constexpr RasterizationState name##CullBackCw(polygonMode, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_CLOCKWISE);\
     constexpr RasterizationState name##CullFrontAndBackCw(polygonMode, VK_CULL_MODE_FRONT_AND_BACK, VK_FRONT_FACE_CLOCKWISE);
 
-    namespace renderstate
-    {
-        MAGMA_RASTERIZATION_STATE_PERMUTATIONS(fill, VK_POLYGON_MODE_FILL)
-        MAGMA_RASTERIZATION_STATE_PERMUTATIONS(line, VK_POLYGON_MODE_LINE)
-        MAGMA_RASTERIZATION_STATE_PERMUTATIONS(point, VK_POLYGON_MODE_POINT)
-    #ifdef VK_NV_fill_rectangle
-        MAGMA_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, VK_POLYGON_MODE_FILL_RECTANGLE_NV)
-    #endif
-    } // namespace renderstate
-} // namespace magma
+namespace magma::renderstate
+{
+    MAGMA_RASTERIZATION_STATE_PERMUTATIONS(fill, VK_POLYGON_MODE_FILL)
+    MAGMA_RASTERIZATION_STATE_PERMUTATIONS(line, VK_POLYGON_MODE_LINE)
+    MAGMA_RASTERIZATION_STATE_PERMUTATIONS(point, VK_POLYGON_MODE_POINT)
+#ifdef VK_NV_fill_rectangle
+    MAGMA_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, VK_POLYGON_MODE_FILL_RECTANGLE_NV)
+#endif
+} // namespace magma::renderstate

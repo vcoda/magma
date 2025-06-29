@@ -40,8 +40,6 @@ namespace magma
 
 #include "streamRasterizationState.inl"
 
-namespace magma
-{
 #define MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(polygonMode, Stream, rasterizationStream)\
     constexpr StreamRasterizationState polygonMode##CullNoneCcw##Stream(polygonMode##CullNoneCcw, rasterizationStream);\
     constexpr StreamRasterizationState polygonMode##CullFrontCcw##Stream(polygonMode##CullFrontCcw, rasterizationStream);\
@@ -52,28 +50,27 @@ namespace magma
     constexpr StreamRasterizationState polygonMode##CullBackCw##Stream(polygonMode##CullBackCw, rasterizationStream);\
     constexpr StreamRasterizationState polygonMode##CullFrontAndBackCw##Stream(polygonMode##CullFrontAndBackCw, rasterizationStream);
 
-    namespace renderstate
-    {
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fill, Stream0, 0)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fill, Stream1, 1)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fill, Stream2, 2)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fill, Stream3, 3)
+namespace magma::renderstate
+{
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fill, Stream0, 0)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fill, Stream1, 1)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fill, Stream2, 2)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fill, Stream3, 3)
 
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(line, Stream0, 0)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(line, Stream1, 1)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(line, Stream2, 2)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(line, Stream3, 3)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(line, Stream0, 0)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(line, Stream1, 1)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(line, Stream2, 2)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(line, Stream3, 3)
 
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(point, Stream0, 0)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(point, Stream1, 1)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(point, Stream2, 2)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(point, Stream3, 3)
-    #ifdef VK_NV_fill_rectangle
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream0, 0)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream1, 1)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream2, 2)
-        MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream3, 3)
-    #endif // VK_NV_fill_rectangle
-    } // namespace renderstate
-} // namespace magma
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(point, Stream0, 0)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(point, Stream1, 1)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(point, Stream2, 2)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(point, Stream3, 3)
+#ifdef VK_NV_fill_rectangle
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream0, 0)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream1, 1)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream2, 2)
+    MAGMA_STREAM_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, Stream3, 3)
+#endif // VK_NV_fill_rectangle
+} // namespace magma::renderstate
 #endif // VK_EXT_transform_feedback

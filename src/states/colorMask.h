@@ -17,25 +17,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-namespace magma
+namespace magma::colormask
 {
-    namespace colormask
-    {
-        constexpr VkColorComponentFlags none(0);
-        constexpr VkColorComponentFlags r(VK_COLOR_COMPONENT_R_BIT);
-        constexpr VkColorComponentFlags g(VK_COLOR_COMPONENT_G_BIT);
-        constexpr VkColorComponentFlags b(VK_COLOR_COMPONENT_B_BIT);
-        constexpr VkColorComponentFlags a(VK_COLOR_COMPONENT_A_BIT);
-        constexpr VkColorComponentFlags rg(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT);
-        constexpr VkColorComponentFlags rb(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_B_BIT);
-        constexpr VkColorComponentFlags ra(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_A_BIT);
-        constexpr VkColorComponentFlags gb(VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT);
-        constexpr VkColorComponentFlags ga(VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_A_BIT);
-        constexpr VkColorComponentFlags ba(VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
-        constexpr VkColorComponentFlags rgb(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT);
-        constexpr VkColorComponentFlags rga(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_A_BIT);
-        constexpr VkColorComponentFlags rba(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
-        constexpr VkColorComponentFlags gba(VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
-        constexpr VkColorComponentFlags rgba(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
-    } // namespace colormask
-} // namespace magma
+    constexpr VkColorComponentFlags none(0);
+    constexpr VkColorComponentFlags r(VK_COLOR_COMPONENT_R_BIT);
+    constexpr VkColorComponentFlags g(VK_COLOR_COMPONENT_G_BIT);
+    constexpr VkColorComponentFlags b(VK_COLOR_COMPONENT_B_BIT);
+    constexpr VkColorComponentFlags a(VK_COLOR_COMPONENT_A_BIT);
+    constexpr VkColorComponentFlags rg(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT);
+    constexpr VkColorComponentFlags rb(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_B_BIT);
+    constexpr VkColorComponentFlags ra(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_A_BIT);
+    constexpr VkColorComponentFlags gb(VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT);
+    constexpr VkColorComponentFlags ga(VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_A_BIT);
+    constexpr VkColorComponentFlags ba(VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
+    constexpr VkColorComponentFlags rgb(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT);
+    constexpr VkColorComponentFlags rga(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_A_BIT);
+    constexpr VkColorComponentFlags rba(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
+    constexpr VkColorComponentFlags gba(VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
+    constexpr VkColorComponentFlags rgba(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
+} // namespace magma::colormask

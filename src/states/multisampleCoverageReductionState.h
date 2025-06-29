@@ -46,8 +46,6 @@ namespace magma
 
 #include "multisampleCoverageReductionState.inl"
 
-namespace magma
-{
 #define MAGMA_MULTISAMPLE_COVERAGE_REDUCTION_STATE_PERMUTATIONS(ReductionMode, coverageReductionMode)\
     constexpr MultisampleCoverageReductionState msaa2x##ReductionMode(msaa2x, coverageReductionMode);\
     constexpr MultisampleCoverageReductionState msaa4x##ReductionMode(msaa4x, coverageReductionMode);\
@@ -56,10 +54,9 @@ namespace magma
     constexpr MultisampleCoverageReductionState msaa32x##ReductionMode(msaa32x, coverageReductionMode);\
     constexpr MultisampleCoverageReductionState msaa64x##ReductionMode(msaa64x, coverageReductionMode);
 
-    namespace renderstate
-    {
-        MAGMA_MULTISAMPLE_COVERAGE_REDUCTION_STATE_PERMUTATIONS(Merge, VK_COVERAGE_REDUCTION_MODE_MERGE_NV)
-        MAGMA_MULTISAMPLE_COVERAGE_REDUCTION_STATE_PERMUTATIONS(Truncate, VK_COVERAGE_REDUCTION_MODE_TRUNCATE_NV)
-    } // namespace renderstate
-} // namespace magma
+namespace magma::renderstate
+{
+    MAGMA_MULTISAMPLE_COVERAGE_REDUCTION_STATE_PERMUTATIONS(Merge, VK_COVERAGE_REDUCTION_MODE_MERGE_NV)
+    MAGMA_MULTISAMPLE_COVERAGE_REDUCTION_STATE_PERMUTATIONS(Truncate, VK_COVERAGE_REDUCTION_MODE_TRUNCATE_NV)
+} // namespace magma::renderstate
 #endif // VK_NV_coverage_reduction_mode

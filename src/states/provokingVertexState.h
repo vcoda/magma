@@ -37,8 +37,6 @@ namespace magma
 
 #include "provokingVertexState.inl"
 
-namespace magma
-{
 #define MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(polygonMode, ProvokingMode, provokingVertexMode)\
     constexpr ProvokingVertexRasterizationState polygonMode##CullNoneCcw##ProvokingMode(polygonMode##CullNoneCcw, provokingVertexMode);\
     constexpr ProvokingVertexRasterizationState polygonMode##CullFrontCcw##ProvokingMode(polygonMode##CullFrontCcw, provokingVertexMode);\
@@ -49,18 +47,17 @@ namespace magma
     constexpr ProvokingVertexRasterizationState polygonMode##CullBackCw##ProvokingMode(polygonMode##CullBackCw, provokingVertexMode);\
     constexpr ProvokingVertexRasterizationState polygonMode##CullFrontAndBackCw##ProvokingMode(polygonMode##CullFrontAndBackCw, provokingVertexMode);
 
-    namespace renderstate
-    {
-        MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(fill, ProvokingFirst, VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT)
-        MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(line, ProvokingFirst, VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT)
-        MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(point, ProvokingFirst, VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT)
-        MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(fill, ProvokingLast, VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT)
-        MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(line, ProvokingLast, VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT)
-        MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(point, ProvokingLast, VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT)
-    #ifdef VK_NV_fill_rectangle
-        MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, ProvokingFirst, VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT)
-        MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, ProvokingLast, VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT)
-    #endif
-    } // namespace renderstate
-} // namespace magma
+namespace magma::renderstate
+{
+    MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(fill, ProvokingFirst, VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT)
+    MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(line, ProvokingFirst, VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT)
+    MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(point, ProvokingFirst, VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT)
+    MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(fill, ProvokingLast, VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT)
+    MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(line, ProvokingLast, VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT)
+    MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(point, ProvokingLast, VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT)
+#ifdef VK_NV_fill_rectangle
+    MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, ProvokingFirst, VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT)
+    MAGMA_PROVOKING_VERTEX_RASTERIZATION_STATE_PERMUTATIONS(fillRectangle, ProvokingLast, VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT)
+#endif
+} // namespace magma::renderstate
 #endif // VK_EXT_provoking_vertex

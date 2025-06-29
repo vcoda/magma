@@ -84,50 +84,47 @@ namespace magma
 
 #include "depthStencilState.inl"
 
-namespace magma
+namespace magma::renderstate
 {
-    namespace renderstate
-    {
-        constexpr StencilOpState stencilZeroDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_ZERO, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilZeroDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_ZERO, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilOneDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 1);
-        constexpr StencilOpState stencilOneDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_REPLACE, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 1);
-        constexpr StencilOpState stencilInvertDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INVERT, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilInvertDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INVERT, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilZeroDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_ZERO, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilZeroDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_ZERO, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilOneDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 1);
+    constexpr StencilOpState stencilOneDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_REPLACE, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 1);
+    constexpr StencilOpState stencilInvertDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INVERT, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilInvertDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INVERT, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
 
-        constexpr StencilOpState stencilIncrementClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilIncrementWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilDecrementClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilDecrementWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilIncrementClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilIncrementWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilDecrementClampDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilDecrementWrapDepthPass(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
 
-        constexpr StencilOpState stencilIncrementClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilIncrementWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilDecrementClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
-        constexpr StencilOpState stencilDecrementWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilIncrementClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_CLAMP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilIncrementWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_INCREMENT_AND_WRAP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilDecrementClampDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_CLAMP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
+    constexpr StencilOpState stencilDecrementWrapDepthFail(VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_DECREMENT_AND_WRAP, VK_COMPARE_OP_ALWAYS, 0xFF, 0xFF, 0);
 
-        constexpr DepthStencilState depthNever(VK_COMPARE_OP_NEVER, true);
-        constexpr DepthStencilState depthLess(VK_COMPARE_OP_LESS, true);
-        constexpr DepthStencilState depthEqual(VK_COMPARE_OP_EQUAL, true);
-        constexpr DepthStencilState depthLessOrEqual(VK_COMPARE_OP_LESS_OR_EQUAL, true);
-        constexpr DepthStencilState depthGreater(VK_COMPARE_OP_GREATER, true);
-        constexpr DepthStencilState depthNotEqual(VK_COMPARE_OP_NOT_EQUAL, true);
-        constexpr DepthStencilState depthGreaterOrEqual(VK_COMPARE_OP_GREATER_OR_EQUAL, true);
-        constexpr DepthStencilState depthAlways(VK_COMPARE_OP_ALWAYS, true);
+    constexpr DepthStencilState depthNever(VK_COMPARE_OP_NEVER, true);
+    constexpr DepthStencilState depthLess(VK_COMPARE_OP_LESS, true);
+    constexpr DepthStencilState depthEqual(VK_COMPARE_OP_EQUAL, true);
+    constexpr DepthStencilState depthLessOrEqual(VK_COMPARE_OP_LESS_OR_EQUAL, true);
+    constexpr DepthStencilState depthGreater(VK_COMPARE_OP_GREATER, true);
+    constexpr DepthStencilState depthNotEqual(VK_COMPARE_OP_NOT_EQUAL, true);
+    constexpr DepthStencilState depthGreaterOrEqual(VK_COMPARE_OP_GREATER_OR_EQUAL, true);
+    constexpr DepthStencilState depthAlways(VK_COMPARE_OP_ALWAYS, true);
 
-        constexpr DepthStencilState depthNeverDontWrite(VK_COMPARE_OP_NEVER, false);
-        constexpr DepthStencilState depthLessDontWrite(VK_COMPARE_OP_LESS, false);
-        constexpr DepthStencilState depthEqualDontWrite(VK_COMPARE_OP_EQUAL, false);
-        constexpr DepthStencilState depthLessOrEqualDontWrite(VK_COMPARE_OP_LESS_OR_EQUAL, false);
-        constexpr DepthStencilState depthGreaterDontWrite(VK_COMPARE_OP_GREATER, false);
-        constexpr DepthStencilState depthNotEqualDontWrite(VK_COMPARE_OP_NOT_EQUAL, false);
-        constexpr DepthStencilState depthGreaterOrEqualDontWrite(VK_COMPARE_OP_GREATER_OR_EQUAL, false);
-        constexpr DepthStencilState depthAlwaysDontWrite(VK_COMPARE_OP_ALWAYS, false);
+    constexpr DepthStencilState depthNeverDontWrite(VK_COMPARE_OP_NEVER, false);
+    constexpr DepthStencilState depthLessDontWrite(VK_COMPARE_OP_LESS, false);
+    constexpr DepthStencilState depthEqualDontWrite(VK_COMPARE_OP_EQUAL, false);
+    constexpr DepthStencilState depthLessOrEqualDontWrite(VK_COMPARE_OP_LESS_OR_EQUAL, false);
+    constexpr DepthStencilState depthGreaterDontWrite(VK_COMPARE_OP_GREATER, false);
+    constexpr DepthStencilState depthNotEqualDontWrite(VK_COMPARE_OP_NOT_EQUAL, false);
+    constexpr DepthStencilState depthGreaterOrEqualDontWrite(VK_COMPARE_OP_GREATER_OR_EQUAL, false);
+    constexpr DepthStencilState depthAlwaysDontWrite(VK_COMPARE_OP_ALWAYS, false);
 
-        // Depth pass
-        constexpr DepthStencilState shadowVolumeDepthPassClampStencil(depthLessDontWrite, stencilIncrementClampDepthPass, stencilDecrementClampDepthPass);
-        constexpr DepthStencilState shadowVolumeDepthPassWrapStencil(depthLessDontWrite, stencilIncrementWrapDepthPass, stencilDecrementWrapDepthPass);
-        // Depth fail / Carmack's reverse
-        constexpr DepthStencilState shadowVolumeDepthFailClampStencil(depthLessDontWrite, stencilDecrementClampDepthFail, stencilIncrementClampDepthFail);
-        constexpr DepthStencilState shadowVolumeDepthFailWrapStencil(depthLessDontWrite, stencilDecrementWrapDepthFail, stencilIncrementWrapDepthFail);
-    } // namespace renderstate
-} // namespace magma
+    // Depth pass
+    constexpr DepthStencilState shadowVolumeDepthPassClampStencil(depthLessDontWrite, stencilIncrementClampDepthPass, stencilDecrementClampDepthPass);
+    constexpr DepthStencilState shadowVolumeDepthPassWrapStencil(depthLessDontWrite, stencilIncrementWrapDepthPass, stencilDecrementWrapDepthPass);
+    // Depth fail / Carmack's reverse
+    constexpr DepthStencilState shadowVolumeDepthFailClampStencil(depthLessDontWrite, stencilDecrementClampDepthFail, stencilIncrementClampDepthFail);
+    constexpr DepthStencilState shadowVolumeDepthFailWrapStencil(depthLessDontWrite, stencilDecrementWrapDepthFail, stencilIncrementWrapDepthFail);
+} // namespace magma::renderstate

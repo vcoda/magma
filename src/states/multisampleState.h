@@ -64,30 +64,27 @@ namespace magma
 
 #include "multisampleState.inl"
 
-namespace magma
+namespace magma::renderstate
 {
-    namespace renderstate
-    {
-        constexpr MultisampleState dontMultisample(VK_SAMPLE_COUNT_1_BIT);
-        constexpr MultisampleState msaa2x(VK_SAMPLE_COUNT_2_BIT);
-        constexpr MultisampleState msaa4x(VK_SAMPLE_COUNT_4_BIT);
-        constexpr MultisampleState msaa8x(VK_SAMPLE_COUNT_8_BIT);
-        constexpr MultisampleState msaa16x(VK_SAMPLE_COUNT_16_BIT);
-        constexpr MultisampleState msaa32x(VK_SAMPLE_COUNT_32_BIT);
-        constexpr MultisampleState msaa64x(VK_SAMPLE_COUNT_64_BIT);
+    constexpr MultisampleState dontMultisample(VK_SAMPLE_COUNT_1_BIT);
+    constexpr MultisampleState msaa2x(VK_SAMPLE_COUNT_2_BIT);
+    constexpr MultisampleState msaa4x(VK_SAMPLE_COUNT_4_BIT);
+    constexpr MultisampleState msaa8x(VK_SAMPLE_COUNT_8_BIT);
+    constexpr MultisampleState msaa16x(VK_SAMPLE_COUNT_16_BIT);
+    constexpr MultisampleState msaa32x(VK_SAMPLE_COUNT_32_BIT);
+    constexpr MultisampleState msaa64x(VK_SAMPLE_COUNT_64_BIT);
 
-        extern const MultisampleCoverageState alphaToCoverageMsaa2x;
-        extern const MultisampleCoverageState alphaToCoverageMsaa4x;
-        extern const MultisampleCoverageState alphaToCoverageMsaa8x;
-        extern const MultisampleCoverageState alphaToCoverageMsaa16x;
-        extern const MultisampleCoverageState alphaToCoverageMsaa32x;
-        extern const MultisampleCoverageState alphaToCoverageMsaa64x;
+    extern const MultisampleCoverageState alphaToCoverageMsaa2x;
+    extern const MultisampleCoverageState alphaToCoverageMsaa4x;
+    extern const MultisampleCoverageState alphaToCoverageMsaa8x;
+    extern const MultisampleCoverageState alphaToCoverageMsaa16x;
+    extern const MultisampleCoverageState alphaToCoverageMsaa32x;
+    extern const MultisampleCoverageState alphaToCoverageMsaa64x;
 
-        extern const MultisampleCoverageState alphaToOneMsaa2x;
-        extern const MultisampleCoverageState alphaToOneMsaa4x;
-        extern const MultisampleCoverageState alphaToOneMsaa8x;
-        extern const MultisampleCoverageState alphaToOneMsaa16x;
-        extern const MultisampleCoverageState alphaToOneMsaa32x;
-        extern const MultisampleCoverageState alphaToOneMsaa64x;
-    } // namespace renderstate
-} // namespace magma
+    extern const MultisampleCoverageState alphaToOneMsaa2x;
+    extern const MultisampleCoverageState alphaToOneMsaa4x;
+    extern const MultisampleCoverageState alphaToOneMsaa8x;
+    extern const MultisampleCoverageState alphaToOneMsaa16x;
+    extern const MultisampleCoverageState alphaToOneMsaa32x;
+    extern const MultisampleCoverageState alphaToOneMsaa64x;
+} // namespace magma::renderstate

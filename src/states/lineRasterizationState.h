@@ -41,8 +41,6 @@ namespace magma
 
 #include "lineRasterizationState.inl"
 
-namespace magma
-{
 #define MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_FACTORS(Mode, Pattern, lineRasterizationMode, stipplePattern)\
     constexpr LineRasterizationState stippledLine##Mode##Pattern(fillCullNoneCcw, lineRasterizationMode, 1, stipplePattern);\
     constexpr LineRasterizationState stippledLine##Mode##Pattern##x2(fillCullNoneCcw, lineRasterizationMode, 2, stipplePattern);\
@@ -62,12 +60,11 @@ namespace magma
     constexpr LineRasterizationState solidLine##Mode(fillCullNoneCcw, lineRasterizationMode);\
     MAGMA_LINE_RASTERIZATION_STATE_STIPPLE_PATTERNS(Mode, lineRasterizationMode)
 
-    namespace renderstate
-    {
-        MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Default, VK_LINE_RASTERIZATION_MODE_DEFAULT_EXT)
-        MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Rectangular, VK_LINE_RASTERIZATION_MODE_RECTANGULAR_EXT)
-        MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Bresenham, VK_LINE_RASTERIZATION_MODE_BRESENHAM_EXT)
-        MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(RectangularSmooth, VK_LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH_EXT)
-    } // namespace renderstate
-} // namespace magma
+namespace magma:: renderstate
+{
+    MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Default, VK_LINE_RASTERIZATION_MODE_DEFAULT_EXT)
+    MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Rectangular, VK_LINE_RASTERIZATION_MODE_RECTANGULAR_EXT)
+    MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(Bresenham, VK_LINE_RASTERIZATION_MODE_BRESENHAM_EXT)
+    MAGMA_LINE_RASTERIZATION_STATE_PERMUTATIONS(RectangularSmooth, VK_LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH_EXT)
+} // namespace magma:: renderstate
 #endif // VK_EXT_line_rasterization
