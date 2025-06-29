@@ -43,6 +43,18 @@ namespace magma::descriptor
     private:
         VkWriteDescriptorSetAccelerationStructureKHR descriptor;
     };
+
+    class AccelerationStructureArray : public AccelerationStructure
+    {
+    public:
+        AccelerationStructureArray(uint32_t binding) noexcept:
+            AccelerationStructure(binding) {}
+        AccelerationStructureArray& operator=(const std::initializer_list<const magma::AccelerationStructure *>&) noexcept;
+
+    private:
+        VkWriteDescriptorSetAccelerationStructureKHR descriptor;
+        std::vector<VkAccelerationStructureKHR> accelerationStructures;
+    };
 } // namespace magma::descriptor
 
 #endif // VK_KHR_acceleration_structure
