@@ -30,7 +30,6 @@ namespace magma
     public:
         // ANDROID (Google LLC)
         const VkBool32 ANDROID_native_buffer: 1;
-
         // Multivendor
         const VkBool32 EXT_acquire_drm_display: 1;
         const VkBool32 EXT_acquire_xlib_display: 1;
@@ -43,15 +42,12 @@ namespace magma
         const VkBool32 EXT_metal_surface: 1;
         const VkBool32 EXT_surface_maintenance1: 1;
         const VkBool32 EXT_swapchain_colorspace: 1;
-
         // FUCHSIA (Google LLC)
         const VkBool32 FUCHSIA_imagepipe_surface: 1;
-
-        // GGP (Google, LLC)
+        // Google Game Platform
         const VkBool32 GGP_stream_descriptor_surface: 1;
-
+        // Google, LLC (OpenGL / ES support)
         const VkBool32 GOOGLE_surfaceless_query: 1;
-
         // Khronos
         const VkBool32 KHR_android_surface: 1;
         const VkBool32 KHR_device_group_creation: 1;
@@ -69,20 +65,15 @@ namespace magma
         const VkBool32 KHR_win32_surface: 1;
         const VkBool32 KHR_xcb_surface: 1;
         const VkBool32 KHR_xlib_surface: 1;
-
         // LunarG, Inc.
         const VkBool32 LUNARG_direct_driver_loading: 1;
-
         // The Brenwill Workshop Ltd.
         const VkBool32 MVK_ios_surface: 1;
         const VkBool32 MVK_macos_surface: 1;
-
         // Nintendo Co., Ltd.
         const VkBool32 NN_vi_surface: 1;
-
         // NVIDIA Corporation
         const VkBool32 NV_external_memory_capabilities: 1;
-
         // BlackBerry Limited
         const VkBool32 QNX_screen_surface: 1;
 

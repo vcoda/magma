@@ -58,14 +58,11 @@ namespace magma
         const VkBool32 AMD_shader_trinary_minmax: 1;
         const VkBool32 AMD_texture_gather_bias_lod: 1;
         const VkBool32 AMD_wave_limits: 1;
-
         // AMD experimental extensions
         const VkBool32 AMDX_shader_enqueue: 1;
-
         // ANDROID (Google LLC)
         const VkBool32 ANDROID_external_format_resolve: 1;
         const VkBool32 ANDROID_external_memory_android_hardware_buffer: 1;
-
         // ARM Limited
         const VkBool32 ARM_pipeline_opacity_micromap: 1;
         const VkBool32 ARM_rasterization_order_attachment_access: 1;
@@ -73,7 +70,6 @@ namespace magma
         const VkBool32 ARM_scheduling_controls: 1;
         const VkBool32 ARM_shader_core_builtins: 1;
         const VkBool32 ARM_shader_core_properties: 1;
-
         // Multivendor
         const VkBool32 EXT_4444_formats: 1;
         const VkBool32 EXT_astc_decode_mode: 1;
@@ -202,36 +198,29 @@ namespace magma
         const VkBool32 EXT_video_encode_h265: 1;
         const VkBool32 EXT_ycbcr_2plane_444_formats: 1;
         const VkBool32 EXT_ycbcr_image_arrays: 1;
-
         // FUCHSIA (Google LLC)
         const VkBool32 FUCHSIA_buffer_collection: 1;
         const VkBool32 FUCHSIA_external_memory: 1;
         const VkBool32 FUCHSIA_external_semaphore: 1;
-
         // GGP (Google, LLC)
         const VkBool32 GGP_frame_token: 1;
-
         // Google LLC
         const VkBool32 GOOGLE_decorate_string: 1;
         const VkBool32 GOOGLE_display_timing: 1;
         const VkBool32 GOOGLE_hlsl_functionality1: 1;
         const VkBool32 GOOGLE_user_type: 1;
-
         // Huawei Technologies Co. Ltd.
         const VkBool32 HUAWEI_cluster_culling_shader: 1;
         const VkBool32 HUAWEI_hdr_vivid: 1;
         const VkBool32 HUAWEI_invocation_mask: 1;
         const VkBool32 HUAWEI_subpass_shading: 1;
-
         // Imagination Technologies
         const VkBool32 IMG_filter_cubic: 1;
         const VkBool32 IMG_format_pvrtc: 1;
         const VkBool32 IMG_relaxed_line_rasterization: 1;
-
         // Intel Corporation
         const VkBool32 INTEL_performance_query: 1;
         const VkBool32 INTEL_shader_integer_functions2: 1;
-
         // Khronos Group
         const VkBool32 KHR_16bit_storage: 1;
         const VkBool32 KHR_8bit_storage: 1;
@@ -343,10 +332,8 @@ namespace magma
         const VkBool32 KHR_win32_keyed_mutex: 1;
         const VkBool32 KHR_workgroup_memory_explicit_layout: 1;
         const VkBool32 KHR_zero_initialize_workgroup_memory: 1;
-
         // Microsoft Corporation
         const VkBool32 MSFT_layered_driver: 1;
-
         // NVIDIA Corporation
         const VkBool32 NV_acquire_winrt_display: 1;
         const VkBool32 NV_clip_space_w_scaling: 1;
@@ -409,7 +396,6 @@ namespace magma
         const VkBool32 NV_viewport_array2: 1;
         const VkBool32 NV_viewport_swizzle: 1;
         const VkBool32 NV_win32_keyed_mutex: 1;
-
         // NVIDIA experimental extensions
         const VkBool32 NVX_binary_import: 1;
         const VkBool32 NVX_device_generated_commands: 1;
@@ -418,10 +404,8 @@ namespace magma
         const VkBool32 NVX_image_view_handle: 1;
         const VkBool32 NVX_multiview_per_view_attributes: 1;
         const VkBool32 NVX_raytracing: 1;
-
         // Samsung Electronics Co., Ltd.
         const VkBool32 SEC_amigo_profiling: 1;
-
         // Qualcomm Technologies, Inc.
         const VkBool32 QCOM_filter_cubic_clamp: 1;
         const VkBool32 QCOM_filter_cubic_weights: 1;
@@ -436,12 +420,11 @@ namespace magma
         const VkBool32 QCOM_rotated_copy_commands: 1;
         const VkBool32 QCOM_tile_properties: 1;
         const VkBool32 QCOM_ycbcr_degamma: 1;
-
         // BlackBerry Limited
         const VkBool32 QNX_external_memory_screen_buffer: 1;
-
         // Valve Corporation
         const VkBool32 VALVE_descriptor_set_host_mapping: 1;
+        const VkBool32 VALVE_fragment_density_map_layered: 1;
         const VkBool32 VALVE_mutable_descriptor_type: 1;
 
         explicit DeviceExtensions(const std::shared_ptr<PhysicalDevice>&);

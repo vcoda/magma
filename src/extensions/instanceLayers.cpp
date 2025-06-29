@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,36 +32,23 @@ namespace magma
 InstanceLayers::InstanceLayers():
     ExtensionRegistry<VkLayerProperties>(Instance::enumerateLayers()),
 
-    MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer),
-    MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer_DEBUG),
-    MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer_VERBOSE),
-
-    MAGMA_CHECK_LAYER_NOPREFIX(GraphicsSpy),
-    MAGMA_CHECK_LAYER_NOPREFIX(libVK_LAYER_RGA_pipeline_extraction),
-    MAGMA_CHECK_LAYER_NOPREFIX(MangoHud),
-    MAGMA_CHECK_LAYER_NOPREFIX(MoltenVK),
-    MAGMA_CHECK_LAYER_NOPREFIX(VirtualSwapchain),
-
     MAGMA_CHECK_LAYER_NOPREFIX(AEJS_DeviceChooserLayer),
 
     MAGMA_CHECK_LAYER(AMD_switchable_graphics),
     MAGMA_CHECK_LAYER(AMD_switchable_graphics_32),
     MAGMA_CHECK_LAYER(AMD_switchable_graphics_64),
 
-    MAGMA_CHECK_LAYER(bandicam_helper),
-    MAGMA_CHECK_LAYER(com_xsplit_www_xbc_64_1),
-    MAGMA_CHECK_LAYER(DxtoryHookHelper),
-    MAGMA_CHECK_LAYER(EOS_Overlay),
-    MAGMA_CHECK_LAYER(FCAT_DT_overlay64),
-    MAGMA_CHECK_LAYER(FLIMES),
-    MAGMA_CHECK_LAYER(force_priority),
-    MAGMA_CHECK_LAYER(fossilize),
-    MAGMA_CHECK_LAYER(fpsmon),
-    MAGMA_CHECK_LAYER(FPSMonitor),
-
     MAGMA_CHECK_LAYER(Galaxy_Overlay),
     MAGMA_CHECK_LAYER(Galaxy_Overlay_DEBUG),
     MAGMA_CHECK_LAYER(Galaxy_Overlay_VERBOSE),
+    MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer),
+    MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer_DEBUG),
+    MAGMA_CHECK_LAYER_NOPREFIX(GalaxyOverlayVkLayer_VERBOSE),
+
+    MAGMA_CHECK_LAYER_NOPREFIX(GraphicsSpy),
+
+    MAGMA_CHECK_LAYER(fpsmon),
+    MAGMA_CHECK_LAYER(FPSMonitor),
 
     MAGMA_CHECK_LAYER(GOOGLE_threading),
     MAGMA_CHECK_LAYER(GOOGLE_unique_objects),
@@ -81,6 +68,7 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(LUNARG_api_dump),
     MAGMA_CHECK_LAYER(LUNARG_assistant_layer),
     MAGMA_CHECK_LAYER(LUNARG_core_validation),
+    MAGMA_CHECK_LAYER(LUNARG_crash_diagnostic),
     MAGMA_CHECK_LAYER(LUNARG_demo_layer),
     MAGMA_CHECK_LAYER(LUNARG_device_profile_api),
     MAGMA_CHECK_LAYER(LUNARG_device_simulation),
@@ -99,10 +87,22 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(LUNARG_VkGHL32),
     MAGMA_CHECK_LAYER(LUNARG_VkGHL64),
     MAGMA_CHECK_LAYER(LUNARG_vktrace),
+    MAGMA_CHECK_LAYER(LUNARG_xenviro_layer),
 
+    MAGMA_CHECK_LAYER_NOPREFIX(MangoHud),
     MAGMA_CHECK_LAYER(MANGOAPP_overlay),
     MAGMA_CHECK_LAYER(MANGOHUD32_overlay),
     MAGMA_CHECK_LAYER(MANGOHUD_overlay),
+    MAGMA_CHECK_LAYER(MANGOHUD_overlay_32),
+    MAGMA_CHECK_LAYER(MANGOHUD_overlay_32_x86),
+    MAGMA_CHECK_LAYER(MANGOHUD_overlay_64_x86_64),
+    MAGMA_CHECK_LAYER(MANGOHUD_overlay_aarch64),
+    MAGMA_CHECK_LAYER(MANGOHUD_overlay_x32),
+    MAGMA_CHECK_LAYER(MANGOHUD_overlay_x32_x86_64),
+    MAGMA_CHECK_LAYER(MANGOHUD_overlay_x86),
+    MAGMA_CHECK_LAYER(MANGOHUD_overlay_x86_64),
+
+    MAGMA_CHECK_LAYER_NOPREFIX(MoltenVK),
 
     MAGMA_CHECK_LAYER(MESA_device_select),
     MAGMA_CHECK_LAYER(MESA_overlay),
@@ -123,12 +123,18 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(playclaw),
 
     MAGMA_CHECK_LAYER(PRIMUS_PrimusVK),
+
+    MAGMA_CHECK_LAYER(RENDERDOC_ARM_Capture),
     MAGMA_CHECK_LAYER(RENDERDOC_Capture),
+    MAGMA_CHECK_LAYER(RENDERDOC_Capture_32),
+
     MAGMA_CHECK_LAYER(reshade),
     MAGMA_CHECK_LAYER(reshade32),
+
     MAGMA_CHECK_LAYER(RGA_pipeline_extraction),
+    MAGMA_CHECK_LAYER_NOPREFIX(libVK_LAYER_RGA_pipeline_extraction),
+
     MAGMA_CHECK_LAYER(ROCKSTAR_GAMES_social_club),
-    MAGMA_CHECK_LAYER(RTSS),
 
     MAGMA_CHECK_LAYER(VALVE_steam_fossilize),
     MAGMA_CHECK_LAYER(VALVE_steam_fossilize_32),
@@ -138,15 +144,26 @@ InstanceLayers::InstanceLayers():
     MAGMA_CHECK_LAYER(VALVE_steam_overlay_64),
 
     MAGMA_CHECK_LAYER(VKBASALT_post_processing),
+    MAGMA_CHECK_LAYER(VKBASALT_post_processing_32),
+    MAGMA_CHECK_LAYER(VKBASALT_post_processing_64),
     MAGMA_CHECK_LAYER(VKBASALT_PostProcess32),
     MAGMA_CHECK_LAYER(VKBASALT_PostProcess64),
 
-    MAGMA_CHECK_LAYER(vkpipeline_db),
-    MAGMA_CHECK_LAYER(window_system_integration),
+    MAGMA_CHECK_LAYER(bandicam_helper),
+    MAGMA_CHECK_LAYER(com_xsplit_www_xbc_64_1),
+    MAGMA_CHECK_LAYER(DxtoryHookHelper),
+    MAGMA_CHECK_LAYER(EOS_Overlay),
+    MAGMA_CHECK_LAYER(FCAT_DT_overlay64),
+    MAGMA_CHECK_LAYER(FLIMES),
+    MAGMA_CHECK_LAYER(force_priority),
+    MAGMA_CHECK_LAYER(fossilize),
+    MAGMA_CHECK_LAYER_NOPREFIX(MIRILLIS_LAYER),
+    MAGMA_CHECK_LAYER(RTSS),
     MAGMA_CHECK_LAYER(XGCV4_64),
     MAGMA_CHECK_LAYER(XSPLIT_64),
-    MAGMA_CHECK_LAYER_NOPREFIX(MIRILLIS_LAYER),
-
-    vkdto_x86_64(MAGMA_HAS_LAYER("vkdto x86_64"))
+    MAGMA_CHECK_LAYER_NOPREFIX(VirtualSwapchain),
+    MAGMA_CHECK_LAYER(vkpipeline_db),
+    vkdto_x86_64(MAGMA_HAS_LAYER("vkdto x86_64")),
+    MAGMA_CHECK_LAYER(window_system_integration)
 {}
 } // namespace magma
