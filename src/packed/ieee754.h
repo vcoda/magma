@@ -20,24 +20,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma warning(disable: 4201) // nonstandard extension used: nameless struct/union
 #endif
 
-namespace magma
+namespace magma::packed
 {
-    namespace packed
+    /* IEEE 754 single-precision binary floating-point format. */
+
+    union Float32
     {
-        /* IEEE 754 single-precision binary floating-point format. */
-
-        union Float32
-        {
-            float f;
-            uint32_t i;
-            struct
-            {   // Little-endian byte order
-                uint32_t m: 23;
-                uint32_t e: 8;
-                uint32_t sign: 1;
-            };
-
-            static constexpr int bias = 127; // Exponent bias
+        float f;
+        uint32_t i;
+        struct
+        {   // Little-endian byte order
+            uint32_t m: 23;
+            uint32_t e: 8;
+            uint32_t sign: 1;
         };
-    } // namespace packed
-} // namespace magma
+
+        static constexpr int bias = 127; // Exponent bias
+    };
+} // namespace magma::packed
