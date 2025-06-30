@@ -35,6 +35,7 @@ namespace magma
             VkPipelineColorBlendStateCreateFlags flags = 0,
             const std::initializer_list<float>& blendConstants = {1.f, 1.f, 1.f, 1.f}) noexcept;
         constexpr ColorBlendState(const ColorBlendState&) noexcept;
+        constexpr ColorBlendState(ColorBlendState&&) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const ColorBlendState&) const noexcept;
         friend std::ostream& operator<<(std::ostream&, const ColorBlendState&);

@@ -48,10 +48,39 @@ constexpr ColorBlendState::ColorBlendState(const ColorBlendState& other) noexcep
             other.blendConstants[0],
             other.blendConstants[1],
             other.blendConstants[2],
-            other.blendConstants[3],
+            other.blendConstants[3]
         }
     }
 {}
+
+constexpr ColorBlendState::ColorBlendState(ColorBlendState&& other) noexcept:
+    VkPipelineColorBlendStateCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
+        other.pNext,
+        other.flags,
+        other.logicOpEnable,
+        other.logicOp,
+        other.attachmentCount,
+        other.pAttachments,
+        {
+            other.blendConstants[0],
+            other.blendConstants[1],
+            other.blendConstants[2],
+            other.blendConstants[3]
+        }
+    }
+{
+    other.pNext = nullptr;
+    other.flags = 0;
+    other.logicOpEnable = VK_FALSE;
+    other.logicOp = VK_LOGIC_OP_CLEAR;
+    other.attachmentCount = 0;
+    other.pAttachments = nullptr;
+    other.blendConstants[0] = 0.f;
+    other.blendConstants[1] = 0.f;
+    other.blendConstants[2] = 0.f;
+    other.blendConstants[3] = 0.f;
+}
 
 constexpr hash_t ColorBlendState::hash() const noexcept
 {
