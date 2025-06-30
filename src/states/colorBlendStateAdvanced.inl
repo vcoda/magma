@@ -1,41 +1,22 @@
 namespace magma
 {
-constexpr AdvancedColorBlendAttachmentState::AdvancedColorBlendAttachmentState(const VkBlendOp advancedBlendOp,
-    const VkColorComponentFlags colorWriteMask /* colormask::rgba */) noexcept:
-    VkPipelineColorBlendAttachmentState{
-        VK_TRUE, // blendEnable
-        VK_BLEND_FACTOR_ZERO, // srcColorBlendFactor
-        VK_BLEND_FACTOR_ZERO, // dstColorBlendFactor
-        advancedBlendOp, // colorBlendOp
-        VK_BLEND_FACTOR_ZERO, // srcAlphaBlendFactor
-        VK_BLEND_FACTOR_ZERO, // dstAlphaBlendFactor
-        advancedBlendOp, // alphaBlendOp
-        colorWriteMask // colorWriteMask
-    }
-{}
-
-constexpr hash_t AdvancedColorBlendAttachmentState::hash() const noexcept
+inline AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other) noexcept:
+    ColorBlendState(other),
+    colorBlendAdvancedStateInfo(other.colorBlendAdvancedStateInfo),
+    attachments(other.attachments)
 {
-    return core::hashArgs(
-        blendEnable,
-        srcColorBlendFactor,
-        dstColorBlendFactor,
-        colorBlendOp,
-        srcAlphaBlendFactor,
-        dstAlphaBlendFactor,
-        alphaBlendOp,
-        colorWriteMask);
+    pNext = &colorBlendAdvancedStateInfo;
+    pAttachments = attachments.data();
 }
 
-constexpr bool AdvancedColorBlendAttachmentState::operator==(const AdvancedColorBlendAttachmentState& other) const noexcept
+inline AdvancedColorBlendState::AdvancedColorBlendState(AdvancedColorBlendState&& other) noexcept:
+    ColorBlendState(std::move(other)),
+    colorBlendAdvancedStateInfo(other.colorBlendAdvancedStateInfo),
+    attachments(std::move(other.attachments))
 {
-    return (blendEnable == other.blendEnable) &&
-        (srcColorBlendFactor == other.srcColorBlendFactor) &&
-        (dstColorBlendFactor == other.dstColorBlendFactor) &&
-        (colorBlendOp == other.colorBlendOp) &&
-        (srcAlphaBlendFactor == other.srcAlphaBlendFactor) &&
-        (dstAlphaBlendFactor == other.dstAlphaBlendFactor) &&
-        (alphaBlendOp == other.alphaBlendOp) &&
-        (colorWriteMask == other.colorWriteMask);
+    pNext = &colorBlendAdvancedStateInfo;
+    pAttachments = attachments.data();
+    other.pNext = nullptr;
+    other.pAttachments = nullptr;
 }
 } // namespace magma

@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,87 +22,36 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_blend_operation_advanced
-AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendAttachmentState& attachment,
-    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap) noexcept
+AdvancedColorBlendState::AdvancedColorBlendState(const ColorBlendAttachmentState& attachment,
+    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap) noexcept:
+    colorBlendAdvancedStateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT,
+        nullptr,
+        MAGMA_BOOLEAN(srcPremultiplied),
+        MAGMA_BOOLEAN(dstPremultiplied),
+        blendOverlap
+    },
+    attachments{attachment}
 {
-    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = MAGMA_NEW VkPipelineColorBlendAdvancedStateCreateInfoEXT;
-    if (colorBlendAdvanced)
-    {
-        colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
-        colorBlendAdvanced->pNext = nullptr;
-        colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
-        colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
-        colorBlendAdvanced->blendOverlap = blendOverlap;
-        pNext = colorBlendAdvanced;
-    }
+    pNext = &colorBlendAdvancedStateInfo;
     attachmentCount = 1;
-    pAttachments = core::copyArray<VkPipelineColorBlendAttachmentState>(&attachment, 1);
+    pAttachments = attachments.data();
 }
 
-AdvancedColorBlendState::AdvancedColorBlendState(const std::initializer_list<AdvancedColorBlendAttachmentState>& attachments,
-    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap) noexcept
+AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<ColorBlendAttachmentState>& attachments,
+    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap) noexcept:
+    colorBlendAdvancedStateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT,
+        nullptr,
+        MAGMA_BOOLEAN(srcPremultiplied),
+        MAGMA_BOOLEAN(dstPremultiplied),
+        blendOverlap
+    },
+    attachments(attachments)
 {
-    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = MAGMA_NEW VkPipelineColorBlendAdvancedStateCreateInfoEXT;
-    if (colorBlendAdvanced)
-    {
-        colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
-        colorBlendAdvanced->pNext = nullptr;
-        colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
-        colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
-        colorBlendAdvanced->blendOverlap = blendOverlap;
-        pNext = colorBlendAdvanced;
-    }
+    pNext = &colorBlendAdvancedStateInfo;
     attachmentCount = core::countof(attachments);
-    pAttachments = core::copyInitializerList<VkPipelineColorBlendAttachmentState>(attachments);
-}
-
-AdvancedColorBlendState::AdvancedColorBlendState(const std::vector<AdvancedColorBlendAttachmentState>& attachments,
-    bool srcPremultiplied, bool dstPremultiplied, VkBlendOverlapEXT blendOverlap) noexcept
-{
-    VkPipelineColorBlendAdvancedStateCreateInfoEXT *colorBlendAdvanced = MAGMA_NEW VkPipelineColorBlendAdvancedStateCreateInfoEXT;
-    if (colorBlendAdvanced)
-    {
-        colorBlendAdvanced->sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT;
-        colorBlendAdvanced->pNext = nullptr;
-        colorBlendAdvanced->srcPremultiplied = MAGMA_BOOLEAN(srcPremultiplied);
-        colorBlendAdvanced->dstPremultiplied = MAGMA_BOOLEAN(dstPremultiplied);
-        colorBlendAdvanced->blendOverlap = blendOverlap;
-        pNext = colorBlendAdvanced;
-    }
-    attachmentCount = core::countof(attachments);
-    pAttachments = core::copyVector<VkPipelineColorBlendAttachmentState>(attachments);
-}
-
-AdvancedColorBlendState::AdvancedColorBlendState(const AdvancedColorBlendState& other) noexcept:
-    ColorBlendState(other)
-{
-    pNext = core::copy((VkPipelineColorBlendAdvancedStateCreateInfoEXT *)other.pNext);
-}
-
-AdvancedColorBlendState& AdvancedColorBlendState::operator=(const AdvancedColorBlendState& other)  noexcept
-{
-    if (this != &other)
-    {
-        delete reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
-        pNext = core::copy(reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(other.pNext));
-        flags = other.flags;
-        logicOpEnable = other.logicOpEnable;
-        logicOp = other.logicOp;
-        attachmentCount = other.attachmentCount;
-        delete[] pAttachments;
-        pAttachments = core::copyArray(other.pAttachments, other.attachmentCount);
-        blendConstants[0] = other.blendConstants[0];
-        blendConstants[1] = other.blendConstants[1];
-        blendConstants[2] = other.blendConstants[2];
-        blendConstants[3] = other.blendConstants[3];
-    }
-    return *this;
-}
-
-AdvancedColorBlendState::~AdvancedColorBlendState()
-{
-    delete reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
-    delete[] pAttachments;
+    pAttachments = attachments.data();
 }
 
 hash_t AdvancedColorBlendState::hash() const noexcept
@@ -113,39 +62,42 @@ hash_t AdvancedColorBlendState::hash() const noexcept
         logicOpEnable,
         logicOp,
         attachmentCount);
-    for (uint32_t i = 0; i < attachmentCount; ++i)
+    for (auto const& attachment: attachments)
     {
         hash = core::hashCombine(hash, core::hashArgs(
-            pAttachments[i].blendEnable,
-            pAttachments[i].srcColorBlendFactor,
-            pAttachments[i].dstColorBlendFactor,
-            pAttachments[i].colorBlendOp,
-            pAttachments[i].srcAlphaBlendFactor,
-            pAttachments[i].dstAlphaBlendFactor,
-            pAttachments[i].alphaBlendOp,
-            pAttachments[i].colorWriteMask));
+            attachment.blendEnable,
+            attachment.srcColorBlendFactor,
+            attachment.dstColorBlendFactor,
+            attachment.colorBlendOp,
+            attachment.srcAlphaBlendFactor,
+            attachment.dstAlphaBlendFactor,
+            attachment.alphaBlendOp,
+            attachment.colorWriteMask));
     }
-    hash = core::hashCombine(hash, core::hashArray(blendConstants, 4));
-    auto colorBlendAdvanced = reinterpret_cast<const VkPipelineColorBlendAdvancedStateCreateInfoEXT *>(pNext);
-    return core::hashCombine(hash, core::hashArgs(
-        colorBlendAdvanced->sType,
-        colorBlendAdvanced->srcPremultiplied,
-        colorBlendAdvanced->dstPremultiplied,
-        colorBlendAdvanced->blendOverlap));
+    hash = core::hashCombine(hash, core::hashArgs(
+        blendConstants[0],
+        blendConstants[1],
+        blendConstants[2],
+        blendConstants[3]));
+    hash = core::hashCombine(hash, core::hashArgs(
+        colorBlendAdvancedStateInfo.sType,
+        colorBlendAdvancedStateInfo.srcPremultiplied,
+        colorBlendAdvancedStateInfo.dstPremultiplied,
+        colorBlendAdvancedStateInfo.blendOverlap));
+    return hash;
 }
 
 bool AdvancedColorBlendState::operator==(const AdvancedColorBlendState& other) const noexcept
 {
-    return (core::compare<VkPipelineColorBlendAdvancedStateCreateInfoEXT>(pNext, other.pNext)) &&
-        (flags == other.flags) &&
+    return (flags == other.flags) &&
         (logicOpEnable == other.logicOpEnable) &&
         (logicOp == other.logicOp) &&
         (attachmentCount == other.attachmentCount) &&
         core::compareArrays(pAttachments, other.pAttachments, attachmentCount) &&
-        (blendConstants[0] == other.blendConstants[0]) &&
-        (blendConstants[1] == other.blendConstants[1]) &&
-        (blendConstants[2] == other.blendConstants[2]) &&
-        (blendConstants[3] == other.blendConstants[3]);
+        core::compareArrays(blendConstants, other.blendConstants, 4) &&
+        (colorBlendAdvancedStateInfo.srcPremultiplied == other.colorBlendAdvancedStateInfo.srcPremultiplied) &&
+        (colorBlendAdvancedStateInfo.dstPremultiplied == other.colorBlendAdvancedStateInfo.dstPremultiplied) &&
+        (colorBlendAdvancedStateInfo.blendOverlap == other.colorBlendAdvancedStateInfo.blendOverlap);
 }
 #endif // VK_EXT_blend_operation_advanced
 } // namespace magma

@@ -43,6 +43,11 @@ constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(
     }
 {}
 
+constexpr ColorBlendAttachmentState::ColorBlendAttachmentState(const VkBlendOp advancedBlendOp,
+    const VkColorComponentFlags colorWriteMask /* colormask::rgba */) noexcept:
+    ColorBlendAttachmentState(VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ZERO, advancedBlendOp, colorWriteMask)
+{}
+
 constexpr hash_t ColorBlendAttachmentState::hash() const noexcept
 {
     return core::hashArgs(
