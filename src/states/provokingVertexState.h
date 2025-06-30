@@ -28,6 +28,7 @@ namespace magma
     {
         constexpr ProvokingVertexRasterizationState(const RasterizationState& state,
             VkProvokingVertexModeEXT provokingVertexMode) noexcept;
+        constexpr ProvokingVertexRasterizationState(const ProvokingVertexRasterizationState&) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const ProvokingVertexRasterizationState&) const noexcept;
 

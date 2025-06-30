@@ -12,6 +12,13 @@ constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationSt
     pNext = &rasterizationOrderInfo;
 }
 
+constexpr RasterizationOrderState::RasterizationOrderState(const RasterizationOrderState& other) noexcept:
+    RasterizationState(other),
+    rasterizationOrderInfo(other.rasterizationOrderInfo)
+{
+    pNext = &rasterizationOrderInfo;
+}
+
 constexpr hash_t RasterizationOrderState::hash() const noexcept
 {
     hash_t hash = RasterizationState::hash();

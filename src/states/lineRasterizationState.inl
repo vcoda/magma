@@ -30,6 +30,13 @@ constexpr LineRasterizationState::LineRasterizationState(const RasterizationStat
     pNext = &lineRasterizationInfo;
 }
 
+constexpr LineRasterizationState::LineRasterizationState(const LineRasterizationState& other) noexcept:
+    RasterizationState(other),
+    lineRasterizationInfo(other.lineRasterizationInfo)
+{
+    pNext = &lineRasterizationInfo;
+}
+
 constexpr hash_t LineRasterizationState::hash() const noexcept
 {
     hash_t hash = RasterizationState::hash();

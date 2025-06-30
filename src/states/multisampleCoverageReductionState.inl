@@ -13,6 +13,13 @@ constexpr MultisampleCoverageReductionState::MultisampleCoverageReductionState(c
     pNext = &coverageReductionInfo;
 }
 
+constexpr MultisampleCoverageReductionState::MultisampleCoverageReductionState(const MultisampleCoverageReductionState& other) noexcept:
+    MultisampleState(other),
+    coverageReductionInfo(other.coverageReductionInfo)
+{
+    pNext = &coverageReductionInfo;
+}
+
 constexpr hash_t MultisampleCoverageReductionState::hash() const noexcept
 {
     hash_t hash = MultisampleState::hash();

@@ -37,6 +37,7 @@ namespace magma
     {
         constexpr MultisampleCoverageReductionState(const MultisampleState& state,
             VkCoverageReductionModeNV coverageReductionMode) noexcept;
+        constexpr MultisampleCoverageReductionState(const MultisampleCoverageReductionState&) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const MultisampleCoverageReductionState&) const noexcept;
 

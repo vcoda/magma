@@ -11,6 +11,13 @@ constexpr MinmaxSamplerState::MinmaxSamplerState(const SamplerState& state, cons
     pNext = &reductionModeInfo;
 }
 
+constexpr MinmaxSamplerState::MinmaxSamplerState(const MinmaxSamplerState& other) noexcept:
+    SamplerState(other),
+    reductionModeInfo(other.reductionModeInfo)
+{
+    pNext = &reductionModeInfo;
+}
+
 constexpr hash_t MinmaxSamplerState::hash() const noexcept
 {
     hash_t hash = SamplerState::hash();

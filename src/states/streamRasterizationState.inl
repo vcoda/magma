@@ -13,6 +13,13 @@ constexpr StreamRasterizationState::StreamRasterizationState(const Rasterization
     pNext = &streamRasterizationInfo;
 }
 
+constexpr StreamRasterizationState::StreamRasterizationState(const StreamRasterizationState& other) noexcept:
+    RasterizationState(other),
+    streamRasterizationInfo(other.streamRasterizationInfo)
+{
+    pNext = &streamRasterizationInfo;
+}
+
 constexpr hash_t StreamRasterizationState::hash() const noexcept
 {
     hash_t hash = RasterizationState::hash();

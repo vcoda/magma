@@ -15,6 +15,13 @@ constexpr ConservativeRasterizationState::ConservativeRasterizationState(const R
     pNext = &conservativeRasterizationInfo;
 }
 
+constexpr ConservativeRasterizationState::ConservativeRasterizationState(const ConservativeRasterizationState& other) noexcept:
+    RasterizationState(other),
+    conservativeRasterizationInfo(other.conservativeRasterizationInfo)
+{
+    pNext = &conservativeRasterizationInfo;
+}
+
 constexpr hash_t ConservativeRasterizationState::hash() const noexcept
 {
     hash_t hash = RasterizationState::hash();

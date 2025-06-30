@@ -33,6 +33,7 @@ namespace magma
         constexpr ConservativeRasterizationState(const RasterizationState& state,
             VkConservativeRasterizationModeEXT conservativeRasterizationMode,
             float extraPrimitiveOverestimationSize = 0.f) noexcept;
+        constexpr ConservativeRasterizationState(const ConservativeRasterizationState&) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const ConservativeRasterizationState&) const noexcept;
 

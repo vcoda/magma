@@ -30,6 +30,7 @@ namespace magma
     {
         constexpr RasterizationOrderState(const RasterizationState& state,
             VkRasterizationOrderAMD rasterizationOrder) noexcept;
+        constexpr RasterizationOrderState(const RasterizationOrderState&) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const RasterizationOrderState&) const noexcept;
 
