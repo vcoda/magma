@@ -69,39 +69,39 @@ namespace magma
 
 #include "samplerState.inl"
 
-#define MAGMA_SAMPLER_STATE_PERMUTATIONS(Suffix, addressMode)\
-    constexpr SamplerState magMinMipNearest##Suffix(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
-    constexpr SamplerState magLinearMinMipNearest##Suffix(VK_FILTER_LINEAR, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
-    constexpr SamplerState magNearestMinLinearMipNearest##Suffix(VK_FILTER_NEAREST, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
-    constexpr SamplerState magMinNearestMipLinear##Suffix(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
-    constexpr SamplerState magMinLinearMipNearest##Suffix(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
-    constexpr SamplerState magNearestMinMipLinear##Suffix(VK_FILTER_NEAREST, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
-    constexpr SamplerState magLinearMinNearestMipLinear##Suffix(VK_FILTER_LINEAR, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
-    constexpr SamplerState magMinMipLinear##Suffix(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X1(addressMode, 1.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X2(addressMode, 2.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X3(addressMode, 3.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X4(addressMode, 4.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X5(addressMode, 5.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X6(addressMode, 6.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X7(addressMode, 7.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X8(addressMode, 8.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X9(addressMode, 9.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X10(addressMode, 10.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X11(addressMode, 11.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X12(addressMode, 12.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X13(addressMode, 13.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X14(addressMode, 14.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X15(addressMode, 15.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##X16(addressMode, 16.f);\
-    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##Suffix##Max(addressMode, std::numeric_limits<float>::max());
+#define MAGMA_SAMPLER_STATE_PERMUTATIONS(AddressMode, addressMode)\
+    constexpr SamplerState magMinMipNearest##AddressMode(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
+    constexpr SamplerState magLinearMinMipNearest##AddressMode(VK_FILTER_LINEAR, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
+    constexpr SamplerState magNearestMinLinearMipNearest##AddressMode(VK_FILTER_NEAREST, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
+    constexpr SamplerState magMinNearestMipLinear##AddressMode(VK_FILTER_NEAREST, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
+    constexpr SamplerState magMinLinearMipNearest##AddressMode(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
+    constexpr SamplerState magNearestMinMipLinear##AddressMode(VK_FILTER_NEAREST, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
+    constexpr SamplerState magLinearMinNearestMipLinear##AddressMode(VK_FILTER_LINEAR, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
+    constexpr SamplerState magMinMipLinear##AddressMode(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##1x(addressMode, 1.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##2x(addressMode, 2.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##3x(addressMode, 3.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##4x(addressMode, 4.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##5x(addressMode, 5.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##6x(addressMode, 6.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##7x(addressMode, 7.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##8x(addressMode, 8.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##9x(addressMode, 9.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##10x(addressMode, 10.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##11x(addressMode, 11.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##12x(addressMode, 12.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##13x(addressMode, 13.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##14x(addressMode, 14.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##15x(addressMode, 15.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##16x(addressMode, 16.f);\
+    constexpr AnisotropicSamplerState magMinLinearMipAnisotropic##AddressMode##Max(addressMode, std::numeric_limits<float>::max());
 
 #ifdef VK_EXT_filter_cubic
-#define MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(Suffix, addressMode)\
-    constexpr SamplerState magCubicMinMipNearest##Suffix(VK_FILTER_CUBIC_EXT, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
-    constexpr SamplerState magCubicMinLinearMipNearest##Suffix(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
-    constexpr SamplerState magCubicMinMipLinear##Suffix(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
-    constexpr SamplerState magMinCubicMipLinear##Suffix(VK_FILTER_CUBIC_EXT, VK_FILTER_CUBIC_EXT, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);
+#define MAGMA_CUBIC_SAMPLER_STATE_PERMUTATIONS(AddressMode, addressMode)\
+    constexpr SamplerState magCubicMinMipNearest##AddressMode(VK_FILTER_CUBIC_EXT, VK_FILTER_NEAREST, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
+    constexpr SamplerState magCubicMinLinearMipNearest##AddressMode(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_NEAREST, addressMode);\
+    constexpr SamplerState magCubicMinMipLinear##AddressMode(VK_FILTER_CUBIC_EXT, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);\
+    constexpr SamplerState magMinCubicMipLinear##AddressMode(VK_FILTER_CUBIC_EXT, VK_FILTER_CUBIC_EXT, VK_SAMPLER_MIPMAP_MODE_LINEAR, addressMode);
 #endif // VK_EXT_filter_cubic
 
 namespace magma::sampler

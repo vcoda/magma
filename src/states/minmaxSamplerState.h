@@ -39,32 +39,32 @@ namespace magma
 
 #include "minmaxSamplerState.inl"
 
-#define MAGMA_MINMAX_SAMPLER_STATE_PERMUTATIONS(AddressMode, Suffix, reductionMode)\
-    constexpr MinmaxSamplerState magMinMipNearest##AddressMode##Suffix(magMinMipNearest##AddressMode, reductionMode);\
-    constexpr MinmaxSamplerState magLinearMinMipNearest##AddressMode##Suffix(magLinearMinMipNearest##AddressMode, reductionMode);\
-    constexpr MinmaxSamplerState magNearestMinLinearMipNearest##AddressMode##Suffix(magNearestMinLinearMipNearest##AddressMode, reductionMode);\
-    constexpr MinmaxSamplerState magMinNearestMipLinear##AddressMode##Suffix(magMinNearestMipLinear##AddressMode, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipNearest##AddressMode##Suffix(magMinLinearMipNearest##AddressMode, reductionMode);\
-    constexpr MinmaxSamplerState magNearestMinMipLinear##AddressMode##Suffix(magNearestMinMipLinear##AddressMode, reductionMode);\
-    constexpr MinmaxSamplerState magLinearMinNearestMipLinear##AddressMode##Suffix(magLinearMinNearestMipLinear##AddressMode, reductionMode);\
-    constexpr MinmaxSamplerState magMinMipLinear##AddressMode##Suffix(magMinMipLinear##AddressMode, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X1(magMinLinearMipAnisotropic##AddressMode##X1, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X2(magMinLinearMipAnisotropic##AddressMode##X2, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X3(magMinLinearMipAnisotropic##AddressMode##X3, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X4(magMinLinearMipAnisotropic##AddressMode##X4, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X5(magMinLinearMipAnisotropic##AddressMode##X5, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X6(magMinLinearMipAnisotropic##AddressMode##X6, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X7(magMinLinearMipAnisotropic##AddressMode##X7, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X8(magMinLinearMipAnisotropic##AddressMode##X8, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X9(magMinLinearMipAnisotropic##AddressMode##X9, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X10(magMinLinearMipAnisotropic##AddressMode##X10, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X11(magMinLinearMipAnisotropic##AddressMode##X11, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X12(magMinLinearMipAnisotropic##AddressMode##X12, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X13(magMinLinearMipAnisotropic##AddressMode##X13, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X14(magMinLinearMipAnisotropic##AddressMode##X14, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X15(magMinLinearMipAnisotropic##AddressMode##X15, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##X16(magMinLinearMipAnisotropic##AddressMode##X16, reductionMode);\
-    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##Suffix##Max(magMinLinearMipAnisotropic##AddressMode##Max, reductionMode);
+#define MAGMA_MINMAX_SAMPLER_STATE_PERMUTATIONS(AddressMode, ReductionMode, reductionMode)\
+    constexpr MinmaxSamplerState magMinMipNearest##AddressMode##ReductionMode(magMinMipNearest##AddressMode, reductionMode);\
+    constexpr MinmaxSamplerState magLinearMinMipNearest##AddressMode##ReductionMode(magLinearMinMipNearest##AddressMode, reductionMode);\
+    constexpr MinmaxSamplerState magNearestMinLinearMipNearest##AddressMode##ReductionMode(magNearestMinLinearMipNearest##AddressMode, reductionMode);\
+    constexpr MinmaxSamplerState magMinNearestMipLinear##AddressMode##ReductionMode(magMinNearestMipLinear##AddressMode, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipNearest##AddressMode##ReductionMode(magMinLinearMipNearest##AddressMode, reductionMode);\
+    constexpr MinmaxSamplerState magNearestMinMipLinear##AddressMode##ReductionMode(magNearestMinMipLinear##AddressMode, reductionMode);\
+    constexpr MinmaxSamplerState magLinearMinNearestMipLinear##AddressMode##ReductionMode(magLinearMinNearestMipLinear##AddressMode, reductionMode);\
+    constexpr MinmaxSamplerState magMinMipLinear##AddressMode##ReductionMode(magMinMipLinear##AddressMode, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##1x(magMinLinearMipAnisotropic##AddressMode##1x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##2x(magMinLinearMipAnisotropic##AddressMode##2x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##3x(magMinLinearMipAnisotropic##AddressMode##3x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##4x(magMinLinearMipAnisotropic##AddressMode##4x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##5x(magMinLinearMipAnisotropic##AddressMode##5x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##6x(magMinLinearMipAnisotropic##AddressMode##6x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##7x(magMinLinearMipAnisotropic##AddressMode##7x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##8x(magMinLinearMipAnisotropic##AddressMode##8x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##9x(magMinLinearMipAnisotropic##AddressMode##9x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##10x(magMinLinearMipAnisotropic##AddressMode##10x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##11x(magMinLinearMipAnisotropic##AddressMode##11x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##12x(magMinLinearMipAnisotropic##AddressMode##12x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##13x(magMinLinearMipAnisotropic##AddressMode##13x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##14x(magMinLinearMipAnisotropic##AddressMode##14x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##15x(magMinLinearMipAnisotropic##AddressMode##15x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##16x(magMinLinearMipAnisotropic##AddressMode##16x, reductionMode);\
+    constexpr MinmaxSamplerState magMinLinearMipAnisotropic##AddressMode##ReductionMode##Max(magMinLinearMipAnisotropic##AddressMode##Max, reductionMode);
 
 namespace magma::sampler
 {

@@ -61,7 +61,7 @@ namespace magma
     constexpr hash_t fillCullNoneCcwOverestimateHash = renderstate::fillCullNoneCcwOverestimate.hash();
 #endif
 #ifdef VK_EXT_line_rasterization
-    constexpr hash_t stippledLineBresenhamPatternAx2Hash = renderstate::stippledLineBresenhamPatternAx2.hash();
+    constexpr hash_t stippledLineBresenhamPatternA2xHash = renderstate::stippledLineBresenhamPatternA2x.hash();
 #endif
 #ifdef VK_EXT_provoking_vertex
     constexpr hash_t fillCullBackCcwProvokingFirstHash = renderstate::fillCullBackCcwProvokingFirst.hash();
@@ -109,7 +109,7 @@ namespace magma
     static_assert(sampler::magNearestMinMipLinearRepeat.getMinFilter() == MinificationFilter::Trilinear, "expected trilinear filter");
     static_assert(sampler::magLinearMinNearestMipLinearRepeat.getMinFilter() == MinificationFilter::Mixed, "exepected mixed filter");
     static_assert(sampler::magMinMipLinearRepeat.getMinFilter() == MinificationFilter::Trilinear, "expected trilinear filter");
-    static_assert(sampler::magMinLinearMipAnisotropicRepeatX1.getMinFilter() == MinificationFilter::Anisotropic, "expected anisotropic filter");
+    static_assert(sampler::magMinLinearMipAnisotropicRepeat1x.getMinFilter() == MinificationFilter::Anisotropic, "expected anisotropic filter");
 
     // Numeric formats
     static_assert(UByteNorm::numericFormat() == NumericFormat::UNorm, "expected UNORM format");
