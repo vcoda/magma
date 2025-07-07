@@ -31,7 +31,7 @@ namespace magma
 
     struct SubpassDescription final : VkSubpassDescription
     {
-        SubpassDescription() noexcept;
+        constexpr SubpassDescription(VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS) noexcept;
         explicit SubpassDescription(VkImageLayout colorLayout) noexcept;
         explicit SubpassDescription(VkImageLayout colorLayout,
             VkImageLayout depthStencilLayout) noexcept;
@@ -42,14 +42,8 @@ namespace magma
         SubpassDescription& operator=(const SubpassDescription&) noexcept;
         ~SubpassDescription();
         hash_t getHash() const noexcept;
-
-    private:
-        SubpassDescription(VkPipelineBindPoint pipelineBindPoint) noexcept;
     };
-} // namespace magma
 
-namespace magma
-{
     namespace subpass
     {
         extern const SubpassDescription colorAttachment;
@@ -77,3 +71,5 @@ namespace magma
     #endif // VK_KHR_separate_depth_stencil_layouts
     } // namespace subpass
 } // namespace magma
+
+#include "subpass.inl"
