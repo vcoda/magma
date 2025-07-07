@@ -55,8 +55,8 @@ it significantly speeds up allocations and minimizes memory fragmentation at run
 
 Defining descriptor set layouts is usually one of the most complicated parts of the Vulkan API, often leading to tangled and hard-to-maintain code. 
 Conceptually, this should be done using reflection between C++ and shader code. Reflection is a mechanism making it possible to investigate yourself.
-In programming languages, reflection is used to access object properties and invoke methods in run-time. While C++ lacks true reflection, Magma emulates it 
-using variadic templates and SPIR-V reflection data. This approach allows descriptor set layouts to be defined as regular C++ structures and ensures their 
+In programming languages, reflection is used to access object properties and invoke methods in run-time. Magma uses Boost.PFR library to iterate over
+fields of descriptor structure and SPIR-V reflection data. This approach allows descriptor set layouts to be defined as regular C++ structures and ensures their 
 validity against specific shader bytecode. At runtime, you can assign resources (buffers, images, samplers, acceleration structures) to descriptor bindings, 
 and they will be seamlessly attached to the shader when the descriptor set is bound via the command buffer.
 
@@ -92,6 +92,7 @@ There are dependencies from the following third party libraries:
 * [shaderc](https://github.com/google/shaderc) - a collection of tools, libraries, and tests for Vulkan shader compilation.
 * [SPIRV-Reflect](https://github.com/chaoticbob/SPIRV-Reflect) - a lightweight library that provides a C/C++ reflection API for SPIR-V shader bytecode in Vulkan applications.
 * [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) - Vulkan memory allocation library.
+* [Boost.PFR](https://github.com/boostorg/pfr) - a C++14 library for very basic reflection that gives you access to structure elements.
 
 Library depends on STL and has not been designed to be used with custom containers. It doesn't use any file input/output.
 
