@@ -39,6 +39,7 @@ namespace magma
         explicit SubpassDescription(const std::vector<VkImageLayout>& colorLayouts,
             const VkImageLayout& depthStencilLayout) noexcept;
         SubpassDescription(const SubpassDescription&) noexcept;
+        SubpassDescription(SubpassDescription&&) noexcept;
         SubpassDescription& operator=(const SubpassDescription&) noexcept;
         ~SubpassDescription();
         hash_t getHash() const noexcept;
