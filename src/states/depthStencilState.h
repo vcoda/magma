@@ -80,7 +80,7 @@ namespace magma
             float minDepthBounds,
             float maxDepthBounds) noexcept;
     };
-}
+} // namespace magma
 
 #include "depthStencilState.inl"
 

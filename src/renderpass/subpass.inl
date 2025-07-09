@@ -1,6 +1,6 @@
 namespace magma
 {
-constexpr SubpassDescription::SubpassDescription(VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept:
+constexpr SubpassDescription::SubpassDescription(const VkPipelineBindPoint pipelineBindPoint /* VK_PIPELINE_BIND_POINT_GRAPHICS */) noexcept:
     VkSubpassDescription{
         0, // flags
         pipelineBindPoint,
@@ -14,7 +14,6 @@ constexpr SubpassDescription::SubpassDescription(VkPipelineBindPoint pipelineBin
         nullptr // pPreserveAttachments
     }
 {}
-
 
 inline SubpassDescription::SubpassDescription(SubpassDescription&& other) noexcept
 {

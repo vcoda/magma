@@ -28,8 +28,7 @@ namespace magma
             const char *entrypoint,\
             std::shared_ptr<Specialization> specialization = nullptr,\
             VkPipelineShaderStageCreateFlags flags = 0) noexcept:\
-            PipelineShaderStage(stage, std::move(module), entrypoint, std::move(specialization), flags)\
-        {}\
+            PipelineShaderStage(stage, std::move(module), entrypoint, std::move(specialization), flags) {}\
     };
 
     MAGMA_DEFINE_PIPELINE_SHADER_STAGE(VertexShaderStage, VK_SHADER_STAGE_VERTEX_BIT)

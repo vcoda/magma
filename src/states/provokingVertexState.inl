@@ -19,7 +19,6 @@ constexpr ProvokingVertexRasterizationState::ProvokingVertexRasterizationState(c
     pNext = &provokingVertexInfo;
 }
 
-
 constexpr hash_t ProvokingVertexRasterizationState::hash() const noexcept
 {
     hash_t hash = RasterizationState::hash();

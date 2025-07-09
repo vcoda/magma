@@ -29,7 +29,7 @@ namespace magma
             VkFilter minFilter,
             VkCompareOp compareOp) noexcept;
     };
-}
+} // namespace magma
 
 #include "depthComparisonSamplerState.inl"
 
