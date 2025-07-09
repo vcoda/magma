@@ -39,7 +39,7 @@ namespace magma
     class AccelerationStructure;
     class BottomLevelAccelerationStructure;
     class TopLevelAccelerationStructure;
-    struct AccelerationStructureGeometryInstances;
+    struct AccelerationStructureInstances;
 #endif
 #ifdef VK_KHR_ray_tracing_pipeline
     class ShaderBindingTable;
@@ -207,8 +207,8 @@ namespace magma
             const VkAccelerationStructureBuildRangeInfoKHR *buildRanges, Buffer *scratchBuffer) const noexcept;
         void updateAccelerationStructure(BottomLevelAccelerationStructure *accelerationStructure, uint32_t geometryCount, const VkAccelerationStructureGeometryKHR **geometries,
             const VkAccelerationStructureBuildRangeInfoKHR *buildRanges, Buffer *scratchBuffer) const noexcept;
-        void buildAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureGeometryInstances& instances, Buffer *scratchBuffer) const noexcept;
-        void updateAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureGeometryInstances& instances, Buffer *scratchBuffer) const noexcept;
+        void buildAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureInstances& instances, Buffer *scratchBuffer) const noexcept;
+        void updateAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureInstances& instances, Buffer *scratchBuffer) const noexcept;
         void updateAccelerationStructureIndirect(AccelerationStructure *accelerationStructure, uint32_t geometryCount, const VkAccelerationStructureGeometryKHR **geometries,
             const uint32_t *maxPrimitiveCounts, const Buffer *indirectBuildRanges, Buffer *scratchBuffer) const noexcept;
         void copyAccelerationStructure(const AccelerationStructure *srcAccelerationStructure, AccelerationStructure *dstAccelerationStructure) const noexcept;
@@ -239,7 +239,7 @@ namespace magma
         void rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode, BottomLevelAccelerationStructure *accelerationStructure, uint32_t geometryCount,
             const VkAccelerationStructureGeometryKHR **geometries, const VkAccelerationStructureBuildRangeInfoKHR *buildRanges, Buffer *scratchBuffer) const noexcept;
         void rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode, TopLevelAccelerationStructure *accelerationStructure,
-            const AccelerationStructureGeometryInstances& instances, Buffer *scratchBuffer) const noexcept;
+            const AccelerationStructureInstances& instances, Buffer *scratchBuffer) const noexcept;
     #endif // VK_KHR_acceleration_structure
 
         VkDevice device;

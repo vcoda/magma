@@ -24,7 +24,7 @@ namespace magma
     class Buffer;
 #ifdef VK_KHR_acceleration_structure
     struct AccelerationStructureGeometry;
-    struct AccelerationStructureGeometryInstances;
+    struct AccelerationStructureInstances;
     struct AccelerationStructureBuildRange;
 #endif
 #ifdef VK_KHR_deferred_host_operations

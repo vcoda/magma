@@ -250,9 +250,9 @@ namespace magma
             lent_ptr<Buffer> scratchBuffer) const noexcept;
         void updateAccelerationStructure(lent_ptr<BottomLevelAccelerationStructure> accelerationStructure, const std::list<AccelerationStructureGeometry>& geometries,
             const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges, lent_ptr<Buffer> scratchBuffer) const noexcept;
-        void buildAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureGeometryInstances& instances,
+        void buildAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureInstances& instances,
             lent_ptr<Buffer> scratchBuffer) const noexcept;
-        void updateAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureGeometryInstances& instances,
+        void updateAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureInstances& instances,
             lent_ptr<Buffer> scratchBuffer) const noexcept;
         void updateAccelerationStructureIndirect(lent_ptr<AccelerationStructure> accelerationStructure, const std::list<AccelerationStructureGeometry> geometries,
             lent_ptr<const Buffer> indirectBuildRanges, lent_ptr<Buffer> scratchBuffer) const noexcept;

@@ -33,7 +33,7 @@ namespace magma
     {
     public:
         explicit TopLevelAccelerationStructure(std::shared_ptr<Device> device,
-            const AccelerationStructureGeometryInstances& instances,
+            const AccelerationStructureInstances& instances,
             VkAccelerationStructureBuildTypeKHR buildType,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             std::shared_ptr<Allocator> allocator = nullptr,
@@ -48,16 +48,16 @@ namespace magma
             VkAccelerationStructureCreateFlagsKHR flags = 0,
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
-        void build(const AccelerationStructureGeometryInstances& instances,
+        void build(const AccelerationStructureInstances& instances,
             void *scratchBuffer,
             lent_ptr<DeferredOperation> deferredOperation = nullptr);
-        void update(const AccelerationStructureGeometryInstances& instances,
+        void update(const AccelerationStructureInstances& instances,
             void *scratchBuffer,
             lent_ptr<DeferredOperation> deferredOperation = nullptr);
 
     private:
         VkResult rebuild(VkBuildAccelerationStructureModeKHR mode,
-            const AccelerationStructureGeometryInstances& instances,
+            const AccelerationStructureInstances& instances,
             void *scratchBuffer,
             lent_ptr<DeferredOperation> deferredOperation);
     };

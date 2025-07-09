@@ -553,12 +553,12 @@ inline void LeanCommandBuffer::updateAccelerationStructure(BottomLevelAccelerati
     rebuildAccelerationStructure(VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR, accelerationStructure, geometryCount, geometries, buildRanges, scratchBuffer);
 }
 
-inline void LeanCommandBuffer::buildAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureGeometryInstances& instances, Buffer *scratchBuffer) const noexcept
+inline void LeanCommandBuffer::buildAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureInstances& instances, Buffer *scratchBuffer) const noexcept
 {
     rebuildAccelerationStructure(VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR, accelerationStructure, instances, scratchBuffer);
 }
 
-inline void LeanCommandBuffer::updateAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureGeometryInstances& instances, Buffer *scratchBuffer) const noexcept
+inline void LeanCommandBuffer::updateAccelerationStructure(TopLevelAccelerationStructure *accelerationStructure, const AccelerationStructureInstances& instances, Buffer *scratchBuffer) const noexcept
 {
     rebuildAccelerationStructure(VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR, accelerationStructure, instances, scratchBuffer);
 }

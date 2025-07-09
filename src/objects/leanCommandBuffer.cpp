@@ -436,7 +436,7 @@ void LeanCommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructur
 }
 
 void LeanCommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode, TopLevelAccelerationStructure *accelerationStructure,
-    const AccelerationStructureGeometryInstances& instances, Buffer *scratchBuffer) const noexcept
+    const AccelerationStructureInstances& instances, Buffer *scratchBuffer) const noexcept
 {
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;

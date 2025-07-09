@@ -27,7 +27,7 @@ namespace magma
 {
 #ifdef VK_KHR_acceleration_structure
 TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Device> device,
-    const AccelerationStructureGeometryInstances& instances,
+    const AccelerationStructureInstances& instances,
     VkAccelerationStructureBuildTypeKHR buildType, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     VkAccelerationStructureCreateFlagsKHR flags /* 0 */,
@@ -47,7 +47,7 @@ TopLevelAccelerationStructure::TopLevelAccelerationStructure(std::shared_ptr<Dev
         flags, buildType, buildFlags, deserializedSize, std::move(allocator), sharing, extendedInfo)
 {}
 
-void TopLevelAccelerationStructure::build(const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
+void TopLevelAccelerationStructure::build(const AccelerationStructureInstances& instances, void *scratchBuffer,
     lent_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     const VkResult result = rebuild(VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR,
@@ -55,7 +55,7 @@ void TopLevelAccelerationStructure::build(const AccelerationStructureGeometryIns
     MAGMA_HANDLE_RESULT(result, "failed to build top-level acceleration structure");
 }
 
-void TopLevelAccelerationStructure::update(const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
+void TopLevelAccelerationStructure::update(const AccelerationStructureInstances& instances, void *scratchBuffer,
     lent_ptr<DeferredOperation> deferredOperation /* nullptr */)
 {
     const VkResult result = rebuild(VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR,
@@ -64,7 +64,7 @@ void TopLevelAccelerationStructure::update(const AccelerationStructureGeometryIn
 }
 
 VkResult TopLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureModeKHR mode,
-    const AccelerationStructureGeometryInstances& instances, void *scratchBuffer,
+    const AccelerationStructureInstances& instances, void *scratchBuffer,
     lent_ptr<DeferredOperation> deferredOperation)
 {
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;

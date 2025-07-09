@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,26 +24,36 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Structure specifying geometries to be built into an acceleration structure. */
+    /* Geometries to be built into an acceleration structure. */
 
     struct AccelerationStructureGeometry : VkAccelerationStructureGeometryKHR
     {
         AccelerationStructureGeometry(VkGeometryTypeKHR geometryType,
             VkGeometryFlagsKHR flags = 0) noexcept;
+
         uint32_t primitiveCount;
     };
 
     /* Triangle geometry in a bottom-level acceleration structure. */
 
-    struct AccelerationStructureGeometryTriangles : AccelerationStructureGeometry
+    struct AccelerationStructureTriangles : AccelerationStructureGeometry
     {
-        AccelerationStructureGeometryTriangles() noexcept;
-        explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
+        explicit AccelerationStructureTriangles(VkFormat vertexFormat,
             const void *vertices,
             uint32_t maxVertex,
             const void *transform = nullptr,
             VkGeometryFlagsKHR flags = 0) noexcept;
-        explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
+        explicit AccelerationStructureTriangles(VkFormat vertexFormat,
+            const Buffer *vertices,
+            const Buffer *transform = nullptr,
+            VkGeometryFlagsKHR flags = 0) noexcept;
+    };
+
+    /* Indexed triangle geometry in a bottom-level acceleration structure. */
+
+    struct AccelerationStructureIndexedTriangles : AccelerationStructureGeometry
+    {
+        explicit AccelerationStructureIndexedTriangles(VkFormat vertexFormat,
             const void *vertices,
             uint32_t maxVertex,
             VkIndexType indexType,
@@ -51,11 +61,7 @@ namespace magma
             uint32_t indexCount,
             const void *transform = nullptr,
             VkGeometryFlagsKHR flags = 0) noexcept;
-        explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
-            const Buffer *vertices,
-            const Buffer *transform = nullptr,
-            VkGeometryFlagsKHR flags = 0) noexcept;
-        explicit AccelerationStructureGeometryTriangles(VkFormat vertexFormat,
+        explicit AccelerationStructureIndexedTriangles(VkFormat vertexFormat,
             const Buffer *vertices,
             VkIndexType indexType,
             const Buffer *indices,
@@ -83,27 +89,27 @@ namespace magma
 
     /* Axis-aligned bounding box geometry in a bottom-level acceleration structure. */
 
-    struct AccelerationStructureGeometryAabbs : AccelerationStructureGeometry
+    struct AccelerationStructureAabbs : AccelerationStructureGeometry
     {
-        AccelerationStructureGeometryAabbs() noexcept;
-        explicit AccelerationStructureGeometryAabbs(const Aabb& aabb,
+        AccelerationStructureAabbs() noexcept;
+        explicit AccelerationStructureAabbs(const Aabb& aabb,
             VkGeometryFlagsKHR flags = 0) noexcept;
-        explicit AccelerationStructureGeometryAabbs(const std::vector<Aabb>& aabbs,
+        explicit AccelerationStructureAabbs(const std::vector<Aabb>& aabbs,
             VkGeometryFlagsKHR flags = 0) noexcept;
-        explicit AccelerationStructureGeometryAabbs(const Buffer *aabbs,
+        explicit AccelerationStructureAabbs(const Buffer *aabbs,
             VkGeometryFlagsKHR flags = 0) noexcept;
     };
 
     /* Geometry consisting of instances of other acceleration structures. */
 
-    struct AccelerationStructureGeometryInstances : AccelerationStructureGeometry
+    struct AccelerationStructureInstances : AccelerationStructureGeometry
     {
-        AccelerationStructureGeometryInstances() noexcept;
-        explicit AccelerationStructureGeometryInstances(uint32_t instanceCount,
+        AccelerationStructureInstances() noexcept;
+        explicit AccelerationStructureInstances(uint32_t instanceCount,
             const void *instances,
             VkGeometryFlagsKHR flags = 0) noexcept;
         template<class Instance>
-        explicit AccelerationStructureGeometryInstances(const AccelerationStructureInstanceBuffer<Instance> *instances,
+        explicit AccelerationStructureInstances(const AccelerationStructureInstanceBuffer<Instance> *instances,
             VkGeometryFlagsKHR flags = 0) noexcept;
     };
 } // namespace magma

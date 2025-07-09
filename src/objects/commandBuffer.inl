@@ -862,7 +862,7 @@ inline void CommandBuffer::drawIndirectByteCountInstanced(uint32_t instanceCount
 #endif // VK_EXT_transform_feedback
 
 #ifdef VK_KHR_acceleration_structure
-inline void CommandBuffer::buildAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureGeometryInstances& instances, lent_ptr<Buffer> scratchBuffer) const noexcept
+inline void CommandBuffer::buildAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureInstances& instances, lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)
@@ -874,7 +874,7 @@ inline void CommandBuffer::buildAccelerationStructure(lent_ptr<TopLevelAccelerat
     }
 }
 
-inline void CommandBuffer::updateAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureGeometryInstances& instances, lent_ptr<Buffer> scratchBuffer) const noexcept
+inline void CommandBuffer::updateAccelerationStructure(lent_ptr<TopLevelAccelerationStructure> accelerationStructure, const AccelerationStructureInstances& instances, lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.KHR_acceleration_structure);
     if (extensions.KHR_acceleration_structure)

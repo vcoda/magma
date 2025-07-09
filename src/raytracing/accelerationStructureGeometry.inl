@@ -1,88 +1,14 @@
 namespace magma
 {
-inline AccelerationStructureGeometry::AccelerationStructureGeometry(VkGeometryTypeKHR geometryType_, VkGeometryFlagsKHR flags_ /* 0 */) noexcept
-{
-    sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
-    pNext = nullptr;
-    geometryType = geometryType_;
-    flags = flags_;
-}
-
-inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(VkFormat vertexFormat, const void *vertices,
-    uint32_t maxVertex, const void *transform /* nullptr */, VkGeometryFlagsKHR flags_ /* 0 */) noexcept:
-    AccelerationStructureGeometryTriangles()
-{
-    MAGMA_ASSERT(vertexFormat);
-    MAGMA_ASSERT(vertices);
-    MAGMA_ASSERT(maxVertex);
-    geometry.triangles.vertexFormat = vertexFormat;
-    geometry.triangles.vertexData = address(vertices);
-    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size());
-    geometry.triangles.maxVertex = maxVertex;
-    geometry.triangles.transformData.hostAddress = transform;
-    flags = flags_;
-    primitiveCount = (geometry.triangles.maxVertex + 1) / 3;
-    MAGMA_ASSERT(primitiveCount);
-}
-
-inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(VkFormat vertexFormat, const void *vertices,
-    uint32_t maxVertex, VkIndexType indexType, const void *indices, uint32_t indexCount,
-    const void *transform /* nullptr */, VkGeometryFlagsKHR flags_ /* 0 */) noexcept:
-    AccelerationStructureGeometryTriangles()
-{
-    MAGMA_ASSERT(vertexFormat);
-    MAGMA_ASSERT(vertices);
-    MAGMA_ASSERT(maxVertex);
-    MAGMA_ASSERT(indices);
-    MAGMA_ASSERT(indexCount);
-    geometry.triangles.vertexFormat = vertexFormat;
-    geometry.triangles.vertexData = address(vertices);
-    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size());
-    geometry.triangles.maxVertex = maxVertex;
-    geometry.triangles.indexType = indexType;
-    geometry.triangles.indexData = address(indices);
-    geometry.triangles.transformData.hostAddress = transform;
-    flags = flags_;
-    MAGMA_ASSERT(indexCount % 3 == 0);
-    primitiveCount = indexCount / 3;
-    MAGMA_ASSERT(primitiveCount);
-}
-
-inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(VkFormat vertexFormat, const Buffer *vertices,
-    const Buffer *transform /* nullptr */, VkGeometryFlagsKHR flags_ /* 0 */) noexcept:
-    AccelerationStructureGeometryTriangles()
-{
-    MAGMA_ASSERT(vertexFormat);
-    geometry.triangles.vertexFormat = vertexFormat;
-    geometry.triangles.vertexData = address(vertices);
-    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size());
-    geometry.triangles.maxVertex = static_cast<uint32_t>(vertices->getSize() / geometry.triangles.vertexStride) - 1;
-    geometry.triangles.transformData = address(transform);
-    flags = flags_;
-    primitiveCount = (geometry.triangles.maxVertex + 1) / 3;
-    MAGMA_ASSERT(primitiveCount);
-}
-
-inline AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles(VkFormat vertexFormat, const Buffer *vertices,
-    VkIndexType indexType, const Buffer *indices, const Buffer *transform /* nullptr */, VkGeometryFlagsKHR flags_ /* 0 */) noexcept:
-    AccelerationStructureGeometryTriangles()
-{
-    MAGMA_ASSERT(vertexFormat);
-    geometry.triangles.vertexFormat = vertexFormat;
-    geometry.triangles.vertexData = address(vertices);
-    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size());
-    geometry.triangles.maxVertex = static_cast<uint32_t>(vertices->getSize() / geometry.triangles.vertexStride) - 1;
-    geometry.triangles.indexType = indexType;
-    geometry.triangles.indexData = address(indices);
-    geometry.triangles.transformData = address(transform);
-    flags = flags_;
-    const size_t indexSize = getIndexSize();
-    MAGMA_ASSERT(indices->getSize() % indexSize == 0);
-    const VkDeviceSize indexCount = indices->getSize() / indexSize;
-    MAGMA_ASSERT(indexCount % 3 == 0);
-    primitiveCount = static_cast<uint32_t>(indexCount / 3);
-    MAGMA_ASSERT(primitiveCount);
-}
+inline AccelerationStructureGeometry::AccelerationStructureGeometry(VkGeometryTypeKHR geometryType, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+    VkAccelerationStructureGeometryKHR{
+        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
+        nullptr, // pNext
+        geometryType,
+        VkAccelerationStructureGeometryDataKHR{}, // geometry
+        flags
+    }
+{}
 
 inline Aabb::Aabb(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) noexcept:
     VkAabbPositionsKHR{
@@ -127,7 +53,7 @@ inline Aabb::Aabb(const Vector& min, const Vector& max) noexcept:
     }
 {}
 
-inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs() noexcept:
+inline AccelerationStructureAabbs::AccelerationStructureAabbs() noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR)
 {
     geometry.aabbs.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR;
@@ -137,7 +63,7 @@ inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs() 
     primitiveCount = 0;
 }
 
-inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(const Aabb& aabb, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+inline AccelerationStructureAabbs::AccelerationStructureAabbs(const Aabb& aabb, VkGeometryFlagsKHR flags /* 0 */) noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR, flags)
 {
     geometry.aabbs.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR;
@@ -147,7 +73,7 @@ inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(co
     primitiveCount = 1;
 }
 
-inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(const std::vector<Aabb>& aabbs, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+inline AccelerationStructureAabbs::AccelerationStructureAabbs(const std::vector<Aabb>& aabbs, VkGeometryFlagsKHR flags /* 0 */) noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR, flags)
 {
     geometry.aabbs.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR;
@@ -158,7 +84,7 @@ inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(co
     MAGMA_ASSERT(primitiveCount);
 }
 
-inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(const Buffer *aabbs, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+inline AccelerationStructureAabbs::AccelerationStructureAabbs(const Buffer *aabbs, VkGeometryFlagsKHR flags /* 0 */) noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR, flags)
 {
     geometry.aabbs.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR;
@@ -170,7 +96,7 @@ inline AccelerationStructureGeometryAabbs::AccelerationStructureGeometryAabbs(co
     MAGMA_ASSERT(primitiveCount);
 }
 
-inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInstances() noexcept:
+inline AccelerationStructureInstances::AccelerationStructureInstances() noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_INSTANCES_KHR)
 {
     geometry.instances.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
@@ -180,7 +106,7 @@ inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInst
     primitiveCount = 0;
 }
 
-inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInstances(uint32_t instanceCount, const void *instances, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+inline AccelerationStructureInstances::AccelerationStructureInstances(uint32_t instanceCount, const void *instances, VkGeometryFlagsKHR flags /* 0 */) noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_INSTANCES_KHR, flags)
 {
     MAGMA_ASSERT(instanceCount);
@@ -193,9 +119,10 @@ inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInst
 }
 
 template<class Instance>
-inline AccelerationStructureGeometryInstances::AccelerationStructureGeometryInstances(const AccelerationStructureInstanceBuffer<Instance> *instances, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+inline AccelerationStructureInstances::AccelerationStructureInstances(const AccelerationStructureInstanceBuffer<Instance> *instances, VkGeometryFlagsKHR flags /* 0 */) noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_INSTANCES_KHR, flags)
 {
+    MAGMA_ASSERT(instances);
     MAGMA_ASSERT(instances->getInstanceCount());
     geometry.instances.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
     geometry.instances.pNext = nullptr;

@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,22 +22,89 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_acceleration_structure
-AccelerationStructureGeometryTriangles::AccelerationStructureGeometryTriangles() noexcept:
-    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_TRIANGLES_KHR)
+AccelerationStructureTriangles::AccelerationStructureTriangles(VkFormat vertexFormat, const void *vertices,
+    uint32_t maxVertex, const void *transform /* nullptr */, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_TRIANGLES_KHR, flags)
 {
+    MAGMA_ASSERT(vertices);
+    MAGMA_ASSERT(maxVertex);
     geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
     geometry.triangles.pNext = nullptr;
-    geometry.triangles.vertexFormat = VK_FORMAT_UNDEFINED;
-    geometry.triangles.vertexData.deviceAddress = MAGMA_NULL;
-    geometry.triangles.vertexStride = 0;
-    geometry.triangles.maxVertex = 0;
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.vertexData = address(vertices);
+    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size());
+    geometry.triangles.maxVertex = maxVertex;
     geometry.triangles.indexType = VK_INDEX_TYPE_NONE_KHR;
     geometry.triangles.indexData.deviceAddress = MAGMA_NULL;
-    geometry.triangles.transformData.deviceAddress = MAGMA_NULL;
-    primitiveCount = 0;
+    geometry.triangles.transformData.hostAddress = transform;
+    primitiveCount = (geometry.triangles.maxVertex + 1) / 3;
+    MAGMA_ASSERT(primitiveCount);
 }
 
-size_t AccelerationStructureGeometryTriangles::getIndexSize() const noexcept
+AccelerationStructureTriangles::AccelerationStructureTriangles(VkFormat vertexFormat, const Buffer *vertices,
+    const Buffer *transform /* nullptr */, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_TRIANGLES_KHR, flags)
+{
+    MAGMA_ASSERT(vertices);
+    geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
+    geometry.triangles.pNext = nullptr;
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.vertexData = address(vertices);
+    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size());
+    geometry.triangles.maxVertex = static_cast<uint32_t>(vertices->getSize() / geometry.triangles.vertexStride) - 1;
+    geometry.triangles.indexType = VK_INDEX_TYPE_NONE_KHR;
+    geometry.triangles.indexData.deviceAddress = MAGMA_NULL;
+    geometry.triangles.transformData = address(transform);
+    primitiveCount = (geometry.triangles.maxVertex + 1) / 3;
+    MAGMA_ASSERT(primitiveCount);
+}
+
+AccelerationStructureIndexedTriangles::AccelerationStructureIndexedTriangles(VkFormat vertexFormat, const void *vertices,
+    uint32_t maxVertex, VkIndexType indexType, const void *indices, uint32_t indexCount,
+    const void *transform /* nullptr */, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_TRIANGLES_KHR, flags)
+{
+    MAGMA_ASSERT(vertices);
+    MAGMA_ASSERT(indices);
+    MAGMA_ASSERT(indexCount);
+    geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
+    geometry.triangles.pNext = nullptr;
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.vertexData = address(vertices);
+    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size());
+    geometry.triangles.maxVertex = maxVertex;
+    geometry.triangles.indexType = indexType;
+    geometry.triangles.indexData = address(indices);
+    geometry.triangles.transformData.hostAddress = transform;
+    MAGMA_ASSERT(indexCount % 3 == 0);
+    primitiveCount = indexCount / 3;
+    MAGMA_ASSERT(primitiveCount);
+}
+
+AccelerationStructureIndexedTriangles::AccelerationStructureIndexedTriangles(VkFormat vertexFormat, const Buffer *vertices,
+    VkIndexType indexType, const Buffer *indices, const Buffer *transform /* nullptr */, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_TRIANGLES_KHR, flags)
+{
+    MAGMA_ASSERT(vertices);
+    MAGMA_ASSERT(indices);
+    geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
+    geometry.triangles.pNext = nullptr;
+    geometry.triangles.vertexFormat = vertexFormat;
+    geometry.triangles.vertexData = address(vertices);
+    geometry.triangles.vertexStride = static_cast<VkDeviceSize>(Format(vertexFormat).size());
+    geometry.triangles.maxVertex = static_cast<uint32_t>(vertices->getSize() / geometry.triangles.vertexStride) - 1;
+    geometry.triangles.indexType = indexType;
+    geometry.triangles.indexData = address(indices);
+    geometry.triangles.transformData = address(transform);
+    const size_t indexSize = getIndexSize();
+    MAGMA_ASSERT(indices->getSize() % indexSize == 0);
+    const VkDeviceSize indexCount = indices->getSize() / indexSize;
+    MAGMA_ASSERT(indexCount % 3 == 0);
+    primitiveCount = static_cast<uint32_t>(indexCount / 3);
+    MAGMA_ASSERT(primitiveCount);
+}
+
+size_t AccelerationStructureIndexedTriangles::getIndexSize() const noexcept
 {
     switch (geometry.triangles.indexType)
     {
