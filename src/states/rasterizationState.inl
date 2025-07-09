@@ -55,15 +55,14 @@ constexpr hash_t RasterizationState::hash() const noexcept
         lineWidth);
 }
 
-template<class Node>
-inline const Node *RasterizationState::findNode(VkStructureType sType) const noexcept
+template<class StructureType>
+inline const StructureType *RasterizationState::findNode(VkStructureType sType) const noexcept
 {
-    const VkBaseInStructure *state = reinterpret_cast<const VkBaseInStructure *>(pNext);
-    while (state)
+    static_assert(sizeof(StructureType) >= sizeof(VkBaseInStructure), "node type size mismatch");
+    for (auto node = reinterpret_cast<const VkBaseInStructure *>(pNext); node; node = node->pNext)
     {
-        if (state->sType == sType)
-            return reinterpret_cast<const Node *>(state);
-        state = reinterpret_cast<const VkBaseInStructure *>(state->pNext);
+        if (node->sType == sType)
+            return reinterpret_cast<const StructureType *>(node);
     }
     return nullptr;
 }

@@ -32,8 +32,8 @@ namespace magma
         constexpr bool chained() const noexcept { return pNext != nullptr; }
         constexpr hash_t hash() const noexcept;
         hash_t chainedHash() const noexcept;
-        template<class Node>
-        const Node *findNode(VkStructureType sType) const noexcept;
+        template<class StructureType>
+        const StructureType *findNode(VkStructureType sType) const noexcept;
         constexpr bool operator==(const RasterizationState&) const noexcept;
         friend std::ostream& operator<<(std::ostream&, const RasterizationState&);
     };
