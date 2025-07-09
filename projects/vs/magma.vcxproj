@@ -744,6 +744,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\raytracing\accelerationStructureInstance.inl" />
     <None Include="..\..\src\raytracing\address.inl" />
     <None Include="..\..\src\renderpass\attachment.inl" />
+    <None Include="..\..\src\renderpass\subpass.inl" />
     <None Include="..\..\src\shaders\rayTracingShaderGroup.inl" />
     <None Include="..\..\src\shaders\shaderBindingTable.inl" />
     <None Include="..\..\src\shaders\specialization.inl" />

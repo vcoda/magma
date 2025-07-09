@@ -1627,6 +1627,9 @@
     <None Include="..\..\src\objects\variableCountDescriptorSet.inl">
       <Filter>Header Files\objects</Filter>
     </None>
+    <None Include="..\..\src\renderpass\subpass.inl">
+      <Filter>Header Files\renderpass</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
