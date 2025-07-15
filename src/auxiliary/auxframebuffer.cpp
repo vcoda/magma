@@ -270,7 +270,7 @@ const MultisampleState& Framebuffer::getMultisampleState() const noexcept
     }
 }
 
-VkImageLayout Framebuffer::optimalDepthStencilLayout(std::shared_ptr<Device> device,
+VkImageLayout Framebuffer::optimalDepthStencilLayout(const std::shared_ptr<Device>& device,
     VkFormat depthStencilFormat, bool sampled) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts

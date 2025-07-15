@@ -90,7 +90,7 @@ namespace magma
             const std::unique_ptr<magma::Framebuffer>& getFramebuffer() const noexcept { return framebuffer; }
 
         private:
-            VkImageLayout optimalDepthStencilLayout(std::shared_ptr<Device> device,
+            VkImageLayout optimalDepthStencilLayout(const std::shared_ptr<Device>& device,
                VkFormat depthStencilFormat,
                bool sampled) const;
 
