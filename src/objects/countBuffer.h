@@ -46,6 +46,11 @@ namespace magma
             const Sharing& sharing = Sharing());
         void setValues(uint32_t x, uint32_t y, uint32_t z,
             lent_ptr<CommandBuffer> cmdBuffer) noexcept;
+        void setValues(const uint32_t values[3],
+            lent_ptr<CommandBuffer> cmdBuffer) noexcept
+        {
+            setValues(values[0], values[1], values[2], std::move(cmdBuffer));
+        }
         std::array<uint32_t, 3> getValues() const noexcept;
     };
 } // namespace magma
