@@ -861,6 +861,9 @@
     <ClInclude Include="..\..\src\extensions\extensionRegistry.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\baseCountBuffer.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1339,6 +1342,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\exceptions\errorHandler.cpp">
       <Filter>Source Files\exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\baseCountBuffer.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

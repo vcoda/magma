@@ -57,6 +57,7 @@ SOURCES += \
     ../../src/objects/model/deviceChild.cpp \
     ../../src/objects/accelerationStructure.cpp \
     ../../src/objects/accelerationStructureInputBuffer.cpp \
+    ../../src/objects/baseCountBuffer.cpp \
     ../../src/objects/baseDeviceMemory.cpp \
     ../../src/objects/baseUniformBuffer.cpp \
     ../../src/objects/bottomLevelStructure.cpp \
@@ -284,6 +285,7 @@ HEADERS += \
     ../../src/objects/accelerationStructure.h \
     ../../src/objects/accelerationStructureInputBuffer.h \
     ../../src/objects/accelerationStructureInstanceBuffer.h \
+    ../../src/objects/baseCountBuffer.h \
     ../../src/objects/baseDeviceMemory.h \
     ../../src/objects/baseUniformBuffer.h \
     ../../src/objects/bottomLevelStructure.h \

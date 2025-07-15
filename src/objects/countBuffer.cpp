@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,31 +19,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "countBuffer.h"
 #include "commandBuffer.h"
-#include "dstTransferBuffer.h"
 #include "../barriers/bufferMemoryBarrier.h"
 
 namespace magma
 {
-BaseCountBuffer::BaseCountBuffer(std::shared_ptr<Device> device, uint32_t count, VkPipelineStageFlags stageMask,
-    std::shared_ptr<Allocator> allocator /* nullptr */, const Sharing& sharing /* default */):
-    Buffer(std::move(device), count * sizeof(uint32_t), 0, // flags
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT |
-            VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-        Initializer(), sharing, std::move(allocator)),
-    stageMask(stageMask)
-{}
-
-void BaseCountBuffer::readback(lent_ptr<CommandBuffer> cmdBuffer) const
-{
-    if (!hostBuffer)
-        hostBuffer = std::make_unique<DstTransferBuffer>(device, size);
-    cmdBuffer->pipelineBarrier(stageMask, VK_PIPELINE_STAGE_TRANSFER_BIT,
-        BufferMemoryBarrier(this, barrier::buffer::shaderWriteTransferRead));
-    const VkBufferCopy region{0, 0, size};
-    cmdBuffer->getLean().copyBuffer(this, hostBuffer.get(), region);
-}
-
 CountBuffer::CountBuffer(std::shared_ptr<Device> device, VkPipelineStageFlags stageMask,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */):
@@ -60,10 +39,11 @@ void CountBuffer::setValue(uint32_t value, lent_ptr<CommandBuffer> cmdBuffer) no
 uint32_t CountBuffer::getValue() const noexcept
 {
     uint32_t value = 0;
-    if (void *data = hostBuffer->getMemory()->map())
+    const void *data = stagingBuffer->getMemory()->map();
+    if (data)
     {
         value = *reinterpret_cast<const uint32_t *>(data);
-        hostBuffer->getMemory()->unmap();
+        stagingBuffer->getMemory()->unmap();
     }
     return value;
 }
@@ -74,8 +54,7 @@ DispatchCountBuffer::DispatchCountBuffer(std::shared_ptr<Device> device, VkPipel
     BaseCountBuffer(std::move(device), 3, stageMask, std::move(allocator), sharing)
 {}
 
-void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
-    lent_ptr<CommandBuffer> cmdBuffer) noexcept
+void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z, lent_ptr<CommandBuffer> cmdBuffer) noexcept
 {
     auto& leanCmd = cmdBuffer->getLean();
     leanCmd.fillBuffer(this, x, sizeof(uint32_t), 0);
@@ -87,13 +66,21 @@ void DispatchCountBuffer::setValues(uint32_t x, uint32_t y, uint32_t z,
 
 std::array<uint32_t, 3> DispatchCountBuffer::getValues() const noexcept
 {
-    std::array<uint32_t, 3> values = {};
-    if (const uint32_t *counts = reinterpret_cast<const uint32_t *>(hostBuffer->getMemory()->map()))
+    std::array<uint32_t, 3> values;
+    const void *data = stagingBuffer->getMemory()->map();
+    if (data)
     {
-        values[0] = counts[0];
-        values[1] = counts[1];
-        values[2] = counts[2];
-        hostBuffer->getMemory()->unmap();
+        const uint32_t *counters = reinterpret_cast<const uint32_t *>(data);
+        values[0] = counters[0];
+        values[1] = counters[1];
+        values[2] = counters[2];
+        stagingBuffer->getMemory()->unmap();
+    }
+    else
+    {
+        values[0] = 0;
+        values[1] = 0;
+        values[2] = 0;
     }
     return values;
 }

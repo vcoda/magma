@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,32 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "buffer.h"
+#include "baseCountBuffer.h"
 
 namespace magma
 {
-    class DstTransferBuffer;
-
-    /* Base class of count buffer. Allows to read back
-       counter value from device to host for debugging. */
-
-    class BaseCountBuffer : public Buffer
-    {
-    public:
-        VkPipelineStageFlags getStageMask() const noexcept { return stageMask; }
-        void readback(lent_ptr<CommandBuffer> cmdBuffer) const;
-
-    protected:
-        BaseCountBuffer(std::shared_ptr<Device> device,
-            uint32_t count,
-            VkPipelineStageFlags stageMask,
-            std::shared_ptr<Allocator> allocator,
-            const Sharing& sharing);
-
-        const VkPipelineStageFlags stageMask;
-        mutable std::unique_ptr<DstTransferBuffer> hostBuffer;
-    };
-
     /* 32-bit unsigned integer atomic counter. */
 
     class CountBuffer : public BaseCountBuffer
