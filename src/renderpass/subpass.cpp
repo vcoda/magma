@@ -76,7 +76,7 @@ SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLa
     }
 }
 
-SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLayouts, const VkImageLayout& depthStencilLayout) noexcept:
+SubpassDescription::SubpassDescription(const std::vector<VkImageLayout>& colorLayouts, VkImageLayout depthStencilLayout) noexcept:
     SubpassDescription(colorLayouts)
 {
     VkAttachmentReference *depthStencilReference = MAGMA_NEW VkAttachmentReference;

@@ -37,7 +37,7 @@ namespace magma
             VkImageLayout depthStencilLayout) noexcept;
         explicit SubpassDescription(const std::vector<VkImageLayout>& colorLayouts) noexcept;
         explicit SubpassDescription(const std::vector<VkImageLayout>& colorLayouts,
-            const VkImageLayout& depthStencilLayout) noexcept;
+            VkImageLayout depthStencilLayout) noexcept;
         SubpassDescription(const SubpassDescription&) noexcept;
         SubpassDescription(SubpassDescription&&) noexcept;
         SubpassDescription& operator=(const SubpassDescription&) noexcept;
