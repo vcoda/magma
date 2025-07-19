@@ -164,7 +164,7 @@ DeviceFeatures::Vendor DeviceFeatures::getVendor() const noexcept
     switch (properties.vendorID)
     { // https://pcisig.com/membership/member-companies
     case 0x1002: return Vendor::AMD;
-    case 0x1010: return Vendor::ImaginationTechnologies;
+    case 0x1010: return Vendor::Imagination;
     case 0x102B: return Vendor::Matrox;
     case 0x106B: return Vendor::Apple;
     case 0x10DE: return Vendor::Nvidia;

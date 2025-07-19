@@ -89,7 +89,7 @@ namespace magma
 
     enum class DeviceFeatures::Vendor : uint32_t
     {
-        AMD, Apple, ARM, Broadcom, ImaginationTechnologies,
+        AMD, Apple, ARM, Broadcom, Imagination,
         Intel, Matrox, Nvidia, S3Graphics, Qualcomm,
         VeriSilicon, VIA, Unknown
     };
