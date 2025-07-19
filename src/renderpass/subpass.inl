@@ -17,7 +17,7 @@ constexpr SubpassDescription::SubpassDescription(const VkPipelineBindPoint pipel
 
 inline SubpassDescription::SubpassDescription(SubpassDescription&& other) noexcept:
     VkSubpassDescription{
-        flags,
+        other.flags,
         other.pipelineBindPoint,
         other.inputAttachmentCount,
         other.pInputAttachments,
