@@ -17,29 +17,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-namespace magma
+namespace magma::core
 {
-    namespace core
+    /* Reference counter to detect circular references that
+       would block the destruction of Vulkan objects. */
+
+#ifdef MAGMA_DEBUG
+    class RefCountChecker final
     {
-        /* Reference counter to check that there are no circular 
-           references that prevents destruction of Vulkan objects. */
-
-    #ifdef MAGMA_DEBUG
-        class RefCountChecker final
+    public:
+        RefCountChecker() noexcept: refCount(0ll) {}
+        ~RefCountChecker()
         {
-        public:
-            RefCountChecker() noexcept: refCount(0ll) {}
-            ~RefCountChecker()
-            {
-                MAGMA_ASSERT(0ll == refCount);
-            }
-            void addRef() noexcept { ++refCount; }
-            void release() noexcept { --refCount; }
-            int64_t getRefCount() const noexcept { return refCount; }
+            MAGMA_ASSERT(0ll == refCount);
+        }
+        void addRef() noexcept { ++refCount; }
+        void release() noexcept { --refCount; }
+        int64_t getRefCount() const noexcept { return refCount; }
 
-        private:
-            std::atomic<int64_t> refCount;
-        };
-    #endif // MAGMA_DEBUG
-    } // namespace core
-} // namespace magma
+    private:
+        std::atomic<int64_t> refCount;
+    };
+#endif // MAGMA_DEBUG
+} // namespace magma::core

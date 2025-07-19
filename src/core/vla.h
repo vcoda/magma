@@ -17,47 +17,44 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-namespace magma
+namespace magma::core
 {
-    namespace core
+    /* Variable-length arrays is a C99 (not C++) feature.
+       But as allocation on stack is much faster than in the heap,
+       we implement our own VLA with alloca()/_malloca() functions.
+       In debug build, VLA always allocated in the heap memory. */
+
+    template<class T>
+    class VariableLengthArray final
     {
-        /* Variable-length arrays is a C99 (not C++) feature.
-           But as allocation on stack is much faster than in the heap,
-           we implement our own VLA with alloca()/_malloca() functions.
-           In debug build, VLA always allocated in the heap memory. */
+    public:
+        static constexpr std::size_t MaxSize =
+        #if defined(_MSC_VER) || defined(__MINGW32__)
+            _ALLOCA_S_THRESHOLD;
+        #else
+            1024;
+        #endif
+        explicit VariableLengthArray(void *ptr, std::size_t len) noexcept;
+        ~VariableLengthArray();
+        T *begin() noexcept { return array; }
+        const T *begin() const noexcept { return array; }
+        T *end() noexcept { return array + len; }
+        const T *end() const noexcept { return array + len; }
+        uint32_t length() const noexcept { return len; }
+        uint32_t count() const noexcept { return cnt; }
+        void put(const T& element) noexcept;
 
-        template<class T>
-        class VariableLengthArray final
-        {
-        public:
-            static constexpr std::size_t MaxSize =
-            #if defined(_MSC_VER) || defined(__MINGW32__)
-                _ALLOCA_S_THRESHOLD;
-            #else
-                1024;
-            #endif
-            explicit VariableLengthArray(void *ptr, std::size_t len) noexcept;
-            ~VariableLengthArray();
-            T *begin() noexcept { return array; }
-            const T *begin() const noexcept { return array; }
-            T *end() noexcept { return array + len; }
-            const T *end() const noexcept { return array + len; }
-            uint32_t length() const noexcept { return len; }
-            uint32_t count() const noexcept { return cnt; }
-            void put(const T& element) noexcept;
+        operator T *() noexcept { return array; }
+        operator const T *() const noexcept { return array; }
 
-            operator T *() noexcept { return array; }
-            operator const T *() const noexcept { return array; }
+        T& operator[](int i) noexcept { return array[i]; }
+        const T& operator[](int i) const noexcept { return array[i]; }
 
-            T& operator[](int i) noexcept { return array[i]; }
-            const T& operator[](int i) const noexcept { return array[i]; }
-
-        private:
-            T *const array;
-            const uint32_t len;
-            uint32_t cnt;
-        };
-    } // namespace core
-} // namespace magma
+    private:
+        T *const array;
+        const uint32_t len;
+        uint32_t cnt;
+    };
+} // namespace magma::core
 
 #include "vla.inl"
