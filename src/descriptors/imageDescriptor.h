@@ -49,8 +49,8 @@ namespace magma::descriptor
     };
 
     /* A sampler descriptor is a descriptor type associated with
-        a sampler object, used to control the behavior of sampling
-        operations performed on a sampled image. */
+       a sampler object, used to control the behavior of sampling
+       operations performed on a sampled image. */
 
     class Sampler : public ImageDescriptor
     {
@@ -61,8 +61,8 @@ namespace magma::descriptor
     };
 
     /* A combined image sampler is a single descriptor type associated
-        with both a sampler and an image resource, combining both
-        a sampler and sampled image descriptor into a single descriptor. */
+       with both a sampler and an image resource, combining both
+       a sampler and sampled image descriptor into a single descriptor. */
 
     class CombinedImageSampler : public ImageDescriptor
     {
@@ -73,8 +73,8 @@ namespace magma::descriptor
     };
 
     /* Immutable samplers are permanently bound into the set layout;
-        later binding a sampler into an immutable sampler slot in a
-        descriptor set is not allowed. */
+       later binding a sampler into an immutable sampler slot in a
+       descriptor set is not allowed. */
 
     class CombinedImageImmutableSampler : public ImageDescriptor
     {
@@ -86,8 +86,8 @@ namespace magma::descriptor
     };
 
     /* A sampled image is a descriptor type associated with
-        an image resource via an image view that sampling
-        operations can be performed on. */
+       an image resource via an image view that sampling
+       operations can be performed on. */
 
     class SampledImage : public ImageDescriptor
     {
@@ -98,8 +98,8 @@ namespace magma::descriptor
     };
 
     /* A storage image is a descriptor type associated with
-        an image resource via an image view that load, store,
-        and atomic operations can be performed on. */
+       an image resource via an image view that load, store,
+       and atomic operations can be performed on. */
 
     class StorageImage : public ImageDescriptor
     {
@@ -110,8 +110,8 @@ namespace magma::descriptor
     };
 
     /* An input attachment is a descriptor type associated with
-        an image resource via an image view that can be used for
-        framebuffer local load operations in fragment shaders. */
+       an image resource via an image view that can be used for
+       framebuffer local load operations in fragment shaders. */
 
     class InputAttachment : public ImageDescriptor
     {
