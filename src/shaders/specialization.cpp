@@ -30,20 +30,6 @@ Specialization::Specialization(const Specialization& other) noexcept:
     }
 {}
 
-Specialization::Specialization(Specialization&& other) noexcept:
-    VkSpecializationInfo{
-        other.mapEntryCount,
-        other.pMapEntries,
-        other.dataSize,
-        other.pData
-    }
-{
-    other.mapEntryCount = 0;
-    pMapEntries = nullptr;
-    dataSize = 0;
-    pData = nullptr;
-}
-
 Specialization& Specialization::operator=(const Specialization& other) noexcept
 {
     if (this != &other)
@@ -53,23 +39,6 @@ Specialization& Specialization::operator=(const Specialization& other) noexcept
         pMapEntries = core::copyArray(other.pMapEntries, other.mapEntryCount);
         dataSize = other.dataSize;
         pData = core::copyBinaryData(other.pData, other.dataSize);
-    }
-    return *this;
-}
-
-Specialization& Specialization::operator=(Specialization&& other) noexcept
-{
-    if (this != &other)
-    {
-        this->~Specialization();
-        mapEntryCount = other.mapEntryCount;
-        pMapEntries = other.pMapEntries;
-        dataSize = other.dataSize;
-        pData = other.pData;
-        other.mapEntryCount = 0;
-        other.pMapEntries = nullptr;
-        other.dataSize = 0;
-        other.pData = nullptr;
     }
     return *this;
 }

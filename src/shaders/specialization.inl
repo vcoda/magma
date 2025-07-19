@@ -30,4 +30,35 @@ inline Specialization::Specialization(const Block& data, const std::initializer_
         core::copyBinaryData(data) // pData
     }
 {}
+
+inline Specialization::Specialization(Specialization&& other) noexcept:
+    VkSpecializationInfo{
+        other.mapEntryCount,
+        other.pMapEntries,
+        other.dataSize,
+        other.pData
+    }
+{
+    other.mapEntryCount = 0;
+    other.pMapEntries = nullptr;
+    other.dataSize = 0;
+    other.pData = nullptr;
+}
+
+inline Specialization& Specialization::operator=(Specialization&& other) noexcept
+{
+    if (this != &other)
+    {
+        this->~Specialization();
+        mapEntryCount = other.mapEntryCount;
+        pMapEntries = other.pMapEntries;
+        dataSize = other.dataSize;
+        pData = other.pData;
+        other.mapEntryCount = 0;
+        other.pMapEntries = nullptr;
+        other.dataSize = 0;
+        other.pData = nullptr;
+    }
+    return *this;
+}
 } // namespace magma
