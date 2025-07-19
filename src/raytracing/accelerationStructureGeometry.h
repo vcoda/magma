@@ -28,10 +28,10 @@ namespace magma
 
     struct AccelerationStructureGeometry : VkAccelerationStructureGeometryKHR
     {
-        AccelerationStructureGeometry(VkGeometryTypeKHR geometryType,
+        constexpr AccelerationStructureGeometry(VkGeometryTypeKHR geometryType,
             VkGeometryFlagsKHR flags = 0) noexcept;
 
-        uint32_t primitiveCount;
+        uint32_t primitiveCount = 0;
     };
 
     /* Triangle geometry in a bottom-level acceleration structure. */

@@ -1,6 +1,6 @@
 namespace magma
 {
-inline AccelerationStructureGeometry::AccelerationStructureGeometry(VkGeometryTypeKHR geometryType, VkGeometryFlagsKHR flags /* 0 */) noexcept:
+constexpr AccelerationStructureGeometry::AccelerationStructureGeometry(const VkGeometryTypeKHR geometryType, const VkGeometryFlagsKHR flags /* 0 */) noexcept:
     VkAccelerationStructureGeometryKHR{
         VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
         nullptr, // pNext
@@ -60,7 +60,6 @@ inline AccelerationStructureAabbs::AccelerationStructureAabbs() noexcept:
     geometry.aabbs.pNext = nullptr;
     geometry.aabbs.data.deviceAddress = MAGMA_NULL;
     geometry.aabbs.stride = 0;
-    primitiveCount = 0;
 }
 
 inline AccelerationStructureAabbs::AccelerationStructureAabbs(const Aabb& aabb, VkGeometryFlagsKHR flags /* 0 */) noexcept:
@@ -103,7 +102,6 @@ inline AccelerationStructureInstances::AccelerationStructureInstances() noexcept
     geometry.instances.pNext = nullptr;
     geometry.instances.arrayOfPointers = VK_FALSE;
     geometry.instances.data.deviceAddress = MAGMA_NULL;
-    primitiveCount = 0;
 }
 
 inline AccelerationStructureInstances::AccelerationStructureInstances(uint32_t instanceCount, const void *instances, VkGeometryFlagsKHR flags /* 0 */) noexcept:
