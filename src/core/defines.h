@@ -44,6 +44,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // MAGMA_X64
 #endif // !VK_USE_64_BIT_PTR_DEFINES
 
+#ifdef MAGMA_DEBUG
+    #define MAGMA_NOOP
+#else
+    #define MAGMA_NOOP {}
+#endif // MAGMA_DEBUG
+
+#ifdef MAGMA_NO_EXCEPTIONS
+    #define MAGMA_THROW return
+#else
+    #define MAGMA_THROW throw
+#endif // MAGMA_NO_EXCEPTIONS
+
 // Qt defines this as macro
 #ifdef foreach
 #undef foreach

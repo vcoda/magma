@@ -53,18 +53,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     b = ((packed >> 8) & 0xFF) / float(0xFF);\
     a = (packed & 0xFF) / float(0xFF);
 
-#ifdef MAGMA_DEBUG
-    #define MAGMA_NOOP
-#else
-    #define MAGMA_NOOP {}
-#endif // MAGMA_DEBUG
-
-#ifdef MAGMA_NO_EXCEPTIONS
-    #define MAGMA_THROW return
-#else
-    #define MAGMA_THROW throw
-#endif
-
 #if defined(MAGMA_DIAGNOSTIC) && defined(MAGMA_DEBUG)
     #define MAGMA_CHECKPOINT(stage) magma::CommandBuffer::insertDebugCheckpoint(__FUNCTION__, (VkPipelineStageFlagBits)stage)
 #else
