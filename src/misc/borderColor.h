@@ -46,15 +46,12 @@ namespace magma
 
 #include "borderColor.inl"
 
-namespace magma
+namespace magma::border
 {
-    namespace border
-    {
-        constexpr BorderColor transparentBlackFloat(VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK);
-        constexpr BorderColor transparentBlackInt(VK_BORDER_COLOR_INT_TRANSPARENT_BLACK);
-        constexpr BorderColor opaqueBlackFloat(VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK);
-        constexpr BorderColor opaqueBlackInt(VK_BORDER_COLOR_INT_OPAQUE_BLACK);
-        constexpr BorderColor opaqueWhiteFloat(VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE);
-        constexpr BorderColor opaqueWhiteInt(VK_BORDER_COLOR_INT_OPAQUE_WHITE);
-    } // namespace border
-} // namespace magma
+    constexpr BorderColor transparentBlackFloat(VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK);
+    constexpr BorderColor transparentBlackInt(VK_BORDER_COLOR_INT_TRANSPARENT_BLACK);
+    constexpr BorderColor opaqueBlackFloat(VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK);
+    constexpr BorderColor opaqueBlackInt(VK_BORDER_COLOR_INT_OPAQUE_BLACK);
+    constexpr BorderColor opaqueWhiteFloat(VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE);
+    constexpr BorderColor opaqueWhiteInt(VK_BORDER_COLOR_INT_OPAQUE_WHITE);
+} // namespace magma::border

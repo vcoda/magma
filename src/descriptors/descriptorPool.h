@@ -17,122 +17,119 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-namespace magma
+namespace magma::descriptor
 {
     /* Pool descriptor contains a descriptor type and number of
        descriptors of that type to be allocated in the pool. */
 
-    namespace descriptor
+    struct DescriptorPool : VkDescriptorPoolSize
     {
-        struct DescriptorPool : VkDescriptorPoolSize
-        {
-            constexpr DescriptorPool(const VkDescriptorType type, const uint32_t descriptorCount) noexcept:
-                VkDescriptorPoolSize{type, descriptorCount} {}
-        };
+        constexpr DescriptorPool(const VkDescriptorType type, const uint32_t descriptorCount) noexcept:
+            VkDescriptorPoolSize{type, descriptorCount} {}
+    };
 
-        struct SamplerPool : DescriptorPool
-        {
-            constexpr SamplerPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_SAMPLER, count) {}
-        };
+    struct SamplerPool : DescriptorPool
+    {
+        constexpr SamplerPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_SAMPLER, count) {}
+    };
 
-        struct CombinedImageSamplerPool : DescriptorPool
-        {
-            constexpr CombinedImageSamplerPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, count) {}
-        };
+    struct CombinedImageSamplerPool : DescriptorPool
+    {
+        constexpr CombinedImageSamplerPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, count) {}
+    };
 
-        struct SampledImagePool : DescriptorPool
-        {
-            constexpr SampledImagePool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, count) {}
-        };
+    struct SampledImagePool : DescriptorPool
+    {
+        constexpr SampledImagePool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, count) {}
+    };
 
-        struct StorageImagePool : DescriptorPool
-        {
-            constexpr StorageImagePool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, count) {}
-        };
+    struct StorageImagePool : DescriptorPool
+    {
+        constexpr StorageImagePool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, count) {}
+    };
 
-        struct UniformTexelBufferPool : DescriptorPool
-        {
-            constexpr UniformTexelBufferPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, count) {}
-        };
+    struct UniformTexelBufferPool : DescriptorPool
+    {
+        constexpr UniformTexelBufferPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, count) {}
+    };
 
-        struct StorageTexelBufferPool : DescriptorPool
-        {
-            constexpr StorageTexelBufferPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, count) {}
-        };
+    struct StorageTexelBufferPool : DescriptorPool
+    {
+        constexpr StorageTexelBufferPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, count) {}
+    };
 
-        struct UniformBufferPool : DescriptorPool
-        {
-            constexpr UniformBufferPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, count) {}
-        };
+    struct UniformBufferPool : DescriptorPool
+    {
+        constexpr UniformBufferPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, count) {}
+    };
 
-        struct StorageBufferPool : DescriptorPool
-        {
-            constexpr StorageBufferPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, count) {}
-        };
+    struct StorageBufferPool : DescriptorPool
+    {
+        constexpr StorageBufferPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, count) {}
+    };
 
-        struct DynamicUniformBufferPool : DescriptorPool
-        {
-            constexpr DynamicUniformBufferPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, count) {}
-        };
+    struct DynamicUniformBufferPool : DescriptorPool
+    {
+        constexpr DynamicUniformBufferPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, count) {}
+    };
 
-        struct DynamicStorageBufferPool : DescriptorPool
-        {
-            constexpr DynamicStorageBufferPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, count) {}
-        };
+    struct DynamicStorageBufferPool : DescriptorPool
+    {
+        constexpr DynamicStorageBufferPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, count) {}
+    };
 
-        struct InputAttachmentPool : DescriptorPool
-        {
-            constexpr InputAttachmentPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, count) {}
-        };
+    struct InputAttachmentPool : DescriptorPool
+    {
+        constexpr InputAttachmentPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, count) {}
+    };
 
-    #ifdef VK_EXT_inline_uniform_block
-        template<class UniformBlockType>
-        struct InlineUniformBlockPool : DescriptorPool
-        {
-            constexpr InlineUniformBlockPool() noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType)) {}
-        };
-    #endif // VK_EXT_inline_uniform_block
+#ifdef VK_EXT_inline_uniform_block
+    template<class UniformBlockType>
+    struct InlineUniformBlockPool : DescriptorPool
+    {
+        constexpr InlineUniformBlockPool() noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT, sizeof(UniformBlockType)) {}
+    };
+#endif // VK_EXT_inline_uniform_block
 
-    #ifdef VK_KHR_acceleration_structure
-        struct AccelerationStructurePool : DescriptorPool
-        {
-            constexpr AccelerationStructurePool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, count) {}
-        };
-    #endif // VK_KHR_acceleration_structure
+#ifdef VK_KHR_acceleration_structure
+    struct AccelerationStructurePool : DescriptorPool
+    {
+        constexpr AccelerationStructurePool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, count) {}
+    };
+#endif // VK_KHR_acceleration_structure
 
-    #ifdef VK_VALVE_mutable_descriptor_type
-        struct MutableDescriptorPool : DescriptorPool
-        {
-            constexpr MutableDescriptorPool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_MUTABLE_VALVE, count) {}
-        };
-    #endif // VK_VALVE_mutable_descriptor_type
+#ifdef VK_VALVE_mutable_descriptor_type
+    struct MutableDescriptorPool : DescriptorPool
+    {
+        constexpr MutableDescriptorPool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_MUTABLE_VALVE, count) {}
+    };
+#endif // VK_VALVE_mutable_descriptor_type
 
-    #ifdef VK_QCOM_image_processing
-        struct SampleWeightImagePool : DescriptorPool
-        {
-            constexpr SampleWeightImagePool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_SAMPLE_WEIGHT_IMAGE_QCOM, count) {}
-        };
+#ifdef VK_QCOM_image_processing
+    struct SampleWeightImagePool : DescriptorPool
+    {
+        constexpr SampleWeightImagePool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_SAMPLE_WEIGHT_IMAGE_QCOM, count) {}
+    };
 
-        struct BlockMatchImagePool : DescriptorPool
-        {
-            constexpr BlockMatchImagePool(const uint32_t count) noexcept:
-                DescriptorPool(VK_DESCRIPTOR_TYPE_BLOCK_MATCH_IMAGE_QCOM, count) {}
-        };
-    #endif // VK_QCOM_image_processing
-    } // namespace descriptor
-} // namespace magma
+    struct BlockMatchImagePool : DescriptorPool
+    {
+        constexpr BlockMatchImagePool(const uint32_t count) noexcept:
+            DescriptorPool(VK_DESCRIPTOR_TYPE_BLOCK_MATCH_IMAGE_QCOM, count) {}
+    };
+#endif // VK_QCOM_image_processing
+} // namespace magma::descriptor
