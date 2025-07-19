@@ -202,7 +202,7 @@ namespace magma
         const VkBool32 FUCHSIA_buffer_collection: 1;
         const VkBool32 FUCHSIA_external_memory: 1;
         const VkBool32 FUCHSIA_external_semaphore: 1;
-        // GGP (Google, LLC)
+        // Google Game Platform
         const VkBool32 GGP_frame_token: 1;
         // Google LLC
         const VkBool32 GOOGLE_decorate_string: 1;
