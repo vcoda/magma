@@ -3,14 +3,13 @@ namespace magma::core
 template<class T>
 inline T *copy(const T *src) noexcept
 {
-    T *dst = nullptr;
     if (src)
     {
-        dst = MAGMA_NEW T;
+        T *dst = MAGMA_NEW T;
         if (dst)
-            memcpy(dst, src, sizeof(T));
+            return (T *)memcpy(dst, src, sizeof(T));
     }
-    return dst;
+    return nullptr;
 }
 
 template<class T>
@@ -25,76 +24,73 @@ inline T *copy(T *dst, const T *src) noexcept
 template<class T>
 inline T *copyArray(const T *src, std::size_t size) noexcept
 {
-    T *dst = nullptr;
     if (src && size)
     {
-        dst = MAGMA_NEW T[size];
+        T *dst = MAGMA_NEW T[size];
         if (dst)
-            memcpy(dst, src, sizeof(T) * size);
+            return (T *)memcpy(dst, src, sizeof(T) * size);
     }
-    return dst;
+    return nullptr;
 }
 
 template<class T>
 inline T *copyVector(const std::vector<T>& src) noexcept
 {
-    T *dst = nullptr;
     if (std::size_t size = src.size())
     {
-        dst = MAGMA_NEW T[size];
+        T *dst = MAGMA_NEW T[size];
         if (dst)
-            memcpy(dst, src.data(), sizeof(T) * size);
+            return (T *)memcpy(dst, src.data(), sizeof(T) * size);
     }
-    return dst;
+    return nullptr;
 }
 
 template<class T1, class T2>
 inline T1 *copyVector(const std::vector<T2>& src) noexcept
 {
     static_assert(sizeof(T1) == sizeof(T2), "type size mismatch");
-    T1 *dst = nullptr;
     if (std::size_t size = src.size())
     {
-        dst = MAGMA_NEW T1[size];
+        T1 *dst = MAGMA_NEW T1[size];
         if (dst)
-            memcpy(dst, src.data(), sizeof(T2) * size);
+            return (T1 *)memcpy(dst, src.data(), sizeof(T2) * size);
     }
-    return dst;
+    return nullptr;
 }
 
 template<class T>
 inline T *copyInitializerList(const std::initializer_list<T>& src) noexcept
 {
-    T *dst = nullptr;
     if (std::size_t size = src.size())
     {
-        dst = MAGMA_NEW T[size];
+        T *dst = MAGMA_NEW T[size];
         if (dst)
         {
             T *y = dst;
             for (const T& x: src)
                 *y++ = x;
+            return dst;
         }
     }
-    return dst;
+    return nullptr;
 }
 
 template<class T1, class T2>
 inline T1 *copyInitializerList(const std::initializer_list<T2>& src) noexcept
 {
     static_assert(sizeof(T1) == sizeof(T2), "type size mismatch");
-    T1 *dst = nullptr;
     if (std::size_t size = src.size())
     {
-        dst = MAGMA_NEW T1[size];
+        T1 *dst = MAGMA_NEW T1[size];
         if (dst)
         {
             T1 *y = dst;
             for (const T2& x: src)
                 memcpy(y++, &x, sizeof(T2));
+            return dst;
         }
     }
-    return dst;
+    return nullptr;
 }
 
 inline char *copyString(const char *src) noexcept
@@ -102,16 +98,16 @@ inline char *copyString(const char *src) noexcept
     MAGMA_ASSERT(src);
     if (!src)
         return nullptr;
-    const std::size_t count = strlen(src) + 1;
-    char *dst = MAGMA_NEW char[count];
+    const std::size_t size = strlen(src) + 1;
+    char *dst = MAGMA_NEW char[size];
     if (dst)
     {
     #if defined(_MSC_VER) || defined(__MINGW32__)
-        const errno_t err = strcpy_s(dst, count, src);
+        const errno_t err = strcpy_s(dst, size, src);
         MAGMA_ASSERT(0 == err);
         MAGMA_UNUSED(err);
     #else
-        strcpy(dst, src);
+        memcpy(dst, src, size);
     #endif // _MSC_VER || __MINGW32__
     }
     return dst;
@@ -124,23 +120,27 @@ inline char *copyString(char *dst, std::size_t size, const char *src) noexcept
     MAGMA_ASSERT(0 == err);
     MAGMA_UNUSED(err);
 #else
-    MAGMA_ASSERT(strlen(src) < size);
-    MAGMA_UNUSED(size);
-    strcpy(dst, src);
+    if (dst && src)
+    {
+        const size_t len = strlen(src);
+        if (len + 1 > size)
+            *dst = '\0';
+        else
+            memcpy(dst, src, len + 1);
+    }
 #endif // _MSC_VER || __MINGW32__
     return dst;
 }
 
 inline uint8_t *copyBinaryData(const void *src, std::size_t size) noexcept
 {
-    uint8_t *dst = nullptr;
     if (src && size)
     {
-        dst = MAGMA_NEW uint8_t[size];
+        uint8_t *dst = MAGMA_NEW uint8_t[size];
         if (dst)
-            memcpy(dst, src, size);
+            return (uint8_t *)memcpy(dst, src, size);
     }
-    return dst;
+    return nullptr;
 }
 
 template<class T>
