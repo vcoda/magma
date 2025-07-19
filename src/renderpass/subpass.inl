@@ -15,18 +15,20 @@ constexpr SubpassDescription::SubpassDescription(const VkPipelineBindPoint pipel
     }
 {}
 
-inline SubpassDescription::SubpassDescription(SubpassDescription&& other) noexcept
+inline SubpassDescription::SubpassDescription(SubpassDescription&& other) noexcept:
+    VkSubpassDescription{
+        flags,
+        other.pipelineBindPoint,
+        other.inputAttachmentCount,
+        other.pInputAttachments,
+        other.colorAttachmentCount,
+        other.pColorAttachments,
+        other.pResolveAttachments,
+        other.pDepthStencilAttachment,
+        other.preserveAttachmentCount,
+        other.pPreserveAttachments
+    }
 {
-    flags = other.flags;
-    pipelineBindPoint = other.pipelineBindPoint;
-    inputAttachmentCount = other.inputAttachmentCount;
-    pInputAttachments = other.pInputAttachments;
-    colorAttachmentCount = other.colorAttachmentCount;
-    pColorAttachments = other.pColorAttachments;
-    pResolveAttachments = other.pResolveAttachments;
-    pDepthStencilAttachment = other.pDepthStencilAttachment;
-    preserveAttachmentCount = other.preserveAttachmentCount;
-    pPreserveAttachments = other.pPreserveAttachments;
     other.flags = 0;
     other.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     other.inputAttachmentCount = 0;
