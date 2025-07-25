@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,6 +42,14 @@ namespace magma
 
 namespace magma::barrier::memory
 {
+    constexpr MemoryBarrier hostWriteIndirectCommandRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+    constexpr MemoryBarrier hostWriteIndexRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_INDEX_READ_BIT);
+    constexpr MemoryBarrier hostWriteVertexAttributeRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+    constexpr MemoryBarrier hostWriteUniformRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_UNIFORM_READ_BIT);
+    constexpr MemoryBarrier hostWriteShaderRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
+    constexpr MemoryBarrier hostWriteTransferRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
+    constexpr MemoryBarrier hostWriteMemoryRead(VK_ACCESS_HOST_WRITE_BIT, VK_ACCESS_MEMORY_READ_BIT);
+
     constexpr MemoryBarrier transferWriteShaderRead(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
     constexpr MemoryBarrier shaderWriteTransferRead(VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT);
 
