@@ -73,7 +73,6 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     renderPass(std::move(renderPass))
 {
     std::shared_ptr<Device> device = this->renderPass->getDevice();
-    std::shared_ptr<const PhysicalDevice> physicalDevice = device->getPhysicalDevice();
     constexpr uint32_t maxDescriptorSets = 10;
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
         descriptor::CombinedImageSamplerPool(maxDescriptorSets), allocator);
