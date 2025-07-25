@@ -94,7 +94,7 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device_,
     allocatorInfo.pDeviceMemoryCallbacks = nullptr;
     allocatorInfo.pHeapSizeLimit = nullptr;
     allocatorInfo.pVulkanFunctions = nullptr;
-    allocatorInfo.instance = *physicalDevice->getInstance();
+    allocatorInfo.instance = physicalDevice->getInstance()->getHandle();
     allocatorInfo.vulkanApiVersion = physicalDevice->getInstance()->getApiVersion();
 #ifdef VK_KHR_external_memory
     allocatorInfo.pTypeExternalMemoryHandleTypes = nullptr;
