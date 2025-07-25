@@ -30,10 +30,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PhysicalDevice::PhysicalDevice(std::shared_ptr<Instance> instance, VkPhysicalDevice handle_,
-    std::shared_ptr<IAllocator> allocator) noexcept:
+PhysicalDevice::PhysicalDevice(Instance *instance, VkPhysicalDevice handle_, std::shared_ptr<IAllocator> allocator) noexcept:
     Dispatchable<VkPhysicalDevice>(VK_OBJECT_TYPE_PHYSICAL_DEVICE, std::move(allocator)),
-    instance(std::move(instance))
+    instance(instance)
 {
     handle = handle_;
     for (auto const& properties: enumerateExtensions())

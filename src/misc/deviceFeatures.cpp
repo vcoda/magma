@@ -66,7 +66,7 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalBuffer(Vk
     VkBufferUsageFlags usage, VkBufferCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
+    const Instance *instance = physicalDevice->getInstance();
     if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
         instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
@@ -85,7 +85,7 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
     VkImageCreateFlags flags /* 0 */) const
 {
     ExternalMemoryFeatures features = {};
-    const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
+    const Instance *instance = physicalDevice->getInstance();
     if (instance->extensionEnabled(VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME) &&
         instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
@@ -104,7 +104,7 @@ DeviceFeatures::ExternalMemoryFeatures DeviceFeatures::supportsExternalImage(VkE
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExternalFenceHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
+    const Instance *instance = physicalDevice->getInstance();
     if (instance->extensionEnabled(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME) &&
         instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
@@ -121,7 +121,7 @@ DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalFence(VkExterna
 DeviceFeatures::ExternalFeatures DeviceFeatures::supportsExternalSemaphore(VkExternalSemaphoreHandleTypeFlagBitsKHR handleType) const
 {
     ExternalFeatures features = {};
-    const std::shared_ptr<Instance>& instance = physicalDevice->getInstance();
+    const Instance *instance = physicalDevice->getInstance();
     if (instance->extensionEnabled(VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME) &&
         instance->extensionEnabled(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {

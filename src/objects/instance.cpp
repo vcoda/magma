@@ -156,8 +156,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) c
     result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
     MAGMA_HANDLE_RESULT(result, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];
-    std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
-    return PhysicalDevice::makeShared(instance, physicalDevice, hostAllocator);
+    return PhysicalDevice::makeShared(const_cast<Instance *>(this), physicalDevice, hostAllocator);
 }
 
 #ifdef VK_KHR_device_group
@@ -183,12 +182,11 @@ std::unique_ptr<PhysicalDeviceGroup> Instance::getPhysicalDeviceGroup(uint32_t g
     if (groupId >= core::countof(deviceGroups))
         return nullptr;
     const VkPhysicalDeviceGroupProperties& deviceGroupProperties = deviceGroups[groupId];
-    std::shared_ptr<Instance> instance = std::const_pointer_cast<Instance>(shared_from_this());
     std::vector<std::shared_ptr<PhysicalDevice>> physicalDevices;
     for (uint32_t deviceId = 0; deviceId < deviceGroupProperties.physicalDeviceCount; ++deviceId)
     {
         VkPhysicalDevice handle = deviceGroupProperties.physicalDevices[deviceId];
-        std::shared_ptr<PhysicalDevice> physicalDevice = PhysicalDevice::makeShared(instance, handle, hostAllocator);
+        std::shared_ptr<PhysicalDevice> physicalDevice = PhysicalDevice::makeShared(const_cast<Instance *>(this), handle, hostAllocator);
         physicalDevices.emplace_back(std::move(physicalDevice));
     }
     return PhysicalDeviceGroup::makeUnique(std::move(physicalDevices), groupId);
