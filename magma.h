@@ -222,6 +222,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/platform/xlibSurface.h"
 
 #include "src/extensions/deviceExtensions.h"
+#include "src/extensions/deviceLayers.h"
 #include "src/extensions/instanceExtensions.h"
 #include "src/extensions/instanceLayers.h"
 

@@ -88,6 +88,7 @@ src\exceptions\errorResult.cpp ^
 src\exceptions\exception.cpp ^
 src\exceptions\reflectionErrorResult.cpp ^
 src\extensions\deviceExtensions.cpp ^
+src\extensions\deviceLayers.cpp ^
 src\extensions\instanceExtensions.cpp ^
 src\extensions\instanceLayers.cpp ^
 src\helpers\executeCommandBuffer.cpp ^
@@ -267,6 +268,7 @@ errorResult.obj ^
 exception.obj ^
 reflectionErrorResult.obj ^
 deviceExtensions.obj ^
+deviceLayers.obj ^
 instanceExtensions.obj ^
 instanceLayers.obj ^
 executeCommandBuffer.obj ^

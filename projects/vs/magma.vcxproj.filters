@@ -864,6 +864,9 @@
     <ClInclude Include="..\..\src\objects\baseCountBuffer.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\extensions\deviceLayers.h">
+      <Filter>Header Files\extensions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1345,6 +1348,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\objects\baseCountBuffer.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\extensions\deviceLayers.cpp">
+      <Filter>Source Files\extensions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

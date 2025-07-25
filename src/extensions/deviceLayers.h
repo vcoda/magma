@@ -16,30 +16,25 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "extensionRegistry.h"
 
 namespace magma
 {
-    /* A registry of instance- or device-level extensions. */
+    class PhysicalDevice;
 
-    template<class Properties>
-    class ExtensionRegistry
+    /* Keep list of layers in alphabetical order! */
+
+    class DeviceLayers : public ExtensionRegistry<VkLayerProperties>
     {
     public:
-        uint32_t getCount() const noexcept { return count; }
-        uint32_t getSupportedCount() const noexcept { return supportedCount; }
+        // Advanced Micro Devices, Inc.
+        const VkBool32 AMD_switchable_graphics: 1;
 
-    protected:
-        ExtensionRegistry(const std::vector<Properties>& properties);
-        bool supported(const char *name) noexcept;
+        // Khronos Group
+        const VkBool32 KHRONOS_validation: 1;
 
-    private:
-        std::map<std::string, Properties> registry;
-        uint32_t count;
-        uint32_t supportedCount;
+        explicit DeviceLayers(const std::shared_ptr<PhysicalDevice>&);
     };
+
+    MAGMA_TYPEDEF_MANAGED_PTR(DeviceLayers)
 } // namespace magma
-
-#include "extensionRegistry.inl"
-
-#define MAGMA_CHECK_LAYER(name) name(supported(MAGMA_LAYER_PREFIX #name))
-#define MAGMA_CHECK_EXTENSION(name) name(supported(MAGMA_EXTENSION_PREFIX #name))

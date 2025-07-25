@@ -52,6 +52,7 @@ SRC_OBJS= \
 	src/exceptions/reflectionErrorResult.o \
 	\
 	src/extensions/deviceExtensions.o \
+	src/extensions/deviceLayers.o \
 	src/extensions/instanceExtensions.o \
 	src/extensions/instanceLayers.o \
 	\
