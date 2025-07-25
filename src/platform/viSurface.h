@@ -27,7 +27,7 @@ namespace magma
     class ViSurface : public Surface
     {
     public:
-        explicit ViSurface(std::shared_ptr<Instance> instance,
+        explicit ViSurface(Instance * instance,
             nn::vi::NativeWindowHandle window,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkViSurfaceCreateFlagsNN flags = 0);

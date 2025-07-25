@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NN_vi_surface
-ViSurface::ViSurface(std::shared_ptr<Instance> instance_,
+ViSurface::ViSurface(Instance *instance,
     nn::vi::NativeWindowHandle window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkViSurfaceCreateFlagsNN flags /* 0 */):
-    Surface(std::move(instance_), std::move(allocator)),
+    Surface(instance, std::move(allocator)),
     window(window)
 {
     VkViSurfaceCreateInfoNN surfaceInfo;

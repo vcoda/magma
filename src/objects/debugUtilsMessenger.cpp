@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_debug_utils
-DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<Instance> instance_,
+DebugUtilsMessenger::DebugUtilsMessenger(Instance *instance,
     PFN_vkDebugUtilsMessengerCallbackEXT userCallback,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDebugUtilsMessageSeverityFlagsEXT messageSeverity /* VERBOSE_BIT | INFO_BIT | WARNING_BIT ERROR_BIT */,
@@ -35,7 +35,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(std::shared_ptr<Instance> instance_,
     void *userData /* nullptr */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT, std::move(allocator)),
-    instance(std::move(instance_))
+    instance(instance)
 {
     MAGMA_ASSERT(userCallback);
     MAGMA_INSTANCE_EXTENSION(vkCreateDebugUtilsMessengerEXT);

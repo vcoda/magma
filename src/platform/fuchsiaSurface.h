@@ -27,7 +27,7 @@ namespace magma
     class FuchsiaImagePipeSurface : public Surface
     {
     public:
-        explicit FuchsiaImagePipeSurface(std::shared_ptr<Instance> instance,
+        explicit FuchsiaImagePipeSurface(Instance * instance,
             zx_handle_t imagePipeHandle,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkImagePipeSurfaceCreateFlagsFUCHSIA flags = 0);

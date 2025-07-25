@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_metal_surface
-MetalSurface::MetalSurface(std::shared_ptr<Instance> instance_,
+MetalSurface::MetalSurface(Instance *instance,
     const CAMetalLayer *layer,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkMetalSurfaceCreateFlagsEXT flags /* 0 */):
-    Surface(std::move(instance_), std::move(allocator)),
+    Surface(instance, std::move(allocator)),
     layer(layer)
 {
     VkMetalSurfaceCreateInfoEXT surfaceInfo;

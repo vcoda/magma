@@ -32,13 +32,13 @@ namespace magma
     {
     public:
         ~Surface();
-        const std::shared_ptr<Instance>& getInstance() const noexcept { return instance; }
+        Instance *getInstance() const noexcept { return instance; }
 
     protected:
-        Surface(std::shared_ptr<Instance> instance,
+        Surface(Instance *instance,
             std::shared_ptr<IAllocator> allocator);
 
-        std::shared_ptr<Instance> instance;
+        Instance *instance;
     };
 #endif // VK_KHR_surface
 
@@ -51,7 +51,7 @@ namespace magma
     class DisplaySurface : public Surface
     {
     public:
-        explicit DisplaySurface(std::shared_ptr<Instance> instance,
+        explicit DisplaySurface(Instance *instance,
             lent_ptr<const DisplayMode> displayMode,
             uint32_t planeIndex,
             uint32_t planeStackIndex,
@@ -81,7 +81,7 @@ namespace magma
     class HeadlessSurface : public Surface
     {
     public:
-        explicit HeadlessSurface(std::shared_ptr<Instance> instance,
+        explicit HeadlessSurface(Instance *instance,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkHeadlessSurfaceCreateFlagsEXT flags = 0);
     };

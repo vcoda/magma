@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_MVK_ios_surface
-iOSSurface::iOSSurface(std::shared_ptr<Instance> instance_,
+iOSSurface::iOSSurface(Instance *instance,
     const void *view,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkIOSSurfaceCreateFlagsMVK flags /* 0 */):
-    Surface(std::move(instance_), std::move(allocator)),
+    Surface(instance, std::move(allocator)),
     view(view)
 {
     VkIOSSurfaceCreateInfoMVK surfaceInfo;

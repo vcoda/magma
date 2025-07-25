@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_xlib_surface
-XlibSurface::XlibSurface(std::shared_ptr<Instance> instance_,
+XlibSurface::XlibSurface(Instance *instance,
     ::Display *dpy, Window window,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkXlibSurfaceCreateFlagsKHR flags /* 0 */):
-    Surface(std::move(instance_), std::move(allocator)),
+    Surface(instance, std::move(allocator)),
     dpy(dpy),
     window(window)
 {

@@ -27,7 +27,7 @@ namespace magma
     class Win32Surface : public Surface
     {
     public:
-        explicit Win32Surface(std::shared_ptr<Instance> instance,
+        explicit Win32Surface(Instance *instance,
             HINSTANCE hInstance,
             HWND hWnd,
             std::shared_ptr<IAllocator> allocator = nullptr,

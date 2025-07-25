@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_FUCHSIA_imagepipe_surface
-FuchsiaImagePipeSurface::FuchsiaImagePipeSurface(std::shared_ptr<Instance> instance_,
+FuchsiaImagePipeSurface::FuchsiaImagePipeSurface(Instance *instance,
     zx_handle_t imagePipeHandle,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkImagePipeSurfaceCreateFlagsFUCHSIA flags /* 0 */):
-    Surface(std::move(instance_), std::move(allocator)),
+    Surface(instance, std::move(allocator)),
     imagePipeHandle(imagePipeHandle)
 {
     VkImagePipeSurfaceCreateInfoFUCHSIA surfaceInfo;

@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_MVK_macos_surface
-MacOSSurface::MacOSSurface(std::shared_ptr<Instance> instance_,
+MacOSSurface::MacOSSurface(Instance *instance,
     const void *view,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkMacOSSurfaceCreateFlagsMVK flags /* 0 */):
-    Surface(std::move(instance_), std::move(allocator)),
+    Surface(instance, std::move(allocator)),
     view(view)
 {
     VkMacOSSurfaceCreateInfoMVK surfaceInfo;

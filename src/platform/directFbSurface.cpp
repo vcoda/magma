@@ -27,11 +27,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_directfb_surface
-DirectFBSurface::DirectFBSurface(std::shared_ptr<Instance> instance_,
+DirectFBSurface::DirectFBSurface(Instance *instance,
     IDirectFB *dfb, IDirectFBSurface *surface,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDirectFBSurfaceCreateFlagsEXT flags /* 0 */):
-    Surface(std::move(instance_), std::move(allocator)),
+    Surface(instance, std::move(allocator)),
 {
     VkDirectFBSurfaceCreateInfoEXT surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_DIRECTFB_SURFACE_CREATE_INFO_EXT;

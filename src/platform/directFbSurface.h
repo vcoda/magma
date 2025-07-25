@@ -27,7 +27,7 @@ namespace magma
     class DirectFBSurface : public Surface
     {
     public:
-        explicit DirectFBSurface(std::shared_ptr<Instance> instance,
+        explicit DirectFBSurface(Instance * instance,
             IDirectFB *dfb,
             IDirectFBSurface *surface,
             std::shared_ptr<IAllocator> allocator = nullptr,
