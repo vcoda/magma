@@ -9,6 +9,9 @@ inline DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType d
         nullptr // pImmutableSamples
     },
     imageType(VK_IMAGE_TYPE_MAX_ENUM),
+#ifdef VK_EXT_descriptor_indexing
+    bindingFlags(0),
+#endif
     dirty(false)
 {}
 
