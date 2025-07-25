@@ -46,8 +46,8 @@ namespace magma
         class ShaderCompiler : public IClass
         {
         public:
-            ShaderCompiler(std::shared_ptr<Device> device,
-                std::shared_ptr<IShaderInclude> handler);
+            explicit ShaderCompiler(std::shared_ptr<Device> device,
+                std::unique_ptr<IShaderInclude> handler);
             ~ShaderCompiler();
             void setOptimizationLevel(shaderc_optimization_level optimizationLevel) noexcept;
             void setGenerateDebugInfo(bool generateDebugInfo) noexcept;
@@ -61,7 +61,7 @@ namespace magma
 
         private:
             std::shared_ptr<Device> device;
-            std::shared_ptr<IShaderInclude> includeHandler;
+            std::unique_ptr<IShaderInclude> includeHandler;
             shaderc_compiler_t compiler;
             shaderc_optimization_level optimizationLevel = shaderc_optimization_level_zero;
             bool generateDebugInfo = false;

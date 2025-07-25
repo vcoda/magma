@@ -25,7 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::aux
 {
-ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device, std::shared_ptr<IShaderInclude> handler):
+ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device, std::unique_ptr<IShaderInclude> handler):
     device(std::move(device)),
     includeHandler(std::move(handler))
 {
