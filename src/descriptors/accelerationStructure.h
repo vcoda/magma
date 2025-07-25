@@ -49,7 +49,7 @@ namespace magma::descriptor
     public:
         AccelerationStructureArray(uint32_t binding) noexcept:
             AccelerationStructure(binding) {}
-        AccelerationStructureArray& operator=(const std::initializer_list<const magma::AccelerationStructure *>&) noexcept;
+        AccelerationStructureArray& operator=(const std::initializer_list<const magma::AccelerationStructure *>&);
 
     private:
         std::vector<VkAccelerationStructureKHR> accelerationStructures;

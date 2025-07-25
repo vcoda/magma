@@ -54,9 +54,10 @@ AccelerationStructure& AccelerationStructure::operator=(lent_ptr<const magma::Ac
     return *this;
 }
 
-AccelerationStructureArray& AccelerationStructureArray::operator=(const std::initializer_list<const magma::AccelerationStructure *>& accelerationStructures_) noexcept
+AccelerationStructureArray& AccelerationStructureArray::operator=(const std::initializer_list<const magma::AccelerationStructure *>& accelerationStructures_)
 {
     accelerationStructures.clear();
+    accelerationStructures.reserve(accelerationStructures_.size());
     for (auto as: accelerationStructures_)
         accelerationStructures.push_back(as->getHandle());
     descriptor.accelerationStructureCount = core::countof(accelerationStructures);
