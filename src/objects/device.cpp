@@ -117,7 +117,7 @@ const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
 
 std::shared_ptr<Queue> Device::getQueue(VkQueueFlagBits flags, uint32_t queueIndex /* 0 */) const
 {
-    const DeviceQueueDescriptor queueDescriptor(physicalDevice, flags, QueuePriorityDefault);
+    const DeviceQueueDescriptor queueDescriptor(physicalDevice.get(), flags, QueuePriorityDefault);
     return getQueueByFamily(queueDescriptor.queueFamilyIndex, queueIndex);
 }
 
@@ -135,7 +135,7 @@ std::shared_ptr<Queue> Device::getQueueByFamily(uint32_t queueFamilyIndex, uint3
             VK_QUEUE_COMPUTE_BIT,
             VK_QUEUE_TRANSFER_BIT})
         {   // Try to get new instance
-            const DeviceQueueDescriptor queueDescriptor(physicalDevice, flag);
+            const DeviceQueueDescriptor queueDescriptor(physicalDevice.get(), flag);
             if (queueDescriptor.queueFamilyIndex == queueFamilyIndex)
             {
                 VkQueue queue = VK_NULL_HANDLE;
