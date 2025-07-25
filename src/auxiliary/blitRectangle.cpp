@@ -65,14 +65,14 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         std::move(pipelineCache), std::move(allocator))
 {}
 
-BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
+BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass_,
     std::shared_ptr<ShaderModule> fragmentShader,
     std::shared_ptr<Specialization> specialization /* nullptr */,
     lent_ptr<PipelineCache> pipelineCache /* nullptr */,
     std::shared_ptr<IAllocator> allocator /* nullptr */):
-    renderPass(std::move(renderPass))
-{
-    std::shared_ptr<Device> device = this->renderPass->getDevice();
+    renderPass(std::move(renderPass_))
+{   // Create descriptor set
+    std::shared_ptr<Device> device = renderPass->getDevice();
     constexpr uint32_t maxDescriptorSets = 10;
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
         descriptor::CombinedImageSamplerPool(maxDescriptorSets), allocator);
@@ -97,7 +97,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
     shaderStages.emplace_back(std::move(vertexShaderStage));
     shaderStages.emplace_back(VK_SHADER_STAGE_FRAGMENT_BIT, std::move(fragmentShader), entryPointName, std::move(specialization));
     // Setup multisample state
-    const VkSampleCountFlagBits samples = this->renderPass->getAttachments().front().samples;
+    const VkSampleCountFlagBits samples = renderPass->getAttachments().front().samples;
     const MultisampleState multisampleState =
         (samples & VK_SAMPLE_COUNT_1_BIT) ? renderstate::dontMultisample :
         (samples & VK_SAMPLE_COUNT_2_BIT) ? renderstate::msaa2x :
@@ -120,16 +120,17 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass,
         renderstate::dontBlendRgba,
         std::vector<VkDynamicState>{VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR},
         std::move(pipelineLayout),
-        this->renderPass, 0,
+        renderPass, 0,
         std::move(allocator),
         std::move(pipelineCache),
         nullptr); // basePipeline
-    for (auto const& attachment: this->renderPass->getAttachments())
+    for (auto const& attachment: renderPass->getAttachments())
     {
         if (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp)
-        {   // The Vulkan spec states: clearValueCount must be greater than the largest attachment index in renderPass that specifies a loadOp
-            // (or stencilLoadOp, if the attachment has a depth/stencil format) of VK_ATTACHMENT_LOAD_OP_CLEAR.
-            clearValues = std::vector<ClearValue>(this->renderPass->getAttachments().size(), clear::black);
+        {   // The Vulkan spec states: clearValueCount must be greater than the largest
+            // attachment index in renderPass that specifies a loadOp (or stencilLoadOp,
+            // if the attachment has a depth/stencil format) of VK_ATTACHMENT_LOAD_OP_CLEAR.
+            clearValues = std::vector<ClearValue>(renderPass->getAttachments().size(), clear::black);
             break;
         }
     }
