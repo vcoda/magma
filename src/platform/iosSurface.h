@@ -29,7 +29,7 @@ namespace magma
     class iOSSurface : public Surface
     {
     public:
-        explicit iOSSurface(Instance * instance,
+        explicit iOSSurface(Instance *instance,
             const void *view,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkIOSSurfaceCreateFlagsMVK flags = 0);

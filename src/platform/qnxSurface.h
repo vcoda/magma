@@ -27,7 +27,7 @@ namespace magma
     class QnxSurface : public Surface
     {
     public:
-        explicit QnxSurface(Instance * instance,
+        explicit QnxSurface(Instance *instance,
             struct _screen_context *context,
             struct _screen_window *window,
             std::shared_ptr<IAllocator> allocator = nullptr,
