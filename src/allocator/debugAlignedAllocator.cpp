@@ -67,8 +67,8 @@ void *DebugAlignedAllocator::alloc(std::size_t size, std::size_t alignment,
         throw std::bad_alloc();
     #endif
     }
-    std::lock_guard<std::mutex> lock(mtx);
     // Add allocation
+    std::lock_guard<std::mutex> lock(mtx);
     allocations[ptr] = {size, allocationScope};
     allocatedMemorySize += size;
     ++numAllocations[allocationScope];
@@ -120,6 +120,7 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
     #endif
     }
     // Replace old allocation with a new one
+    std::lock_guard<std::mutex> lock(mtx);
     allocatedMemorySize -= oldSize;
     allocations.erase(original);
     allocations[ptr] = {size, allocationScope};
