@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -83,13 +83,13 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
         this->free(original);
         return nullptr;
     }
-    void *ptr;
     if (!original)
         return alloc(size, alignment, allocationScope);
     const std::size_t oldSize = getAllocationSize(original);
     if (0 == oldSize)
         return nullptr;
     MAGMA_ASSERT(core::powerOfTwo(alignment));
+    void *ptr;
 #if defined(_MSC_VER)
     ptr = _aligned_realloc(original, size, alignment);
 #else
@@ -136,7 +136,7 @@ void DebugAlignedAllocator::free(void *ptr) noexcept
     std::lock_guard<std::mutex> lock(mtx);
     auto it = allocations.find(ptr);
     MAGMA_ASSERT(it != allocations.end());
-    if (it  == allocations.end())
+    if (it == allocations.end())
         return;
 #if defined(_MSC_VER)
     _aligned_free(ptr);
