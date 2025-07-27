@@ -180,14 +180,12 @@ std::size_t DebugAlignedAllocator::getAllocationSize(void *ptr) const
     std::lock_guard<std::mutex> lock(mtx);
     auto it = allocations.find(ptr);
     MAGMA_ASSERT(it != allocations.end());
-    if (allocations.end() == it)
-    {
-    #ifdef MAGMA_NO_EXCEPTIONS
-        return 0;
-    #else
-        throw std::invalid_argument("alien memory pointer");
-    #endif
-    }
-    return it->second.first;
+    if (it != allocations.end())
+        return it->second.first;
+#ifdef MAGMA_NO_EXCEPTIONS
+    return 0;
+#else
+    throw std::out_of_range("alien memory pointer");
+#endif
 }
 } // namespace magma
