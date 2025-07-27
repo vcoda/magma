@@ -183,3 +183,9 @@ namespace magma
 
 #define MAGMA_HOST_ALLOCATOR(allocator) allocator ? allocator->getHostAllocator() : nullptr
 #define MAGMA_DEVICE_ALLOCATOR(allocator) allocator ? allocator->getDeviceAllocator() : nullptr
+
+#ifdef MAGMA_NO_EXCEPTIONS
+    #define MAGMA_HANDLE_OUT_OF_MEMORY(ptr) if (!ptr) return nullptr
+#else
+    #define MAGMA_HANDLE_OUT_OF_MEMORY(ptr) if (!ptr) throw std::bad_alloc()
+#endif // MAGMA_NO_EXCEPTIONS

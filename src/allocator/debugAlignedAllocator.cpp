@@ -59,14 +59,7 @@ void *DebugAlignedAllocator::alloc(std::size_t size, std::size_t alignment,
     if (result != 0) // posix_memalign() does not modify memptr on failure
         ptr = nullptr;
 #endif // _MSC_VER || __MINGW32__
-    if (!ptr)
-    {
-    #ifdef MAGMA_NO_EXCEPTIONS
-        return nullptr;
-    #else
-        throw std::bad_alloc();
-    #endif
-    }
+    MAGMA_HANDLE_OUT_OF_MEMORY(ptr);
     // Add allocation
     std::lock_guard<std::mutex> lock(mtx);
     allocations[ptr] = {size, allocationScope};
@@ -111,14 +104,7 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
     #endif
     }
 #endif // !_MSC_VER
-    if (!ptr)
-    {
-    #ifdef MAGMA_NO_EXCEPTIONS
-        return nullptr;
-    #else
-        throw std::bad_alloc();
-    #endif
-    }
+    MAGMA_HANDLE_OUT_OF_MEMORY(ptr);
     // Replace old allocation with a new one
     std::lock_guard<std::mutex> lock(mtx);
     allocatedMemorySize -= oldSize;
