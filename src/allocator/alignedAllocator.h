@@ -40,5 +40,11 @@ namespace magma
             VkInternalAllocationType,
             VkSystemAllocationScope) noexcept override {}
         AllocationStatistics getAllocationStatistics() const noexcept override;
+
+    private:
+    #if !defined(_MSC_VER)
+        std::unordered_map<void*, std::size_t> allocations;
+        mutable std::mutex mtx;
+    #endif
     };
 } // namespace magma

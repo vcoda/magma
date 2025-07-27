@@ -44,6 +44,10 @@ void *AlignedAllocator::alloc(std::size_t size, std::size_t alignment,
         throw std::bad_alloc();
     #endif
     }
+#if !defined(_MSC_VER)
+    std::lock_guard<std::mutex> lock(mtx);
+    allocations[ptr] = size;
+#endif
     return ptr;
 }
 
@@ -62,6 +66,9 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
 #if defined(_MSC_VER)
     ptr = _aligned_realloc(original, size, alignment);
 #else
+    mtx.lock();
+    const std::size_t oldSize = allocations.at(original);
+    mtx.unlock();
     #if defined(__MINGW32__)
     ptr = __mingw_aligned_malloc(size, alignment);
     #else
@@ -72,7 +79,7 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
     #endif
     if (ptr)
     {   // On Unix we need to copy memory between aligned blocks
-        memcpy(ptr, original, size);
+        memcpy(ptr, original, std::min(size, oldSize));
     #if defined(__MINGW32__)
         __mingw_aligned_free(original);
     #else
@@ -88,6 +95,11 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
         throw std::bad_alloc();
     #endif
     }
+#if !defined(_MSC_VER)
+    std::lock_guard<std::mutex> lock(mtx);
+    allocations.erase(original);
+    allocations[ptr] = size;
+#endif
     return ptr;
 }
 
@@ -97,11 +109,15 @@ void AlignedAllocator::free(void *ptr) noexcept
         return;
 #if defined(_MSC_VER)
     _aligned_free(ptr);
-#elif defined(__MINGW32__)
-    __mingw_aligned_free(ptr);
 #else
+    #if defined(__MINGW32__)
+    __mingw_aligned_free(ptr);
+    #else
     ::free(ptr);
-#endif
+    #endif
+    std::lock_guard<std::mutex> lock(mtx);
+    allocations.erase(ptr);
+#endif // !_MSC_VER
 }
 
 AllocationStatistics AlignedAllocator::getAllocationStatistics() const noexcept
