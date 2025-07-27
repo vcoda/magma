@@ -44,18 +44,22 @@ DebugAlignedAllocator::~DebugAlignedAllocator()
     }
 }
 
-void *DebugAlignedAllocator::alloc(std::size_t size,
-    std::size_t alignment,
+void *DebugAlignedAllocator::alloc(std::size_t size, std::size_t alignment,
     VkSystemAllocationScope allocationScope)
 {
-#if defined(_MSC_VER) || defined(__MINGW32__)
-    void *ptr = _aligned_malloc(size, alignment);
-    if (!ptr)
+    MAGMA_ASSERT(core::powerOfTwo(alignment));
+    void *ptr;
+#if defined(_MSC_VER)
+    ptr = _aligned_malloc(size, alignment);
+#elif defined(__MINGW32__)
+    ptr = __mingw_aligned_malloc(size, alignment);
 #else
-    void *ptr = nullptr;
+    MAGMA_ASSERT(alignment % sizeof(void *) == 0);
     const int result = posix_memalign(&ptr, alignment, size);
-    if (result != 0)
+    if (result != 0) // posix_memalign() does not modify memptr on failure
+        ptr = nullptr;
 #endif // _MSC_VER || __MINGW32__
+    if (!ptr)
     {
     #ifdef MAGMA_NO_EXCEPTIONS
         return nullptr;
@@ -74,13 +78,39 @@ void *DebugAlignedAllocator::alloc(std::size_t size,
 void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size_t alignment,
     VkSystemAllocationScope allocationScope)
 {
-#if defined(_MSC_VER) || defined(__MINGW32__)
-    void *ptr = _aligned_realloc(original, size, alignment);
+    if (0 == size)
+    {   // realloc(ptr, 0) equals to free()
+        this->free(original);
+        return nullptr;
+    }
+    void *ptr;
+    if (!original)
+        return alloc(size, alignment, allocationScope);
+    const std::size_t oldSize = getAllocationSize(original);
+    if (0 == oldSize)
+        return nullptr;
+    MAGMA_ASSERT(core::powerOfTwo(alignment));
+#if defined(_MSC_VER)
+    ptr = _aligned_realloc(original, size, alignment);
 #else
-    MAGMA_UNUSED(alignment);
-    void *ptr = ::realloc(original, size);
-    // TODO: check alignment, use posix_memalign/memcpy if not aligned!
-#endif // _MSC_VER || __MINGW32__
+    #if defined(__MINGW32__)
+    ptr = __mingw_aligned_malloc(size, alignment);
+    #else
+    MAGMA_ASSERT(alignment % sizeof(void *) == 0);
+    const int result = posix_memalign(&ptr, alignment, size);
+    if (result != 0) // posix_memalign() does not modify memptr on failure
+        ptr = nullptr;
+    #endif
+    if (ptr)
+    {   // On Unix we need to copy memory between aligned blocks
+        memcpy(ptr, original, std::min(size, oldSize));
+    #if defined(__MINGW32__)
+        __mingw_aligned_free(original);
+    #else
+        ::free(original);
+    #endif
+    }
+#endif // !_MSC_VER
     if (!ptr)
     {
     #ifdef MAGMA_NO_EXCEPTIONS
@@ -89,9 +119,8 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
         throw std::bad_alloc();
     #endif
     }
-    std::lock_guard<std::mutex> lock(mtx);
     // Replace old allocation with a new one
-    allocatedMemorySize -= allocations.at(original).first;
+    allocatedMemorySize -= oldSize;
     allocations.erase(original);
     allocations[ptr] = {size, allocationScope};
     allocatedMemorySize += size;
@@ -101,20 +130,25 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
 
 void DebugAlignedAllocator::free(void *ptr) noexcept
 {
-    if (ptr)
-    {
-    #if defined(_MSC_VER) || defined(__MINGW32__)
-        _aligned_free(ptr);
-    #else
-        ::free(ptr);
-    #endif // _MSC_VER || __MINGW32__
-        std::lock_guard<std::mutex> lock(mtx);
-        // Delete allocation
-        auto entry = allocations.at(ptr);
-        allocations.erase(ptr);
-        allocatedMemorySize -= entry.first;
-        ++numFrees[entry.second];
-    }
+    if (!ptr)
+        return;
+    std::lock_guard<std::mutex> lock(mtx);
+    auto it = allocations.find(ptr);
+    MAGMA_ASSERT(it != allocations.end());
+    if (it  == allocations.end())
+        return;
+#if defined(_MSC_VER)
+    _aligned_free(ptr);
+#elif defined(__MINGW32__)
+    __mingw_aligned_free(ptr);
+#else
+    ::free(ptr);
+#endif
+    // Delete allocation
+    auto [size, allocationScope] = it->second;
+    allocations.erase(it);
+    allocatedMemorySize -= size;
+    ++numFrees[allocationScope];
 }
 
 void DebugAlignedAllocator::internalAllocationNotification(std::size_t size,
