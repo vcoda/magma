@@ -76,14 +76,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_INUSE(obj)
 #endif // MAGMA_RETAIN_OBJECTS_IN_USE
 
-#if defined(_MSC_VER) || defined(__MINGW32__)
-    #define MAGMA_STACK_ALLOC(size) (size > 0) ? _malloca(size) : nullptr
-    #define MAGMA_STACK_FREE(p) _freea(p)
-#else
-    #define MAGMA_STACK_ALLOC(size) (size > 0) ? alloca(size) : nullptr
-    #define MAGMA_STACK_FREE(p)
-#endif // _MSC_VER || __MINGW32__
-
 #ifdef MAGMA_SSE
     #define mm_permute_ps(v, c) _mm_shuffle_ps((v), (v), c)
 #endif

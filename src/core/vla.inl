@@ -21,7 +21,9 @@ VariableLengthArray<T>::~VariableLengthArray()
         for (T *p = begin(); p != end(); ++p)
             p->~T();
     }
-    MAGMA_STACK_FREE(array);
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    _freea(array);
+#endif
 }
 
 template<class T>
@@ -34,4 +36,4 @@ void VariableLengthArray<T>::put(const T& element) noexcept
 
 #define MAGMA_VLA(Type, var, count)\
     MAGMA_ASSERT(sizeof(Type) * count <= magma::core::VariableLengthArray<Type>::MaxSize);\
-    magma::core::VariableLengthArray<Type> var(MAGMA_STACK_ALLOC(sizeof(Type) * count), count)
+    magma::core::VariableLengthArray<Type> var(count ? MAGMA_ALLOCA(sizeof(Type) * count) : nullptr, count)
