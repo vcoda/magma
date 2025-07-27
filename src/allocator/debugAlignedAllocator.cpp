@@ -153,4 +153,20 @@ AllocationStatistics DebugAlignedAllocator::getAllocationStatistics() const noex
     statistics.internalAllocations.aliveInstanceAllocations = numInternalAllocations[VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE] - numInternalFrees[VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE];
     return statistics;
 }
+
+std::size_t DebugAlignedAllocator::getAllocationSize(void *ptr) const
+{
+    std::lock_guard<std::mutex> lock(mtx);
+    auto it = allocations.find(ptr);
+    MAGMA_ASSERT(it != allocations.end());
+    if (allocations.end() == it)
+    {
+    #ifdef MAGMA_NO_EXCEPTIONS
+        return 0;
+    #else
+        throw std::invalid_argument("alien memory pointer");
+    #endif
+    }
+    return it->second.first;
+}
 } // namespace magma

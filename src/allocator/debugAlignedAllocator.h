@@ -44,6 +44,8 @@ namespace magma
         AllocationStatistics getAllocationStatistics() const noexcept override;
 
     private:
+        std::size_t getAllocationSize(void *ptr) const;
+
         std::unordered_map<void*, std::pair<std::size_t, VkSystemAllocationScope>> allocations;
         std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1> numAllocations;
         std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1> numReallocations;
