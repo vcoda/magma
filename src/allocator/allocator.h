@@ -20,27 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    struct AllocationStatistics
-    {
-        struct AllocationScopes
-        {
-            uint32_t aliveCommandAllocations = 0;
-            uint32_t aliveObjectAllocations = 0;
-            uint32_t aliveCacheAllocations = 0;
-            uint32_t aliveDeviceAllocations = 0;
-            uint32_t aliveInstanceAllocations = 0;
-        };
-
-        std::size_t allocatedMemorySize = 0;
-        std::size_t internalAllocatedMemorySize = 0;
-        AllocationScopes allocations;
-        AllocationScopes internalAllocations;
-    };
-
-    struct AllocationCallbacks : VkAllocationCallbacks
-    {
-        AllocationCallbacks() noexcept;
-    };
+    struct AllocationStatistics;
 
     /* Vulkan provides applications the opportunity to perform
        host memory allocations on behalf of the Vulkan implementation.
@@ -50,6 +30,11 @@ namespace magma
        Rather, this can be useful for certain embedded systems, for
        debugging purposes (e.g. putting a guard page after all host
        allocations), or for memory allocation logging. */
+
+    struct AllocationCallbacks : VkAllocationCallbacks
+    {
+        AllocationCallbacks() noexcept;
+    };
 
     class IAllocator : public IClass, public AllocationCallbacks
     {
@@ -69,6 +54,23 @@ namespace magma
             VkInternalAllocationType allocationType,
             VkSystemAllocationScope allocationScope) noexcept = 0;
         virtual AllocationStatistics getAllocationStatistics() const noexcept = 0;
+    };
+
+    struct AllocationStatistics
+    {
+        struct AllocationScopes
+        {
+            uint32_t aliveCommandAllocations = 0;
+            uint32_t aliveObjectAllocations = 0;
+            uint32_t aliveCacheAllocations = 0;
+            uint32_t aliveDeviceAllocations = 0;
+            uint32_t aliveInstanceAllocations = 0;
+        };
+
+        std::size_t allocatedMemorySize = 0;
+        std::size_t internalAllocatedMemorySize = 0;
+        AllocationScopes allocations;
+        AllocationScopes internalAllocations;
     };
 
     struct MemoryBlockInfo
