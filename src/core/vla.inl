@@ -1,7 +1,7 @@
 namespace magma::core
 {
 template<class T>
-VariableLengthArray<T>::VariableLengthArray(void *ptr, std::size_t len) noexcept:
+inline VariableLengthArray<T>::VariableLengthArray(void *ptr, std::size_t len) noexcept:
     array(reinterpret_cast<T *>(ptr)),
     len(static_cast<uint32_t>(len)),
     cnt(0)
@@ -14,7 +14,7 @@ VariableLengthArray<T>::VariableLengthArray(void *ptr, std::size_t len) noexcept
 }
 
 template<class T>
-VariableLengthArray<T>::~VariableLengthArray()
+inline VariableLengthArray<T>::~VariableLengthArray()
 {
     if constexpr (std::is_destructible<T>::value)
     {
@@ -27,7 +27,7 @@ VariableLengthArray<T>::~VariableLengthArray()
 }
 
 template<class T>
-void VariableLengthArray<T>::put(const T& element) noexcept
+inline void VariableLengthArray<T>::put(const T& element) noexcept
 {
     MAGMA_ASSERT(cnt < len);
     array[cnt++] = element;
