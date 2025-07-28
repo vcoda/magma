@@ -51,14 +51,14 @@ void *DebugAlignedAllocator::alloc(std::size_t size, std::size_t alignment,
     void *ptr;
 #if defined(_MSC_VER)
     ptr = _aligned_malloc(size, alignment);
-#elif defined(__MINGW32__)
+#elif defined(__MINGW32__) || defined(__MINGW64__)
     ptr = __mingw_aligned_malloc(size, alignment);
 #else
     MAGMA_ASSERT(alignment % sizeof(void *) == 0);
     const int result = posix_memalign(&ptr, alignment, size);
     if (result != 0) // posix_memalign() does not modify memptr on failure
         ptr = nullptr;
-#endif // _MSC_VER || __MINGW32__
+#endif // !_MSC_VER && !__MINGW__
     MAGMA_HANDLE_OUT_OF_MEMORY(ptr);
     // Add allocation
     std::lock_guard<std::mutex> lock(mtx);
@@ -86,18 +86,18 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
 #if defined(_MSC_VER)
     ptr = _aligned_realloc(original, size, alignment);
 #else
-    #if defined(__MINGW32__)
+    #if defined(__MINGW32__) || defined(__MINGW64__)
     ptr = __mingw_aligned_malloc(size, alignment);
     #else
     MAGMA_ASSERT(alignment % sizeof(void *) == 0);
     const int result = posix_memalign(&ptr, alignment, size);
     if (result != 0) // posix_memalign() does not modify memptr on failure
         ptr = nullptr;
-    #endif
+    #endif // !__MINGW__
     if (ptr)
     {   // On Unix we need to copy memory between aligned blocks
         memcpy(ptr, original, std::min(size, oldSize));
-    #if defined(__MINGW32__)
+    #if defined(__MINGW32__) || defined(__MINGW64__)
         __mingw_aligned_free(original);
     #else
         ::free(original);
@@ -126,7 +126,7 @@ void DebugAlignedAllocator::free(void *ptr) noexcept
         return;
 #if defined(_MSC_VER)
     _aligned_free(ptr);
-#elif defined(__MINGW32__)
+#elif defined(__MINGW32__) || defined(__MINGW64__)
     __mingw_aligned_free(ptr);
 #else
     ::free(ptr);
