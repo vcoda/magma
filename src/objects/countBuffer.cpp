@@ -78,9 +78,7 @@ std::array<uint32_t, 3> DispatchCountBuffer::getValues() const noexcept
     }
     else
     {
-        values[0] = 0;
-        values[1] = 0;
-        values[2] = 0;
+        values.fill(0);
     }
     return values;
 }
