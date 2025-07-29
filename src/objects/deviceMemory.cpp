@@ -113,11 +113,8 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     const StructureChain& extendedInfo /* default */)
 {
     MAGMA_ASSERT(!mapped());
-    if (mapPointer)
-    {
-        vkUnmapMemory(getNativeDevice(), handle);
-        mapPointer = nullptr;
-    }
+    if (mapped())
+        unmap();
     vkFreeMemory(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
     handle = VK_NULL_HANDLE;
     --allocationCount;
