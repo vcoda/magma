@@ -165,7 +165,7 @@ bool ManagedDeviceMemory::invalidateMappedRange(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
-    VkResult result = deviceAllocator->invalidateMappedRange(allocation, offset, size);
+    const VkResult result = deviceAllocator->invalidateMappedRange(allocation, offset, size);
     return (VK_SUCCESS == result);
 }
 
