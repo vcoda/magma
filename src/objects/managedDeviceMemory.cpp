@@ -55,11 +55,13 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object,
         unmap();
     deviceAllocator->free(allocation);
     allocation = nullptr;
-    handle = VK_NULL_HANDLE;
     subOffset = 0ull;
     memoryRequirements = memoryRequirements_;
-    allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, memoryType.propertyFlags, extendedInfo);
-    onDefragment();
+    if (memoryRequirements.size > 0)
+    {
+        allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, memoryType.propertyFlags, extendedInfo);
+        subOffset = deviceAllocator->getMemoryBlockInfo(allocation).offset;
+    }
 }
 
 void ManagedDeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
