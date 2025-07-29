@@ -47,6 +47,7 @@ namespace magma
         virtual void *getMapPointer() const noexcept = 0;
         virtual VkDeviceSize getMapOffset() const noexcept = 0;
         virtual VkDeviceSize getMapSize() const noexcept = 0;
+        virtual VkMemoryMapFlags getMapFlags() const noexcept = 0;
         virtual float getPriority() const noexcept = 0;
         virtual void setPriority(float priority) noexcept = 0;
         virtual bool managed() const noexcept = 0;
