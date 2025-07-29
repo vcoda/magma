@@ -77,7 +77,7 @@ namespace magma
         bool invalidateMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept override;
         VkDeviceSize getCommitment() noexcept override;
-        void onDefragment() noexcept override;
+        void onDefragment() noexcept override {}
 
     private:
         static std::atomic<uint32_t> allocationCount;

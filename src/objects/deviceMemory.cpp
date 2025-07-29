@@ -308,9 +308,4 @@ VkDeviceSize DeviceMemory::getCommitment() noexcept
     vkGetDeviceMemoryCommitment(getNativeDevice(), handle, &commitedMemoryInBytes);
     return commitedMemoryInBytes;
 }
-
-void DeviceMemory::onDefragment() noexcept
-{
-    // Do nothing with direct memory allocation
-}
 } // namespace magma
