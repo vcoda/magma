@@ -168,11 +168,9 @@ bool ManagedDeviceMemory::invalidateMappedRange(
 }
 
 VkDeviceSize ManagedDeviceMemory::getCommitment() noexcept
-{
-    VkDeviceSize commitedMemoryInBytes = 0ull;
-    MAGMA_ASSERT(getPropertyFlags() & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT);
-    vkGetDeviceMemoryCommitment(getNativeDevice(), handle, &commitedMemoryInBytes);
-    return commitedMemoryInBytes;
+{   // With VMA we can't get commitment as VkDeviceMemory may be shared
+    // between many blocks, so just return the size of sub-allocation.
+    return deviceAllocator->getMemoryBlockInfo(allocation).size;
 }
 
 void ManagedDeviceMemory::onDefragment() noexcept
