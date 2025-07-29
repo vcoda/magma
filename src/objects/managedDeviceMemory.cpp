@@ -33,11 +33,10 @@ ManagedDeviceMemory::ManagedDeviceMemory(std::shared_ptr<Device> device,
     const StructureChain& extendedInfo):
     BaseDeviceMemory(std::move(device), memoryRequirements, flags, std::move(hostAllocator), extendedInfo),
     objectType(objectType),
-    deviceAllocator(std::move(deviceAllocator_))
-{
-    allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, flags, extendedInfo);
-    onDefragment();
-}
+    deviceAllocator(std::move(deviceAllocator_)),
+    allocation(deviceAllocator->allocate(objectType, object, memoryRequirements, flags, extendedInfo)),
+    subOffset(deviceAllocator->getMemoryBlockInfo(allocation).offset)
+{}
 
 ManagedDeviceMemory::~ManagedDeviceMemory()
 {
@@ -118,7 +117,7 @@ void ManagedDeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObject
 void *ManagedDeviceMemory::map(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,
-    VkMemoryMapFlags /* 0 */) noexcept
+    VkMemoryMapFlags /* mmapFlags = 0 */) noexcept
 {
     MAGMA_ASSERT(flags.hostVisible);
     if (!mapPointer)
@@ -134,7 +133,7 @@ void *ManagedDeviceMemory::map(
         mapSize = (VK_WHOLE_SIZE == size) ? getSize() : size;
     }
     if (offset != mapOffset)
-    {   // Offset inside mapped block
+    {   // Offset inside mapped sub-allocation
         const ptrdiff_t ptrdiff = static_cast<ptrdiff_t>(offset - mapOffset);
         mapPointer = reinterpret_cast<uint8_t *>(mapPointer) + ptrdiff;
         mapOffset = offset;
@@ -177,11 +176,8 @@ VkDeviceSize ManagedDeviceMemory::getCommitment() noexcept
 }
 
 void ManagedDeviceMemory::onDefragment() noexcept
-{
-    const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(allocation);
-    // The following can be changed after call to vmaDefragment()
+{   // The following can be changed after call to vmaDefragment()
     // if allocation is passed to the function, or if allocation is lost:
-    handle = memoryInfo.deviceMemory;
-    subOffset = memoryInfo.offset;
+    subOffset = deviceAllocator->getMemoryBlockInfo(allocation).offset;
 }
 } // namespace magma

@@ -74,6 +74,6 @@ namespace magma
         const VkObjectType objectType;
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
         DeviceMemoryBlock allocation;
-        VkDeviceSize subOffset = 0ull;
+        VkDeviceSize subOffset;
     };
 } // namespace magma
