@@ -75,12 +75,13 @@ void ManagedDeviceMemory::bind(NonDispatchableHandle object, VkObjectType object
 #ifdef VK_NV_ray_tracing
     case VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV:
         {
+            const MemoryBlockInfo memoryInfo = deviceAllocator->getMemoryBlockInfo(allocation);
             VkBindAccelerationStructureMemoryInfoNV bindAccelerationStructureMemoryInfo;
             bindAccelerationStructureMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NV;
             bindAccelerationStructureMemoryInfo.pNext = nullptr;
             bindAccelerationStructureMemoryInfo.accelerationStructure = core::reinterpret<VkAccelerationStructureNV>(object);
-            bindAccelerationStructureMemoryInfo.memory = handle;
-            bindAccelerationStructureMemoryInfo.memoryOffset = subOffset + offset;
+            bindAccelerationStructureMemoryInfo.memory = memoryInfo.deviceMemory;
+            bindAccelerationStructureMemoryInfo.memoryOffset = memoryInfo.offset + offset;
             bindAccelerationStructureMemoryInfo.deviceIndexCount = 0;
             bindAccelerationStructureMemoryInfo.pDeviceIndices = nullptr;
             MAGMA_REQUIRED_DEVICE_EXTENSION(vkBindAccelerationStructureMemoryNV, VK_NV_RAY_TRACING_EXTENSION_NAME);
