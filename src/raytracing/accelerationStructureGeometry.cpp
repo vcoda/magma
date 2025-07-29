@@ -67,6 +67,7 @@ AccelerationStructureIndexedTriangles::AccelerationStructureIndexedTriangles(VkF
     MAGMA_ASSERT(vertices);
     MAGMA_ASSERT(indices);
     MAGMA_ASSERT(indexCount);
+    MAGMA_ASSERT(indexCount % 3 == 0);
     geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
     geometry.triangles.pNext = nullptr;
     geometry.triangles.vertexFormat = vertexFormat;
@@ -76,7 +77,6 @@ AccelerationStructureIndexedTriangles::AccelerationStructureIndexedTriangles(VkF
     geometry.triangles.indexType = indexType;
     geometry.triangles.indexData = address(indices);
     geometry.triangles.transformData.hostAddress = transform;
-    MAGMA_ASSERT(indexCount % 3 == 0);
     primitiveCount = indexCount / 3;
     MAGMA_ASSERT(primitiveCount);
 }
