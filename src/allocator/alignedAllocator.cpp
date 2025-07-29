@@ -59,9 +59,11 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
 #if defined(_MSC_VER)
     ptr = _aligned_realloc(original, size, alignment);
 #else
-    mtx.lock();
-    const std::size_t oldSize = allocations.at(original);
-    mtx.unlock();
+    std::size_t oldSize;
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        oldSize = allocations.at(original);
+    }
     #if defined(__MINGW32__) || defined(__MINGW64__)
     ptr = __mingw_aligned_malloc(size, alignment);
     #else
