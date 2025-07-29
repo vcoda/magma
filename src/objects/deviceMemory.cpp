@@ -239,21 +239,25 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
 void *DeviceMemory::map(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,
-    VkMemoryMapFlags mapFlags /* 0 */) noexcept
+    VkMemoryMapFlags mmapFlags /* 0 */) noexcept
 {
     MAGMA_ASSERT(flags.hostVisible);
-    if (!mapPointer)
+    if (!mapPointer || (mapOffset != offset) ||
+        mapSize < ((VK_WHOLE_SIZE == size) ? getSize() : size) ||
+        mapFlags != mmapFlags)
     {
-        const VkResult result = vkMapMemory(getNativeDevice(), handle, offset, size, mapFlags, &mapPointer);
+        unmap();
+        const VkResult result = vkMapMemory(getNativeDevice(), handle, offset, size, mmapFlags, &mapPointer);
         if (result != VK_SUCCESS)
         {   // VK_ERROR_OUT_OF_HOST_MEMORY
             // VK_ERROR_OUT_OF_DEVICE_MEMORY
             // VK_ERROR_MEMORY_MAP_FAILED
             return nullptr;
         }
+        mapOffset = offset;
+        mapSize = (VK_WHOLE_SIZE == size) ? getSize() : size;
+        mapFlags = mmapFlags;
     }
-    mapOffset = offset;
-    mapSize = (VK_WHOLE_SIZE == size) ? getSize() : size;
     return mapPointer;
 }
 
@@ -266,6 +270,7 @@ void DeviceMemory::unmap() noexcept
         mapPointer = nullptr;
         mapOffset = 0;
         mapSize = 0;
+        mapFlags = 0;
     }
 }
 

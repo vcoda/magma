@@ -118,7 +118,6 @@ void *ManagedDeviceMemory::map(
     VkMemoryMapFlags /* 0 */) noexcept
 {
     MAGMA_ASSERT(flags.hostVisible);
-    MAGMA_UNUSED(size);
     if (!mapPointer)
     {
         const VkResult result = deviceAllocator->map(allocation, offset, &mapPointer);
@@ -128,9 +127,15 @@ void *ManagedDeviceMemory::map(
             // VK_ERROR_MEMORY_MAP_FAILED
             return nullptr;
         }
+        mapOffset = offset;
+        mapSize = (VK_WHOLE_SIZE == size) ? getSize() : size;
     }
-    mapOffset = offset;
-    mapSize = (VK_WHOLE_SIZE == size) ? getSize() : size;
+    if (offset != mapOffset)
+    {   // Offset inside mapped block
+        const ptrdiff_t ptrdiff = static_cast<ptrdiff_t>(offset - mapOffset);
+        mapPointer = reinterpret_cast<uint8_t *>(mapPointer) + ptrdiff;
+        mapOffset = offset;
+    }
     return mapPointer;
 }
 
