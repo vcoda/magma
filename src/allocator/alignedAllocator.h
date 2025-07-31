@@ -44,7 +44,7 @@ namespace magma
     private:
     #if !defined(_MSC_VER)
         std::unordered_map<void*, std::size_t> allocations;
-        mutable std::mutex mtx;
+        mutable std::shared_mutex mtx;
     #endif
     };
 } // namespace magma

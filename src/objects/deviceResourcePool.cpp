@@ -30,7 +30,7 @@ namespace magma
 #if (VK_USE_64_BIT_PTR_DEFINES == 1)
 DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcept
 {
-    std::lock_guard<std::mutex> guard(DeviceChild::mtx);
+    std::shared_lock<std::shared_mutex> guard(DeviceChild::mtx);
     Resources statistics;
     statistics.semaphoreCount = core::countof(semaphores);
     statistics.fenceCount = core::countof(fences);
@@ -128,7 +128,7 @@ DeviceResourcePool::Resources DeviceResourcePool::countResources() const noexcep
 
 VkDeviceSize DeviceResourcePool::deviceLocalMemoryAllocated() const noexcept
 {
-    std::lock_guard<std::mutex> guard(DeviceChild::mtx);
+    std::shared_lock<std::shared_mutex> guard(DeviceChild::mtx);
     VkDeviceSize size = 0ull;
     foreach<DeviceMemory>(deviceMemories,
         [&size](const BaseDeviceMemory *memory)
@@ -141,7 +141,7 @@ VkDeviceSize DeviceResourcePool::deviceLocalMemoryAllocated() const noexcept
 
 VkDeviceSize DeviceResourcePool::hostVisibleMemoryAllocated() const noexcept
 {
-    std::lock_guard<std::mutex> guard(DeviceChild::mtx);
+    std::shared_lock<std::shared_mutex> guard(DeviceChild::mtx);
     VkDeviceSize size = 0ull;
     foreach<DeviceMemory>(deviceMemories,
         [&size](const BaseDeviceMemory *memory)
@@ -154,7 +154,7 @@ VkDeviceSize DeviceResourcePool::hostVisibleMemoryAllocated() const noexcept
 
 VkDeviceSize DeviceResourcePool::resizableBarMemoryAllocated() const noexcept
 {
-    std::lock_guard<std::mutex> guard(DeviceChild::mtx);
+    std::shared_lock<std::shared_mutex> guard(DeviceChild::mtx);
     VkDeviceSize size = 0ull;
     foreach<DeviceMemory>(deviceMemories,
         [&size](const BaseDeviceMemory *memory)
@@ -168,7 +168,7 @@ VkDeviceSize DeviceResourcePool::resizableBarMemoryAllocated() const noexcept
 
 VkDeviceSize DeviceResourcePool::bufferMemoryFootprint() const noexcept
 {
-    std::lock_guard<std::mutex> guard(DeviceChild::mtx);
+    std::shared_lock<std::shared_mutex> guard(DeviceChild::mtx);
     VkDeviceSize size = 0ull;
     foreach<Buffer>(deviceMemories,
         [&size](const Buffer *buffer)
@@ -182,7 +182,7 @@ VkDeviceSize DeviceResourcePool::bufferMemoryFootprint() const noexcept
 
 VkDeviceSize DeviceResourcePool::imageMemoryFootprint() const noexcept
 {
-    std::lock_guard<std::mutex> guard(DeviceChild::mtx);
+    std::shared_lock<std::shared_mutex> guard(DeviceChild::mtx);
     VkDeviceSize size = 0ull;
     foreach<Image>(images,
         [&size](const Image *image)
@@ -197,7 +197,7 @@ VkDeviceSize DeviceResourcePool::imageMemoryFootprint() const noexcept
 
 VkDeviceSize DeviceResourcePool::accelerationStructureMemoryFootprint() const noexcept
 {
-    std::lock_guard<std::mutex> guard(DeviceChild::mtx);
+    std::shared_lock<std::shared_mutex> guard(DeviceChild::mtx);
     VkDeviceSize size = 0ull;
 #ifdef VK_KHR_acceleration_structure
     foreach<AccelerationStructure>(accelerationStructures,
@@ -213,7 +213,7 @@ VkDeviceSize DeviceResourcePool::accelerationStructureMemoryFootprint() const no
 
 bool DeviceResourcePool::hasUnreleasedResources() const noexcept
 {
-    std::lock_guard<std::mutex> guard(DeviceChild::mtx);
+    std::shared_lock<std::shared_mutex> guard(DeviceChild::mtx);
     return semaphores.size() ||
         fences.size() ||
         deviceMemories.size() ||

@@ -49,6 +49,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <mutex>
 #include <optional>
 #include <set>
+#include <shared_mutex>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>

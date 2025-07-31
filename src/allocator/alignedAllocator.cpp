@@ -38,7 +38,7 @@ void *AlignedAllocator::alloc(std::size_t size, std::size_t alignment,
 #endif // !_MSC_VER && !__MINGW__
     MAGMA_HANDLE_OUT_OF_MEMORY(ptr);
 #if !defined(_MSC_VER)
-    std::lock_guard<std::mutex> lock(mtx);
+    std::lock_guard<std::shared_mutex> lock(mtx);
     allocations[ptr] = size;
 #endif
     return ptr;
@@ -61,7 +61,7 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
 #else
     std::size_t oldSize;
     {
-        std::lock_guard<std::mutex> lock(mtx);
+        std::shared_lock<std::shared_mutex> lock(mtx);
         oldSize = allocations.at(original);
     }
     #if defined(__MINGW32__) || defined(__MINGW64__)
@@ -84,7 +84,7 @@ void *AlignedAllocator::realloc(void *original, std::size_t size, std::size_t al
 #endif // !_MSC_VER
     MAGMA_HANDLE_OUT_OF_MEMORY(ptr);
 #if !defined(_MSC_VER)
-    std::lock_guard<std::mutex> lock(mtx);
+    std::lock_guard<std::shared_mutex> lock(mtx);
     allocations.erase(original);
     allocations[ptr] = size;
 #endif
@@ -103,7 +103,7 @@ void AlignedAllocator::free(void *ptr) noexcept
     #else
     ::free(ptr);
     #endif
-    std::lock_guard<std::mutex> lock(mtx);
+    std::lock_guard<std::shared_mutex> lock(mtx);
     allocations.erase(ptr);
 #endif // !_MSC_VER
 }

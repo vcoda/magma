@@ -54,6 +54,6 @@ namespace magma
         std::array<uint32_t, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE + 1> numInternalFrees;
         std::size_t allocatedMemorySize;
         std::size_t internalAllocatedMemorySize;
-        mutable std::mutex mtx;
+        mutable std::shared_mutex mtx;
     };
 } // namespace magma
