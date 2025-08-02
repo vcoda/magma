@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "macros.h"
 #include "variantPtr.h"
 #include "lentPtr.h"
+#include "spinlock.h"
 #include "vla.h"
 #include "hashing/constexpr.h"
 #include "hashing/fnv1.h"

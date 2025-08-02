@@ -51,6 +51,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <shared_mutex>
 #include <string>
+#include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <variant>
