@@ -46,10 +46,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <list>
 #include <map>
 #include <memory>
-#include <mutex>
 #include <optional>
 #include <set>
-#include <shared_mutex>
 #include <string>
 #include <thread>
 #include <unordered_map>

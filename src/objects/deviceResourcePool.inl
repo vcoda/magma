@@ -71,6 +71,7 @@ MAGMA_RESOURCE_POOL(VkPrivateDataSlotEXT, privateDataSlots)
 template<class NonDispatchableChild, class Type>
 inline void DeviceResourcePool::foreach(const Pool<Type>& pool, const Fn<NonDispatchableChild>& fn) const noexcept
 {
+    std::lock_guard<core::Spinlock> lock(DeviceChild::mtx);
     std::for_each(pool.cbegin(), pool.cend(),
         [&fn](const NonDispatchable<Type> *parent)
         {   // We need costly dynamic_cast to get properties of object of concrete type

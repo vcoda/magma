@@ -61,7 +61,7 @@ void *DebugAlignedAllocator::alloc(std::size_t size, std::size_t alignment,
 #endif // !_MSC_VER && !__MINGW__
     MAGMA_HANDLE_OUT_OF_MEMORY(ptr);
     // Add allocation
-    std::lock_guard<std::shared_mutex> lock(mtx);
+    std::lock_guard<core::Spinlock> lock(mtx);
     allocations[ptr] = {size, allocationScope};
     allocatedMemorySize += size;
     ++numAllocations[allocationScope];
@@ -106,7 +106,7 @@ void *DebugAlignedAllocator::realloc(void *original, std::size_t size, std::size
 #endif // !_MSC_VER
     MAGMA_HANDLE_OUT_OF_MEMORY(ptr);
     // Replace old allocation with a new one
-    std::lock_guard<std::shared_mutex> lock(mtx);
+    std::lock_guard<core::Spinlock> lock(mtx);
     allocatedMemorySize -= oldSize;
     allocations.erase(original);
     allocations[ptr] = {size, allocationScope};
@@ -119,7 +119,7 @@ void DebugAlignedAllocator::free(void *ptr) noexcept
 {
     if (!ptr)
         return;
-    std::lock_guard<std::shared_mutex> lock(mtx);
+    std::lock_guard<core::Spinlock> lock(mtx);
     auto it = allocations.find(ptr);
     MAGMA_ASSERT(it != allocations.end());
     if (it == allocations.end())
@@ -142,7 +142,7 @@ void DebugAlignedAllocator::internalAllocationNotification(std::size_t size,
     VkInternalAllocationType /* allocationType */,
     VkSystemAllocationScope allocationScope) noexcept
 {
-    std::lock_guard<std::shared_mutex> lock(mtx);
+    std::lock_guard<core::Spinlock> lock(mtx);
     internalAllocatedMemorySize += size;
     ++numInternalAllocations[allocationScope];
 }
@@ -151,14 +151,14 @@ void DebugAlignedAllocator::internalFreeNotification(std::size_t size,
     VkInternalAllocationType /* allocationType */,
     VkSystemAllocationScope allocationScope) noexcept
 {
-    std::lock_guard<std::shared_mutex> lock(mtx);
+    std::lock_guard<core::Spinlock> lock(mtx);
     internalAllocatedMemorySize -= size;
     ++numInternalFrees[allocationScope];
 }
 
 AllocationStatistics DebugAlignedAllocator::getAllocationStatistics() const noexcept
 {
-    std::shared_lock<std::shared_mutex> lock(mtx);
+    std::lock_guard<core::Spinlock> lock(mtx);
     AllocationStatistics statistics;
     statistics.allocatedMemorySize = allocatedMemorySize;
     statistics.internalAllocatedMemorySize = internalAllocatedMemorySize;
@@ -177,7 +177,7 @@ AllocationStatistics DebugAlignedAllocator::getAllocationStatistics() const noex
 
 std::size_t DebugAlignedAllocator::getAllocationSize(void *ptr) const
 {
-    std::shared_lock<std::shared_mutex> lock(mtx);
+    std::lock_guard<core::Spinlock> lock(mtx);
     auto it = allocations.find(ptr);
     MAGMA_ASSERT(it != allocations.end());
     if (it != allocations.end())

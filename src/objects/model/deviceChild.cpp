@@ -28,9 +28,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-/* Shared mutex is a synchronization primitive that
-   allows exclusive write while having shared read. */
-std::shared_mutex DeviceChild::mtx;
+core::Spinlock DeviceChild::mtx;
 
 void DeviceChild::setPrivateData(uint64_t data)
 {
@@ -43,7 +41,7 @@ void DeviceChild::setPrivateData(uint64_t data)
 #endif // VK_EXT_private_data
     std::unordered_map<uint64_t, uint64_t>& dataMap = device->getPrivateDataMap();
     const uint64_t handle = getObjectHandle();
-    std::lock_guard<std::shared_mutex> lock(mtx);
+    std::lock_guard<core::Spinlock> lock(mtx);
     dataMap[handle] = data;
 }
 
@@ -58,7 +56,7 @@ uint64_t DeviceChild::getPrivateData() const noexcept
 #endif // VK_EXT_private_data
     std::unordered_map<uint64_t, uint64_t>& dataMap = device->getPrivateDataMap();
     const uint64_t handle = getObjectHandle();
-    std::shared_lock<std::shared_mutex> lock(mtx);
+    std::lock_guard<core::Spinlock> lock(mtx);
     auto it = dataMap.find(handle);
     if (it != dataMap.end())
         return it->second;

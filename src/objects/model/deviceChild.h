@@ -54,7 +54,7 @@ namespace magma
         bool extensionEnabled(const char *name) const noexcept;
 
         std::shared_ptr<Device> device;
-        static std::shared_mutex mtx;
+        static core::Spinlock mtx;
         friend DeviceResourcePool;
     };
 } // namespace magma
