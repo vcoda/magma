@@ -1645,6 +1645,9 @@
     <None Include="..\..\src\renderpass\subpass.inl">
       <Filter>Header Files\renderpass</Filter>
     </None>
+    <None Include="..\..\src\core\spinlock.inl">
+      <Filter>Header Files\core</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
