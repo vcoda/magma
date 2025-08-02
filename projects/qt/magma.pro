@@ -207,7 +207,6 @@ HEADERS += \
     ../../src/barriers/memoryBarrier.h \
     ../../src/barriers/subpassDependency.h \
     ../../src/barriers/subpassDependency2.h \
-    ../../src/core/hashing/combine.h \
     ../../src/core/hashing/constexpr.h \
     ../../src/core/hashing/fnv1.h \
     ../../src/core/hashing/fnv1string.h \
@@ -218,6 +217,7 @@ HEADERS += \
     ../../src/core/pch.h \
     ../../src/core/popcount.h \
     ../../src/core/refCountChecker.h \
+    ../../src/core/spinlock.h \
     ../../src/core/variantPtr.h \
     ../../src/core/vla.h \
     ../../src/descriptors/accelerationStructure.h \
@@ -227,10 +227,10 @@ HEADERS += \
     ../../src/descriptors/bufferDescriptorArray.h \
     ../../src/descriptors/descriptorPool.h \
     ../../src/descriptors/descriptorSetLayoutBinding.h \
-    ../../src/descriptors/descriptorSetTable.h \
     ../../src/descriptors/imageArrayElement.h \
     ../../src/descriptors/imageDescriptor.h \
     ../../src/descriptors/imageDescriptorArray.h \
+    ../../src/descriptors/imageDescriptorVariableArray.h \
     ../../src/descriptors/inlineUniformBlock.h \
     ../../src/exceptions/compileError.h \
     ../../src/exceptions/errorHandler.h \
@@ -241,7 +241,7 @@ HEADERS += \
     ../../src/exceptions/unsupportedExtension.h \
     ../../src/extensions/deviceExtensions.h \
     ../../src/extensions/deviceLayers.h \
-    ../../src/extensions/extensions.h \
+    ../../src/extensions/extensionRegistry.h \
     ../../src/extensions/instanceExtensions.h \
     ../../src/extensions/instanceLayers.h \
     ../../src/extensions/layers.h \
@@ -250,9 +250,7 @@ HEADERS += \
     ../../src/helpers/executeCommandBuffer.h \
     ../../src/helpers/executeDeferredOperation.h \
     ../../src/helpers/layoutTransition.h \
-    ../../src/helpers/mapScoped.h \
     ../../src/helpers/mapTyped.h \
-    ../../src/helpers/stackArray.h \
     ../../src/helpers/streamInsertOperators.h \
     ../../src/helpers/stringifyFlags.h \
     ../../src/helpers/uniformArray.h \
@@ -281,6 +279,7 @@ HEADERS += \
     ../../src/objects/model/deviceChild.h \
     ../../src/objects/model/dispatchable.h \
     ../../src/objects/model/iobject.h \
+    ../../src/objects/model/iresource.h \
     ../../src/objects/model/nondispatchable.h \
     ../../src/objects/model/object.h \
     ../../src/objects/model/objectType.h \
@@ -338,7 +337,6 @@ HEADERS += \
     ../../src/objects/indexBuffer.h \
     ../../src/objects/indirectBuffer.h \
     ../../src/objects/instance.h \
-    ../../src/objects/iresource.h \
     ../../src/objects/leanCommandBuffer.h \
     ../../src/objects/managedDeviceMemory.h \
     ../../src/objects/multiviewRenderPass.h \
@@ -361,7 +359,6 @@ HEADERS += \
     ../../src/objects/resource.h \
     ../../src/objects/sampler.h \
     ../../src/objects/samplerYcbcrConversion.h \
-    ../../src/objects/secondaryCommandBuffer.h \
     ../../src/objects/semaphore.h \
     ../../src/objects/shaderModule.h \
     ../../src/objects/srcTransferBuffer.h \
