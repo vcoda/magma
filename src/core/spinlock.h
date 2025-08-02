@@ -48,14 +48,14 @@ namespace magma::core
             #if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__)
                 _mm_pause();
             #elif defined(_M_ARM) || defined(_M_ARM64)
-                __yield();
-            #elif defined(__arm__) || defined(__aarch64__)
              /* In a Symmetric Multi-Threading (SMT) design,
                 a thread can use a Yield instruction to give a hint
                 to the processor that it is running on. The Yield
                 hint indicates that whatever the thread is currently
                 doing is of low importance, and so could yield. For
                 example, the thread might be sitting in a spin-lock. */
+                __yield();
+            #elif defined(__arm__) || defined(__aarch64__)
                 #if defined(__ARM_ACLE)
                     __yield();
                 #elif defined(__has_builtin)
