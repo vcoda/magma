@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__)
     #include <emmintrin.h>
-#else
+#elif defined(__arm__) || defined(__aarch64__)
     #include <arm_acle.h>
 #endif
 
