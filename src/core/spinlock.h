@@ -47,7 +47,9 @@ namespace magma::core
                  for an implementation-specific amount of time. */
             #if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__)
                 _mm_pause();
-            #elif defined(__arm__) || defined(__aarch64__) || defined(_M_ARM) || defined(_M_ARM64)
+            #elif defined(_M_ARM) || defined(_M_ARM64)
+                __yield();
+            #elif defined(__arm__) || defined(__aarch64__)
              /* In a Symmetric Multi-Threading (SMT) design,
                 a thread can use a Yield instruction to give a hint
                 to the processor that it is running on. The Yield
