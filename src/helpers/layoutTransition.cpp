@@ -33,7 +33,8 @@ void layoutTransition(lent_ptr<Image> image, VkImageLayout newLayout,
     cmdBuffer->reset();
     cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     {
-        image->layoutTransition(newLayout, cmdBuffer.get(), VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, dependencyFlags);
+        image->layoutTransition(newLayout, cmdBuffer.get(),
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, dependencyFlags);
     }
     cmdBuffer->end();
     // Block until execution is complete

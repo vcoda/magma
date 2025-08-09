@@ -58,9 +58,7 @@ uint64_t DeviceChild::getPrivateData() const noexcept
     const uint64_t handle = getObjectHandle();
     std::lock_guard<core::Spinlock> lock(mtx);
     auto it = dataMap.find(handle);
-    if (it != dataMap.end())
-        return it->second;
-    return 0ull;
+    return it != dataMap.end() ? it->second : 0ull;
 }
 
 #ifdef MAGMA_DEBUG

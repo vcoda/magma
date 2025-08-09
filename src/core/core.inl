@@ -51,15 +51,13 @@ inline typename T::NativeHandle dereference(T *p) noexcept
 template<class VkObject>
 inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
 {
-    if (handle)
-    {
-    #if (VK_USE_64_BIT_PTR_DEFINES == 1)
-        return reinterpret_cast<VkObject>(handle);
-    #else
-        return static_cast<VkObject>(handle);
-    #endif
-    }
-    return VK_NULL_HANDLE;
+    if (!handle)
+        return VK_NULL_HANDLE;
+#if (VK_USE_64_BIT_PTR_DEFINES == 1)
+    return reinterpret_cast<VkObject>(handle);
+#else
+    return static_cast<VkObject>(handle);
+#endif
 }
 
 template<class T1, class T2, class L>
