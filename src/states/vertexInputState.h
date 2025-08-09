@@ -84,7 +84,6 @@ namespace magma
         virtual uint32_t stride(uint32_t binding) const noexcept;
         hash_t hash() const noexcept;
         bool operator==(const VertexInputState&) const noexcept;
-        friend std::ostream& operator<<(std::ostream&, const VertexInputState&);
 
     #ifdef VK_EXT_vertex_attribute_divisor
         VkPipelineVertexInputDivisorStateCreateInfoEXT vertexInputDivisorInfo;

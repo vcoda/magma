@@ -421,6 +421,7 @@ HEADERS += \
     ../../src/states/conservativeRasterizationState.h \
     ../../src/states/depthComparisonSamplerState.h \
     ../../src/states/depthStencilState.h \
+    ../../src/states/formattedOutput.h \
     ../../src/states/inputAssemblyState.h \
     ../../src/states/lineRasterizationState.h \
     ../../src/states/minmaxSamplerState.h \

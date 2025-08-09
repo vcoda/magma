@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
+#include "formattedOutput.h"
 #include "vertexInputState.h"
 #include "inputAssemblyState.h"
 #include "tesselationState.h"
@@ -28,9 +29,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../helpers/streamInsertOperators.h"
 #include "../helpers/stringifyFlags.h"
 
-namespace magma
-{
+using namespace magma;
 using namespace helpers;
+
+/* TODO - check pNext member for the presence of structure chain to output extended states. */
 
 std::ostream& operator<<(std::ostream& out, const VertexInputState& state)
 {
@@ -224,4 +226,3 @@ std::ostream& operator<<(std::ostream& out, const ColorBlendState& state)
         << "]";
     return out;
 }
-} // namespace magma

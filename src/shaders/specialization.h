@@ -47,8 +47,9 @@ namespace magma
         Specialization& operator=(Specialization&&) noexcept;
         ~Specialization();
         hash_t getHash() const noexcept;
-        friend std::ostream& operator<<(std::ostream&, const Specialization&);
     };
 } // namespace magma
+
+std::ostream& operator<<(std::ostream&, const magma::Specialization&);
 
 #include "specialization.inl"

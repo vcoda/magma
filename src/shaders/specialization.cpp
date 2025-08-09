@@ -64,8 +64,9 @@ hash_t Specialization::getHash() const noexcept
     return core::hashCombine(hash, core::hashArray(
         byteData, dataSize));
 }
+} // namespace magma
 
-std::ostream& operator<<(std::ostream& out, const Specialization& specialization)
+std::ostream& operator<<(std::ostream& out, const magma::Specialization& specialization)
 {
     out << "\tVkSpecializationInfo [" << std::endl
         << "\t\tmapEntryCount: " << specialization.mapEntryCount << std::endl
@@ -94,4 +95,3 @@ std::ostream& operator<<(std::ostream& out, const Specialization& specialization
     out << "\t]";
     return out;
 }
-} // namespace magma

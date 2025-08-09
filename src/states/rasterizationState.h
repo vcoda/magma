@@ -35,7 +35,6 @@ namespace magma
         template<class StructureType>
         const StructureType *findNode(VkStructureType sType) const noexcept;
         constexpr bool operator==(const RasterizationState&) const noexcept;
-        friend std::ostream& operator<<(std::ostream&, const RasterizationState&);
     };
 
     /* Controls whether to bias fragment depth values:

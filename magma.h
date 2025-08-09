@@ -141,6 +141,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/states/conservativeRasterizationState.h"
 #include "src/states/depthComparisonSamplerState.h"
 #include "src/states/depthStencilState.h"
+#include "src/states/formattedOutput.h"
 #include "src/states/inputAssemblyState.h"
 #include "src/states/lineRasterizationState.h"
 #include "src/states/minmaxSamplerState.h"

@@ -391,6 +391,7 @@
     <ClInclude Include="..\..\src\states\conservativeRasterizationState.h" />
     <ClInclude Include="..\..\src\states\depthComparisonSamplerState.h" />
     <ClInclude Include="..\..\src\states\depthStencilState.h" />
+    <ClInclude Include="..\..\src\states\formattedOutput.h" />
     <ClInclude Include="..\..\src\states\inputAssemblyState.h" />
     <ClInclude Include="..\..\src\states\lineRasterizationState.h" />
     <ClInclude Include="..\..\src\states\minmaxSamplerState.h" />

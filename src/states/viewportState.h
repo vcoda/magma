@@ -48,7 +48,6 @@ namespace magma
         ViewportState& operator=(const ViewportState&) noexcept;
         virtual hash_t hash() const noexcept;
         bool operator==(const ViewportState&) const noexcept;
-        friend std::ostream& operator<<(std::ostream&, const ViewportState&);
 
     protected:
         ViewportState(bool negativeOneToOne) noexcept;

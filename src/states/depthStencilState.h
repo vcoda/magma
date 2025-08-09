@@ -66,7 +66,6 @@ namespace magma
             VkPipelineDepthStencilStateCreateFlags flags = 0) noexcept;
         constexpr hash_t hash() const noexcept;
         constexpr bool operator==(const DepthStencilState&) const noexcept;
-        friend std::ostream& operator<<(std::ostream&, const DepthStencilState&);
     };
 
     /* The depth bounds test conditionally disables coverage

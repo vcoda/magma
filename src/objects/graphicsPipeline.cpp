@@ -32,6 +32,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/multisampleState.h"
 #include "../states/depthStencilState.h"
 #include "../states/colorBlendState.h"
+#include "../states/formattedOutput.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 #include "../helpers/streamInsertOperators.h"
