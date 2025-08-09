@@ -19,7 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Border color used when U(V,W) address mode is set to clamp-to-border. */
+    /* Border color used when U(V,W) address mode
+       is set to clamp-to-border. */
 
     class BorderColor
     {

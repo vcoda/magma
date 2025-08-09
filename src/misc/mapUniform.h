@@ -136,13 +136,13 @@ inline void map(NonCoherentUniformBuffer<Type> *uniformBuffer,
             offset = offset / nonCoherentAtomSize * nonCoherentAtomSize;
         const VkDeviceSize minFlushSize = std::min(memory->getSize(), nonCoherentAtomSize);
         size = std::max(size, minFlushSize);
-        // vkFlushMappedMemoryRanges() guarantees that host writes to the
-        // memory ranges are made available to the host memory domain,
-        // such that they can be made available to the device memory domain
-        // using the VK_ACCESS_HOST_WRITE_BIT access type.
-        // Unmapping non-coherent memory does not implicitly flush the host
-        // mapped memory, and host writes that have not been flushed may not
-        // ever be visible to the device.
+        /* vkFlushMappedMemoryRanges() guarantees that host writes to the
+           memory ranges are made available to the host memory domain,
+           such that they can be made available to the device memory domain
+           using the VK_ACCESS_HOST_WRITE_BIT access type.
+           Unmapping non-coherent memory does not implicitly flush the host
+           mapped memory, and host writes that have not been flushed may not
+           ever be visible to the device. */
         memory->flushMappedRange(offset, size);
     }
     uniformBuffer->unmap();

@@ -10,9 +10,8 @@ inline DescriptorSet::DescriptorSet(std::shared_ptr<DescriptorPool> descriptorPo
     uint32_t setIndex /* 0 */,
     const StructureChain& extendedInfo /* default */):
     DescriptorSet(std::move(descriptorPool), std::move(allocator))
-{
+{   // Iterate over members of descriptor set table
     std::vector<uint32_t> locations;
-    // Iterate over members of descriptor set table
     boost::pfr::for_each_field(setTable,
         [this, &locations, stageFlags](auto& descriptor)
         {
