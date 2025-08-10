@@ -699,8 +699,10 @@ VkPipelineStageFlags Image::getSuitableDstStageMask(uint32_t queueFamilyIndex) c
     else if (flags & VK_QUEUE_COMPUTE_BIT)
     {
         dstStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+    #ifdef VK_KHR_ray_tracing_pipeline
         if (device->extensionEnabled(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME))
             dstStageMask |= VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR;
+    #endif // VK_KHR_ray_tracing_pipeline
     }
     else if (flags & VK_QUEUE_TRANSFER_BIT)
         dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
