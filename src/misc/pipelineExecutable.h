@@ -36,7 +36,7 @@ namespace magma
     class PipelineExecutable : NonCopyable
     {
     public:
-        PipelineExecutable(VkDevice device,
+        explicit PipelineExecutable(VkDevice device,
             VkPipeline pipeline,
             const VkPipelineExecutablePropertiesKHR& properties,
             uint32_t executableIndex) noexcept;
