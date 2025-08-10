@@ -30,6 +30,7 @@ namespace magma
         constexpr Format(VkFormat format) noexcept;
         constexpr operator VkFormat() const noexcept;
         constexpr bool valid() const noexcept;
+        constexpr const char *name() const noexcept;
         constexpr bool unorm() const noexcept;
         constexpr bool snorm() const noexcept;
         constexpr bool uscaled() const noexcept;
