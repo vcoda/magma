@@ -36,7 +36,11 @@ FillRectangleVertexShader::FillRectangleVertexShader(std::shared_ptr<Device> dev
             #include "spirv/output/blitv_nv"
             constexpr hash_t hash = core::hashArray(vsBlit);
             constexpr hash_t hashNV = core::hashArray(vsBlitNV);
+        #ifdef VK_NV_fill_rectangle
             const bool NV_fill_rectangle = device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME);
+        #else
+            const bool NV_fill_rectangle = false;
+        #endif // VK_NV_fill_rectangle
             return std::make_shared<ShaderModule>(device,
                 NV_fill_rectangle ? vsBlitNV : vsBlit,
                 NV_fill_rectangle ? sizeof(vsBlitNV) : sizeof(vsBlit),
@@ -44,8 +48,12 @@ FillRectangleVertexShader::FillRectangleVertexShader(std::shared_ptr<Device> dev
                 std::move(allocator));
         }(),
         "main"),
+#ifdef VK_NV_fill_rectangle
     rasterizationState(device->extensionEnabled(VK_NV_FILL_RECTANGLE_EXTENSION_NAME)
         ? renderstate::fillRectangleCullNoneCcw
         : renderstate::fillCullNoneCcw)
+#else
+    rasterizationState(renderstate::fillCullNoneCcw)
+#endif // VK_NV_fill_rectangle
 {}
 } // namespace magma::aux
