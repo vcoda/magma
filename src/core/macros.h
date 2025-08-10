@@ -27,7 +27,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_FAILURE(message) MAGMA_ASSERT(!message)
 
-#define MAGMA_STRINGIZE(name) #name
+#define MAGMA_STRINGIZE(identifier) #identifier
+#define MAGMA_STRINGIZE_ENUMERATOR(name) case name: return MAGMA_STRINGIZE(name)
 
 #define MAGMA_BITWISE_AND(usage, flags) ((usage & (flags)) == (flags))
 
