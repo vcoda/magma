@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -620,6 +620,91 @@ bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcep
     const auto it = extensions.find(extensionName);
     return it != extensions.end();
 }
+
+VkDeviceSize PhysicalDevice::getDeviceLocalHeapSize() const noexcept
+{
+    VkDeviceSize deviceLocalHeapSize = 0ull;
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
+    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
+    {
+        const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
+        if (memoryType.propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+        {
+            const uint32_t deviceLocalHeapIndex = memoryType.heapIndex;
+            MAGMA_ASSERT(deviceLocalHeapIndex < memoryProperties.memoryHeapCount);
+            const VkMemoryHeap& deviceLocalMemoryHeap = memoryProperties.memoryHeaps[deviceLocalHeapIndex];
+            if (deviceLocalMemoryHeap.flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+                deviceLocalHeapSize = std::max(deviceLocalMemoryHeap.size, deviceLocalHeapSize);
+        }
+    }
+    return deviceLocalHeapSize;
+}
+
+VkDeviceSize PhysicalDevice::getHostVisibleHeapSize() const noexcept
+{
+    VkDeviceSize hostVisibleHeapSize = 0ull;
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
+    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
+    {
+        const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
+        constexpr VkMemoryPropertyFlags hostVisibleMemoryFlags =
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        if (MAGMA_BITWISE_AND(memoryType.propertyFlags, hostVisibleMemoryFlags))
+        {
+            MAGMA_ASSERT(memoryType.heapIndex < memoryProperties.memoryHeapCount);
+            const VkMemoryHeap& hostVisibleHeap = memoryProperties.memoryHeaps[memoryType.heapIndex];
+            hostVisibleHeapSize = std::max(hostVisibleHeap.size, hostVisibleHeapSize);
+        }
+    }
+    return hostVisibleHeapSize;
+}
+
+VkDeviceSize PhysicalDevice::getDeviceLocalHostVisibleHeapSize() const noexcept
+{
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
+    VkDeviceSize deviceLocalHostVisibleHeapSize = 0ull;
+    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
+    {   /* Both Nvidia and AMD generally expose a 256MiB-ish staging buffer
+           with the DEVICE_LOCAL_BIT | HOST_VISIBLE_BIT | HOST_COHERENT_BIT
+           flags where the GPU and CPU can both write into common memory
+           visible to each other. This limit correlates with the 256MiB
+           PCIE-specified BAR-size limit that defines the size of the
+           VRAM aperture/window that the host can access. */
+        const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
+        constexpr VkMemoryPropertyFlags deviceLocalHostVisibleMemoryFlags =
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        if (MAGMA_BITWISE_AND(memoryType.propertyFlags, deviceLocalHostVisibleMemoryFlags))
+        {
+            MAGMA_ASSERT(memoryType.heapIndex < memoryProperties.memoryHeapCount);
+            const VkMemoryHeap& deviceLocalHostVisibleHeap = memoryProperties.memoryHeaps[memoryType.heapIndex];
+            if (deviceLocalHostVisibleHeap.flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+                deviceLocalHostVisibleHeapSize = std::max(deviceLocalHostVisibleHeap.size, deviceLocalHostVisibleHeapSize);
+        }
+    }
+    return deviceLocalHostVisibleHeapSize;
+}
+
+#ifdef VK_KHR_device_group
+VkDeviceSize PhysicalDevice::getDeviceGroupSharedHeapSize() const noexcept
+{
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
+    VkDeviceSize deviceGroupSharedHeapSize = 0ull;
+    for (uint32_t i = 0; i < memoryProperties.memoryHeapCount; ++i)
+    {
+        const VkMemoryHeap& memoryHeap = memoryProperties.memoryHeaps[i];
+        if (memoryHeap.flags & VK_MEMORY_HEAP_MULTI_INSTANCE_BIT_KHR)
+            deviceGroupSharedHeapSize = std::max(memoryHeap.size, deviceGroupSharedHeapSize);
+    }
+    return deviceGroupSharedHeapSize;
+}
+#endif // VK_KHR_device_group
 
 bool PhysicalDevice::getPipelineCacheCompatibility(const VkPipelineCacheHeaderVersionOne *header) const noexcept
 {

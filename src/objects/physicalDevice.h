@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -591,6 +591,12 @@ namespace magma
         std::shared_ptr<Device> createDefaultDevice() const;
         const std::unique_ptr<DeviceFeatures>& features() const;
         bool extensionSupported(const char *extensionName) const noexcept;
+        VkDeviceSize getDeviceLocalHeapSize() const noexcept;
+        VkDeviceSize getHostVisibleHeapSize() const noexcept;
+        VkDeviceSize getDeviceLocalHostVisibleHeapSize() const noexcept;
+    #ifdef VK_KHR_device_group
+        VkDeviceSize getDeviceGroupSharedHeapSize() const noexcept;
+    #endif
         bool getPipelineCacheCompatibility(const VkPipelineCacheHeaderVersionOne *header) const noexcept;
 
     private:
