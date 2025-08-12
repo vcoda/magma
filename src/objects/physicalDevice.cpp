@@ -654,8 +654,9 @@ VkDeviceSize PhysicalDevice::getHostVisibleHeapSize() const noexcept
             VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
         if (MAGMA_BITWISE_AND(memoryType.propertyFlags, hostVisibleMemoryFlags))
         {
-            MAGMA_ASSERT(memoryType.heapIndex < memoryProperties.memoryHeapCount);
-            const VkMemoryHeap& hostVisibleHeap = memoryProperties.memoryHeaps[memoryType.heapIndex];
+            const uint32_t hostVisibleHeapIndex = memoryType.heapIndex;
+            MAGMA_ASSERT(hostVisibleHeapIndex < memoryProperties.memoryHeapCount);
+            const VkMemoryHeap& hostVisibleHeap = memoryProperties.memoryHeaps[hostVisibleHeapIndex];
             hostVisibleHeapSize = std::max(hostVisibleHeap.size, hostVisibleHeapSize);
         }
     }
@@ -681,8 +682,9 @@ VkDeviceSize PhysicalDevice::getDeviceLocalHostVisibleHeapSize() const noexcept
             VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
         if (MAGMA_BITWISE_AND(memoryType.propertyFlags, deviceLocalHostVisibleMemoryFlags))
         {
-            MAGMA_ASSERT(memoryType.heapIndex < memoryProperties.memoryHeapCount);
-            const VkMemoryHeap& deviceLocalHostVisibleHeap = memoryProperties.memoryHeaps[memoryType.heapIndex];
+            const uint32_t deviceLocalHostVisibleHeapIndex = memoryType.heapIndex;
+            MAGMA_ASSERT(deviceLocalHostVisibleHeapIndex < memoryProperties.memoryHeapCount);
+            const VkMemoryHeap& deviceLocalHostVisibleHeap = memoryProperties.memoryHeaps[deviceLocalHostVisibleHeapIndex];
             if (deviceLocalHostVisibleHeap.flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
                 deviceLocalHostVisibleHeapSize = std::max(deviceLocalHostVisibleHeap.size, deviceLocalHostVisibleHeapSize);
         }
