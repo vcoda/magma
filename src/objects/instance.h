@@ -29,8 +29,7 @@ namespace magma
        object initializes the Vulkan library and allows the application
        to pass information about itself to the implementation. */
 
-    class Instance : public Dispatchable<VkInstance>,
-        public std::enable_shared_from_this<Instance>
+    class Instance : public Dispatchable<VkInstance>
     {
     public:
         explicit Instance(const NullTerminatedStringArray& enabledLayers,
