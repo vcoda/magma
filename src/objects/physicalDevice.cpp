@@ -664,9 +664,9 @@ VkDeviceSize PhysicalDevice::getHostVisibleHeapSize() const noexcept
 
 VkDeviceSize PhysicalDevice::getDeviceLocalHostVisibleHeapSize() const noexcept
 {
+    VkDeviceSize deviceLocalHostVisibleHeapSize = 0ull;
     VkPhysicalDeviceMemoryProperties memoryProperties;
     vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
-    VkDeviceSize deviceLocalHostVisibleHeapSize = 0ull;
     for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
     {   /* Both Nvidia and AMD generally expose a 256MiB-ish staging buffer
            with the DEVICE_LOCAL_BIT | HOST_VISIBLE_BIT | HOST_COHERENT_BIT
@@ -693,9 +693,9 @@ VkDeviceSize PhysicalDevice::getDeviceLocalHostVisibleHeapSize() const noexcept
 #ifdef VK_KHR_device_group
 VkDeviceSize PhysicalDevice::getDeviceGroupSharedHeapSize() const noexcept
 {
+    VkDeviceSize deviceGroupSharedHeapSize = 0ull;
     VkPhysicalDeviceMemoryProperties memoryProperties;
     vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
-    VkDeviceSize deviceGroupSharedHeapSize = 0ull;
     for (uint32_t i = 0; i < memoryProperties.memoryHeapCount; ++i)
     {
         const VkMemoryHeap& memoryHeap = memoryProperties.memoryHeaps[i];
