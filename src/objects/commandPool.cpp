@@ -52,8 +52,9 @@ CommandPool::~CommandPool()
             std::shared_ptr<CommandBuffer> cmdBuffer = weakRef.lock();
             MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Pending);
             commandBuffers.put(cmdBuffer->getLean().getHandle());
-            cmdBuffer->getLean().handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in the destructor
             cmdBuffer->releaseObjectsInUse();
+            // Don't call vkFreeCommandBuffers() in the destructor
+            cmdBuffer->getLean().handle = VK_NULL_HANDLE;
         }
     }
     if (commandBuffers.count())
