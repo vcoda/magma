@@ -32,8 +32,7 @@ namespace magma
        to integrate API to help you allocate memory for Vulkan buffer
        and image storage. See: https://gpuopen.com/vulkan-memory-allocator */
 
-    class DeviceMemoryAllocator : public IDeviceMemoryAllocator,
-        public std::enable_shared_from_this<DeviceMemoryAllocator>
+    class DeviceMemoryAllocator : public IDeviceMemoryAllocator
     {
     public:
         explicit DeviceMemoryAllocator(std::shared_ptr<Device> device,
