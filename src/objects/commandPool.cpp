@@ -70,10 +70,10 @@ bool CommandPool::reset(bool releaseResources /* false */) noexcept
     const VkResult result = vkResetCommandPool(getNativeDevice(), handle, flags);
     MAGMA_ASSERT(VK_SUCCESS == result);
     if (result == VK_SUCCESS)
-    {   // Resetting a command pool recycles all of the resources from all of the
-        // command buffers allocated from the command pool back to the command pool.
-        // All command buffers that have been allocated from the command pool are put
-        // in the initial state.
+    {   /* Resetting a command pool recycles all of the resources from all
+           of the command buffers allocated from the command pool back to
+           the command pool. All command buffers that have been allocated
+           from the command pool are put in the initial state. */
         for (auto it = cmdPool.begin(); it != cmdPool.end(); )
         {
             if (it->expired())
