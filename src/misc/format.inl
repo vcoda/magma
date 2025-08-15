@@ -280,7 +280,6 @@ constexpr const char *Format::name() const noexcept
     MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_A4B4G4R4_UNORM_PACK16_EXT);
 #endif // VK_EXT_4444_formats
 #ifdef VK_NV_optical_flow
-    MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_R16G16_S10_5_NV);
     MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_R16G16_SFIXED5_NV);
 #endif // VK_NV_optical_flow
 #ifdef VK_KHR_maintenance5
