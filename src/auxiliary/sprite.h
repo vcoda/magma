@@ -18,58 +18,55 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../objects/image.h"
 
-namespace magma
+namespace magma::aux
 {
-    namespace aux
+    /* Sprite is a two-dimensional bitmap that is integrated
+       into a background image. Drawing is performed via image
+       blitting with format conversion, scaling and filtering.
+       Color key and alpha blending aren't supported by blit API. */
+
+    class Sprite : public Image
     {
-        /* Sprite is a two-dimensional bitmap that is integrated
-           into a background image. Drawing is performed via image
-           blitting with format conversion, scaling and filtering.
-           Color key and alpha blending aren't supported by blit API. */
+    public:
+        explicit Sprite(lent_ptr<CommandBuffer> cmdBuffer,
+            VkFormat format,
+            const VkExtent2D& extent,
+            lent_ptr<const SrcTransferBuffer> srcBuffer,
+            VkDeviceSize offset,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing());
+        explicit Sprite(lent_ptr<CommandBuffer> cmdBuffer,
+            VkFormat format,
+            const VkExtent2D& extent,
+            VkDeviceSize size,
+            const void *data,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing(),
+            CopyMemoryFn copyMemFn = nullptr);
+        void setWidth(uint32_t width_) noexcept { width = width_; }
+        uint32_t getWidth() const noexcept { return width; }
+        void setHeight(uint32_t height_) noexcept { height = height_; }
+        uint32_t getHeight() const noexcept { return height; }
+        bool isScaled() const noexcept { return (width != extent.width) || (height != extent.height); }
+        void setPosition(int32_t x_, int32_t y_) noexcept { x = x_; y = y_; }
+        VkOffset2D getPosition() const noexcept { return {x, y}; }
+        void flipHorizontal() noexcept { std::swap(topLeft.x, bottomRight.x); }
+        bool isFlippedHorizontally() const noexcept { return topLeft.x > bottomRight.x; }
+        void flipVertical() noexcept { std::swap(topLeft.y, bottomRight.y); }
+        bool isFlippedVertically() const noexcept { return topLeft.y > bottomRight.y; }
+        void blit(lent_ptr<CommandBuffer> cmdBuffer,
+            lent_ptr<Image> dstImage,
+            VkFilter filter = VK_FILTER_NEAREST) const noexcept;
 
-        class Sprite : public Image
-        {
-        public:
-            explicit Sprite(lent_ptr<CommandBuffer> cmdBuffer,
-                VkFormat format,
-                const VkExtent2D& extent,
-                lent_ptr<const SrcTransferBuffer> srcBuffer,
-                VkDeviceSize offset,
-                std::shared_ptr<Allocator> allocator = nullptr,
-                const Sharing& sharing = Sharing());
-            explicit Sprite(lent_ptr<CommandBuffer> cmdBuffer,
-                VkFormat format,
-                const VkExtent2D& extent,
-                VkDeviceSize size,
-                const void *data,
-                std::shared_ptr<Allocator> allocator = nullptr,
-                const Sharing& sharing = Sharing(),
-                CopyMemoryFn copyMemFn = nullptr);
-            void setWidth(uint32_t width_) noexcept { width = width_; }
-            uint32_t getWidth() const noexcept { return width; }
-            void setHeight(uint32_t height_) noexcept { height = height_; }
-            uint32_t getHeight() const noexcept { return height; }
-            bool isScaled() const noexcept { return (width != extent.width) || (height != extent.height); }
-            void setPosition(int32_t x_, int32_t y_) noexcept { x = x_; y = y_; }
-            VkOffset2D getPosition() const noexcept { return {x, y}; }
-            void flipHorizontal() noexcept { std::swap(topLeft.x, bottomRight.x); }
-            bool isFlippedHorizontally() const noexcept { return topLeft.x > bottomRight.x; }
-            void flipVertical() noexcept { std::swap(topLeft.y, bottomRight.y); }
-            bool isFlippedVertically() const noexcept { return topLeft.y > bottomRight.y; }
-            void blit(lent_ptr<CommandBuffer> cmdBuffer,
-                lent_ptr<Image> dstImage,
-                VkFilter filter = VK_FILTER_NEAREST) const noexcept;
+    private:
+        bool inBounds(const VkExtent3D& extent) const noexcept;
+        void clip(VkOffset3D srcOffsets[2], VkOffset3D dstOffsets[2],
+            int32_t width, int32_t height) const noexcept;
 
-        private:
-            bool inBounds(const VkExtent3D& extent) const noexcept;
-            void clip(VkOffset3D srcOffsets[2], VkOffset3D dstOffsets[2],
-                int32_t width, int32_t height) const noexcept;
-
-            int32_t x, y;
-            uint32_t width;
-            uint32_t height;
-            VkOffset3D topLeft;
-            VkOffset3D bottomRight;
-        };
-    } // namespace aux
-} // namespace magma
+        int32_t x, y;
+        uint32_t width;
+        uint32_t height;
+        VkOffset3D topLeft;
+        VkOffset3D bottomRight;
+    };
+} // namespace magma:aux
