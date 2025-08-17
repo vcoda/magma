@@ -68,11 +68,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
     #define MAGMA_INUSE(obj)\
-    if (obj.shareable()) try\
+    if (!(usage & VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))\
     {\
-        inUse.push_back(obj.get_shared());\
-    }\
-    catch(...) {}
+        if (obj.shareable()) try\
+        {\
+            inUse.push_back(obj.get_shared());\
+        } catch(...) {}\
+    }
 #else
     #define MAGMA_INUSE(obj)
 #endif // MAGMA_RETAIN_OBJECTS_IN_USE
