@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,14 +20,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "shaderCompiler.h"
 #include "../objects/device.h"
 #include "../objects/shaderModule.h"
+#include "../helpers/enumerationCast.h"
 #include "../exceptions/errorResult.h"
 #include "../exceptions/compileError.h"
 
 namespace magma::aux
 {
-ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device, std::unique_ptr<IShaderInclude> handler):
+ShaderCompiler::ShaderCompiler(std::shared_ptr<Device> device, std::unique_ptr<IShaderInclude> includeHandler):
     device(std::move(device)),
-    includeHandler(std::move(handler))
+    includeHandler(std::move(includeHandler))
 {
     compiler = shaderc_compiler_initialize();
     if (!compiler)
@@ -39,8 +40,7 @@ ShaderCompiler::~ShaderCompiler()
     shaderc_compiler_release(compiler);
 }
 
-std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view source, std::string_view entrypoint,
-    shaderc_shader_kind shaderKind /* shaderc_glsl_infer_from_source */,
+std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view source, std::string_view entrypoint, VkShaderStageFlagBits shaderStage,
     const std::unordered_map<std::string_view, std::string_view>& macroDefinitions /* empty */,
     std::string_view srcFileName  /* empty */)
 {
@@ -54,7 +54,15 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view sou
             value.data(), value.length());
     }
     // Define compiler behavior
-    shaderc_compile_options_set_optimization_level(options, optimizationLevel);
+    shaderc_optimization_level level;
+    switch (optimizationLevel)
+    {
+    case OptimizationLevel::None: level = shaderc_optimization_level_zero; break;
+    case OptimizationLevel::Size: level = shaderc_optimization_level_size; break;
+    case OptimizationLevel::Performance: level = shaderc_optimization_level_performance; break;
+    default: level = shaderc_optimization_level_zero;
+    }
+    shaderc_compile_options_set_optimization_level(options, level);
     if (generateDebugInfo)
         shaderc_compile_options_set_generate_debug_info(options);
     if (suppressWarnings)
@@ -64,7 +72,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view sou
     if (includeHandler)
     {   // Provide shader include callbacks
         shaderc_compile_options_set_include_callbacks(options,
-            [](void *userData, const char *requestedSource, int type, const char *requestingSource, size_t includeDepth)
+            [](void *userData, const char *requestedSource, int includeType, const char *requestingSource, size_t includeDepth)
             {
                 shaderc_include_result *result = new(std::nothrow)shaderc_include_result;
                 if (result)
@@ -74,8 +82,8 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view sou
                     result->source_name_length = strlen(requestedSource);
                     result->content_length = 0;
                     result->content = (const char *)includeHandler->resolve(
-                        static_cast<shaderc_include_type>(type), requestedSource, requestingSource,
-                        includeDepth, result->content_length);
+                        (shaderc_include_type_relative == includeType) ? IncludePath::Relative : IncludePath::Standard,
+                        requestedSource, requestingSource, includeDepth, result->content_length);
                     result->user_data = nullptr;
                 }
                 return result;
@@ -88,6 +96,7 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view sou
             },
             includeHandler.get());
     }
+    const shaderc_shader_kind shaderKind = helpers::shaderStageToShaderCKind(shaderStage);
     // Compile GLSL to SPIR-V
     const shaderc_compilation_result_t result = shaderc_compile_into_spv(compiler,
         source.data(), source.length(), shaderKind, srcFileName.data(), entrypoint.data(), options);

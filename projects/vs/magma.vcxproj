@@ -602,7 +602,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\auxiliary\immediateRender.inl" />
-    <None Include="..\..\src\auxiliary\shaderCompiler.inl" />
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VULKAN_SDK)\Bin\glslangValidator.exe -V --vn fsBlit %(FullPath) -o ../../src/auxiliary/spirv/output/blitf</Command>

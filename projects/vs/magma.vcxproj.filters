@@ -1387,9 +1387,6 @@
     <None Include="..\..\src\auxiliary\immediateRender.inl">
       <Filter>Header Files\auxiliary</Filter>
     </None>
-    <None Include="..\..\src\auxiliary\shaderCompiler.inl">
-      <Filter>Header Files\auxiliary</Filter>
-    </None>
     <None Include="..\..\src\barriers\subpassDependency.inl">
       <Filter>Header Files\barriers</Filter>
     </None>
