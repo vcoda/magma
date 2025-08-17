@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,42 +17,38 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-namespace magma
+namespace magma::aux
 {
-    namespace aux
+    /* GPU profiling block. */
+
+    class ScopedProfile final : NonCopyable
     {
-        /* GPU profiling block. */
-
-        class ScopedProfile final : NonCopyable
+    public:
+        explicit ScopedProfile(const char *name, lent_ptr<CommandBuffer> cmdBuffer,
+            uint32_t color = 0xFFFFFFFF):
+            cmdBuffer(cmdBuffer.get()),
+            profiler(Profiler::get(Profiler::Queue::Graphics))
         {
-        public:
-            explicit ScopedProfile(const char *name, lent_ptr<CommandBuffer> cmdBuffer,
-                uint32_t color = 0xFFFFFFFF):
-                cmdBuffer(cmdBuffer.get()),
-                profiler(Profiler::get(Profiler::Queue::Graphics))
-            {
-                if (profiler)
-                    profiler->beginSection(std::move(cmdBuffer), name, color);
-            }
+            if (profiler)
+                profiler->beginSection(std::move(cmdBuffer), name, color);
+        }
 
-            ~ScopedProfile()
-            {
-                if (profiler)
-                    profiler->endSection(cmdBuffer);
-            }
+        ~ScopedProfile()
+        {
+            if (profiler)
+                profiler->endSection(cmdBuffer);
+        }
 
-        private:
-            CommandBuffer *cmdBuffer;
-            Profiler *profiler;
-        };
-    } // namespace aux
-} // namespace magma
+    private:
+        CommandBuffer *cmdBuffer;
+        Profiler *profiler;
+    };
+} // namespace magma::aux
 
-#define MAGMA_SCOPED_PROFILE(name, cmdBuffer, line) magma::aux::ScopedProfile _magma_profile_line##line(name, cmdBuffer);
+#define MAGMA_SCOPED_PROFILE(name, cmdBuffer, id) magma::aux::ScopedProfile _magma_profile_##id(name, cmdBuffer);
 
 #ifdef MAGMA_DEBUG
-    #define MAGMA_PROFILE_INDIRECT(name, cmdBuffer, line) MAGMA_SCOPED_PROFILE(name, cmdBuffer, line)
-    #define MAGMA_PROFILE(name, cmdBuffer) MAGMA_PROFILE_INDIRECT(name, cmdBuffer, __LINE__)
+    #define MAGMA_PROFILE(name, cmdBuffer) MAGMA_SCOPED_PROFILE(name, cmdBuffer, MAGMA_COUNTER)
     #define MAGMA_PROFILE_BEGIN(name, cmdBuffer) {\
         MAGMA_PROFILE(name, cmdBuffer)
     #define MAGMA_PROFILE_END }

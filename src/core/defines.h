@@ -44,6 +44,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // MAGMA_X64
 #endif // !VK_USE_64_BIT_PTR_DEFINES
 
+#if defined(__COUNTER__)
+    #define MAGMA_COUNTER __COUNTER__
+#else
+    #define MAGMA_COUNTER __LINE__
+#endif
+
 #if defined(_MSC_VER) || defined(__MINGW32__)
     #define MAGMA_ALLOCA _malloca
 #else
