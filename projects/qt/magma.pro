@@ -33,7 +33,7 @@ SOURCES += \
     ../../src/exceptions/errorHandler.cpp \
     ../../src/exceptions/errorResult.cpp \
     ../../src/exceptions/exception.cpp \
-    ../../src/exceptions/reflectionErrorResult.cpp \
+    ../../src/exceptions/reflectionError.cpp \
     ../../src/extensions/deviceExtensions.cpp \
     ../../src/extensions/deviceLayers.cpp \
     ../../src/extensions/instanceExtensions.cpp \
@@ -236,7 +236,7 @@ HEADERS += \
     ../../src/exceptions/errorHandler.h \
     ../../src/exceptions/errorResult.h \
     ../../src/exceptions/exception.h \
-    ../../src/exceptions/reflectionErrorResult.h \
+    ../../src/exceptions/reflectionError.h \
     ../../src/exceptions/sourcelocation.h \
     ../../src/exceptions/unsupportedExtension.h \
     ../../src/extensions/deviceExtensions.h \

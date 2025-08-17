@@ -86,7 +86,7 @@ src\descriptors\imageDescriptor.cpp ^
 src\exceptions\errorHandler.cpp ^
 src\exceptions\errorResult.cpp ^
 src\exceptions\exception.cpp ^
-src\exceptions\reflectionErrorResult.cpp ^
+src\exceptions\reflectionError.cpp ^
 src\extensions\deviceExtensions.cpp ^
 src\extensions\deviceLayers.cpp ^
 src\extensions\instanceExtensions.cpp ^
@@ -266,7 +266,7 @@ imageDescriptor.obj ^
 errorHandler.obj ^
 errorResult.obj ^
 exception.obj ^
-reflectionErrorResult.obj ^
+reflectionError.obj ^
 deviceExtensions.obj ^
 deviceLayers.obj ^
 instanceExtensions.obj ^

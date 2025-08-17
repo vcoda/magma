@@ -49,7 +49,7 @@ SRC_OBJS= \
 	src/exceptions/errorHandler.o \
 	src/exceptions/errorResult.o \
 	src/exceptions/exception.o \
-	src/exceptions/reflectionErrorResult.o \
+	src/exceptions/reflectionError.o \
 	\
 	src/extensions/deviceExtensions.o \
 	src/extensions/deviceLayers.o \

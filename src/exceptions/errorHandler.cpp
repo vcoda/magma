@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "errorHandler.h"
 #include "errorResult.h"
-#include "reflectionErrorResult.h"
+#include "reflectionError.h"
 
 namespace magma::exception
 {
@@ -110,7 +110,7 @@ void handleResult(VkResult result, const char *message, const source_location& l
         throw FullScreenExclusiveModeLost(message);
 #endif
     default:
-        throw ErrorResult(result, message, location);
+        throw Error(result, message, location);
 #endif // MAGMA_NO_EXCEPTIONS
     }
 }
@@ -126,7 +126,7 @@ void handleReflectionResult(SpvReflectResult result, const char *message, const 
     #ifdef MAGMA_NO_EXCEPTIONS
         reflectionErrorHandler(result, message, location);
     #else
-        throw ReflectionErrorResult(result, message, location);
+        throw ReflectionError(result, message, location);
     #endif // MAGMA_NO_EXCEPTIONS
     }
 }

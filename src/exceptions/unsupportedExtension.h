@@ -19,24 +19,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #ifndef MAGMA_NO_EXCEPTIONS
 #include "exception.h"
 
-namespace magma
+namespace magma::exception
 {
-    namespace exception
+    /* Vulkan driver doesn't support requested extension. */
+
+    class UnsupportedExtension : public Exception
     {
-        /* Vulkan driver doesn't support requested extension. */
+    public:
+        explicit UnsupportedExtension(const char *extension,
+            bool instance) noexcept:
+            Exception(extension), instance(instance) {}
+        bool instanceExtension() const noexcept { return instance; }
 
-        class UnsupportedExtension : public Exception
-        {
-        public:
-            explicit UnsupportedExtension(const char *extension,
-                bool instance) noexcept:
-                Exception(extension), instance(instance) {}
-            bool instanceExtension() const noexcept { return instance; }
-
-        private:
-            const bool instance;
-        };
-    } // namespace exception
-} // namespace magma
+    private:
+        const bool instance;
+    };
+} // namespace magma::exception
 
 #endif // !MAGMA_NO_EXCEPTIONS

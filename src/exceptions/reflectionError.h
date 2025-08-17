@@ -16,30 +16,28 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#ifndef MAGMA_NO_EXCEPTIONS
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 #include "exception.h"
 #include "errorHandler.h"
 
-namespace magma
+namespace magma::exception
 {
-    namespace exception
+    /* Error result of SPIRV-Reflect library. */
+
+    class ReflectionError : public Exception
     {
-        /* Error result of SPIRV-Reflect library. */
+    public:
+        explicit ReflectionError(SpvReflectResult result,
+            const char *message,
+            const source_location& location) noexcept:
+            Exception(message, location), result(result) {}
+        SpvReflectResult error() const noexcept { return result; }
+        const char *description() const noexcept;
 
-    #ifndef MAGMA_NO_EXCEPTIONS
-        class ReflectionErrorResult : public Exception
-        {
-        public:
-            explicit ReflectionErrorResult(SpvReflectResult result,
-                const char *message,
-                const source_location& location) noexcept:
-                Exception(message, location), result(result) {}
-            SpvReflectResult error() const noexcept { return result; }
-            const char *description() const noexcept;
+    private:
+        const SpvReflectResult result;
+    };
 
-        private:
-            const SpvReflectResult result;
-        };
-    #endif // !MAGMA_NO_EXCEPTIONS
-    } // namespace exception
-} // namespace magma
+} // namespace magma::exception
+#endif // !MAGMA_NO_EXCEPTIONS

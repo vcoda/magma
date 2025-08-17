@@ -17,12 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "reflectionErrorResult.h"
+#ifndef MAGMA_NO_EXCEPTIONS
+#include "reflectionError.h"
 
 namespace magma::exception
 {
-#ifndef MAGMA_NO_EXCEPTIONS
-const char *ReflectionErrorResult::description() const noexcept
+const char *ReflectionError::description() const noexcept
 {
     switch (result)
     {
@@ -51,5 +51,5 @@ const char *ReflectionErrorResult::description() const noexcept
     default: return "Unknown error code";
     }
 }
-#endif // !MAGMA_NO_EXCEPTIONS
 } // namespace magma::exception
+#endif // !MAGMA_NO_EXCEPTIONS

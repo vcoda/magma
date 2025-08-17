@@ -468,9 +468,6 @@
     <ClInclude Include="..\..\src\exceptions\exception.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\exceptions\reflectionErrorResult.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\exceptions\sourcelocation.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
@@ -873,6 +870,9 @@
     <ClInclude Include="..\..\src\states\formattedOutput.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\reflectionError.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1259,9 +1259,6 @@
     <ClCompile Include="..\..\src\states\formattedOutput.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\exceptions\reflectionErrorResult.cpp">
-      <Filter>Source Files\exceptions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\objects\pipelineBatch.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
@@ -1357,6 +1354,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\extensions\deviceLayers.cpp">
       <Filter>Source Files\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\exceptions\reflectionError.cpp">
+      <Filter>Source Files\exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

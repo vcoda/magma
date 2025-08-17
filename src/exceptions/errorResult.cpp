@@ -17,12 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
 #pragma hdrstop
-#include "errorResult.h"
+#ifndef MAGMA_NO_EXCEPTIONS
 
+#include "errorResult.h"
 namespace magma::exception
 {
-#ifndef MAGMA_NO_EXCEPTIONS
-const char *ErrorResult::description() const noexcept
+const char *Error::description() const noexcept
 {   // https://registry.khronos.org/vulkan/specs/latest/man/html/VkResult.html
     switch (result)
     {
@@ -89,5 +89,5 @@ const char *ErrorResult::description() const noexcept
         return "Unknown error code";
     }
 }
-#endif // !MAGMA_NO_EXCEPTIONS
 } // namespace magma::exception
+#endif // !MAGMA_NO_EXCEPTIONS

@@ -17,31 +17,28 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-namespace magma
+namespace magma::exception
 {
-    namespace exception
+    /* The source_location class represents certain information
+       about the source code, such as file names, line numbers,
+       and function names. Previously, functions that desire to
+       obtain this information about the call site (for logging,
+       testing, or debugging purposes) must use macros so that
+       predefined macros like __LINE__ and __FILE__ are expanded
+       in the context of the caller. The source_location class
+       provides a better alternative. */
+
+    struct source_location
     {
-        /* The source_location class represents certain information
-           about the source code, such as file names, line numbers,
-           and function names. Previously, functions that desire to
-           obtain this information about the call site (for logging,
-           testing, or debugging purposes) must use macros so that
-           predefined macros like __LINE__ and __FILE__ are expanded
-           in the context of the caller. The source_location class
-           provides a better alternative. */
+        /* constexpr */ std::uint_least32_t line() const noexcept { return static_cast<std::uint_least32_t>(ln); }
+        /* constexpr */ std::uint_least32_t column() const noexcept { return 0; }
+        /* constexpr */ const char* file_name() const noexcept { return file; }
+        /* constexpr */ const char* function_name() const noexcept { return function; }
 
-        struct source_location
-        {
-            /* constexpr */ std::uint_least32_t line() const noexcept { return static_cast<std::uint_least32_t>(ln); }
-            /* constexpr */ std::uint_least32_t column() const noexcept { return 0; }
-            /* constexpr */ const char* file_name() const noexcept { return file; }
-            /* constexpr */ const char* function_name() const noexcept { return function; }
-
-            const char *file = nullptr;
-            long ln = 0;
-            const char *function = nullptr;
-        };
-    } // namespace exception
-} // namespace magma
+        const char *file = nullptr;
+        long ln = 0;
+        const char *function = nullptr;
+    };
+} // namespace magma::exception
 
 #define MAGMA_SOURCE_LOCATION magma::exception::source_location{__FILE__, __LINE__, __FUNCTION__}

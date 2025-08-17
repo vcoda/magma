@@ -16,40 +16,35 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "exception.h"
 #ifndef MAGMA_NO_EXCEPTIONS
+#include "exception.h"
 #include <shaderc/shaderc.h>
 
-namespace magma
+namespace magma::exception
 {
-    namespace exception
+    /* Exception throwed by aux::ShaderCompiler class. */
+
+    class CompileError : public Exception
     {
-        /* Exception thrown by aux::ShaderCompiler. */
-
-        class CompileError : public Exception
+    public:
+        explicit CompileError(shaderc_compilation_result_t result,
+            const source_location& location):
+            Exception(shaderc_result_get_error_message(result), location),
+            status_(shaderc_result_get_compilation_status(result)),
+            warnings_(shaderc_result_get_num_warnings(result)),
+            errors_(shaderc_result_get_num_errors(result))
         {
-        public:
-            explicit CompileError(shaderc_compilation_result_t result,
-                const source_location& location):
-                Exception(shaderc_result_get_error_message(result), location),
-                status_(shaderc_result_get_compilation_status(result)),
-                warnings_(shaderc_result_get_num_warnings(result)),
-                errors_(shaderc_result_get_num_errors(result))
-            {
-                shaderc_result_release(result);
-            }
+            shaderc_result_release(result);
+        }
 
-            shaderc_compilation_status status() const noexcept { return status_; }
-            std::size_t warnings() const noexcept { return warnings_; }
-            std::size_t errors() const noexcept { return errors_; }
+        shaderc_compilation_status status() const noexcept { return status_; }
+        std::size_t warnings() const noexcept { return warnings_; }
+        std::size_t errors() const noexcept { return errors_; }
 
-        private:
-            shaderc_compilation_status status_;
-            std::size_t warnings_;
-            std::size_t errors_;
-        };
-    } // namespace exception
-} // namespace magma
-
+    private:
+        shaderc_compilation_status status_;
+        std::size_t warnings_;
+        std::size_t errors_;
+    };
+} // namespace magma::exception
 #endif // !MAGMA_NO_EXCEPTIONS
-
