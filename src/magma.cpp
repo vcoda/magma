@@ -26,6 +26,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef MAGMA_VERIFY_CONSTEXPR
+    // Format
+    constexpr Format rgbaUnormFormat(VK_FORMAT_R8G8B8A8_UNORM);
+    constexpr const char *rgbaUnormName = rgbaUnormFormat.name();
+    static_assert(rgbaUnormFormat.unorm(), "expected unorm format");
+    static_assert(rgbaUnormFormat.alpha(), "expected alpha channel");
+    static_assert(!rgbaUnormFormat.bc(), "expected uncompressed format");
     // Attachment description
     constexpr AttachmentDescription rgbaUnormAttachment(VK_FORMAT_R8G8B8A8_UNORM, 4, op::load, op::store,
         VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
