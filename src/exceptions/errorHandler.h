@@ -21,10 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::exception
 {
-    /* If C++ exceptions are not enabled, application has an
-       option to provide custom error handlers which will be
-       called when library throws an exception or Vulkan/SpvReflect
-       error is encountered. */
+    /* If C++ exceptions are disabled, the application has an
+       option to provide custom error handlers, which will be
+       invoked when the library throws an exception or when a
+       VkResult/SpvReflectResult error is encountered. */
 
 #ifdef MAGMA_NO_EXCEPTIONS
     typedef std::function<void(const char *, const source_location&)> ExceptionHandler;

@@ -22,9 +22,9 @@ namespace magma
     class PhysicalDevice;
     class Surface;
 
-    /*  Allows to hide boilerplate code when it is needed
-        to determine whether some format or memory features
-        are supported by physical device or not. */
+    /* Allows hiding boilerplate code when it is needed
+       to determine whether some format or memory features
+       are supported by the physical device or not. */
 
     class DeviceFeatures : NonCopyable
     {

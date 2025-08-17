@@ -669,19 +669,19 @@ VkDeviceSize PhysicalDevice::getDeviceLocalHostVisibleHeapSize() const noexcept
     VkPhysicalDeviceMemoryProperties memoryProperties;
     vkGetPhysicalDeviceMemoryProperties(handle, &memoryProperties);
     for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
-    {   /* Both Nvidia and AMD generally expose a 256MiB-ish staging buffer
-           with the DEVICE_LOCAL_BIT | HOST_VISIBLE_BIT | HOST_COHERENT_BIT
-           flags where the GPU and CPU can both write into common memory
-           visible to each other. This limit correlates with the 256MiB
-           PCIE-specified BAR-size limit that defines the size of the
-           VRAM aperture/window that the host can access. */
+    {
         const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
         constexpr VkMemoryPropertyFlags deviceLocalHostVisibleMemoryFlags =
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
             VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
         if (MAGMA_BITWISE_AND(memoryType.propertyFlags, deviceLocalHostVisibleMemoryFlags))
-        {
+        {/* Major GPU vendors expose a 256MiB-ish staging buffer
+            with the DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT
+            flags where the GPU and CPU can both write into shared
+            memory visible to each other. This limit correlates with
+            the 256MiB PCIE-specified BAR limit that defines the size
+            of the VRAM window that the host can access. */
             const uint32_t deviceLocalHostVisibleHeapIndex = memoryType.heapIndex;
             MAGMA_ASSERT(deviceLocalHostVisibleHeapIndex < memoryProperties.memoryHeapCount);
             const VkMemoryHeap& deviceLocalHostVisibleHeap = memoryProperties.memoryHeaps[deviceLocalHostVisibleHeapIndex];

@@ -140,20 +140,25 @@ bool DeviceFeatures::supportsImageUsage(lent_ptr<const Surface> surface, VkImage
     return MAGMA_BITWISE_AND(surfaceCapabilities.supportedUsageFlags, flags);
 }
 
-/* Usually a CPU can only access 256MB of VRAM. If Resizable BAR
-   or Smart Access Memory features are enabled in BIOS, a CPU may
-   access the GPU's entire framebuffer. */
 bool DeviceFeatures::supportsDeviceLocalHostVisibleMemory() const noexcept
 {
     const VkPhysicalDeviceMemoryProperties memoryProperties = physicalDevice->getMemoryProperties();
     for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; ++i)
     {
         const VkMemoryType& memoryType = memoryProperties.memoryTypes[i];
-        if (MAGMA_BITWISE_AND(memoryType.propertyFlags,
+        constexpr VkMemoryPropertyFlags deviceLocalHostVisibleMemoryFlags =
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT))
+            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        if (MAGMA_BITWISE_AND(memoryType.propertyFlags, deviceLocalHostVisibleMemoryFlags))
+        {/* Major GPU vendors expose a 256MiB-ish staging buffer
+            with the DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT
+            flags where the GPU and CPU can both write into shared
+            memory visible to each other. This limit correlates with
+            the 256MiB PCIE-specified BAR limit that defines the size
+            of the VRAM window that the host can access. */
             return true;
+        }
     }
     return false;
 }
