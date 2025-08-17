@@ -39,41 +39,41 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr);
         ~DeviceMemoryAllocator();
         VmaAllocator getHandle() const noexcept { return allocator; }
-        virtual const std::shared_ptr<Device>& getDevice() const noexcept override { return device; }
-        virtual const std::shared_ptr<IAllocator>& getHostAllocator() const noexcept override { return hostAllocator; }
-        virtual DeviceMemoryBlock allocate(VkObjectType objectType,
+        const std::shared_ptr<Device>& getDevice() const noexcept override { return device; }
+        const std::shared_ptr<IAllocator>& getHostAllocator() const noexcept override { return hostAllocator; }
+        DeviceMemoryBlock allocate(VkObjectType objectType,
             NonDispatchableHandle object,
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             const StructureChain& extendedInfo) override;
-        virtual std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
+        std::vector<DeviceMemoryBlock> allocPages(const std::vector<VkMemoryRequirements>& memoryRequirements,
             const std::vector<VkMemoryPropertyFlags>& flags,
             const std::vector<float>& priorities) override;
-        virtual DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
+        DeviceMemoryBlock realloc(DeviceMemoryBlock memory,
             VkDeviceSize size) override;
-        virtual void free(DeviceMemoryBlock memory) noexcept override;
-        virtual void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept override;
-        virtual VkResult bindMemory(DeviceMemoryBlock memory,
+        void free(DeviceMemoryBlock memory) noexcept override;
+        void freePages(std::vector<DeviceMemoryBlock>& memoryPages) noexcept override;
+        VkResult bindMemory(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             NonDispatchableHandle object,
             VkObjectType objectType) const noexcept override;
-        virtual MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept override;
-        virtual std::vector<MemoryBudget> getBudget() const noexcept override;
-        virtual VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
-        virtual VkResult beginDefragmentation(VkFlags flags) noexcept override;
-        virtual VkResult beginDefragmentationPass() override;
-        virtual VkResult endDefragmentationPass() noexcept override;
-        virtual void endDefragmentation(DefragmentationStats* stats = nullptr) noexcept override;
+        MemoryBlockInfo getMemoryBlockInfo(DeviceMemoryBlock memory) const noexcept override;
+        std::vector<MemoryBudget> getBudget() const noexcept override;
+        VkResult checkCorruption(uint32_t memoryTypeBits) noexcept override;
+        VkResult beginDefragmentation(VkFlags flags) noexcept override;
+        VkResult beginDefragmentationPass() override;
+        VkResult endDefragmentationPass() noexcept override;
+        void endDefragmentation(DefragmentationStats* stats = nullptr) noexcept override;
 
     private:
-        virtual VkResult map(DeviceMemoryBlock memory,
+        VkResult map(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             void **data) noexcept override;
-        virtual void unmap(DeviceMemoryBlock memory) noexcept override;
-        virtual VkResult flushMappedRange(DeviceMemoryBlock memory,
+        void unmap(DeviceMemoryBlock memory) noexcept override;
+        VkResult flushMappedRange(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             VkDeviceSize size) noexcept override;
-        virtual VkResult invalidateMappedRange(DeviceMemoryBlock memory,
+        VkResult invalidateMappedRange(DeviceMemoryBlock memory,
             VkDeviceSize offset,
             VkDeviceSize size) noexcept override;
         std::vector<VmaAllocation> gatherSuballocations(const std::list<std::shared_ptr<IResource>>& resources);
