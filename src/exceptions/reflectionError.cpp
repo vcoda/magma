@@ -24,7 +24,7 @@ namespace magma::exception
 {
 const char *ReflectionError::description() const noexcept
 {
-    switch (result)
+    switch (error)
     {
     case SPV_REFLECT_RESULT_SUCCESS: return "Operation successfully completed";
     case SPV_REFLECT_RESULT_NOT_READY: return "Reflection result not ready yet";

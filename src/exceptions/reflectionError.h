@@ -28,15 +28,15 @@ namespace magma::exception
     class ReflectionError : public Exception
     {
     public:
-        explicit ReflectionError(SpvReflectResult result,
+        explicit ReflectionError(SpvReflectResult error,
             const char *message,
             const source_location& location) noexcept:
-            Exception(message, location), result(result) {}
-        SpvReflectResult error() const noexcept { return result; }
+            Exception(message, location), error(error) {}
+        SpvReflectResult result() const noexcept { return error; }
         const char *description() const noexcept;
 
     private:
-        const SpvReflectResult result;
+        const SpvReflectResult error;
     };
 
 } // namespace magma::exception

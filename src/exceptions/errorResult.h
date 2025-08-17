@@ -29,16 +29,16 @@ namespace magma::exception
     class Error : public Exception
     {
     public:
-        explicit Error(VkResult result, const char *message) noexcept:
-            Exception(message), result(result) {}
-        explicit Error(VkResult result, const char *message,
+        explicit Error(VkResult error, const char *message) noexcept:
+            Exception(message), error(error) {}
+        explicit Error(VkResult error, const char *message,
             const source_location& location) noexcept:
-            Exception(message, location), result(result) {}
-        VkResult error() const noexcept { return result; }
+            Exception(message, location), error(error) {}
+        VkResult result() const noexcept { return error; }
         const char *description() const noexcept;
 
     private:
-        const VkResult result;
+        const VkResult error;
     };
 
     /* A host memory allocation has failed. */

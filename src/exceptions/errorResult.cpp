@@ -18,13 +18,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #ifndef MAGMA_NO_EXCEPTIONS
-
 #include "errorResult.h"
+
 namespace magma::exception
 {
 const char *Error::description() const noexcept
 {   // https://registry.khronos.org/vulkan/specs/latest/man/html/VkResult.html
-    switch (result)
+    switch (error)
     {
     case VK_SUCCESS: return "Command successfully completed";
     case VK_NOT_READY: return "A fence or query has not yet completed";
