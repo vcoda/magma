@@ -282,6 +282,9 @@ constexpr const char *Format::name() const noexcept
 #ifdef VK_NV_optical_flow
     MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_R16G16_SFIXED5_NV);
 #endif // VK_NV_optical_flow
+#ifdef VK_ARM_tensors
+    MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_R8_BOOL_ARM);
+#endif
 #ifdef VK_ARM_format_pack
     MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_R10X6_UINT_PACK16_ARM);
     MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_R10X6G10X6_UINT_2PACK16_ARM);
@@ -1077,6 +1080,19 @@ constexpr bool Format::multiPlanar() const noexcept
     case VK_FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
         return true;
 #endif // VK_EXT_ycbcr_2plane_444_formats
+    default:
+        return false;
+    }
+}
+
+constexpr bool Format::tensor() const noexcept
+{
+    switch (format)
+    {
+#ifdef VK_ARM_tensors
+    case VK_FORMAT_R8_BOOL_ARM:
+        return true;
+#endif // VK_ARM_tensors
     default:
         return false;
     }

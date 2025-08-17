@@ -53,6 +53,7 @@ namespace magma
         constexpr bool ycbcr() const noexcept;
         constexpr bool packed() const noexcept;
         constexpr bool multiPlanar() const noexcept;
+        constexpr bool tensor() const noexcept;
         constexpr std::size_t depthStencilSize() const noexcept;
         constexpr std::size_t bcSize() const noexcept;
         constexpr std::size_t etc2Size() const noexcept;
