@@ -19,6 +19,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/compatibility.h"
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 
+// Old Vulkan SDKs include shaderc library, with newer SDK
+// you can get it here: github.com/KhronosGroup/shaderc
+#include <shaderc/shaderc.h>
+
 namespace magma::helpers
 {
 constexpr VkDebugReportObjectTypeEXT objectToDebugReportType(const VkObjectType objectType) noexcept
@@ -185,6 +189,47 @@ constexpr VkImageType spirvDimToImageType(const SpvDim dim) noexcept
     default:
         MAGMA_FAILURE("unknown spirv dimension");
         return VK_IMAGE_TYPE_MAX_ENUM;
+    }
+}
+
+constexpr shaderc_shader_kind shaderStageToShaderCKind(const VkShaderStageFlagBits shaderStage) noexcept
+{
+    switch (shaderStage)
+    {
+    case VK_SHADER_STAGE_VERTEX_BIT:
+        return shaderc_glsl_vertex_shader;
+    case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
+        return shaderc_glsl_tess_control_shader;
+    case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
+        return shaderc_glsl_tess_evaluation_shader;
+    case VK_SHADER_STAGE_GEOMETRY_BIT:
+        return shaderc_glsl_geometry_shader;
+    case VK_SHADER_STAGE_FRAGMENT_BIT:
+        return shaderc_glsl_fragment_shader;
+    case VK_SHADER_STAGE_COMPUTE_BIT:
+        return shaderc_glsl_compute_shader;
+#ifdef VK_KHR_ray_tracing_pipeline
+    case VK_SHADER_STAGE_RAYGEN_BIT_KHR:
+        return shaderc_glsl_raygen_shader;
+    case VK_SHADER_STAGE_ANY_HIT_BIT_KHR:
+        return shaderc_glsl_anyhit_shader;
+    case VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR:
+        return shaderc_glsl_closesthit_shader;
+    case VK_SHADER_STAGE_MISS_BIT_KHR:
+        return shaderc_glsl_miss_shader;
+    case VK_SHADER_STAGE_INTERSECTION_BIT_KHR:
+        return shaderc_glsl_intersection_shader;
+    case VK_SHADER_STAGE_CALLABLE_BIT_KHR:
+        return shaderc_glsl_callable_shader;
+#endif // VK_KHR_ray_tracing_pipeline
+#ifdef VK_NV_mesh_shader
+    case VK_SHADER_STAGE_TASK_BIT_NV:
+        return shaderc_glsl_task_shader;
+    case VK_SHADER_STAGE_MESH_BIT_NV:
+        return shaderc_glsl_mesh_shader;
+#endif // VK_NV_mesh_shader
+    default:
+        return shaderc_glsl_infer_from_source;
     }
 }
 } // namespace magma::helpers

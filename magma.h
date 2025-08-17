@@ -242,7 +242,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/auxiliary/typedefs.h"
 
 #include "src/helpers/alignedUniformArray.h"
-#include "src/helpers/enumerationCast.h"
 #include "src/helpers/executeCommandBuffer.h"
 #include "src/helpers/executeDeferredOperation.h"
 #include "src/helpers/layoutTransition.h"
