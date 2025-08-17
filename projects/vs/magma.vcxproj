@@ -80,7 +80,7 @@
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;..\..\src\third-party\pfr\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <DisableSpecificWarnings>4458;4348</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4458;4348;4065</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -99,7 +99,7 @@
       <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;..\..\src\third-party\pfr\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <DisableSpecificWarnings>4458;4348</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4458;4348;4065</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ConformanceMode>true</ConformanceMode>
@@ -120,7 +120,7 @@
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP16 /constexpr:depth2048 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4458;4348</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4458;4348;4065</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -144,7 +144,7 @@
       <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;..\..\src\third-party\pfr\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4458;4348</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4458;4348;4065</DisableSpecificWarnings>
       <AdditionalOptions>/MP16 /constexpr:depth2048 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
