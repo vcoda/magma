@@ -256,5 +256,5 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/exceptions/compileError.h"
 #include "src/exceptions/errorHandler.h"
 #include "src/exceptions/errorResult.h"
-#include "src/exceptions/reflectionErrorResult.h"
+#include "src/exceptions/reflectionError.h"
 #include "src/exceptions/unsupportedExtension.h"
