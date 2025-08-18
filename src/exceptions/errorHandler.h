@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
+#include <spirv-tools/libspirv.h>
 #include "sourcelocation.h"
 
 namespace magma::exception
@@ -24,16 +25,18 @@ namespace magma::exception
     /* If C++ exceptions are disabled, the application has an
        option to provide custom error handlers, which will be
        invoked when the library throws an exception or when a
-       VkResult/SpvReflectResult error is encountered. */
+       VkResult/SpvReflectResult/spv_result_t error is encountered. */
 
 #ifdef MAGMA_NO_EXCEPTIONS
     typedef std::function<void(const char *, const source_location&)> ExceptionHandler;
     typedef std::function<void(VkResult, const char *, const source_location&)> ErrorHandler;
     typedef std::function<void(SpvReflectResult, const char *, const source_location&)> ReflectionErrorHandler;
+    typedef std::function<void(spv_result_t, const char *, const source_location&)> SpirvErrorHandler;
 
     void setExceptionHandler(ExceptionHandler handler) noexcept;
     void setErrorHandler(ErrorHandler handler) noexcept;
     void setReflectionErrorHandler(ReflectionErrorHandler handler) noexcept;
+    void setSpirvErrorHandler(SpirvErrorHandler handler) noexcept;
 #endif // MAGMA_NO_EXCEPTIONS
 
     void handleException(std::string_view message,
@@ -44,6 +47,9 @@ namespace magma::exception
     void handleReflectionResult(SpvReflectResult result,
         const char *message,
         const source_location& location);
+    void handleSpirvResult(spv_result_t result,
+        const char *message,
+        const source_location& location);
 } // namespace magma::exception
 
 #define MAGMA_ERROR(message) magma::exception::handleException(message, MAGMA_SOURCE_LOCATION)
@@ -51,3 +57,5 @@ namespace magma::exception
 #define MAGMA_HANDLE_RESULT(result, message) magma::exception::handleResult(result, message, MAGMA_SOURCE_LOCATION)
 
 #define MAGMA_HANDLE_REFLECTION_RESULT(result, message) magma::exception::handleReflectionResult(result, message, MAGMA_SOURCE_LOCATION)
+
+#define MAGMA_HANDLE_SPIRV_RESULT(result, message) magma::exception::handleSpirvResult(result, message, MAGMA_SOURCE_LOCATION)

@@ -873,6 +873,9 @@
     <ClInclude Include="..\..\src\exceptions\reflectionError.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\exceptions\spirvError.h">
+      <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">

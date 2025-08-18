@@ -20,27 +20,36 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "errorHandler.h"
 #include "errorResult.h"
 #include "reflectionError.h"
+#include "spirvError.h"
 
 namespace magma::exception
 {
+// If error encountered and no error handler is provided, program is aborted
 #ifdef MAGMA_NO_EXCEPTIONS
 static ExceptionHandler exceptionHandler =
     [](const char *message, const source_location&)
-    {   // If no exception handler is provided, abort program
+    {
         std::cerr << message << std::endl;
         abort();
     };
 
 static ErrorHandler errorHandler =
     [](VkResult, const char *message, const source_location&)
-    {   // If no Vulkan error handler is provided, abort program
+    {
         std::cerr << message << std::endl;
         abort();
     };
 
 static ReflectionErrorHandler reflectionErrorHandler =
     [](SpvReflectResult, const char *message, const source_location&)
-    {   // If no SPIRV-Reflect error handler is provided, abort program
+    {
+        std::cerr << message << std::endl;
+        abort();
+    };
+
+static SpirvErrorHandler spirvErrorHandler =
+    [](spv_result_t, const char *message, const source_location&)
+    {
         std::cerr << message << std::endl;
         abort();
     };
@@ -58,6 +67,11 @@ void setErrorHandler(ErrorHandler handler) noexcept
 void setReflectionErrorHandler(ReflectionErrorHandler handler) noexcept
 {
     reflectionErrorHandler = std::move(handler);
+}
+
+void setSpirvErrorHandler(SpirvErrorHandler handler) noexcept
+{
+    spirvErrorHandler = std::move(handler);
 }
 #endif // MAGMA_NO_EXCEPTIONS
 
@@ -127,6 +141,26 @@ void handleReflectionResult(SpvReflectResult result, const char *message, const 
         reflectionErrorHandler(result, message, location);
     #else
         throw ReflectionError(result, message, location);
+    #endif // MAGMA_NO_EXCEPTIONS
+    }
+}
+
+void handleSpirvResult(spv_result_t result, const char *message, const source_location& location)
+{
+    switch (result)
+    {
+    case SPV_SUCCESS:
+    case SPV_UNSUPPORTED:
+    case SPV_END_OF_STREAM:
+    case SPV_WARNING:
+    case SPV_FAILED_MATCH:
+    case SPV_REQUESTED_TERMINATION:
+        break;
+    default:
+    #ifdef MAGMA_NO_EXCEPTIONS
+        spirvErrorHandler(result, message, location);
+    #else
+        throw SpirvError(result, message, location);
     #endif // MAGMA_NO_EXCEPTIONS
     }
 }
