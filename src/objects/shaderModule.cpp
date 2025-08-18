@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflection.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
+#include "../exceptions/spirvError.h"
 
 namespace magma
 {
@@ -99,6 +100,44 @@ ShaderModule::ShaderModule(std::shared_ptr<Device> device, const std::vector<Spi
 ShaderModule::~ShaderModule()
 {
     vkDestroyShaderModule(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
+}
+
+// Requires program to be linked with SPIRV-Tools lib
+std::string ShaderModule::disassemble() const
+{
+    const SpirvWord *binary = nullptr;
+    std::size_t wordCount = 0;
+    if (reflection)
+    {
+        binary = reflection->getCode();
+        wordCount = reflection->getCodeSize() / sizeof(SpirvWord);
+    }
+    else if (!bytecode.empty())
+    {
+        binary = bytecode.data();
+        wordCount = bytecode.size();
+    }
+    if (!binary)
+        return std::string();
+    spv_context context = spvContextCreate(SPV_ENV_UNIVERSAL_1_6);
+    if (!context)
+        return std::string();
+    spv_text text = nullptr;
+    spv_diagnostic diagnostic = nullptr;
+    const spv_result_t result = spvBinaryToText(context, binary, wordCount,
+        SPV_BINARY_TO_TEXT_OPTION_NO_HEADER | SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES,
+        &text, &diagnostic);
+    if (result < SPV_SUCCESS)
+    {
+        const std::string error(diagnostic->error ? diagnostic->error :
+            "failed to decode SPIR-V binary to its assembly text");
+        spvContextDestroy(context);
+        MAGMA_HANDLE_SPIRV_RESULT(result, error.c_str());
+    }
+    const std::string disassembly = std::string(text->str);
+    spvTextDestroy(text);
+    spvContextDestroy(context);
+    return disassembly;
 }
 
 hash_t ShaderModule::getHash() const noexcept

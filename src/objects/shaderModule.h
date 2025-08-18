@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ namespace magma
         #endif
             const StructureChain& extendedInfo = StructureChain());
         ~ShaderModule();
+        std::string disassemble() const;
         const std::unique_ptr<const ShaderReflection>& getReflection() const noexcept { return reflection; }
         hash_t getHash() const noexcept;
         hash_t getBytecodeHash() const noexcept;
