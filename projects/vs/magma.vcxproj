@@ -701,6 +701,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\descriptors\imageDescriptorArray.inl" />
     <None Include="..\..\src\descriptors\imageDescriptorVariableArray.inl" />
     <None Include="..\..\src\descriptors\inlineUniformBlock.inl" />
+    <None Include="..\..\src\exceptions\exception.inl" />
     <None Include="..\..\src\extensions\extensionRegistry.inl" />
     <None Include="..\..\src\helpers\alignedUniformArray.inl" />
     <None Include="..\..\src\helpers\uniformArray.inl" />

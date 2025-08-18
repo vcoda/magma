@@ -1651,6 +1651,9 @@
     <None Include="..\..\src\core\spinlock.inl">
       <Filter>Header Files\core</Filter>
     </None>
+    <None Include="..\..\src\exceptions\exception.inl">
+      <Filter>Header Files\exceptions</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">
