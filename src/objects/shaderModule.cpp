@@ -143,7 +143,7 @@ std::string ShaderModule::disassemble() const
             MAGMA_HANDLE_SPIRV_RESULT(result, "failed to decode SPIR-V binary to its assembly text");
         }
     }
-    const std::string disassembly = std::string(text->str);
+    const std::string disassembly(text->str, text->length);
     spvTextDestroy(text);
     spvDiagnosticDestroy(diagnostic);
     spvContextDestroy(context);
