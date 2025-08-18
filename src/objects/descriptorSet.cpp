@@ -151,7 +151,11 @@ void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflect
             break;
         }
         if (out.tellp() > 0)
-            MAGMA_ERROR(out.str());
+        {   // Make sure error string will survive stack unwinding
+            static std::string error;
+            error = out.str();
+            MAGMA_ERROR(error.c_str());
+        }
     }
 }
 } // namespace magma
