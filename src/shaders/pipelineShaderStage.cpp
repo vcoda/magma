@@ -142,6 +142,9 @@ std::ostream& operator<<(std::ostream& out, const PipelineShaderStage& shaderSta
     else
         out << *shaderStage.specialization << std::endl;
     out << "]";
+    const std::string disassembly = shaderStage.shaderModule->disassemble();
+    if (!disassembly.empty())
+        out << std::endl << "Disassembly [" << std::endl << disassembly << "]";
     auto const& reflection = shaderStage.shaderModule->getReflection();
     if (reflection)
         out << std::endl << *reflection;
