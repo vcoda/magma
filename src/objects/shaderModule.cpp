@@ -129,13 +129,23 @@ std::string ShaderModule::disassemble() const
         &text, &diagnostic);
     if (result < SPV_SUCCESS)
     {
-        const std::string error(diagnostic->error ? diagnostic->error :
-            "failed to decode SPIR-V binary to its assembly text");
-        spvContextDestroy(context);
-        MAGMA_HANDLE_SPIRV_RESULT(result, error.c_str());
+        if (diagnostic)
+        {
+            static std::string error;
+            error = std::string(diagnostic->error);
+            spvDiagnosticDestroy(diagnostic);
+            spvContextDestroy(context);
+            MAGMA_HANDLE_SPIRV_RESULT(result, error.c_str());
+        }
+        else
+        {
+            spvContextDestroy(context);
+            MAGMA_HANDLE_SPIRV_RESULT(result, "failed to decode SPIR-V binary to its assembly text");
+        }
     }
     const std::string disassembly = std::string(text->str);
     spvTextDestroy(text);
+    spvDiagnosticDestroy(diagnostic);
     spvContextDestroy(context);
     return disassembly;
 }
