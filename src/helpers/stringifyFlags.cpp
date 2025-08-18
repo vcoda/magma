@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 #include "stringifyFlags.h"
 #include "streamInsertOperators.h"
+#include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 
 namespace magma::helpers
 {
@@ -257,4 +258,30 @@ std::string stringifyDeviceGroupPresentMode(VkDeviceGroupPresentModeFlagsKHR fla
     return out.str();
 }
 #endif // VK_KHR_device_group
+
+std::string stringifyReflectTypeFlags(SpvReflectTypeFlags flags)
+{
+    if (!flags)
+        return "0";
+    std::ostringstream out;
+    for (SpvReflectTypeFlagBits bit: {
+        SPV_REFLECT_TYPE_FLAG_UNDEFINED,
+        SPV_REFLECT_TYPE_FLAG_VOID,
+        SPV_REFLECT_TYPE_FLAG_BOOL,
+        SPV_REFLECT_TYPE_FLAG_INT,
+        SPV_REFLECT_TYPE_FLAG_FLOAT,
+        SPV_REFLECT_TYPE_FLAG_VECTOR,
+        SPV_REFLECT_TYPE_FLAG_MATRIX,
+        SPV_REFLECT_TYPE_FLAG_EXTERNAL_IMAGE,
+        SPV_REFLECT_TYPE_FLAG_EXTERNAL_SAMPLER,
+        SPV_REFLECT_TYPE_FLAG_EXTERNAL_SAMPLED_IMAGE,
+        SPV_REFLECT_TYPE_FLAG_EXTERNAL_BLOCK,
+        SPV_REFLECT_TYPE_FLAG_EXTERNAL_ACCELERATION_STRUCTURE,
+        SPV_REFLECT_TYPE_FLAG_EXTERNAL_MASK,
+        SPV_REFLECT_TYPE_FLAG_STRUCT,
+        SPV_REFLECT_TYPE_FLAG_ARRAY,
+        SPV_REFLECT_TYPE_FLAG_REF
+    }) stringifyOredBit(flags, bit, out);
+    return out.str();
+}
 } // namespace magma::helpers

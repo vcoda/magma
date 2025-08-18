@@ -16,9 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #include "pch.h"
+#pragma hdrstop
 #include "shaderReflection.h"
 #include "../exceptions/reflectionError.h"
 #include "../helpers/streamInsertOperators.h"
+#include "../helpers/stringifyFlags.h"
 
 namespace magma
 {
@@ -222,11 +224,13 @@ std::ostream& operator<<(std::ostream& out, const ShaderReflection& reflection)
 {
     const SpvReflectShaderModule& module = reflection.module;
     out << "SpvReflectShaderModule [" << std::endl
+        << "\tgenerator: " << module.generator << std::endl
         << "\tshader_stage: " << module.shader_stage << std::endl
+        << "\tspirv_size: " << spvReflectGetCodeSize(&module) << std::endl
         << "\tsource_language: " << spvReflectSourceLanguage(module.source_language)
         << " " << module.source_language_version << std::endl;
     for (uint32_t i = 0; i < module.entry_point_count; ++i)
-        out << "\tentry_point: " << module.entry_points[i].name << std::endl;
+        out << "\tentry_point #" << i << ": \"" << module.entry_points[i].name << "\"" << std::endl;
     out << "\tdescriptor_set_count: " << module.descriptor_set_count << std::endl;
     for (uint32_t i = 0; i < module.descriptor_set_count; ++i)
     {
@@ -254,6 +258,31 @@ std::ostream& operator<<(std::ostream& out, const ShaderReflection& reflection)
             // TODO: uav_counter_binding
         }
         out << "\t]" << std::endl;
+    }
+    out << "\tinput_variable_count: " << module.input_variable_count << std::endl;
+    for (uint32_t i = 0; i < module.input_variable_count; ++i)
+    {
+        const SpvReflectInterfaceVariable *var = module.input_variables[i];
+        out << "\tSpvReflectInterfaceVariable [" << std::endl
+            << "\t\tname: " << var->name << std::endl
+            << "\t\tlocation: " << var->location << std::endl
+            << "\t\tformat: " << var->format << std::endl
+            << "\t\ttype_flags: " << magma::helpers::stringifyReflectTypeFlags(var->type_description->type_flags) << std::endl;
+        out << "\t]" << std::endl;
+    }
+    out << "\toutput_variable_count: " << module.output_variable_count << std::endl;
+    for (uint32_t i = 0; i < module.output_variable_count; ++i)
+    {
+        const SpvReflectInterfaceVariable *var = module.output_variables[i];
+        if ((var->location != -1) && (var->format != SPV_REFLECT_FORMAT_UNDEFINED))
+        {
+            out << "\tSpvReflectInterfaceVariable [" << std::endl
+                << "\t\tname: " << var->name << std::endl
+                << "\t\tlocation: " << var->location << std::endl
+                << "\t\tformat: " << var->format << std::endl
+                << "\t\ttype_flags: " << magma::helpers::stringifyReflectTypeFlags(var->type_description->type_flags) << std::endl;
+            out << "\t]" << std::endl;
+        }
     }
     out << "]";
     return out;

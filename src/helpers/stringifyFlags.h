@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
+typedef uint32_t SpvReflectTypeFlags;
+
 namespace magma::helpers
 {
     std::string stringifyMask(uint32_t mask);
@@ -35,4 +37,5 @@ namespace magma::helpers
 #ifdef VK_KHR_device_group
     std::string stringifyDeviceGroupPresentMode(VkDeviceGroupPresentModeFlagsKHR flags);
 #endif
+    std::string stringifyReflectTypeFlags(SpvReflectTypeFlags flags);
 } // namespace magma::helpers
