@@ -102,9 +102,9 @@ ShaderModule::~ShaderModule()
     vkDestroyShaderModule(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
-// Requires program to be linked with SPIRV-Tools lib
 std::string ShaderModule::disassemble() const
-{
+{   // Requires program to be linked with SPIRV-Tools lib
+#ifdef MAGMA_SPIRV_TOOLS
     const SpirvWord *binary = nullptr;
     std::size_t wordCount = 0;
     if (reflection)
@@ -148,6 +148,9 @@ std::string ShaderModule::disassemble() const
     spvDiagnosticDestroy(diagnostic);
     spvContextDestroy(context);
     return disassembly;
+#else
+    return std::string();
+#endif // MAGMA_SPIRV_TOOLS
 }
 
 hash_t ShaderModule::getHash() const noexcept
