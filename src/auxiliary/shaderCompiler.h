@@ -72,7 +72,7 @@ namespace magma
             OptimizationLevel getOptimizationLevel() const noexcept { return optimizationLevel; }
             void setGenerateDebugInfo(bool generateDebugInfo_) noexcept { generateDebugInfo = generateDebugInfo_; }
             bool getGenerateDebugInfo() const noexcept { return generateDebugInfo; }
-            void setSuppressWarnings(bool suppressWarnings_) noexcept { suppressWarnings_ = suppressWarnings; }
+            void setSuppressWarnings(bool suppressWarnings_) noexcept { suppressWarnings = suppressWarnings_; }
             bool getSuppressWarnings() const noexcept { return suppressWarnings; }
             void setWarningsAsErrors(bool warningsAsErrors_) noexcept { warningsAsErrors = warningsAsErrors_; }
             bool getWarningsAsErrors() const noexcept { return warningsAsErrors; }
