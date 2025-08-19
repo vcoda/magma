@@ -9,9 +9,4 @@ inline Exception::Exception(const char *message, const source_location& location
     message(message),
     location(location)
 {}
-
-inline Exception::Exception(std::string_view message, const source_location& location) noexcept:
-    message(message.data()),
-    location(location)
-{}
 } // namespace magma::exception

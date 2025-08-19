@@ -75,12 +75,12 @@ void setSpirvErrorHandler(SpirvErrorHandler handler) noexcept
 }
 #endif // MAGMA_NO_EXCEPTIONS
 
-void handleException(std::string_view message, const source_location& location)
+void handleError(const char *message, const source_location& location)
 {
 #ifdef MAGMA_NO_EXCEPTIONS
-    exceptionHandler(message.data(), location);
+    exceptionHandler(message, location);
 #else
-    throw Exception(std::move(message), location);
+    throw Exception(message, location);
 #endif
 }
 

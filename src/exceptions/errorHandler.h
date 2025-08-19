@@ -39,7 +39,7 @@ namespace magma::exception
     void setSpirvErrorHandler(SpirvErrorHandler handler) noexcept;
 #endif // MAGMA_NO_EXCEPTIONS
 
-    void handleException(std::string_view message,
+    void handleError(const char *message,
         const source_location& location);
     void handleResult(VkResult result,
         const char *message,
@@ -52,7 +52,7 @@ namespace magma::exception
         const source_location& location);
 } // namespace magma::exception
 
-#define MAGMA_ERROR(message) magma::exception::handleException(message, MAGMA_SOURCE_LOCATION)
+#define MAGMA_ERROR(message) magma::exception::handleError(message, MAGMA_SOURCE_LOCATION)
 
 #define MAGMA_HANDLE_RESULT(result, message) magma::exception::handleResult(result, message, MAGMA_SOURCE_LOCATION)
 
