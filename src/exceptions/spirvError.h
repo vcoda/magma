@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "errorHandler.h"
 #ifndef MAGMA_NO_EXCEPTIONS
-#include <spirv-tools/libspirv.h>
 #include "exception.h"
 
 namespace magma::exception
