@@ -103,7 +103,9 @@ ShaderModule::~ShaderModule()
 }
 
 std::string ShaderModule::disassemble() const
-{   // Requires program to be linked with SPIRV-Tools lib
+{
+    std::string disassembly;
+    // Requires program to be linked with SPIRV-Tools lib
 #ifdef MAGMA_SPIRV_TOOLS
     const SpirvWord *binary = nullptr;
     std::size_t wordCount = 0;
@@ -127,30 +129,23 @@ std::string ShaderModule::disassemble() const
     const spv_result_t result = spvBinaryToText(context, binary, wordCount,
         SPV_BINARY_TO_TEXT_OPTION_NO_HEADER | SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES,
         &text, &diagnostic);
+    static std::string error;
+    if (diagnostic)
+    {
+        error = std::string(diagnostic->error);
+        spvDiagnosticDestroy(diagnostic);
+    }
     if (result < SPV_SUCCESS)
     {
-        if (diagnostic)
-        {
-            static std::string error;
-            error = std::string(diagnostic->error);
-            spvDiagnosticDestroy(diagnostic);
-            spvContextDestroy(context);
-            MAGMA_HANDLE_SPIRV_RESULT(result, error.c_str());
-        }
-        else
-        {
-            spvContextDestroy(context);
-            MAGMA_HANDLE_SPIRV_RESULT(result, "failed to decode SPIR-V binary to its assembly text");
-        }
+        spvContextDestroy(context);
+        MAGMA_HANDLE_SPIRV_RESULT(result, diagnostic ?
+            error.c_str() : "failed to decode SPIR-V binary");
     }
-    const std::string disassembly(text->str, text->length);
+    disassembly = std::string(text->str, text->length);
     spvTextDestroy(text);
-    spvDiagnosticDestroy(diagnostic);
     spvContextDestroy(context);
-    return disassembly;
-#else
-    return std::string();
 #endif // MAGMA_SPIRV_TOOLS
+    return disassembly;
 }
 
 hash_t ShaderModule::getHash() const noexcept
