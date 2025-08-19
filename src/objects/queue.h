@@ -134,6 +134,7 @@ namespace magma
         MAGMA_MAKE_SHARED(Queue)
         Queue(VkQueue handle, VkQueueFlagBits flags,
             uint32_t familyIndex, uint32_t index) noexcept;
+        constexpr VkFlags getUsage() const noexcept { return 0; }
 
         const VkQueueFlagBits flags;
         const uint32_t familyIndex;
