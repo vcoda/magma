@@ -41,8 +41,8 @@ namespace magma
         uint32_t vertexCount;
     };
 
-    /* An array of vertex buffer attributes like vertices, normals,
-       colors, texture coordinates etc. */
+    /* An array of vertex buffer attributes like vertices,
+       normals, colors, texture coordinates etc. */
 
     class VertexBuffer : public BaseVertexBuffer
     {

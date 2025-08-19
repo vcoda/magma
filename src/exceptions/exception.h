@@ -23,8 +23,8 @@ namespace magma::exception
 {
     /* Base exception class. Provides optional information
        such as an error message, file name, and line number
-       where the exception was thrown. Designed to work with
-       string literals only, preventing memory allocations
+       where the exception was thrown. Meant to work with
+       string literals only, to prevent memory allocations
        while handling exceptions. */
 
     class Exception : public std::exception

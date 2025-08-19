@@ -20,7 +20,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Texel buffer that is accessed from the shader stage through buffer view. */
+    /* Texel buffer that is accessed from the shader stage
+       through buffer view. */
 
     class StorageTexelBuffer : public Buffer
     {
@@ -49,10 +50,9 @@ namespace magma
     /* Major GPU vendors expose a 256MiB-ish staging buffer
        with the DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT
        flags where the GPU and CPU can both write into shared
-       memory visible to each other. This 256MiB limit
-       correlates with the 256MiB PCIE-specified BAR-size limit
-       that defines the size of the 256MiB aperture/window of
-       VRAM that the host can access. */
+       memory visible to each other. This limit correlates with
+       the 256MiB PCIE-specified BAR limit that defines the size
+       of the VRAM window that the host can access. */
 
     class DynamicStorageTexelBuffer : public Buffer
     {

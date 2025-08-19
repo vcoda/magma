@@ -24,7 +24,7 @@ namespace magma::exception
 {
     /* If C++ exceptions are disabled, the application has an
        option to provide custom error handlers, which will be
-       invoked when the library throws an exception or when a
+       invoked when the library reports an error or when a
        VkResult/SpvReflectResult/spv_result_t error is encountered. */
 
 #ifdef MAGMA_NO_EXCEPTIONS
