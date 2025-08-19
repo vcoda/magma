@@ -32,8 +32,8 @@ namespace magma::exception
     {
         constexpr std::uint_least32_t line() const noexcept { return static_cast<std::uint_least32_t>(ln); }
         constexpr std::uint_least32_t column() const noexcept { return 0; }
-        constexpr const char* file_name() const noexcept { return file; }
-        constexpr const char* function_name() const noexcept { return function; }
+        constexpr const char *file_name() const noexcept { return file; }
+        constexpr const char *function_name() const noexcept { return function; }
 
         const char *file = nullptr;
         long ln = 0;

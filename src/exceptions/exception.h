@@ -33,9 +33,7 @@ namespace magma::exception
         explicit Exception(const char *message = "unknown exception") noexcept;
         explicit Exception(const char *message,
             const source_location& location) noexcept;
-        explicit Exception(std::string_view message,
-            const source_location& location) noexcept;
-        const char* what() const noexcept override { return message; }
+        const char *what() const noexcept override { return message; }
         const source_location& where() const noexcept { return location; }
 
     private:
