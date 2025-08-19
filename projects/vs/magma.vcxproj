@@ -449,6 +449,7 @@
     <ClCompile Include="..\..\src\exceptions\errorResult.cpp" />
     <ClCompile Include="..\..\src\exceptions\exception.cpp" />
     <ClCompile Include="..\..\src\exceptions\reflectionError.cpp" />
+    <ClCompile Include="..\..\src\exceptions\spirvError.cpp" />
     <ClCompile Include="..\..\src\extensions\deviceLayers.cpp" />
     <ClCompile Include="..\..\src\extensions\instanceExtensions.cpp" />
     <ClCompile Include="..\..\src\extensions\instanceLayers.cpp" />

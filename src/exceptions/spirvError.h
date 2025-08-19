@@ -32,6 +32,7 @@ namespace magma::exception
             const source_location& location) noexcept:
             Exception(message, location), error(error) {}
         spv_result_t result() const noexcept { return error; }
+        const char *description() const noexcept;
 
     private:
         const spv_result_t error;

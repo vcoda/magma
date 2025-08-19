@@ -34,6 +34,7 @@ SOURCES += \
     ../../src/exceptions/errorResult.cpp \
     ../../src/exceptions/exception.cpp \
     ../../src/exceptions/reflectionError.cpp \
+    ../../src/exceptions/spirvError.cpp \
     ../../src/extensions/deviceExtensions.cpp \
     ../../src/extensions/deviceLayers.cpp \
     ../../src/extensions/instanceExtensions.cpp \
@@ -237,6 +238,7 @@ HEADERS += \
     ../../src/exceptions/errorResult.h \
     ../../src/exceptions/exception.h \
     ../../src/exceptions/reflectionError.h \
+    ../../src/exceptions/spirvError.h \
     ../../src/exceptions/sourcelocation.h \
     ../../src/exceptions/unsupportedExtension.h \
     ../../src/extensions/deviceExtensions.h \

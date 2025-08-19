@@ -1361,6 +1361,9 @@
     <ClCompile Include="..\..\src\exceptions\reflectionError.cpp">
       <Filter>Source Files\exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\exceptions\spirvError.cpp">
+      <Filter>Source Files\exceptions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\objects\commandBuffer.inl">

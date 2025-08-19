@@ -50,6 +50,7 @@ SRC_OBJS= \
 	src/exceptions/errorResult.o \
 	src/exceptions/exception.o \
 	src/exceptions/reflectionError.o \
+	src/exceptions/spirvError.o \
 	\
 	src/extensions/deviceExtensions.o \
 	src/extensions/deviceLayers.o \
