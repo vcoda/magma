@@ -67,6 +67,15 @@ inline const StructureType *RasterizationState::findNode(VkStructureType sType) 
     return nullptr;
 }
 
+constexpr RasterizationState& RasterizationState::operator=(const RasterizationState& other) noexcept
+{
+    if (this != &other)
+    {
+        VkPipelineRasterizationStateCreateInfo::operator=(other);
+    }
+    return *this;
+}
+
 constexpr bool RasterizationState::operator==(const RasterizationState& other) const noexcept
 {
     return (flags == other.flags) &&

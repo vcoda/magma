@@ -29,6 +29,7 @@ namespace magma
         constexpr MultisampleState(uint32_t sampleCount) noexcept;
         constexpr MultisampleState(const MultisampleState&) noexcept;
         constexpr hash_t hash() const noexcept;
+        constexpr MultisampleState& operator=(const MultisampleState&) noexcept;
         constexpr bool operator==(const MultisampleState&) const noexcept;
     };
 

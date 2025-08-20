@@ -73,6 +73,15 @@ constexpr hash_t MultisampleState::hash() const noexcept
     return hash;
 }
 
+constexpr MultisampleState& MultisampleState::operator=(const MultisampleState& other) noexcept
+{
+    if (this != &other)
+    {
+        VkPipelineMultisampleStateCreateInfo::operator=(other);
+    }
+    return *this;
+}
+
 constexpr bool MultisampleState::operator==(const MultisampleState& other) const noexcept
 {
     return (flags == other.flags) &&

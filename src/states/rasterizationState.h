@@ -34,6 +34,7 @@ namespace magma
         hash_t chainedHash() const noexcept;
         template<class StructureType>
         const StructureType *findNode(VkStructureType sType) const noexcept;
+        constexpr RasterizationState& operator=(const RasterizationState&) noexcept;
         constexpr bool operator==(const RasterizationState&) const noexcept;
     };
 
