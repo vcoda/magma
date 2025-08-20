@@ -41,7 +41,7 @@ ShaderCompiler::~ShaderCompiler()
 }
 
 std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view source, std::string_view entrypoint, VkShaderStageFlagBits shaderStage,
-    const std::unordered_map<std::string_view, std::string_view>& macroDefinitions /* empty */,
+    const std::unordered_map<std::string, std::string>& macroDefinitions /* empty */,
     std::string_view srcFileName  /* empty */)
 {
     MAGMA_ASSERT(!source.empty());
@@ -50,8 +50,8 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view sou
     for (auto const& [name, value]: macroDefinitions)
     {   // Add preprocessor definitions
         shaderc_compile_options_add_macro_definition(options,
-            name.data(), name.length(),
-            value.data(), value.length());
+            name.c_str(), name.length(),
+            value.c_str(), value.length());
     }
     // Define compiler behavior
     shaderc_optimization_level level;

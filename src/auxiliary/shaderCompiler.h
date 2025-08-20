@@ -79,7 +79,7 @@ namespace magma
             std::shared_ptr<ShaderModule> compileShader(std::string_view source,
                 std::string_view entrypoint,
                 VkShaderStageFlagBits shaderStage = (VkShaderStageFlagBits)0,
-                const std::unordered_map<std::string_view, std::string_view>& macroDefinitions = {},
+                const std::unordered_map<std::string, std::string>& macroDefinitions = {},
                 std::string_view srcFileName = {});
 
         private:
