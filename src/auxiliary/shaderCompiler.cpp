@@ -57,8 +57,8 @@ std::shared_ptr<ShaderModule> ShaderCompiler::compileShader(std::string_view sou
     shaderc_optimization_level level;
     switch (optimizationLevel)
     {
-    case OptimizationLevel::NoneOpt: level = shaderc_optimization_level_zero; break;
-    case OptimizationLevel::SizeOpt: level = shaderc_optimization_level_size; break;
+    case OptimizationLevel::Disabled: level = shaderc_optimization_level_zero; break;
+    case OptimizationLevel::Compact: level = shaderc_optimization_level_size; break;
     case OptimizationLevel::Performance: level = shaderc_optimization_level_performance; break;
     default: level = shaderc_optimization_level_zero;
     }

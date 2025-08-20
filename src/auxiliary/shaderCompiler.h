@@ -34,7 +34,7 @@ namespace magma
 
         enum class OptimizationLevel : uint8_t
         {
-            NoneOpt, SizeOpt, Performance
+            Disabled, Compact, Performance
         };
 
         /* An abstract interface for mapping an #include request
