@@ -161,16 +161,15 @@ void Device::updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descr
     updateDescriptorSets(core::countof(descriptorWrites), descriptorWrites.data(), core::countof(descriptorCopies), descriptorCopies.data());
 }
 
-bool Device::waitIdle() const
+void Device::waitIdle() const
 {
     const VkResult result = vkDeviceWaitIdle(handle);
+    MAGMA_HANDLE_RESULT(result, "failed to wait for device to become idle");
     if (VK_SUCCESS == result)
     {
         for (auto& [key, queue]: queues)
             key, queue->onIdle();
     }
-    MAGMA_HANDLE_RESULT(result, "failed to wait for device to become idle");
-    return true;
 }
 
 bool Device::resetFences(std::vector<lent_ptr<Fence>>& fences) const noexcept

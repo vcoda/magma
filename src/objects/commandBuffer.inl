@@ -1142,16 +1142,6 @@ inline void CommandBuffer::releaseObjectsInUse() noexcept
 #endif
 }
 
-inline void CommandBuffer::queueSubmissionFinished() noexcept
-{
-    MAGMA_ASSERT(State::Executable == state);
-    if (State::Executable == state)
-    {   // If any command buffer submitted to the queue is in the
-        // executable state, it is moved to the pending state.
-        state = State::Pending;
-    }
-}
-
 inline void CommandBuffer::executionFinished() noexcept
 {
     /* Once execution of all submissions of a command buffer complete,
@@ -1167,6 +1157,16 @@ inline void CommandBuffer::executionFinished() noexcept
     else
     {
         state = State::Executable;
+    }
+}
+
+inline void CommandBuffer::queueSubmissionFinished() noexcept
+{
+    MAGMA_ASSERT(State::Executable == state);
+    if (State::Executable == state)
+    {   // If any command buffer submitted to the queue is in the
+        // executable state, it is moved to the pending state.
+        state = State::Pending;
     }
 }
 } // namespace magma

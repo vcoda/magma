@@ -167,7 +167,7 @@ void Queue::submit(lent_ptr<CommandBuffer> cmdBuffer,
     MAGMA_INUSE(waitSemaphore);
     MAGMA_INUSE(signalSemaphore);
     cmdBuffer->queueSubmissionFinished();
-    submittedCommandBuffers.push_back(cmdBuffer.get());
+    submittedCmdBuffers.insert(cmdBuffer.get());
 }
 
 void Queue::submit(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers,
@@ -208,7 +208,7 @@ void Queue::submit(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers,
             MAGMA_ASSERT(cmdBuffer->primary());
             MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Executable);
             dereferencedCmdBuffers.put(cmdBuffer->getLean());
-            submittedCommandBuffers.push_back(cmdBuffer.get());
+            submittedCmdBuffers.insert(cmdBuffer.get());
         }
     }
     submitInfo.commandBufferCount = dereferencedCmdBuffers.count();
@@ -333,9 +333,9 @@ void Queue::submitDeviceGroup(const std::vector<lent_ptr<CommandBuffer>>& cmdBuf
 void Queue::waitIdle()
 {
     const VkResult result = vkQueueWaitIdle(handle);
+    MAGMA_HANDLE_RESULT(result, "failed to wait for a queue to become idle");
     if (VK_SUCCESS == result)
         onIdle();
-    MAGMA_HANDLE_RESULT(result, "failed to wait for a queue to become idle");
 }
 
 void Queue::present(const std::unique_ptr<Swapchain>& swapchain, uint32_t imageIndex,
@@ -429,21 +429,19 @@ uint32_t Queue::inUseObjectCount() const noexcept
 }
 
 /* 3.3.1. Object Lifetime
-   The following Vulkan objects must not be destroyed while any queue is executing commands that use the object:
-
+   The following Vulkan objects must not be destroyed while
+   any queue is executing commands that use the object:
     * VkFence
     * VkSemaphore
     * VkCommandBuffer
     * VkCommandPool */
-
 void Queue::onIdle()
 {
-    for (auto cmdBuffer: submittedCommandBuffers)
+    for (auto cmdBuffer: submittedCmdBuffers)
         cmdBuffer->executionFinished();
-    submittedCommandBuffers.clear();
+    submittedCmdBuffers.clear();
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-    while (!inUse.empty())
-        inUse.pop_back();
+    inUse.clear();
 #endif
 }
 } // namespace magma

@@ -128,13 +128,13 @@ namespace magma
         std::vector<VkCheckpointDataNV> getCheckpoints(lent_ptr<const Device> device) const;
     #endif
         uint32_t inUseObjectCount() const noexcept;
-        void onIdle();
 
     private:
         MAGMA_MAKE_SHARED(Queue)
         Queue(VkQueue handle, VkQueueFlagBits flags,
             uint32_t familyIndex, uint32_t index) noexcept;
         constexpr VkFlags getUsage() const noexcept { return 0; }
+        void onIdle();
 
         const VkQueueFlagBits flags;
         const uint32_t familyIndex;
@@ -142,9 +142,9 @@ namespace magma
     #ifdef VK_EXT_swapchain_maintenance1
         VkPresentModeKHR presentMode;
     #endif
-        std::vector<CommandBuffer *> submittedCommandBuffers;
+        std::unordered_set<CommandBuffer *> submittedCmdBuffers;
     #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
-        std::vector<std::shared_ptr<const IObject>> inUse;
+        std::unordered_set<std::shared_ptr<const IObject>> inUse;
     #endif
         friend Device;
     };

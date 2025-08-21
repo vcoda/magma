@@ -66,7 +66,7 @@ namespace magma
             const VkCopyDescriptorSet *descriptorCopies) const noexcept;
         void updateDescriptorSets(const std::vector<VkWriteDescriptorSet>& descriptorWrites,
             const std::vector<VkCopyDescriptorSet>& descriptorCopies = {}) const noexcept;
-        bool waitIdle() const;
+        void waitIdle() const;
         bool resetFences(std::vector<lent_ptr<Fence>>& fences) const noexcept;
         bool waitForFences(const std::vector<lent_ptr<Fence>>& fences,
             bool waitAll,

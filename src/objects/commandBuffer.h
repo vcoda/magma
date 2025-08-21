@@ -365,6 +365,7 @@ namespace magma
         bool insideTransformFeedback() const noexcept { return transformFeedback; }
         uint32_t inUseObjectCount() const noexcept;
         void releaseObjectsInUse() noexcept;
+        void executionFinished() noexcept;
 
     protected:
         MAGMA_MAKE_SHARED(CommandBuffer)
@@ -409,7 +410,6 @@ namespace magma
 
         VkDevice getNativeDevice() const noexcept { return leanCmd.device; }
         void queueSubmissionFinished() noexcept;
-        void executionFinished() noexcept;
         void pushDebugMarker(const char* /* name */, uint32_t /* color */) noexcept MAGMA_NOOP;
         void popDebugMarker() noexcept MAGMA_NOOP;
         void insertDebugCheckpoint(const char *command, VkPipelineStageFlagBits pipelineStage) const noexcept;
