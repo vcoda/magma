@@ -168,9 +168,11 @@ void Queue::submit(lent_ptr<CommandBuffer> cmdBuffer,
     MAGMA_INUSE(signalSemaphore);
     cmdBuffer->queueSubmissionFinished();
     submittedCmdBuffers.insert(cmdBuffer.get());
+    if (fence)
+        fence->completeExecutionOnSignaled(std::move(cmdBuffer));
 }
 
-void Queue::submit(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers,
+void Queue::submit(std::vector<lent_ptr<CommandBuffer>> cmdBuffers,
     const std::initializer_list<VkPipelineStageFlags>& waitDstStageMask /* void */,
     const std::initializer_list<lent_ptr<const Semaphore>>& waitSemaphores /* void */,
     const std::initializer_list<lent_ptr<Semaphore>>& signalSemaphores /* void */,
@@ -229,7 +231,11 @@ void Queue::submit(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers,
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));
     MAGMA_HANDLE_RESULT(result, "queue submission failed");
     for (auto& cmdBuffer: cmdBuffers)
+    {
         cmdBuffer->queueSubmissionFinished();
+        if (fence)
+            fence->completeExecutionOnSignaled(std::move(cmdBuffer));
+    }
 }
 
 #ifdef VK_KHR_timeline_semaphore
@@ -308,7 +314,7 @@ void Queue::submit(lent_ptr<const D3d12ExternalTimelineSemaphore> semaphore, uin
 #endif // VK_KHR_external_semaphore_win32
 
 #ifdef VK_KHR_device_group
-void Queue::submitDeviceGroup(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers,
+void Queue::submitDeviceGroup(std::vector<lent_ptr<CommandBuffer>> cmdBuffers,
     const std::initializer_list<uint32_t>& cmdBufferDeviceMasks /* void */,
     const std::initializer_list<VkPipelineStageFlags>& waitDstStageMask /* void */,
     const std::initializer_list<lent_ptr<const Semaphore>>& waitSemaphores /* void */,
@@ -326,7 +332,7 @@ void Queue::submitDeviceGroup(const std::vector<lent_ptr<CommandBuffer>>& cmdBuf
     deviceGroupSubmitInfo.pCommandBufferDeviceMasks = cmdBufferDeviceMasks.begin();
     deviceGroupSubmitInfo.signalSemaphoreCount = core::countof(signalSemaphoreDeviceIndices);
     deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = signalSemaphoreDeviceIndices.begin();
-    submit(cmdBuffers, waitDstStageMask, waitSemaphores, signalSemaphores, std::move(fence), StructureChain(deviceGroupSubmitInfo));
+    submit(std::move(cmdBuffers), waitDstStageMask, waitSemaphores, signalSemaphores, std::move(fence), StructureChain(deviceGroupSubmitInfo));
 }
 #endif // VK_KHR_device_group
 

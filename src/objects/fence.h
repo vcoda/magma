@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,6 +20,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class CommandBuffer;
+    class Queue;
+
     /* Fences are a synchronization primitive that can be
        used to insert a dependency from a queue to the host.
        Fences have two states - signaled and unsignaled.
@@ -37,11 +40,17 @@ namespace magma
         ~Fence();
         bool reset() noexcept;
         State getStatus() const noexcept;
-        bool wait(uint64_t timeout = std::numeric_limits<uint64_t>::max()) const;
+        bool wait(uint64_t timeout = std::numeric_limits<uint64_t>::max());
 
     protected:
         Fence(std::shared_ptr<IAllocator> allocator,
             std::shared_ptr<Device> device) noexcept;
+
+    private:
+        void completeExecutionOnSignaled(lent_ptr<CommandBuffer> cmdBuffer);
+
+        std::unordered_set<CommandBuffer *> submittedCmdBuffers;
+        friend Queue;
     };
 
     /* Fences have two states - signaled and unsignaled.

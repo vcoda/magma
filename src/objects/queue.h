@@ -78,7 +78,7 @@ namespace magma
             lent_ptr<Semaphore> signalSemaphore = nullptr,
             lent_ptr<Fence> fence = nullptr,
             const StructureChain& extendedInfo = StructureChain());
-        void submit(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers,
+        void submit(std::vector<lent_ptr<CommandBuffer>> cmdBuffers,
             const std::initializer_list<VkPipelineStageFlags>& waitDstStageMask = {},
             const std::initializer_list<lent_ptr<const Semaphore>>& waitSemaphores = {},
             const std::initializer_list<lent_ptr<Semaphore>>& signalSemaphores = {},
@@ -100,7 +100,7 @@ namespace magma
         #endif // VK_KHR_timeline_semaphore
     #endif // VK_KHR_external_semaphore_win32
     #ifdef VK_KHR_device_group
-        void submitDeviceGroup(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers,
+        void submitDeviceGroup(std::vector<lent_ptr<CommandBuffer>> cmdBuffers,
             const std::initializer_list<uint32_t>& cmdBufferDeviceMasks = {},
             const std::initializer_list<VkPipelineStageFlags>& waitDstStageMask = {},
             const std::initializer_list<lent_ptr<const Semaphore>>& waitSemaphores = {},

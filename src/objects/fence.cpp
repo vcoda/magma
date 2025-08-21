@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "fence.h"
 #include "device.h"
+#include "commandBuffer.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 
@@ -60,11 +61,23 @@ Fence::State Fence::getStatus() const noexcept
     return (VK_SUCCESS == result) ? State::Signaled : State::Unsignaled;
 }
 
-bool Fence::wait(uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
+bool Fence::wait(uint64_t timeout /* std::numeric_limits<uint64_t>::max() */)
 {
     constexpr VkBool32 waitAll = VK_TRUE;
     const VkResult result = vkWaitForFences(getNativeDevice(), 1, &handle, waitAll, timeout);
     MAGMA_HANDLE_RESULT(result, "failed to wait fence");
+    if (VK_SUCCESS == result)
+    {   // Fence to be signaled once all submitted command buffers have completed execution
+        for (auto cmdBuffer: submittedCmdBuffers)
+            cmdBuffer->executionFinished();
+        submittedCmdBuffers.clear();
+    }
     return (result != VK_TIMEOUT); // VK_SUCCESS or VK_TIMEOUT
+}
+
+void Fence::completeExecutionOnSignaled(lent_ptr<CommandBuffer> cmdBuffer)
+{
+    MAGMA_ASSERT(cmdBuffer);
+    submittedCmdBuffers.insert(cmdBuffer.get());
 }
 } // namespace magma

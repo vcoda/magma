@@ -29,8 +29,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    class Queue;
     class Fence;
+    class Queue;
 #ifdef VK_KHR_acceleration_structure
     struct AccelerationStructureGeometry;
 #endif
@@ -365,7 +365,6 @@ namespace magma
         bool insideTransformFeedback() const noexcept { return transformFeedback; }
         uint32_t inUseObjectCount() const noexcept;
         void releaseObjectsInUse() noexcept;
-        void executionFinished() noexcept;
 
     protected:
         MAGMA_MAKE_SHARED(CommandBuffer)
@@ -410,6 +409,7 @@ namespace magma
 
         VkDevice getNativeDevice() const noexcept { return leanCmd.device; }
         void queueSubmissionFinished() noexcept;
+        void executionFinished() noexcept;
         void pushDebugMarker(const char* /* name */, uint32_t /* color */) noexcept MAGMA_NOOP;
         void popDebugMarker() noexcept MAGMA_NOOP;
         void insertDebugCheckpoint(const char *command, VkPipelineStageFlagBits pipelineStage) const noexcept;
@@ -445,6 +445,7 @@ namespace magma
         mutable std::vector<std::shared_ptr<const DeviceChild>> inUse;
     #endif // MAGMA_RETAIN_OBJECTS_IN_USE
         friend CommandPool;
+        friend Fence;
         friend Queue;
     };
 

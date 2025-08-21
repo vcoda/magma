@@ -38,9 +38,8 @@ void finish(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<Queue> queue,
         auto& fence = cmdBuffer->getFence();
         if (Fence::State::Signaled == fence->getStatus())
             fence->reset();
-        queue->submit(cmdBuffer.get(), 0, nullptr, nullptr, fence);
+        queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
         fence->wait();
-        cmdBuffer->executionFinished();
         fence->reset();
     }
 }
