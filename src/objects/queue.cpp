@@ -444,7 +444,10 @@ uint32_t Queue::inUseObjectCount() const noexcept
 void Queue::onIdle()
 {
     for (auto cmdBuffer: submittedCmdBuffers)
-        cmdBuffer->executionFinished();
+    {
+        if (CommandBuffer::State::Pending == cmdBuffer->getState())
+            cmdBuffer->executionFinished();
+    }
     submittedCmdBuffers.clear();
 #ifdef MAGMA_RETAIN_OBJECTS_IN_USE
     inUse.clear();
