@@ -80,7 +80,7 @@ PipelineShaderStage& PipelineShaderStage::operator=(const PipelineShaderStage& o
 {
     if (this != &other)
     {
-        this->~PipelineShaderStage();
+        release();
         shaderModule = other.shaderModule;
         specialization = other.specialization;
         flags = other.flags;
@@ -96,7 +96,7 @@ PipelineShaderStage& PipelineShaderStage::operator=(PipelineShaderStage&& other)
 {
     if (this != &other)
     {
-        this->~PipelineShaderStage();
+        release();
         pNext = other.pNext;
         flags = other.flags;
         stage = other.stage;

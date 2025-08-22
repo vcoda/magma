@@ -42,6 +42,7 @@ namespace magma
         DeviceFaultInfo& operator=(const DeviceFaultInfo&) noexcept;
         DeviceFaultInfo& operator=(DeviceFaultInfo&&) noexcept;
         ~DeviceFaultInfo();
+        void release();
 
     private:
         uint32_t addressInfoCount;

@@ -43,6 +43,7 @@ namespace magma
         SubpassDescription& operator=(const SubpassDescription&) noexcept;
         SubpassDescription& operator=(SubpassDescription&&) noexcept;
         ~SubpassDescription();
+        void release();
         hash_t getHash() const noexcept;
     };
 

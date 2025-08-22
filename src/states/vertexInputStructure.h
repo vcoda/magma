@@ -30,6 +30,7 @@ namespace magma
     public:
         VertexInputStructure() {}
         ~VertexInputStructure();
+        void release();
         explicit VertexInputStructure(uint32_t binding,
             const VertexInputAttribute& attribute,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;

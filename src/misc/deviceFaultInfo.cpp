@@ -90,7 +90,7 @@ DeviceFaultInfo& DeviceFaultInfo::operator=(const DeviceFaultInfo& other) noexce
 {
     if (this != &other)
     {
-        this->~DeviceFaultInfo();
+        release();
         pNext = other.pNext;
         core::copyString(description, VK_MAX_DESCRIPTION_SIZE, other.description);
         pAddressInfos = core::copyArray(other.pAddressInfos, other.addressInfoCount);
@@ -107,7 +107,7 @@ DeviceFaultInfo& DeviceFaultInfo::operator=(DeviceFaultInfo&& other) noexcept
 {
     if (this != &other)
     {
-        this->~DeviceFaultInfo();
+        release();
         pNext = other.pNext;
         core::copyString(description, VK_MAX_DESCRIPTION_SIZE, other.description);
         pAddressInfos = other.pAddressInfos;
@@ -129,9 +129,17 @@ DeviceFaultInfo& DeviceFaultInfo::operator=(DeviceFaultInfo&& other) noexcept
 
 DeviceFaultInfo::~DeviceFaultInfo()
 {
+    release();
+}
+
+void DeviceFaultInfo::release()
+{
     delete[] pAddressInfos;
     delete[] pVendorInfos;
     delete[] reinterpret_cast<const uint8_t *>(pVendorBinaryData);
+    pAddressInfos = nullptr;
+    pVendorInfos = nullptr;
+    pVendorBinaryData = nullptr;
 }
 #endif // VK_EXT_device_fault
 } // namespace magma

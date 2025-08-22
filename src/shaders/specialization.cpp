@@ -34,7 +34,7 @@ Specialization& Specialization::operator=(const Specialization& other) noexcept
 {
     if (this != &other)
     {
-        this->~Specialization();
+        release();
         mapEntryCount = other.mapEntryCount;
         pMapEntries = core::copyArray(other.pMapEntries, other.mapEntryCount);
         dataSize = other.dataSize;
@@ -45,8 +45,15 @@ Specialization& Specialization::operator=(const Specialization& other) noexcept
 
 Specialization::~Specialization()
 {
+    release();
+}
+
+void Specialization::release()
+{
     delete[] pMapEntries;
     delete[] reinterpret_cast<const uint8_t *>(pData);
+    pMapEntries = nullptr;
+    pData = nullptr;
 }
 
 hash_t Specialization::getHash() const noexcept

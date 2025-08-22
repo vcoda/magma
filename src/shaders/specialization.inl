@@ -49,7 +49,7 @@ inline Specialization& Specialization::operator=(Specialization&& other) noexcep
 {
     if (this != &other)
     {
-        this->~Specialization();
+        release();
         mapEntryCount = other.mapEntryCount;
         pMapEntries = other.pMapEntries;
         dataSize = other.dataSize;

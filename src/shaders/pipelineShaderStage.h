@@ -39,7 +39,8 @@ namespace magma
         PipelineShaderStage(PipelineShaderStage&&) noexcept;
         PipelineShaderStage& operator=(const PipelineShaderStage&) noexcept;
         PipelineShaderStage& operator=(PipelineShaderStage&&) noexcept;
-        virtual ~PipelineShaderStage() { delete[] pName; }
+        virtual ~PipelineShaderStage() { release(); }
+        virtual void release() { delete[] pName; }
         const std::shared_ptr<ShaderModule>& getShaderModule() const noexcept { return shaderModule; }
         const std::shared_ptr<Specialization>& getSpecialization() const noexcept { return specialization; }
         hash_t getHash() const noexcept;
