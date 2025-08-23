@@ -24,48 +24,56 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::helpers
 {
-void layoutTransition(lent_ptr<Image> image, VkImageLayout newLayout,
+bool layoutTransition(lent_ptr<Image> image, VkImageLayout newLayout,
     lent_ptr<CommandBuffer> cmdBuffer,
     VkDependencyFlags dependencyFlags /* 0 */)
 {
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
-    cmdBuffer->reset();
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+    if (cmdBuffer->reset())
     {
-        image->layoutTransition(newLayout, cmdBuffer.get(),
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, dependencyFlags);
+        if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
+        {
+            image->layoutTransition(newLayout, cmdBuffer.get(),
+                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, dependencyFlags);
+            cmdBuffer->end();
+            // Block until execution is complete
+            finish(std::move(cmdBuffer));
+            return true;
+        }
     }
-    cmdBuffer->end();
-    // Block until execution is complete
-    finish(std::move(cmdBuffer));
+    return false;
 }
 
-void batchLayoutTransition(const std::unordered_map<lent_ptr<Image>, LayoutTransition>& imageLayouts,
+bool batchLayoutTransition(const std::unordered_map<lent_ptr<Image>, LayoutTransition>& imageLayouts,
     lent_ptr<CommandBuffer> cmdBuffer,
     VkDependencyFlags dependencyFlags /* 0 */)
 {
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
-    cmdBuffer->reset();
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+    if (cmdBuffer->reset())
     {
-        std::vector<ImageMemoryBarrier> imageMemoryBarriers;
-        imageMemoryBarriers.reserve(imageLayouts.size());
-        for (auto const& [image, transition]: imageLayouts)
+        if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
         {
-            const VkImageSubresourceRange subresourceRange = image->getSubresourceRange(
-                transition.baseMipLevel, transition.baseArrayLayer);
-            imageMemoryBarriers.emplace_back(image.get(), transition.newLayout, subresourceRange);
+            std::vector<ImageMemoryBarrier> imageMemoryBarriers;
+            imageMemoryBarriers.reserve(imageLayouts.size());
+            for (auto const& [image, transition]: imageLayouts)
+            {
+                const VkImageSubresourceRange subresourceRange = image->getSubresourceRange(
+                    transition.baseMipLevel, transition.baseArrayLayer);
+                imageMemoryBarriers.emplace_back(image.get(), transition.newLayout, subresourceRange);
+            }
+            // Use single barrier command for all images
+            cmdBuffer->pipelineBarrier(
+                VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                imageMemoryBarriers, dependencyFlags);
+            cmdBuffer->end();
+            // Block until execution is complete
+            finish(std::move(cmdBuffer));
+            return true;
         }
-        // Use single barrier command for all images
-        cmdBuffer->pipelineBarrier(
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-            imageMemoryBarriers, dependencyFlags);
     }
-    cmdBuffer->end();
-    // Block until execution is complete
-    finish(std::move(cmdBuffer));
+    return false;
 }
 } // namespace magma::helpers

@@ -139,7 +139,7 @@ namespace magma
             const CopyLayout& bufferLayout,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
-        void copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer,
+        bool copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer,
             const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator,
             CopyMemoryFn copyMem,

@@ -229,14 +229,17 @@ VkImageLayout Swapchain::layoutTransition(VkImageLayout newLayout, lent_ptr<Comm
     VkImageLayout oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
-    cmdBuffer->reset();
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+    if (cmdBuffer->reset())
     {
-        for (auto& image: bindedImages)
-            oldLayout = image->layoutTransition(newLayout, cmdBuffer.get(), shaderStageMask);
+        if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
+        {
+            for (auto& image: bindedImages)
+                oldLayout = image->layoutTransition(newLayout, cmdBuffer.get(), shaderStageMask);
+            cmdBuffer->end();
+            // Block until execution is complete
+            finish(std::move(cmdBuffer));
+        }
     }
-    cmdBuffer->end();
-    finish(std::move(cmdBuffer));
     return oldLayout;
 }
 

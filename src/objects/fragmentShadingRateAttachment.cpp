@@ -44,25 +44,28 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuf
         VK_IMAGE_TILING_OPTIMAL,
         optional, sharing, allocator)
 {
-    MAGMA_ASSERT(data);
-    auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, data, std::move(allocator),
-        Buffer::Initializer(), Sharing(), std::move(copyMem));
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
-    cmdBuffer->reset();
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+    MAGMA_ASSERT(data);
+    if (cmdBuffer->reset())
     {
-        for (uint32_t arrayLayer = 0; arrayLayer < arrayLayers; ++arrayLayer)
+        if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
         {
-            constexpr CopyLayout bufferLayout = {0, 0, 0};
-            constexpr VkOffset3D imageOffset = {0, 0, 0};
-            copyMip(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
-                VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
-                VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR);
+            auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, data, std::move(allocator),
+                Buffer::Initializer(), Sharing(), std::move(copyMem));
+            for (uint32_t arrayLayer = 0; arrayLayer < arrayLayers; ++arrayLayer)
+            {
+                constexpr CopyLayout bufferLayout = {0, 0, 0};
+                constexpr VkOffset3D imageOffset = {0, 0, 0};
+                copyMip(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
+                    VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
+                    VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR);
+            }
+            cmdBuffer->end();
+            // Block until execution is complete
+            finish(std::move(cmdBuffer));
         }
     }
-    cmdBuffer->end();
-    finish(std::move(cmdBuffer));
 }
 
 FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuffer> cmdBuffer,

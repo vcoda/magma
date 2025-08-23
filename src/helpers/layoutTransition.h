@@ -29,7 +29,7 @@ namespace magma::helpers
        for VK_DESCRIPTOR_TYPE_STORAGE_IMAGE allowed layout is
        VK_IMAGE_LAYOUT_GENERAL, which isn't set by default. */
 
-    void layoutTransition(lent_ptr<Image> image,
+    bool layoutTransition(lent_ptr<Image> image,
         VkImageLayout newLayout,
         lent_ptr<CommandBuffer> cmdBuffer,
         VkDependencyFlags dependencyFlags = 0);
@@ -41,7 +41,7 @@ namespace magma::helpers
         uint32_t baseArrayLayer = 0;
     };
 
-    void batchLayoutTransition(const std::unordered_map<lent_ptr<Image>, LayoutTransition>& imageLayouts,
+    bool batchLayoutTransition(const std::unordered_map<lent_ptr<Image>, LayoutTransition>& imageLayouts,
         lent_ptr<CommandBuffer> cmdBuffer,
         VkDependencyFlags dependencyFlags = 0);
 } // namespace magma::helpers

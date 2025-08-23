@@ -624,7 +624,7 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
 }
 
-void Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<MipData>& mipMaps,
+bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<MipData>& mipMaps,
     std::shared_ptr<Allocator> allocator, CopyMemoryFn copyMem,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {   // Setup mip chain for buffer copy
@@ -652,16 +652,20 @@ void Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
         });
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
-    cmdBuffer->reset();
-    cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-    {   // Copy buffer to image
-        copyMipmap(cmdBuffer.get(), srcBuffer, mipChain,
-            CopyLayout{0, 0, 0},
-            dstLayout, dstStageMask);
+    if (cmdBuffer->reset())
+    {
+        if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
+        {   // Copy buffer to image
+            copyMipmap(cmdBuffer.get(), srcBuffer, mipChain,
+                CopyLayout{0, 0, 0},
+                dstLayout, dstStageMask);
+            cmdBuffer->end();
+            // Block until execution is complete
+            finish(std::move(cmdBuffer));
+            return true;
+        }
     }
-    cmdBuffer->end();
-    // Block until execution is complete
-    finish(std::move(cmdBuffer));
+    return false;
 }
 
 VkExtent3D Image::calculateValidMipExtent(uint32_t level) const noexcept
