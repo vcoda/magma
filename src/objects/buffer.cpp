@@ -392,6 +392,8 @@ VkDeviceSize Buffer::stagingCopy(lent_ptr<CommandBuffer> cmdBuffer, const void *
     MAGMA_ASSERT(srcBuffer);
     if (!srcBuffer || !srcBufferSize || !size)
         return 0;
+    MAGMA_ASSERT(cmdBuffer->allowsReset());
+    MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     if (cmdBuffer->reset())
     {
         if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
