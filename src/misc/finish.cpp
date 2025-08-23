@@ -18,7 +18,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "../objects/device.h"
-#include "../objects/commandPool.h"
 #include "../objects/commandBuffer.h"
 #include "../objects/queue.h"
 #include "../objects/fence.h"
