@@ -33,10 +33,11 @@ void finish(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<Queue> queue,
         queue->waitIdle();
     }
     else
-    {   // Wait for command buffer operations to finish
+    {
         auto& fence = cmdBuffer->getFence();
         if (Fence::State::Signaled == fence->getStatus())
             fence->reset();
+        // Wait for command buffer operations to finish
         queue->submit(std::move(cmdBuffer), 0, nullptr, nullptr, fence);
         fence->wait();
         fence->reset();
@@ -46,7 +47,8 @@ void finish(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<Queue> queue,
 void finish(lent_ptr<CommandBuffer> cmdBuffer, bool waitIdle /* false */)
 {   // Get queue associated with command buffer
     const uint32_t queueFamilyIndex = cmdBuffer->getQueueFamilyIndex();
-    std::shared_ptr<Queue> queue = cmdBuffer->getDevice()->getQueueByFamily(queueFamilyIndex);
+    const std::shared_ptr<Device>& device = cmdBuffer->getDevice();
+    std::shared_ptr<Queue> queue = device->getQueueByFamily(queueFamilyIndex);
     MAGMA_ASSERT(queue);
     finish(std::move(cmdBuffer), std::move(queue), waitIdle);
 }
