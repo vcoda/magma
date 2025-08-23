@@ -361,7 +361,7 @@ VkDeviceSize Buffer::hostCopy(const void *srcBuffer, VkDeviceSize srcBufferSize,
 VkDeviceSize Buffer::transferCopy(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const Buffer> srcBuffer,
     VkDeviceSize srcOffset /* 0 */,
     VkDeviceSize dstOffset /* 0 */,
-    VkDeviceSize size /* VK_WHOLE_SIZE */)
+    VkDeviceSize size /* VK_WHOLE_SIZE */) noexcept
 {
     MAGMA_ASSERT(srcBuffer);
     const VkDeviceSize srcBufferSize = srcBuffer->getSize();
