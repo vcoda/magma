@@ -41,7 +41,8 @@ UniformTexelBuffer::UniformTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkDevi
     CopyMemoryFn copyMem /* nullptr */):
     UniformTexelBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMem));
+    stagingCopy(std::move(cmdBuffer), data, size, 0, 0, VK_WHOLE_SIZE,
+        std::move(allocator), std::move(copyMem));
 }
 
 UniformTexelBuffer::UniformTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,
@@ -54,6 +55,6 @@ UniformTexelBuffer::UniformTexelBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_p
         size ? size : srcBuffer->getSize(),
         std::move(allocator), optional, sharing)
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    transferCopy(std::move(cmdBuffer), std::move(srcBuffer), srcOffset, 0, VK_WHOLE_SIZE);
 }
 } // namespace magma

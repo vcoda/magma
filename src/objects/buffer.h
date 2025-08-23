@@ -59,17 +59,25 @@ namespace magma
         VkDeviceAddress getDeviceAddress() const noexcept override;
     #endif
         void onDefragment() override;
-        void copyHost(const void *srcBuffer,
+        VkDeviceSize hostCopy(const void *srcBuffer,
             VkDeviceSize srcBufferSize,
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
             CopyMemoryFn copyMem = nullptr) noexcept;
-        void copyTransfer(lent_ptr<CommandBuffer> cmdBuffer,
-            lent_ptr<const SrcTransferBuffer> srcBuffer,
+        VkDeviceSize transferCopy(lent_ptr<CommandBuffer> cmdBuffer,
+            lent_ptr<const Buffer> srcBuffer,
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE);
+        VkDeviceSize stagingCopy(lent_ptr<CommandBuffer> cmdBuffer,
+            const void *srcBuffer,
+            VkDeviceSize srcBufferSize,
+            VkDeviceSize srcOffset = 0,
+            VkDeviceSize dstOffset = 0,
+            VkDeviceSize size = VK_WHOLE_SIZE,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            CopyMemoryFn copyMem = nullptr);
 
     protected:
         Buffer(std::shared_ptr<Device> device,
@@ -80,10 +88,6 @@ namespace magma
             const Initializer& optional,
             const Sharing& sharing,
             std::shared_ptr<Allocator> allocator);
-        void copyStaged(lent_ptr<CommandBuffer> cmdBuffer,
-            const void *data,
-            std::shared_ptr<Allocator> allocator,
-            CopyMemoryFn copyMem = nullptr);
 
         const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;

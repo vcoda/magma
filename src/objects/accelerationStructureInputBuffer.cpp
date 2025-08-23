@@ -41,7 +41,8 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(lent_ptr<Comm
     CopyMemoryFn copyMem /* nullptr */):
     AccelerationStructureInputBuffer(cmdBuffer->getDevice(), size, optional, sharing, allocator)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMem));
+    stagingCopy(std::move(cmdBuffer), data, size, 0, 0, VK_WHOLE_SIZE,
+        std::move(allocator), std::move(copyMem));
 }
 
 AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,
@@ -51,10 +52,10 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(lent_ptr<Comm
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     AccelerationStructureInputBuffer(cmdBuffer->getDevice(),
-        size > 0 ? size : srcBuffer->getSize(),
+        size ? size : srcBuffer->getSize(),
         optional, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    transferCopy(std::move(cmdBuffer), std::move(srcBuffer), srcOffset, 0, VK_WHOLE_SIZE);
 }
 #endif // VK_KHR_acceleration_structure
 } // namespace magma

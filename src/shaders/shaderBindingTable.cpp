@@ -35,7 +35,8 @@ public:
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
             Initializer(), Sharing(), allocator)
     {
-        copyStaged(std::move(cmdBuffer), buffer.data(), std::move(allocator));
+        stagingCopy(std::move(cmdBuffer), buffer.data(), buffer.size(),
+            0, 0, VK_WHOLE_SIZE, std::move(allocator));
     }
 };
 

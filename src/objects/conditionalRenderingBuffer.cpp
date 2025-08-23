@@ -35,7 +35,8 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(lent_ptr<CommandBuffer> c
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, allocator)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMem));
+    stagingCopy(std::move(cmdBuffer), data, size, 0, 0, VK_WHOLE_SIZE,
+        std::move(allocator), std::move(copyMem));
 }
 
 ConditionalRenderingBuffer::ConditionalRenderingBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,
@@ -45,13 +46,13 @@ ConditionalRenderingBuffer::ConditionalRenderingBuffer(lent_ptr<CommandBuffer> c
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Buffer(cmdBuffer->getDevice(),
-        size > 0 ? size : srcBuffer->getSize(),
+        size ? size : srcBuffer->getSize(),
         0, // flags
         VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         optional, sharing, std::move(allocator))
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), size, srcOffset);
+    transferCopy(std::move(cmdBuffer), std::move(srcBuffer), srcOffset, 0, VK_WHOLE_SIZE);
 }
 #endif // VK_EXT_conditional_rendering
 } // namespace magma

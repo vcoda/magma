@@ -79,7 +79,8 @@ IndexBuffer::IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkIndexType indexTyp
     CopyMemoryFn copyMem /* nullptr */):
     IndexBuffer(cmdBuffer->getDevice(), indexType, size, allocator, optional, sharing)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMem));
+    stagingCopy(std::move(cmdBuffer), data, size, 0, 0, VK_WHOLE_SIZE,
+        std::move(allocator), std::move(copyMem));
 }
 
 IndexBuffer::IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkIndexType indexType, lent_ptr<const SrcTransferBuffer> srcBuffer,
@@ -92,7 +93,7 @@ IndexBuffer::IndexBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkIndexType indexTyp
         size ? size : srcBuffer->getSize(),
         std::move(allocator), optional, sharing)
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    transferCopy(std::move(cmdBuffer), std::move(srcBuffer), srcOffset, 0, VK_WHOLE_SIZE);
 }
 
 DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexType indexType, VkDeviceSize size, bool stagedPool,
@@ -108,6 +109,6 @@ DynamicIndexBuffer::DynamicIndexBuffer(std::shared_ptr<Device> device, VkIndexTy
         optional, sharing, std::move(allocator))
 {
     if (initialData)
-        copyHost(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMem));
+        hostCopy(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMem));
 }
 } // namespace magma

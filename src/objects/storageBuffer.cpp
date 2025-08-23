@@ -41,7 +41,8 @@ StorageBuffer::StorageBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkDeviceSize siz
     CopyMemoryFn copyMem /* nullptr */):
     StorageBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMem));
+    stagingCopy(std::move(cmdBuffer), data, size, 0, 0, VK_WHOLE_SIZE,
+        std::move(allocator), std::move(copyMem));
 }
 
 StorageBuffer::StorageBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,
@@ -54,7 +55,7 @@ StorageBuffer::StorageBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const S
         size ? size : srcBuffer->getSize(),
         std::move(allocator), optional, sharing)
 {
-    copyTransfer(std::move(cmdBuffer), std::move(srcBuffer), srcOffset);
+    transferCopy(std::move(cmdBuffer), std::move(srcBuffer), srcOffset, 0, VK_WHOLE_SIZE);
 }
 
 DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDeviceSize size, bool stagedPool,
@@ -71,7 +72,7 @@ DynamicStorageBuffer::DynamicStorageBuffer(std::shared_ptr<Device> device, VkDev
         optional, sharing, std::move(allocator))
 {
     if (initialData)
-        copyHost(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMem));
+        hostCopy(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMem));
 }
 
 #ifdef VK_KHR_acceleration_structure
