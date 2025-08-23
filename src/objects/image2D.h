@@ -47,7 +47,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
-            CopyMemoryFn copyMemFn = nullptr);
+            CopyMemoryFn copyMem = nullptr);
         VkExtent2D getExtent2D() const noexcept { return {extent.width, extent.height}; }
 
     protected:

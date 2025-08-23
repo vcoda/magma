@@ -42,7 +42,7 @@ namespace magma::aux
             const void *data,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
-            CopyMemoryFn copyMemFn = nullptr);
+            CopyMemoryFn copyMem = nullptr);
         void setWidth(uint32_t width_) noexcept { width = width_; }
         uint32_t getWidth() const noexcept { return width; }
         void setHeight(uint32_t height_) noexcept { height = height_; }

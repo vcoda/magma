@@ -44,10 +44,10 @@ VertexBuffer::VertexBuffer(lent_ptr<CommandBuffer> cmdBuffer, VkDeviceSize size,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFn copyMemFn /* nullptr */):
+    CopyMemoryFn copyMem /* nullptr */):
     VertexBuffer(cmdBuffer->getDevice(), size, allocator, optional, sharing)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMemFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMem));
 }
 
 VertexBuffer::VertexBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,
@@ -68,7 +68,7 @@ DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDevic
     const void *initialData /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFn copyMemFn /* nullptr */):
+    CopyMemoryFn copyMem /* nullptr */):
     BaseVertexBuffer(std::move(device), size,
         VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
@@ -76,6 +76,6 @@ DynamicVertexBuffer::DynamicVertexBuffer(std::shared_ptr<Device> device, VkDevic
         optional, sharing, std::move(allocator))
 {
     if (initialData)
-        copyHost(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMemFn));
+        copyHost(initialData, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMem));
 }
 } // namespace magma

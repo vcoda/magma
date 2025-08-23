@@ -67,7 +67,7 @@ Sprite::Sprite(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExten
     VkDeviceSize size, const void *data,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
-    CopyMemoryFn copyMemFn /* nullptr */):
+    CopyMemoryFn copyMem /* nullptr */):
     Image(cmdBuffer->getDevice(), VK_IMAGE_TYPE_2D, format, VkExtent3D{extent_.width, extent_.height, 1},
         1, // mipLevels
         1, // arrayLayers
@@ -95,7 +95,7 @@ Sprite::Sprite(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExten
         bottomRight.y *= footprint.second;
     }
     const MipData mip = {extent, size, data};
-    copyMipmapStaged(std::move(cmdBuffer), {mip}, std::move(allocator), std::move(copyMemFn),
+    copyMipmapStaged(std::move(cmdBuffer), {mip}, std::move(allocator), std::move(copyMem),
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
         VK_PIPELINE_STAGE_TRANSFER_BIT);
 }

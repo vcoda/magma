@@ -6,9 +6,9 @@ inline TIndexBuffer<IndexType>::TIndexBuffer(lent_ptr<CommandBuffer> cmdBuffer, 
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFn copyMemFn /* nullptr */):
+    CopyMemoryFn copyMem /* nullptr */):
     IndexBuffer(std::move(cmdBuffer), magma::getIndexType<IndexType>(), IndexCount * sizeof(IndexType), indices,
-        std::move(allocator), optional, sharing, std::move(copyMemFn))
+        std::move(allocator), optional, sharing, std::move(copyMem))
 {}
 
 template<class T>

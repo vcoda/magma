@@ -42,7 +42,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
-            CopyMemoryFn copyMemFn = nullptr);
+            CopyMemoryFn copyMem = nullptr);
         explicit FragmentDensityMap(lent_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             const VkExtent2D& extent,

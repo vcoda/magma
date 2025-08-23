@@ -38,10 +38,10 @@ AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(lent_ptr<Comm
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFn copyMemFn /* nullptr */):
+    CopyMemoryFn copyMem /* nullptr */):
     AccelerationStructureInputBuffer(cmdBuffer->getDevice(), size, optional, sharing, allocator)
 {
-    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMemFn));
+    copyStaged(std::move(cmdBuffer), data, std::move(allocator), std::move(copyMem));
 }
 
 AccelerationStructureInputBuffer::AccelerationStructureInputBuffer(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<const SrcTransferBuffer> srcBuffer,

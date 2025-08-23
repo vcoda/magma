@@ -142,7 +142,7 @@ namespace magma
         void copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer,
             const std::vector<MipData>& mipMaps,
             std::shared_ptr<Allocator> allocator,
-            CopyMemoryFn copyMemFn,
+            CopyMemoryFn copyMem,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
         VkExtent3D calculateValidMipExtent(uint32_t mipLevel) const noexcept;

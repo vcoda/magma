@@ -58,7 +58,7 @@ namespace magma
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
-            CopyMemoryFn copyMemFn = nullptr);
+            CopyMemoryFn copyMem = nullptr);
         explicit VertexBuffer(lent_ptr<CommandBuffer> cmdBuffer,
             lent_ptr<const SrcTransferBuffer> srcBuffer,
             std::shared_ptr<Allocator> allocator = nullptr,
@@ -85,6 +85,6 @@ namespace magma
             const void *initialData = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),
-            CopyMemoryFn copyMemFn = nullptr);
+            CopyMemoryFn copyMem = nullptr);
     };
 } // namespace magma

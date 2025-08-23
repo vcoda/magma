@@ -64,7 +64,7 @@ namespace magma
             VkDeviceSize srcOffset = 0,
             VkDeviceSize dstOffset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
-            CopyMemoryFn copyMemFn = nullptr) noexcept;
+            CopyMemoryFn copyMem = nullptr) noexcept;
         void copyTransfer(lent_ptr<CommandBuffer> cmdBuffer,
             lent_ptr<const SrcTransferBuffer> srcBuffer,
             VkDeviceSize srcOffset = 0,
@@ -83,7 +83,7 @@ namespace magma
         void copyStaged(lent_ptr<CommandBuffer> cmdBuffer,
             const void *data,
             std::shared_ptr<Allocator> allocator,
-            CopyMemoryFn copyMemFn = nullptr);
+            CopyMemoryFn copyMem = nullptr);
 
         const VkBufferCreateFlags flags;
         const VkBufferUsageFlags usage;

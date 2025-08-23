@@ -26,7 +26,7 @@ SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device, VkDeviceSiz
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
-    CopyMemoryFn copyMemFn /* nullptr */):
+    CopyMemoryFn copyMem /* nullptr */):
     Buffer(std::move(device), size,
         0, // flags
         VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
@@ -34,6 +34,6 @@ SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device, VkDeviceSiz
         optional, sharing, std::move(allocator))
 {
     if (data)
-        copyHost(data, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMemFn));
+        copyHost(data, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMem));
 }
 } // namespace magma
