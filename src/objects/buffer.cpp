@@ -351,7 +351,7 @@ VkDeviceSize Buffer::hostCopy(const void *srcBuffer, VkDeviceSize srcBufferSize,
     {
         if (!copyMem)
             copyMem = std::memcpy;
-        copyMem(dstBuffer, (uint8_t *)srcBuffer + srcOffset, safeCopySize);
+        copyMem(dstBuffer, (uint8_t *)srcBuffer + srcOffset, static_cast<std::size_t>(safeCopySize));
         memory->unmap();
         return safeCopySize;
     }
