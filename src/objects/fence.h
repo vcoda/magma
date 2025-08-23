@@ -24,10 +24,7 @@ namespace magma
     class Queue;
 
     /* Fences are a synchronization primitive that can be
-       used to insert a dependency from a queue to the host.
-       Fences have two states - signaled and unsignaled.
-       A fence can be signaled as part of the execution of
-       a queue submission command. */
+       used to insert a dependency from a queue to the host. */
 
     class Fence : public NonDispatchable<VkFence>
     {
