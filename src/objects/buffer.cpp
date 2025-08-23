@@ -344,8 +344,7 @@ VkDeviceSize Buffer::hostCopy(const void *srcBuffer, VkDeviceSize srcBufferSize,
     else
         size = std::min(size, dstRemaining);
     const VkDeviceSize safeCopySize = std::min(size, srcRemaining);
-    if (!safeCopySize)
-        return 0;
+    MAGMA_ASSERT(safeCopySize);
     void *dstBuffer = memory->map(dstOffset, safeCopySize);
     if (dstBuffer)
     {
@@ -376,8 +375,7 @@ VkDeviceSize Buffer::transferCopy(lent_ptr<CommandBuffer> cmdBuffer, lent_ptr<co
     else
         size = std::min(size, dstRemaining);
     const VkDeviceSize safeCopySize = std::min(size, srcRemaining);
-    if (!safeCopySize)
-        return 0;
+    MAGMA_ASSERT(safeCopySize);
     cmdBuffer->copyBuffer(std::move(srcBuffer), this, srcOffset, dstOffset, safeCopySize);
     return safeCopySize;
 }
