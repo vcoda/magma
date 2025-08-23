@@ -22,7 +22,7 @@ namespace magma
 {
 template<class Type>
 inline void mapImageRange(lent_ptr<Image> image, VkDeviceSize offset, VkDeviceSize size,
-    std::function<void(Type *data)> mapFn)
+    std::function<void(Type *data)> mapMem)
 {
     MAGMA_ASSERT(image);
     MAGMA_ASSERT(image->getTiling() == VK_IMAGE_TILING_LINEAR);
@@ -34,8 +34,8 @@ inline void mapImageRange(lent_ptr<Image> image, VkDeviceSize offset, VkDeviceSi
         MAGMA_ASSERT(data);
         if (data) try
         {
-            MAGMA_ASSERT(mapFn);
-            mapFn(static_cast<Type *>(data));
+            MAGMA_ASSERT(mapMem);
+            mapMem(static_cast<Type *>(data));
             imageMemory->unmap();
         }
         catch (...)
@@ -47,8 +47,8 @@ inline void mapImageRange(lent_ptr<Image> image, VkDeviceSize offset, VkDeviceSi
 }
 
 template<class Type>
-inline void mapImage(lent_ptr<Image> image, std::function<void(Type *data)> mapFn)
+inline void mapImage(lent_ptr<Image> image, std::function<void(Type *data)> mapMem)
 {
-    mapImageRange(std::move(image), 0, VK_WHOLE_SIZE, std::move(mapFn));
+    mapImageRange(std::move(image), 0, VK_WHOLE_SIZE, std::move(mapMem));
 }
 } // namespace magma

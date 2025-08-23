@@ -23,7 +23,7 @@ namespace magma
 {
 template<class Type>
 inline void map(UniformBuffer<Type> *uniformBuffer,
-    std::function<void(typename UniformBuffer<Type>::UniformType *data)> mapFn)
+    std::function<void(typename UniformBuffer<Type>::UniformType *data)> mapMem)
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(sizeof(Type) <= uniformBuffer->getSize());
@@ -31,8 +31,8 @@ inline void map(UniformBuffer<Type> *uniformBuffer,
     MAGMA_ASSERT(data);
     if (data) try
     {
-        MAGMA_ASSERT(mapFn);
-        mapFn(reinterpret_cast<Type *>(data));
+        MAGMA_ASSERT(mapMem);
+        mapMem(reinterpret_cast<Type *>(data));
         uniformBuffer->unmap();
     }
     catch (...)
@@ -44,21 +44,21 @@ inline void map(UniformBuffer<Type> *uniformBuffer,
 
 template<class Type>
 inline void map(const std::unique_ptr<UniformBuffer<Type>>& uniformBuffer,
-    std::function<void(typename UniformBuffer<Type>::UniformType *data)> mapFn)
+    std::function<void(typename UniformBuffer<Type>::UniformType *data)> mapMem)
 {
-    map(uniformBuffer.get(), std::move(mapFn));
+    map(uniformBuffer.get(), std::move(mapMem));
 }
 
 template<class Type>
 inline void map(const std::shared_ptr<UniformBuffer<Type>>& uniformBuffer,
-    std::function<void(typename UniformBuffer<Type>::UniformType *data)> mapFn)
+    std::function<void(typename UniformBuffer<Type>::UniformType *data)> mapMem)
 {
-    map(uniformBuffer.get(), std::move(mapFn));
+    map(uniformBuffer.get(), std::move(mapMem));
 }
 
 template<class Type>
 inline void map(DynamicUniformBuffer<Type> *uniformBuffer,
-    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapFn)
+    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapMem)
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(sizeof(Type) <= uniformBuffer->getSize());
@@ -69,8 +69,8 @@ inline void map(DynamicUniformBuffer<Type> *uniformBuffer,
         helpers::AlignedUniformArray<Type> array(data,
             uniformBuffer->getArraySize(),
             uniformBuffer->getAlignment());
-        MAGMA_ASSERT(mapFn);
-        mapFn(array);
+        MAGMA_ASSERT(mapMem);
+        mapMem(array);
         uniformBuffer->unmap();
     }
     catch (...)
@@ -82,21 +82,21 @@ inline void map(DynamicUniformBuffer<Type> *uniformBuffer,
 
 template<class Type>
 inline void map(const std::unique_ptr<DynamicUniformBuffer<Type>>& uniformBuffer,
-    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapFn)
+    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapMem)
 {
-    return map(uniformBuffer.get(), std::move(mapFn));
+    return map(uniformBuffer.get(), std::move(mapMem));
 }
 
 template<class Type>
 inline void map(const std::shared_ptr<DynamicUniformBuffer<Type>>& uniformBuffer,
-    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapFn)
+    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapMem)
 {
-    return map(uniformBuffer.get(), std::move(mapFn));
+    return map(uniformBuffer.get(), std::move(mapMem));
 }
 
 template<class Type>
 inline void map(NonCoherentUniformBuffer<Type> *uniformBuffer,
-    std::function<void(helpers::UniformArray<Type>& array)> mapFn)
+    std::function<void(helpers::UniformArray<Type>& array)> mapMem)
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(sizeof(Type) <= uniformBuffer->getSize());
@@ -107,7 +107,7 @@ inline void map(NonCoherentUniformBuffer<Type> *uniformBuffer,
     if (uniformBuffer->mappedPersistently())
     {
         helpers::UniformArray<Type> array(memory->getMapPointer(), arraySize, alignment);
-        mapFn(array);
+        mapMem(array);
         offset = array.getFirstIndex() * alignment;
         size = array.getUpdatedRange() * alignment;
     }
@@ -118,8 +118,8 @@ inline void map(NonCoherentUniformBuffer<Type> *uniformBuffer,
         if (data) try
         {
             helpers::UniformArray<Type> array(data, arraySize, alignment);
-            MAGMA_ASSERT(mapFn);
-            mapFn(array);
+            MAGMA_ASSERT(mapMem);
+            mapMem(array);
             offset = array.getFirstIndex() * alignment;
             size = array.getUpdatedRange() * alignment;
         }
@@ -150,21 +150,21 @@ inline void map(NonCoherentUniformBuffer<Type> *uniformBuffer,
 
 template<class Type>
 inline void map(const std::unique_ptr<NonCoherentUniformBuffer<Type>>& uniformBuffer,
-    std::function<void(helpers::UniformArray<Type>& array)> mapFn)
+    std::function<void(helpers::UniformArray<Type>& array)> mapMem)
 {
-    map(uniformBuffer.get(), std::move(mapFn));
+    map(uniformBuffer.get(), std::move(mapMem));
 }
 
 template<class Type>
 inline void map(const std::shared_ptr<NonCoherentUniformBuffer<Type>>& uniformBuffer,
-    std::function<void(helpers::UniformArray<Type>& array)> mapFn)
+    std::function<void(helpers::UniformArray<Type>& array)> mapMem)
 {
-    map(uniformBuffer.get(), std::move(mapFn));
+    map(uniformBuffer.get(), std::move(mapMem));
 }
 
 template<class Type>
 inline void map(NonCoherentDynamicUniformBuffer<Type> *uniformBuffer,
-    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapFn)
+    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapMem)
 {
     MAGMA_ASSERT(uniformBuffer);
     MAGMA_ASSERT(sizeof(Type) <= uniformBuffer->getSize());
@@ -175,8 +175,8 @@ inline void map(NonCoherentDynamicUniformBuffer<Type> *uniformBuffer,
     if (uniformBuffer->mappedPersistently())
     {
         helpers::AlignedUniformArray<Type> array(memory->getMapPointer(), arraySize, alignment);
-        MAGMA_ASSERT(mapFn);
-        mapFn(array);
+        MAGMA_ASSERT(mapMem);
+        mapMem(array);
         offset = array.getFirstIndex() * alignment;
         size = array.getUpdatedRange() * alignment;
     }
@@ -187,8 +187,8 @@ inline void map(NonCoherentDynamicUniformBuffer<Type> *uniformBuffer,
         if (data) try
         {
             helpers::AlignedUniformArray<Type> array(data, arraySize, alignment);
-            MAGMA_ASSERT(mapFn);
-            mapFn(array);
+            MAGMA_ASSERT(mapMem);
+            mapMem(array);
             offset = array.getFirstIndex() * alignment;
             size = array.getUpdatedRange() * alignment;
         }
@@ -212,15 +212,15 @@ inline void map(NonCoherentDynamicUniformBuffer<Type> *uniformBuffer,
 
 template<class Type>
 inline void map(const std::unique_ptr<NonCoherentDynamicUniformBuffer<Type>>& uniformBuffer,
-    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapFn)
+    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapMem)
 {
-    map(uniformBuffer.get(), std::move(mapFn));
+    map(uniformBuffer.get(), std::move(mapMem));
 }
 
 template<class Type>
 inline void map(const std::shared_ptr<NonCoherentDynamicUniformBuffer<Type>>& uniformBuffer,
-    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapFn)
+    std::function<void(helpers::AlignedUniformArray<Type>& array)> mapMem)
 {
-    map(uniformBuffer.get(), std::move(mapFn));
+    map(uniformBuffer.get(), std::move(mapMem));
 }
 } // namespace magma

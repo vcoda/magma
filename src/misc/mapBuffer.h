@@ -22,7 +22,7 @@ namespace magma
 {
 template<class Type>
 inline void mapRange(lent_ptr<Buffer> buffer, VkDeviceSize offset, VkDeviceSize size,
-    std::function<void(Type *data)> mapFn)
+    std::function<void(Type *data)> mapMem)
 {
     MAGMA_ASSERT(buffer);
     MAGMA_ASSERT(offset + (VK_WHOLE_SIZE == size ? 0 : size) <= buffer->getSize());
@@ -32,8 +32,8 @@ inline void mapRange(lent_ptr<Buffer> buffer, VkDeviceSize offset, VkDeviceSize 
         void *data = bufferMemory->map(offset, size);
         if (data) try
         {
-            MAGMA_ASSERT(mapFn);
-            mapFn(reinterpret_cast<Type *>(data));
+            MAGMA_ASSERT(mapMem);
+            mapMem(reinterpret_cast<Type *>(data));
             bufferMemory->unmap();
         }
         catch (...)
@@ -45,8 +45,8 @@ inline void mapRange(lent_ptr<Buffer> buffer, VkDeviceSize offset, VkDeviceSize 
 }
 
 template<class Type>
-inline void map(lent_ptr<Buffer> buffer, std::function<void(Type *data)> mapFn)
+inline void map(lent_ptr<Buffer> buffer, std::function<void(Type *data)> mapMem)
 {
-    mapRange(std::move(buffer), 0, VK_WHOLE_SIZE, std::move(mapFn));
+    mapRange(std::move(buffer), 0, VK_WHOLE_SIZE, std::move(mapMem));
 }
 } // namespace magma
