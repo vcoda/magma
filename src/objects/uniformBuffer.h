@@ -70,9 +70,16 @@ namespace magma
     {
     public:
         explicit UniformBuffer(std::shared_ptr<Device> device,
-            bool stagedPool = false,
-            bool mappedPersistently = false,
-            uint32_t arraySize = 1,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Buffer::Initializer& optional = Buffer::Initializer(),
+            const Sharing& sharing = Sharing()):
+            UniformBuffer(std::move(device), false, false, 1, std::move(allocator), optional, sharing)
+        {}
+
+        explicit UniformBuffer(std::shared_ptr<Device> device,
+            bool stagedPool,
+            bool mappedPersistently,
+            uint32_t arraySize,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
@@ -95,9 +102,16 @@ namespace magma
     {
     public:
         explicit NonCoherentUniformBuffer(std::shared_ptr<Device> device,
-            bool mappedPersistently,
             std::shared_ptr<Allocator> allocator = nullptr,
-            uint32_t arraySize = 1,
+            const Buffer::Initializer& optional = Buffer::Initializer(),
+            const Sharing& sharing = Sharing()):
+            NonCoherentUniformBuffer(std::move(device), false, 1, std::move(allocator), optional, sharing)
+        {}
+
+        explicit NonCoherentUniformBuffer(std::shared_ptr<Device> device,
+            bool mappedPersistently,
+            uint32_t arraySize,
+            std::shared_ptr<Allocator> allocator = nullptr,
             const Buffer::Initializer& optional = Buffer::Initializer(),
             const Sharing& sharing = Sharing()):
             TBaseUniformBuffer<Type>(std::move(device), arraySize,
