@@ -28,6 +28,7 @@ namespace magma
 
     struct AccelerationStructureGeometry : VkAccelerationStructureGeometryKHR
     {
+        constexpr AccelerationStructureGeometry() noexcept;
         constexpr AccelerationStructureGeometry(VkGeometryTypeKHR geometryType,
             VkGeometryFlagsKHR flags = 0) noexcept;
 
@@ -38,6 +39,7 @@ namespace magma
 
     struct AccelerationStructureTriangles : AccelerationStructureGeometry
     {
+        AccelerationStructureTriangles() noexcept {}
         explicit AccelerationStructureTriangles(VkFormat vertexFormat,
             const void *vertices,
             uint32_t maxVertex,
@@ -53,6 +55,7 @@ namespace magma
 
     struct AccelerationStructureIndexedTriangles : AccelerationStructureGeometry
     {
+        AccelerationStructureIndexedTriangles() noexcept {}
         explicit AccelerationStructureIndexedTriangles(VkFormat vertexFormat,
             const void *vertices,
             uint32_t maxVertex,
@@ -91,7 +94,7 @@ namespace magma
 
     struct AccelerationStructureAabbs : AccelerationStructureGeometry
     {
-        AccelerationStructureAabbs() noexcept;
+        AccelerationStructureAabbs() noexcept {}
         explicit AccelerationStructureAabbs(const Aabb& aabb,
             VkGeometryFlagsKHR flags = 0) noexcept;
         explicit AccelerationStructureAabbs(const std::vector<Aabb>& aabbs,
@@ -104,7 +107,7 @@ namespace magma
 
     struct AccelerationStructureInstances : AccelerationStructureGeometry
     {
-        AccelerationStructureInstances() noexcept;
+        AccelerationStructureInstances() noexcept {}
         explicit AccelerationStructureInstances(uint32_t instanceCount,
             const void *instances,
             VkGeometryFlagsKHR flags = 0) noexcept;

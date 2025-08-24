@@ -1,5 +1,15 @@
 namespace magma
 {
+constexpr AccelerationStructureGeometry::AccelerationStructureGeometry() noexcept:
+    VkAccelerationStructureGeometryKHR{
+        VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
+        nullptr, // pNext
+        VK_GEOMETRY_TYPE_MAX_ENUM_KHR,
+        VkAccelerationStructureGeometryDataKHR{}, // geometry
+        0, // flags
+    }
+{}
+
 constexpr AccelerationStructureGeometry::AccelerationStructureGeometry(const VkGeometryTypeKHR geometryType, const VkGeometryFlagsKHR flags /* 0 */) noexcept:
     VkAccelerationStructureGeometryKHR{
         VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR,
@@ -53,15 +63,6 @@ inline Aabb::Aabb(const Vector& min, const Vector& max) noexcept:
     }
 {}
 
-inline AccelerationStructureAabbs::AccelerationStructureAabbs() noexcept:
-    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR)
-{
-    geometry.aabbs.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR;
-    geometry.aabbs.pNext = nullptr;
-    geometry.aabbs.data.deviceAddress = MAGMA_NULL;
-    geometry.aabbs.stride = 0;
-}
-
 inline AccelerationStructureAabbs::AccelerationStructureAabbs(const Aabb& aabb, VkGeometryFlagsKHR flags /* 0 */) noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR, flags)
 {
@@ -93,15 +94,6 @@ inline AccelerationStructureAabbs::AccelerationStructureAabbs(const Buffer *aabb
     MAGMA_ASSERT(aabbs->getSize() % geometry.aabbs.stride == 0);
     primitiveCount = static_cast<uint32_t>(aabbs->getSize() / geometry.aabbs.stride);
     MAGMA_ASSERT(primitiveCount);
-}
-
-inline AccelerationStructureInstances::AccelerationStructureInstances() noexcept:
-    AccelerationStructureGeometry(VK_GEOMETRY_TYPE_INSTANCES_KHR)
-{
-    geometry.instances.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
-    geometry.instances.pNext = nullptr;
-    geometry.instances.arrayOfPointers = VK_FALSE;
-    geometry.instances.data.deviceAddress = MAGMA_NULL;
 }
 
 inline AccelerationStructureInstances::AccelerationStructureInstances(uint32_t instanceCount, const void *instances, VkGeometryFlagsKHR flags /* 0 */) noexcept:
