@@ -106,7 +106,7 @@ SubpassDescription& SubpassDescription::operator=(const SubpassDescription& othe
 {
     if (this != &other)
     {
-        this->~SubpassDescription();
+        release();
         flags = other.flags;
         pipelineBindPoint = other.pipelineBindPoint;
         inputAttachmentCount = other.inputAttachmentCount;
@@ -123,11 +123,21 @@ SubpassDescription& SubpassDescription::operator=(const SubpassDescription& othe
 
 SubpassDescription::~SubpassDescription()
 {
+    release();
+}
+
+void SubpassDescription::release()
+{
     delete[] pInputAttachments;
     delete[] pColorAttachments;
     delete[] pResolveAttachments;
     delete pDepthStencilAttachment;
     delete[] pPreserveAttachments;
+    pInputAttachments = nullptr;
+    pColorAttachments = nullptr;
+    pResolveAttachments = nullptr;
+    pDepthStencilAttachment = nullptr;
+    pPreserveAttachments = nullptr;
 }
 
 hash_t SubpassDescription::getHash() const noexcept

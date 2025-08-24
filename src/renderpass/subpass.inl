@@ -45,7 +45,7 @@ inline SubpassDescription& SubpassDescription::operator=(SubpassDescription&& ot
 {
     if (this != &other)
     {
-        this->~SubpassDescription();
+        release();
         flags = other.flags;
         pipelineBindPoint = other.pipelineBindPoint;
         inputAttachmentCount = other.inputAttachmentCount;

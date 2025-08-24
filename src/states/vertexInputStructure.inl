@@ -3,6 +3,12 @@ namespace magma
 template<class Vertex>
 inline VertexInputStructure<Vertex>::~VertexInputStructure()
 {
+    release();
+}
+
+template<class Vertex>
+inline void VertexInputStructure<Vertex>::release()
+{
     pVertexBindingDescriptions = nullptr; // delete[] pVertexBindingDescriptions in VertexInputState will be no-op
 }
 
@@ -78,7 +84,7 @@ inline VertexInputStructure<Vertex>& VertexInputStructure<Vertex>::operator=(con
 {
     if (this != &other)
     {
-        this->~VertexInputStructure();
+        release();
         flags = other.flags;
         vertexBindingDescription = other.vertexBindingDescription;
         vertexBindingDescriptionCount = other.vertexBindingDescriptionCount;
