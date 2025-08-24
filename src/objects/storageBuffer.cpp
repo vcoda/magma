@@ -82,7 +82,7 @@ AccelerationStructureStorageBuffer::AccelerationStructureStorageBuffer(std::shar
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
     Buffer(std::move(device), size, 0, // flags
-        VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR,
         [buildType]() -> VkMemoryPropertyFlags
         {
             switch (buildType)
