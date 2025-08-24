@@ -43,10 +43,12 @@ namespace magma
         explicit AccelerationStructureTriangles(VkFormat vertexFormat,
             const void *vertices,
             uint32_t maxVertex,
+            std::size_t vertexStride = 0,
             const void *transform = nullptr,
             VkGeometryFlagsKHR flags = 0) noexcept;
         explicit AccelerationStructureTriangles(VkFormat vertexFormat,
             const Buffer *vertices,
+            std::size_t vertexStride = 0,
             const Buffer *transform = nullptr,
             VkGeometryFlagsKHR flags = 0) noexcept;
     };
@@ -62,12 +64,14 @@ namespace magma
             VkIndexType indexType,
             const void *indices,
             uint32_t indexCount,
+            std::size_t vertexStride = 0,
             const void *transform = nullptr,
             VkGeometryFlagsKHR flags = 0) noexcept;
         explicit AccelerationStructureIndexedTriangles(VkFormat vertexFormat,
             const Buffer *vertices,
             VkIndexType indexType,
             const Buffer *indices,
+            std::size_t vertexStride = 0,
             const Buffer *transform = nullptr,
             VkGeometryFlagsKHR flags = 0) noexcept;
         size_t getIndexSize() const noexcept;
