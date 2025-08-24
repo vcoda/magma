@@ -46,6 +46,7 @@ namespace magma
         explicit FragmentDensityMapView(std::unique_ptr<FragmentDensityMap> fragmentDensityMap,
             bool fragmentDensityMapDynamic,
             bool fragmentDensityMapDeferred,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkImageUsageFlags usage = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~FragmentDensityMapView();

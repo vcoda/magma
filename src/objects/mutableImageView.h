@@ -30,6 +30,7 @@ namespace magma
     public:
         explicit MutableImageView(std::unique_ptr<MutableImage> image,
             VkFormat mutableFormat,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkImageViewCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit MutableImageView(std::unique_ptr<MutableImage> image,
@@ -38,6 +39,7 @@ namespace magma
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
             uint32_t baseArrayLayer = 0,
             uint32_t layerCount = VK_REMAINING_ARRAY_LAYERS,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkImageViewCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         ~MutableImageView();

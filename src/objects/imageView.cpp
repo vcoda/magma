@@ -28,8 +28,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t levelCount, uint32_t baseArrayLayer, uint32_t layerCount_,
-    const VkComponentMapping& swizzling, VkImageViewCreateFlags flags, VkImageUsageFlags usage, const StructureChain& extendedInfo):
-    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image->getDevice(), image->getHostAllocator()),
+    const VkComponentMapping& swizzling, VkImageViewCreateFlags flags, VkImageUsageFlags usage,
+    std::shared_ptr<IAllocator> allocator, const StructureChain& extendedInfo):
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image->getDevice(), std::move(allocator)),
     flags(flags),
     viewType(imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags())),
     format(image->getFormat()),
@@ -77,8 +78,9 @@ ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t levelCo
     MAGMA_HANDLE_RESULT(result, "failed to create image view");
 }
 
-ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t baseArrayLayer, uint32_t layerCount, VkImageViewCreateFlags flags):
-    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image->getDevice(), image->getHostAllocator()),
+ImageView::ImageView(const Image *image, uint32_t baseMipLevel, uint32_t baseArrayLayer, uint32_t layerCount, VkImageViewCreateFlags flags,
+    std::shared_ptr<IAllocator> allocator) noexcept:
+    NonDispatchable(VK_OBJECT_TYPE_IMAGE_VIEW, image->getDevice(), std::move(allocator)),
     flags(flags),
     viewType(imageToViewType(image->getType(), image->getArrayLayers(), image->getFlags())),
     format(image->getFormat()),

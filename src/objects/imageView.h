@@ -57,12 +57,14 @@ namespace magma
             const VkComponentMapping& swizzling,
             VkImageViewCreateFlags flags,
             VkImageUsageFlags usage,
+            std::shared_ptr<IAllocator> allocator,
             const StructureChain& extendedInfo);
         ImageView(const Image *image,
             uint32_t baseMipLevel,
             uint32_t baseArrayLayer,
             uint32_t layerCount,
-            VkImageViewCreateFlags flags);
+            VkImageViewCreateFlags flags,
+            std::shared_ptr<IAllocator> allocator) noexcept;
         VkImageViewType imageToViewType(VkImageType imageType, uint32_t arrayLayers, VkImageCreateFlags flags) noexcept;
 
         const VkImageViewCreateFlags flags;
@@ -87,11 +89,13 @@ namespace magma
     {
     public:
         explicit TImageView(Pointer image,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkImageViewCreateFlags flags = 0,
             VkImageUsageFlags usage = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit TImageView(Pointer image,
             const VkComponentMapping& swizzling,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             VkImageViewCreateFlags flags = 0,
             VkImageUsageFlags usage = 0,
             const StructureChain& extendedInfo = StructureChain());
@@ -100,6 +104,7 @@ namespace magma
             uint32_t levelCount = VK_REMAINING_MIP_LEVELS,
             uint32_t baseArrayLayer = 0,
             uint32_t layerCount = VK_REMAINING_ARRAY_LAYERS,
+            std::shared_ptr<IAllocator> allocator = nullptr,
             const VkComponentMapping& swizzling = {
                 VK_COMPONENT_SWIZZLE_IDENTITY,
                 VK_COMPONENT_SWIZZLE_IDENTITY,

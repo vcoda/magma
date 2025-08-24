@@ -25,6 +25,7 @@ namespace magma
 #ifdef VK_EXT_fragment_density_map
 FragmentDensityMapView::FragmentDensityMapView(std::unique_ptr<FragmentDensityMap> fragmentDensityMap,
     bool fragmentDensityMapDynamic, bool fragmentDensityMapDeferred,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkImageUsageFlags usage /* 0 */,
     const StructureChain& extendedInfo /* default */):
     ImageView(fragmentDensityMap.get(), 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS,
@@ -32,12 +33,13 @@ FragmentDensityMapView::FragmentDensityMapView(std::unique_ptr<FragmentDensityMa
          VK_COMPONENT_SWIZZLE_IDENTITY,
          VK_COMPONENT_SWIZZLE_IDENTITY,
          VK_COMPONENT_SWIZZLE_IDENTITY},
-        (fragmentDensityMapDynamic ? VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT : 0)
+        (fragmentDensityMapDynamic ? VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT : 0) |
     #ifdef VK_EXT_fragment_density_map2
-        | (fragmentDensityMapDeferred ? VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT : 0)
-    #endif
-       ,usage,
-        extendedInfo),
+        (fragmentDensityMapDeferred ? VK_IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT : 0),
+    #else
+        0,
+    #endif // VK_EXT_fragment_density_map2
+        usage, std::move(allocator), extendedInfo),
     fragmentDensityMap(std::move(fragmentDensityMap))
 {
     MAGMA_UNUSED(fragmentDensityMapDeferred);

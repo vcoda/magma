@@ -26,8 +26,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 MutableImageView::MutableImageView(std::unique_ptr<MutableImage> image, VkFormat mutableFormat,
-    VkImageViewCreateFlags flags /* 0 */, const StructureChain& extendedInfo /* default */):
-    MutableImageView(std::move(image), mutableFormat, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, flags, extendedInfo)
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
+    VkImageViewCreateFlags flags /* 0 */,
+    const StructureChain& extendedInfo /* default */):
+    MutableImageView(std::move(image), mutableFormat, 0, VK_REMAINING_MIP_LEVELS, 0, VK_REMAINING_ARRAY_LAYERS, std::move(allocator), flags, extendedInfo)
 {}
 
 MutableImageView::MutableImageView(std::unique_ptr<MutableImage> image, VkFormat mutableFormat,
@@ -35,9 +37,10 @@ MutableImageView::MutableImageView(std::unique_ptr<MutableImage> image, VkFormat
     uint32_t levelCount /* VK_REMAINING_MIP_LEVELS */,
     uint32_t baseArrayLayer /* 0 */,
     uint32_t layerCount /* VK_REMAINING_ARRAY_LAYERS */,
+    std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkImageViewCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    ImageView(image.get(), baseMipLevel, baseArrayLayer, layerCount, flags),
+    ImageView(image.get(), baseMipLevel, baseArrayLayer, layerCount, flags, std::move(allocator)),
     mutableImage(std::move(image)),
     mutableFormat(mutableFormat)
 {
