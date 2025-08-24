@@ -83,6 +83,13 @@ DeviceMemoryAllocator::DeviceMemoryAllocator(std::shared_ptr<Device> device_,
         allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_KHR_DEDICATED_ALLOCATION_BIT;
     }
 #endif // VK_KHR_get_memory_requirements2 && VK_KHR_dedicated_allocation
+#if defined(VK_KHR_buffer_device_address)
+    if (device->extensionEnabled(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME))
+        allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
+#elif defined(VK_EXT_buffer_device_address)
+    if (device->extensionEnabled(VK_EXT_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME))
+        allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
+#endif // VK_EXT_buffer_device_address
 #ifdef VK_EXT_memory_priority
     if (device->extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
         allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_EXT_MEMORY_PRIORITY_BIT;
