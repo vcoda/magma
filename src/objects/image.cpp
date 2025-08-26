@@ -626,18 +626,18 @@ bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
     std::shared_ptr<Allocator> allocator, CopyMemoryFn copyMem,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {   // Setup mip chain for buffer copy
-    std::vector<Mip> mipChain;
     VkDeviceSize bufferOffset = 0ull;
+    std::vector<Mip> mipChain;
     mipChain.reserve(mipMaps.size());
     for (auto const& mip: mipMaps)
     {
         mipChain.emplace_back(mip.extent, bufferOffset);
-        bufferOffset += core::alignUp(mip.size, (VkDeviceSize)16);
+        bufferOffset += core::alignUp(mip.size, 16ull);
     }
-    // Allocate staged buffer for mip data
-    auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, bufferOffset, nullptr,
+    // Allocate temporary staging buffer for mip data
+    auto stagingBuffer = std::make_unique<SrcTransferBuffer>(device, bufferOffset, nullptr,
         std::move(allocator), Buffer::Initializer(), Sharing());
-    map<uint8_t>(srcBuffer,
+    map<uint8_t>(stagingBuffer,
         [&](uint8_t *buffer)
         {
             if (!copyMem)
@@ -645,7 +645,7 @@ bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
             core::foreach(mipChain, mipMaps,
                 [buffer, copyMem](auto& dstMip, auto& srcMip)
                 {   // Copy mip texels to buffer
-                    copyMem(buffer + dstMip.bufferOffset, srcMip.texels, (size_t)srcMip.size);
+                    copyMem(buffer + dstMip.bufferOffset, srcMip.texels, static_cast<std::size_t>(srcMip.size));
                 });
         });
     MAGMA_ASSERT(cmdBuffer->allowsReset());
@@ -654,9 +654,8 @@ bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
     {
         if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
         {   // Copy buffer to image
-            copyMipmap(cmdBuffer.get(), srcBuffer, mipChain,
-                CopyLayout{0, 0, 0},
-                dstLayout, dstStageMask);
+            constexpr CopyLayout bufferLayout{0, 0, 0};
+            copyMipmap(cmdBuffer.get(), stagingBuffer, mipChain, bufferLayout, dstLayout, dstStageMask);
             cmdBuffer->end();
             // Block until execution is complete
             finish(std::move(cmdBuffer));
