@@ -61,7 +61,8 @@ namespace magma
     #endif // VK_KHR_device_group
         void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
-            VkMemoryMapFlags flags = 0) noexcept override;
+            VkMemoryMapFlags flags = 0,
+            bool persistently = false) noexcept override;
         void unmap() noexcept override;
         bool flushMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept override;

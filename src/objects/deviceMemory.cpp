@@ -112,9 +112,8 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     const VkMemoryRequirements& memoryRequirements_,
     const StructureChain& extendedInfo /* default */)
 {
-    MAGMA_ASSERT(!mapped());
-    if (mapped())
-        unmap();
+    if (mapPointer)
+        vkUnmapMemory(getNativeDevice(), handle);
     vkFreeMemory(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
     handle = VK_NULL_HANDLE;
     --allocationCount;
@@ -124,10 +123,16 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
     memoryAllocateInfo.pNext = extendedInfo.headNode();
     memoryAllocateInfo.allocationSize = memoryRequirements.size;
     memoryAllocateInfo.memoryTypeIndex = findTypeIndex(memoryType.propertyFlags).value();
-    const VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
+    VkResult result = vkAllocateMemory(getNativeDevice(), &memoryAllocateInfo,
         MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to reallocate device memory");
     ++allocationCount;
+    if (mapPersistent)
+    {
+        mapPersistent = false;
+        map(mapOffset, mapSize, mapFlags, true);
+        MAGMA_ASSERT(mapPointer);
+    }
 }
 
 void DeviceMemory::bind(NonDispatchableHandle object, VkObjectType objectType,
@@ -236,9 +241,12 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
 void *DeviceMemory::map(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,
-    VkMemoryMapFlags mmapFlags /* 0 */) noexcept
+    VkMemoryMapFlags mmapFlags /* 0 */,
+    bool persistently /* false */) noexcept
 {
     MAGMA_ASSERT(flags.hostVisible);
+    if (mapPersistent)
+        return mapPointer;
     if (!mapPointer || (mapOffset != offset) ||
         mapSize < ((VK_WHOLE_SIZE == size) ? getSize() : size) ||
         mapFlags != mmapFlags)
@@ -254,6 +262,7 @@ void *DeviceMemory::map(
         mapOffset = offset;
         mapSize = (VK_WHOLE_SIZE == size) ? getSize() : size;
         mapFlags = mmapFlags;
+        mapPersistent = persistently;
     }
     return mapPointer;
 }
@@ -261,7 +270,7 @@ void *DeviceMemory::map(
 void DeviceMemory::unmap() noexcept
 {
     MAGMA_ASSERT(flags.hostVisible);
-    if (mapPointer)
+    if (mapPointer && !mapPersistent)
     {
         vkUnmapMemory(getNativeDevice(), handle);
         mapPointer = nullptr;

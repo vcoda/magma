@@ -41,6 +41,7 @@ namespace magma
         VkMemoryMapFlags getMapFlags() const noexcept override { return mapFlags; }
         bool binded() const noexcept override { return binding != VK_NULL_HANDLE; }
         bool mapped() const noexcept override { return mapPointer != nullptr; }
+        bool persistentlyMapped() const noexcept override { return mapPointer && mapPersistent; }
 
     protected:
         BaseDeviceMemory(std::shared_ptr<Device> device,
@@ -62,5 +63,6 @@ namespace magma
         VkDeviceSize mapOffset;
         VkDeviceSize mapSize;
         VkMemoryMapFlags mapFlags;
+        bool mapPersistent;
     };
 } // namespace magma

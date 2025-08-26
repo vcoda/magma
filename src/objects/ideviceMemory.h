@@ -53,6 +53,7 @@ namespace magma
         virtual bool managed() const noexcept = 0;
         virtual bool binded() const noexcept = 0;
         virtual bool mapped() const noexcept = 0;
+        virtual bool persistentlyMapped() const noexcept = 0;
         virtual void realloc(NonDispatchableHandle object,
             const VkMemoryRequirements& memoryRequirements,
             const StructureChain& extendedInfo = StructureChain()) = 0;
@@ -68,7 +69,8 @@ namespace magma
     #endif // VK_KHR_device_group
         virtual void *map(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE,
-            VkMemoryMapFlags flags = 0) noexcept = 0;
+            VkMemoryMapFlags flags = 0,
+            bool persistently = false) noexcept = 0;
         virtual void unmap() noexcept = 0;
         virtual bool flushMappedRange(VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept = 0;

@@ -50,8 +50,8 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object,
     const StructureChain& extendedInfo /* default */)
 {
     MAGMA_ASSERT(!mapped());
-    if (mapped())
-        unmap();
+    if (mapPointer)
+        deviceAllocator->unmap(allocation);
     deviceAllocator->free(allocation);
     allocation = nullptr;
     subOffset = 0ull;
@@ -60,6 +60,12 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object,
     {
         allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, memoryType.propertyFlags, extendedInfo);
         subOffset = deviceAllocator->getMemoryBlockInfo(allocation).offset;
+        if (mapPersistent)
+        {
+            mapPersistent = false;
+            map(mapOffset, mapSize, mapFlags, true);
+            MAGMA_ASSERT(mapPointer);
+        }
     }
 }
 
@@ -117,9 +123,12 @@ void ManagedDeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObject
 void *ManagedDeviceMemory::map(
     VkDeviceSize offset /* 0 */,
     VkDeviceSize size /* VK_WHOLE_SIZE */,
-    VkMemoryMapFlags /* mmapFlags = 0 */) noexcept
+    VkMemoryMapFlags /* mmapFlags = 0 */,
+    bool persistently /* false */) noexcept
 {
     MAGMA_ASSERT(flags.hostVisible);
+    if (mapPersistent)
+        return mapPointer;
     if (!mapPointer)
     {
         const VkResult result = deviceAllocator->map(allocation, offset, &mapPointer);
@@ -137,6 +146,7 @@ void *ManagedDeviceMemory::map(
         const ptrdiff_t ptrdiff = static_cast<ptrdiff_t>(offset - mapOffset);
         mapPointer = reinterpret_cast<uint8_t *>(mapPointer) + ptrdiff;
         mapOffset = offset;
+        mapPersistent = persistently;
     }
     return mapPointer;
 }
@@ -144,7 +154,7 @@ void *ManagedDeviceMemory::map(
 void ManagedDeviceMemory::unmap() noexcept
 {
     MAGMA_ASSERT(flags.hostVisible);
-    if (mapPointer)
+    if (mapPointer && !mapPersistent)
     {
         deviceAllocator->unmap(allocation);
         mapPointer = nullptr;
