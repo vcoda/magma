@@ -127,11 +127,17 @@ void DeviceMemory::realloc(NonDispatchableHandle /* unused */,
         MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to reallocate device memory");
     ++allocationCount;
+    result = VK_ERROR_MEMORY_MAP_FAILED;
     if (mapPersistent)
+    {   // Try remap the memory within new allocation
+        mapSize = std::min(mapSize, getSize());
+        result = vkMapMemory(getNativeDevice(), handle, mapOffset, mapSize, mapFlags, &mapPointer);
+    }
+    if (result != VK_SUCCESS)
     {
+        mapPointer = nullptr;
+        mapOffset = mapSize = mapFlags = 0;
         mapPersistent = false;
-        map(mapOffset, mapSize, mapFlags, true);
-        MAGMA_ASSERT(mapPointer);
     }
 }
 

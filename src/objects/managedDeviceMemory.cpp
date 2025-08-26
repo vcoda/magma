@@ -56,16 +56,16 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object,
     allocation = nullptr;
     subOffset = 0ull;
     memoryRequirements = memoryRequirements_;
-    if (memoryRequirements.size > 0)
+    allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, memoryType.propertyFlags, extendedInfo);
+    subOffset = deviceAllocator->getMemoryBlockInfo(allocation).offset;
+    VkResult result = VK_ERROR_MEMORY_MAP_FAILED;
+    if (mapPersistent)
+        result = deviceAllocator->map(allocation, mapOffset, &mapPointer);
+    if (result != VK_SUCCESS)
     {
-        allocation = deviceAllocator->allocate(objectType, object, memoryRequirements, memoryType.propertyFlags, extendedInfo);
-        subOffset = deviceAllocator->getMemoryBlockInfo(allocation).offset;
-        if (mapPersistent)
-        {
-            mapPersistent = false;
-            map(mapOffset, mapSize, mapFlags, true);
-            MAGMA_ASSERT(mapPointer);
-        }
+        mapPointer = nullptr;
+        mapOffset = mapSize = mapFlags = 0;
+        mapPersistent = false;
     }
 }
 
