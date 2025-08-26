@@ -60,7 +60,10 @@ void ManagedDeviceMemory::realloc(NonDispatchableHandle object,
     subOffset = deviceAllocator->getMemoryBlockInfo(allocation).offset;
     VkResult result = VK_ERROR_MEMORY_MAP_FAILED;
     if (mapPersistent)
+    {   // Try remap the memory within new allocation
+        mapSize = std::min(mapSize, getSize());
         result = deviceAllocator->map(allocation, mapOffset, &mapPointer);
+    }
     if (result != VK_SUCCESS)
     {
         mapPointer = nullptr;
