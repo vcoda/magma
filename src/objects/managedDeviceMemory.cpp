@@ -140,13 +140,13 @@ void *ManagedDeviceMemory::map(
         }
         mapOffset = offset;
         mapSize = (VK_WHOLE_SIZE == size) ? getSize() : size;
+        mapPersistent = persistently;
     }
     if (offset != mapOffset)
     {   // Offset inside mapped sub-allocation
         const ptrdiff_t ptrdiff = static_cast<ptrdiff_t>(offset - mapOffset);
         mapPointer = reinterpret_cast<uint8_t *>(mapPointer) + ptrdiff;
         mapOffset = offset;
-        mapPersistent = persistently;
     }
     return mapPointer;
 }
