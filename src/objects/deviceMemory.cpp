@@ -318,8 +318,8 @@ bool DeviceMemory::invalidateMappedRange(
 
 VkDeviceSize DeviceMemory::getCommitment() noexcept
 {
-    VkDeviceSize commitedMemoryInBytes = 0ull;
     MAGMA_ASSERT(getPropertyFlags() & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT);
+    VkDeviceSize commitedMemoryInBytes = 0ull;
     vkGetDeviceMemoryCommitment(getNativeDevice(), handle, &commitedMemoryInBytes);
     return commitedMemoryInBytes;
 }
