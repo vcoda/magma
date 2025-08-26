@@ -572,14 +572,12 @@ void Image::copyMip(lent_ptr<CommandBuffer> cmdBuffer,
     subresourceRange.baseArrayLayer = arrayLayer;
     subresourceRange.layerCount = 1;
     // Image layout transition to destination of a transfer command
-    const ImageMemoryBarrier transferDst(this, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, transferDst);
-    {
-        cmdBuffer->copyBufferToImage(std::move(srcBuffer), this, region);
-    }
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+        ImageMemoryBarrier(this, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange));
+    cmdBuffer->copyBufferToImage(std::move(srcBuffer), this, region);
     // Image layout transition to <dstLayout> (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
-    const ImageMemoryBarrier shaderRead(this, dstLayout, subresourceRange);
-    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask, shaderRead);
+    cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask,
+        ImageMemoryBarrier(this, dstLayout, subresourceRange));
 }
 
 void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
