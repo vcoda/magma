@@ -37,9 +37,13 @@ inline Type *map(lent_ptr<Buffer> buffer,
     return reinterpret_cast<Type *>(ptr);
 }
 
-inline void unmap(lent_ptr<Buffer> buffer) noexcept
+inline bool unmap(lent_ptr<Buffer> buffer) noexcept
 {
-    if (buffer->getMemory()->mapped())
-        buffer->getMemory()->unmap();
+    const std::unique_ptr<IDeviceMemory>& memory = buffer->getMemory();
+    if (memory->persistentlyMapped())
+        return false;
+    if (memory->mapped())
+        memory->unmap();
+    return true;
 }
 } // namespace magma::helpers
