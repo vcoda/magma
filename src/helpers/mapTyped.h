@@ -40,10 +40,9 @@ inline Type *map(lent_ptr<Buffer> buffer,
 inline bool unmap(lent_ptr<Buffer> buffer) noexcept
 {
     const std::unique_ptr<IDeviceMemory>& memory = buffer->getMemory();
-    if (memory->persistentlyMapped())
+    if (!memory->mapped() || memory->persistentlyMapped())
         return false;
-    if (memory->mapped())
-        memory->unmap();
+    memory->unmap();
     return true;
 }
 } // namespace magma::helpers
