@@ -29,6 +29,10 @@ namespace magma
         enum class Family : uint8_t;
         virtual Family getFamily() const noexcept = 0;
         virtual const std::unique_ptr<IDeviceMemory>& getMemory() const noexcept = 0;
+        virtual VkMemoryRequirements getMemoryRequirements() const noexcept = 0;
+    #ifdef VK_KHR_get_memory_requirements2
+        virtual VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const = 0;
+    #endif
         virtual void bindMemory(std::unique_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) = 0;
     #ifdef VK_KHR_device_group
