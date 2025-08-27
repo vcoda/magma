@@ -142,24 +142,10 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
         if (optional.lazilyAllocated)
             memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     }
-    std::unique_ptr<IDeviceMemory> memory;
-    if (MAGMA_DEVICE_ALLOCATOR(allocator))
-    {
-        memory = std::make_unique<ManagedDeviceMemory>(std::move(device),
-            VK_OBJECT_TYPE_IMAGE, handle,
-            memoryRequirements, memoryFlags,
-            MAGMA_HOST_ALLOCATOR(allocator),
-            MAGMA_DEVICE_ALLOCATOR(allocator),
-            extendedMemoryInfo);
-    }
-    else
-    {
-        memory = std::make_unique<DeviceMemory>(std::move(device),
-            memoryRequirements, memoryFlags,
-            MAGMA_HOST_ALLOCATOR(allocator),
-            extendedMemoryInfo);
-    }
-    bindMemory(std::move(memory));
+    std::unique_ptr<IDeviceMemory> bufferMemory = allocateMemory(handle,
+        memoryRequirements, memoryFlags, extendedMemoryInfo,
+        std::move(device), std::move(allocator));
+    bindMemory(std::move(bufferMemory));
 }
 
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,

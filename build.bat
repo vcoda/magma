@@ -182,6 +182,7 @@ src\objects\queue.cpp ^
 src\objects\rayTracingPipeline.cpp ^
 src\objects\rayTracingPipelineBatch.cpp ^
 src\objects\renderPass.cpp ^
+src\objects\resource.cpp ^
 src\objects\sampler.cpp ^
 src\objects\samplerYcbcrConversion.cpp ^
 src\objects\semaphore.cpp ^
@@ -363,6 +364,7 @@ queue.obj ^
 rayTracingPipeline.obj ^
 rayTracingPipelineBatch.obj ^
 renderPass.obj ^
+resource.obj ^
 sampler.obj ^
 samplerYcbcrConversion.obj ^
 semaphore.obj ^

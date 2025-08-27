@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,11 +17,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "model/iresource.h"
-#include "ideviceMemory.h"
 #include "../misc/sharing.h"
 
 namespace magma
 {
+    class Allocator;
+    class Device;
+    class StructureChain;
+
     /* Non-dispatchable resource object (buffer, image,
        acceleration structure). Buffers and images are
        created with a sharing mode controlling how they
@@ -30,17 +33,21 @@ namespace magma
     class Resource : public IResource
     {
     public:
+        virtual ~Resource();
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
         const std::unique_ptr<IDeviceMemory>& getMemory() const noexcept override { return memory; }
 
     protected:
-        Resource(VkDeviceSize size, const Sharing& sharing) noexcept:
-            sharing(sharing),
-            size(size),
-            offset(0ull)
-        {}
+        Resource(VkDeviceSize size,
+            const Sharing& sharing) noexcept;
+        std::unique_ptr<IDeviceMemory> allocateMemory(NonDispatchableHandle handle,
+            const VkMemoryRequirements& memoryRequirements,
+            VkMemoryPropertyFlags flags,
+            const StructureChain& extendedMemoryInfo,
+            std::shared_ptr<Device> device,
+            std::shared_ptr<Allocator> allocator);
 
         const Sharing sharing;
         VkDeviceSize size;

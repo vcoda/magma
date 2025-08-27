@@ -150,6 +150,7 @@ SRC_OBJS= \
 	src/objects/rayTracingPipeline.o \
 	src/objects/rayTracingPipelineBatch.o \
 	src/objects/renderPass.o \
+	src/objects/resource.o \
 	src/objects/sampler.o \
 	src/objects/samplerYcbcrConversion.o \
 	src/objects/semaphore.o \

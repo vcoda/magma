@@ -130,6 +130,7 @@ SOURCES += \
     ../../src/objects/rayTracingPipeline.cpp \
     ../../src/objects/rayTracingPipelineBatch.cpp \
     ../../src/objects/renderPass.cpp \
+    ../../src/objects/resource.cpp \
     ../../src/objects/sampler.cpp \
     ../../src/objects/samplerYcbcrConversion.cpp \
     ../../src/objects/semaphore.cpp \
