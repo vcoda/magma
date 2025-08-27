@@ -47,7 +47,7 @@ namespace magma
             VkMemoryPropertyFlags flags,
             const StructureChain& extendedMemoryInfo,
             std::shared_ptr<Device> device,
-            std::shared_ptr<Allocator> allocator);
+            std::shared_ptr<Allocator> allocator) const;
 
         const Sharing sharing;
         VkDeviceSize size;

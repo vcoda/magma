@@ -37,7 +37,7 @@ Resource::~Resource()
 std::unique_ptr<IDeviceMemory> Resource::allocateMemory(NonDispatchableHandle handle,
     const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
     const StructureChain& extendedMemoryInfo,
-    std::shared_ptr<Device> device, std::shared_ptr<Allocator> allocator)
+    std::shared_ptr<Device> device, std::shared_ptr<Allocator> allocator) const
 {
     std::shared_ptr<IAllocator> hostAllocator;
     std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
