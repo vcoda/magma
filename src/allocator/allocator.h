@@ -184,7 +184,6 @@ namespace magma
 } // namespace magma
 
 #define MAGMA_HOST_ALLOCATOR(allocator) allocator ? allocator->getHostAllocator() : nullptr
-#define MAGMA_DEVICE_ALLOCATOR(allocator) allocator ? allocator->getDeviceAllocator() : nullptr
 
 #ifdef MAGMA_NO_EXCEPTIONS
     #define MAGMA_HANDLE_OUT_OF_MEMORY(ptr) if (!ptr) return nullptr
