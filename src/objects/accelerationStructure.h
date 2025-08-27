@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "model/nondispatchable.h"
 #include "resource.h"
 #include "queryPool.h"
 
@@ -42,7 +43,8 @@ namespace magma
        triangles. */
 
 #ifdef VK_KHR_acceleration_structure
-    class AccelerationStructure : public Resource<AccelerationStructure, VkAccelerationStructureKHR>
+    class AccelerationStructure : public Resource,
+        public NonDispatchable<VkAccelerationStructureKHR>
     {
     public:
         ~AccelerationStructure();

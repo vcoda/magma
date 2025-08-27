@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "model/nondispatchable.h"
 #include "resource.h"
 #include "ideviceMemory.h"
 
@@ -31,7 +32,8 @@ namespace magma
        or compute pipeline via descriptor sets, or by directly
        specifying them as parameters to certain commands. */
 
-    class Image : public Resource<Image, VkImage>
+    class Image : public Resource,
+        public NonDispatchable<VkImage>
     {
     public:
         struct Mip;

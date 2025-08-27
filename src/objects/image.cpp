@@ -41,7 +41,8 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageCreateFlags flags_, VkImageUsageFlags usage_, VkImageTiling tiling,
     const Initializer& optional, const Sharing& sharing, std::shared_ptr<Allocator> allocator):
-    Resource(VK_OBJECT_TYPE_IMAGE, device, 0, sharing, allocator),
+    NonDispatchable<VkImage>(VK_OBJECT_TYPE_IMAGE, device, MAGMA_HOST_ALLOCATOR(allocator)),
+    Resource(0, sharing),
     flags(flags_| optional.flags),
     imageType(imageType),
     format(format),
@@ -164,7 +165,8 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling):
-    Resource(VK_OBJECT_TYPE_IMAGE, std::move(device), 0, Sharing(), nullptr),
+    NonDispatchable<VkImage>(VK_OBJECT_TYPE_IMAGE, std::move(device), nullptr),
+    Resource(0, sharing),
     flags(flags),
     imageType(imageType),
     format(format),

@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "model/nondispatchable.h"
 #include "resource.h"
 #include "ideviceMemory.h"
 
@@ -30,7 +31,8 @@ namespace magma
        commands, or by directly specifying them as parameters
        to certain commands. */
 
-    class Buffer : public Resource<Buffer, VkBuffer>
+    class Buffer : public Resource,
+        public NonDispatchable<VkBuffer>
     {
     public:
         struct Initializer;
