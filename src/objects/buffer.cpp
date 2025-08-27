@@ -54,9 +54,9 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create buffer");
-    // Allocate buffer memory
-    StructureChain extendedMemoryInfo;
+    // Prepare memory requirements
     VkMemoryRequirements memoryRequirements;
+    StructureChain extendedMemoryInfo;
 #if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)
     if (extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
         extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
@@ -118,6 +118,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
         if (!(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT))
             memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     }
+    // Allocate and bind buffer memory
     std::unique_ptr<IDeviceMemory> bufferMemory = allocateMemory(handle,
         memoryRequirements, memoryFlags, extendedMemoryInfo,
         std::move(device), std::move(allocator));

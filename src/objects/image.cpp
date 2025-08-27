@@ -85,9 +85,9 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 #endif // VK_KHR_image_format_list
     const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create image");
-    // Allocate image memory
-    StructureChain extendedMemoryInfo;
+    // Prepare memory requirements
     VkMemoryRequirements memoryRequirements;
+    StructureChain extendedMemoryInfo;
 #if defined(VK_KHR_get_memory_requirements2) && defined(VK_KHR_dedicated_allocation)
     if (extensionEnabled(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME) &&
         extensionEnabled(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME))
@@ -142,10 +142,11 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
         if (optional.lazilyAllocated)
             memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     }
-    std::unique_ptr<IDeviceMemory> bufferMemory = allocateMemory(handle,
+    // Allocate and bind image memory
+    std::unique_ptr<IDeviceMemory> imageMemory = allocateMemory(handle,
         memoryRequirements, memoryFlags, extendedMemoryInfo,
         std::move(device), std::move(allocator));
-    bindMemory(std::move(bufferMemory));
+    bindMemory(std::move(imageMemory));
 }
 
 Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat format,
