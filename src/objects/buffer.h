@@ -40,9 +40,9 @@ namespace magma
         VkBufferCreateFlags getFlags() const noexcept { return flags; }
         VkBufferUsageFlags getUsage() const noexcept { return usage; }
         Family getFamily() const noexcept override final { return Family::Buffer; }
-        VkMemoryRequirements getMemoryRequirements() const noexcept;
+        VkMemoryRequirements getMemoryRequirements() const noexcept override;
     #ifdef VK_KHR_get_memory_requirements2
-        VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const;
+        VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const override;
     #endif
         VkSparseMemoryBind getSparseMemoryBind(VkDeviceSize bufferOffset,
             VkDeviceSize size,

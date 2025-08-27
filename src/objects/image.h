@@ -74,10 +74,10 @@ namespace magma
             const VkOffset3D& offset,
             const VkExtent3D& extent,
             VkDeviceSize memoryOffset) const noexcept;
-        VkMemoryRequirements getMemoryRequirements() const noexcept;
+        VkMemoryRequirements getMemoryRequirements() const noexcept override;
         std::vector<VkSparseImageMemoryRequirements> getSparseMemoryRequirements() const;
     #ifdef VK_KHR_get_memory_requirements2
-        VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const;
+        VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const override;
         std::vector<VkSparseImageMemoryRequirements2KHR> getSparseMemoryRequirements2(void *memoryRequirements) const;
     #endif // VK_KHR_get_memory_requirements2
         void bindMemory(std::unique_ptr<IDeviceMemory> memory,
