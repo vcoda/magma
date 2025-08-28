@@ -60,9 +60,10 @@ DescriptorSet::~DescriptorSet()
 
 bool DescriptorSet::dirty() const
 {
-    return std::any_of(descriptors.begin(), descriptors.end(), [](auto descriptor) {
-        return descriptor->modified();
-    });
+    return std::any_of(descriptors.begin(), descriptors.end(),
+        [](auto descriptor) {
+            return descriptor->modified();
+        });
 }
 
 void DescriptorSet::update()

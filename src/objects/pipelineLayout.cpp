@@ -119,8 +119,7 @@ PipelineLayout::~PipelineLayout()
 bool PipelineLayout::hasLayout(lent_ptr<const DescriptorSetLayout> setLayout) const noexcept
 {
     return std::any_of(layoutHashes.begin(), layoutHashes.end(),
-        [&setLayout](hash_t layoutHash)
-        {
+        [&setLayout](hash_t layoutHash) {
             return setLayout->getHash() == layoutHash;
         });
 }

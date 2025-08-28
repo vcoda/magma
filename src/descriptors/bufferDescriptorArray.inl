@@ -9,8 +9,7 @@ template<uint32_t Size>
 inline bool BufferDescriptorArray<Size>::resourceBinded() const noexcept
 {
     return std::all_of(descriptors.begin(), descriptors.end(),
-        [](auto const& it)
-        {
+        [](auto const& it) {
             return (it.buffer != VK_NULL_HANDLE);
         });
 }
@@ -40,8 +39,7 @@ template<uint32_t Size>
 inline bool TexelBufferDescriptorArray<Size>::resourceBinded() const noexcept
 {
     return std::all_of(descriptors.begin(), descriptors.end(),
-        [](auto view)
-        {
+        [](auto view) {
             return (view != VK_NULL_HANDLE);
         });
 }

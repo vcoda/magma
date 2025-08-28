@@ -425,8 +425,7 @@ VkInstance Device::getNativeInstance() const noexcept
 bool Device::supportsQueueFamily(uint32_t queueFamilyIndex, uint32_t queueIndex) const noexcept
 {
     auto it = std::find_if(queueDescriptors.begin(), queueDescriptors.end(),
-        [queueFamilyIndex](const DeviceQueueDescriptor& descriptor)
-        {
+        [queueFamilyIndex](const DeviceQueueDescriptor& descriptor) {
             return descriptor.queueFamilyIndex == queueFamilyIndex;
         });
     if (it != queueDescriptors.end())

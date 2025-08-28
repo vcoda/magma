@@ -42,15 +42,13 @@ Profiler::Profiler(VkQueueFlags queueType, std::shared_ptr<Device> device, std::
     // Try to find dedicated queue
     const std::vector<VkQueueFamilyProperties> queueFamilyProperties = physicalDevice->getQueueFamilyProperties();
     auto it = std::find_if(queueFamilyProperties.begin(), queueFamilyProperties.end(),
-        [queueType](const VkQueueFamilyProperties& properties)
-        {
+        [queueType](const VkQueueFamilyProperties& properties) {
             return (properties.queueFlags & queueType) == queueType;
         });
     if (queueFamilyProperties.end() == it)
     {   // Find any queue that has corresponding flag
         it = std::find_if(queueFamilyProperties.begin(), queueFamilyProperties.end(),
-            [queueType](const VkQueueFamilyProperties& properties)
-            {
+            [queueType](const VkQueueFamilyProperties& properties) {
                 return (properties.queueFlags & queueType);
             });
     }

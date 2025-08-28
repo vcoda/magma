@@ -12,22 +12,19 @@ inline bool ImageDescriptorArray<Size>::resourceBinded() const noexcept
     {
     case VK_DESCRIPTOR_TYPE_SAMPLER:
         return std::all_of(descriptors.begin(), descriptors.end(),
-            [](auto const& it)
-            {
+            [](auto const& it) {
                 return (it.sampler != VK_NULL_HANDLE);
             });
     case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
         return std::all_of(descriptors.begin(), descriptors.end(),
-            [](auto const& it)
-            {
+            [](auto const& it) {
                 return (it.sampler != VK_NULL_HANDLE) && (it.imageView != VK_NULL_HANDLE);
             });
     case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
     case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
     case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
         return std::all_of(descriptors.begin(), descriptors.end(),
-            [](auto const& it)
-            {
+            [](auto const& it) {
                 return (it.imageView != VK_NULL_HANDLE);
             });
     default:
@@ -67,17 +64,14 @@ template<uint32_t Size>
 inline bool CombinedImageImmutableSamplerArray<Size>::resourceBinded() const noexcept
 {
     const bool associatedWithSamplers = std::all_of(this->descriptors.begin(), this->descriptors.end(),
-        [](auto const& it)
-        {
+        [](auto const& it) {
             return (it.sampler != VK_NULL_HANDLE);
         }) || std::all_of(immutableSamplers.begin(), immutableSamplers.end(),
-        [](VkSampler it)
-        {
+        [](VkSampler it) {
             return (it != VK_NULL_HANDLE);
         });
     return std::all_of(this->descriptors.begin(), this->descriptors.end(),
-        [](auto const& it)
-        {
+        [](auto const& it) {
             return (it.imageView != VK_NULL_HANDLE);
         }) && associatedWithSamplers;
 }

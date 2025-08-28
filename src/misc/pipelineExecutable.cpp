@@ -79,9 +79,8 @@ std::vector<VkPipelineExecutableInternalRepresentationKHR> PipelineExecutable::g
                 data.emplace_back(ir.dataSize ? MAGMA_NEW char[ir.dataSize] : nullptr);
         }
         core::foreach(internalRepresentations, data,
-            [](auto& ir, auto& data)
-            {   // Assign cached pointer
-                ir.pData = data.get();
+            [](auto& ir, auto& data) {
+                ir.pData = data.get(); // Assign cached pointer
             });
         result = vkGetPipelineExecutableInternalRepresentationsKHR(device, &pipelineExecutableInfo,
             &internalRepresentationCount, internalRepresentations.data());

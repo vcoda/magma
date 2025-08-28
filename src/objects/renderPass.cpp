@@ -167,8 +167,7 @@ VkExtent2D RenderPass::getRenderAreaGranularity() const noexcept
 bool RenderPass::usesClear() const noexcept
 {
     return std::any_of(attachments.begin(), attachments.end(),
-        [](auto const& attachment)
-        {
+        [](auto const& attachment) {
             return (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp);
         });
 }
@@ -176,8 +175,7 @@ bool RenderPass::usesClear() const noexcept
 bool RenderPass::usesMultisampling() const noexcept
 {
     return std::any_of(attachments.begin(), attachments.end(),
-        [](auto const& attachment)
-        {
+        [](auto const& attachment) {
             return (attachment.samples > 1);
         });
 }
