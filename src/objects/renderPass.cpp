@@ -81,7 +81,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     SubpassDescription subpassDescription;
     subpassDescription.colorAttachmentCount = colorAttachmentCount;
     subpassDescription.pColorAttachments = colorAttachments;
-    subpassDescription.pResolveAttachments = resolveAttachments;
+    subpassDescription.pResolveAttachments = resolveAttachmentCount ? resolveAttachments : nullptr;
     subpassDescription.pDepthStencilAttachment = hasDepthStencilAttachment ? &depthStencilAttachment : nullptr;
     SubpassDependency dependencies[] = {
         // Dependency at the beginning of the render pass
