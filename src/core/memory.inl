@@ -178,4 +178,16 @@ inline bool compareArrays(const T *p1, const T *p2, std::size_t count) noexcept
         return false;
     return !memcmp(p1, p2, sizeof(T) * count);
 }
+
+template<class T>
+inline std::size_t stacksize(std::size_t count) noexcept
+{
+    const std::size_t size = sizeof(T) * count;
+#ifdef _MSC_VER
+    MAGMA_ASSERT(size < _ALLOCA_S_THRESHOLD);
+#else
+    MAGMA_ASSERT(size < 1024);
+#endif
+    return size;
+}
 } // namespace magma::core

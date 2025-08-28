@@ -183,6 +183,12 @@ namespace magma
     };
 } // namespace magma
 
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    #define stackalloc(T, count) reinterpret_cast<T *>(_alloca(magma::core::stacksize<T>(static_cast<std::size_t>(count))))
+#else
+    #define stackalloc(T, count) reinterpret_cast<T *>(alloca(magma::core::stacksize<T>(static_cast<std::size_t>(count))))
+#endif
+
 #define MAGMA_HOST_ALLOCATOR(allocator) allocator ? allocator->getHostAllocator() : nullptr
 
 #ifdef MAGMA_NO_EXCEPTIONS
