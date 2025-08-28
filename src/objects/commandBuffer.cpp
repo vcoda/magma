@@ -252,7 +252,7 @@ void CommandBuffer::blitImage(lent_ptr<const Image> srcImage, lent_ptr<Image> ds
 void CommandBuffer::waitEvents(const std::initializer_list<lent_ptr<const Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::initializer_list<MemoryBarrier>& memoryBarriers /* empty */,
     const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
-    const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_ /* empty */) const noexcept
+    const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers /* empty */) const noexcept
 {
     MAGMA_VLA(const Event*, unmanagedEvents, events.size());
     for (auto const& event: events)
@@ -260,22 +260,18 @@ void CommandBuffer::waitEvents(const std::initializer_list<lent_ptr<const Event>
         unmanagedEvents.put(event.get());
         MAGMA_INUSE(event);
     }
-    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
-    for (auto const& barrier: imageMemoryBarriers_)
-    {
-        imageMemoryBarriers.put(barrier);
-        barrier.updateImageLayout();
-    }
     leanCmd.waitEvents(unmanagedEvents.count(), unmanagedEvents, srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.begin(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin(),
-        imageMemoryBarriers.count(), imageMemoryBarriers);
+        core::countof(imageMemoryBarriers), imageMemoryBarriers.begin());
+    for (auto const& barrier: imageMemoryBarriers)
+        barrier.updateImageLayout();
     MAGMA_CHECKPOINT(dstStageMask);
 }
 
 void CommandBuffer::waitEvents(const std::vector<lent_ptr<const Event>>& events, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::vector<MemoryBarrier>& memoryBarriers, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers,
-    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_) const noexcept
+    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept
 {
     MAGMA_VLA(const Event*, unmanagedEvents, events.size());
     for (auto const& event: events)
@@ -283,35 +279,28 @@ void CommandBuffer::waitEvents(const std::vector<lent_ptr<const Event>>& events,
         unmanagedEvents.put(event.get());
         MAGMA_INUSE(event);
     }
-    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
-    for (auto const& barrier: imageMemoryBarriers_)
-    {
-        imageMemoryBarriers.put(barrier);
-        barrier.updateImageLayout();
-    }
     leanCmd.waitEvents(unmanagedEvents.count(), unmanagedEvents, srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.data(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data(),
-        imageMemoryBarriers.count(), imageMemoryBarriers);
+        core::countof(imageMemoryBarriers), imageMemoryBarriers.data());
+    for (auto const& barrier: imageMemoryBarriers)
+        barrier.updateImageLayout();
     MAGMA_CHECKPOINT(dstStageMask);
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::initializer_list<MemoryBarrier>& memoryBarriers /* empty */,
     const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
-    const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers_ /* empty */,
+    const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers /* empty */,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
-    for (auto const& barrier: imageMemoryBarriers_)
-    {
-        imageMemoryBarriers.put(barrier);
-        barrier.updateImageLayout();
-    }
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.begin(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin(),
-        imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
+        core::countof(imageMemoryBarriers), imageMemoryBarriers.begin(),
+        dependencyFlags);
+    for (auto const& barrier: imageMemoryBarriers)
+        barrier.updateImageLayout();
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }
@@ -319,19 +308,16 @@ void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelin
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
     const std::vector<MemoryBarrier>& memoryBarriers,
     const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers,
-    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers_,
+    const std::vector<ImageMemoryBarrier>& imageMemoryBarriers,
     VkDependencyFlags dependencyFlags /* 0 */) noexcept
 {
-    MAGMA_VLA(VkImageMemoryBarrier, imageMemoryBarriers, imageMemoryBarriers_.size());
-    for (auto const& barrier: imageMemoryBarriers_)
-    {
-        imageMemoryBarriers.put(barrier);
-        barrier.updateImageLayout();
-    }
     leanCmd.pipelineBarrier(srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.data(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data(),
-        imageMemoryBarriers.count(), imageMemoryBarriers, dependencyFlags);
+        core::countof(imageMemoryBarriers), imageMemoryBarriers.data(),
+        dependencyFlags);
+    for (auto const& barrier: imageMemoryBarriers)
+        barrier.updateImageLayout();
     MAGMA_CHECKPOINT(dstStageMask);
     MAGMA_INCR(stats.pipelineBarrierCount, 1);
 }

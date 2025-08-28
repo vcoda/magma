@@ -30,7 +30,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout) no
 ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, const VkImageSubresourceRange& subresourceRange) noexcept:
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-        nullptr, // pNext
+        image, // pNext
         VK_ACCESS_NONE_KHR, // srcAccessMask
         VK_ACCESS_NONE_KHR, // dstAccessMask
         image->getLayout(subresourceRange.baseMipLevel),
@@ -39,8 +39,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, co
         VK_QUEUE_FAMILY_IGNORED,
         *image,
         subresourceRange
-    },
-    image(image)
+    }
 {
     switch (oldLayout)
     {
@@ -175,7 +174,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
     VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept:
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-        nullptr, // pNext
+        image, // pNext
         srcAccessMask,
         dstAccessMask,
         image->getLayout(0),
@@ -184,12 +183,12 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
         VK_QUEUE_FAMILY_IGNORED,
         *image,
         ImageSubresourceRange(image)
-    },
-    image(image)
+    }
 {}
 
 void ImageMemoryBarrier::updateImageLayout() const noexcept
-{
+{   // This ugly cast allows to keep the size of ImageMemoryBarrier equal to the size of VkImageMemoryBarrier
+    Image *image = const_cast<Image *>(reinterpret_cast<const Image *>(pNext));
     uint32_t levelCount = subresourceRange.levelCount;
     if (VK_REMAINING_MIP_LEVELS == levelCount)
         levelCount = image->getMipLevels() - subresourceRange.baseMipLevel;

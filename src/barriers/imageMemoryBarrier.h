@@ -44,8 +44,6 @@ namespace magma
     private:
         // Image layout will be updated by CommandBuffer::pipelineBarrier()
         void updateImageLayout() const noexcept;
-
-        Image *image;
         friend class CommandBuffer;
     };
 } // namespace magma
