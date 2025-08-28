@@ -74,10 +74,11 @@ void PipelineCache::mergeCache(lent_ptr<const PipelineCache> srcCache)
 
 void PipelineCache::mergeCaches(const std::vector<lent_ptr<const PipelineCache>>& srcCaches)
 {
-    MAGMA_VLA(VkPipelineCache, dereferencedSrcCaches, srcCaches.size());
+    auto dereferencedSrcCaches = stackalloc(VkPipelineCache, srcCaches.size());
+    uint32_t srcCacheCount = 0;
     for (auto const& cache: srcCaches)
-        dereferencedSrcCaches.put(*cache);
-    const VkResult result = vkMergePipelineCaches(getNativeDevice(), handle, dereferencedSrcCaches.count(), dereferencedSrcCaches);
+        dereferencedSrcCaches[srcCacheCount++] = *cache;
+    const VkResult result = vkMergePipelineCaches(getNativeDevice(), handle, srcCacheCount, dereferencedSrcCaches);
     MAGMA_HANDLE_RESULT(result, "failed to merge pipeline caches");
 }
 } // namespace magma

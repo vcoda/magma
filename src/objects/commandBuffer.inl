@@ -282,10 +282,7 @@ inline void CommandBuffer::clearDepthStencilImage(lent_ptr<Image> image, const C
 
 inline void CommandBuffer::clearAttachments(const std::initializer_list<ClearAttachment>& attachments, const VkClearRect& clearRect) const noexcept
 {
-    MAGMA_VLA(VkClearAttachment, clearAttachments, attachments.size());
-    for (auto const& attachment: attachments)
-        clearAttachments.put(attachment);
-    leanCmd.clearAttachments(core::countof(attachments), clearAttachments, clearRect);
+    leanCmd.clearAttachments(core::countof(attachments), attachments.begin(), clearRect);
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 }
 

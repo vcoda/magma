@@ -828,9 +828,6 @@
     <ClInclude Include="..\..\src\misc\mapBuffer.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\vla.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\defines.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -1640,9 +1637,6 @@
       <Filter>Header Files\core</Filter>
     </None>
     <None Include="..\..\src\core\variantPtr.inl">
-      <Filter>Header Files\core</Filter>
-    </None>
-    <None Include="..\..\src\core\vla.inl">
       <Filter>Header Files\core</Filter>
     </None>
     <None Include="..\..\src\objects\descriptorSet.inl">

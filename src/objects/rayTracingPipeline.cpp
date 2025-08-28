@@ -49,9 +49,10 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     shaderGroups(shaderGroups_),
     maxRecursionDepth(maxRecursionDepth)
 {
-    MAGMA_VLA(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
+    auto dereferencedStages = stackalloc(VkPipelineShaderStageCreateInfo, shaderStages.size());
+    uint32_t stageCount = 0;
     for (auto const& stage: shaderStages)
-        dereferencedStages.put(stage);
+        dereferencedStages[stageCount++] = stage;
     VkRayTracingPipelineCreateInfoKHR pipelineInfo;
     VkRayTracingPipelineInterfaceCreateInfoKHR pipelineInterfaceInfo = {};
     VkPipelineLibraryCreateInfoKHR pipelineLibraryInfo = {};
@@ -61,7 +62,7 @@ RayTracingPipeline::RayTracingPipeline(std::shared_ptr<Device> device_, const st
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stageCount = dereferencedStages.count();
+    pipelineInfo.stageCount = stageCount;
     pipelineInfo.pStages = dereferencedStages;
     pipelineInfo.groupCount = core::countof(shaderGroups);
     pipelineInfo.pGroups = shaderGroups.data();

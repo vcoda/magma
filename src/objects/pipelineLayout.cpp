@@ -90,14 +90,15 @@ PipelineLayout::PipelineLayout(const std::initializer_list<lent_ptr<const Descri
 {
     for (auto const& layout: setLayouts)
         layoutHashes.insert(layout->getHash());
-    MAGMA_VLA(VkDescriptorSetLayout, dereferencedSetLayouts, setLayouts.size());
+    auto dereferencedSetLayouts = stackalloc(VkDescriptorSetLayout, setLayouts.size());
+    uint32_t setLayoutCount = 0;
     for (auto const& layout: setLayouts)
-        dereferencedSetLayouts.put(*layout);
+        dereferencedSetLayouts[setLayoutCount++] = *layout;
     VkPipelineLayoutCreateInfo pipelineLayoutInfo;
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.pNext = nullptr;
     pipelineLayoutInfo.flags = flags;
-    pipelineLayoutInfo.setLayoutCount = dereferencedSetLayouts.count();
+    pipelineLayoutInfo.setLayoutCount = setLayoutCount;
     pipelineLayoutInfo.pSetLayouts = dereferencedSetLayouts;
     pipelineLayoutInfo.pushConstantRangeCount = core::countof(pushConstantRanges);
     pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();

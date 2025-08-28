@@ -221,7 +221,6 @@ HEADERS += \
     ../../src/core/refCountChecker.h \
     ../../src/core/spinlock.h \
     ../../src/core/variantPtr.h \
-    ../../src/core/vla.h \
     ../../src/descriptors/accelerationStructure.h \
     ../../src/descriptors/arrayElement.h \
     ../../src/descriptors/bufferArrayElement.h \

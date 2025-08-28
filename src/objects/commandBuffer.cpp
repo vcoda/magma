@@ -174,13 +174,14 @@ void CommandBuffer::setViewport(float x, float y, float width, float height,
 void CommandBuffer::bindDescriptorSets(lent_ptr<const Pipeline> pipeline, uint32_t firstSet, const std::initializer_list<lent_ptr<const DescriptorSet>>& descriptorSets,
     const std::initializer_list<uint32_t>& dynamicOffsets /* empty */) noexcept
 {
-    MAGMA_VLA(const DescriptorSet*, unmanagedDescriptorSets, descriptorSets.size());
+    auto unmanagedDescriptorSets = stackalloc(const DescriptorSet*, descriptorSets.size());
+    uint32_t descriptorSetCount = 0;
     for (auto const& descriptorSet: descriptorSets)
     {
-        unmanagedDescriptorSets.put(descriptorSet.get());
+        unmanagedDescriptorSets[descriptorSetCount++] = descriptorSet.get();
         MAGMA_INUSE(descriptorSet);
     }
-    leanCmd.bindDescriptorSets(pipeline->getBindPoint(), pipeline->getLayout().get(), firstSet, unmanagedDescriptorSets.count(), unmanagedDescriptorSets,
+    leanCmd.bindDescriptorSets(pipeline->getBindPoint(), pipeline->getLayout().get(), firstSet, descriptorSetCount, unmanagedDescriptorSets,
         core::countof(dynamicOffsets), dynamicOffsets.begin());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     MAGMA_INCR(stats.bindDescriptorSetCount, 1);
@@ -189,13 +190,14 @@ void CommandBuffer::bindDescriptorSets(lent_ptr<const Pipeline> pipeline, uint32
 void CommandBuffer::bindVertexBuffers(uint32_t firstBinding, const std::initializer_list<lent_ptr<const Buffer>>& vertexBuffers,
     const std::initializer_list<VkDeviceSize>& offsets /* empty */) noexcept
 {
-    MAGMA_VLA(const Buffer*, unmanagedVertexBuffers, vertexBuffers.size());
+    auto unmanagedVertexBuffers = stackalloc(const Buffer*, vertexBuffers.size());
+    uint32_t bindingCount = 0;
     for (auto const& buffer: vertexBuffers)
     {
-        unmanagedVertexBuffers.put(buffer.get());
+        unmanagedVertexBuffers[bindingCount++] = buffer.get();
         MAGMA_INUSE(buffer);
     }
-    leanCmd.bindVertexBuffers(firstBinding, unmanagedVertexBuffers.count(), unmanagedVertexBuffers, offsets.begin());
+    leanCmd.bindVertexBuffers(firstBinding, bindingCount, unmanagedVertexBuffers, offsets.begin());
     MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_VERTEX_INPUT_BIT);
     MAGMA_INCR(stats.bindVertexBufferCount, 1);
 }
@@ -254,13 +256,14 @@ void CommandBuffer::waitEvents(const std::initializer_list<lent_ptr<const Event>
     const std::initializer_list<BufferMemoryBarrier>& bufferMemoryBarriers /* empty */,
     const std::initializer_list<ImageMemoryBarrier>& imageMemoryBarriers /* empty */) const noexcept
 {
-    MAGMA_VLA(const Event*, unmanagedEvents, events.size());
+    auto unmanagedEvents = stackalloc(const Event*, events.size());
+    uint32_t eventCount = 0;
     for (auto const& event: events)
     {
-        unmanagedEvents.put(event.get());
+        unmanagedEvents[eventCount++] = event.get();
         MAGMA_INUSE(event);
     }
-    leanCmd.waitEvents(unmanagedEvents.count(), unmanagedEvents, srcStageMask, dstStageMask,
+    leanCmd.waitEvents(eventCount, unmanagedEvents, srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.begin(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.begin(),
         core::countof(imageMemoryBarriers), imageMemoryBarriers.begin());
@@ -273,13 +276,14 @@ void CommandBuffer::waitEvents(const std::vector<lent_ptr<const Event>>& events,
     const std::vector<MemoryBarrier>& memoryBarriers, const std::vector<BufferMemoryBarrier>& bufferMemoryBarriers,
     const std::vector<ImageMemoryBarrier>& imageMemoryBarriers) const noexcept
 {
-    MAGMA_VLA(const Event*, unmanagedEvents, events.size());
+    auto unmanagedEvents = stackalloc(const Event*, events.size());
+    uint32_t eventCount = 0;
     for (auto const& event: events)
     {
-        unmanagedEvents.put(event.get());
+        unmanagedEvents[eventCount++] = event.get();
         MAGMA_INUSE(event);
     }
-    leanCmd.waitEvents(unmanagedEvents.count(), unmanagedEvents, srcStageMask, dstStageMask,
+    leanCmd.waitEvents(eventCount, unmanagedEvents, srcStageMask, dstStageMask,
         core::countof(memoryBarriers), memoryBarriers.data(),
         core::countof(bufferMemoryBarriers), bufferMemoryBarriers.data(),
         core::countof(imageMemoryBarriers), imageMemoryBarriers.data());
@@ -447,13 +451,14 @@ void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, const st
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
     if (extensions.EXT_transform_feedback)
     {
-        MAGMA_VLA(Buffer*, unmanagedTransformFeedbackBuffers, transformFeedbackBuffers.size());
+        auto unmanagedTransformFeedbackBuffers = stackalloc(Buffer*, transformFeedbackBuffers.size());
+        uint32_t bindingCount = 0;
         for (auto const& buffer: transformFeedbackBuffers)
         {
-            unmanagedTransformFeedbackBuffers.put(buffer.get());
+            unmanagedTransformFeedbackBuffers[bindingCount++] = buffer.get();
             MAGMA_INUSE(buffer);
         }
-        leanCmd.bindTransformFeedbackBuffers(firstBinding, unmanagedTransformFeedbackBuffers.count(), unmanagedTransformFeedbackBuffers, offsets.begin(), sizes.begin());
+        leanCmd.bindTransformFeedbackBuffers(firstBinding, bindingCount, unmanagedTransformFeedbackBuffers, offsets.begin(), sizes.begin());
         MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT);
         MAGMA_INCR(stats.bindTransformFeedbackBufferCount, 1);
     }
@@ -466,13 +471,14 @@ void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, const st
     MAGMA_ASSERT(extensions.EXT_transform_feedback);
     if (extensions.EXT_transform_feedback)
     {
-        MAGMA_VLA(const Buffer*, unmanagedCounterBuffers, counterBuffers.size());
+        auto unmanagedCounterBuffers = stackalloc(const Buffer*, counterBuffers.size());
+        uint32_t counterBufferCount = 0;
         for (auto const& buffer: counterBuffers)
         {
-            unmanagedCounterBuffers.put(buffer.get());
+            unmanagedCounterBuffers[counterBufferCount++] = buffer.get();
             MAGMA_INUSE(buffer);
         }
-        leanCmd.beginTransformFeedback(firstCounterBuffer, unmanagedCounterBuffers.count(), unmanagedCounterBuffers, counterBufferOffsets.begin());
+        leanCmd.beginTransformFeedback(firstCounterBuffer, counterBufferCount, unmanagedCounterBuffers, counterBufferOffsets.begin());
         transformFeedback = VK_TRUE;
         MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT);
         MAGMA_INCR(stats.transformFeedbackCount, 1);
@@ -491,13 +497,14 @@ void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, const std:
             popDebugMarker();
             annotatedTransformFeedback = VK_FALSE;
         }
-        MAGMA_VLA(Buffer*, unmanagedCounterBuffers, counterBuffers.size());
+        auto unmanagedCounterBuffers = stackalloc(Buffer*, counterBuffers.size());
+        uint32_t counterBufferCount = 0;
         for (auto const& buffer: counterBuffers)
         {
-            unmanagedCounterBuffers.put(buffer.get());
+            unmanagedCounterBuffers[counterBufferCount++] = buffer.get();
             MAGMA_INUSE(buffer);
         }
-        leanCmd.endTransformFeedback(firstCounterBuffer, unmanagedCounterBuffers.count(), unmanagedCounterBuffers, counterBufferOffsets.begin());
+        leanCmd.endTransformFeedback(firstCounterBuffer, counterBufferCount, unmanagedCounterBuffers, counterBufferOffsets.begin());
         transformFeedback = VK_FALSE;
         MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT);
     }
@@ -513,10 +520,11 @@ void CommandBuffer::beginRenderPass(lent_ptr<const RenderPass> renderPass, lent_
     MAGMA_ASSERT(extensions.KHR_imageless_framebuffer);
     if (extensions.KHR_imageless_framebuffer)
     {
-        MAGMA_VLA(ImageView*, unmanagedAttachments, attachments.size());
+        auto unmanagedAttachments = stackalloc(ImageView*, attachments.size());
+        uint32_t attachmentCount = 0;
         for (auto const& attachment: attachments)
         {
-            unmanagedAttachments.put(attachment.get());
+            unmanagedAttachments[attachmentCount++] = attachment.get();
             MAGMA_INUSE(attachment);
         }
         VkRect2D renderArea;
@@ -527,7 +535,7 @@ void CommandBuffer::beginRenderPass(lent_ptr<const RenderPass> renderPass, lent_
             renderArea.offset = VkOffset2D{0, 0};
             renderArea.extent = framebuffer->getExtent();
         }
-        leanCmd.beginRenderPass(renderPass.get(), framebuffer.get(), unmanagedAttachments.count(), unmanagedAttachments,
+        leanCmd.beginRenderPass(renderPass.get(), framebuffer.get(), attachmentCount, unmanagedAttachments,
             core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()), renderArea, contents);
         renderingPass = VK_TRUE;
         MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
@@ -553,13 +561,14 @@ void CommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, lent_ptr<con
     MAGMA_ASSERT(extensions.KHR_imageless_framebuffer && extensions.KHR_device_group);
     if (extensions.KHR_imageless_framebuffer && extensions.KHR_device_group)
     {
-        MAGMA_VLA(ImageView*, unmanagedAttachments, attachments.size());
+        auto unmanagedAttachments = stackalloc(ImageView*, attachments.size());
+        uint32_t attachmentCount = 0;
         for (auto const& attachment: attachments)
         {
-            unmanagedAttachments.put(attachment.get());
+            unmanagedAttachments[attachmentCount++] = attachment.get();
             MAGMA_INUSE(attachment);
         }
-        leanCmd.beginDeviceGroupRenderPass(deviceMask, renderPass.get(), framebuffer.get(), unmanagedAttachments.count(), unmanagedAttachments,
+        leanCmd.beginDeviceGroupRenderPass(deviceMask, renderPass.get(), framebuffer.get(), attachmentCount, unmanagedAttachments,
             core::countof(clearValues), reinterpret_cast<const VkClearValue *>(clearValues.begin()),
             core::countof(deviceRenderAreas), deviceRenderAreas.begin(), contents);
         renderingPass = VK_TRUE;
@@ -584,12 +593,13 @@ void CommandBuffer::buildAccelerationStructure(lent_ptr<BottomLevelAccelerationS
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
-        MAGMA_VLA(VkAccelerationStructureBuildRangeInfoKHR, buildRanges, geometryCount);
+        auto geometryPointers = stackalloc(const VkAccelerationStructureGeometryKHR*, geometryCount);
+        auto buildRanges = stackalloc(VkAccelerationStructureBuildRangeInfoKHR, geometryCount);
+        uint32_t i = 0;
         for (auto const& geometry: geometries)
         {
-            geometryPointers.put(&geometry);
-            buildRanges.put({geometry.primitiveCount});
+            geometryPointers[i] = &geometry;
+            buildRanges[i++] = {geometry.primitiveCount};
         }
         leanCmd.buildAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges, scratchBuffer.get());
         MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
@@ -606,9 +616,10 @@ void CommandBuffer::buildAccelerationStructure(lent_ptr<BottomLevelAccelerationS
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        auto geometryPointers = stackalloc(const VkAccelerationStructureGeometryKHR*, geometryCount);
+        uint32_t i = 0;
         for (auto const& geometry: geometries)
-            geometryPointers.put(&geometry);
+            geometryPointers[i++] = &geometry;
         leanCmd.buildAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges.data(), scratchBuffer.get());
         MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
         MAGMA_INUSE(accelerationStructure);
@@ -623,12 +634,13 @@ void CommandBuffer::updateAccelerationStructure(lent_ptr<BottomLevelAcceleration
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
-        MAGMA_VLA(VkAccelerationStructureBuildRangeInfoKHR, buildRanges, geometryCount);
+        auto geometryPointers = stackalloc(const VkAccelerationStructureGeometryKHR*, geometryCount);
+        auto buildRanges = stackalloc(VkAccelerationStructureBuildRangeInfoKHR, geometryCount);
+        uint32_t i = 0;
         for (auto const& geometry: geometries)
         {
-            geometryPointers.put(&geometry);
-            buildRanges.put({geometry.primitiveCount});
+            geometryPointers[i] = &geometry;
+            buildRanges[i++] = {geometry.primitiveCount};
         }
         leanCmd.updateAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges, scratchBuffer.get());
         MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
@@ -645,9 +657,10 @@ void CommandBuffer::updateAccelerationStructure(lent_ptr<BottomLevelAcceleration
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
+        auto geometryPointers = stackalloc(const VkAccelerationStructureGeometryKHR*, geometryCount);
+        uint32_t i = 0;
         for (auto const& geometry: geometries)
-            geometryPointers.put(&geometry);
+            geometryPointers[i++] = &geometry;
         leanCmd.updateAccelerationStructure(accelerationStructure.get(), geometryCount, geometryPointers, buildRanges.data(), scratchBuffer.get());
         MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
         MAGMA_INUSE(accelerationStructure);
@@ -663,12 +676,13 @@ void CommandBuffer::updateAccelerationStructureIndirect(lent_ptr<AccelerationStr
     if (extensions.KHR_acceleration_structure)
     {
         const uint32_t geometryCount = (uint32_t)std::distance(geometries.begin(), geometries.end());
-        MAGMA_VLA(const VkAccelerationStructureGeometryKHR*, geometryPointers, geometryCount);
-        MAGMA_VLA(uint32_t, maxPrimitiveCounts, geometryCount);
+        auto geometryPointers = stackalloc(const VkAccelerationStructureGeometryKHR*, geometryCount);
+        auto maxPrimitiveCounts = stackalloc(uint32_t, geometryCount);
+        uint32_t i = 0;
         for (auto const& geometry: geometries)
         {
-            geometryPointers.put(&geometry);
-            maxPrimitiveCounts.put(geometry.primitiveCount);
+            geometryPointers[i] = &geometry;
+            maxPrimitiveCounts[i++] = geometry.primitiveCount;
         }
         leanCmd.updateAccelerationStructureIndirect(accelerationStructure.get(), geometryCount, geometryPointers, maxPrimitiveCounts,
             indirectBuildRanges.get(), scratchBuffer.get());

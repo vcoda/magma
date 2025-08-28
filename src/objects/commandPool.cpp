@@ -44,21 +44,21 @@ CommandPool::CommandPool(std::shared_ptr<Device> device, uint32_t queueFamilyInd
 
 CommandPool::~CommandPool()
 {
-    MAGMA_VLA(VkCommandBuffer, commandBuffers, cmdPool.size());
+    auto dereferencedCmdBuffers = stackalloc(VkCommandBuffer, cmdPool.size());
+    uint32_t commandBufferCount = 0;
     for (auto& weakRef: cmdPool)
     {
         if (!weakRef.expired())
         {
             std::shared_ptr<CommandBuffer> cmdBuffer = weakRef.lock();
             MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Pending);
-            commandBuffers.put(cmdBuffer->getLean().getHandle());
+            dereferencedCmdBuffers[commandBufferCount++] = cmdBuffer->getLean().getHandle();
             cmdBuffer->releaseObjectsInUse();
-            // Don't call vkFreeCommandBuffers() in the destructor
-            cmdBuffer->getLean().handle = VK_NULL_HANDLE;
+            cmdBuffer->getLean().handle = VK_NULL_HANDLE; // Don't call vkFreeCommandBuffers() in the destructor
         }
     }
-    if (commandBuffers.count())
-        vkFreeCommandBuffers(getNativeDevice(), handle, commandBuffers.count(), commandBuffers);
+    if (commandBufferCount)
+        vkFreeCommandBuffers(getNativeDevice(), handle, commandBufferCount, dereferencedCmdBuffers);
     vkDestroyCommandPool(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
@@ -116,13 +116,13 @@ std::vector<std::shared_ptr<CommandBuffer>> CommandPool::allocateCommandBuffers(
     cmdBufferAllocateInfo.commandPool = handle;
     cmdBufferAllocateInfo.level = level;
     cmdBufferAllocateInfo.commandBufferCount = commandBufferCount;
-    MAGMA_VLA(VkCommandBuffer, commandBuffers, commandBufferCount);
+    auto commandBuffers = stackalloc(VkCommandBuffer, commandBufferCount);
     const VkResult result = vkAllocateCommandBuffers(getNativeDevice(), &cmdBufferAllocateInfo, commandBuffers);
     MAGMA_HANDLE_RESULT(result, "failed to allocate command buffers");
     std::vector<std::shared_ptr<CommandBuffer>> cmdBuffers;
-    for (auto handle: commandBuffers)
+    for (uint32_t i = 0; i < commandBufferCount; ++i)
     {
-        std::shared_ptr<CommandBuffer> cmdBuffer = CommandBuffer::makeShared(level, handle, this);
+        std::shared_ptr<CommandBuffer> cmdBuffer = CommandBuffer::makeShared(level, commandBuffers[i], this);
         cmdBuffers.emplace_back(std::move(cmdBuffer));
         cmdPool.insert(cmdBuffers.back());
     }

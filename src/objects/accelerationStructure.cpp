@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "accelerationStructure.h"
 #include "device.h"
-#include "commandBuffer.h"
 #include "storageBuffer.h"
 #include "deferredOperation.h"
 #include "../raytracing/accelerationStructureGeometry.h"
@@ -44,12 +43,13 @@ AccelerationStructure::AccelerationStructure(std::shared_ptr<Device> device, VkA
     buildScratchSize(0ull),
     updateScratchSize(0ull)
 {
-    MAGMA_VLA(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);
-    MAGMA_VLA(uint32_t, maxPrimitiveCounts, geometryCount);
+    auto geometryPointers = stackalloc(const VkAccelerationStructureGeometryKHR*, geometryCount);
+    auto maxPrimitiveCounts = stackalloc(uint32_t, geometryCount);
+    uint32_t i = 0;
     for (auto const& geometry: geometries)
     {
-        geometryPointers.put(&geometry);
-        maxPrimitiveCounts.put(geometry.primitiveCount);
+        geometryPointers[i] = &geometry;
+        maxPrimitiveCounts[i++] = geometry.primitiveCount;
     }
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;

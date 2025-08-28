@@ -21,7 +21,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "variantPtr.h"
 #include "lentPtr.h"
 #include "spinlock.h"
-#include "vla.h"
 #include "hashing/constexpr.h"
 #include "hashing/fnv1.h"
 #include "hashing/fnv1string.h"
@@ -99,8 +98,6 @@ namespace magma
         template<class T> bool compare(const void *p1, const void *p2) noexcept;
         template<class T> bool compare(const T *p1, const T *p2) noexcept;
         template<class T> bool compareArrays(const T *p1, const T *p2, std::size_t count) noexcept;
-
-        template<class T> std::size_t stacksize(std::size_t count) noexcept;
     } // namespace core
 } // namespace magma
 

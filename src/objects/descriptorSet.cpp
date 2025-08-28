@@ -67,7 +67,7 @@ bool DescriptorSet::dirty() const
 
 void DescriptorSet::update()
 {
-    MAGMA_VLA(VkWriteDescriptorSet, descriptorWrites, descriptors.size());
+    auto descriptorWrites = stackalloc(VkWriteDescriptorSet, descriptors.size());
     const uint32_t descriptorWriteCount = writeDescriptors(descriptorWrites);
     if (descriptorWriteCount)
         device->updateDescriptorSets(descriptorWriteCount, descriptorWrites, 0, nullptr);

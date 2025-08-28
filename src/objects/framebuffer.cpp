@@ -65,15 +65,16 @@ Framebuffer::Framebuffer(lent_ptr<const RenderPass> renderPass, const std::vecto
     extent(attachments_.front()->getExtent2D()),
     layerCount(attachments_.front()->getArrayLayerCount())
 {
-    MAGMA_VLA(VkImageView, dereferencedAttachments, attachments_.size());
+    auto dereferencedAttachments = stackalloc(VkImageView, attachments_.size());
+    uint32_t attachmentCount = 0;
     for (auto& attachment: attachments_)
-        dereferencedAttachments.put(*attachment);
+        dereferencedAttachments[attachmentCount++] = *attachment;
     VkFramebufferCreateInfo framebufferInfo;
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.pNext = extendedInfo.headNode();
     framebufferInfo.flags = flags;
     framebufferInfo.renderPass = *renderPass;
-    framebufferInfo.attachmentCount = dereferencedAttachments.count();
+    framebufferInfo.attachmentCount = attachmentCount;
     framebufferInfo.pAttachments = dereferencedAttachments;
     framebufferInfo.width = extent.width;
     framebufferInfo.height = extent.height;

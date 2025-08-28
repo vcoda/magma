@@ -57,8 +57,8 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     }
     const uint32_t colorAttachmentCount = multisampleAttachmentCount ? multisampleAttachmentCount : resolveAttachmentCount;
     resolveAttachmentCount = std::max(0U, multisampleAttachmentCount);
-    MAGMA_VLA(VkAttachmentReference, colorAttachments, colorAttachmentCount);
-    MAGMA_VLA(VkAttachmentReference, resolveAttachments, resolveAttachmentCount);
+    auto colorAttachments = stackalloc(VkAttachmentReference, colorAttachmentCount);
+    auto resolveAttachments = stackalloc(VkAttachmentReference, resolveAttachmentCount);
     VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
     bool hasDepthStencilAttachment = false;
     uint32_t attachmentIndex = 0, colorIndex = 0, resolveIndex = 0;

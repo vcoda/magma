@@ -79,9 +79,9 @@ inline void LeanCommandBuffer::bindDescriptorSet(VkPipelineBindPoint bindPoint, 
 inline void LeanCommandBuffer::bindDescriptorSets(VkPipelineBindPoint bindPoint, const PipelineLayout *layout, uint32_t firstSet, uint32_t descriptorSetCount, const DescriptorSet **descriptorSets,
     uint32_t dynamicOffsetCount /* 0 */, const uint32_t *dynamicOffsets /* nullptr */) noexcept
 {
-    MAGMA_VLA(VkDescriptorSet, dereferencedDescriptorSets, descriptorSetCount);
+    auto dereferencedDescriptorSets = stackalloc(VkDescriptorSet, descriptorSetCount);
     for (uint32_t i = 0; i < descriptorSetCount; ++i)
-        dereferencedDescriptorSets.put(*descriptorSets[i]);
+        dereferencedDescriptorSets[i] = *descriptorSets[i];
     vkCmdBindDescriptorSets(handle, bindPoint, *layout, firstSet, descriptorSetCount, dereferencedDescriptorSets, dynamicOffsetCount, dynamicOffsets);
 }
 
@@ -98,11 +98,11 @@ inline void LeanCommandBuffer::bindVertexBuffer(uint32_t firstBinding, const Buf
 
 inline void LeanCommandBuffer::bindVertexBuffers(uint32_t firstBinding, uint32_t bindingCount, const Buffer **vertexBuffers, const VkDeviceSize *offsets) noexcept
 {
-    MAGMA_VLA(VkBuffer, dereferencedVertexBuffers, bindingCount);
+    auto dereferencedVertexBuffers = stackalloc(VkBuffer, bindingCount);
     for (uint32_t i = 0; i < bindingCount; ++i)
     {
         MAGMA_ASSERT(vertexBuffers[i]->getUsage() & VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
-        dereferencedVertexBuffers.put(*vertexBuffers[i]);
+        dereferencedVertexBuffers[i] = *vertexBuffers[i];
     }
     vkCmdBindVertexBuffers(handle, firstBinding, bindingCount, dereferencedVertexBuffers, offsets);
 }
@@ -263,9 +263,9 @@ inline void LeanCommandBuffer::waitEvents(uint32_t eventCount, const Event **eve
     uint32_t memoryBarrierCount, const VkMemoryBarrier *memoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier *bufferMemoryBarriers,
     uint32_t imageMemoryBarrierCount, const VkImageMemoryBarrier *imageMemoryBarriers) const noexcept
 {
-    MAGMA_VLA(VkEvent, dereferencedEvents, eventCount);
+    auto dereferencedEvents = stackalloc(VkEvent, eventCount);
     for (uint32_t i = 0; i < eventCount; ++i)
-        dereferencedEvents.put(*events[i]);
+        dereferencedEvents[i] = *events[i];
     vkCmdWaitEvents(handle, eventCount, dereferencedEvents, srcStageMask, dstStageMask,
         memoryBarrierCount, memoryBarriers,
         bufferMemoryBarrierCount, bufferMemoryBarriers,
@@ -359,9 +359,9 @@ inline void LeanCommandBuffer::endRenderPass() noexcept
 
 inline void LeanCommandBuffer::executeCommands(uint32_t cmdBufferCount, const LeanCommandBuffer **cmdBuffers) noexcept
 {
-    MAGMA_VLA(VkCommandBuffer, dereferencedCmdBuffers, cmdBufferCount);
+    auto dereferencedCmdBuffers = stackalloc(VkCommandBuffer, cmdBufferCount);
     for (uint32_t i = 0; i < cmdBufferCount; ++i)
-        dereferencedCmdBuffers.put(*cmdBuffers[i]);
+        dereferencedCmdBuffers[i] = *cmdBuffers[i];
     vkCmdExecuteCommands(handle, cmdBufferCount, dereferencedCmdBuffers);
 }
 
@@ -390,7 +390,7 @@ inline void LeanCommandBuffer::setLineStipple(uint32_t stippleFactor, uint16_t s
 #ifdef VK_KHR_push_descriptor
 inline void LeanCommandBuffer::pushDescriptorSet(VkPipelineBindPoint bindPoint, const PipelineLayout *layout, uint32_t set, const DescriptorSet *descriptorSet) noexcept
 {
-    MAGMA_VLA(VkWriteDescriptorSet, descriptorWrites, descriptorSet->getDescriptorCount());
+    auto descriptorWrites = stackalloc(VkWriteDescriptorSet, descriptorSet->getDescriptorCount());
     uint32_t descriptorWriteCount = descriptorSet->writeDescriptors(descriptorWrites);
     MAGMA_DEVICE_EXTENSION(vkCmdPushDescriptorSetKHR);
     vkCmdPushDescriptorSetKHR(handle, bindPoint, *layout, set, descriptorWriteCount, descriptorWrites);
@@ -509,11 +509,11 @@ inline void LeanCommandBuffer::bindTransformFeedbackBuffer(uint32_t firstBinding
 
 inline void LeanCommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding, uint32_t bindingCount, Buffer **buffers, const VkDeviceSize *offsets, const VkDeviceSize *sizes /* nullptr */) noexcept
 {
-    MAGMA_VLA(VkBuffer, dereferencedBuffers, bindingCount);
+    auto dereferencedBuffers = stackalloc(VkBuffer, bindingCount);
     for (uint32_t i = 0; i < bindingCount; ++i)
     {
         MAGMA_ASSERT(buffers[i]->getUsage() & VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT);
-        dereferencedBuffers.put(*buffers[i]);
+        dereferencedBuffers[i] = *buffers[i];
     }
     MAGMA_DEVICE_EXTENSION(vkCmdBindTransformFeedbackBuffersEXT);
     vkCmdBindTransformFeedbackBuffersEXT(handle, firstBinding, bindingCount, dereferencedBuffers, offsets, sizes);

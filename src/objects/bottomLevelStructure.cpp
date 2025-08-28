@@ -95,10 +95,10 @@ VkResult BottomLevelAccelerationStructure::rebuild(VkBuildAccelerationStructureM
     const std::vector<VkAccelerationStructureBuildRangeInfoKHR>& buildRanges,
     void *scratchBuffer, lent_ptr<DeferredOperation> deferredOperation)
 {
-    geometryCount = core::countof(geometries);
-    MAGMA_VLA(const VkAccelerationStructureGeometryKHR *, geometryPointers, geometryCount);
+    auto geometryPointers = stackalloc(const VkAccelerationStructureGeometryKHR*, geometries.size());
+    geometryCount = 0;
     for (auto const& geometry: geometries)
-        geometryPointers.put(&geometry);
+        geometryPointers[geometryCount++] = &geometry;
     VkAccelerationStructureBuildGeometryInfoKHR buildGeometryInfo;
     buildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
     buildGeometryInfo.pNext = nullptr;

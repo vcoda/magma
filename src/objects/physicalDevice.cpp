@@ -470,14 +470,14 @@ std::vector<std::unique_ptr<Display>> PhysicalDevice::getSupportedDisplays(uint3
     std::vector<std::unique_ptr<Display>> supportedDisplays;
     if (displayCount)
     {
-        MAGMA_VLA(VkDisplayKHR, displays, displayCount);
+        auto displays = stackalloc(VkDisplayKHR, displayCount);
         result = vkGetDisplayPlaneSupportedDisplaysKHR(handle, planeIndex, &displayCount, displays);
         if (VK_SUCCESS == result)
         {
             std::shared_ptr<PhysicalDevice> physicalDevice = std::const_pointer_cast<PhysicalDevice>(shared_from_this());
-            for (VkDisplayKHR handle: displays)
+            for (uint32_t i = 0; i < displayCount; ++i)
             {
-                std::unique_ptr<Display> display = Display::makeUnique(physicalDevice, handle, planeIndex);
+                std::unique_ptr<Display> display = Display::makeUnique(physicalDevice, displays[i], planeIndex);
                 supportedDisplays.emplace_back(std::move(display));
             }
         }

@@ -34,23 +34,25 @@ void PrimaryCommandBuffer::executeCommands(lent_ptr<CommandBuffer> cmdBuffer) no
 
 void PrimaryCommandBuffer::executeCommands(const std::initializer_list<lent_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
-    MAGMA_VLA(const LeanCommandBuffer*, leanCmdBuffers, cmdBuffers.size());
+    auto leanCmdBuffers = stackalloc(const LeanCommandBuffer*, cmdBuffers.size());
+    uint32_t cmdBufferCount = 0;
     for (auto const& cmdBuffer: cmdBuffers)
     {
         MAGMA_ASSERT(!cmdBuffer->primary());
-        leanCmdBuffers.put(&cmdBuffer->getLean());
+        leanCmdBuffers[cmdBufferCount++] = &cmdBuffer->getLean();
     }
-    leanCmd.executeCommands(leanCmdBuffers.count(), leanCmdBuffers);
+    leanCmd.executeCommands(cmdBufferCount, leanCmdBuffers);
 }
 
 void PrimaryCommandBuffer::executeCommands(const std::vector<lent_ptr<CommandBuffer>>& cmdBuffers) noexcept
 {
-    MAGMA_VLA(const LeanCommandBuffer*, leanCmdBuffers, cmdBuffers.size());
+    auto leanCmdBuffers = stackalloc(const LeanCommandBuffer*, cmdBuffers.size());
+    uint32_t cmdBufferCount = 0;
     for (auto const& cmdBuffer: cmdBuffers)
     {
         MAGMA_ASSERT(!cmdBuffer->primary());
-        leanCmdBuffers.put(&cmdBuffer->getLean());
+        leanCmdBuffers[cmdBufferCount++] = &cmdBuffer->getLean();
     }
-    leanCmd.executeCommands(leanCmdBuffers.count(), leanCmdBuffers);
+    leanCmd.executeCommands(cmdBufferCount, leanCmdBuffers);
 }
 } // namespace magma

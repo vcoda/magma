@@ -72,11 +72,12 @@ std::vector<uint8_t> ValidationCache::getData() const
 
 void ValidationCache::mergeCaches(const std::vector<lent_ptr<const ValidationCache>>& caches)
 {
-    MAGMA_VLA(VkValidationCacheEXT, dereferencedCaches, caches.size());
+    auto dereferencedCaches = stackalloc(VkValidationCacheEXT, caches.size());
+    uint32_t srcCacheCount = 0;
     for (auto const& cache: caches)
-        dereferencedCaches.put(*cache);
+        dereferencedCaches[srcCacheCount++] = *cache;
     MAGMA_DEVICE_EXTENSION(vkMergeValidationCachesEXT);
-    const VkResult result = vkMergeValidationCachesEXT(getNativeDevice(), handle, dereferencedCaches.count(), dereferencedCaches);
+    const VkResult result = vkMergeValidationCachesEXT(getNativeDevice(), handle, srcCacheCount, dereferencedCaches);
     MAGMA_HANDLE_RESULT(result, "failed to merge validation caches");
 }
 #endif // VK_EXT_validation_cache

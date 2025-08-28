@@ -179,11 +179,11 @@ void LeanCommandBuffer::beginConditionalRendering(const Buffer *buffer, VkDevice
 void LeanCommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, uint32_t counterBufferCount, const Buffer **counterBuffers,
     const VkDeviceSize *counterBufferOffsets /* nullptr */) noexcept
 {
-    MAGMA_VLA(VkBuffer, dereferencedCounterBuffers, counterBufferCount);
+    auto dereferencedCounterBuffers = stackalloc(VkBuffer, counterBufferCount);
     for (uint32_t i = 0; i < counterBufferCount; ++i)
     {
         MAGMA_ASSERT(counterBuffers[i]->getUsage() & VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT);
-        dereferencedCounterBuffers.put(*counterBuffers[i]);
+        dereferencedCounterBuffers[i] = *counterBuffers[i];
     }
     MAGMA_DEVICE_EXTENSION(vkCmdBeginTransformFeedbackEXT);
     vkCmdBeginTransformFeedbackEXT(handle, firstCounterBuffer, counterBufferCount, dereferencedCounterBuffers, counterBufferOffsets);
@@ -192,11 +192,11 @@ void LeanCommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer, uint
 void LeanCommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer, uint32_t counterBufferCount, Buffer **counterBuffers,
     const VkDeviceSize *counterBufferOffsets /* nullptr */) noexcept
 {
-    MAGMA_VLA(VkBuffer, dereferencedCounterBuffers, counterBufferCount);
+    auto dereferencedCounterBuffers = stackalloc(VkBuffer, counterBufferCount);
     for (uint32_t i = 0; i < counterBufferCount; ++i)
     {
         MAGMA_ASSERT(counterBuffers[i]->getUsage() & VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT);
-        dereferencedCounterBuffers.put(*counterBuffers[i]);
+        dereferencedCounterBuffers[i] = *counterBuffers[i];
     }
     MAGMA_DEVICE_EXTENSION(vkCmdEndTransformFeedbackEXT);
     vkCmdEndTransformFeedbackEXT(handle, firstCounterBuffer, counterBufferCount, dereferencedCounterBuffers, counterBufferOffsets);
@@ -212,9 +212,9 @@ void LeanCommandBuffer::beginRenderPass(const RenderPass *renderPass, ImagelessF
     uint32_t attachmentCount, ImageView **attachments, uint32_t clearValueCount, const VkClearValue *clearValues,
     const VkRect2D& renderArea, VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    MAGMA_VLA(VkImageView, dereferencedAttachments, attachmentCount);
+    auto dereferencedAttachments = stackalloc(VkImageView, attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
-        dereferencedAttachments.put(*attachments[i]);
+        dereferencedAttachments[i] = *attachments[i];
     VkRenderPassBeginInfo renderPassBeginInfo;
     VkRenderPassAttachmentBeginInfoKHR renderPassBeginAttachmentInfo;
     renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -237,9 +237,9 @@ void LeanCommandBuffer::beginDeviceGroupRenderPass(uint32_t deviceMask, const Re
     uint32_t deviceRenderAreaCount /* 0 */, const VkRect2D *deviceRenderAreas /* nullptr */,
     VkSubpassContents contents /* VK_SUBPASS_CONTENTS_INLINE */) noexcept
 {
-    MAGMA_VLA(VkImageView, dereferencedAttachments, attachmentCount);
+    auto dereferencedAttachments = stackalloc(VkImageView, attachmentCount);
     for (uint32_t i = 0; i < attachmentCount; ++i)
-        dereferencedAttachments.put(*attachments[i]);
+        dereferencedAttachments[i] = *attachments[i];
     VkRenderPassBeginInfo renderPassBeginInfo;
     VkRenderPassAttachmentBeginInfoKHR renderPassBeginAttachmentInfo;
     VkDeviceGroupRenderPassBeginInfo renderPassBeginDeviceGroupInfo;

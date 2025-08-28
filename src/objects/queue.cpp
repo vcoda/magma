@@ -102,19 +102,19 @@ void Queue::bindSparse(const std::vector<VkSparseBufferMemoryBindInfo>& bufferBi
     lent_ptr<Fence> fence /* nullptr */,
     const StructureChain& extendedInfo /* default */)
 {
-    MAGMA_VLA(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
-    MAGMA_VLA(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
     VkBindSparseInfo bindSparseInfo = {};
     bindSparseInfo.sType = VK_STRUCTURE_TYPE_BIND_SPARSE_INFO;
     bindSparseInfo.pNext = extendedInfo.headNode();
     if (waitSemaphores.size() > 0)
     {
+        auto dereferencedWaitSemaphores = stackalloc(VkSemaphore, waitSemaphores.size());
+        uint32_t waitSemaphoreCount = 0;
         for (auto const& semaphore: waitSemaphores)
         {
             if (semaphore)
-                dereferencedWaitSemaphores.put(*semaphore);
+                dereferencedWaitSemaphores[waitSemaphoreCount++] = *semaphore;
         }
-        bindSparseInfo.waitSemaphoreCount = dereferencedWaitSemaphores.count();
+        bindSparseInfo.waitSemaphoreCount = waitSemaphoreCount;
         bindSparseInfo.pWaitSemaphores = dereferencedWaitSemaphores;
     }
     bindSparseInfo.bufferBindCount = core::countof(bufferBinds);
@@ -125,12 +125,14 @@ void Queue::bindSparse(const std::vector<VkSparseBufferMemoryBindInfo>& bufferBi
     bindSparseInfo.pImageBinds = imageBinds.data();
     if (signalSemaphores.size() > 0)
     {
+        auto dereferencedSignalSemaphores = stackalloc(VkSemaphore, signalSemaphores.size());
+        uint32_t signalSemaphoreCount = 0;
         for (auto const& semaphore: signalSemaphores)
         {
             if (semaphore)
-                dereferencedSignalSemaphores.put(*semaphore);
+                dereferencedSignalSemaphores[signalSemaphoreCount++] = *semaphore;
         }
-        bindSparseInfo.signalSemaphoreCount = dereferencedSignalSemaphores.count();
+        bindSparseInfo.signalSemaphoreCount = signalSemaphoreCount;
         bindSparseInfo.pSignalSemaphores = dereferencedSignalSemaphores;
     }
     const VkResult result = vkQueueBindSparse(handle, 1, &bindSparseInfo, MAGMA_OPTIONAL_HANDLE(fence));
@@ -182,50 +184,52 @@ void Queue::submit(std::vector<lent_ptr<CommandBuffer>> cmdBuffers,
     MAGMA_ASSERT(cmdBuffers.size());
     if (0 == cmdBuffers.size())
         return;
-    MAGMA_VLA(VkCommandBuffer, dereferencedCmdBuffers, cmdBuffers.size());
-    MAGMA_VLA(VkSemaphore, dereferencedWaitSemaphores, waitSemaphores.size());
-    MAGMA_VLA(VkSemaphore, dereferencedSignalSemaphores, signalSemaphores.size());
-    // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkSubmitInfo.html
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.pNext = extendedInfo.headNode();
     if (waitSemaphores.size() > 0)
     {
+        auto dereferencedWaitSemaphores = stackalloc(VkSemaphore, waitSemaphores.size());
+        uint32_t waitSemaphoreCount = 0;
         for (auto const& semaphore: waitSemaphores)
         {
             if (semaphore)
             {
-                dereferencedWaitSemaphores.put(*semaphore);
+                dereferencedWaitSemaphores[waitSemaphoreCount++] = *semaphore;
                 MAGMA_INUSE(semaphore);
             }
         }
-        submitInfo.waitSemaphoreCount = dereferencedWaitSemaphores.count();
+        submitInfo.waitSemaphoreCount = waitSemaphoreCount;
         submitInfo.pWaitSemaphores = dereferencedWaitSemaphores;
         submitInfo.pWaitDstStageMask = waitDstStageMask.begin();
     }
+    auto dereferencedCmdBuffers = stackalloc(VkCommandBuffer, cmdBuffers.size());
+    uint32_t commandBufferCount = 0;
     for (auto const& cmdBuffer: cmdBuffers)
     {
         if (cmdBuffer)
         {
             MAGMA_ASSERT(cmdBuffer->primary());
             MAGMA_ASSERT(cmdBuffer->getState() == CommandBuffer::State::Executable);
-            dereferencedCmdBuffers.put(cmdBuffer->getLean());
+            dereferencedCmdBuffers[commandBufferCount++] = cmdBuffer->getLean();
             submittedCmdBuffers.insert(cmdBuffer.get());
         }
     }
-    submitInfo.commandBufferCount = dereferencedCmdBuffers.count();
+    submitInfo.commandBufferCount = commandBufferCount;
     submitInfo.pCommandBuffers = dereferencedCmdBuffers;
     if (signalSemaphores.size() > 0)
     {
+        auto dereferencedSignalSemaphores = stackalloc(VkSemaphore, signalSemaphores.size());
+        uint32_t signalSemaphoreCount = 0;
         for (auto const& semaphore: signalSemaphores)
         {
             if (semaphore)
             {
-                dereferencedSignalSemaphores.put(*semaphore);
+                dereferencedSignalSemaphores[signalSemaphoreCount++] = *semaphore;
                 MAGMA_INUSE(semaphore);
             }
         }
-        submitInfo.signalSemaphoreCount = dereferencedSignalSemaphores.count();
+        submitInfo.signalSemaphoreCount = signalSemaphoreCount;
         submitInfo.pSignalSemaphores = dereferencedSignalSemaphores;
     }
     const VkResult result = vkQueueSubmit(handle, 1, &submitInfo, MAGMA_OPTIONAL_HANDLE(fence));

@@ -67,7 +67,8 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
     const RasterizationState& rasterizationState, const std::vector<VkDynamicState>& dynamicStates,
     lent_ptr<const PipelineLayout> layout, VkPipelineCreateFlags flags /* 0 */)
 {   // https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#pipelines-graphics-subsets-pre-rasterization
-    MAGMA_VLA(VkPipelineShaderStageCreateInfo, dereferencedStages, preRasterizationShaderStages.size());
+    auto dereferencedStages = stackalloc(VkPipelineShaderStageCreateInfo, preRasterizationShaderStages.size());
+    uint32_t stageCount = 0;
     for (auto const& stage: preRasterizationShaderStages)
     {
         switch (stage.stage)
@@ -80,7 +81,7 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
         case VK_SHADER_STAGE_TASK_BIT_EXT:
         case VK_SHADER_STAGE_MESH_BIT_EXT:
     #endif // VK_EXT_mesh_shader
-            dereferencedStages.put(stage);
+            dereferencedStages[stageCount++] = stage;
             break;
         default:
             MAGMA_ERROR("invalid shader stage for pre-rasterization subset");
@@ -92,7 +93,7 @@ void GraphicsPipelineLibrary::compilePreRasterizationShaders(const std::vector<P
     graphicsPipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     graphicsPipelineInfo.pNext = &graphicsPipelineLibraryInfo;
     graphicsPipelineInfo.flags = flags | VK_PIPELINE_CREATE_LIBRARY_BIT_KHR;
-    graphicsPipelineInfo.stageCount = dereferencedStages.count();
+    graphicsPipelineInfo.stageCount = stageCount;
     graphicsPipelineInfo.pStages = dereferencedStages;
     graphicsPipelineInfo.pTessellationState = &tesselationState;
     graphicsPipelineInfo.pViewportState = &viewportState;

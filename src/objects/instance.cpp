@@ -152,7 +152,7 @@ std::shared_ptr<PhysicalDevice> Instance::getPhysicalDevice(uint32_t deviceId) c
     MAGMA_ASSERT(deviceId < physicalDeviceCount);
     if (deviceId >= physicalDeviceCount)
         return nullptr;
-    MAGMA_VLA(VkPhysicalDevice, physicalDevices, physicalDeviceCount);
+    auto physicalDevices = stackalloc(VkPhysicalDevice, physicalDeviceCount);
     result = vkEnumeratePhysicalDevices(handle, &physicalDeviceCount, physicalDevices);
     MAGMA_HANDLE_RESULT(result, "failed to enumerate physical devices");
     VkPhysicalDevice physicalDevice = physicalDevices[deviceId];

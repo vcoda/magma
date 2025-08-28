@@ -174,20 +174,22 @@ void Device::waitIdle() const
 
 bool Device::resetFences(std::vector<lent_ptr<Fence>>& fences) const noexcept
 {
-    MAGMA_VLA(VkFence, dereferencedFences, fences.size());
+    auto dereferencedFences = stackalloc(VkFence, fences.size());
+    uint32_t fenceCount = 0;
     for (auto const& fence: fences)
-        dereferencedFences.put(*fence);
-    const VkResult result = vkResetFences(handle, dereferencedFences.count(), dereferencedFences);
+        dereferencedFences[fenceCount++] = *fence;
+    const VkResult result = vkResetFences(handle, fenceCount, dereferencedFences);
     return (VK_SUCCESS == result);
 }
 
 bool Device::waitForFences(const std::vector<lent_ptr<Fence>>& fences, bool waitAll,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
-    MAGMA_VLA(VkFence, dereferencedFences, fences.size());
+    auto dereferencedFences = stackalloc(VkFence, fences.size());
+    uint32_t fenceCount = 0;
     for (auto const& fence: fences)
-        dereferencedFences.put(*fence);
-    const VkResult result = vkWaitForFences(handle, dereferencedFences.count(), dereferencedFences, MAGMA_BOOLEAN(waitAll), timeout);
+        dereferencedFences[fenceCount++] = *fence;
+    const VkResult result = vkWaitForFences(handle, fenceCount, dereferencedFences, MAGMA_BOOLEAN(waitAll), timeout);
     MAGMA_HANDLE_RESULT(result, "failed to wait for fence(s)");
     // VK_SUCCESS or VK_TIMEOUT
     return (result != VK_TIMEOUT);
@@ -198,14 +200,15 @@ bool Device::waitSemaphores(const std::vector<lent_ptr<TimelineSemaphore>>& sema
     const std::vector<uint64_t>& values, bool waitAll,
     uint64_t timeout /* std::numeric_limits<uint64_t>::max() */) const
 {
-    MAGMA_VLA(VkSemaphore, dereferencedSemaphores, semaphores.size());
+    auto dereferencedSemaphores = stackalloc(VkSemaphore, semaphores.size());
+    uint32_t semaphoreCount = 0;
     for (auto const& semaphore: semaphores)
-        dereferencedSemaphores.put(*semaphore);
+        dereferencedSemaphores[semaphoreCount++] = *semaphore;
     VkSemaphoreWaitInfo waitInfo;
     waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO_KHR;
     waitInfo.pNext = nullptr;
     waitInfo.flags = waitAll ? 0 : VK_SEMAPHORE_WAIT_ANY_BIT_KHR;
-    waitInfo.semaphoreCount = dereferencedSemaphores.count();
+    waitInfo.semaphoreCount = semaphoreCount;
     waitInfo.pSemaphores = dereferencedSemaphores;
     waitInfo.pValues = values.data();
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkWaitSemaphoresKHR, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
@@ -365,19 +368,19 @@ bool Device::getAccelerationStructureCompatibility(const AccelerationStructureHe
 std::vector<uint64_t> Device::getCalibratedTimestamps(const std::vector<VkTimeDomainEXT>& timeDomains,
     uint64_t *maxDeviation /* nullptr */) const
 {
-    MAGMA_VLA(VkCalibratedTimestampInfoEXT, calibratedTimestampInfos, timeDomains.size());
-    VkCalibratedTimestampInfoEXT calibratedTimestampInfo;
-    calibratedTimestampInfo.sType = VK_STRUCTURE_TYPE_CALIBRATED_TIMESTAMP_INFO_EXT;
-    calibratedTimestampInfo.pNext = nullptr;
+    auto calibratedTimestampInfos = stackalloc(VkCalibratedTimestampInfoEXT, timeDomains.size());
+    uint32_t timestampCount = 0;
     for (VkTimeDomainEXT timeDomain: timeDomains)
     {
-        calibratedTimestampInfo.timeDomain = timeDomain;
-        calibratedTimestampInfos.put(calibratedTimestampInfo);
+        VkCalibratedTimestampInfoEXT& info = calibratedTimestampInfos[timestampCount++];
+        info.sType = VK_STRUCTURE_TYPE_CALIBRATED_TIMESTAMP_INFO_EXT;
+        info.pNext = nullptr;
+        info.timeDomain = timeDomain;
     }
     std::vector<uint64_t> timestamps(timeDomains.size(), 0ull);
     uint64_t deviation = 0ull;
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetCalibratedTimestampsEXT, VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME);
-    vkGetCalibratedTimestampsEXT(handle, calibratedTimestampInfos.count(), calibratedTimestampInfos, timestamps.data(),
+    vkGetCalibratedTimestampsEXT(handle, timestampCount, calibratedTimestampInfos, timestamps.data(),
         maxDeviation ? maxDeviation : &deviation);
     return timestamps;
 }

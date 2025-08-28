@@ -45,9 +45,10 @@ bool generateMipmap(lent_ptr<Image> image, uint32_t baseMipLevel, VkFilter filte
         return false;
     // Store image layouts of mip chain
     const bool hadUniformLayout = image->hasUniformLayout();
-    MAGMA_VLA(VkImageLayout, oldLayouts, image->getMipLevels() - baseMipLevel);
+    auto oldLayouts = stackalloc(VkImageLayout, image->getMipLevels() - baseMipLevel);
+    int i = 0;
     for (uint32_t level = baseMipLevel; level < image->getMipLevels(); ++level)
-        oldLayouts.put(image->getLayout(level));
+        oldLayouts[i++] = image->getLayout(level);
     const VkImageAspectFlags aspectMask = image->getAspectMask();
     VkExtent3D srcMipExtent = image->calculateMipExtent(baseMipLevel);
     // Transition of base mip level to transfer source layout

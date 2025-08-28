@@ -207,16 +207,14 @@ const std::vector<std::shared_ptr<SwapchainImage>>& Swapchain::getImages() const
         vkGetSwapchainImagesKHR(getNativeDevice(), handle, &swapchainImageCount, nullptr);
         if (swapchainImageCount)
         {
-            MAGMA_VLA(VkImage, swapchainImages, swapchainImageCount);
+            auto swapchainImages = stackalloc(VkImage, swapchainImageCount);
             const VkResult result = vkGetSwapchainImagesKHR(getNativeDevice(), handle, &swapchainImageCount, swapchainImages);
             MAGMA_HANDLE_RESULT(result, "failed to get swapchain images");
-            uint32_t imageIndex = 0;
-            for (VkImage handle: swapchainImages)
+            for (uint32_t imageIndex = 0; imageIndex < swapchainImageCount; ++imageIndex)
             {   // Image has been allocated by swapchain internally, so construct through image handle and it's roperties
-                std::shared_ptr<SwapchainImage> image = SwapchainImage::makeShared(handle, device,
+                std::shared_ptr<SwapchainImage> image = SwapchainImage::makeShared(swapchainImages[imageIndex], device,
                     surfaceFormat.format, extent, arrayLayers, imageUsage, imageIndex);
                 bindedImages.emplace_back(std::move(image));
-                ++imageIndex;
             }
         }
     }

@@ -99,9 +99,10 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     Pipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, std::move(device_), std::move(layout_), std::move(allocator), core::countof(shaderStages)),
     rsHash(0ull)
 {
-    MAGMA_VLA(VkPipelineShaderStageCreateInfo, dereferencedStages, shaderStages.size());
+    auto dereferencedStages = stackalloc(VkPipelineShaderStageCreateInfo, shaderStages.size());
+    uint32_t stageCount = 0;
     for (auto const& stage: shaderStages)
-        dereferencedStages.put(stage);
+        dereferencedStages[stageCount++] = stage;
     VkGraphicsPipelineCreateInfo pipelineInfo;
     VkPipelineDynamicStateCreateInfo pipelineDynamicStateInfo;
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -109,7 +110,7 @@ GraphicsPipeline::GraphicsPipeline(std::shared_ptr<Device> device_,
     pipelineInfo.flags = flags;
     if (basePipeline)
         pipelineInfo.flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-    pipelineInfo.stageCount = dereferencedStages.count();
+    pipelineInfo.stageCount = stageCount;
     pipelineInfo.pStages = dereferencedStages;
     pipelineInfo.pVertexInputState = &vertexInputState;
     pipelineInfo.pInputAssemblyState = &inputAssemblyState;

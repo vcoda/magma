@@ -183,10 +183,14 @@ namespace magma
     };
 } // namespace magma
 
+/* The alloca() function allocates size bytes of space in the stack
+   frame of the caller. This temporary space is automatically freed
+   when the function that called alloca() returns to its caller. */
+
 #if defined(_MSC_VER) || defined(__MINGW32__)
-    #define stackalloc(T, count) reinterpret_cast<T *>(_alloca(magma::core::stacksize<T>(static_cast<std::size_t>(count))))
+    #define stackalloc(T, count) reinterpret_cast<T *>(_alloca(std::min(sizeof(T) * count, static_cast<std::size_t>(_ALLOCA_S_THRESHOLD))))
 #else
-    #define stackalloc(T, count) reinterpret_cast<T *>(alloca(magma::core::stacksize<T>(static_cast<std::size_t>(count))))
+    #define stackalloc(T, count) reinterpret_cast<T *>(alloca(std::min(sizeof(T) * count, static_cast<std::size_t>(1024))))
 #endif
 
 #define MAGMA_HOST_ALLOCATOR(allocator) allocator ? allocator->getHostAllocator() : nullptr
