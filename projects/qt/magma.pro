@@ -32,7 +32,6 @@ SOURCES += \
     ../../src/descriptors/imageDescriptor.cpp \
     ../../src/exceptions/errorHandler.cpp \
     ../../src/exceptions/errorResult.cpp \
-    ../../src/exceptions/exception.cpp \
     ../../src/exceptions/reflectionError.cpp \
     ../../src/exceptions/spirvError.cpp \
     ../../src/extensions/deviceExtensions.cpp \

@@ -1133,9 +1133,6 @@
     <ClCompile Include="..\..\src\exceptions\errorResult.cpp">
       <Filter>Source Files\exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\exceptions\exception.cpp">
-      <Filter>Source Files\exceptions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\extensions\instanceExtensions.cpp">
       <Filter>Source Files\extensions</Filter>
     </ClCompile>

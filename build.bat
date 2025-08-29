@@ -85,7 +85,6 @@ src\descriptors\bufferDescriptor.cpp ^
 src\descriptors\imageDescriptor.cpp ^
 src\exceptions\errorHandler.cpp ^
 src\exceptions\errorResult.cpp ^
-src\exceptions\exception.cpp ^
 src\exceptions\reflectionError.cpp ^
 src\exceptions\spirvError.cpp ^
 src\extensions\deviceExtensions.cpp ^
@@ -267,7 +266,6 @@ bufferDescriptor.obj ^
 imageDescriptor.obj ^
 errorHandler.obj ^
 errorResult.obj ^
-exception.obj ^
 reflectionError.obj ^
 spirvError.obj ^
 deviceExtensions.obj ^

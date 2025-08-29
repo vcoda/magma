@@ -48,7 +48,6 @@ SRC_OBJS= \
 	\
 	src/exceptions/errorHandler.o \
 	src/exceptions/errorResult.o \
-	src/exceptions/exception.o \
 	src/exceptions/reflectionError.o \
 	src/exceptions/spirvError.o \
 	\
