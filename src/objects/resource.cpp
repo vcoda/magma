@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "resource.h"
 #include "deviceMemory.h"
 #include "managedDeviceMemory.h"
-#include "../misc/structureChain.h"
 #include "../allocator/allocator.h"
 
 namespace magma
