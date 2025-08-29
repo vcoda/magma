@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,6 +17,29 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../misc/compatibility.h"
+
+/* The alloca() function allocates size bytes of space in the stack
+   frame of the caller. This temporary space is automatically freed
+   when the function that called alloca() returns to its caller. */
+
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    #if !defined(alloca)
+        #define alloca _alloca
+    #endif
+    #define MAGMA_MAX_ALLOCA_SIZE std::size_t(_ALLOCA_S_THRESHOLD)
+#else
+    #define MAGMA_MAX_ALLOCA_SIZE std::size_t(1024)
+#endif
+
+#define stackalloc(T, count) reinterpret_cast<T *>(alloca(std::min(sizeof(T) * count, MAGMA_MAX_ALLOCA_SIZE)))
+
+#define MAGMA_HOST_ALLOCATOR(allocator) allocator ? allocator->getHostAllocator() : nullptr
+
+#ifdef MAGMA_NO_EXCEPTIONS
+    #define MAGMA_HANDLE_OUT_OF_MEMORY(ptr) if (!ptr) return nullptr
+#else
+    #define MAGMA_HANDLE_OUT_OF_MEMORY(ptr) if (!ptr) throw std::bad_alloc()
+#endif
 
 namespace magma
 {
@@ -182,21 +205,3 @@ namespace magma
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
     };
 } // namespace magma
-
-/* The alloca() function allocates size bytes of space in the stack
-   frame of the caller. This temporary space is automatically freed
-   when the function that called alloca() returns to its caller. */
-
-#if defined(_MSC_VER) || defined(__MINGW32__)
-    #define stackalloc(T, count) reinterpret_cast<T *>(_alloca(std::min(sizeof(T) * count, static_cast<std::size_t>(_ALLOCA_S_THRESHOLD))))
-#else
-    #define stackalloc(T, count) reinterpret_cast<T *>(alloca(std::min(sizeof(T) * count, static_cast<std::size_t>(1024))))
-#endif
-
-#define MAGMA_HOST_ALLOCATOR(allocator) allocator ? allocator->getHostAllocator() : nullptr
-
-#ifdef MAGMA_NO_EXCEPTIONS
-    #define MAGMA_HANDLE_OUT_OF_MEMORY(ptr) if (!ptr) return nullptr
-#else
-    #define MAGMA_HANDLE_OUT_OF_MEMORY(ptr) if (!ptr) throw std::bad_alloc()
-#endif // MAGMA_NO_EXCEPTIONS
