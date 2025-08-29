@@ -1359,7 +1359,7 @@
       <Filter>Source Files\exceptions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\resource.cpp">
-      <Filter>Header Files\objects</Filter>
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
