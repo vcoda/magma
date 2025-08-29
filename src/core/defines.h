@@ -50,12 +50,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     #define MAGMA_COUNTER __LINE__
 #endif
 
-#if defined(_MSC_VER) || defined(__MINGW32__)
-    #define MAGMA_ALLOCA _malloca
-#else
-    #define MAGMA_ALLOCA alloca
-#endif
-
 #ifdef MAGMA_DEBUG
     #define MAGMA_NOOP
 #else
