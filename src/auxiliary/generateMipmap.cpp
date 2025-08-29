@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/deviceFeatures.h"
 #include "../misc/imageSubresourceRange.h"
+#include "../allocator/allocator.h"
 
 namespace magma::aux
 {

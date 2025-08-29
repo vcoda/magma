@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "swapchainImage.h"
 #include "device.h"
 #include "swapchain.h"
+#include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma

@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "descriptorPool.h"
 #include "device.h"
 #include "../shaders/shaderReflection.h"
+#include "../allocator/allocator.h"
 #include "../helpers/enumerationCast.h"
 #include "../helpers/streamInsertOperators.h"
 

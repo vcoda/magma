@@ -27,6 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../states/multisampleState.h"
 #include "../misc/featureQuery.h"
 #include "../misc/format.h"
+#include "../allocator/allocator.h"
 
 namespace magma::aux
 {
