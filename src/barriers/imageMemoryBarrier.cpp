@@ -23,9 +23,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-std::unordered_map<VkImage, Image*> ImageMemoryBarrier::images;
-core::Spinlock ImageMemoryBarrier::mtx;
-
 ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout) noexcept:
     ImageMemoryBarrier(image, newLayout, ImageSubresourceRange(image))
 {}
@@ -171,8 +168,6 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, co
     default:
         MAGMA_FAILURE("unknown new image layout");
     }
-    std::lock_guard<core::Spinlock> lock(mtx);
-    images[*image] = image;
 }
 
 ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
@@ -189,15 +184,15 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
         *image,
         ImageSubresourceRange(image)
     }
-{
-    std::lock_guard<core::Spinlock> lock(mtx);
-    images[*image] = image;
-}
+{}
 
 void ImageMemoryBarrier::updateImageLayout() const noexcept
 {
-    std::lock_guard<core::Spinlock> lock(mtx);
-    Image *barrierImage = images[image];
+    Resource *resource = Resource::get(image);
+    Image *barrierImage = dynamic_cast<Image *>(resource);
+    MAGMA_ASSERT(barrierImage);
+    if (!barrierImage)
+        return;
     uint32_t levelCount = subresourceRange.levelCount;
     if (VK_REMAINING_MIP_LEVELS == levelCount)
         levelCount = barrierImage->getMipLevels() - subresourceRange.baseMipLevel;
