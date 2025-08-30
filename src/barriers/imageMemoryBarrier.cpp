@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+std::unordered_map<VkImage, Image*> ImageMemoryBarrier::images;
+core::Spinlock ImageMemoryBarrier::mtx;
+
 ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout) noexcept:
     ImageMemoryBarrier(image, newLayout, ImageSubresourceRange(image))
 {}
@@ -30,7 +33,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout) no
 ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, const VkImageSubresourceRange& subresourceRange) noexcept:
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-        image, // pNext
+        nullptr, // pNext
         VK_ACCESS_NONE_KHR, // srcAccessMask
         VK_ACCESS_NONE_KHR, // dstAccessMask
         image->getLayout(subresourceRange.baseMipLevel),
@@ -168,13 +171,15 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, co
     default:
         MAGMA_FAILURE("unknown new image layout");
     }
+    std::lock_guard<core::Spinlock> lock(mtx);
+    images[*image] = image;
 }
 
 ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
     VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept:
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-        image, // pNext
+        nullptr, // pNext
         srcAccessMask,
         dstAccessMask,
         image->getLayout(0),
@@ -184,15 +189,19 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
         *image,
         ImageSubresourceRange(image)
     }
-{}
+{
+    std::lock_guard<core::Spinlock> lock(mtx);
+    images[*image] = image;
+}
 
 void ImageMemoryBarrier::updateImageLayout() const noexcept
-{   // This ugly cast allows to keep the size of ImageMemoryBarrier equal to the size of VkImageMemoryBarrier
-    Image *image = const_cast<Image *>(reinterpret_cast<const Image *>(pNext));
+{
+    std::lock_guard<core::Spinlock> lock(mtx);
+    Image *barrierImage = images[image];
     uint32_t levelCount = subresourceRange.levelCount;
     if (VK_REMAINING_MIP_LEVELS == levelCount)
-        levelCount = image->getMipLevels() - subresourceRange.baseMipLevel;
+        levelCount = barrierImage->getMipLevels() - subresourceRange.baseMipLevel;
     for (uint32_t level = 0; level < levelCount; ++level)
-        image->setLayout(subresourceRange.baseMipLevel + level, newLayout);
+        barrierImage->setLayout(subresourceRange.baseMipLevel + level, newLayout);
 }
 } // namespace magma

@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -44,6 +44,10 @@ namespace magma
     private:
         // Image layout will be updated by CommandBuffer::pipelineBarrier()
         void updateImageLayout() const noexcept;
+
+        // Allows to keep the size of ImageMemoryBarrier equal to the size of base structure
+        static std::unordered_map<VkImage, Image*> images;
+        static core::Spinlock mtx;
         friend class CommandBuffer;
     };
 } // namespace magma
