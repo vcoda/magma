@@ -42,64 +42,58 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
     viewOffsets(viewOffsets),
     correlationMasks(correlationMasks)
 {
+    uint32_t colorAttachmentCount = 0;
     uint32_t multisampleAttachmentCount = 0;
-    uint32_t resolveAttachmentCount = 0;
-    for (auto const& attachmentDesc: attachments)
+    for (auto const& attachment: attachments)
     {
-        const Format format(attachmentDesc.format);
+        const Format format(attachment.format);
         if (!format.depth() && !format.stencil() && !format.depthStencil())
         {
-            if (attachmentDesc.samples > 1)
+            if (attachment.samples > 1)
                 ++multisampleAttachmentCount;
             else
-                ++resolveAttachmentCount;
+                ++colorAttachmentCount;
         }
     }
-    const uint32_t colorAttachmentCount = multisampleAttachmentCount ? multisampleAttachmentCount : resolveAttachmentCount;
-    resolveAttachmentCount = std::max(0U, multisampleAttachmentCount);
+    const uint32_t resolveAttachmentCount = multisampleAttachmentCount ? colorAttachmentCount : 0;
+    colorAttachmentCount = std::max(multisampleAttachmentCount, colorAttachmentCount); // Any non-depth attachment
     auto colorAttachments = stackalloc(VkAttachmentReference, colorAttachmentCount);
     auto resolveAttachments = stackalloc(VkAttachmentReference, resolveAttachmentCount);
     VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
-    bool hasDepthStencilAttachment = false;
     uint32_t attachmentIndex = 0, colorIndex = 0, resolveIndex = 0;
-    for (auto const& attachmentDesc: attachments)
+    for (auto const& attachment: attachments)
     {
-        const Format format(attachmentDesc.format);
+        const Format format(attachment.format);
         if (format.depth() || format.stencil() || format.depthStencil())
         {
             if (VK_IMAGE_LAYOUT_UNDEFINED == depthStencilAttachment.layout)
             {
-                const VkImageLayout depthStencilLayout = optimalDepthStencilLayout(format);
+                VkImageLayout depthStencilLayout = optimalDepthStencilLayout(format);
                 depthStencilAttachment = {attachmentIndex, depthStencilLayout};
-                hasDepthStencilAttachment = true;
             }
         }
         else
         {
-            if (attachmentDesc.samples > 1 || resolveAttachmentCount < 1)
+            if ((attachment.samples > 1) || (resolveAttachmentCount < 1))
                 colorAttachments[colorIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
             else
                 resolveAttachments[resolveIndex++] = {attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
         }
         ++attachmentIndex;
     }
-    // Describe render pass
     SubpassDescription subpassDescription;
     subpassDescription.colorAttachmentCount = colorAttachmentCount;
-    subpassDescription.pColorAttachments = colorAttachments;
-    subpassDescription.pResolveAttachments = resolveAttachments;
-    subpassDescription.pDepthStencilAttachment = hasDepthStencilAttachment ? &depthStencilAttachment : nullptr;
-    SubpassDependency dependencies[] = {
-        // Dependency at the beginning of the render pass
-        subpassBeginDependency(colorAttachmentCount > 0, hasDepthStencilAttachment),
-        // Dependency at the end of the render pass
-        subpassEndDependency(colorAttachmentCount > 0, hasDepthStencilAttachment)
+    subpassDescription.pColorAttachments = colorAttachmentCount ? colorAttachments : nullptr;
+    subpassDescription.pResolveAttachments = resolveAttachmentCount ? resolveAttachments : nullptr;
+    subpassDescription.pDepthStencilAttachment = depthStencilAttachment.layout ? &depthStencilAttachment : nullptr;
+    const SubpassDependency dependencies[] = {
+        beginDependency(colorAttachmentCount > 0, depthStencilAttachment.layout != VK_IMAGE_LAYOUT_UNDEFINED),
+        endDependency(colorAttachmentCount > 0, depthStencilAttachment.layout != VK_IMAGE_LAYOUT_UNDEFINED)
     };
-    // Create render pass
     VkRenderPassCreateInfo renderPassInfo;
     VkRenderPassMultiviewCreateInfoKHR renderPassMultiviewInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.pNext = &renderPassMultiviewInfo;
+    renderPassInfo.pNext = extendedInfo.headNode();
     renderPassInfo.flags = 0;
     renderPassInfo.attachmentCount = core::countof(attachments);
     renderPassInfo.pAttachments = attachments.data();

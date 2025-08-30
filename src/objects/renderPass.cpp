@@ -37,8 +37,8 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     const StructureChain& extendedInfo /* default */):
     RenderPass(std::move(device), std::move(allocator), attachments, flags)
 {
-    uint32_t multisampleAttachmentCount = 0;
     uint32_t colorAttachmentCount = 0;
+    uint32_t multisampleAttachmentCount = 0;
     for (auto const& attachment: attachments)
     {
         const Format format(attachment.format);
@@ -55,7 +55,6 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     auto colorAttachments = stackalloc(VkAttachmentReference, colorAttachmentCount);
     auto resolveAttachments = stackalloc(VkAttachmentReference, resolveAttachmentCount);
     VkAttachmentReference depthStencilAttachment = {0, VK_IMAGE_LAYOUT_UNDEFINED};
-    bool hasDepthStencilAttachment = false;
     uint32_t attachmentIndex = 0, colorIndex = 0, resolveIndex = 0;
     for (auto const& attachment: attachments)
     {
@@ -66,7 +65,6 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
             {
                 VkImageLayout depthStencilLayout = optimalDepthStencilLayout(format);
                 depthStencilAttachment = {attachmentIndex, depthStencilLayout};
-                hasDepthStencilAttachment = true;
             }
         }
         else
@@ -80,14 +78,12 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     }
     SubpassDescription subpassDescription;
     subpassDescription.colorAttachmentCount = colorAttachmentCount;
-    subpassDescription.pColorAttachments = colorAttachments;
+    subpassDescription.pColorAttachments = colorAttachmentCount ? colorAttachments : nullptr;
     subpassDescription.pResolveAttachments = resolveAttachmentCount ? resolveAttachments : nullptr;
-    subpassDescription.pDepthStencilAttachment = hasDepthStencilAttachment ? &depthStencilAttachment : nullptr;
-    SubpassDependency dependencies[] = {
-        // Dependency at the beginning of the render pass
-        subpassBeginDependency(colorAttachmentCount > 0, hasDepthStencilAttachment),
-        // Dependency at the end of the render pass
-        subpassEndDependency(colorAttachmentCount > 0, hasDepthStencilAttachment)
+    subpassDescription.pDepthStencilAttachment = depthStencilAttachment.layout ? &depthStencilAttachment : nullptr;
+    const SubpassDependency dependencies[] = {
+        beginDependency(colorAttachmentCount > 0, depthStencilAttachment.layout != VK_IMAGE_LAYOUT_UNDEFINED),
+        endDependency(colorAttachmentCount > 0, depthStencilAttachment.layout != VK_IMAGE_LAYOUT_UNDEFINED)
     };
     VkRenderPassCreateInfo renderPassInfo;
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -196,7 +192,7 @@ VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
     return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 }
 
-SubpassDependency RenderPass::subpassBeginDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept
+SubpassDependency RenderPass::beginDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept
 {
     SubpassDependency subpassDependency;
     subpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
@@ -219,7 +215,7 @@ SubpassDependency RenderPass::subpassBeginDependency(bool colorAttachment, bool 
     return subpassDependency;
 }
 
-SubpassDependency RenderPass::subpassEndDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept
+SubpassDependency RenderPass::endDependency(bool colorAttachment, bool depthStencilAttachment) const noexcept
 {
     SubpassDependency subpassDependency;
     subpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;

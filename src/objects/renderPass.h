@@ -67,9 +67,9 @@ namespace magma
             const std::vector<AttachmentDescription>& attachments,
             VkRenderPassCreateFlags flags);
         VkImageLayout optimalDepthStencilLayout(const Format& format) const;
-        SubpassDependency subpassBeginDependency(bool colorAttachment,
+        SubpassDependency beginDependency(bool colorAttachment,
             bool depthStencilAttachment) const noexcept;
-        SubpassDependency subpassEndDependency(bool colorAttachment,
+        SubpassDependency endDependency(bool colorAttachment,
             bool depthStencilAttachment) const noexcept;
 
         const VkRenderPassCreateFlags flags;
