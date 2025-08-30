@@ -24,20 +24,43 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+core::Spinlock Resource::mtx;
+Resource::Map Resource::resourceMap;
+
 Resource::Resource(VkDeviceSize size, const Sharing& sharing) noexcept:
     sharing(sharing),
     size(size),
-    offset(0ull)
+    offset(0ull),
+    where(resourceMap.end())
 {}
 
 Resource::~Resource()
-{}
+{
+    if (where != resourceMap.end())
+    {
+        std::lock_guard<core::Spinlock> lock(mtx);
+        resourceMap.erase(where);
+    }
+}
+
+Resource *Resource::get(NonDispatchableHandle handle) noexcept
+{
+    std::lock_guard<core::Spinlock> lock(mtx);
+    auto it = resourceMap.find(handle);
+    if (it != resourceMap.end())
+        return it->second;
+    return nullptr;
+}
 
 std::unique_ptr<IDeviceMemory> Resource::allocateMemory(NonDispatchableHandle handle,
     const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
     const StructureChain& extendedMemoryInfo,
-    std::shared_ptr<Device> device, std::shared_ptr<Allocator> allocator) const
+    std::shared_ptr<Device> device, std::shared_ptr<Allocator> allocator)
 {
+    {
+        std::lock_guard<core::Spinlock> lock(mtx);
+        where = resourceMap.emplace(handle, this).first;
+    }
     std::shared_ptr<IAllocator> hostAllocator;
     std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
     if (allocator)
