@@ -130,7 +130,7 @@ SubpassDescription::~SubpassDescription()
     delete[] pPreserveAttachments;
 }
 
-hash_t SubpassDescription::getHash() const noexcept
+hash_t SubpassDescription::hash() const noexcept
 {
     hash_t hash = core::hashArgs(
         flags,

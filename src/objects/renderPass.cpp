@@ -110,7 +110,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
         extendedInfo.hash());
     for (auto const& attachment: attachments)
         hash = core::hashCombine(hash, attachment.hash());
-    hash = core::hashCombine(hash, subpassDescription.getHash());
+    hash = core::hashCombine(hash, subpassDescription.hash());
     for (auto const& dependency: dependencies)
         hash = core::hashCombine(hash, dependency.hash());
     subpassDescription.pColorAttachments = nullptr;
@@ -147,7 +147,7 @@ RenderPass::RenderPass(std::shared_ptr<Device> device, const std::vector<Attachm
     for (auto const& attachment: attachments)
         hash = core::hashCombine(hash, attachment.hash());
     for (auto const& subpass: subpasses)
-        hash = core::hashCombine(hash, subpass.getHash());
+        hash = core::hashCombine(hash, subpass.hash());
     for (auto const& dependency: dependencies)
         hash = core::hashCombine(hash, dependency.hash());
 }

@@ -130,7 +130,7 @@ MultiviewRenderPass::MultiviewRenderPass(std::shared_ptr<Device> device, const s
         extendedInfo.hash());
     for (auto const& attachment: attachments)
         hash = core::hashCombine(hash, attachment.hash());
-    hash = core::hashCombine(hash, subpassDescription.getHash());
+    hash = core::hashCombine(hash, subpassDescription.hash());
     for (auto const& dependency: dependencies)
         hash = core::hashCombine(hash, dependency.hash());
     for (uint32_t i = 0; i < renderPassMultiviewInfo.subpassCount; ++i)
