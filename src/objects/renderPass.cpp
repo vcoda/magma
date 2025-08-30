@@ -160,22 +160,6 @@ VkExtent2D RenderPass::getRenderAreaGranularity() const noexcept
     return granularity;
 }
 
-bool RenderPass::usesClear() const noexcept
-{
-    return std::any_of(attachments.begin(), attachments.end(),
-        [](auto const& attachment) {
-            return (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp);
-        });
-}
-
-bool RenderPass::usesMultisampling() const noexcept
-{
-    return std::any_of(attachments.begin(), attachments.end(),
-        [](auto const& attachment) {
-            return (attachment.samples > 1);
-        });
-}
-
 VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts

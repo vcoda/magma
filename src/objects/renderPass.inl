@@ -15,6 +15,22 @@ inline RenderPass::RenderPass(std::shared_ptr<Device> device, std::shared_ptr<IA
     hash(0ull)
 {}
 
+inline bool RenderPass::usesClear() const noexcept
+{
+    return std::any_of(attachments.begin(), attachments.end(),
+        [](auto const& attachment) {
+            return (VK_ATTACHMENT_LOAD_OP_CLEAR == attachment.loadOp);
+        });
+}
+
+inline bool RenderPass::usesMultisampling() const noexcept
+{
+    return std::any_of(attachments.begin(), attachments.end(),
+        [](auto const& attachment) {
+            return (attachment.samples > 1);
+        });
+}
+
 inline void RenderPass::begin(const std::vector<ImageView *>& imageViews) const noexcept
 {
     for (size_t i = 0, n = std::min(attachments.size(), imageViews.size()); i < n; ++i)
