@@ -32,7 +32,7 @@ namespace magma
         struct FormatFeatures;
         struct ExternalFeatures;
         struct ExternalMemoryFeatures;
-        enum class Vendor : uint32_t;
+        enum class Vendor : uint8_t;
 
         bool isUmaArchitecture() const noexcept;
         FormatFeatures supportsFormatFeatures(VkFormat format,
@@ -87,10 +87,10 @@ namespace magma
         VkBool32 importable: 1;
     };
 
-    enum class DeviceFeatures::Vendor : uint32_t
+    enum class DeviceFeatures::Vendor : uint8_t
     {
-        AMD, Apple, ARM, Broadcom, Imagination,
-        Intel, Matrox, Nvidia, S3Graphics, Qualcomm,
-        VeriSilicon, VIA, Unknown
+        Unknown, AMD, Apple, ARM, Broadcom,
+        Imagination, Intel, Matrox, Nvidia,
+        S3Graphics, Qualcomm, VeriSilicon, VIA
     };
 } // namespace magma
