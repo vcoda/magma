@@ -186,17 +186,21 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
     }
 {}
 
-void ImageMemoryBarrier::updateImageLayout() const noexcept
+bool ImageMemoryBarrier::updateImageLayout() const noexcept
 {
     Resource *resource = Resource::get(image);
     Image *barrierImage = dynamic_cast<Image *>(resource);
     MAGMA_ASSERT(barrierImage);
     if (!barrierImage)
-        return;
+        return false;
     uint32_t levelCount = subresourceRange.levelCount;
     if (VK_REMAINING_MIP_LEVELS == levelCount)
         levelCount = barrierImage->getMipLevels() - subresourceRange.baseMipLevel;
+    MAGMA_ASSERT(levelCount);
+    if (!levelCount)
+        return false;
     for (uint32_t level = 0; level < levelCount; ++level)
         barrierImage->setLayout(subresourceRange.baseMipLevel + level, newLayout);
+    return true;
 }
 } // namespace magma

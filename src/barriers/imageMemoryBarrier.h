@@ -42,8 +42,8 @@ namespace magma
             VkAccessFlags dstAccessMask) noexcept;
 
     private:
-        // Image layout will be updated by CommandBuffer::pipelineBarrier()
-        void updateImageLayout() const noexcept;
+        // Image layout updated by CommandBuffer::pipelineBarrier()
+        bool updateImageLayout() const noexcept;
         friend class CommandBuffer;
     };
 } // namespace magma
