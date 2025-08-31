@@ -75,7 +75,7 @@ namespace magma
             {
                 const float ax = x >= 0.f ? x : -x;
                 const float frac = ax - static_cast<uint32_t>(ax);
-                const uint32_t fractional = static_cast<uint32_t>(frac * 1000000.f); // shift left
+                const uint32_t fractional = static_cast<uint32_t>(frac * 1'000'000.f); // shift left
                 const uint32_t integer = static_cast<uint32_t>(x);
                 const ConstexprHash<uint32_t> hasher;
                 const hash_t intHash = hasher(integer);
@@ -91,7 +91,7 @@ namespace magma
             {
                 const double ax = x >= 0. ? x : -x;
                 const double frac = ax - static_cast<uint64_t>(ax);
-                const uint64_t fractional = static_cast<uint64_t>(frac * 1000000000.); // shift left
+                const uint64_t fractional = static_cast<uint64_t>(frac * 1'000'000'000.); // shift left
                 const uint64_t integer = static_cast<uint64_t>(x);
                 const ConstexprHash<uint64_t> hasher;
                 const hash_t intHash = hasher(integer);
