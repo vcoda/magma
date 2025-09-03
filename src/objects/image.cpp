@@ -578,7 +578,7 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
     std::vector<VkBufferImageCopy> regions;
     regions.reserve(mipMap.size());
     uint32_t mipIndex = 0;
-    for (const Mip& mip: mipMap)
+    for (auto const& mip: mipMap)
     {   // Define buffer -> image copy region
         VkBufferImageCopy region;
         region.bufferOffset = bufferLayout.offset + mip.bufferOffset;
