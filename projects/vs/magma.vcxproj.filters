@@ -384,9 +384,6 @@
     <ClInclude Include="..\..\src\auxiliary\profiler.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\auxiliary\scopedProfile.h">
-      <Filter>Header Files\auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\auxiliary\shaderCompiler.h">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
@@ -872,6 +869,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\exceptions\spirvError.h">
       <Filter>Header Files\exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\auxiliary\profiler.inl">
+      <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

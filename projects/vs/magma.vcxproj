@@ -174,7 +174,7 @@
     <ClInclude Include="..\..\src\auxiliary\imageDescriptorSet.h" />
     <ClInclude Include="..\..\src\auxiliary\immediateRender.h" />
     <ClInclude Include="..\..\src\auxiliary\profiler.h" />
-    <ClInclude Include="..\..\src\auxiliary\scopedProfile.h" />
+    <ClInclude Include="..\..\src\auxiliary\profiler.inl" />
     <ClInclude Include="..\..\src\auxiliary\shaderCompiler.h" />
     <ClInclude Include="..\..\src\auxiliary\sprite.h" />
     <ClInclude Include="..\..\src\auxiliary\textShader.h" />

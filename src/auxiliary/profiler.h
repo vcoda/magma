@@ -90,11 +90,7 @@ namespace magma
             const char *name;
             uint32_t frameIndex;
             double time; // In nanoseconds
-            Sample(const char *name, uint32_t frameIndex, double time) noexcept:
-                name(name),
-                frameIndex(frameIndex),
-                time(time)
-            {}
+            Sample(const char *, uint32_t, double) noexcept;
         };
 
         struct Profiler::Section
@@ -102,11 +98,7 @@ namespace magma
             const char *name;
             uint32_t frameIndex;
             uint32_t beginQuery;
-            Section(const char *name, uint32_t frameIndex, uint32_t beginQuery) noexcept:
-                name(name),
-                frameIndex(frameIndex),
-                beginQuery(beginQuery)
-            {}
+            Section(const char *, uint32_t, uint32_t) noexcept;
         };
 
         /* Performance profiler for graphics queue. */
@@ -130,7 +122,35 @@ namespace magma
                 Profiler(VK_QUEUE_COMPUTE_BIT, std::move(device), std::move(allocator))
             {}
         };
+
+        /* GPU profiling block. */
+
+        class ScopedProfile final : NonCopyable
+        {
+        public:
+            explicit ScopedProfile(const char *name,
+                lent_ptr<CommandBuffer> cmdBuffer,
+                uint32_t color = 0xFFFFFFFF);
+            ~ScopedProfile();
+
+        private:
+            CommandBuffer *cmdBuffer;
+            Profiler *profiler;
+        };
     } // namespace aux
 } // namespace magma
 
-#include "scopedProfile.h"
+#include "profiler.inl"
+
+#define MAGMA_SCOPED_PROFILE(name, cmdBuffer, id) magma::aux::ScopedProfile _magma_profile_##id(name, cmdBuffer);
+
+#ifdef MAGMA_DEBUG
+    #define MAGMA_PROFILE(name, cmdBuffer) MAGMA_SCOPED_PROFILE(name, cmdBuffer, MAGMA_COUNTER)
+    #define MAGMA_PROFILE_BEGIN(name, cmdBuffer) {\
+        MAGMA_PROFILE(name, cmdBuffer)
+    #define MAGMA_PROFILE_END }
+#else
+    #define MAGMA_PROFILE(name, cmdBuffer)
+    #define MAGMA_PROFILE_BEGIN(name, cmdBuffer) {
+    #define MAGMA_PROFILE_END }
+#endif // MAGMA_DEBUG
