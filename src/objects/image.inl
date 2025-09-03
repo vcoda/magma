@@ -6,7 +6,7 @@ inline Image::Mip::Mip() noexcept:
     texels(nullptr)
 {}
 
-inline Image::Mip::Mip(uint32_t width, uint32_t height, VkDeviceSize) noexcept:
+inline Image::Mip::Mip(uint32_t width, uint32_t height, VkDeviceSize bufferOffset) noexcept:
     extent{width, height, 1},
     bufferOffset(bufferOffset),
     texels(nullptr)
