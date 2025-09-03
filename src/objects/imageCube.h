@@ -45,7 +45,7 @@ namespace magma
             const Sharing& sharing = Sharing());
         explicit ImageCube(lent_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
-            const std::vector<MipData>& mipMap,
+            const std::vector<Mip>& mipMap,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),

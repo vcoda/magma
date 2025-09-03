@@ -45,7 +45,7 @@ namespace magma
         explicit Image2DArray(lent_ptr<CommandBuffer> cmdBuffer,
             VkFormat format,
             uint32_t arrayLayers,
-            const std::vector<MipData>& mipMap,
+            const std::vector<Mip>& mipMap,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
             const Sharing& sharing = Sharing(),

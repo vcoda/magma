@@ -50,7 +50,7 @@ Image2D::Image2D(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 
-Image2D::Image2D(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMap,
+Image2D::Image2D(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<Mip>& mipMap,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,

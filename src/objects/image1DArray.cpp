@@ -53,7 +53,7 @@ Image1DArray::Image1DArray(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, u
 }
 
 Image1DArray::Image1DArray(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t arrayLayers,
-    const std::vector<MipData>& mipMap,
+    const std::vector<Mip>& mipMap,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,

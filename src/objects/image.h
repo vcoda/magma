@@ -37,7 +37,6 @@ namespace magma
     {
     public:
         struct Mip;
-        struct MipData;
         struct CopyLayout;
         struct Initializer;
 
@@ -142,7 +141,7 @@ namespace magma
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
         bool copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer,
-            const std::vector<MipData>& mipMap,
+            const std::vector<Mip>& mipMap,
             std::shared_ptr<Allocator> allocator,
             CopyMemoryFn copyMem,
             VkImageLayout dstLayout,
@@ -170,19 +169,15 @@ namespace magma
 
     struct Image::Mip
     {
+        VkExtent3D extent;
+        union {
+            VkDeviceSize bufferOffset;
+            VkDeviceSize size;
+        };
+        const void *texels;
         Mip() noexcept;
         Mip(const VkExtent3D&, VkDeviceSize) noexcept;
-        VkExtent3D extent;
-        VkDeviceSize bufferOffset;
-    };
-
-    struct Image::MipData
-    {
-        MipData() noexcept;
-        MipData(const VkExtent3D&, VkDeviceSize, const void *) noexcept;
-        VkExtent3D extent;
-        VkDeviceSize size;
-        const void *texels;
+        Mip(const VkExtent3D&, VkDeviceSize, const void *) noexcept;
     };
 
     struct Image::CopyLayout

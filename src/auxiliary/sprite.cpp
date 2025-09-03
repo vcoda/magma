@@ -94,7 +94,7 @@ Sprite::Sprite(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExten
         bottomRight.x *= footprint.first;
         bottomRight.y *= footprint.second;
     }
-    const MipData mip = {extent, size, data};
+    const Mip mip = {extent, size, data};
     copyMipmapStaged(std::move(cmdBuffer), {mip}, std::move(allocator), std::move(copyMem),
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
         VK_PIPELINE_STAGE_TRANSFER_BIT);
