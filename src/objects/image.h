@@ -176,7 +176,11 @@ namespace magma
         };
         const void *texels;
         Mip() noexcept;
+        Mip(uint32_t, uint32_t, VkDeviceSize) noexcept;
+        Mip(const VkExtent2D&, VkDeviceSize) noexcept;
         Mip(const VkExtent3D&, VkDeviceSize) noexcept;
+        Mip(uint32_t, uint32_t, VkDeviceSize, const void *) noexcept;
+        Mip(const VkExtent2D&, VkDeviceSize, const void *) noexcept;
         Mip(const VkExtent3D&, VkDeviceSize, const void *) noexcept;
     };
 
