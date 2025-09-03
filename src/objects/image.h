@@ -137,12 +137,12 @@ namespace magma
             VkImageTiling tiling);
         void copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
             lent_ptr<const SrcTransferBuffer> srcBuffer,
-            const std::vector<Mip>& mipMaps,
+            const std::vector<Mip>& mipMap,
             const CopyLayout& bufferLayout,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask);
         bool copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer,
-            const std::vector<MipData>& mipMaps,
+            const std::vector<MipData>& mipMap,
             std::shared_ptr<Allocator> allocator,
             CopyMemoryFn copyMem,
             VkImageLayout dstLayout,

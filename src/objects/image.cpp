@@ -571,14 +571,14 @@ void Image::copyMip(lent_ptr<CommandBuffer> cmdBuffer,
 
 void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
     lent_ptr<const SrcTransferBuffer> srcBuffer,
-    const std::vector<Mip>& mipMaps, const CopyLayout& bufferLayout,
+    const std::vector<Mip>& mipMap, const CopyLayout& bufferLayout,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {
     const VkImageAspectFlags aspectMask = getAspectMask();
     std::vector<VkBufferImageCopy> regions;
-    regions.reserve(mipMaps.size());
+    regions.reserve(mipMap.size());
     uint32_t mipIndex = 0;
-    for (const Mip& mip: mipMaps)
+    for (const Mip& mip: mipMap)
     {   // Define buffer -> image copy region
         VkBufferImageCopy region;
         region.bufferOffset = bufferLayout.offset + mip.bufferOffset;
@@ -609,14 +609,14 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
         ImageMemoryBarrier(this, dstLayout, subresourceRange));
 }
 
-bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<MipData>& mipMaps,
+bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<MipData>& mipMap,
     std::shared_ptr<Allocator> allocator, CopyMemoryFn copyMem,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {   // Setup mip chain for buffer copy
     VkDeviceSize bufferOffset = 0ull;
     std::vector<Mip> mipChain;
-    mipChain.reserve(mipMaps.size());
-    for (auto const& mip: mipMaps)
+    mipChain.reserve(mipMap.size());
+    for (auto const& mip: mipMap)
     {
         mipChain.emplace_back(mip.extent, bufferOffset);
         bufferOffset += core::alignUp(mip.size, (VkDeviceSize)16);
@@ -629,7 +629,7 @@ bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
         {
             if (!copyMem)
                 copyMem = std::memcpy;
-            core::foreach(mipChain, mipMaps,
+            core::foreach(mipChain, mipMap,
                 [buffer, copyMem](auto& dstMip, auto& srcMip)
                 {   // Copy mip texels to buffer
                     copyMem(buffer + dstMip.bufferOffset, srcMip.texels, static_cast<std::size_t>(srcMip.size));

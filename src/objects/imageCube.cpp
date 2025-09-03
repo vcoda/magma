@@ -36,33 +36,33 @@ ImageCube::ImageCube(std::shared_ptr<Device> device, VkFormat format, uint32_t d
 {}
 
 ImageCube::ImageCube(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format,
-    lent_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMaps,
+    lent_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMap,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */):
-    ImageCube(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, core::countof(mipMaps) / 6,
+    ImageCube(cmdBuffer->getDevice(), format, mipMap.front().extent.width, core::countof(mipMap) / 6,
         std::move(allocator), optional, sharing)
 {
-    MAGMA_ASSERT(mipMaps.size() % 6 == 0);
-    MAGMA_ASSERT(mipMaps.front().extent.width == mipMaps.front().extent.height);
+    MAGMA_ASSERT(mipMap.size() % 6 == 0);
+    MAGMA_ASSERT(mipMap.front().extent.width == mipMap.front().extent.height);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer->getQueueFamilyIndex());
-    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMaps, bufferLayout,
+    copyMipmap(std::move(cmdBuffer), std::move(srcBuffer), mipMap, bufferLayout,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 
-ImageCube::ImageCube(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMaps,
+ImageCube::ImageCube(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<MipData>& mipMap,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
     CopyMemoryFn copyMem /* nullptr */):
-    ImageCube(cmdBuffer->getDevice(), format, mipMaps.front().extent.width, core::countof(mipMaps) / 6,
+    ImageCube(cmdBuffer->getDevice(), format, mipMap.front().extent.width, core::countof(mipMap) / 6,
         allocator, optional, sharing)
 {
-    MAGMA_ASSERT(mipMaps.size() % 6 == 0);
-    MAGMA_ASSERT(mipMaps.front().extent.width == mipMaps.front().extent.height);
+    MAGMA_ASSERT(mipMap.size() % 6 == 0);
+    MAGMA_ASSERT(mipMap.front().extent.width == mipMap.front().extent.height);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer->getQueueFamilyIndex());
-    copyMipmapStaged(std::move(cmdBuffer), mipMaps, std::move(allocator), std::move(copyMem),
+    copyMipmapStaged(std::move(cmdBuffer), mipMap, std::move(allocator), std::move(copyMem),
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 } // namespace magma
