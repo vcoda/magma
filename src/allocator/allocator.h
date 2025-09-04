@@ -204,4 +204,8 @@ namespace magma
         std::shared_ptr<IAllocator> hostAllocator;
         std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
     };
+
+    MAGMA_TYPEDEF_MANAGED_PTR(IAllocator)
+    MAGMA_TYPEDEF_MANAGED_PTR(IDeviceMemoryAllocator)
+    MAGMA_TYPEDEF_MANAGED_PTR(Allocator)
 } // namespace magma

@@ -76,6 +76,7 @@ namespace magma
     MAGMA_TYPEDEF_MANAGED_PTR(QueryPool)
     MAGMA_TYPEDEF_MANAGED_PTR(Queue)
     MAGMA_TYPEDEF_MANAGED_PTR(RenderPass)
+    MAGMA_TYPEDEF_MANAGED_PTR(Resource)
     MAGMA_TYPEDEF_MANAGED_PTR(Sampler)
     MAGMA_TYPEDEF_MANAGED_PTR(SecondaryCommandBuffer)
     MAGMA_TYPEDEF_MANAGED_PTR(Semaphore)
@@ -204,8 +205,7 @@ namespace magma
     MAGMA_TYPEDEF_MANAGED_PTR(SwapchainImage)
 #endif
 
-    MAGMA_TYPEDEF_MANAGED_PTR(IAllocator)
-    MAGMA_TYPEDEF_MANAGED_PTR(IDeviceMemoryAllocator)
+    MAGMA_TYPEDEF_MANAGED_PTR(IDeviceMemory)
     MAGMA_TYPEDEF_MANAGED_PTR(IObject)
     MAGMA_TYPEDEF_MANAGED_PTR(IResource)
 } // namespace magma
