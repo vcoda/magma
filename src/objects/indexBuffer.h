@@ -107,6 +107,9 @@ namespace magma
             CopyMemoryFn copyMem = nullptr);
     };
 
+    template<class T> using TIndexBufferUPtr = std::unique_ptr<TIndexBuffer<T>>;
+    template<class T> using TIndexBufferSPtr = std::shared_ptr<TIndexBuffer<T>>;
+
     /* Major GPU vendors expose a 256MiB-ish staging buffer
        with the DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT
        flags where the GPU and CPU can both write into shared

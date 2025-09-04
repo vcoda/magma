@@ -22,7 +22,7 @@ namespace magma
 {
     template<class Type>
     class NonDispatchable;
-    template<class Type> using Pool = std::unordered_set<NonDispatchable<Type> *>;
+    template<class T> using Pool = std::unordered_set<NonDispatchable<T> *>;
 
     /* Resource pool stores pointers to different Vulkan objects
        that were created by device. Pool allows to keep statistics

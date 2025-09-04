@@ -136,8 +136,8 @@ namespace magma
         }
     };
 
-    template<class Type> using UniformBufferUPtr = std::unique_ptr<UniformBuffer<Type>>;
-    template<class Type> using UniformBufferSPtr = std::shared_ptr<UniformBuffer<Type>>;
-    template<class Type> using NonCoherentUniformBufferUPtr = std::unique_ptr<NonCoherentUniformBuffer<Type>>;
-    template<class Type> using NonCoherentUniformBufferSPtr = std::shared_ptr<NonCoherentUniformBuffer<Type>>;
+    template<class T> using UniformBufferUPtr = std::unique_ptr<UniformBuffer<T>>;
+    template<class T> using UniformBufferSPtr = std::shared_ptr<UniformBuffer<T>>;
+    template<class T> using NonCoherentUniformBufferUPtr = std::unique_ptr<NonCoherentUniformBuffer<T>>;
+    template<class T> using NonCoherentUniformBufferSPtr = std::shared_ptr<NonCoherentUniformBuffer<T>>;
 } // namespace magma
