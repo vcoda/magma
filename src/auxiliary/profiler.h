@@ -142,15 +142,18 @@ namespace magma
 
 #include "profiler.inl"
 
-#define MAGMA_SCOPED_PROFILE(name, cmdBuffer, id) magma::aux::ScopedProfile _magma_profile_##id(name, cmdBuffer);
+#define MAGMA_SCOPED_PROFILE(name, cmdBuffer) magma::aux::ScopedProfile MAGMA_CONCAT(_magmaProfile, MAGMA_COUNTER)(name, cmdBuffer);
 
 #ifdef MAGMA_DEBUG
-    #define MAGMA_PROFILE(name, cmdBuffer) MAGMA_SCOPED_PROFILE(name, cmdBuffer, MAGMA_COUNTER)
-    #define MAGMA_PROFILE_BEGIN(name, cmdBuffer) {\
-        MAGMA_PROFILE(name, cmdBuffer)
-    #define MAGMA_PROFILE_END }
+    #define MAGMA_PROFILE(cmdBuffer) MAGMA_SCOPED_PROFILE(__FUNCTION__, cmdBuffer)
+    #define MAGMA_PROFILE_NAMED(name, cmdBuffer) MAGMA_SCOPED_PROFILE(name, cmdBuffer)
 #else
-    #define MAGMA_PROFILE(name, cmdBuffer)
-    #define MAGMA_PROFILE_BEGIN(name, cmdBuffer) {
-    #define MAGMA_PROFILE_END }
+    #define MAGMA_PROFILE(cmdBuffer)
+    #define MAGMA_PROFILE_NAMED(name, cmdBuffer)
 #endif // MAGMA_DEBUG
+
+#define MAGMA_PROFILE_BEGIN(cmdBuffer) {\
+    MAGMA_PROFILE(cmdBuffer)
+#define MAGMA_PROFILE_BEGIN_NAMED(name, cmdBuffer) {\
+    MAGMA_PROFILE_NAMED(name, cmdBuffer)
+#define MAGMA_PROFILE_END }
