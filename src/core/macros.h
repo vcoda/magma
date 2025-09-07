@@ -27,6 +27,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAGMA_FAILURE(message) MAGMA_ASSERT(!message)
 
+#define MAGMA_CONCAT_IMPL(x, y) x##y
+#define MAGMA_CONCAT(x, y) MAGMA_CONCAT_IMPL(x, y)
+
 #define MAGMA_STRINGIZE(identifier) #identifier
 #define MAGMA_STRINGIZE_ENUMERATOR(name) case name: return MAGMA_STRINGIZE(name)
 
