@@ -86,6 +86,8 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create image");
     registerObject(handle);
+    if (optional.aliasingMemory)
+        return;
     // Prepare memory requirements
     VkMemoryRequirements memoryRequirements;
     StructureChain extendedMemoryInfo;

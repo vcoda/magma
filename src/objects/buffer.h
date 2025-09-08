@@ -103,6 +103,7 @@ namespace magma
         VkBool32 deviceAddress: 1; // VK_KHR_buffer_device_address
         VkBool32 deviceAddressCaptureReplay: 1;
         VkBool32 lazilyAllocated: 1;
+        VkBool32 aliasingMemory: 1;
         uint32_t deviceMask; // VK_KHR_device_group
         float memoryPriority; // VK_EXT_memory_priority
         Initializer() noexcept:
@@ -112,6 +113,7 @@ namespace magma
             deviceAddress(VK_FALSE),
             deviceAddressCaptureReplay(VK_FALSE),
             lazilyAllocated(VK_FALSE),
+            aliasingMemory(VK_FALSE),
             deviceMask(0),
             memoryPriority(MemoryPriorityDefault)
         {}

@@ -55,6 +55,8 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create buffer");
     registerObject(handle);
+    if (optional.aliasingMemory)
+        return;
     // Prepare memory requirements
     VkMemoryRequirements memoryRequirements;
     StructureChain extendedMemoryInfo;

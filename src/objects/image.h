@@ -197,6 +197,7 @@ namespace magma
         VkBool32 srcTransfer: 1;
         VkBool32 storage: 1;
         VkBool32 lazilyAllocated: 1;
+        VkBool32 aliasingMemory: 1;
         std::vector<VkFormat> viewFormats; // VK_KHR_image_format_list
         uint32_t deviceMask; // VK_KHR_device_group
         float memoryPriority; // VK_EXT_memory_priority
@@ -205,6 +206,7 @@ namespace magma
             srcTransfer(VK_FALSE),
             storage(VK_FALSE),
             lazilyAllocated(VK_FALSE),
+            aliasingMemory(VK_FALSE),
             deviceMask(0),
             memoryPriority(MemoryPriorityDefault)
         {}
