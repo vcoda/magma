@@ -85,6 +85,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 #endif // VK_KHR_image_format_list
     const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create image");
+    registerObject(handle);
     // Prepare memory requirements
     VkMemoryRequirements memoryRequirements;
     StructureChain extendedMemoryInfo;
@@ -169,6 +170,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
 
 Image::~Image()
 {
+    unregisterObject(handle);
     vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
@@ -393,9 +395,11 @@ void Image::onDefragment()
     imageInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     imageInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     imageInfo.initialLayout = mipLayouts[0];
+    unregisterObject(handle);
     vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
     const VkResult result = vkCreateImage(getNativeDevice(), &imageInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to recreate defragmented image");
+    registerObject(handle);
     bindMemory(std::move(memory), offset);
 }
 

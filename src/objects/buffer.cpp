@@ -54,6 +54,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
     const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create buffer");
+    registerObject(handle);
     // Prepare memory requirements
     VkMemoryRequirements memoryRequirements;
     StructureChain extendedMemoryInfo;
@@ -127,6 +128,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
 
 Buffer::~Buffer()
 {
+    unregisterObject(handle);
     vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
@@ -303,9 +305,11 @@ void Buffer::onDefragment()
     bufferInfo.sharingMode = sharing.getMode();
     bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    unregisterObject(handle);
     vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
     const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to recreate defragmented buffer");
+    registerObject(handle);
     bindMemory(std::move(memory), offset);
 }
 
