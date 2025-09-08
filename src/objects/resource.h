@@ -33,7 +33,6 @@ namespace magma
     class Resource : public IResource
     {
     public:
-        virtual ~Resource();
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
@@ -59,8 +58,6 @@ namespace magma
 
     private:
         static core::Spinlock mtx;
-        using Map = std::unordered_map<NonDispatchableHandle, Resource*>;
-        static Map resourceMap;
-        Map::iterator where;
+        static std::unordered_map<NonDispatchableHandle, Resource*> resourceMap;
     };
 } // namespace magma

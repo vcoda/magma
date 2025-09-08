@@ -25,23 +25,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 core::Spinlock Resource::mtx;
-Resource::Map Resource::resourceMap;
+std::unordered_map<NonDispatchableHandle, Resource*> Resource::resourceMap;
 
 Resource::Resource(VkDeviceSize size, const Sharing& sharing) noexcept:
     sharing(sharing),
     size(size),
-    offset(0ull),
-    where(resourceMap.end())
+    offset(0ull)
 {}
-
-Resource::~Resource()
-{
-    if (where != resourceMap.end())
-    {
-        std::lock_guard<core::Spinlock> lock(mtx);
-        resourceMap.erase(where);
-    }
-}
 
 Resource *Resource::get(NonDispatchableHandle handle) noexcept
 {
@@ -55,7 +45,7 @@ Resource *Resource::get(NonDispatchableHandle handle) noexcept
 void Resource::registerObject(NonDispatchableHandle handle)
 {
     std::lock_guard<core::Spinlock> lock(mtx);
-    where = resourceMap.emplace(handle, this).first;
+    resourceMap.emplace(handle, this);
 }
 
 void Resource::unregisterObject(NonDispatchableHandle handle)
