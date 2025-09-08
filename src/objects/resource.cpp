@@ -52,15 +52,23 @@ Resource *Resource::get(NonDispatchableHandle handle) noexcept
     return nullptr;
 }
 
+void Resource::registerObject(NonDispatchableHandle handle)
+{
+    std::lock_guard<core::Spinlock> lock(mtx);
+    where = resourceMap.emplace(handle, this).first;
+}
+
+void Resource::unregisterObject(NonDispatchableHandle handle)
+{
+    std::lock_guard<core::Spinlock> lock(mtx);
+    resourceMap.erase(handle);
+}
+
 std::unique_ptr<IDeviceMemory> Resource::allocateMemory(NonDispatchableHandle handle,
     const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
     const StructureChain& extendedMemoryInfo,
     std::shared_ptr<Device> device, std::shared_ptr<Allocator> allocator)
 {
-    {
-        std::lock_guard<core::Spinlock> lock(mtx);
-        where = resourceMap.emplace(handle, this).first;
-    }
     std::shared_ptr<IAllocator> hostAllocator;
     std::shared_ptr<IDeviceMemoryAllocator> deviceAllocator;
     if (allocator)

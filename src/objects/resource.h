@@ -43,6 +43,8 @@ namespace magma
     protected:
         Resource(VkDeviceSize size,
             const Sharing& sharing) noexcept;
+        void registerObject(NonDispatchableHandle handle);
+        void unregisterObject(NonDispatchableHandle handle);
         std::unique_ptr<IDeviceMemory> allocateMemory(NonDispatchableHandle handle,
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
