@@ -33,6 +33,7 @@ namespace magma
     class Resource : public IResource
     {
     public:
+        bool unbound() const noexcept { return !memory; }
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
