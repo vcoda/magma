@@ -236,7 +236,7 @@ void DeviceMemory::bindDeviceGroup(NonDispatchableHandle object, VkObjectType ob
 #endif // VK_NV_ray_tracing
     else
     {
-        MAGMA_FAILURE("unknown type of binded object");
+        MAGMA_FAILURE("unknown type of bound object");
     }
     MAGMA_HANDLE_RESULT(result, "failed to bind device memory across the subdevices");
     if (VK_SUCCESS == result)

@@ -100,7 +100,7 @@ void ManagedDeviceMemory::bind(NonDispatchableHandle object, VkObjectType object
         break;
 #endif // VK_NV_ray_tracing
     default:
-        MAGMA_FAILURE("unknown type of binded object");
+        MAGMA_FAILURE("unknown type of bound object");
         result = VK_ERROR_UNKNOWN;
     }
     MAGMA_HANDLE_RESULT(result, "failed to bind device memory");

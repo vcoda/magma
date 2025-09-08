@@ -96,7 +96,7 @@ void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflect
     for (auto descriptor: descriptors)
     {
         if (!descriptor->resourceBinded())
-            std::cout << "warning: binding #" << descriptor->binding << " has no binded resource" << std::endl;
+            std::cout << "warning: binding #" << descriptor->binding << " has no bound resource" << std::endl;
         const SpvReflectDescriptorBinding *reflectedBinding = nullptr;
         for (uint32_t i = 0; i < descriptorSet->binding_count; ++i)
         {
