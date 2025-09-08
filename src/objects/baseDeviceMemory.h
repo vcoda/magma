@@ -39,7 +39,7 @@ namespace magma
         VkDeviceSize getMapOffset() const noexcept override { return mapOffset; }
         VkDeviceSize getMapSize() const noexcept override { return mapSize; }
         VkMemoryMapFlags getMapFlags() const noexcept override { return mapFlags; }
-        bool binded() const noexcept override { return binding != VK_NULL_HANDLE; }
+        bool bound() const noexcept override { return binding != VK_NULL_HANDLE; }
         bool mapped() const noexcept override { return mapPointer != nullptr; }
         bool persistentlyMapped() const noexcept override { return mapPointer && mapPersistent; }
 

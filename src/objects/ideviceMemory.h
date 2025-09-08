@@ -51,7 +51,7 @@ namespace magma
         virtual float getPriority() const noexcept = 0;
         virtual void setPriority(float priority) noexcept = 0;
         virtual bool managed() const noexcept = 0;
-        virtual bool binded() const noexcept = 0;
+        virtual bool bound() const noexcept = 0;
         virtual bool mapped() const noexcept = 0;
         virtual bool persistentlyMapped() const noexcept = 0;
         virtual void realloc(NonDispatchableHandle object,
