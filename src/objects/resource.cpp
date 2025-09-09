@@ -24,8 +24,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-core::Spinlock Resource::mtx;
 std::unordered_map<NonDispatchableHandle, Resource*> Resource::resourceMap;
+core::Spinlock Resource::mtx;
 
 Resource::Resource(VkDeviceSize size, const Sharing& sharing) noexcept:
     sharing(sharing),

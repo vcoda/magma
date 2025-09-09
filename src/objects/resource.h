@@ -58,7 +58,7 @@ namespace magma
         std::unique_ptr<IDeviceMemory> memory;
 
     private:
-        static core::Spinlock mtx;
         static std::unordered_map<NonDispatchableHandle, Resource*> resourceMap;
+        static core::Spinlock mtx;
     };
 } // namespace magma
