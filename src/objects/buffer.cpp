@@ -307,9 +307,11 @@ void Buffer::onDefragment()
     bufferInfo.sharingMode = sharing.getMode();
     bufferInfo.queueFamilyIndexCount = sharing.getQueueFamiliesCount();
     bufferInfo.pQueueFamilyIndices = sharing.getQueueFamilyIndices().data();
+    IAllocator *allocator = MAGMA_OPTIONAL(hostAllocator);
     unregisterObject(handle);
-    vkDestroyBuffer(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
-    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
+    vkDestroyBuffer(getNativeDevice(), handle, allocator);
+    handle = VK_NULL_HANDLE;
+    const VkResult result = vkCreateBuffer(getNativeDevice(), &bufferInfo, allocator, &handle);
     MAGMA_HANDLE_RESULT(result, "failed to recreate defragmented buffer");
     registerObject(handle);
     bindMemory(std::move(memory), offset);
