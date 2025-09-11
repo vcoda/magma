@@ -42,13 +42,13 @@ Resource *Resource::get(NonDispatchableHandle handle) noexcept
     return nullptr;
 }
 
-void Resource::registerObject(NonDispatchableHandle handle)
+void Resource::postCreate(NonDispatchableHandle handle)
 {
     std::lock_guard<core::Spinlock> lock(mtx);
     resourceMap.emplace(handle, this);
 }
 
-void Resource::unregisterObject(NonDispatchableHandle handle)
+void Resource::preDestroy(NonDispatchableHandle handle)
 {
     std::lock_guard<core::Spinlock> lock(mtx);
     resourceMap.erase(handle);
