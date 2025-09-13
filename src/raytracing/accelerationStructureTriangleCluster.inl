@@ -63,4 +63,50 @@ inline AccelerationStructureTriangleClusterInput::AccelerationStructureTriangleC
         maxTotalVertexCount += core::countof(cluster.vertices);
     }
 }
+
+constexpr AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleCluster(uint32_t clusterID /* 0 */) noexcept:
+    VkClusterAccelerationStructureBuildTriangleClusterInfoNV{
+        clusterID,
+        0, // clusterFlags
+        0, // triangleCount
+        0, // vertexCount
+        0, // positionTruncateBitCount
+        0, // indexType
+        0, // opacityMicromapIndexType
+        {0, 0, 0}, // baseGeometryIndexAndGeometryFlags
+        0, // indexBufferStride
+        0, // vertexBufferStride
+        0, // geometryIndexAndFlagsBufferStride
+        0, // opacityMicromapIndexBufferStride
+        MAGMA_NULL, // indexBuffer
+        MAGMA_NULL, // vertexBuffer
+        MAGMA_NULL, // geometryIndexAndFlagsBuffer
+        MAGMA_NULL, // opacityMicromapArray
+        MAGMA_NULL  // opacityMicromapIndexBuffer
+    }
+{}
+
+template<class Vertex, class Index>
+AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster, uint32_t clusterID) noexcept:
+    AccelerationStructureBuildTriangleCluster(clusterID)
+{
+    MAGMA_ASSERT(!cluster.vertices.empty());
+    MAGMA_ASSERT(!cluster.indices.empty());
+    MAGMA_ASSERT(cluster.indices.size() % 3 == 0);
+    const uint32_t clusterTriangleCount = core::countof(cluster.indices) / 3;
+    MAGMA_ASSERT(clusterTriangleCount <= MAGMA_MAX_CLUSTER_TRIANGLE_COUNT); // max 9 bits
+    triangleCount = clusterTriangleCount;
+    const uint32_t clusterVertexCount = core::countof(cluster.vertices);
+    MAGMA_ASSERT(clusterVertexCount <= MAGMA_MAX_CLUSTER_VERTEX_COUNT); // max 9 bits
+    vertexCount = clusterVertexCount;
+    indexType = cluster.getIndexFormat();
+    indexBufferStride = sizeof(Index);
+    vertexBufferStride = sizeof(Vertex);
+    baseGeometryIndexAndGeometryFlags.geometryIndex = cluster.findMinGeometryIndex();
+    baseGeometryIndexAndGeometryFlags.reserved = 0;
+    baseGeometryIndexAndGeometryFlags.geometryFlags = cluster.geometryFlags;
+    indexBuffer = (VkDeviceAddress)cluster.indexBufferOffset;
+    vertexBuffer = (VkDeviceAddress)cluster.vertexBufferOffset;
+    geometryIndexAndFlagsBuffer = (VkDeviceAddress)cluster.propertyBufferOffset;
+}
 } // namespace magma

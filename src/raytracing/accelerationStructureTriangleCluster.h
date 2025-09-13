@@ -52,6 +52,16 @@ namespace magma
         AccelerationStructureTriangleClusterInput(VkFormat vertexFormat,
             const std::list<Cluster<Vertex, Index>>& clusters);
     };
+
+    /* Describes build operation for a cluster acceleration structure. */
+
+    struct AccelerationStructureBuildTriangleCluster : VkClusterAccelerationStructureBuildTriangleClusterInfoNV
+    {
+        constexpr AccelerationStructureBuildTriangleCluster(uint32_t clusterID = 0) noexcept;
+        template<class Vertex, class Index>
+        AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster,
+            uint32_t clusterID) noexcept;
+    };
 } // namespace magma
 
 #include "accelerationStructureTriangleCluster.inl"
