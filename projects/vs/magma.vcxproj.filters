@@ -873,6 +873,12 @@
     <ClInclude Include="..\..\src\auxiliary\profiler.inl">
       <Filter>Header Files\auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureTriangleCluster.h">
+      <Filter>Header Files\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureTriangleCluster.inl">
+      <Filter>Header Files\raytracing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">

@@ -371,6 +371,8 @@
     <ClInclude Include="..\..\src\raytracing\accelerationStructureGeometry.h" />
     <ClInclude Include="..\..\src\raytracing\accelerationStructureHeader.h" />
     <ClInclude Include="..\..\src\raytracing\accelerationStructureInstance.h" />
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureTriangleCluster.h" />
+    <ClInclude Include="..\..\src\raytracing\accelerationStructureTriangleCluster.inl" />
     <ClInclude Include="..\..\src\raytracing\address.h" />
     <ClInclude Include="..\..\src\renderpass\attachment.h" />
     <ClInclude Include="..\..\src\renderpass\loadStoreOp.h" />

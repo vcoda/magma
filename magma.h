@@ -127,6 +127,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/raytracing/accelerationStructureGeometry.h"
 #include "src/raytracing/accelerationStructureHeader.h"
 #include "src/raytracing/accelerationStructureInstance.h"
+#include "src/raytracing/accelerationStructureTriangleCluster.h"
 #include "src/raytracing/address.h"
 
 #include "src/renderpass/attachment.h"
