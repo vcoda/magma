@@ -23,14 +23,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Meshlet geometry. */
+    /* Cluster geometry. */
 
     template<class Vertex, class Index>
     struct Cluster
     {
+        static_assert(std::is_same<Index, uint8_t>::value || std::is_same<Index, uint16_t>::value || std::is_same<Index, uint32_t>::value,
+            "index should be of unsigned char, short or int type");
+
         std::vector<Vertex> vertices;
         std::vector<Index> indices;
         std::vector<uint32_t> geometryIndices = {0};
+        VkClusterAccelerationStructureGeometryFlagsNV geometryFlags = 0;
+        VkDeviceSize vertexBufferOffset = 0;
+        VkDeviceSize indexBufferOffset = 0;
+        VkDeviceSize propertyBufferOffset = 0;
+
+        uint32_t findMinGeometryIndex() const noexcept;
+        constexpr VkClusterAccelerationStructureIndexFormatFlagBitsNV getIndexFormat() const noexcept;
     };
 
     /* Parameters describing a cluster acceleration structure. */

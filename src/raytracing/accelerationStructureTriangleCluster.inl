@@ -1,5 +1,24 @@
 namespace magma
 {
+template<class Vertex, class Index>
+inline uint32_t Cluster<Vertex, Index>::findMinGeometryIndex() const noexcept
+{
+    if (!geometryIndices.empty())
+        return *std::min_element(geometryIndices.begin(), geometryIndices.end());
+    return 0;
+}
+
+template<class Vertex, class Index>
+constexpr VkClusterAccelerationStructureIndexFormatFlagBitsNV Cluster<Vertex, Index>::getIndexFormat() const noexcept
+{
+    if constexpr (std::is_same<Index, uint8_t>::value)
+        return VK_CLUSTER_ACCELERATION_STRUCTURE_INDEX_FORMAT_8BIT_NV;
+    else if constexpr (std::is_same<Index, uint16_t>::value)
+        return VK_CLUSTER_ACCELERATION_STRUCTURE_INDEX_FORMAT_16BIT_NV;
+    else // if constexpr (std::is_same<Index, uint32_t>::value)
+        return VK_CLUSTER_ACCELERATION_STRUCTURE_INDEX_FORMAT_32BIT_NV;
+}
+
 constexpr AccelerationStructureTriangleClusterInput::AccelerationStructureTriangleClusterInput(VkFormat vertexFormat /* VK_FORMAT_UNDEFINED */) noexcept:
     VkClusterAccelerationStructureTriangleClusterInputNV{
         VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_TRIANGLE_CLUSTER_INPUT_NV,
