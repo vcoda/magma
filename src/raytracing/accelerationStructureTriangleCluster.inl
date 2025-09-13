@@ -31,17 +31,17 @@ inline AccelerationStructureTriangleClusterInput::AccelerationStructureTriangleC
             uniqueGeometryIndices.insert(geometryIndex);
         }
         // Maximum number of unique values of the geometry index for each cluster
-        maxClusterUniqueGeometryCount = std::max(maxClusterUniqueGeometryCount, MAGMA_COUNT(uniqueGeometryIndices));
+        maxClusterUniqueGeometryCount = std::max(maxClusterUniqueGeometryCount, core::countof(uniqueGeometryIndices));
         // Maximum number of triangles in a cluster
-        const uint32_t clusterTriangleCount = MAGMA_COUNT(cluster.indices) / 3;
+        const uint32_t clusterTriangleCount = core::countof(cluster.indices) / 3;
         maxClusterTriangleCount = std::max(maxClusterTriangleCount, clusterTriangleCount);
         // Maximum number of unique vertices in the cluster's index buffer
         std::unordered_set<Index> uniqueVertexIndices;
         for (Index i: cluster.indices)
             uniqueVertexIndices.insert(i);
-        maxClusterVertexCount = std::max(maxClusterVertexCount, MAGMA_COUNT(uniqueVertexIndices));
+        maxClusterVertexCount = std::max(maxClusterVertexCount, core::countof(uniqueVertexIndices));
         maxTotalTriangleCount += clusterTriangleCount;
-        maxTotalVertexCount += MAGMA_COUNT(cluster.vertices);
+        maxTotalVertexCount += core::countof(cluster.vertices);
     }
 }
 } // namespace magma
