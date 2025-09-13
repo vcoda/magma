@@ -879,6 +879,9 @@
     <ClInclude Include="..\..\src\raytracing\accelerationStructureTriangleCluster.inl">
       <Filter>Header Files\raytracing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\objects\clusterAccelerationStructure.h">
+      <Filter>Header Files\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1365,6 +1368,9 @@
       <Filter>Source Files\exceptions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\objects\resource.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objects\clusterAccelerationStructure.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>

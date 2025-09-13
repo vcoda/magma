@@ -261,6 +261,7 @@
     <ClInclude Include="..\..\src\objects\bottomLevelStructure.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInputBuffer.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h" />
+    <ClInclude Include="..\..\src\objects\clusterAccelerationStructure.h" />
     <ClInclude Include="..\..\src\objects\countBuffer.h" />
     <ClInclude Include="..\..\src\objects\baseDeviceMemory.h" />
     <ClInclude Include="..\..\src\objects\baseUniformBuffer.h" />
@@ -476,6 +477,7 @@
     <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\baseCountBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\bottomLevelStructure.cpp" />
+    <ClCompile Include="..\..\src\objects\clusterAccelerationStructure.cpp" />
     <ClCompile Include="..\..\src\objects\countBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\baseDeviceMemory.cpp" />
     <ClCompile Include="..\..\src\objects\baseUniformBuffer.cpp" />
