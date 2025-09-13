@@ -43,13 +43,13 @@ namespace magma
         constexpr VkClusterAccelerationStructureIndexFormatFlagBitsNV getIndexFormat() const noexcept;
     };
 
-    /* Parameters describing a cluster acceleration structure. */
+    /* Describes a cluster acceleration structure. */
 
-    struct AccelerationStructureTriangleClusterInput : VkClusterAccelerationStructureTriangleClusterInputNV
+    struct AccelerationStructureTriangleCluster : VkClusterAccelerationStructureTriangleClusterInputNV
     {
-        constexpr AccelerationStructureTriangleClusterInput(VkFormat vertexFormat = VK_FORMAT_UNDEFINED) noexcept;
+        constexpr AccelerationStructureTriangleCluster(VkFormat vertexFormat = VK_FORMAT_UNDEFINED) noexcept;
         template<class Vertex, class Index>
-        AccelerationStructureTriangleClusterInput(VkFormat vertexFormat,
+        AccelerationStructureTriangleCluster(VkFormat vertexFormat,
             const std::list<Cluster<Vertex, Index>>& clusters);
     };
 
