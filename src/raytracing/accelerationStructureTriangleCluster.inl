@@ -44,6 +44,7 @@ inline AccelerationStructureTriangleCluster::AccelerationStructureTriangleCluste
         MAGMA_ASSERT(!cluster.indices.empty());
         MAGMA_ASSERT(cluster.indices.size() % 3 == 0);
         std::unordered_set<uint32_t> uniqueGeometryIndices;
+        uniqueGeometryIndices.reserve(cluster.geometryIndices.size());
         for (uint32_t geometryIndex: cluster.geometryIndices)
         {   // Maximum geometry index value for any constructed geometry
             maxGeometryIndexValue = std::max(maxGeometryIndexValue, geometryIndex);
@@ -56,6 +57,7 @@ inline AccelerationStructureTriangleCluster::AccelerationStructureTriangleCluste
         maxClusterTriangleCount = std::max(maxClusterTriangleCount, clusterTriangleCount);
         // Maximum number of unique vertices in the cluster's index buffer
         std::unordered_set<Index> uniqueVertexIndices;
+        uniqueVertexIndices.reserve(cluster.indices.size());
         for (Index i: cluster.indices)
             uniqueVertexIndices.insert(i);
         maxClusterVertexCount = std::max(maxClusterVertexCount, core::countof(uniqueVertexIndices));
