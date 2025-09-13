@@ -462,10 +462,11 @@ void LeanCommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructur
 #endif // VK_KHR_acceleration_structure
 
 #ifdef VK_NV_cluster_acceleration_structure
-void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount,
-    VkClusterAccelerationStructureOpTypeNV opType, VkClusterAccelerationStructureOpModeNV opMode, const VkClusterAccelerationStructureOpInputNV& opInput,
-    Buffer *scratchBuffer, VkBuildAccelerationStructureFlagsKHR flags /* 0 */) const noexcept
+void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccelerationStructureOpTypeNV opType,
+    ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount,
+    Buffer *scratchBuffer, VkBuildAccelerationStructureFlagsKHR flags) const noexcept
 {
+    VkClusterAccelerationStructureMoveObjectsInputNV moveObjects;
     VkClusterAccelerationStructureCommandsInfoNV clusterAccelerationStructureCommandsInfo;
     clusterAccelerationStructureCommandsInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_COMMANDS_INFO_NV;
     clusterAccelerationStructureCommandsInfo.pNext = nullptr;
@@ -474,8 +475,25 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(ClusterAcceler
     clusterAccelerationStructureCommandsInfo.input.maxAccelerationStructureCount = maxAccelerationStructureCount;
     clusterAccelerationStructureCommandsInfo.input.flags = flags;
     clusterAccelerationStructureCommandsInfo.input.opType = opType;
-    clusterAccelerationStructureCommandsInfo.input.opMode = opMode;
-    clusterAccelerationStructureCommandsInfo.input.opInput = opInput;
+    clusterAccelerationStructureCommandsInfo.input.opMode = clusterAccelerationStructure->getOpMode();
+    switch (clusterAccelerationStructureCommandsInfo.input.opType)
+    {
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_MOVE_OBJECTS_NV:
+        moveObjects.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_MOVE_OBJECTS_INPUT_NV;
+        moveObjects.pNext = nullptr;
+        moveObjects.type = clusterAccelerationStructure->getType();
+        moveObjects.noMoveOverlap = VK_FALSE; // old clusters can overlap themselves
+        moveObjects.maxMovedBytes = clusterAccelerationStructure->getSize();
+        clusterAccelerationStructureCommandsInfo.input.opInput.pMoveObjects = &moveObjects;
+        break;
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_CLUSTERS_BOTTOM_LEVEL_NV:
+        clusterAccelerationStructureCommandsInfo.input.opInput.pClustersBottomLevel = clusterAccelerationStructure->getClustersBottomLevel();
+        break;
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_NV:
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_TEMPLATE_NV:
+        clusterAccelerationStructureCommandsInfo.input.opInput.pTriangleClusters = clusterAccelerationStructure->getTriangleClusters();
+        break;
+    }
     clusterAccelerationStructureCommandsInfo.dstImplicitData = clusterAccelerationStructure->getImplicitData()->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.scratchData = scratchBuffer->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.dstAddressesArray.deviceAddress = clusterAccelerationStructure->getAddressesArray()->getDeviceAddress();

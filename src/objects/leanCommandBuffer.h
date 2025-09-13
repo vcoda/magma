@@ -224,9 +224,12 @@ namespace magma
         void writeAccelerationStructureProperties(const AccelerationStructure *accelerationStructure, QueryPool *queryPool, uint32_t firstQuery = 0) const noexcept;
     #endif // VK_KHR_acceleration_structure
     #ifdef VK_NV_cluster_acceleration_structure
-        void buildClusterAccelerationStructureIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount,
-            VkClusterAccelerationStructureOpTypeNV opType, VkClusterAccelerationStructureOpModeNV opMode, const VkClusterAccelerationStructureOpInputNV& opInput,
-            Buffer *scratchBuffer, VkBuildAccelerationStructureFlagsKHR flags = 0) const noexcept;
+        void moveObjectsIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
+        void buildBottomLevelClustersIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
+        void buildTriangleClusterIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
+        void buildTriangleClusterTemplateIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
+        void instantiateTriangleClusterIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
+        void getClusterTemplateIndicesIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
     #endif // VK_NV_cluster_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline
@@ -250,6 +253,10 @@ namespace magma
         void rebuildAccelerationStructure(VkBuildAccelerationStructureModeKHR mode, TopLevelAccelerationStructure *accelerationStructure,
             const AccelerationStructureInstances& instances, Buffer *scratchBuffer) const noexcept;
     #endif // VK_KHR_acceleration_structure
+    #ifdef VK_NV_cluster_acceleration_structure
+        void buildClusterAccelerationStructureIndirect(VkClusterAccelerationStructureOpTypeNV opType, ClusterAccelerationStructure *clusterAccelerationStructure,
+            uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer, VkBuildAccelerationStructureFlagsKHR flags) const noexcept;
+    #endif // VK_NV_cluster_acceleration_structure
 
         VkDevice device;
         VkCommandPool cmdPool;

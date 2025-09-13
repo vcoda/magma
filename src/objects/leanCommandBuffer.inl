@@ -564,6 +564,44 @@ inline void LeanCommandBuffer::updateAccelerationStructure(TopLevelAccelerationS
 }
 #endif // VK_KHR_acceleration_structure
 
+#ifdef VK_NV_cluster_acceleration_structure
+inline void LeanCommandBuffer::moveObjectsIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept
+{
+    buildClusterAccelerationStructureIndirect(VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_MOVE_OBJECTS_NV,
+        clusterAccelerationStructure, maxAccelerationStructureCount, scratchBuffer, 0); // VkBuildAccelerationStructureFlagsKHR
+}
+
+inline void LeanCommandBuffer::buildBottomLevelClustersIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept
+{
+    buildClusterAccelerationStructureIndirect(VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_CLUSTERS_BOTTOM_LEVEL_NV,
+        clusterAccelerationStructure, maxAccelerationStructureCount, scratchBuffer, 0);
+}
+
+inline void LeanCommandBuffer::buildTriangleClusterIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept
+{
+    buildClusterAccelerationStructureIndirect(VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_NV,
+        clusterAccelerationStructure, maxAccelerationStructureCount, scratchBuffer, 0);
+}
+
+inline void LeanCommandBuffer::buildTriangleClusterTemplateIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept
+{
+    buildClusterAccelerationStructureIndirect(VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_TEMPLATE_NV,
+        clusterAccelerationStructure, maxAccelerationStructureCount, scratchBuffer, 0);
+}
+
+inline void LeanCommandBuffer::instantiateTriangleClusterIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept
+{
+    buildClusterAccelerationStructureIndirect(VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_INSTANTIATE_TRIANGLE_CLUSTER_NV,
+        clusterAccelerationStructure, maxAccelerationStructureCount, scratchBuffer, 0);
+}
+
+inline void LeanCommandBuffer::getClusterTemplateIndicesIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept
+{
+    buildClusterAccelerationStructureIndirect(VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_GET_CLUSTER_TEMPLATE_INDICES_NV,
+        clusterAccelerationStructure, maxAccelerationStructureCount, scratchBuffer, 0);
+}
+#endif // VK_NV_cluster_acceleration_structure
+
 #ifdef VK_KHR_ray_tracing_pipeline
 inline void LeanCommandBuffer::setRayTracingPipelineStackSize(uint32_t pipelineStackSize) const noexcept
 {
