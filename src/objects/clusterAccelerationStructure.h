@@ -26,13 +26,31 @@ namespace magma
     class ClusterAccelerationStructure
     {
     public:
-        explicit ClusterAccelerationStructure(std::shared_ptr<Device> device);
+        explicit ClusterAccelerationStructure(std::shared_ptr<Device> device,
+            VkClusterAccelerationStructureTypeNV type,
+            VkBuildAccelerationStructureFlagsKHR buildFlags,
+            const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters,
+            VkClusterAccelerationStructureOpModeNV opMode);
+        VkClusterAccelerationStructureTypeNV getType() const noexcept { return type; }
+        VkClusterAccelerationStructureOpModeNV getOpMode() const noexcept { return opMode; }
+        VkDeviceSize getSize() const noexcept { return accelerationStructureSize; }
+        VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
+        VkDeviceSize getBuildScratchSize() const noexcept { return buildScratchSize; }
         const std::unique_ptr<Buffer>& getImplicitData() const noexcept { return implicitData; }
         const std::unique_ptr<Buffer>& getAddressesArray() const noexcept { return addressesArrayBuffer; }
         const std::unique_ptr<Buffer>& getSizesArray() const noexcept { return sizesArrayBuffer; }
         const std::unique_ptr<Buffer>& getInfosArray() const noexcept { return infosArrayBuffer; }
+        VkClusterAccelerationStructureTriangleClusterInputNV *getTriangleClusters() noexcept { return &triangleClusters; }
+        VkClusterAccelerationStructureClustersBottomLevelInputNV *getClustersBottomLevel() noexcept { return &clustersBottomLevel; }
 
     private:
+        const VkClusterAccelerationStructureTypeNV type;
+        const VkClusterAccelerationStructureOpModeNV opMode;
+        VkClusterAccelerationStructureTriangleClusterInputNV triangleClusters;
+        VkClusterAccelerationStructureClustersBottomLevelInputNV clustersBottomLevel;
+        VkDeviceSize accelerationStructureSize;
+        VkDeviceSize updateScratchSize;
+        VkDeviceSize buildScratchSize;
         std::unique_ptr<Buffer> implicitData;
         std::unique_ptr<Buffer> addressesArrayBuffer;
         std::unique_ptr<Buffer> sizesArrayBuffer;

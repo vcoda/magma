@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,8 +25,31 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#ifdef VK_KHR_acceleration_structure
-ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Device> device)
-{}
-#endif // VK_KHR_acceleration_structure
+#ifdef VK_NV_cluster_acceleration_structure
+ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Device> device,
+    VkClusterAccelerationStructureTypeNV type,
+    VkBuildAccelerationStructureFlagsKHR buildFlags,
+    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters_,
+    VkClusterAccelerationStructureOpModeNV opMode):
+    type(type),
+    opMode(opMode),
+    triangleClusters(triangleClusters_)
+{
+    auto getNativeDevice = [device]() -> VkDevice { return device->getHandle(); };
+    VkClusterAccelerationStructureInputInfoNV clusterAccelerationStructureInputInfo;
+    clusterAccelerationStructureInputInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_INPUT_INFO_NV;
+    clusterAccelerationStructureInputInfo.pNext = nullptr;
+    clusterAccelerationStructureInputInfo.maxAccelerationStructureCount = 0;
+	clusterAccelerationStructureInputInfo.flags = buildFlags;
+	clusterAccelerationStructureInputInfo.opType = VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_NV;
+	clusterAccelerationStructureInputInfo.opMode = opMode;
+	clusterAccelerationStructureInputInfo.opInput.pTriangleClusters = &triangleClusters;
+    VkAccelerationStructureBuildSizesInfoKHR buildSizesInfo = {VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR};
+    MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetClusterAccelerationStructureBuildSizesNV, VK_NV_CLUSTER_ACCELERATION_STRUCTURE_EXTENSION_NAME);
+    vkGetClusterAccelerationStructureBuildSizesNV(getNativeDevice(), &clusterAccelerationStructureInputInfo, &buildSizesInfo);
+    accelerationStructureSize = buildSizesInfo.accelerationStructureSize;
+    updateScratchSize = buildSizesInfo.updateScratchSize;
+    buildScratchSize = buildSizesInfo.buildScratchSize;
+}
+#endif // VK_NV_cluster_acceleration_structure
 } // namespace magma
