@@ -42,6 +42,9 @@ namespace magma
     class TopLevelAccelerationStructure;
     struct AccelerationStructureInstances;
 #endif
+#ifdef VK_NV_cluster_acceleration_structure
+    class ClusterAccelerationStructure;
+#endif // VK_NV_cluster_acceleration_structure
 #ifdef VK_KHR_ray_tracing_pipeline
     class ShaderBindingTable;
 #endif
@@ -220,6 +223,11 @@ namespace magma
         void deserializeAccelerationStructure(const Buffer *srcBuffer, AccelerationStructure *dstAccelerationStructure, VkDeviceAddress bufferOffset = 0) const noexcept;
         void writeAccelerationStructureProperties(const AccelerationStructure *accelerationStructure, QueryPool *queryPool, uint32_t firstQuery = 0) const noexcept;
     #endif // VK_KHR_acceleration_structure
+    #ifdef VK_NV_cluster_acceleration_structure
+        void buildClusterAccelerationStructureIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount,
+            VkClusterAccelerationStructureOpTypeNV opType, VkClusterAccelerationStructureOpModeNV opMode, const VkClusterAccelerationStructureOpInputNV& opInput,
+            Buffer *scratchBuffer, VkBuildAccelerationStructureFlagsKHR flags = 0) const noexcept;
+    #endif // VK_NV_cluster_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline
         void setRayTracingPipelineStackSize(uint32_t pipelineStackSize) const noexcept;

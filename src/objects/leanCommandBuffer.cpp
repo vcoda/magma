@@ -26,6 +26,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "imageView.h"
 #include "bottomLevelStructure.h"
 #include "topLevelStructure.h"
+#include "clusterAccelerationStructure.h"
 #include "../shaders/shaderBindingTable.h"
 #include "../raytracing/accelerationStructureGeometry.h"
 #include "../exceptions/errorResult.h"
@@ -459,4 +460,37 @@ void LeanCommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructur
     vkCmdBuildAccelerationStructuresKHR(handle, 1, &buildGeometryInfo, &buildRangeInfos);
 }
 #endif // VK_KHR_acceleration_structure
+
+#ifdef VK_NV_cluster_acceleration_structure
+void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount,
+    VkClusterAccelerationStructureOpTypeNV opType, VkClusterAccelerationStructureOpModeNV opMode, const VkClusterAccelerationStructureOpInputNV& opInput,
+    Buffer *scratchBuffer, VkBuildAccelerationStructureFlagsKHR flags /* 0 */) const noexcept
+{
+    VkClusterAccelerationStructureCommandsInfoNV clusterAccelerationStructureCommandsInfo;
+    clusterAccelerationStructureCommandsInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_COMMANDS_INFO_NV;
+    clusterAccelerationStructureCommandsInfo.pNext = nullptr;
+    clusterAccelerationStructureCommandsInfo.input.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_INPUT_INFO_NV;
+    clusterAccelerationStructureCommandsInfo.input.pNext = nullptr;
+    clusterAccelerationStructureCommandsInfo.input.maxAccelerationStructureCount = maxAccelerationStructureCount;
+    clusterAccelerationStructureCommandsInfo.input.flags = flags;
+    clusterAccelerationStructureCommandsInfo.input.opType = opType;
+    clusterAccelerationStructureCommandsInfo.input.opMode = opMode;
+    clusterAccelerationStructureCommandsInfo.input.opInput = opInput;
+    clusterAccelerationStructureCommandsInfo.dstImplicitData = clusterAccelerationStructure->getImplicitData()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.scratchData = scratchBuffer->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.dstAddressesArray.deviceAddress = clusterAccelerationStructure->getAddressesArray()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.dstAddressesArray.stride = 8;
+    clusterAccelerationStructureCommandsInfo.dstAddressesArray.size = maxAccelerationStructureCount * 8;
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = clusterAccelerationStructure->getSizesArray()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = 8;
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * 8;
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = clusterAccelerationStructure->getInfosArray()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = 0;
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * sizeof(VkClusterAccelerationStructureBuildTriangleClusterInfoNV);
+    clusterAccelerationStructureCommandsInfo.srcInfosCount = MAGMA_NULL;
+    clusterAccelerationStructureCommandsInfo.addressResolutionFlags = 0;
+    MAGMA_DEVICE_EXTENSION(vkCmdBuildClusterAccelerationStructureIndirectNV);
+    vkCmdBuildClusterAccelerationStructureIndirectNV(handle, &clusterAccelerationStructureCommandsInfo);
+}
+#endif // VK_NV_cluster_acceleration_structure
 } // namespace magma
