@@ -61,7 +61,8 @@ namespace magma
         protected:
             Profiler(VkQueueFlags queueType,
                 std::shared_ptr<Device> device,
-                std::shared_ptr<IAllocator> allocator);
+                std::shared_ptr<IAllocator> allocator,
+                uint32_t maxTimestampQueries);
             uint32_t getResetQueryCount() const noexcept;
 
         private:
@@ -107,8 +108,9 @@ namespace magma
         {
         public:
             explicit GraphicsProfiler(std::shared_ptr<Device> device,
-                std::shared_ptr<IAllocator> allocator = nullptr):
-                Profiler(VK_QUEUE_GRAPHICS_BIT, std::move(device), std::move(allocator))
+                std::shared_ptr<IAllocator> allocator = nullptr,
+                uint32_t maxTimestampQueries = 256):
+                Profiler(VK_QUEUE_GRAPHICS_BIT, std::move(device), std::move(allocator), maxTimestampQueries)
             {}
         };
 
@@ -118,8 +120,9 @@ namespace magma
         {
         public:
             explicit ComputeProfiler(std::shared_ptr<Device> device,
-                std::shared_ptr<IAllocator> allocator = nullptr):
-                Profiler(VK_QUEUE_COMPUTE_BIT, std::move(device), std::move(allocator))
+                std::shared_ptr<IAllocator> allocator = nullptr,
+                uint32_t maxTimestampQueries = 256):
+                Profiler(VK_QUEUE_COMPUTE_BIT, std::move(device), std::move(allocator), maxTimestampQueries)
             {}
         };
 
