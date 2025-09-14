@@ -40,7 +40,7 @@ inline AccelerationStructureTriangleCluster::AccelerationStructureTriangleCluste
 {
     for (auto const& cluster: clusters)
     {
-        MAGMA_ASSERT(!cluster.vertices.empty());
+        MAGMA_ASSERT(cluster.vertexCount <= MAGMA_MAX_CLUSTER_VERTEX_COUNT); // max 9 bits
         MAGMA_ASSERT(!cluster.indices.empty());
         MAGMA_ASSERT(cluster.indices.size() % 3 == 0);
         std::unordered_set<uint32_t> uniqueGeometryIndices;
@@ -62,7 +62,7 @@ inline AccelerationStructureTriangleCluster::AccelerationStructureTriangleCluste
             uniqueVertexIndices.insert(i);
         maxClusterVertexCount = std::max(maxClusterVertexCount, core::countof(uniqueVertexIndices));
         maxTotalTriangleCount += clusterTriangleCount;
-        maxTotalVertexCount += core::countof(cluster.vertices);
+        maxTotalVertexCount += cluster.vertexCount;
     }
 }
 
@@ -92,15 +92,13 @@ template<class Vertex, class Index>
 AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster, uint32_t clusterID) noexcept:
     AccelerationStructureBuildTriangleCluster(clusterID)
 {
-    MAGMA_ASSERT(!cluster.vertices.empty());
     MAGMA_ASSERT(!cluster.indices.empty());
     MAGMA_ASSERT(cluster.indices.size() % 3 == 0);
     const uint32_t clusterTriangleCount = core::countof(cluster.indices) / 3;
     MAGMA_ASSERT(clusterTriangleCount <= MAGMA_MAX_CLUSTER_TRIANGLE_COUNT); // max 9 bits
     triangleCount = clusterTriangleCount;
-    const uint32_t clusterVertexCount = core::countof(cluster.vertices);
-    MAGMA_ASSERT(clusterVertexCount <= MAGMA_MAX_CLUSTER_VERTEX_COUNT); // max 9 bits
-    vertexCount = clusterVertexCount;
+    MAGMA_ASSERT(cluster.vertexCount <= MAGMA_MAX_CLUSTER_VERTEX_COUNT); // max 9 bits
+    vertexCount = cluster.vertexCount;
     indexType = cluster.getIndexFormat();
     indexBufferStride = sizeof(Index);
     vertexBufferStride = sizeof(Vertex);
