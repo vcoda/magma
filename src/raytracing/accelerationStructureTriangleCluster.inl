@@ -35,7 +35,7 @@ constexpr AccelerationStructureTriangleCluster::AccelerationStructureTriangleClu
 {}
 
 template<class Vertex, class Index>
-inline AccelerationStructureTriangleCluster::AccelerationStructureTriangleCluster(VkFormat vertexFormat, const std::list<Cluster<Vertex, Index>>& clusters):
+inline AccelerationStructureTriangleCluster::AccelerationStructureTriangleCluster(VkFormat vertexFormat, const std::forward_list<Cluster<Vertex, Index>>& clusters):
     AccelerationStructureTriangleCluster(vertexFormat)
 {
     for (auto const& cluster: clusters)

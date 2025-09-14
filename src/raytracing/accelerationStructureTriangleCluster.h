@@ -53,7 +53,7 @@ namespace magma
         constexpr AccelerationStructureTriangleCluster(VkFormat vertexFormat = VK_FORMAT_UNDEFINED) noexcept;
         template<class Vertex, class Index>
         AccelerationStructureTriangleCluster(VkFormat vertexFormat,
-            const std::list<Cluster<Vertex, Index>>& clusters);
+            const std::forward_list<Cluster<Vertex, Index>>& clusters);
     };
 
     /* Describes build operation for a cluster acceleration structure. */
