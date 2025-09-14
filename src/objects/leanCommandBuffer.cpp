@@ -29,6 +29,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "clusterAccelerationStructure.h"
 #include "../shaders/shaderBindingTable.h"
 #include "../raytracing/accelerationStructureGeometry.h"
+#include "../raytracing/accelerationStructureTriangleCluster.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
@@ -463,9 +464,11 @@ void LeanCommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructur
 
 #ifdef VK_NV_cluster_acceleration_structure
 void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccelerationStructureOpTypeNV opType,
-    ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount,
-    Buffer *scratchBuffer, VkBuildAccelerationStructureFlagsKHR flags) const noexcept
+    ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept
 {
+    VkBuildAccelerationStructureFlagsKHR flags = 0; // TODO
+    const uint32_t maxAccelerationStructureCount = clusterAccelerationStructure->getMaxAccelerationStructureCount();
+    const std::size_t stride = getClusterAccelerationStructureSize(opType);
     VkClusterAccelerationStructureMoveObjectsInputNV moveObjects;
     VkClusterAccelerationStructureCommandsInfoNV clusterAccelerationStructureCommandsInfo;
     clusterAccelerationStructureCommandsInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_COMMANDS_INFO_NV;
@@ -476,14 +479,14 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
     clusterAccelerationStructureCommandsInfo.input.flags = flags;
     clusterAccelerationStructureCommandsInfo.input.opType = opType;
     clusterAccelerationStructureCommandsInfo.input.opMode = clusterAccelerationStructure->getOpMode();
-    switch (clusterAccelerationStructureCommandsInfo.input.opType)
+    switch (opType)
     {
     case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_MOVE_OBJECTS_NV:
         moveObjects.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_MOVE_OBJECTS_INPUT_NV;
         moveObjects.pNext = nullptr;
         moveObjects.type = clusterAccelerationStructure->getType();
         moveObjects.noMoveOverlap = VK_FALSE; // old clusters can overlap themselves
-        moveObjects.maxMovedBytes = clusterAccelerationStructure->getSize();
+        moveObjects.maxMovedBytes = clusterAccelerationStructure->getClusterAccelerationStructureBuffer()->getSize();
         clusterAccelerationStructureCommandsInfo.input.opInput.pMoveObjects = &moveObjects;
         break;
     case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_CLUSTERS_BOTTOM_LEVEL_NV:
@@ -494,17 +497,20 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
         clusterAccelerationStructureCommandsInfo.input.opInput.pTriangleClusters = clusterAccelerationStructure->getTriangleClusters();
         break;
     }
-    clusterAccelerationStructureCommandsInfo.dstImplicitData = clusterAccelerationStructure->getImplicitData()->getDeviceAddress();
+    if (VK_CLUSTER_ACCELERATION_STRUCTURE_OP_MODE_IMPLICIT_DESTINATIONS_NV == clusterAccelerationStructureCommandsInfo.input.opMode)
+        clusterAccelerationStructureCommandsInfo.dstImplicitData = clusterAccelerationStructure->getClusterAccelerationStructureBuffer()->getDeviceAddress();
+    else // OP_MODE_EXPLICIT_DESTINATIONS_NV or OP_MODE_COMPUTE_SIZES_NV
+        clusterAccelerationStructureCommandsInfo.dstImplicitData = MAGMA_NULL;
     clusterAccelerationStructureCommandsInfo.scratchData = scratchBuffer->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.dstAddressesArray.deviceAddress = clusterAccelerationStructure->getAddressesArray()->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.dstAddressesArray.stride = 8;
-    clusterAccelerationStructureCommandsInfo.dstAddressesArray.size = maxAccelerationStructureCount * 8;
-    clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = clusterAccelerationStructure->getSizesArray()->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = 8;
-    clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * 8;
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = clusterAccelerationStructure->getInfosArray()->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = 0;
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * sizeof(VkClusterAccelerationStructureBuildTriangleClusterInfoNV);
+    clusterAccelerationStructureCommandsInfo.dstAddressesArray.deviceAddress = clusterAccelerationStructure->getAddressesBuffer()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.dstAddressesArray.stride = stride;
+    clusterAccelerationStructureCommandsInfo.dstAddressesArray.size = maxAccelerationStructureCount * stride;
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = clusterAccelerationStructure->getSizesBuffer()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = stride;
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * stride;
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = clusterAccelerationStructure->getInfosBuffer()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = 0; // If the stride is 0, the structures are assumed to be packed tightly
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * stride;
     clusterAccelerationStructureCommandsInfo.srcInfosCount = MAGMA_NULL;
     clusterAccelerationStructureCommandsInfo.addressResolutionFlags = 0;
     MAGMA_DEVICE_EXTENSION(vkCmdBuildClusterAccelerationStructureIndirectNV);

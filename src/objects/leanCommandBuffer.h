@@ -223,13 +223,14 @@ namespace magma
         void deserializeAccelerationStructure(const Buffer *srcBuffer, AccelerationStructure *dstAccelerationStructure, VkDeviceAddress bufferOffset = 0) const noexcept;
         void writeAccelerationStructureProperties(const AccelerationStructure *accelerationStructure, QueryPool *queryPool, uint32_t firstQuery = 0) const noexcept;
     #endif // VK_KHR_acceleration_structure
+
     #ifdef VK_NV_cluster_acceleration_structure
-        void moveObjectsIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
-        void buildBottomLevelClustersIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
-        void buildTriangleClusterIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
-        void buildTriangleClusterTemplateIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
-        void instantiateTriangleClusterIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
-        void getClusterTemplateIndicesIndirect(ClusterAccelerationStructure *clusterAccelerationStructure, uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer) const noexcept;
+        void moveObjects(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void buildClustersBottomLevel(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void buildTriangleCluster(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void buildTriangleClusterTemplate(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void instantiateTriangleCluster(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void getClusterTemplateIndices(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
     #endif // VK_NV_cluster_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline
@@ -254,8 +255,8 @@ namespace magma
             const AccelerationStructureInstances& instances, Buffer *scratchBuffer) const noexcept;
     #endif // VK_KHR_acceleration_structure
     #ifdef VK_NV_cluster_acceleration_structure
-        void buildClusterAccelerationStructureIndirect(VkClusterAccelerationStructureOpTypeNV opType, ClusterAccelerationStructure *clusterAccelerationStructure,
-            uint32_t maxAccelerationStructureCount, Buffer *scratchBuffer, VkBuildAccelerationStructureFlagsKHR flags) const noexcept;
+        void buildClusterAccelerationStructureIndirect(VkClusterAccelerationStructureOpTypeNV opType,
+            ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
     #endif // VK_NV_cluster_acceleration_structure
 
         VkDevice device;

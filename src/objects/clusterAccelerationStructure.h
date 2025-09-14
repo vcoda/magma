@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "model/nondispatchable.h"
+#include "../misc/sharing.h"
 
 namespace magma
 {
@@ -30,31 +31,34 @@ namespace magma
             VkClusterAccelerationStructureTypeNV type,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters,
-            VkClusterAccelerationStructureOpModeNV opMode);
+            uint32_t maxAccelerationStructureCount,
+            uint32_t maxTotalClusterCount,
+            uint32_t maxClusterCountPerAccelerationStructure,
+            VkClusterAccelerationStructureOpModeNV opMode,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing());
         VkClusterAccelerationStructureTypeNV getType() const noexcept { return type; }
         VkClusterAccelerationStructureOpModeNV getOpMode() const noexcept { return opMode; }
-        VkDeviceSize getSize() const noexcept { return accelerationStructureSize; }
-        VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
-        VkDeviceSize getBuildScratchSize() const noexcept { return buildScratchSize; }
-        const std::unique_ptr<Buffer>& getImplicitData() const noexcept { return implicitData; }
-        const std::unique_ptr<Buffer>& getAddressesArray() const noexcept { return addressesArrayBuffer; }
-        const std::unique_ptr<Buffer>& getSizesArray() const noexcept { return sizesArrayBuffer; }
-        const std::unique_ptr<Buffer>& getInfosArray() const noexcept { return infosArrayBuffer; }
-        VkClusterAccelerationStructureTriangleClusterInputNV *getTriangleClusters() noexcept { return &triangleClusters; }
-        VkClusterAccelerationStructureClustersBottomLevelInputNV *getClustersBottomLevel() noexcept { return &clustersBottomLevel; }
+        uint32_t getMaxAccelerationStructureCount() const noexcept { return maxAccelerationStructureCount; }
+        const std::unique_ptr<Buffer>& getClusterAccelerationStructureBuffer() const noexcept { return clusterAccelerationStructureBuffer; }
+        const std::unique_ptr<Buffer>& getAddressesBuffer() const noexcept { return addressesBuffer; }
+        const std::unique_ptr<Buffer>& getSizesBuffer() const noexcept { return sizesBuffer; }
+        const std::unique_ptr<Buffer>& getInfosBuffer() const noexcept { return infosBuffer; }
+
+        VkClusterAccelerationStructureTriangleClusterInputNV *getTriangleClusters() noexcept { return &triangleClustersInput; }
+        VkClusterAccelerationStructureClustersBottomLevelInputNV *getClustersBottomLevel() noexcept { return &clustersBottomLevelInput; }
 
     private:
         const VkClusterAccelerationStructureTypeNV type;
         const VkClusterAccelerationStructureOpModeNV opMode;
-        VkClusterAccelerationStructureTriangleClusterInputNV triangleClusters;
-        VkClusterAccelerationStructureClustersBottomLevelInputNV clustersBottomLevel;
-        VkDeviceSize accelerationStructureSize;
-        VkDeviceSize updateScratchSize;
-        VkDeviceSize buildScratchSize;
-        std::unique_ptr<Buffer> implicitData;
-        std::unique_ptr<Buffer> addressesArrayBuffer;
-        std::unique_ptr<Buffer> sizesArrayBuffer;
-        std::unique_ptr<Buffer> infosArrayBuffer;
+        const uint32_t maxAccelerationStructureCount;
+        VkClusterAccelerationStructureTriangleClusterInputNV triangleClustersInput;
+        VkClusterAccelerationStructureClustersBottomLevelInputNV clustersBottomLevelInput;
+        VkClusterAccelerationStructureMoveObjectsInputNV moveObjectsInput;
+        std::unique_ptr<Buffer> clusterAccelerationStructureBuffer;
+        std::unique_ptr<Buffer> addressesBuffer;
+        std::unique_ptr<Buffer> sizesBuffer;
+        std::unique_ptr<Buffer> infosBuffer;
     };
 #endif // VK_NV_cluster_acceleration_structure
 } // namespace magma
