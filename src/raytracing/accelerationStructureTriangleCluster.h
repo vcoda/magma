@@ -66,6 +66,16 @@ namespace magma
             uint32_t clusterID) noexcept;
     };
 
+    /* Instead of true device addresses of vertex/index buffers we store
+       offsets in the VkClusterAccelerationStructureBuildTriangleClusterInfoNV.
+       When memory is allocated and data is placed in the buffers, we get
+       real device addresses and fixup pointers in the triangle clusters. */
+
+    void fixupTriangleClustersBufferAddresses(std::vector<VkClusterAccelerationStructureBuildTriangleClusterInfoNV>& triangleClusters,
+        const Buffer *vertexBuffer,
+        const Buffer *indexBuffer,
+        const Buffer *geometryIndexAndFlagsBuffer = nullptr) noexcept;
+
     /* Structure size is dependent on VkClusterAccelerationStructureInputInfoNV::opType. */
 
     constexpr std::size_t getClusterAccelerationStructureSize(VkClusterAccelerationStructureOpTypeNV opType) noexcept;

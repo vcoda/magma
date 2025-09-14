@@ -112,6 +112,20 @@ AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleClu
     geometryIndexAndFlagsBuffer = (VkDeviceAddress)cluster.propertyBufferOffset;
 }
 
+inline void fixupTriangleClustersBufferAddresses(std::vector<VkClusterAccelerationStructureBuildTriangleClusterInfoNV>& triangleClusters,
+    const Buffer *vertexBuffer, const Buffer *indexBuffer, const Buffer *geometryIndexAndFlagsBuffer /* nullptr */) noexcept
+{
+    const VkDeviceAddress vertexBufferDeviceAddress = vertexBuffer->getDeviceAddress();
+    const VkDeviceAddress indexBufferDeviceAddress = indexBuffer->getDeviceAddress();
+    const VkDeviceAddress geometryIndexAndFlagsBufferDeviceAddress = geometryIndexAndFlagsBuffer ? geometryIndexAndFlagsBuffer->getDeviceAddress() : MAGMA_NULL;
+    for (auto& cluster: triangleClusters)
+    {
+        cluster.vertexBuffer += vertexBufferDeviceAddress;
+        cluster.indexBuffer += indexBufferDeviceAddress;
+        cluster.geometryIndexAndFlagsBuffer += geometryIndexAndFlagsBufferDeviceAddress;
+    }
+}
+
 constexpr std::size_t getClusterAccelerationStructureSize(VkClusterAccelerationStructureOpTypeNV opType) noexcept
 {
     switch (opType)
