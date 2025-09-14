@@ -18,8 +18,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #ifdef VK_NV_cluster_acceleration_structure
 
-#define MAGMA_MAX_CLUSTER_TRIANGLE_COUNT 511
-#define MAGMA_MAX_CLUSTER_VERTEX_COUNT 511
+// Defined in VkClusterAccelerationStructureBuildTriangleClusterInfoNV
+#define MAGMA_NUM_CLUSTER_BITS 9
+
+#define MAGMA_MAX_CLUSTER_TRIANGLE_COUNT (1 << MAGMA_NUM_CLUSTER_BITS)
+#define MAGMA_MAX_CLUSTER_VERTEX_COUNT (1 << MAGMA_NUM_CLUSTER_BITS)
 
 namespace magma
 {
