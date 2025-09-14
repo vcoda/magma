@@ -107,7 +107,7 @@ AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleClu
     baseGeometryIndexAndGeometryFlags.geometryFlags = cluster.geometryFlags;
     indexBuffer = (VkDeviceAddress)cluster.indexBufferOffset;
     vertexBuffer = (VkDeviceAddress)cluster.vertexBufferOffset;
-    geometryIndexAndFlagsBuffer = (VkDeviceAddress)cluster.propertyBufferOffset;
+    geometryIndexAndFlagsBuffer = (VkDeviceAddress)cluster.geometryIndexAndFlagsBufferOffset;
 }
 
 inline void fixupTriangleClustersBufferAddresses(std::vector<VkClusterAccelerationStructureBuildTriangleClusterInfoNV>& triangleClusters,

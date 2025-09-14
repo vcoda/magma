@@ -38,9 +38,9 @@ namespace magma
         std::vector<Index> indices;
         std::vector<uint32_t> geometryIndices = {0};
         VkClusterAccelerationStructureGeometryFlagsNV geometryFlags = 0;
-        VkDeviceSize vertexBufferOffset = 0;
-        VkDeviceSize indexBufferOffset = 0;
-        VkDeviceSize propertyBufferOffset = 0;
+        uint64_t vertexBufferOffset = 0;
+        uint64_t indexBufferOffset = 0;
+        uint64_t geometryIndexAndFlagsBufferOffset = 0;
 
         uint32_t findMinGeometryIndex() const noexcept;
         constexpr VkClusterAccelerationStructureIndexFormatFlagBitsNV getIndexFormat() const noexcept;
