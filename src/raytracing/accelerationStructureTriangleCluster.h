@@ -62,6 +62,11 @@ namespace magma
         AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster,
             uint32_t clusterID) noexcept;
     };
+
+    /* Structure size is dependent on VkClusterAccelerationStructureInputInfoNV::opType. */
+
+    constexpr std::size_t getClusterAccelerationStructureSize(VkClusterAccelerationStructureOpTypeNV opType) noexcept;
+    constexpr std::size_t getClusterAccelerationStructureMaxSize() noexcept;
 } // namespace magma
 
 #include "accelerationStructureTriangleCluster.inl"

@@ -111,4 +111,38 @@ AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleClu
     vertexBuffer = (VkDeviceAddress)cluster.vertexBufferOffset;
     geometryIndexAndFlagsBuffer = (VkDeviceAddress)cluster.propertyBufferOffset;
 }
+
+constexpr std::size_t getClusterAccelerationStructureSize(VkClusterAccelerationStructureOpTypeNV opType) noexcept
+{
+    switch (opType)
+    {
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_MOVE_OBJECTS_NV:
+        return sizeof(VkClusterAccelerationStructureMoveObjectsInfoNV);
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_CLUSTERS_BOTTOM_LEVEL_NV:
+        return sizeof(VkClusterAccelerationStructureBuildClustersBottomLevelInfoNV);
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_NV:
+        return sizeof(VkClusterAccelerationStructureBuildTriangleClusterInfoNV);
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_TEMPLATE_NV:
+        return sizeof(VkClusterAccelerationStructureBuildTriangleClusterTemplateInfoNV);
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_INSTANTIATE_TRIANGLE_CLUSTER_NV:
+        return sizeof(VkClusterAccelerationStructureInstantiateClusterInfoNV);
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_GET_CLUSTER_TEMPLATE_INDICES_NV:
+        return sizeof(VkClusterAccelerationStructureGetTemplateIndicesInfoNV);
+    default:
+        return 0;
+    }
+}
+
+constexpr std::size_t getClusterAccelerationStructureMaxSize() noexcept
+{
+    constexpr std::array<std::size_t, 6> sizes = {
+        sizeof(VkClusterAccelerationStructureMoveObjectsInfoNV),
+        sizeof(VkClusterAccelerationStructureBuildClustersBottomLevelInfoNV),
+        sizeof(VkClusterAccelerationStructureBuildTriangleClusterInfoNV),
+        sizeof(VkClusterAccelerationStructureBuildTriangleClusterTemplateInfoNV),
+        sizeof(VkClusterAccelerationStructureInstantiateClusterInfoNV),
+        sizeof(VkClusterAccelerationStructureGetTemplateIndicesInfoNV)
+    };
+    return *std::max_element(sizes.begin(), sizes.end());
+}
 } // namespace magma
