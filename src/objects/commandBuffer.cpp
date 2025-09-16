@@ -754,6 +754,7 @@ CommandBuffer::Extensions::Extensions(lent_ptr<const Device> device):
     MAGMA_DEVICE_EXTENSION_ENABLED(KHR_push_descriptor),
     MAGMA_DEVICE_EXTENSION_ENABLED(KHR_ray_tracing_pipeline),
     MAGMA_DEVICE_EXTENSION_ENABLED(KHR_ray_tracing_maintenance1),
+    MAGMA_DEVICE_EXTENSION_ENABLED(NV_cluster_acceleration_structure),
     MAGMA_DEVICE_EXTENSION_ENABLED(NV_device_diagnostic_checkpoints),
     MAGMA_DEVICE_EXTENSION_ENABLED(NV_mesh_shader),
     MAGMA_INSTANCE_EXTENSION_ENABLED(EXT_debug_utils)

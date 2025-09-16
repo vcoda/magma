@@ -393,6 +393,7 @@ namespace magma
             const VkBool32 KHR_push_descriptor: 1;
             const VkBool32 KHR_ray_tracing_pipeline: 1;
             const VkBool32 KHR_ray_tracing_maintenance1: 1;
+            const VkBool32 NV_cluster_acceleration_structure: 1;
             const VkBool32 NV_device_diagnostic_checkpoints: 1;
             const VkBool32 NV_mesh_shader: 1;
             const VkBool32 EXT_debug_utils: 1;
