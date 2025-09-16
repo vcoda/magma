@@ -952,6 +952,74 @@ inline void CommandBuffer::writeAccelerationStructureProperties(lent_ptr<const A
 }
 #endif // VK_KHR_acceleration_structure
 
+#ifdef VK_NV_cluster_acceleration_structure
+inline void CommandBuffer::moveObjects(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.NV_cluster_acceleration_structure);
+    if (extensions.NV_cluster_acceleration_structure)
+    {
+        leanCmd.moveObjects(clusterAccelerationStructure.get(), scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_TRANSFER_BIT);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+inline void CommandBuffer::buildClustersBottomLevel(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.NV_cluster_acceleration_structure);
+    if (extensions.NV_cluster_acceleration_structure)
+    {
+        leanCmd.buildClustersBottomLevel(clusterAccelerationStructure.get(), scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+inline void CommandBuffer::buildTriangleCluster(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.NV_cluster_acceleration_structure);
+    if (extensions.NV_cluster_acceleration_structure)
+    {
+        leanCmd.buildTriangleCluster(clusterAccelerationStructure.get(), scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+inline void CommandBuffer::buildTriangleClusterTemplate(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.NV_cluster_acceleration_structure);
+    if (extensions.NV_cluster_acceleration_structure)
+    {
+        leanCmd.buildTriangleClusterTemplate(clusterAccelerationStructure.get(), scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+inline void CommandBuffer::instantiateTriangleCluster(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.NV_cluster_acceleration_structure);
+    if (extensions.NV_cluster_acceleration_structure)
+    {
+        leanCmd.instantiateTriangleCluster(clusterAccelerationStructure.get(), scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+
+inline void CommandBuffer::getClusterTemplateIndices(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept
+{
+    MAGMA_ASSERT(extensions.NV_cluster_acceleration_structure);
+    if (extensions.NV_cluster_acceleration_structure)
+    {
+        leanCmd.getClusterTemplateIndices(clusterAccelerationStructure.get(), scratchBuffer.get());
+        MAGMA_CHECKPOINT(VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR);
+        MAGMA_INUSE(scratchBuffer);
+    }
+}
+#endif // VK_NV_cluster_acceleration_structure
+
 #ifdef VK_KHR_ray_tracing_pipeline
 inline void CommandBuffer::setRayTracingPipelineStackSize(uint32_t pipelineStackSize) const noexcept
 {

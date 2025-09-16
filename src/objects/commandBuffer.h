@@ -265,6 +265,15 @@ namespace magma
         void writeAccelerationStructureProperties(lent_ptr<const AccelerationStructure> accelerationStructure, lent_ptr<QueryPool> queryPool, uint32_t firstQuery = 0) const noexcept;
     #endif // VK_KHR_acceleration_structure
 
+    #ifdef VK_NV_cluster_acceleration_structure
+        void moveObjects(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept;
+        void buildClustersBottomLevel(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept;
+        void buildTriangleCluster(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept;
+        void buildTriangleClusterTemplate(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept;
+        void instantiateTriangleCluster(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept;
+        void getClusterTemplateIndices(lent_ptr<ClusterAccelerationStructure> clusterAccelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept;
+    #endif // VK_NV_cluster_acceleration_structure
+
     #ifdef VK_KHR_ray_tracing_pipeline
         void setRayTracingPipelineStackSize(uint32_t pipelineStackSize) const noexcept;
         void traceRays(const ShaderBindingTable& shaderBindingTable, uint32_t width, uint32_t height, uint32_t depth = 1) const noexcept;
