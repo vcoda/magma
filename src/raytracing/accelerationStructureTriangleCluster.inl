@@ -54,6 +54,7 @@ inline AccelerationStructureTriangleCluster::AccelerationStructureTriangleCluste
         maxClusterUniqueGeometryCount = std::max(maxClusterUniqueGeometryCount, core::countof(uniqueGeometryIndices));
         // Maximum number of triangles in a cluster
         const uint32_t clusterTriangleCount = core::countof(cluster.indices) / 3;
+        MAGMA_ASSERT(clusterTriangleCount <= MAGMA_MAX_CLUSTER_TRIANGLE_COUNT);
         maxClusterTriangleCount = std::max(maxClusterTriangleCount, clusterTriangleCount);
         // Maximum number of unique vertices in the cluster's index buffer
         std::unordered_set<Index> uniqueVertexIndices;
