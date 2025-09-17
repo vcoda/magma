@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pipeline.h"
 #include "pipelineLayout.h"
 #include "queryPool.h"
+#include "clusterAccelerationStructure.h"
 #include "../misc/extension.h"
 #include "../allocator/allocator.h"
 
@@ -42,9 +43,6 @@ namespace magma
     class TopLevelAccelerationStructure;
     struct AccelerationStructureInstances;
 #endif
-#ifdef VK_NV_cluster_acceleration_structure
-    class ClusterAccelerationStructure;
-#endif // VK_NV_cluster_acceleration_structure
 #ifdef VK_KHR_ray_tracing_pipeline
     class ShaderBindingTable;
 #endif
@@ -225,12 +223,12 @@ namespace magma
     #endif // VK_KHR_acceleration_structure
 
     #ifdef VK_NV_cluster_acceleration_structure
-        void moveObjects(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
-        void buildClustersBottomLevel(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
-        void buildTriangleCluster(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
-        void buildTriangleClusterTemplate(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
-        void instantiateTriangleCluster(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
-        void getClusterTemplateIndices(ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void moveObjects(ClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void buildClustersBottomLevel(BottomLevelClusterAcccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void buildTriangleCluster(TriangleClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void buildTriangleClusterTemplate(TriangleClusterAccelerationStructureTemplate *accelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void instantiateTriangleCluster(TriangleClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void getClusterTemplateIndices(ClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
     #endif // VK_NV_cluster_acceleration_structure
 
     #ifdef VK_KHR_ray_tracing_pipeline

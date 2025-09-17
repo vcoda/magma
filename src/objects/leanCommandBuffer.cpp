@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2024 Victor Coda.
+Copyright (C) 2018-2025 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -464,10 +464,9 @@ void LeanCommandBuffer::rebuildAccelerationStructure(VkBuildAccelerationStructur
 
 #ifdef VK_NV_cluster_acceleration_structure
 void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccelerationStructureOpTypeNV opType,
-    ClusterAccelerationStructure *clusterAccelerationStructure, Buffer *scratchBuffer) const noexcept
+    ClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept
 {
-    VkBuildAccelerationStructureFlagsKHR flags = 0; // TODO
-    const uint32_t maxAccelerationStructureCount = clusterAccelerationStructure->getMaxAccelerationStructureCount();
+    const uint32_t maxAccelerationStructureCount = accelerationStructure->getMaxAccelerationStructureCount();
     const std::size_t stride = getClusterAccelerationStructureSize(opType);
     VkClusterAccelerationStructureMoveObjectsInputNV moveObjects;
     VkClusterAccelerationStructureCommandsInfoNV clusterAccelerationStructureCommandsInfo;
@@ -476,41 +475,38 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
     clusterAccelerationStructureCommandsInfo.input.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_INPUT_INFO_NV;
     clusterAccelerationStructureCommandsInfo.input.pNext = nullptr;
     clusterAccelerationStructureCommandsInfo.input.maxAccelerationStructureCount = maxAccelerationStructureCount;
-    clusterAccelerationStructureCommandsInfo.input.flags = flags;
+    clusterAccelerationStructureCommandsInfo.input.flags = accelerationStructure->getBuildFlags();
     clusterAccelerationStructureCommandsInfo.input.opType = opType;
-    clusterAccelerationStructureCommandsInfo.input.opMode = clusterAccelerationStructure->getOpMode();
-    switch (opType)
+    clusterAccelerationStructureCommandsInfo.input.opMode = accelerationStructure->getOpMode();
+    if (VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_MOVE_OBJECTS_NV == opType)
     {
-    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_MOVE_OBJECTS_NV:
         moveObjects.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_MOVE_OBJECTS_INPUT_NV;
         moveObjects.pNext = nullptr;
-        moveObjects.type = clusterAccelerationStructure->getType();
+        moveObjects.type = accelerationStructure->getType();
         moveObjects.noMoveOverlap = VK_FALSE; // old clusters can overlap themselves
-        moveObjects.maxMovedBytes = clusterAccelerationStructure->getClusterAccelerationStructureBuffer()->getSize();
+        moveObjects.maxMovedBytes = 0; // TODO
         clusterAccelerationStructureCommandsInfo.input.opInput.pMoveObjects = &moveObjects;
-        break;
-    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_CLUSTERS_BOTTOM_LEVEL_NV:
-        clusterAccelerationStructureCommandsInfo.input.opInput.pClustersBottomLevel = clusterAccelerationStructure->getClustersBottomLevel();
-        break;
-    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_NV:
-    case VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_TEMPLATE_NV:
-        clusterAccelerationStructureCommandsInfo.input.opInput.pTriangleClusters = clusterAccelerationStructure->getTriangleClusters();
-        break;
+    }
+    else
+    {
+        clusterAccelerationStructureCommandsInfo.input.opInput = accelerationStructure->getOpInput();
     }
     if (VK_CLUSTER_ACCELERATION_STRUCTURE_OP_MODE_IMPLICIT_DESTINATIONS_NV == clusterAccelerationStructureCommandsInfo.input.opMode)
-        clusterAccelerationStructureCommandsInfo.dstImplicitData = clusterAccelerationStructure->getClusterAccelerationStructureBuffer()->getDeviceAddress();
+        clusterAccelerationStructureCommandsInfo.dstImplicitData = accelerationStructure->getImplicitData()->getDeviceAddress();
     else // OP_MODE_EXPLICIT_DESTINATIONS_NV or OP_MODE_COMPUTE_SIZES_NV
         clusterAccelerationStructureCommandsInfo.dstImplicitData = MAGMA_NULL;
     clusterAccelerationStructureCommandsInfo.scratchData = scratchBuffer->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.dstAddressesArray.deviceAddress = clusterAccelerationStructure->getAddressesBuffer()->getDeviceAddress();
+#if 0 // TODO
+    clusterAccelerationStructureCommandsInfo.dstAddressesArray.deviceAddress = accelerationStructure->getAddressesBuffer()->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.dstAddressesArray.stride = stride;
     clusterAccelerationStructureCommandsInfo.dstAddressesArray.size = maxAccelerationStructureCount * stride;
-    clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = clusterAccelerationStructure->getSizesBuffer()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = accelerationStructure->getSizesBuffer()->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = stride;
     clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * stride;
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = clusterAccelerationStructure->getInfosBuffer()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = accelerationStructure->getInfosBuffer()->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = 0; // If the stride is 0, the structures are assumed to be packed tightly
     clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * stride;
+#endif
     clusterAccelerationStructureCommandsInfo.srcInfosCount = MAGMA_NULL;
     clusterAccelerationStructureCommandsInfo.addressResolutionFlags = 0;
     MAGMA_DEVICE_EXTENSION(vkCmdBuildClusterAccelerationStructureIndirectNV);

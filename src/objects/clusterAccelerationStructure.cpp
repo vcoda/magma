@@ -18,9 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "pch.h"
 #pragma hdrstop
 #include "clusterAccelerationStructure.h"
-#include "buffer.h"
+#include "device.h"
 #include "storageBuffer.h"
-#include "../raytracing/accelerationStructureTriangleCluster.h"
 #include "../misc/extension.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
@@ -28,74 +27,116 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_cluster_acceleration_structure
-ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Device> device,
-    VkClusterAccelerationStructureTypeNV type,
-    VkBuildAccelerationStructureFlagsKHR buildFlags,
-    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters,
-    uint32_t maxAccelerationStructureCount,
-    uint32_t maxTotalClusterCount, // ???
-    uint32_t maxClusterCountPerAccelerationStructure,
-    VkClusterAccelerationStructureOpModeNV opMode,
-    std::shared_ptr<Allocator> allocator /* nullptr */,
-    const Sharing& sharing /* default */):
+ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Device> device_,
+    VkClusterAccelerationStructureTypeNV type, VkClusterAccelerationStructureOpModeNV opMode,
+    VkBuildAccelerationStructureFlagsKHR buildFlags, uint32_t maxAccelerationStructureCount, const void *opInput,
+    std::shared_ptr<Allocator> allocator, const Sharing& sharing, const StructureChain& extendedInfo):
+    device(std::move(device_)),
     type(type),
     opMode(opMode),
-    maxAccelerationStructureCount(maxAccelerationStructureCount),
-    triangleClustersInput(triangleClusters)
+    buildFlags(buildFlags),
+    maxAccelerationStructureCount(maxAccelerationStructureCount)
 {
-    auto getNativeDevice = [device]() -> VkDevice { return device->getHandle(); };
-    // Parameters to build a regular or templated cluster acceleration structure
-    VkClusterAccelerationStructureInputInfoNV triangleClustersInfo, clustersBottomLevelInfo, moveObjectsInfo;
-    triangleClustersInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_INPUT_INFO_NV;
-    triangleClustersInfo.pNext = nullptr;
-    triangleClustersInfo.maxAccelerationStructureCount = maxAccelerationStructureCount;
-	triangleClustersInfo.flags = buildFlags;
-	triangleClustersInfo.opType = VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_NV;
-	triangleClustersInfo.opMode = opMode;
-	triangleClustersInfo.opInput.pTriangleClusters = &triangleClustersInput;
-    // Parameters to build multiple bottom level acceleration structures from multiple cluster level acceleration structures
-    clustersBottomLevelInput.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_CLUSTERS_BOTTOM_LEVEL_INPUT_NV;
-    clustersBottomLevelInput.pNext = nullptr;
-    clustersBottomLevelInput.maxTotalClusterCount = maxTotalClusterCount;
-    clustersBottomLevelInput.maxClusterCountPerAccelerationStructure = maxClusterCountPerAccelerationStructure;
-    clustersBottomLevelInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_INPUT_INFO_NV;
-    clustersBottomLevelInfo.pNext = nullptr;
-    clustersBottomLevelInfo.maxAccelerationStructureCount = 0; // accelInfo.maxAccelerationStructureCount = meshes.size();
-    clustersBottomLevelInfo.flags = buildFlags;
-    clustersBottomLevelInfo.opType = VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_CLUSTERS_BOTTOM_LEVEL_NV;
-	clustersBottomLevelInfo.opMode = opMode;
-    clustersBottomLevelInfo.opInput.pClustersBottomLevel = &clustersBottomLevelInput;
-    // Upper threshold on the number of bytes moved and the type of acceleration structure being moved
-    moveObjectsInput.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_MOVE_OBJECTS_INPUT_NV;
-    moveObjectsInput.pNext = nullptr;
-    moveObjectsInput.type = VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_NV;
-    moveObjectsInput.noMoveOverlap = VK_FALSE;
-    moveObjectsInput.maxMovedBytes = 0; // Assigned later
-    moveObjectsInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_INPUT_INFO_NV;
-    moveObjectsInfo.pNext = nullptr;
-    moveObjectsInfo.maxAccelerationStructureCount = triangleClustersInfo.maxAccelerationStructureCount;
-    moveObjectsInfo.flags = buildFlags;
-    moveObjectsInfo.opType = VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_MOVE_OBJECTS_NV;
-	moveObjectsInfo.opMode = opMode;
-    moveObjectsInfo.opInput.pMoveObjects = &moveObjectsInput;
-    VkAccelerationStructureBuildSizesInfoKHR triangleClustersBuildSizes = {VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR};
-    VkAccelerationStructureBuildSizesInfoKHR clustersBottomLevelBuildSizes = {VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR};
-    VkAccelerationStructureBuildSizesInfoKHR moveObjectsBuildSizes = {VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR};
+    VkClusterAccelerationStructureInputInfoNV clusterAccelerationStructureInputInfo;
+    clusterAccelerationStructureInputInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_INPUT_INFO_NV;
+    clusterAccelerationStructureInputInfo.pNext = (void *)extendedInfo.headNode();
+    clusterAccelerationStructureInputInfo.maxAccelerationStructureCount = maxAccelerationStructureCount;
+    clusterAccelerationStructureInputInfo.flags = buildFlags;
+	clusterAccelerationStructureInputInfo.opMode = opMode;
+    switch (type)
+    {
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_CLUSTERS_BOTTOM_LEVEL_NV:
+        clusterAccelerationStructureInputInfo.opType = VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_CLUSTERS_BOTTOM_LEVEL_NV;
+        clusterAccelerationStructureInputInfo.opInput.pClustersBottomLevel = (VkClusterAccelerationStructureClustersBottomLevelInputNV *)opInput;
+        break;
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_NV:
+        clusterAccelerationStructureInputInfo.opType = VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_NV;
+        clusterAccelerationStructureInputInfo.opInput.pTriangleClusters = (VkClusterAccelerationStructureTriangleClusterInputNV *)opInput;
+        break;
+    case VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_TEMPLATE_NV:
+        clusterAccelerationStructureInputInfo.opType = VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_TRIANGLE_CLUSTER_TEMPLATE_NV;
+        clusterAccelerationStructureInputInfo.opInput.pTriangleClusters = (VkClusterAccelerationStructureTriangleClusterInputNV *)opInput;
+        break;
+    }
+    auto getNativeDevice = [this]() -> VkDevice { return device->getHandle(); };
+    VkAccelerationStructureBuildSizesInfoKHR buildSizesInfo = {VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR};
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetClusterAccelerationStructureBuildSizesNV, VK_NV_CLUSTER_ACCELERATION_STRUCTURE_EXTENSION_NAME);
-    vkGetClusterAccelerationStructureBuildSizesNV(getNativeDevice(), &triangleClustersInfo, &triangleClustersBuildSizes);
-	vkGetClusterAccelerationStructureBuildSizesNV(getNativeDevice(), &clustersBottomLevelInfo, &clustersBottomLevelBuildSizes);
-    moveObjectsInput.maxMovedBytes = triangleClustersBuildSizes.accelerationStructureSize;
-    vkGetClusterAccelerationStructureBuildSizesNV(getNativeDevice(), &moveObjectsInfo, &moveObjectsBuildSizes);
-    auto clusterAccelerationStructureBuffer = std::make_unique<AccelerationStructureStorageBuffer>(device,
-        triangleClustersBuildSizes.accelerationStructureSize, VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR,
-        allocator, Buffer::Initializer(), sharing);
-    VkDeviceSize maxAddressesBufferSize = maxAccelerationStructureCount * 16; // TODO: correct size
-    Buffer::Initializer initializer;
-    initializer.deviceAddress = VK_TRUE;
-    addressesBuffer = std::make_unique<DynamicStorageBuffer>(device, maxAddressesBufferSize, false, allocator, nullptr, initializer, sharing);
-    sizesBuffer = std::make_unique<DynamicStorageBuffer>(device, maxAccelerationStructureCount * sizeof(VkDeviceSize), false, allocator, nullptr, initializer, sharing);
-    const VkDeviceSize maxInfosBufferSize = triangleClustersInfo.maxAccelerationStructureCount * getClusterAccelerationStructureMaxSize();
-    infosBuffer = std::make_unique<DynamicStorageBuffer>(device, maxInfosBufferSize, false, allocator, nullptr, initializer, sharing);
+	vkGetClusterAccelerationStructureBuildSizesNV(getNativeDevice(), &clusterAccelerationStructureInputInfo, &buildSizesInfo);
+    if (VK_CLUSTER_ACCELERATION_STRUCTURE_OP_MODE_IMPLICIT_DESTINATIONS_NV == opMode)
+    {   // Allocate storage for implicit data
+        implicitData = std::make_unique<AccelerationStructureStorageBuffer>(device, buildSizesInfo.accelerationStructureSize,
+            VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR, std::move(allocator), Buffer::Initializer(), sharing);
+    }
+}
+
+ClusterAccelerationStructure::~ClusterAccelerationStructure() {}
+
+BottomLevelClusterAcccelerationStructure::BottomLevelClusterAcccelerationStructure(std::shared_ptr<Device> device,
+    VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
+    uint32_t maxTotalClusterCount, uint32_t maxClusterCountPerAccelerationStructure, uint32_t maxAccelerationStructureCount,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Sharing& sharing /* default */,
+    const StructureChain& extendedInfo /* default */):
+    ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_CLUSTERS_BOTTOM_LEVEL_NV,
+        opMode, buildFlags, maxAccelerationStructureCount,
+        [maxTotalClusterCount, maxClusterCountPerAccelerationStructure]() -> void*
+        {   // TODO: check lifetime
+            auto clustersBottomLevel = stackalloc(VkClusterAccelerationStructureClustersBottomLevelInputNV, 1);
+            clustersBottomLevel->sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_CLUSTERS_BOTTOM_LEVEL_INPUT_NV;
+            clustersBottomLevel->pNext = nullptr;
+            clustersBottomLevel->maxTotalClusterCount = maxTotalClusterCount;
+            clustersBottomLevel->maxClusterCountPerAccelerationStructure = maxClusterCountPerAccelerationStructure;
+            return clustersBottomLevel;
+        }(),
+        std::move(allocator), sharing, extendedInfo)
+{
+    clustersBottomLevel.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_CLUSTERS_BOTTOM_LEVEL_INPUT_NV;
+    clustersBottomLevel.pNext = nullptr;
+    clustersBottomLevel.maxTotalClusterCount = maxTotalClusterCount;
+    clustersBottomLevel.maxClusterCountPerAccelerationStructure = maxClusterCountPerAccelerationStructure;
+}
+
+VkClusterAccelerationStructureOpInputNV BottomLevelClusterAcccelerationStructure::getOpInput() const noexcept
+{
+    VkClusterAccelerationStructureOpInputNV opInput;
+    opInput.pClustersBottomLevel = (VkClusterAccelerationStructureClustersBottomLevelInputNV *)&clustersBottomLevel;
+    return opInput;
+}
+
+TriangleClusterAccelerationStructure::TriangleClusterAccelerationStructure(std::shared_ptr<Device> device,
+    VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
+    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters_, uint32_t maxAccelerationStructureCount,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Sharing& sharing /* default */,
+    const StructureChain& extendedInfo /* default */):
+    ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_NV,
+        opMode, buildFlags, maxAccelerationStructureCount, &triangleClusters_, std::move(allocator), sharing, extendedInfo),
+    triangleClusters(triangleClusters_)
+{}
+
+VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructure::getOpInput() const noexcept
+{
+    VkClusterAccelerationStructureOpInputNV opInput;
+    opInput.pTriangleClusters = (VkClusterAccelerationStructureTriangleClusterInputNV *)&triangleClusters;
+    return opInput;
+}
+
+TriangleClusterAccelerationStructureTemplate::TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device,
+    VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
+    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters_, uint32_t maxAccelerationStructureCount,
+    std::shared_ptr<Allocator> allocator /* nullptr */,
+    const Sharing& sharing /* default */,
+    const StructureChain& extendedInfo /* default */):
+    ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_TEMPLATE_NV,
+        opMode, buildFlags, maxAccelerationStructureCount, &triangleClusters_, std::move(allocator), sharing, extendedInfo),
+    triangleClusters(triangleClusters_)
+{}
+
+VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructureTemplate::getOpInput() const noexcept
+{
+    VkClusterAccelerationStructureOpInputNV opInput;
+    opInput.pTriangleClusters = (VkClusterAccelerationStructureTriangleClusterInputNV *)&triangleClusters;
+    return opInput;
 }
 #endif // VK_NV_cluster_acceleration_structure
 } // namespace magma

@@ -21,44 +21,110 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
+    class Device;
     class Buffer;
 
+    /* https://docs.vulkan.org/features/latest/features/proposals/VK_NV_cluster_acceleration_structure.html
+       https://github.com/KhronosGroup/Vulkan-Docs/blob/main/proposals/VK_NV_cluster_acceleration_structure.adoc */
+
 #ifdef VK_NV_cluster_acceleration_structure
-    class ClusterAccelerationStructure
+
+    /* A CLAS is an intermediate acceleration structure created from triangles,
+       which can then be used to build Cluster BLAS. The Cluster BLAS serves
+       as an alternative to the traditional BLAS. The goal is for applications
+       to organize mesh geometry into CLAS primitives before creating the
+       Cluster BLAS. To optimize trace performance, geometry should be grouped
+       into CLAS based on spatial proximity. */
+
+    class ClusterAccelerationStructure : public IClass
     {
     public:
-        explicit ClusterAccelerationStructure(std::shared_ptr<Device> device,
+        ~ClusterAccelerationStructure();
+        VkClusterAccelerationStructureTypeNV getType() const noexcept { return type; }
+        VkClusterAccelerationStructureOpModeNV getOpMode() const noexcept { return opMode; }
+        VkBuildAccelerationStructureFlagsKHR getBuildFlags() const noexcept { return buildFlags; }
+        uint32_t getMaxAccelerationStructureCount() const noexcept { return maxAccelerationStructureCount; }
+        const std::unique_ptr<Buffer>& getImplicitData() const noexcept { return implicitData; }
+        virtual VkClusterAccelerationStructureOpInputNV getOpInput() const noexcept = 0;
+
+    protected:
+        ClusterAccelerationStructure(std::shared_ptr<Device> device,
             VkClusterAccelerationStructureTypeNV type,
+            VkClusterAccelerationStructureOpModeNV opMode,
+            VkBuildAccelerationStructureFlagsKHR buildFlags,
+            uint32_t maxAccelerationStructureCount,
+            const void *opInput,
+            std::shared_ptr<Allocator> allocator,
+            const Sharing& sharing,
+            const StructureChain& extendedInfo);
+
+        std::shared_ptr<Device> device;
+        const VkClusterAccelerationStructureTypeNV type;
+        const VkClusterAccelerationStructureOpModeNV opMode;
+        const VkBuildAccelerationStructureFlagsKHR buildFlags;
+        const uint32_t maxAccelerationStructureCount;
+        std::unique_ptr<Buffer> implicitData;
+    };
+
+    /* A bottom level cluster acceleration structure.
+       Used to build multiple bottom level acceleration structures from multiple cluster level acceleration structures. */
+
+    class BottomLevelClusterAcccelerationStructure : public ClusterAccelerationStructure
+    {
+    public:
+        explicit BottomLevelClusterAcccelerationStructure(std::shared_ptr<Device> device,
+            VkClusterAccelerationStructureOpModeNV opMode,
+            VkBuildAccelerationStructureFlagsKHR buildFlags,
+            uint32_t maxTotalClusterCount,
+            uint32_t maxClusterCountPerAccelerationStructure,
+            uint32_t maxAccelerationStructureCount,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing(),
+            const StructureChain& extendedInfo = StructureChain());
+        uint32_t getMaxTotalClusterCount() const noexcept { return clustersBottomLevel.maxTotalClusterCount; }
+        uint32_t getMaxClusterCountPerAccelerationStructure() const noexcept { return clustersBottomLevel.maxClusterCountPerAccelerationStructure; }
+        VkClusterAccelerationStructureOpInputNV getOpInput() const noexcept override;
+
+    private:
+        VkClusterAccelerationStructureClustersBottomLevelInputNV clustersBottomLevel;
+    };
+
+    /* A cluster acceleration structure. */
+
+    class TriangleClusterAccelerationStructure : public ClusterAccelerationStructure
+    {
+    public:
+        explicit TriangleClusterAccelerationStructure(std::shared_ptr<Device> device,
+            VkClusterAccelerationStructureOpModeNV opMode,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
             const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters,
             uint32_t maxAccelerationStructureCount,
-            uint32_t maxTotalClusterCount,
-            uint32_t maxClusterCountPerAccelerationStructure,
-            VkClusterAccelerationStructureOpModeNV opMode,
             std::shared_ptr<Allocator> allocator = nullptr,
-            const Sharing& sharing = Sharing());
-        VkClusterAccelerationStructureTypeNV getType() const noexcept { return type; }
-        VkClusterAccelerationStructureOpModeNV getOpMode() const noexcept { return opMode; }
-        uint32_t getMaxAccelerationStructureCount() const noexcept { return maxAccelerationStructureCount; }
-        const std::unique_ptr<Buffer>& getClusterAccelerationStructureBuffer() const noexcept { return clusterAccelerationStructureBuffer; }
-        const std::unique_ptr<Buffer>& getAddressesBuffer() const noexcept { return addressesBuffer; }
-        const std::unique_ptr<Buffer>& getSizesBuffer() const noexcept { return sizesBuffer; }
-        const std::unique_ptr<Buffer>& getInfosBuffer() const noexcept { return infosBuffer; }
-
-        VkClusterAccelerationStructureTriangleClusterInputNV *getTriangleClusters() noexcept { return &triangleClustersInput; }
-        VkClusterAccelerationStructureClustersBottomLevelInputNV *getClustersBottomLevel() noexcept { return &clustersBottomLevelInput; }
+            const Sharing& sharing = Sharing(),
+            const StructureChain& extendedInfo = StructureChain());
+        VkClusterAccelerationStructureOpInputNV getOpInput() const noexcept override;
 
     private:
-        const VkClusterAccelerationStructureTypeNV type;
-        const VkClusterAccelerationStructureOpModeNV opMode;
-        const uint32_t maxAccelerationStructureCount;
-        VkClusterAccelerationStructureTriangleClusterInputNV triangleClustersInput;
-        VkClusterAccelerationStructureClustersBottomLevelInputNV clustersBottomLevelInput;
-        VkClusterAccelerationStructureMoveObjectsInputNV moveObjectsInput;
-        std::unique_ptr<Buffer> clusterAccelerationStructureBuffer;
-        std::unique_ptr<Buffer> addressesBuffer;
-        std::unique_ptr<Buffer> sizesBuffer;
-        std::unique_ptr<Buffer> infosBuffer;
+        const VkClusterAccelerationStructureTriangleClusterInputNV triangleClusters;
+    };
+
+    /* A cluster acceleration structure template. */
+
+    class TriangleClusterAccelerationStructureTemplate : public ClusterAccelerationStructure
+    {
+    public:
+        explicit TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device,
+            VkClusterAccelerationStructureOpModeNV opMode,
+            VkBuildAccelerationStructureFlagsKHR buildFlags,
+            const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate,
+            uint32_t maxAccelerationStructureCount,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Sharing& sharing = Sharing(),
+            const StructureChain& extendedInfo = StructureChain());
+        VkClusterAccelerationStructureOpInputNV getOpInput() const noexcept override;
+
+    private:
+        const VkClusterAccelerationStructureTriangleClusterInputNV triangleClusters;
     };
 #endif // VK_NV_cluster_acceleration_structure
 } // namespace magma
