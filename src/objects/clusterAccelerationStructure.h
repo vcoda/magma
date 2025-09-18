@@ -182,7 +182,7 @@ namespace magma
         VkClusterAccelerationStructureOpInputNV getOpInput() const noexcept override;
 
     private:
-        const VkClusterAccelerationStructureTriangleClusterInputNV triangleClusters;
+        const VkClusterAccelerationStructureTriangleClusterInputNV triangleClustersTemplate;
     };
 #endif // VK_NV_cluster_acceleration_structure
 } // namespace magma

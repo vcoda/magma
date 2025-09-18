@@ -123,19 +123,19 @@ VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructure::ge
 
 TriangleClusterAccelerationStructureTemplate::TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device,
     VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
-    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters_, uint32_t maxAccelerationStructureCount,
+    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate_, uint32_t maxAccelerationStructureCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_TEMPLATE_NV,
-        opMode, buildFlags, maxAccelerationStructureCount, &triangleClusters_, std::move(allocator), sharing, extendedInfo),
-    triangleClusters(triangleClusters_)
+        opMode, buildFlags, maxAccelerationStructureCount, &triangleClustersTemplate_, std::move(allocator), sharing, extendedInfo),
+    triangleClustersTemplate(triangleClustersTemplate_)
 {}
 
 VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructureTemplate::getOpInput() const noexcept
 {
     VkClusterAccelerationStructureOpInputNV opInput;
-    opInput.pTriangleClusters = (VkClusterAccelerationStructureTriangleClusterInputNV *)&triangleClusters;
+    opInput.pTriangleClusters = (VkClusterAccelerationStructureTriangleClusterInputNV *)&triangleClustersTemplate;
     return opInput;
 }
 #endif // VK_NV_cluster_acceleration_structure
