@@ -67,7 +67,35 @@ namespace magma
     };
 
     /* A bottom level cluster acceleration structure.
-       Used to build multiple bottom level acceleration structures from multiple cluster level acceleration structures. */
+       Used to build multiple bottom level acceleration structures
+       from multiple cluster level acceleration structures.
+
+       Typical calculation of input parameters may be done like this:
+
+        constexpr int MaxClustersPerMesh = 100;
+
+        struct Cluster
+        {
+            uint32_t vertexCount, indexCount;
+        };
+
+        struct ClusterizedMesh
+        {
+            Cluster clusters[MaxClustersPerMesh];
+            uint32_t clusterCount;
+        };
+
+        std::list<ClusterizedMesh> meshes;
+        uint32_t maxTotalClusterCount = 0;
+        uint32_t maxClusterCountPerAccelerationStructure = 0;
+        uint32_t maxAccelerationStructureCount = 0;
+
+        for (auto& mesh: meshes)
+        {
+            maxTotalClusterCount += mesh.clusterCount;
+            maxClusterCountPerAccelerationStructure = std::max(maxClusterCountPerAccelerationStructure, mesh.clusterCount);
+            ++maxAccelerationStructureCount;
+        } */
 
     class BottomLevelClusterAcccelerationStructure : public ClusterAccelerationStructure
     {
