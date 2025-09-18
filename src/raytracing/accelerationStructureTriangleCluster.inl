@@ -90,7 +90,7 @@ constexpr AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildT
 {}
 
 template<class Vertex, class Index>
-AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster, uint32_t clusterID) noexcept:
+inline AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster, uint32_t clusterID) noexcept:
     AccelerationStructureBuildTriangleCluster(clusterID)
 {
     MAGMA_ASSERT(!cluster.indices.empty());
