@@ -42,7 +42,7 @@ namespace magma
         uint64_t indexBufferOffset = 0;
         uint64_t geometryIndexAndFlagsBufferOffset = 0;
 
-        uint32_t findMinGeometryIndex() const noexcept;
+        uint32_t findBaseGeometryIndex() const noexcept;
         constexpr VkClusterAccelerationStructureIndexFormatFlagBitsNV getIndexFormat() const noexcept;
     };
 

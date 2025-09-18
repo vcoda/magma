@@ -1,7 +1,7 @@
 namespace magma
 {
 template<class Vertex, class Index>
-inline uint32_t Cluster<Vertex, Index>::findMinGeometryIndex() const noexcept
+inline uint32_t Cluster<Vertex, Index>::findBaseGeometryIndex() const noexcept
 {
     if (!geometryIndices.empty())
         return *std::min_element(geometryIndices.begin(), geometryIndices.end());
@@ -103,7 +103,7 @@ inline AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTria
     indexType = cluster.getIndexFormat();
     indexBufferStride = sizeof(Index);
     vertexBufferStride = sizeof(Vertex);
-    baseGeometryIndexAndGeometryFlags.geometryIndex = cluster.findMinGeometryIndex();
+    baseGeometryIndexAndGeometryFlags.geometryIndex = cluster.findBaseGeometryIndex();
     baseGeometryIndexAndGeometryFlags.reserved = 0;
     baseGeometryIndexAndGeometryFlags.geometryFlags = cluster.geometryFlags;
     indexBuffer = (VkDeviceAddress)cluster.indexBufferOffset;
