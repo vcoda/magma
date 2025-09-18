@@ -79,11 +79,10 @@ namespace magma
             uint32_t clusterCount;
         };
 
-        std::list<ClusterizedMesh> meshes;
+        std::forward_list<ClusterizedMesh> meshes;
         uint32_t maxTotalClusterCount = 0;
         uint32_t maxClusterCountPerAccelerationStructure = 0;
         uint32_t maxAccelerationStructureCount = 0;
-
         for (auto& mesh: meshes)
         {
             maxTotalClusterCount += mesh.clusterCount;
@@ -127,7 +126,22 @@ namespace magma
         * ClusterID: A CLAS can be assigned a user-defined 32-bit ClusterID,
           which can be accessed from a hit shader.
         * Vertex positions in a CLAS can be quantized for better storage by
-          implicitly zeroing a variable number of floating point mantissa bits. */
+          implicitly zeroing a variable number of floating point mantissa bits.
+
+       Typical calculation of input parameters may be done like this:
+
+        std::forward_list<ClusterizedMesh> meshes;
+        std::forward_list<magma::Cluster<MyVertex, uint8_t>> clusters;
+        uint32_t maxClusterAccelerationStructureCount = 0;
+        for (auto& mesh: meshes)
+        {
+            for (auto& meshCluster: mesh.clusters)
+            {
+                clusters.push_front(asMagmaCluster(meshCluster));
+                ++maxClusterAccelerationStructureCount;
+            }
+        }
+        magma::AccelerationStructureTriangleCluster triangleClusters(MyVertex::Format, clusters); */
 
     class TriangleClusterAccelerationStructure : public ClusterAccelerationStructure
     {
