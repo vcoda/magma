@@ -90,10 +90,10 @@ namespace magma
             ++maxAccelerationStructureCount;
         } */
 
-    class BottomLevelClusterAcccelerationStructure : public ClusterAccelerationStructure
+    class BottomLevelClusterAccelerationStructure : public ClusterAccelerationStructure
     {
     public:
-        explicit BottomLevelClusterAcccelerationStructure(std::shared_ptr<Device> device,
+        explicit BottomLevelClusterAccelerationStructure(std::shared_ptr<Device> device,
             uint32_t maxTotalClusterCount,
             uint32_t maxClusterCountPerAccelerationStructure,
             uint32_t maxAccelerationStructureCount,

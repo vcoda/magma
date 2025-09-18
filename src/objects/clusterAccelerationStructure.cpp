@@ -71,7 +71,7 @@ ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Devic
 
 ClusterAccelerationStructure::~ClusterAccelerationStructure() {}
 
-BottomLevelClusterAcccelerationStructure::BottomLevelClusterAcccelerationStructure(std::shared_ptr<Device> device,
+BottomLevelClusterAccelerationStructure::BottomLevelClusterAccelerationStructure(std::shared_ptr<Device> device,
     uint32_t maxTotalClusterCount, uint32_t maxClusterCountPerAccelerationStructure, uint32_t maxAccelerationStructureCount,
     VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -95,7 +95,7 @@ BottomLevelClusterAcccelerationStructure::BottomLevelClusterAcccelerationStructu
     clustersBottomLevel.maxClusterCountPerAccelerationStructure = maxClusterCountPerAccelerationStructure;
 }
 
-VkClusterAccelerationStructureOpInputNV BottomLevelClusterAcccelerationStructure::getOpInput() const noexcept
+VkClusterAccelerationStructureOpInputNV BottomLevelClusterAccelerationStructure::getOpInput() const noexcept
 {
     VkClusterAccelerationStructureOpInputNV opInput;
     opInput.pClustersBottomLevel = (VkClusterAccelerationStructureClustersBottomLevelInputNV *)&clustersBottomLevel;

@@ -964,7 +964,7 @@ inline void CommandBuffer::moveObjects(lent_ptr<ClusterAccelerationStructure> ac
     }
 }
 
-inline void CommandBuffer::buildClustersBottomLevel(lent_ptr<BottomLevelClusterAcccelerationStructure> accelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept
+inline void CommandBuffer::buildClustersBottomLevel(lent_ptr<BottomLevelClusterAccelerationStructure> accelerationStructure, lent_ptr<Buffer> scratchBuffer) const noexcept
 {
     MAGMA_ASSERT(extensions.NV_cluster_acceleration_structure);
     if (extensions.NV_cluster_acceleration_structure)

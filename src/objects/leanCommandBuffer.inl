@@ -570,7 +570,7 @@ inline void LeanCommandBuffer::moveObjects(ClusterAccelerationStructure *acceler
     buildClusterAccelerationStructureIndirect(VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_MOVE_OBJECTS_NV, accelerationStructure, scratchBuffer);
 }
 
-inline void LeanCommandBuffer::buildClustersBottomLevel(BottomLevelClusterAcccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept
+inline void LeanCommandBuffer::buildClustersBottomLevel(BottomLevelClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept
 {
     buildClusterAccelerationStructureIndirect(VK_CLUSTER_ACCELERATION_STRUCTURE_OP_TYPE_BUILD_CLUSTERS_BOTTOM_LEVEL_NV, accelerationStructure, scratchBuffer);
 }

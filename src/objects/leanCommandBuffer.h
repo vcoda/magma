@@ -224,7 +224,7 @@ namespace magma
 
     #ifdef VK_NV_cluster_acceleration_structure
         void moveObjects(ClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
-        void buildClustersBottomLevel(BottomLevelClusterAcccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
+        void buildClustersBottomLevel(BottomLevelClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
         void buildTriangleCluster(TriangleClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
         void buildTriangleClusterTemplate(TriangleClusterAccelerationStructureTemplate *accelerationStructure, Buffer *scratchBuffer) const noexcept;
         void instantiateTriangleCluster(TriangleClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept;
