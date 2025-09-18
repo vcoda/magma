@@ -28,8 +28,8 @@ namespace magma
 {
 #ifdef VK_NV_cluster_acceleration_structure
 ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Device> device_,
-    VkClusterAccelerationStructureTypeNV type, VkClusterAccelerationStructureOpModeNV opMode,
-    VkBuildAccelerationStructureFlagsKHR buildFlags, uint32_t maxAccelerationStructureCount, const void *opInput,
+    VkClusterAccelerationStructureTypeNV type, const void *opInput, uint32_t maxAccelerationStructureCount,
+    VkClusterAccelerationStructureOpModeNV opMode,VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator, const Sharing& sharing, const StructureChain& extendedInfo):
     device(std::move(device_)),
     type(type),
@@ -72,13 +72,12 @@ ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Devic
 ClusterAccelerationStructure::~ClusterAccelerationStructure() {}
 
 BottomLevelClusterAcccelerationStructure::BottomLevelClusterAcccelerationStructure(std::shared_ptr<Device> device,
-    VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
     uint32_t maxTotalClusterCount, uint32_t maxClusterCountPerAccelerationStructure, uint32_t maxAccelerationStructureCount,
+    VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_CLUSTERS_BOTTOM_LEVEL_NV,
-        opMode, buildFlags, maxAccelerationStructureCount,
         [maxTotalClusterCount, maxClusterCountPerAccelerationStructure]() -> void*
         {   // TODO: check lifetime
             auto clustersBottomLevel = stackalloc(VkClusterAccelerationStructureClustersBottomLevelInputNV, 1);
@@ -88,7 +87,7 @@ BottomLevelClusterAcccelerationStructure::BottomLevelClusterAcccelerationStructu
             clustersBottomLevel->maxClusterCountPerAccelerationStructure = maxClusterCountPerAccelerationStructure;
             return clustersBottomLevel;
         }(),
-        std::move(allocator), sharing, extendedInfo)
+        maxAccelerationStructureCount, opMode, buildFlags, std::move(allocator), sharing, extendedInfo)
 {
     clustersBottomLevel.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_CLUSTERS_BOTTOM_LEVEL_INPUT_NV;
     clustersBottomLevel.pNext = nullptr;
@@ -104,13 +103,13 @@ VkClusterAccelerationStructureOpInputNV BottomLevelClusterAcccelerationStructure
 }
 
 TriangleClusterAccelerationStructure::TriangleClusterAccelerationStructure(std::shared_ptr<Device> device,
+    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters_, uint32_t maxClusterAccelerationStructureCount,
     VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
-    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters_, uint32_t maxAccelerationStructureCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_NV,
-        opMode, buildFlags, maxAccelerationStructureCount, &triangleClusters_, std::move(allocator), sharing, extendedInfo),
+         &triangleClusters_, maxClusterAccelerationStructureCount, opMode, buildFlags, std::move(allocator), sharing, extendedInfo),
     triangleClusters(triangleClusters_)
 {}
 
@@ -122,13 +121,13 @@ VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructure::ge
 }
 
 TriangleClusterAccelerationStructureTemplate::TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device,
+    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate_, uint32_t maxClusterAccelerationStructureCount,
     VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
-    const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate_, uint32_t maxAccelerationStructureCount,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
     ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_TEMPLATE_NV,
-        opMode, buildFlags, maxAccelerationStructureCount, &triangleClustersTemplate_, std::move(allocator), sharing, extendedInfo),
+         &triangleClustersTemplate_, maxClusterAccelerationStructureCount, opMode, buildFlags, std::move(allocator), sharing, extendedInfo),
     triangleClustersTemplate(triangleClustersTemplate_)
 {}
 

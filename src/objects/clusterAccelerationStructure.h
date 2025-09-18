@@ -44,10 +44,10 @@ namespace magma
     protected:
         ClusterAccelerationStructure(std::shared_ptr<Device> device,
             VkClusterAccelerationStructureTypeNV type,
+            const void *opInput,
+            uint32_t maxAccelerationStructureCount,
             VkClusterAccelerationStructureOpModeNV opMode,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
-            uint32_t maxAccelerationStructureCount,
-            const void *opInput,
             std::shared_ptr<Allocator> allocator,
             const Sharing& sharing,
             const StructureChain& extendedInfo);
@@ -95,11 +95,11 @@ namespace magma
     {
     public:
         explicit BottomLevelClusterAcccelerationStructure(std::shared_ptr<Device> device,
-            VkClusterAccelerationStructureOpModeNV opMode,
-            VkBuildAccelerationStructureFlagsKHR buildFlags,
             uint32_t maxTotalClusterCount,
             uint32_t maxClusterCountPerAccelerationStructure,
             uint32_t maxAccelerationStructureCount,
+            VkClusterAccelerationStructureOpModeNV opMode,
+            VkBuildAccelerationStructureFlagsKHR buildFlags,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
@@ -133,10 +133,10 @@ namespace magma
     {
     public:
         explicit TriangleClusterAccelerationStructure(std::shared_ptr<Device> device,
+            const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters,
+            uint32_t maxClusterAccelerationStructureCount,
             VkClusterAccelerationStructureOpModeNV opMode,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
-            const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters,
-            uint32_t maxAccelerationStructureCount,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
@@ -172,10 +172,10 @@ namespace magma
     {
     public:
         explicit TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device,
+            const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters,
+            uint32_t maxClusterAccelerationStructureCount,
             VkClusterAccelerationStructureOpModeNV opMode,
             VkBuildAccelerationStructureFlagsKHR buildFlags,
-            const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate,
-            uint32_t maxAccelerationStructureCount,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing(),
             const StructureChain& extendedInfo = StructureChain());
