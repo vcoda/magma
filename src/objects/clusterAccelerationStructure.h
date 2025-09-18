@@ -27,15 +27,9 @@ namespace magma
     /* https://docs.vulkan.org/features/latest/features/proposals/VK_NV_cluster_acceleration_structure.html
        https://github.com/KhronosGroup/Vulkan-Docs/blob/main/proposals/VK_NV_cluster_acceleration_structure.adoc */
 
+    /* Base cluster acceleration structure. */
+
 #ifdef VK_NV_cluster_acceleration_structure
-
-    /* A CLAS is an intermediate acceleration structure created from triangles,
-       which can then be used to build Cluster BLAS. The Cluster BLAS serves
-       as an alternative to the traditional BLAS. The goal is for applications
-       to organize mesh geometry into CLAS primitives before creating the
-       Cluster BLAS. To optimize trace performance, geometry should be grouped
-       into CLAS based on spatial proximity. */
-
     class ClusterAccelerationStructure : public IClass
     {
     public:
@@ -66,13 +60,12 @@ namespace magma
         std::unique_ptr<Buffer> implicitData;
     };
 
-    /* A bottom level cluster acceleration structure.
-       Used to build multiple bottom level acceleration structures
-       from multiple cluster level acceleration structures.
+    /* Cluster Bottom Level Acceleration Structure (CBLAS), constructed from
+       references to CLAS structures
 
-       Typical calculation of input parameters may be done like this:
-
-        constexpr int MaxClustersPerMesh = 100;
+       The Cluster BLAS serves as an alternative to the traditional BLAS.
+       The goal is for applications to organize mesh geometry into CLAS
+       primitives before creating the Cluster BLAS.
 
        Typical calculation of input parameters may be done like this:
 
@@ -118,7 +111,23 @@ namespace magma
         VkClusterAccelerationStructureClustersBottomLevelInputNV clustersBottomLevel;
     };
 
-    /* A cluster acceleration structure. */
+    /* A CLAS is an intermediate acceleration structure created from triangles,
+       which can then be used to build Cluster BLAS. To optimize trace performance,
+       geometry should be grouped into CLAS based on spatial proximity.
+
+       A CLAS behaves similarly to a BLAS in many respects but has the following
+       differences:
+
+        * Triangle and Vertex Limits: A CLAS can contain up to a small number
+          of triangles and vertices.
+        * TLAS Integration: CLAS cannot be directly included in a TLAS. Instead,
+          they are referenced as part of a Cluster BLAS, which can be traced.
+        * Geometry Indices: Indices in a CLAS can be specified per primitive
+          that are local to the CLAS and may be non-consecutive.
+        * ClusterID: A CLAS can be assigned a user-defined 32-bit ClusterID,
+          which can be accessed from a hit shader.
+        * Vertex positions in a CLAS can be quantized for better storage by
+          implicitly zeroing a variable number of floating point mantissa bits. */
 
     class TriangleClusterAccelerationStructure : public ClusterAccelerationStructure
     {
@@ -137,7 +146,27 @@ namespace magma
         const VkClusterAccelerationStructureTriangleClusterInputNV triangleClusters;
     };
 
-    /* A cluster acceleration structure template. */
+    /* A partially constructed CLAS which can be instantiated to multiple
+       cluster level acceleration structures.
+
+       Cluster Templates are designed to efficiently instantiate CLAS in memory.
+       During the CLAS instantiation process from a Cluster Template, the actual
+       vertex positions are provided, and the ClusterID as well as the geometry
+       index can be offset uniformly. Cluster Templates perform as much pre-
+       computation as possible that is independent of final vertex positions,
+       enabling reuse when generating multiple CLAS instances. A Cluster Template
+       is a partially constructed CLAS with the following distinctions:
+
+        * It does not store or require vertex position data, however it can use it
+          to guide the spatial relationship among triangles.
+        * Its size is smaller due to the absence of position information.
+        * It cannot be used for tracing or as a basis for building other
+          acceleration structures.
+        * Bounding box information can be used in combination with the ability
+          to zero some of the floating point mantissa bits, to optimize the
+          storage of the actual vertices at instantiation.
+        * It retains non-positional properties similar to a CLAS, which are
+          inherited when the CLAS is instantiated. */
 
     class TriangleClusterAccelerationStructureTemplate : public ClusterAccelerationStructure
     {
