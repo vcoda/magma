@@ -74,14 +74,15 @@ namespace magma
 
         constexpr int MaxClustersPerMesh = 100;
 
-        struct Cluster
-        {
-            uint32_t vertexCount, indexCount;
-        };
+       Typical calculation of input parameters may be done like this:
 
         struct ClusterizedMesh
         {
-            Cluster clusters[MaxClustersPerMesh];
+            struct Cluster
+            {
+                uint32_t vertexCount, indexCount;
+                ...
+            } clusters[N];
             uint32_t clusterCount;
         };
 
