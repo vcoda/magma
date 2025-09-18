@@ -34,9 +34,11 @@ namespace magma
         static_assert(std::is_same<Index, uint8_t>::value || std::is_same<Index, uint16_t>::value || std::is_same<Index, uint32_t>::value,
             "index should be of unsigned char, short or int type");
 
+        uint32_t id = 0;
         uint32_t vertexCount = 0;
         std::vector<Index> indices;
         std::vector<uint32_t> geometryIndices = {0};
+        VkClusterAccelerationStructureClusterFlagsNV flags = 0;
         VkClusterAccelerationStructureGeometryFlagsNV geometryFlags = 0;
         uint64_t vertexBufferOffset = 0;
         uint64_t indexBufferOffset = 0;
@@ -62,8 +64,7 @@ namespace magma
     {
         constexpr AccelerationStructureBuildTriangleCluster(uint32_t clusterID = 0) noexcept;
         template<class Vertex, class Index>
-        AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster,
-            uint32_t clusterID) noexcept;
+        AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster) noexcept;
     };
 
     /* Instead of true device addresses of vertex/index buffers we store

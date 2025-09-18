@@ -90,11 +90,12 @@ constexpr AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildT
 {}
 
 template<class Vertex, class Index>
-inline AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster, uint32_t clusterID) noexcept:
-    AccelerationStructureBuildTriangleCluster(clusterID)
+inline AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster) noexcept:
+    AccelerationStructureBuildTriangleCluster(cluster.id)
 {
     MAGMA_ASSERT(!cluster.indices.empty());
     MAGMA_ASSERT(cluster.indices.size() % 3 == 0);
+    clusterFlags = cluster.flags;
     const uint32_t clusterTriangleCount = core::countof(cluster.indices) / 3;
     MAGMA_ASSERT(clusterTriangleCount <= MAGMA_MAX_CLUSTER_TRIANGLE_COUNT); // max 9 bits
     triangleCount = clusterTriangleCount;
