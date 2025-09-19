@@ -20,7 +20,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 // Defined in VkClusterAccelerationStructureBuildTriangleClusterInfoNV
 #define MAGMA_NUM_CLUSTER_BITS 9
-
 #define MAGMA_MAX_CLUSTER_TRIANGLE_COUNT (1 << MAGMA_NUM_CLUSTER_BITS)
 #define MAGMA_MAX_CLUSTER_VERTEX_COUNT (1 << MAGMA_NUM_CLUSTER_BITS)
 
@@ -67,10 +66,10 @@ namespace magma
         AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster) noexcept;
     };
 
-    /* Instead of true device addresses of vertex/index buffers we store
-       offsets in the VkClusterAccelerationStructureBuildTriangleClusterInfoNV.
-       When memory is allocated and data is placed in the buffers, we get
-       real device addresses and fixup pointers in the triangle clusters. */
+    /* Instead of true device addresses of vertex/index buffers
+       we store offsets in the BuildTriangleCluster structure.
+       When memory is allocated and data is placed in the buffers,
+       we get real device addresses and then fixup pointers. */
 
     void fixupTriangleClustersBufferAddresses(std::vector<VkClusterAccelerationStructureBuildTriangleClusterInfoNV>& triangleClusters,
         const Buffer *vertexBuffer,
