@@ -29,7 +29,7 @@ namespace magma
 #ifdef VK_NV_cluster_acceleration_structure
 ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Device> device_,
     VkClusterAccelerationStructureTypeNV type, const void *opInput, uint32_t maxAccelerationStructureCount,
-    VkClusterAccelerationStructureOpModeNV opMode,VkBuildAccelerationStructureFlagsKHR buildFlags,
+    VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator, const Sharing& sharing, const StructureChain& extendedInfo):
     device(std::move(device_)),
     type(type),
