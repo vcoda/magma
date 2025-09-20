@@ -50,6 +50,7 @@ namespace magma
     MAGMA_TYPEDEF_MANAGED_PTR(Framebuffer)
     MAGMA_TYPEDEF_MANAGED_PTR(GraphicsPipeline)
     MAGMA_TYPEDEF_MANAGED_PTR(GraphicsPipelineBatch)
+    MAGMA_TYPEDEF_MANAGED_PTR(HostStorageBuffer)
     MAGMA_TYPEDEF_MANAGED_PTR(Image)
     MAGMA_TYPEDEF_MANAGED_PTR(Image1D)
     MAGMA_TYPEDEF_MANAGED_PTR(Image1DArray)

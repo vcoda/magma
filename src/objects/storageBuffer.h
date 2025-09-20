@@ -48,6 +48,20 @@ namespace magma
             const Sharing& sharing = Sharing());
     };
 
+    /* A storage buffer with HOST_VISIBLE_BIT | HOST_COHERENT_BIT flags.
+       This buffer may be written by device and read by host, but user
+       has no intention to update it each frame. */
+
+    class HostStorageBuffer : public Buffer
+    {
+    public:
+        explicit HostStorageBuffer(std::shared_ptr<Device> device,
+            VkDeviceSize size,
+            std::shared_ptr<Allocator> allocator = nullptr,
+            const Initializer& optional = Initializer(),
+            const Sharing& sharing = Sharing());
+    };
+
     /* Major GPU vendors expose a 256MiB-ish staging buffer
        with the DEVICE_LOCAL | HOST_VISIBLE | HOST_COHERENT
        flags where the GPU and CPU can both write into shared
