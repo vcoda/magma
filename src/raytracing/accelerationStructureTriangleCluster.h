@@ -49,11 +49,11 @@ namespace magma
 
     /* Describes a cluster acceleration structure. */
 
-    struct AccelerationStructureTriangleCluster : VkClusterAccelerationStructureTriangleClusterInputNV
+    struct TriangleClusterAccelerationStructureInput : VkClusterAccelerationStructureTriangleClusterInputNV
     {
-        constexpr AccelerationStructureTriangleCluster(VkFormat vertexFormat = VK_FORMAT_UNDEFINED) noexcept;
+        constexpr TriangleClusterAccelerationStructureInput(VkFormat vertexFormat = VK_FORMAT_UNDEFINED) noexcept;
         template<class Vertex, class Index>
-        AccelerationStructureTriangleCluster(VkFormat vertexFormat,
+        TriangleClusterAccelerationStructureInput(VkFormat vertexFormat,
             const std::forward_list<Cluster<Vertex, Index>>& clusters);
     };
 

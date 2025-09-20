@@ -19,7 +19,7 @@ constexpr VkClusterAccelerationStructureIndexFormatFlagBitsNV Cluster<Vertex, In
         return VK_CLUSTER_ACCELERATION_STRUCTURE_INDEX_FORMAT_32BIT_NV;
 }
 
-constexpr AccelerationStructureTriangleCluster::AccelerationStructureTriangleCluster(VkFormat vertexFormat /* VK_FORMAT_UNDEFINED */) noexcept:
+constexpr TriangleClusterAccelerationStructureInput::TriangleClusterAccelerationStructureInput(VkFormat vertexFormat /* VK_FORMAT_UNDEFINED */) noexcept:
     VkClusterAccelerationStructureTriangleClusterInputNV{
         VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_TRIANGLE_CLUSTER_INPUT_NV,
         nullptr, // pNext
@@ -35,8 +35,8 @@ constexpr AccelerationStructureTriangleCluster::AccelerationStructureTriangleClu
 {}
 
 template<class Vertex, class Index>
-inline AccelerationStructureTriangleCluster::AccelerationStructureTriangleCluster(VkFormat vertexFormat, const std::forward_list<Cluster<Vertex, Index>>& clusters):
-    AccelerationStructureTriangleCluster(vertexFormat)
+inline TriangleClusterAccelerationStructureInput::TriangleClusterAccelerationStructureInput(VkFormat vertexFormat, const std::forward_list<Cluster<Vertex, Index>>& clusters):
+    TriangleClusterAccelerationStructureInput(vertexFormat)
 {
     for (auto const& cluster: clusters)
     {

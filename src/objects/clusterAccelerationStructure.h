@@ -145,7 +145,7 @@ namespace magma
                 ++maxClusterAccelerationStructureCount;
             }
         }
-        magma::AccelerationStructureTriangleCluster triangleClusters(VK_FORMAT_R16G16B16A16_SFLOAT, clusters);
+        magma::TriangleClusterAccelerationStructureInput triangleClusters(VK_FORMAT_R16G16B16A16_SFLOAT, clusters);
     */
 
     class TriangleClusterAccelerationStructure : public ClusterAccelerationStructure
