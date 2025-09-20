@@ -77,10 +77,10 @@ constexpr AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildT
         0, // indexType
         0, // opacityMicromapIndexType
         {0, 0, 0}, // baseGeometryIndexAndGeometryFlags
-        0, // indexBufferStride
-        0, // vertexBufferStride
-        0, // geometryIndexAndFlagsBufferStride
-        0, // opacityMicromapIndexBufferStride
+        0, // indexBufferStride - 0 meaning the values are tightly-packed
+        0, // vertexBufferStride - 0 meaning the values are tightly-packed
+        0, // geometryIndexAndFlagsBufferStride - 0 meaning the values are tightly-packed
+        0, // opacityMicromapIndexBufferStride - 0 meaning the values are tightly-packed
         MAGMA_NULL, // indexBuffer
         MAGMA_NULL, // vertexBuffer
         MAGMA_NULL, // geometryIndexAndFlagsBuffer
@@ -90,7 +90,8 @@ constexpr AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildT
 {}
 
 template<class Vertex, class Index>
-inline AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster) noexcept:
+inline AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster,
+    uint16_t vertexStride /* 0 */, uint16_t indexStride /* 0 */, uint16_t geometryIndexAndFlagsStride /* 0 */) noexcept:
     AccelerationStructureBuildTriangleCluster(cluster.id)
 {
     MAGMA_ASSERT(!cluster.indices.empty());
@@ -102,8 +103,12 @@ inline AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTria
     MAGMA_ASSERT(cluster.vertexCount <= MAGMA_MAX_CLUSTER_VERTEX_COUNT); // max 9 bits
     vertexCount = cluster.vertexCount;
     indexType = cluster.getIndexFormat();
-    indexBufferStride = sizeof(Index);
-    vertexBufferStride = sizeof(Vertex);
+    indexBufferStride = indexStride ? indexStride : sizeof(Index);
+    vertexBufferStride = vertexStride ? vertexStride : sizeof(Vertex);
+    if (geometryIndexAndFlagsStride)
+        geometryIndexAndFlagsBufferStride = geometryIndexAndFlagsStride;
+    else
+        geometryIndexAndFlagsBufferStride = sizeof(VkClusterAccelerationStructureGeometryIndexAndGeometryFlagsNV);
     baseGeometryIndexAndGeometryFlags.geometryIndex = cluster.findBaseGeometryIndex();
     baseGeometryIndexAndGeometryFlags.reserved = 0;
     baseGeometryIndexAndGeometryFlags.geometryFlags = cluster.geometryFlags;

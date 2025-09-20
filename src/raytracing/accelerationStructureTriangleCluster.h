@@ -63,7 +63,10 @@ namespace magma
     {
         constexpr AccelerationStructureBuildTriangleCluster(uint32_t clusterID = 0) noexcept;
         template<class Vertex, class Index>
-        AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster) noexcept;
+        AccelerationStructureBuildTriangleCluster(const Cluster<Vertex, Index>& cluster,
+            uint16_t vertexStride = 0,
+            uint16_t indexStride = 0,
+            uint16_t geometryIndexAndFlagsStride = 0) noexcept;
     };
 
     /* Instead of true device addresses of vertex/index buffers
