@@ -504,11 +504,9 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
         clusterAccelerationStructureCommandsInfo.dstAddressesArray.stride = sizeof(VkDeviceAddress);
         clusterAccelerationStructureCommandsInfo.dstAddressesArray.size = maxAccelerationStructureCount * sizeof(VkDeviceAddress);
     }
-#if 0
-    clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = accelerationStructure->getSizesBuffer()->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = stride;
-    clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * stride;
-#endif
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = accelerationStructure->getSizes()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = sizeof(uint32_t);
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * sizeof(uint32_t);
     clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = accelerationStructure->getSrcInfosArray()->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = getClusterAccelerationStructureSize(opType);
     clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * clusterAccelerationStructureCommandsInfo.srcInfosArray.stride;

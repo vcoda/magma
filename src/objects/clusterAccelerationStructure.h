@@ -40,6 +40,7 @@ namespace magma
         uint32_t getMaxAccelerationStructureCount() const noexcept { return maxAccelerationStructureCount; }
         const std::unique_ptr<Buffer>& getImplicitData() const noexcept { return implicitData; }
         const std::unique_ptr<Buffer>& getAddresses() const noexcept { return addressesBuffer; }
+        const std::unique_ptr<Buffer>& getSizes() const noexcept { return sizesBuffer; }
         std::shared_ptr<Buffer> getSrcInfosArray() const noexcept { return srcInfosArray; }
         virtual VkClusterAccelerationStructureOpInputNV getOpInput() const noexcept = 0;
 
@@ -61,6 +62,7 @@ namespace magma
         const uint32_t maxAccelerationStructureCount;
         std::unique_ptr<Buffer> implicitData;
         std::unique_ptr<Buffer> addressesBuffer;
+        std::unique_ptr<Buffer> sizesBuffer;
         std::shared_ptr<Buffer> srcInfosArray;
     };
 
