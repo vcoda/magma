@@ -96,7 +96,7 @@ BottomLevelClusterAccelerationStructure::BottomLevelClusterAccelerationStructure
         maxAccelerationStructureCount, opMode, buildFlags, std::move(allocator), sharing, extendedInfo)
 {
     MAGMA_ASSERT(buildBottomLevelInfos->getSize() >= maxAccelerationStructureCount * sizeof(VkClusterAccelerationStructureBuildClustersBottomLevelInfoNV));
-    srcInfosArray = std::move(buildBottomLevelInfos);
+    infosArray = std::move(buildBottomLevelInfos);
     clustersBottomLevel.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_CLUSTERS_BOTTOM_LEVEL_INPUT_NV;
     clustersBottomLevel.pNext = nullptr;
     clustersBottomLevel.maxTotalClusterCount = maxTotalClusterCount;
@@ -121,7 +121,7 @@ TriangleClusterAccelerationStructure::TriangleClusterAccelerationStructure(std::
     triangleClusters(triangleClusters_)
 {
     MAGMA_ASSERT(buildClusterInfos->getSize() >= maxAccelerationStructureCount * sizeof(VkClusterAccelerationStructureBuildTriangleClusterInfoNV));
-    srcInfosArray = std::move(buildClusterInfos);
+    infosArray = std::move(buildClusterInfos);
 }
 
 VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructure::getOpInput() const noexcept
@@ -142,7 +142,7 @@ TriangleClusterAccelerationStructureTemplate::TriangleClusterAccelerationStructu
     triangleClustersTemplate(triangleClustersTemplate_)
 {
     MAGMA_ASSERT(buildClusterTemplateInfos->getSize() >= maxAccelerationStructureCount * sizeof(VkClusterAccelerationStructureBuildTriangleClusterTemplateInfoNV));
-    srcInfosArray = std::move(buildClusterTemplateInfos);
+    infosArray = std::move(buildClusterTemplateInfos);
 }
 
 VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructureTemplate::getOpInput() const noexcept

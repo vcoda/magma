@@ -507,10 +507,10 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
     clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = accelerationStructure->getSizes()->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = sizeof(uint32_t);
     clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * sizeof(uint32_t);
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = accelerationStructure->getSrcInfosArray()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = accelerationStructure->getInfosArray()->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = getClusterAccelerationStructureSize(opType);
     clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * clusterAccelerationStructureCommandsInfo.srcInfosArray.stride;
-    MAGMA_ASSERT(accelerationStructure->getSrcInfosArray()->getSize() >= clusterAccelerationStructureCommandsInfo.srcInfosArray.size);
+    MAGMA_ASSERT(accelerationStructure->getInfosArray()->getSize() >= clusterAccelerationStructureCommandsInfo.srcInfosArray.size);
     clusterAccelerationStructureCommandsInfo.srcInfosCount = MAGMA_NULL;
     clusterAccelerationStructureCommandsInfo.addressResolutionFlags = 0;
     MAGMA_DEVICE_EXTENSION(vkCmdBuildClusterAccelerationStructureIndirectNV);

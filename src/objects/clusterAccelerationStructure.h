@@ -41,7 +41,7 @@ namespace magma
         const std::unique_ptr<Buffer>& getImplicitData() const noexcept { return implicitData; }
         const std::unique_ptr<Buffer>& getAddresses() const noexcept { return addressesBuffer; }
         const std::unique_ptr<Buffer>& getSizes() const noexcept { return sizesBuffer; }
-        std::shared_ptr<Buffer> getSrcInfosArray() const noexcept { return srcInfosArray; }
+        const std::shared_ptr<Buffer>& getInfosArray() const noexcept { return infosArray; }
         virtual VkClusterAccelerationStructureOpInputNV getOpInput() const noexcept = 0;
 
     protected:
@@ -63,7 +63,7 @@ namespace magma
         std::unique_ptr<Buffer> implicitData;
         std::unique_ptr<Buffer> addressesBuffer;
         std::unique_ptr<Buffer> sizesBuffer;
-        std::shared_ptr<Buffer> srcInfosArray;
+        std::shared_ptr<Buffer> infosArray;
     };
 
     /* Cluster Bottom Level Acceleration Structure (CBLAS), constructed
