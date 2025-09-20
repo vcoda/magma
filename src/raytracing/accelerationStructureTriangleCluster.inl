@@ -117,6 +117,27 @@ inline AccelerationStructureBuildTriangleCluster::AccelerationStructureBuildTria
     geometryIndexAndFlagsBuffer = (VkDeviceAddress)cluster.geometryIndexAndFlagsBufferOffset;
 }
 
+inline void fixupTriangleClustersBufferAddresses(Buffer *triangleClusters,
+    const Buffer *vertexBuffer, const Buffer *indexBuffer,
+    const Buffer *geometryIndexAndFlagsBuffer /* nullptr */) noexcept
+{
+    const VkDeviceAddress vertexBufferDeviceAddress = vertexBuffer->getDeviceAddress();
+    const VkDeviceAddress indexBufferDeviceAddress = indexBuffer->getDeviceAddress();
+    const VkDeviceAddress geometryIndexAndFlagsBufferDeviceAddress = geometryIndexAndFlagsBuffer ? geometryIndexAndFlagsBuffer->getDeviceAddress() : MAGMA_NULL;
+    map<VkClusterAccelerationStructureBuildTriangleClusterInfoNV>(triangleClusters,
+        [&](auto *clusters)
+        {
+            const uint32_t clusterCount = uint32_t(triangleClusters->getSize() / sizeof(VkClusterAccelerationStructureBuildTriangleClusterInfoNV));
+            for (uint32_t i = 0; i < clusterCount; ++i)
+            {
+                VkClusterAccelerationStructureBuildTriangleClusterInfoNV& cluster = clusters[i];
+                cluster.vertexBuffer += vertexBufferDeviceAddress;
+                cluster.indexBuffer += indexBufferDeviceAddress;
+                cluster.geometryIndexAndFlagsBuffer += geometryIndexAndFlagsBufferDeviceAddress;
+            }
+        });
+}
+
 inline void fixupTriangleClustersBufferAddresses(std::vector<VkClusterAccelerationStructureBuildTriangleClusterInfoNV>& triangleClusters,
     const Buffer *vertexBuffer, const Buffer *indexBuffer, const Buffer *geometryIndexAndFlagsBuffer /* nullptr */) noexcept
 {

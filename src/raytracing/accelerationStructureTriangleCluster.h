@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #ifdef VK_NV_cluster_acceleration_structure
+#include "../misc/mapBuffer.h"
 
 // Defined in VkClusterAccelerationStructureBuildTriangleClusterInfoNV
 #define MAGMA_NUM_CLUSTER_BITS 9
@@ -73,6 +74,11 @@ namespace magma
        we store offsets in the BuildTriangleCluster structure.
        When memory is allocated and data is placed in the buffers,
        we get real device addresses and then fixup pointers. */
+
+    void fixupTriangleClustersBufferAddresses(Buffer *triangleClusters,
+        const Buffer *vertexBuffer,
+        const Buffer *indexBuffer,
+        const Buffer *geometryIndexAndFlagsBuffer = nullptr) noexcept;
 
     void fixupTriangleClustersBufferAddresses(std::vector<VkClusterAccelerationStructureBuildTriangleClusterInfoNV>& triangleClusters,
         const Buffer *vertexBuffer,
