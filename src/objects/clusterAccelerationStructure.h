@@ -198,7 +198,7 @@ namespace magma
     {
     public:
         explicit TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device,
-            std::shared_ptr<Buffer> buildClusterInfos,
+            std::shared_ptr<Buffer> buildClusterTemplateInfos,
             const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate,
             uint32_t maxClusterAccelerationStructureCount,
             VkClusterAccelerationStructureOpModeNV opMode,

@@ -129,7 +129,7 @@ VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructure::ge
     return opInput;
 }
 
-TriangleClusterAccelerationStructureTemplate::TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device, std::shared_ptr<Buffer> buildClusterInfos,
+TriangleClusterAccelerationStructureTemplate::TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device, std::shared_ptr<Buffer> buildClusterTemplateInfos,
     const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate_, uint32_t maxClusterAccelerationStructureCount,
     VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
@@ -139,8 +139,8 @@ TriangleClusterAccelerationStructureTemplate::TriangleClusterAccelerationStructu
          &triangleClustersTemplate_, maxClusterAccelerationStructureCount, opMode, buildFlags, std::move(allocator), sharing, extendedInfo),
     triangleClustersTemplate(triangleClustersTemplate_)
 {
-    MAGMA_ASSERT(buildClusterInfos->getSize() >= maxAccelerationStructureCount * sizeof(VkClusterAccelerationStructureBuildTriangleClusterInfoNV));
-    srcInfosArray = std::move(buildClusterInfos);
+    MAGMA_ASSERT(buildClusterTemplateInfos->getSize() >= maxAccelerationStructureCount * sizeof(VkClusterAccelerationStructureBuildTriangleClusterTemplateInfoNV));
+    srcInfosArray = std::move(buildClusterTemplateInfos);
 }
 
 VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructureTemplate::getOpInput() const noexcept
