@@ -467,9 +467,8 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
     ClusterAccelerationStructure *accelerationStructure, Buffer *scratchBuffer) const noexcept
 {
     const uint32_t maxAccelerationStructureCount = accelerationStructure->getMaxAccelerationStructureCount();
-    const std::size_t stride = getClusterAccelerationStructureSize(opType);
-    VkClusterAccelerationStructureMoveObjectsInputNV moveObjects;
     VkClusterAccelerationStructureCommandsInfoNV clusterAccelerationStructureCommandsInfo;
+    VkClusterAccelerationStructureMoveObjectsInputNV moveObjects;
     clusterAccelerationStructureCommandsInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_COMMANDS_INFO_NV;
     clusterAccelerationStructureCommandsInfo.pNext = nullptr;
     clusterAccelerationStructureCommandsInfo.input.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_INPUT_INFO_NV;
@@ -496,17 +495,24 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
     else // OP_MODE_EXPLICIT_DESTINATIONS_NV or OP_MODE_COMPUTE_SIZES_NV
         clusterAccelerationStructureCommandsInfo.dstImplicitData = MAGMA_NULL;
     clusterAccelerationStructureCommandsInfo.scratchData = scratchBuffer->getDeviceAddress();
-#if 0 // TODO
-    clusterAccelerationStructureCommandsInfo.dstAddressesArray.deviceAddress = accelerationStructure->getAddressesBuffer()->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.dstAddressesArray.stride = stride;
-    clusterAccelerationStructureCommandsInfo.dstAddressesArray.size = maxAccelerationStructureCount * stride;
+    if (VK_CLUSTER_ACCELERATION_STRUCTURE_OP_MODE_COMPUTE_SIZES_NV == clusterAccelerationStructureCommandsInfo.input.opMode)
+        clusterAccelerationStructureCommandsInfo.dstAddressesArray = VkStridedDeviceAddressRegionKHR{};
+    else
+    {   // VK_CLUSTER_ACCELERATION_STRUCTURE_OP_MODE_IMPLICIT_DESTINATIONS_NV - the addresses are saved
+        // VK_CLUSTER_ACCELERATION_STRUCTURE_OP_MODE_EXPLICIT_DESTINATIONS_NV - the addresses are read from
+        clusterAccelerationStructureCommandsInfo.dstAddressesArray.deviceAddress = accelerationStructure->getAddresses()->getDeviceAddress();
+        clusterAccelerationStructureCommandsInfo.dstAddressesArray.stride = sizeof(VkDeviceAddress);
+        clusterAccelerationStructureCommandsInfo.dstAddressesArray.size = maxAccelerationStructureCount * sizeof(VkDeviceAddress);
+    }
+#if 0
     clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = accelerationStructure->getSizesBuffer()->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = stride;
     clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * stride;
 #endif
     clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = accelerationStructure->getSrcInfosArray()->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = stride;
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * stride;
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = getClusterAccelerationStructureSize(opType);
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * clusterAccelerationStructureCommandsInfo.srcInfosArray.stride;
+    MAGMA_ASSERT(accelerationStructure->getSrcInfosArray()->getSize() >= clusterAccelerationStructureCommandsInfo.srcInfosArray.size);
     clusterAccelerationStructureCommandsInfo.srcInfosCount = MAGMA_NULL;
     clusterAccelerationStructureCommandsInfo.addressResolutionFlags = 0;
     MAGMA_DEVICE_EXTENSION(vkCmdBuildClusterAccelerationStructureIndirectNV);
