@@ -39,6 +39,7 @@ namespace magma
         VkBuildAccelerationStructureFlagsKHR getBuildFlags() const noexcept { return buildFlags; }
         uint32_t getMaxAccelerationStructureCount() const noexcept { return maxAccelerationStructureCount; }
         const std::unique_ptr<Buffer>& getImplicitData() const noexcept { return implicitData; }
+        std::shared_ptr<Buffer> getSrcInfosArray() const noexcept { return srcInfosArray; }
         virtual VkClusterAccelerationStructureOpInputNV getOpInput() const noexcept = 0;
 
     protected:
@@ -58,6 +59,7 @@ namespace magma
         const VkBuildAccelerationStructureFlagsKHR buildFlags;
         const uint32_t maxAccelerationStructureCount;
         std::unique_ptr<Buffer> implicitData;
+        std::shared_ptr<Buffer> srcInfosArray;
     };
 
     /* Cluster Bottom Level Acceleration Structure (CBLAS), constructed
@@ -94,6 +96,7 @@ namespace magma
     {
     public:
         explicit BottomLevelClusterAccelerationStructure(std::shared_ptr<Device> device,
+            std::shared_ptr<Buffer> buildBottomLevelInfos,
             uint32_t maxTotalClusterCount,
             uint32_t maxClusterCountPerAccelerationStructure,
             uint32_t maxAccelerationStructureCount,
@@ -152,6 +155,7 @@ namespace magma
     {
     public:
         explicit TriangleClusterAccelerationStructure(std::shared_ptr<Device> device,
+            std::shared_ptr<Buffer> buildClusterInfos,
             const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters,
             uint32_t maxClusterAccelerationStructureCount,
             VkClusterAccelerationStructureOpModeNV opMode,
@@ -192,6 +196,7 @@ namespace magma
     {
     public:
         explicit TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device,
+            std::shared_ptr<Buffer> buildClusterInfos,
             const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate,
             uint32_t maxClusterAccelerationStructureCount,
             VkClusterAccelerationStructureOpModeNV opMode,

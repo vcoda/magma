@@ -503,10 +503,10 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
     clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = accelerationStructure->getSizesBuffer()->getDeviceAddress();
     clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = stride;
     clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * stride;
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = accelerationStructure->getInfosBuffer()->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = 0; // If the stride is 0, the structures are assumed to be packed tightly
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * stride;
 #endif
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = accelerationStructure->getSrcInfosArray()->getDeviceAddress();
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = stride;
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * stride;
     clusterAccelerationStructureCommandsInfo.srcInfosCount = MAGMA_NULL;
     clusterAccelerationStructureCommandsInfo.addressResolutionFlags = 0;
     MAGMA_DEVICE_EXTENSION(vkCmdBuildClusterAccelerationStructureIndirectNV);
