@@ -125,15 +125,14 @@ inline void fixupTriangleClustersBufferAddresses(Buffer *triangleClusters,
     const VkDeviceAddress indexBufferDeviceAddress = indexBuffer->getDeviceAddress();
     const VkDeviceAddress geometryIndexAndFlagsBufferDeviceAddress = geometryIndexAndFlagsBuffer ? geometryIndexAndFlagsBuffer->getDeviceAddress() : MAGMA_NULL;
     map<VkClusterAccelerationStructureBuildTriangleClusterInfoNV>(triangleClusters,
-        [&](auto *clusters)
+        [&](auto *cluster)
         {
             const uint32_t clusterCount = uint32_t(triangleClusters->getSize() / sizeof(VkClusterAccelerationStructureBuildTriangleClusterInfoNV));
-            for (uint32_t i = 0; i < clusterCount; ++i)
+            for (uint32_t i = 0; i < clusterCount; ++i, ++cluster)
             {
-                VkClusterAccelerationStructureBuildTriangleClusterInfoNV& cluster = clusters[i];
-                cluster.vertexBuffer += vertexBufferDeviceAddress;
-                cluster.indexBuffer += indexBufferDeviceAddress;
-                cluster.geometryIndexAndFlagsBuffer += geometryIndexAndFlagsBufferDeviceAddress;
+                cluster->vertexBuffer += vertexBufferDeviceAddress;
+                cluster->indexBuffer += indexBufferDeviceAddress;
+                cluster->geometryIndexAndFlagsBuffer += geometryIndexAndFlagsBufferDeviceAddress;
             }
         });
 }
