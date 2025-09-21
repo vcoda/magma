@@ -35,7 +35,10 @@ ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Devic
     type(type),
     opMode(opMode),
     buildFlags(buildFlags),
-    maxAccelerationStructureCount(maxAccelerationStructureCount)
+    maxAccelerationStructureCount(maxAccelerationStructureCount),
+    size(0ull),
+    buildScratchSize(0ull),
+    updateScratchSize(0ull)
 {
     VkClusterAccelerationStructureInputInfoNV clusterAccelerationStructureInputInfo;
     clusterAccelerationStructureInputInfo.sType = VK_STRUCTURE_TYPE_CLUSTER_ACCELERATION_STRUCTURE_INPUT_INFO_NV;
@@ -73,6 +76,9 @@ ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Devic
     addressesBuffer = std::make_unique<HostStorageBuffer>(device, addressesBufferSize, allocator, initializer, sharing);
     const VkDeviceSize sizesBufferSize = maxAccelerationStructureCount * sizeof(uint32_t);
     sizesBuffer = std::make_unique<HostStorageBuffer>(device, sizesBufferSize, allocator, initializer, sharing);
+    size = buildSizesInfo.accelerationStructureSize;
+    buildScratchSize = buildSizesInfo.buildScratchSize;
+    updateScratchSize = buildSizesInfo.updateScratchSize;
 }
 
 ClusterAccelerationStructure::~ClusterAccelerationStructure() {}

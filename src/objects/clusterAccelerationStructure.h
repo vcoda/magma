@@ -38,6 +38,9 @@ namespace magma
         VkClusterAccelerationStructureOpModeNV getOpMode() const noexcept { return opMode; }
         VkBuildAccelerationStructureFlagsKHR getBuildFlags() const noexcept { return buildFlags; }
         uint32_t getMaxAccelerationStructureCount() const noexcept { return maxAccelerationStructureCount; }
+        VkDeviceSize getSize() const noexcept { return size; }
+        VkDeviceSize getBuildScratchSize() const noexcept { return buildScratchSize; }
+        VkDeviceSize getUpdateScratchSize() const noexcept { return updateScratchSize; }
         const std::unique_ptr<Buffer>& getImplicitData() const noexcept { return implicitData; }
         const std::unique_ptr<Buffer>& getAddresses() const noexcept { return addressesBuffer; }
         const std::unique_ptr<Buffer>& getSizes() const noexcept { return sizesBuffer; }
@@ -60,6 +63,9 @@ namespace magma
         const VkClusterAccelerationStructureOpModeNV opMode;
         const VkBuildAccelerationStructureFlagsKHR buildFlags;
         const uint32_t maxAccelerationStructureCount;
+        VkDeviceSize size;
+        VkDeviceSize buildScratchSize;
+        VkDeviceSize updateScratchSize;
         std::unique_ptr<Buffer> implicitData;
         std::unique_ptr<Buffer> addressesBuffer;
         std::unique_ptr<Buffer> sizesBuffer;
