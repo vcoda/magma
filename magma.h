@@ -36,6 +36,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/bottomLevelStructure.h"
 #include "src/objects/buffer.h"
 #include "src/objects/bufferView.h"
+#include "src/objects/clusterAccelerationStructure.h"
 #include "src/objects/commandBuffer.h"
 #include "src/objects/commandPool.h"
 #include "src/objects/computePipeline.h"
