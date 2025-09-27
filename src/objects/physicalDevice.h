@@ -597,6 +597,10 @@ namespace magma
     #ifdef VK_KHR_device_group
         VkDeviceSize getDeviceGroupSharedHeapSize() const noexcept;
     #endif
+    #ifdef VK_NV_cluster_acceleration_structure
+        VkPhysicalDeviceClusterAccelerationStructureFeaturesNV getClusterAccelerationStructureFeatures() const;
+        VkPhysicalDeviceClusterAccelerationStructurePropertiesNV getClusterAccelerationStructureProperties() const;
+    #endif
         bool getPipelineCacheCompatibility(const VkPipelineCacheHeaderVersionOne *header) const noexcept;
 
     private:

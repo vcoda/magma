@@ -1711,4 +1711,22 @@ VkPhysicalDeviceMutableDescriptorTypeFeaturesVALVE PhysicalDevice::getMutableDes
     return mutableDescriptorTypeFeatures;
 }
 #endif // VK_VALVE_mutable_descriptor_type
+
+#ifdef VK_NV_cluster_acceleration_structure
+VkPhysicalDeviceClusterAccelerationStructureFeaturesNV PhysicalDevice::getClusterAccelerationStructureFeatures() const
+{
+    VkPhysicalDeviceClusterAccelerationStructureFeaturesNV clusterAccelerationStructureFeatures = {};
+    clusterAccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CLUSTER_ACCELERATION_STRUCTURE_FEATURES_NV;
+    getFeatures2(&clusterAccelerationStructureFeatures);
+    return clusterAccelerationStructureFeatures;
+}
+
+VkPhysicalDeviceClusterAccelerationStructurePropertiesNV PhysicalDevice::getClusterAccelerationStructureProperties() const
+{
+    VkPhysicalDeviceClusterAccelerationStructurePropertiesNV clusterAccelerationStructureProperties = {};
+    clusterAccelerationStructureProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CLUSTER_ACCELERATION_STRUCTURE_PROPERTIES_NV;
+    getProperties2(&clusterAccelerationStructureProperties);
+    return clusterAccelerationStructureProperties;
+}
+#endif // VK_NV_cluster_acceleration_structure
 } // namespace magma
