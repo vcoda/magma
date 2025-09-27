@@ -505,11 +505,11 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
         clusterAccelerationStructureCommandsInfo.dstAddressesArray.size = maxAccelerationStructureCount * sizeof(VkDeviceAddress);
     }
     clusterAccelerationStructureCommandsInfo.dstSizesArray.deviceAddress = accelerationStructure->getSizes()->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = sizeof(uint32_t);
+    clusterAccelerationStructureCommandsInfo.dstSizesArray.stride = sizeof(uint32_t); // The stride in dstSizesArray must be greater than or equal to 4
     clusterAccelerationStructureCommandsInfo.dstSizesArray.size = maxAccelerationStructureCount * sizeof(uint32_t);
     clusterAccelerationStructureCommandsInfo.srcInfosArray.deviceAddress = accelerationStructure->getInfosArray()->getDeviceAddress();
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = getClusterAccelerationStructureSize(opType);
-    clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * clusterAccelerationStructureCommandsInfo.srcInfosArray.stride;
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.stride = getClusterAccelerationStructureSize(opType); // If 0, the structures are assumed to be packed tightly
+    clusterAccelerationStructureCommandsInfo.srcInfosArray.size = maxAccelerationStructureCount * getClusterAccelerationStructureSize(opType);
     MAGMA_ASSERT(accelerationStructure->getInfosArray()->getSize() >= clusterAccelerationStructureCommandsInfo.srcInfosArray.size);
     clusterAccelerationStructureCommandsInfo.srcInfosCount = MAGMA_NULL;
     clusterAccelerationStructureCommandsInfo.addressResolutionFlags = 0;
