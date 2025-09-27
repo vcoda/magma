@@ -219,5 +219,8 @@ namespace magma
     private:
         const VkClusterAccelerationStructureTriangleClusterInputNV triangleClustersTemplate;
     };
+
+    VkDeviceSize calculateClusterCompactBufferSize(lent_ptr<Buffer> dstSizesArray,
+        uint32_t maxAccelerationStructureCount);
 #endif // VK_NV_cluster_acceleration_structure
 } // namespace magma

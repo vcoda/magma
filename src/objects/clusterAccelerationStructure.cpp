@@ -19,8 +19,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "clusterAccelerationStructure.h"
 #include "device.h"
+#include "physicalDevice.h"
 #include "storageBuffer.h"
 #include "../misc/extension.h"
+#include "../misc/mapBuffer.h"
 #include "../allocator/allocator.h"
 #include "../exceptions/errorResult.h"
 
@@ -157,5 +159,23 @@ VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructureTemp
     opInput.pTriangleClusters = (VkClusterAccelerationStructureTriangleClusterInputNV *)&triangleClustersTemplate;
     return opInput;
 }
+
+VkDeviceSize calculateClusterCompactBufferSize(lent_ptr<Buffer> dstSizesArray, uint32_t maxAccelerationStructureCount)
+{
+    std::shared_ptr<PhysicalDevice> physicalDevice = dstSizesArray->getDevice()->getPhysicalDevice();
+    const VkPhysicalDeviceClusterAccelerationStructurePropertiesNV clusterAccelerationStructureProperties = physicalDevice->getClusterAccelerationStructureProperties();
+    VkDeviceSize compactBufferSize = 0ull;
+    map<uint32_t>(std::move(dstSizesArray),
+        [&](const uint32_t *clasSizes)
+        {
+            for (uint32_t i = 0; i < maxAccelerationStructureCount; ++i)
+            {
+                const uint32_t size = clasSizes[i];
+                compactBufferSize += core::alignUp(size, clusterAccelerationStructureProperties.clusterByteAlignment);
+            }
+        });
+    return compactBufferSize;
+}
+
 #endif // VK_NV_cluster_acceleration_structure
 } // namespace magma
