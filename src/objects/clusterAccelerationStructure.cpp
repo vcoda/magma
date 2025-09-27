@@ -160,18 +160,19 @@ VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructureTemp
     return opInput;
 }
 
-VkDeviceSize calculateClusterCompactBufferSize(lent_ptr<Buffer> dstSizesArray, uint32_t maxAccelerationStructureCount)
+VkDeviceSize calculateClusterCompactBufferSize(lent_ptr<Buffer> sizesArray, uint32_t numAccelerationStructureCount)
 {
-    std::shared_ptr<PhysicalDevice> physicalDevice = dstSizesArray->getDevice()->getPhysicalDevice();
+    std::shared_ptr<PhysicalDevice> physicalDevice = sizesArray->getDevice()->getPhysicalDevice();
     const VkPhysicalDeviceClusterAccelerationStructurePropertiesNV clusterAccelerationStructureProperties = physicalDevice->getClusterAccelerationStructureProperties();
+    const uint32_t clusterByteAlignment = clusterAccelerationStructureProperties.clusterByteAlignment;
     VkDeviceSize compactBufferSize = 0ull;
-    map<uint32_t>(std::move(dstSizesArray),
-        [&](const uint32_t *clasSizes)
+    map<uint32_t>(std::move(sizesArray),
+        [numAccelerationStructureCount, clusterByteAlignment, &compactBufferSize](const uint32_t *clasSizes)
         {
-            for (uint32_t i = 0; i < maxAccelerationStructureCount; ++i)
+            for (uint32_t i = 0; i < numAccelerationStructureCount; ++i)
             {
                 const uint32_t size = clasSizes[i];
-                compactBufferSize += core::alignUp(size, clusterAccelerationStructureProperties.clusterByteAlignment);
+                compactBufferSize += core::alignUp(size, clusterByteAlignment);
             }
         });
     return compactBufferSize;

@@ -220,7 +220,7 @@ namespace magma
         const VkClusterAccelerationStructureTriangleClusterInputNV triangleClustersTemplate;
     };
 
-    VkDeviceSize calculateClusterCompactBufferSize(lent_ptr<Buffer> dstSizesArray,
-        uint32_t maxAccelerationStructureCount);
+    VkDeviceSize calculateClusterCompactBufferSize(lent_ptr<Buffer> sizesArray,
+        uint32_t numAccelerationStructureCount);
 #endif // VK_NV_cluster_acceleration_structure
 } // namespace magma
