@@ -70,7 +70,7 @@ ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Devic
     if (VK_CLUSTER_ACCELERATION_STRUCTURE_OP_MODE_IMPLICIT_DESTINATIONS_NV == opMode)
     {   // Allocate storage for implicit data
         implicitData = std::make_unique<AccelerationStructureStorageBuffer>(device, buildSizesInfo.accelerationStructureSize,
-            VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR, std::move(allocator), Buffer::Initializer(), sharing);
+            VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR, allocator, Buffer::Initializer(), sharing);
     }
     Buffer::Initializer initializer;
     initializer.deviceAddress = VK_TRUE; // Buffer::getDeviceAddress() should succeed
