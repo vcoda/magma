@@ -483,7 +483,7 @@ void LeanCommandBuffer::buildClusterAccelerationStructureIndirect(VkClusterAccel
         moveObjects.pNext = nullptr;
         moveObjects.type = accelerationStructure->getType();
         moveObjects.noMoveOverlap = VK_FALSE; // old clusters can overlap themselves
-        moveObjects.maxMovedBytes = 0; // TODO
+        moveObjects.maxMovedBytes = accelerationStructure->getSize();
         clusterAccelerationStructureCommandsInfo.input.opInput.pMoveObjects = &moveObjects;
     }
     else
