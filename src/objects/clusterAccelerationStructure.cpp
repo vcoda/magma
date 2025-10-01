@@ -76,7 +76,7 @@ ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Devic
     const VkDeviceSize addressesBufferSize = maxAccelerationStructureCount * sizeof(VkDeviceAddress);
     addressesBuffer = std::make_unique<HostStorageBuffer>(device, addressesBufferSize, allocator, initializer, sharing);
     const VkDeviceSize sizesBufferSize = maxAccelerationStructureCount * sizeof(uint32_t);
-    sizesBuffer = std::make_unique<HostStorageBuffer>(device, sizesBufferSize, allocator, initializer, sharing);
+    sizesBuffer = std::make_unique<HostStorageBuffer>(std::move(device), sizesBufferSize, std::move(allocator), initializer, sharing);
     size = buildSizesInfo.accelerationStructureSize;
     buildScratchSize = buildSizesInfo.buildScratchSize;
     updateScratchSize = buildSizesInfo.updateScratchSize;
