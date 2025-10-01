@@ -58,7 +58,6 @@ namespace magma
             const Sharing& sharing,
             const StructureChain& extendedInfo);
 
-        std::shared_ptr<Device> device;
         const VkClusterAccelerationStructureTypeNV type;
         const VkClusterAccelerationStructureOpModeNV opMode;
         const VkBuildAccelerationStructureFlagsKHR buildFlags;
@@ -105,8 +104,7 @@ namespace magma
     class BottomLevelClusterAccelerationStructure : public ClusterAccelerationStructure
     {
     public:
-        explicit BottomLevelClusterAccelerationStructure(std::shared_ptr<Device> device,
-            std::shared_ptr<Buffer> buildBottomLevelInfos,
+        explicit BottomLevelClusterAccelerationStructure(std::shared_ptr<Buffer> buildBottomLevelInfos,
             uint32_t maxTotalClusterCount,
             uint32_t maxClusterCountPerAccelerationStructure,
             uint32_t maxAccelerationStructureCount,
@@ -164,8 +162,7 @@ namespace magma
     class TriangleClusterAccelerationStructure : public ClusterAccelerationStructure
     {
     public:
-        explicit TriangleClusterAccelerationStructure(std::shared_ptr<Device> device,
-            std::shared_ptr<Buffer> buildClusterInfos,
+        explicit TriangleClusterAccelerationStructure(std::shared_ptr<Buffer> buildClusterInfos,
             const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters,
             uint32_t maxClusterAccelerationStructureCount,
             VkClusterAccelerationStructureOpModeNV opMode,
@@ -205,8 +202,7 @@ namespace magma
     class TriangleClusterAccelerationStructureTemplate : public ClusterAccelerationStructure
     {
     public:
-        explicit TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device,
-            std::shared_ptr<Buffer> buildClusterTemplateInfos,
+        explicit TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Buffer> buildClusterTemplateInfos,
             const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate,
             uint32_t maxClusterAccelerationStructureCount,
             VkClusterAccelerationStructureOpModeNV opMode,

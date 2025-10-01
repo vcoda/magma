@@ -29,11 +29,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_NV_cluster_acceleration_structure
-ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Device> device_,
+ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Device> device,
     VkClusterAccelerationStructureTypeNV type, const void *opInput, uint32_t maxAccelerationStructureCount,
     VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator, const Sharing& sharing, const StructureChain& extendedInfo):
-    device(std::move(device_)),
     type(type),
     opMode(opMode),
     buildFlags(buildFlags),
@@ -63,7 +62,7 @@ ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Devic
         clusterAccelerationStructureInputInfo.opInput.pTriangleClusters = (VkClusterAccelerationStructureTriangleClusterInputNV *)opInput;
         break;
     }
-    auto getNativeDevice = [this]() -> VkDevice { return device->getHandle(); };
+    auto getNativeDevice = [&device]() -> VkDevice { return device->getHandle(); };
     VkAccelerationStructureBuildSizesInfoKHR buildSizesInfo = {VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR};
     MAGMA_REQUIRED_DEVICE_EXTENSION(vkGetClusterAccelerationStructureBuildSizesNV, VK_NV_CLUSTER_ACCELERATION_STRUCTURE_EXTENSION_NAME);
 	vkGetClusterAccelerationStructureBuildSizesNV(getNativeDevice(), &clusterAccelerationStructureInputInfo, &buildSizesInfo);
@@ -85,13 +84,13 @@ ClusterAccelerationStructure::ClusterAccelerationStructure(std::shared_ptr<Devic
 
 ClusterAccelerationStructure::~ClusterAccelerationStructure() {}
 
-BottomLevelClusterAccelerationStructure::BottomLevelClusterAccelerationStructure(std::shared_ptr<Device> device, std::shared_ptr<Buffer> buildBottomLevelInfos,
+BottomLevelClusterAccelerationStructure::BottomLevelClusterAccelerationStructure(std::shared_ptr<Buffer> buildBottomLevelInfos,
     uint32_t maxTotalClusterCount, uint32_t maxClusterCountPerAccelerationStructure, uint32_t maxAccelerationStructureCount,
     VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_CLUSTERS_BOTTOM_LEVEL_NV,
+    ClusterAccelerationStructure(buildBottomLevelInfos->getDevice(), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_CLUSTERS_BOTTOM_LEVEL_NV,
         [maxTotalClusterCount, maxClusterCountPerAccelerationStructure]() -> void*
         {   // TODO: check lifetime
             auto clustersBottomLevel = stackalloc(VkClusterAccelerationStructureClustersBottomLevelInputNV, 1);
@@ -118,13 +117,13 @@ VkClusterAccelerationStructureOpInputNV BottomLevelClusterAccelerationStructure:
     return opInput;
 }
 
-TriangleClusterAccelerationStructure::TriangleClusterAccelerationStructure(std::shared_ptr<Device> device, std::shared_ptr<Buffer> buildClusterInfos,
+TriangleClusterAccelerationStructure::TriangleClusterAccelerationStructure(std::shared_ptr<Buffer> buildClusterInfos,
     const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClusters_, uint32_t maxClusterAccelerationStructureCount,
     VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_NV,
+    ClusterAccelerationStructure(buildClusterInfos->getDevice(), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_NV,
          &triangleClusters_, maxClusterAccelerationStructureCount, opMode, buildFlags, std::move(allocator), sharing, extendedInfo),
     triangleClusters(triangleClusters_)
 {
@@ -139,13 +138,13 @@ VkClusterAccelerationStructureOpInputNV TriangleClusterAccelerationStructure::ge
     return opInput;
 }
 
-TriangleClusterAccelerationStructureTemplate::TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Device> device, std::shared_ptr<Buffer> buildClusterTemplateInfos,
+TriangleClusterAccelerationStructureTemplate::TriangleClusterAccelerationStructureTemplate(std::shared_ptr<Buffer> buildClusterTemplateInfos,
     const VkClusterAccelerationStructureTriangleClusterInputNV& triangleClustersTemplate_, uint32_t maxClusterAccelerationStructureCount,
     VkClusterAccelerationStructureOpModeNV opMode, VkBuildAccelerationStructureFlagsKHR buildFlags,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Sharing& sharing /* default */,
     const StructureChain& extendedInfo /* default */):
-    ClusterAccelerationStructure(std::move(device), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_TEMPLATE_NV,
+    ClusterAccelerationStructure(buildClusterTemplateInfos->getDevice(), VK_CLUSTER_ACCELERATION_STRUCTURE_TYPE_TRIANGLE_CLUSTER_TEMPLATE_NV,
          &triangleClustersTemplate_, maxClusterAccelerationStructureCount, opMode, buildFlags, std::move(allocator), sharing, extendedInfo),
     triangleClustersTemplate(triangleClustersTemplate_)
 {
