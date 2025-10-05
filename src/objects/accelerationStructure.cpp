@@ -148,6 +148,18 @@ VkDeviceSize AccelerationStructure::getProperty(AccelerationStructureQuery::Type
     return property;
 }
 
+VkMemoryRequirements AccelerationStructure::getMemoryRequirements() const noexcept
+{
+    return buffer->getMemoryRequirements();
+}
+
+#ifdef VK_KHR_get_memory_requirements2
+VkMemoryRequirements AccelerationStructure::getMemoryRequirements2(void *memoryRequirements) const
+{
+    return buffer->getMemoryRequirements2(memoryRequirements);
+}
+#endif // VK_KHR_get_memory_requirements2
+
 void AccelerationStructure::bindMemory(std::unique_ptr<IDeviceMemory> deviceMemory,
     VkDeviceSize offset /* 0 */)
 {
