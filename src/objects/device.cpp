@@ -85,7 +85,19 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
             "could not be completed for implementation-specific reasons");
     }
 #endif // !MAGMA_NO_EXCEPTIONS
-    MAGMA_HANDLE_RESULT(result, "failed to create logical device");
+    const char *message = "failed to create logical device";
+    if (VK_ERROR_EXTENSION_NOT_PRESENT == result)
+    {
+        for (const char *extension: enabledExtensions_)
+        {
+            if (!physicalDevice->extensionSupported(extension))
+            {
+                message = extension;
+                break;
+            }
+        }
+    }
+    MAGMA_HANDLE_RESULT(result, message);
     // Store enabled layers and extensions
     for (auto const& layer: enabledLayers_)
         enabledLayers.emplace(layer);
