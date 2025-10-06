@@ -109,6 +109,10 @@ void handleResult(VkResult result, const char *message, const source_location& l
         throw OutOfDeviceMemory(message, location);
     case VK_ERROR_DEVICE_LOST:
         throw DeviceLost(message, location);
+    case VK_ERROR_EXTENSION_NOT_PRESENT:
+        throw ExtensionNotPresent(message, location);
+    case VK_ERROR_FEATURE_NOT_PRESENT:
+        throw FeatureNotPresent(message, location);
 #ifdef VK_KHR_swapchain
     case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
         throw NativeWindowInUse(message);

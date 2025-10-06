@@ -81,6 +81,26 @@ namespace magma::exception
             Error(VK_ERROR_DEVICE_LOST, message, location) {}
     };
 
+    /* A requested extension is not supported. */
+
+    class ExtensionNotPresent : public Error
+    {
+    public:
+        explicit ExtensionNotPresent(const char *message,
+            const source_location& location) noexcept:
+            Error(VK_ERROR_EXTENSION_NOT_PRESENT, message, location) {}
+    };
+
+    /* A requested feature is not supported. */
+
+    class FeatureNotPresent : public Error
+    {
+    public:
+        explicit FeatureNotPresent(const char *message,
+            const source_location& location) noexcept:
+            Error(VK_ERROR_FEATURE_NOT_PRESENT, message, location) {}
+    };
+
     /* The requested version of Vulkan is not supported
        by the driver or is otherwise incompatible for
        implementation-specific reasons. */
