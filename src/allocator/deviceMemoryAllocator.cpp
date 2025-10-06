@@ -49,6 +49,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif // __clang__
 
 #define VMA_IMPLEMENTATION
+#define VMA_VULKAN_VERSION 1000000
+#define VMA_KHR_MAINTENANCE4 0
 #include "../third-party/VulkanMemoryAllocator/include/vk_mem_alloc.h"
 
 #if defined(_MSC_VER)
