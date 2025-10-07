@@ -82,8 +82,7 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     switch (result)
     {
     case VK_ERROR_INITIALIZATION_FAILED:
-        throw exception::InitializationFailed("initialization of logical device "
-            "could not be completed for implementation-specific reasons");
+        throw exception::InitializationFailed("initialization of logical device failed");
     case VK_ERROR_EXTENSION_NOT_PRESENT:
         for (const char *extension: enabledExtensions_)
         {
