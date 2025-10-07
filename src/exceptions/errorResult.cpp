@@ -89,5 +89,79 @@ const char *Error::description() const noexcept
         return "Unknown error code";
     }
 }
+
+FeatureNotPresent::FeatureNotPresent(const VkPhysicalDeviceFeatures& enabledFeatures,
+    const VkPhysicalDeviceFeatures& supportedFeatures) noexcept:
+    Error(VK_ERROR_FEATURE_NOT_PRESENT, [&]() noexcept -> const char*
+    {
+        static const char *const featureNames[] = {
+            "robustBufferAccess",
+            "fullDrawIndexUint32",
+            "imageCubeArray",
+            "independentBlend",
+            "geometryShader",
+            "tessellationShader",
+            "sampleRateShading",
+            "dualSrcBlend",
+            "logicOp",
+            "multiDrawIndirect",
+            "drawIndirectFirstInstance",
+            "depthClamp",
+            "depthBiasClamp",
+            "fillModeNonSolid",
+            "depthBounds",
+            "wideLines",
+            "largePoints",
+            "alphaToOne",
+            "multiViewport",
+            "samplerAnisotropy",
+            "textureCompressionETC2",
+            "textureCompressionASTC_LDR",
+            "textureCompressionBC",
+            "occlusionQueryPrecise",
+            "pipelineStatisticsQuery",
+            "vertexPipelineStoresAndAtomics",
+            "fragmentStoresAndAtomics",
+            "shaderTessellationAndGeometryPointSize",
+            "shaderImageGatherExtended",
+            "shaderStorageImageExtendedFormats",
+            "shaderStorageImageMultisample",
+            "shaderStorageImageReadWithoutFormat",
+            "shaderStorageImageWriteWithoutFormat",
+            "shaderUniformBufferArrayDynamicIndexing",
+            "shaderSampledImageArrayDynamicIndexing",
+            "shaderStorageBufferArrayDynamicIndexing",
+            "shaderStorageImageArrayDynamicIndexing",
+            "shaderClipDistance",
+            "shaderCullDistance",
+            "shaderFloat64",
+            "shaderInt64",
+            "shaderInt16",
+            "shaderResourceResidency",
+            "shaderResourceMinLod",
+            "sparseBinding",
+            "sparseResidencyBuffer",
+            "sparseResidencyImage2D",
+            "sparseResidencyImage3D",
+            "sparseResidency2Samples",
+            "sparseResidency4Samples",
+            "sparseResidency8Samples",
+            "sparseResidency16Samples",
+            "sparseResidencyAliased",
+            "variableMultisampleRate",
+            "inheritedQueries"
+        };
+        const VkBool32 *enabledFlags = reinterpret_cast<const VkBool32 *>(&enabledFeatures);
+        const VkBool32 *supportedFlags = reinterpret_cast<const VkBool32 *>(&supportedFeatures);
+        constexpr std::size_t featureCount = sizeof(VkPhysicalDeviceFeatures) / sizeof(VkBool32);
+        auto it = std::find_if(supportedFlags, supportedFlags + featureCount,
+            [&enabledFlags](VkBool32 supportedFlag) {
+                return *enabledFlags++ && !supportedFlag;
+            });
+        if (it < supportedFlags + featureCount)
+            return featureNames[it - supportedFlags];
+        return "unknown feature";
+    }())
+{}
 } // namespace magma::exception
 #endif // !MAGMA_NO_EXCEPTIONS

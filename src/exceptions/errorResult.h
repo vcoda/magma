@@ -96,9 +96,8 @@ namespace magma::exception
     class FeatureNotPresent : public Error
     {
     public:
-        explicit FeatureNotPresent(const char *message,
-            const source_location& location) noexcept:
-            Error(VK_ERROR_FEATURE_NOT_PRESENT, message, location) {}
+        explicit FeatureNotPresent(const VkPhysicalDeviceFeatures& enabledFeatures,
+            const VkPhysicalDeviceFeatures& supportedFeatures) noexcept;
     };
 
     /* The requested version of Vulkan is not supported
