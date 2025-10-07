@@ -86,9 +86,8 @@ namespace magma::exception
     class ExtensionNotPresent : public Error
     {
     public:
-        explicit ExtensionNotPresent(const char *message,
-            const source_location& location) noexcept:
-            Error(VK_ERROR_EXTENSION_NOT_PRESENT, message, location) {}
+        explicit ExtensionNotPresent(const char *message) noexcept:
+            Error(VK_ERROR_EXTENSION_NOT_PRESENT, message) {}
     };
 
     /* A requested feature is not supported. */

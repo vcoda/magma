@@ -79,18 +79,20 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
 #endif // VK_KHR_get_physical_device_properties2
     const VkResult result = vkCreateDevice(*physicalDevice, &deviceInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
 #ifndef MAGMA_NO_EXCEPTIONS
-    if (VK_ERROR_INITIALIZATION_FAILED == result)
+    switch (result)
     {
+    case VK_ERROR_INITIALIZATION_FAILED:
         throw exception::InitializationFailed("initialization of logical device "
             "could not be completed for implementation-specific reasons");
-    }
-    else if (VK_ERROR_EXTENSION_NOT_PRESENT == result)
-    {
+    case VK_ERROR_EXTENSION_NOT_PRESENT:
         for (const char *extension: enabledExtensions_)
         {
             if (!physicalDevice->extensionSupported(extension))
-                throw exception::ExtensionNotPresent(extension, MAGMA_SOURCE_LOCATION);
+                throw exception::ExtensionNotPresent(extension);
         }
+        break;
+    case VK_ERROR_FEATURE_NOT_PRESENT:
+        throw exception::FeatureNotPresent(enabledFeatures, physicalDevice->getFeatures());
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create logical device");
