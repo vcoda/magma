@@ -153,13 +153,11 @@ FeatureNotPresent::FeatureNotPresent(const VkPhysicalDeviceFeatures& enabledFeat
         };
         const VkBool32 *enabledFlags = reinterpret_cast<const VkBool32 *>(&enabledFeatures);
         const VkBool32 *supportedFlags = reinterpret_cast<const VkBool32 *>(&supportedFeatures);
-        constexpr std::size_t featureCount = sizeof(VkPhysicalDeviceFeatures) / sizeof(VkBool32);
-        auto it = std::find_if(supportedFlags, supportedFlags + featureCount,
-            [&enabledFlags](VkBool32 supportedFlag) {
-                return *enabledFlags++ && !supportedFlag;
-            });
-        if (it < supportedFlags + featureCount)
-            return featureNames[it - supportedFlags];
+        for (std::size_t i = 0; i < sizeof(VkPhysicalDeviceFeatures) / sizeof(VkBool32); ++i)
+        {
+            if (enabledFlags[i] && !supportedFlags[i])
+                return featureNames[i];
+        }
         return "unknown feature";
     }())
 {}
