@@ -237,9 +237,8 @@ HEADERS += \
     ../../src/exceptions/errorResult.h \
     ../../src/exceptions/exception.h \
     ../../src/exceptions/reflectionError.h \
-    ../../src/exceptions/spirvError.h \
     ../../src/exceptions/sourcelocation.h \
-    ../../src/exceptions/unsupportedExtension.h \
+    ../../src/exceptions/spirvError.h \
     ../../src/extensions/deviceExtensions.h \
     ../../src/extensions/deviceLayers.h \
     ../../src/extensions/extensionRegistry.h \

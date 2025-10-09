@@ -468,9 +468,6 @@
     <ClInclude Include="..\..\src\exceptions\sourcelocation.h">
       <Filter>Header Files\exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\exceptions\unsupportedExtension.h">
-      <Filter>Header Files\exceptions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\extensions\instanceExtensions.h">
       <Filter>Header Files\extensions</Filter>
     </ClInclude>

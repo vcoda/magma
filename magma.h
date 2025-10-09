@@ -260,4 +260,3 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/exceptions/errorResult.h"
 #include "src/exceptions/reflectionError.h"
 #include "src/exceptions/spirvError.h"
-#include "src/exceptions/unsupportedExtension.h"
