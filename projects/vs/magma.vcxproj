@@ -216,7 +216,6 @@
     <ClInclude Include="..\..\src\exceptions\reflectionError.h" />
     <ClInclude Include="..\..\src\exceptions\sourcelocation.h" />
     <ClInclude Include="..\..\src\exceptions\spirvError.h" />
-    <ClInclude Include="..\..\src\exceptions\unsupportedExtension.h" />
     <ClInclude Include="..\..\src\extensions\deviceLayers.h" />
     <ClInclude Include="..\..\src\extensions\instanceExtensions.h" />
     <ClInclude Include="..\..\src\extensions\instanceLayers.h" />
