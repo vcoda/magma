@@ -236,6 +236,16 @@ VkExtent3D Image::calculateMipExtent(uint32_t level) const noexcept
     return mipExtent;
 }
 
+uint32_t Image::getLevelTexelCount(uint32_t level) const noexcept
+{
+    const Format imageFormat(format);
+    if (imageFormat.blockCompressed())
+        return 0;
+    return std::max(1u, extent.width >> level) *
+        std::max(1u, extent.height >> level) *
+        std::max(1u, extent.depth >> level);
+}
+
 VkSubresourceLayout Image::getSubresourceLayout(uint32_t mipLevel, uint32_t arrayLayer /* 0 */) const noexcept
 {
     MAGMA_ASSERT(mipLevel < mipLevels);

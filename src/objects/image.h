@@ -61,6 +61,8 @@ namespace magma
         VkImageAspectFlags getAspectMask() const noexcept;
         VkExtent3D getExtent() const noexcept { return extent; }
         VkExtent3D calculateMipExtent(uint32_t level) const noexcept;
+        uint32_t getLevelTexelCount(uint32_t level) const noexcept;
+        uint32_t getTexelCount() const noexcept;
         const std::vector<VkFormat>& getViewFormats() const noexcept { return viewFormats; }
         VkSubresourceLayout getSubresourceLayout(uint32_t mipLevel,
             uint32_t arrayLayer = 0) const noexcept;
