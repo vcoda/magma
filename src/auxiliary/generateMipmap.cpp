@@ -86,14 +86,18 @@ bool generateMipmap(lent_ptr<Image> image, uint32_t baseMipLevel, VkFilter filte
             ImageMemoryBarrier(image.get(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstMip));
         srcMipExtent = dstMipExtent;
     }
+    const VkImageLayout baseMipLayout = oldLayouts[0];
     if (hadUniformLayout) // Restore image layout of mips remaining after <baseMipLevel>
-        image->layoutTransitionBaseMipLayer(oldLayouts[0], baseMipLevel, 0, std::move(cmdBuffer));
+        image->layoutTransitionBaseMipLayer(baseMipLayout, baseMipLevel, 0, std::move(cmdBuffer));
     else
     {   // Restore image layouts for each mip level
         ImageSubresourceRange dstMip(image.get(), baseMipLevel, 1);
         for (uint32_t level = baseMipLevel; level < image->getMipLevels(); ++level)
         {
-            const VkImageLayout oldLayout = oldLayouts[level - baseMipLevel];
+            VkImageLayout oldLayout = oldLayouts[level - baseMipLevel];
+            if (VK_IMAGE_LAYOUT_UNDEFINED == oldLayout)
+                oldLayout = baseMipLayout; // Fallback to base layout
+            MAGMA_ASSERT(oldLayout != VK_IMAGE_LAYOUT_UNDEFINED);
             if (oldLayout != image->getLayout(level))
             {
                 dstMip.baseMipLevel = level;
