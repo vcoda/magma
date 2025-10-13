@@ -47,9 +47,8 @@ bool generateMipmap(lent_ptr<Image> image, uint32_t baseMipLevel, VkFilter filte
     // Store image layouts of mip chain
     const bool hadUniformLayout = image->hasUniformLayout();
     auto oldLayouts = stackalloc(VkImageLayout, image->getMipLevels() - baseMipLevel);
-    int i = 0;
     for (uint32_t level = baseMipLevel; level < image->getMipLevels(); ++level)
-        oldLayouts[i++] = image->getLayout(level);
+        oldLayouts[level - baseMipLevel] = image->getLayout(level);
     const VkImageAspectFlags aspectMask = image->getAspectMask();
     VkExtent3D srcMipExtent = image->calculateMipExtent(baseMipLevel);
     // Transition of base mip level to transfer source layout
