@@ -18,6 +18,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "model/nondispatchable.h"
 #include "../misc/sharing.h"
+#include "../allocator/allocator.h"
 
 namespace magma
 {
