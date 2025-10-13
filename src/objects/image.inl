@@ -57,6 +57,6 @@ inline uint32_t Image::getTexelCount() const noexcept
     uint32_t texelCount = 0;
     for (uint32_t level = 0; level < mipLevels; ++level)
         texelCount += getLevelTexelCount(level);
-    return texelCount;
+    return texelCount * arrayLayers;
 }
 } // namespace magma
