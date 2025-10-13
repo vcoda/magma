@@ -36,16 +36,18 @@ namespace magma::vt
        draw triangles with per-vertex color interpolation. */
 
     template<class V, class C>
-    struct ColorVertex : Vertex<V>
+    struct ColorVertex
     {
+        V pos;
         C color;
     };
 
     /* Vertex with position and texture (u,v) coordinates. */
 
     template<class V, class T>
-    struct TexVertex : Vertex<V>
+    struct TexVertex
     {
+        V pos;
         T uv;
     };
 
@@ -53,8 +55,9 @@ namespace magma::vt
        to implement simple diffuse and specular lighting. */
 
     template<class V, class N>
-    struct LitVertex : Vertex<V>
+    struct LitVertex
     {
+        V pos;
         N normal;
     };
 
@@ -63,8 +66,10 @@ namespace magma::vt
        multiplied with diffuse texture. */
 
     template<class V, class N, class T>
-    struct LitTexVertex : LitVertex<V, N>
+    struct LitTexVertex
     {
+        V pos;
+        N normal;
         T uv;
     };
 
@@ -73,8 +78,10 @@ namespace magma::vt
        pixel bump mapping. */
 
     template<class V, class N, class T>
-    struct BumpVertex : LitVertex<V, N>
+    struct BumpVertex
     {
+        V pos;
+        N normal;
         N tangent;
         N bitangent;
         T uv;
