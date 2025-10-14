@@ -108,6 +108,12 @@ namespace magma
             uint32_t arrayLayer,
             lent_ptr<const SrcTransferBuffer> srcBuffer,
             const CopyLayout& bufferLayout,
+            const VkOffset3D& imageOffset);
+        void copyMipWithTransition(lent_ptr<CommandBuffer> cmdBuffer,
+            uint32_t mipLevel,
+            uint32_t arrayLayer,
+            lent_ptr<const SrcTransferBuffer> srcBuffer,
+            const CopyLayout& bufferLayout,
             const VkOffset3D& imageOffset,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);

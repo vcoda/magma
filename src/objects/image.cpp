@@ -555,12 +555,9 @@ VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint3
     return oldLayout;
 }
 
-void Image::copyMip(lent_ptr<CommandBuffer> cmdBuffer,
-    uint32_t mipLevel, uint32_t arrayLayer,
-    lent_ptr<const SrcTransferBuffer> srcBuffer,
-    const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
-    VkImageLayout dstLayout,
-    VkPipelineStageFlags dstStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
+
+void Image::copyMip(lent_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel, uint32_t arrayLayer,
+    lent_ptr<const SrcTransferBuffer> srcBuffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset)
 {
     VkBufferImageCopy region;
     region.bufferOffset = bufferLayout.offset;
@@ -572,17 +569,24 @@ void Image::copyMip(lent_ptr<CommandBuffer> cmdBuffer,
     region.imageSubresource.layerCount = 1;
     region.imageOffset = imageOffset;
     region.imageExtent = calculateValidMipExtent(mipLevel);
+    cmdBuffer->copyBufferToImage(std::move(srcBuffer), this, region);
+}
+
+void Image::copyMipWithTransition(lent_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel, uint32_t arrayLayer,
+    lent_ptr<const SrcTransferBuffer> srcBuffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset,
+    VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask /* VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT */)
+{
     VkImageSubresourceRange subresourceRange;
-    subresourceRange.aspectMask = region.imageSubresource.aspectMask;
+    subresourceRange.aspectMask = getAspectMask();
     subresourceRange.baseMipLevel = mipLevel;
     subresourceRange.levelCount = 1;
     subresourceRange.baseArrayLayer = arrayLayer;
     subresourceRange.layerCount = 1;
-    // Image layout transition to destination of a transfer command
+    // Layout transition to destination of a transfer command
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
         ImageMemoryBarrier(this, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange));
-    cmdBuffer->copyBufferToImage(std::move(srcBuffer), this, region);
-    // Image layout transition to <dstLayout> (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+    copyMip(cmdBuffer.get(), mipLevel, arrayLayer, std::move(srcBuffer), bufferLayout, imageOffset);
+    // Layout transition to dstLayout (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask,
         ImageMemoryBarrier(this, dstLayout, subresourceRange));
 }

@@ -59,7 +59,7 @@ Sprite::Sprite(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const VkExten
     }
     const CopyLayout bufferLayout = {offset, 0, 0};
     constexpr VkOffset3D imageOffset{0, 0, 0};
-    copyMip(std::move(cmdBuffer), 0, 0, std::move(srcBuffer), bufferLayout, imageOffset,
+    copyMipWithTransition(std::move(cmdBuffer), 0, 0, std::move(srcBuffer), bufferLayout, imageOffset,
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT);
 }
 

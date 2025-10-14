@@ -57,7 +57,7 @@ FragmentDensityMap::FragmentDensityMap(lent_ptr<CommandBuffer> cmdBuffer,
             {
                 constexpr CopyLayout bufferLayout = {0, 0, 0};
                 constexpr VkOffset3D imageOffset = {0, 0, 0};
-                copyMip(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
+                copyMipWithTransition(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
                     VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT,
                     VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT);
             }
@@ -89,7 +89,7 @@ FragmentDensityMap::FragmentDensityMap(lent_ptr<CommandBuffer> cmdBuffer,
     for (uint32_t arrayLayer = 0; arrayLayer < arrayLayers; ++arrayLayer)
     {
         constexpr VkOffset3D imageOffset = {0, 0, 0};
-        copyMip(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
+        copyMipWithTransition(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
             VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT,
             VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT);
     }
