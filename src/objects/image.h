@@ -108,7 +108,7 @@ namespace magma
             uint32_t arrayLayer,
             lent_ptr<const SrcTransferBuffer> srcBuffer,
             const CopyLayout& bufferLayout,
-            const VkOffset3D& imageOffset);
+            const VkOffset3D& imageOffset = {0, 0, 0});
         void copyMipWithTransition(lent_ptr<CommandBuffer> cmdBuffer,
             uint32_t mipLevel,
             uint32_t arrayLayer,

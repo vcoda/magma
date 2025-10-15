@@ -556,7 +556,8 @@ VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint3
 }
 
 void Image::copyMip(lent_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel, uint32_t arrayLayer,
-    lent_ptr<const SrcTransferBuffer> srcBuffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset)
+    lent_ptr<const SrcTransferBuffer> srcBuffer, const CopyLayout& bufferLayout,
+    const VkOffset3D& imageOffset /* {0, 0, 0} */)
 {
     VkBufferImageCopy region;
     region.bufferOffset = bufferLayout.offset;
