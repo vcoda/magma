@@ -27,10 +27,8 @@ namespace magma
     public:
         explicit SrcTransferBuffer(std::shared_ptr<Device> device,
             VkDeviceSize size,
-            const void *data = nullptr,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Initializer& optional = Initializer(),
-            const Sharing& sharing = Sharing(),
-            CopyMemoryFn copyMem = nullptr);
+            const Sharing& sharing = Sharing());
     };
 } // namespace magma

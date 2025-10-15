@@ -555,7 +555,6 @@ VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint3
     return oldLayout;
 }
 
-
 void Image::copyMip(lent_ptr<CommandBuffer> cmdBuffer, uint32_t mipLevel, uint32_t arrayLayer,
     lent_ptr<const SrcTransferBuffer> srcBuffer, const CopyLayout& bufferLayout, const VkOffset3D& imageOffset)
 {
@@ -634,35 +633,31 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
 bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<Mip>& mipMap,
     std::shared_ptr<Allocator> allocator, CopyMemoryFn copyMem,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
-{   // Setup mip chain for buffer copy
+{   // Setup mipmaps for buffer copy
     VkDeviceSize bufferOffset = 0ull;
     std::vector<Mip> mipChain;
     mipChain.reserve(mipMap.size());
-    for (auto const& mip: mipMap)
+    for (auto const& mipLevel: mipMap)
     {
-        mipChain.emplace_back(mip.extent, bufferOffset);
-        bufferOffset += core::alignUp(mip.size, (VkDeviceSize)16);
+        mipChain.emplace_back(mipLevel.extent, bufferOffset);
+        bufferOffset += core::alignUp(mipLevel.size, (VkDeviceSize)16);
     }
-    // Allocate temporary staging buffer for mip data
-    auto stagingBuffer = std::make_unique<SrcTransferBuffer>(device, bufferOffset, nullptr,
-        std::move(allocator), Buffer::Initializer(), Sharing());
-    map<uint8_t>(stagingBuffer,
-        [&](uint8_t *buffer)
-        {
-            if (!copyMem)
-                copyMem = std::memcpy;
-            core::foreach(mipChain, mipMap,
-                [buffer, copyMem](auto& dstMip, auto& srcMip)
-                {   // Copy mip texels to buffer
-                    copyMem(buffer + dstMip.bufferOffset, srcMip.texels, static_cast<std::size_t>(srcMip.size));
-                });
-        });
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     if (cmdBuffer->reset())
     {
         if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
-        {   // Copy buffer to image
+        {   // Allocate temporary staging buffer for mipmaps
+            auto stagingBuffer = std::make_unique<SrcTransferBuffer>(device, bufferOffset, std::move(allocator));
+            map<uint8_t>(stagingBuffer, [&](uint8_t *buffer)
+            {
+                if (!copyMem)
+                    copyMem = std::memcpy;
+                core::foreach(mipChain, mipMap, [buffer, &copyMem](auto& dstMip, auto& srcMip) {
+                    copyMem(buffer + dstMip.bufferOffset, srcMip.texels, static_cast<std::size_t>(srcMip.size));
+                });
+            });
+            // Copy buffer to image
             constexpr CopyLayout bufferLayout{0, 0, 0};
             copyMipmap(cmdBuffer.get(), stagingBuffer, mipChain, bufferLayout, dstLayout, dstStageMask);
             cmdBuffer->end();

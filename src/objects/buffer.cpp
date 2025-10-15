@@ -388,10 +388,16 @@ VkDeviceSize Buffer::stagingCopy(lent_ptr<CommandBuffer> cmdBuffer, const void *
     if (cmdBuffer->reset())
     {
         if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
-        {   // Allocate temporary staging buffer
-            auto stagingBuffer = std::make_unique<SrcTransferBuffer>(device,
-                srcBufferSize - srcOffset, (const uint8_t *)srcBuffer + srcOffset,
-                std::move(allocator), Initializer(), Sharing(), std::move(copyMem));
+        {
+            const VkDeviceSize srcRemaining = srcBufferSize - srcOffset;
+            if (VK_WHOLE_SIZE == size)
+                size = srcRemaining;
+            else
+                size = std::min(size, srcRemaining);
+            // Allocate temporary staging buffer
+            auto stagingBuffer = std::make_unique<SrcTransferBuffer>(device, size, std::move(allocator));
+            stagingBuffer->hostCopy(srcBuffer, srcBufferSize, srcOffset, 0, size, std::move(copyMem));
+            // Copy host -> device
             const VkDeviceSize numberOfBytesCopied = transferCopy(cmdBuffer.get(),
                 stagingBuffer.get(), 0, dstOffset, size);
             cmdBuffer->end();

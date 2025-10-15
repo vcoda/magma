@@ -51,13 +51,13 @@ FragmentShadingRateAttachment::FragmentShadingRateAttachment(lent_ptr<CommandBuf
     {
         if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
         {
-            auto srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, data, std::move(allocator),
-                Buffer::Initializer(), Sharing(), std::move(copyMem));
+            auto stagingBuffer = std::make_unique<SrcTransferBuffer>(device, size, std::move(allocator));
+            stagingBuffer->hostCopy(data, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMem));
             for (uint32_t arrayLayer = 0; arrayLayer < arrayLayers; ++arrayLayer)
             {
                 constexpr CopyLayout bufferLayout = {0, 0, 0};
                 constexpr VkOffset3D imageOffset = {0, 0, 0};
-                copyMipWithTransition(cmdBuffer.get(), 0, arrayLayer, srcBuffer.get(), bufferLayout, imageOffset,
+                copyMipWithTransition(cmdBuffer.get(), 0, arrayLayer, stagingBuffer, bufferLayout, imageOffset,
                     VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
                     VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR);
             }

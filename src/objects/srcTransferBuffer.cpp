@@ -22,18 +22,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 SrcTransferBuffer::SrcTransferBuffer(std::shared_ptr<Device> device, VkDeviceSize size,
-    const void *data /* nullptr */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
-    const Sharing& sharing /* default */,
-    CopyMemoryFn copyMem /* nullptr */):
+    const Sharing& sharing /* default */):
     Buffer(std::move(device), size,
         0, // flags
         VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         optional, sharing, std::move(allocator))
-{
-    if (data)
-        hostCopy(data, size, 0, 0, VK_WHOLE_SIZE, std::move(copyMem));
-}
+{}
 } // namespace magma
