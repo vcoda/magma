@@ -175,6 +175,12 @@ namespace magma
         std::vector<VkFormat> viewFormats;
     };
 
+    /* A mipmap (multum in parvo, meaning "much in little")
+       is a pre-calculated, optimized sequence of images,
+       each of which has an image resolution which is a factor
+       of two smaller than the previous. They are intended to
+       increase rendering speed and reduce aliasing artifacts. */
+
     struct Image::Mip
     {
         VkExtent3D extent;
@@ -219,6 +225,8 @@ namespace magma
             memoryPriority(MemoryPriorityDefault)
         {}
     };
+
+    typedef std::vector<Image::Mip> Mipmap;
 } // namespace magma
 
 #include "image.inl"

@@ -593,7 +593,7 @@ void Image::copyMipWithTransition(lent_ptr<CommandBuffer> cmdBuffer, uint32_t mi
 
 void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
     lent_ptr<const SrcTransferBuffer> srcBuffer,
-    const std::vector<Mip>& mipMap, const CopyLayout& bufferLayout,
+    const Mipmap& mipMap, const CopyLayout& bufferLayout,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {
     const VkImageAspectFlags aspectMask = getAspectMask();
@@ -631,7 +631,7 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
         ImageMemoryBarrier(this, dstLayout, subresourceRange));
 }
 
-bool Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<Mip>& mipMap,
+bool Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer, const Mipmap& mipMap,
     std::shared_ptr<Allocator> allocator, CopyMemoryFn copyMem,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {   // Setup mipmaps for copy operation

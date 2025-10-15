@@ -37,7 +37,7 @@ Image2D::Image2D(std::shared_ptr<Device> device, VkFormat format, const VkExtent
 {}
 
 Image2D::Image2D(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format,
-    lent_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMap,
+    lent_ptr<const SrcTransferBuffer> srcBuffer, const Mipmap& mipMap,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
@@ -50,7 +50,7 @@ Image2D::Image2D(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 
-Image2D::Image2D(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const std::vector<Mip>& mipMap,
+Image2D::Image2D(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const Mipmap& mipMap,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,

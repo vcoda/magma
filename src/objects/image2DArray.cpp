@@ -39,7 +39,7 @@ Image2DArray::Image2DArray(std::shared_ptr<Device> device, VkFormat format, cons
 {}
 
 Image2DArray::Image2DArray(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t arrayLayers,
-    lent_ptr<const SrcTransferBuffer> srcBuffer, const std::vector<Mip>& mipMap,
+    lent_ptr<const SrcTransferBuffer> srcBuffer, const Mipmap& mipMap,
     const CopyLayout& bufferLayout /* {offset = 0, rowLength = 0, imageHeight = 0} */,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
@@ -55,7 +55,7 @@ Image2DArray::Image2DArray(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, u
 }
 
 Image2DArray::Image2DArray(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, uint32_t arrayLayers,
-    const std::vector<Mip>& mipMap,
+    const Mipmap& mipMap,
     std::shared_ptr<Allocator> allocator /* nullptr */,
     const Initializer& optional /* default */,
     const Sharing& sharing /* default */,
