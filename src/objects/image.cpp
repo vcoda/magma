@@ -599,10 +599,10 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
     std::vector<VkBufferImageCopy> regions;
     regions.reserve(mipMap.size());
     uint32_t mipIndex = 0;
-    for (auto const& mip: mipMap)
+    for (const Mip& level: mipMap)
     {   // Define buffer -> image copy region
         VkBufferImageCopy region;
-        region.bufferOffset = bufferLayout.offset + mip.bufferOffset;
+        region.bufferOffset = bufferLayout.offset + level.bufferOffset;
         region.bufferRowLength = bufferLayout.rowLength;
         region.bufferImageHeight = bufferLayout.imageHeight;
         region.imageSubresource.aspectMask = aspectMask;
@@ -621,11 +621,11 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
     subresourceRange.levelCount = mipLevels;
     subresourceRange.baseArrayLayer = 0;
     subresourceRange.layerCount = arrayLayers;
-    // Image layout transition to destination of a transfer command
+    // Layout transition to destination of a transfer command
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
         ImageMemoryBarrier(this, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, subresourceRange));
     cmdBuffer->copyBufferToImage(std::move(srcBuffer), this, regions);
-    // Image layout transition to <dstLayout> (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+    // Layout transition to dstLayout (usually VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     cmdBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, dstStageMask,
         ImageMemoryBarrier(this, dstLayout, subresourceRange));
 }
@@ -633,21 +633,21 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
 bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<Mip>& mipMap,
     std::shared_ptr<Allocator> allocator, CopyMemoryFn copyMem,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
-{   // Setup mipmaps for buffer copy
+{   // Setup mipmaps for copy operation
     VkDeviceSize bufferOffset = 0ull;
     std::vector<Mip> mipChain;
     mipChain.reserve(mipMap.size());
-    for (auto const& mipLevel: mipMap)
+    for (const Mip& level: mipMap)
     {
-        mipChain.emplace_back(mipLevel.extent, bufferOffset);
-        bufferOffset += core::alignUp(mipLevel.size, (VkDeviceSize)16);
+        mipChain.emplace_back(level.extent, bufferOffset);
+        bufferOffset += core::alignUp(level.size, (VkDeviceSize)16);
     }
     MAGMA_ASSERT(cmdBuffer->allowsReset());
     MAGMA_ASSERT(cmdBuffer->getState() != CommandBuffer::State::Recording);
     if (cmdBuffer->reset())
     {
         if (cmdBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT))
-        {   // Allocate temporary staging buffer for mipmaps
+        {   // Copy mipmaps to temporary staging buffer
             auto stagingBuffer = std::make_unique<SrcTransferBuffer>(device, bufferOffset, std::move(allocator));
             map<uint8_t>(stagingBuffer, [&](uint8_t *buffer)
             {
@@ -657,9 +657,8 @@ bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vecto
                     copyMem(buffer + dstMip.bufferOffset, srcMip.texels, static_cast<std::size_t>(srcMip.size));
                 });
             });
-            // Copy buffer to image
-            constexpr CopyLayout bufferLayout{0, 0, 0};
-            copyMipmap(cmdBuffer.get(), stagingBuffer, mipChain, bufferLayout, dstLayout, dstStageMask);
+            // Copy data from buffer to image
+            copyMipmap(cmdBuffer.get(), stagingBuffer, mipChain, {0, 0, 0}, dstLayout, dstStageMask);
             cmdBuffer->end();
             // Block until execution is complete
             finish(std::move(cmdBuffer));
