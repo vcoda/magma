@@ -64,7 +64,7 @@ Image1DArray::Image1DArray(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, u
 {
     MAGMA_ASSERT(core::countof(mipMap) % arrayLayers == 0);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer->getQueueFamilyIndex());
-    copyMipmapStaged(std::move(cmdBuffer), mipMap, std::move(allocator), std::move(copyMem),
+    copyMipmap(std::move(cmdBuffer), mipMap, std::move(allocator), std::move(copyMem),
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 } // namespace magma

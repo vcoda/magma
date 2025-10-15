@@ -62,7 +62,7 @@ ImageCube::ImageCube(lent_ptr<CommandBuffer> cmdBuffer, VkFormat format, const s
     MAGMA_ASSERT(mipMap.size() % 6 == 0);
     MAGMA_ASSERT(mipMap.front().extent.width == mipMap.front().extent.height);
     VkPipelineStageFlags dstStageMask = getSuitableDstStageMask(cmdBuffer->getQueueFamilyIndex());
-    copyMipmapStaged(std::move(cmdBuffer), mipMap, std::move(allocator), std::move(copyMem),
+    copyMipmap(std::move(cmdBuffer), mipMap, std::move(allocator), std::move(copyMem),
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstStageMask);
 }
 } // namespace magma

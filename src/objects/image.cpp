@@ -630,7 +630,7 @@ void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
         ImageMemoryBarrier(this, dstLayout, subresourceRange));
 }
 
-bool Image::copyMipmapStaged(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<Mip>& mipMap,
+bool Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer, const std::vector<Mip>& mipMap,
     std::shared_ptr<Allocator> allocator, CopyMemoryFn copyMem,
     VkImageLayout dstLayout, VkPipelineStageFlags dstStageMask)
 {   // Setup mipmaps for copy operation
