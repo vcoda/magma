@@ -72,10 +72,11 @@ namespace magma
         #endif
             const StructureChain& extendedInfo = StructureChain());
         ~ShaderModule();
-        std::string disassemble() const;
+        VkShaderStageFlagBits getStage() const noexcept;
         const std::unique_ptr<const ShaderReflection>& getReflection() const noexcept { return reflection; }
         hash_t getHash() const noexcept;
         hash_t getBytecodeHash() const noexcept;
+        std::string disassemble() const;
 
     private:
         std::unique_ptr<const ShaderReflection> reflection;

@@ -102,6 +102,34 @@ ShaderModule::~ShaderModule()
     vkDestroyShaderModule(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
+VkShaderStageFlagBits ShaderModule::getStage() const noexcept
+{
+    return reflection->getShaderStage();
+}
+
+hash_t ShaderModule::getHash() const noexcept
+{
+    return core::hashCombine(hash, getBytecodeHash());
+}
+
+hash_t ShaderModule::getBytecodeHash() const noexcept
+{
+    if (!bytecodeHash)
+    {   // Compute on demand
+        if (!bytecode.empty())
+        {
+            bytecodeHash = core::hashArray(bytecode.data(), bytecode.size());
+            std::vector<SpirvWord>().swap(bytecode);
+        }
+        else if (reflection)
+        {
+            auto wordCount = reflection->getCodeSize() / sizeof(SpirvWord);
+            bytecodeHash = core::hashArray(reflection->getCode(), wordCount);
+        }
+    }
+    return bytecodeHash;
+}
+
 std::string ShaderModule::disassemble() const
 {
     std::string disassembly;
@@ -146,28 +174,5 @@ std::string ShaderModule::disassemble() const
     spvContextDestroy(context);
 #endif // MAGMA_SPIRV_TOOLS
     return disassembly;
-}
-
-hash_t ShaderModule::getHash() const noexcept
-{
-    return core::hashCombine(hash, getBytecodeHash());
-}
-
-hash_t ShaderModule::getBytecodeHash() const noexcept
-{
-    if (!bytecodeHash)
-    {   // Compute on demand
-        if (!bytecode.empty())
-        {
-            bytecodeHash = core::hashArray(bytecode.data(), bytecode.size());
-            std::vector<SpirvWord>().swap(bytecode);
-        }
-        else if (reflection)
-        {
-            auto wordCount = reflection->getCodeSize() / sizeof(SpirvWord);
-            bytecodeHash = core::hashArray(reflection->getCode(), wordCount);
-        }
-    }
-    return bytecodeHash;
 }
 } // namespace magma
