@@ -30,9 +30,12 @@ namespace magma
     class PipelineShaderStage : public VkPipelineShaderStageCreateInfo
     {
     public:
-        explicit PipelineShaderStage(const VkShaderStageFlagBits stage,
+        explicit PipelineShaderStage(std::shared_ptr<ShaderModule> module,
+            std::shared_ptr<Specialization> specialization = nullptr,
+            VkPipelineShaderStageCreateFlags flags = 0) noexcept;
+        explicit PipelineShaderStage(VkShaderStageFlagBits stage,
             std::shared_ptr<ShaderModule> module,
-            const char *const entrypoint,
+            const char *entrypoint,
             std::shared_ptr<Specialization> specialization = nullptr,
             VkPipelineShaderStageCreateFlags flags = 0) noexcept;
         PipelineShaderStage(const PipelineShaderStage&) noexcept;

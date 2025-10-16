@@ -25,7 +25,23 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PipelineShaderStage::PipelineShaderStage(const VkShaderStageFlagBits stage, std::shared_ptr<ShaderModule> shaderModule, const char *const entrypoint,
+PipelineShaderStage::PipelineShaderStage(std::shared_ptr<ShaderModule> shaderModule,
+    std::shared_ptr<Specialization> specialization /* nullptr */,
+    VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
+    VkPipelineShaderStageCreateInfo{
+        VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        nullptr,
+        flags,
+        shaderModule->getStage(),
+        *shaderModule,
+        core::copyString(shaderModule->getReflection()->getEntryPointName(0)),
+        specialization.get()
+    },
+    shaderModule(std::move(shaderModule)),
+    specialization(std::move(specialization))
+{}
+
+PipelineShaderStage::PipelineShaderStage(VkShaderStageFlagBits stage, std::shared_ptr<ShaderModule> shaderModule, const char *entrypoint,
     std::shared_ptr<Specialization> specialization /* nullptr */,
     VkPipelineShaderStageCreateFlags flags /* 0 */) noexcept:
     VkPipelineShaderStageCreateInfo{
