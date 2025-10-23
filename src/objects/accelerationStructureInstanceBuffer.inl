@@ -12,8 +12,7 @@ inline AccelerationStructureInstanceBuffer<Instance>::AccelerationStructureInsta
     first(std::numeric_limits<uint32_t>::max()),
     last(std::numeric_limits<uint32_t>::min())
 {
-    srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, nullptr,
-        std::move(allocator), Initializer(), Sharing());
+    srcBuffer = std::make_unique<SrcTransferBuffer>(device, size, std::move(allocator));
     instances = reinterpret_cast<Instance *>(srcBuffer->getMemory()->map());
     MAGMA_ASSERT(instances);
     if (instances)
