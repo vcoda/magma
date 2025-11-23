@@ -444,6 +444,7 @@ VkImageLayout Image::layoutTransitionBaseMipLayer(VkImageLayout newLayout, uint3
         break;
     case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
         srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        [[fallthrough]];
     case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
         srcStageMask |= (VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT);
         break;

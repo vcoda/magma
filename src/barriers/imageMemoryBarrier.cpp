@@ -109,6 +109,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, co
         // combined image/sampler, or input attachment.
         MAGMA_ASSERT(image->getUsage() & (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT));
         dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+        [[fallthrough]];
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
         if (image->getUsage() & VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT)
             dstAccessMask |= VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
