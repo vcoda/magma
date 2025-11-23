@@ -198,7 +198,6 @@ HEADERS += \
     ../../src/auxiliary/imageDescriptorSet.h \
     ../../src/auxiliary/immediateRender.h \
     ../../src/auxiliary/profiler.h \
-    ../../src/auxiliary/scopedProfile.h \
     ../../src/auxiliary/shaderCompiler.h \
     ../../src/auxiliary/sprite.h \
     ../../src/auxiliary/textShader.h \
@@ -244,7 +243,6 @@ HEADERS += \
     ../../src/extensions/extensionRegistry.h \
     ../../src/extensions/instanceExtensions.h \
     ../../src/extensions/instanceLayers.h \
-    ../../src/extensions/layers.h \
     ../../src/helpers/alignedUniformArray.h \
     ../../src/helpers/enumerationCast.h \
     ../../src/helpers/executeCommandBuffer.h \
