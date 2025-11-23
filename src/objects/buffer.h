@@ -31,8 +31,8 @@ namespace magma
        commands, or by directly specifying them as parameters
        to certain commands. */
 
-    class Buffer : public Resource,
-        public NonDispatchable<VkBuffer>
+    class Buffer : public NonDispatchable<VkBuffer>,
+        public Resource
     {
     public:
         struct Initializer;

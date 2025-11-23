@@ -32,8 +32,8 @@ namespace magma
        or compute pipeline via descriptor sets, or by directly
        specifying them as parameters to certain commands. */
 
-    class Image : public Resource,
-        public NonDispatchable<VkImage>
+    class Image : public NonDispatchable<VkImage>,
+        public Resource
     {
     public:
         struct Mip;
