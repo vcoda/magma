@@ -81,10 +81,10 @@ namespace magma
         VkMemoryRequirements getMemoryRequirements2(void *memoryRequirements) const override;
         std::vector<VkSparseImageMemoryRequirements2KHR> getSparseMemoryRequirements2(void *memoryRequirements) const;
     #endif // VK_KHR_get_memory_requirements2
-        void bindMemory(std::unique_ptr<IDeviceMemory> memory,
+        void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group
-        void bindMemoryDeviceGroup(std::unique_ptr<IDeviceMemory> memory,
+        void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) override;

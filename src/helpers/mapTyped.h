@@ -39,7 +39,7 @@ inline Type *map(lent_ptr<Buffer> buffer,
 
 inline bool unmap(lent_ptr<Buffer> buffer) noexcept
 {
-    const std::unique_ptr<IDeviceMemory>& memory = buffer->getMemory();
+    auto& memory = buffer->getMemory();
     if (!memory->mapped() || memory->persistentlyMapped())
         return false;
     memory->unmap();

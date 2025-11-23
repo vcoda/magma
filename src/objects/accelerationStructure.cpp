@@ -160,14 +160,14 @@ VkMemoryRequirements AccelerationStructure::getMemoryRequirements2(void *memoryR
 }
 #endif // VK_KHR_get_memory_requirements2
 
-void AccelerationStructure::bindMemory(std::unique_ptr<IDeviceMemory> deviceMemory,
+void AccelerationStructure::bindMemory(std::shared_ptr<IDeviceMemory> deviceMemory,
     VkDeviceSize offset /* 0 */)
 {
     buffer->bindMemory(std::move(deviceMemory), offset);
 }
 
 #ifdef VK_KHR_device_group
-void AccelerationStructure::bindMemoryDeviceGroup(std::unique_ptr<IDeviceMemory> deviceMemory,
+void AccelerationStructure::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> deviceMemory,
     const std::vector<uint32_t>& deviceIndices,
     const std::vector<VkRect2D>& splitInstanceBindRegions,
     VkDeviceSize offset /* 0 */)

@@ -54,7 +54,7 @@ void Resource::preDestroy(NonDispatchableHandle handle)
     resourceMap.erase(handle);
 }
 
-std::unique_ptr<IDeviceMemory> Resource::allocateMemory(NonDispatchableHandle handle,
+std::shared_ptr<IDeviceMemory> Resource::allocateMemory(NonDispatchableHandle handle,
     const VkMemoryRequirements& memoryRequirements, VkMemoryPropertyFlags flags,
     const StructureChain& extendedMemoryInfo,
     std::shared_ptr<Device> device, std::shared_ptr<Allocator> allocator)
@@ -78,7 +78,7 @@ std::unique_ptr<IDeviceMemory> Resource::allocateMemory(NonDispatchableHandle ha
             std::move(hostAllocator), std::move(deviceAllocator),
             extendedMemoryInfo);
     }
-    return std::make_unique<DeviceMemory>(std::move(device),
+    return std::make_shared<DeviceMemory>(std::move(device),
         memoryRequirements, flags, std::move(hostAllocator),
         extendedMemoryInfo);
 }

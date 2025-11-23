@@ -146,7 +146,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
             memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     }
     // Allocate and bind image memory
-    std::unique_ptr<IDeviceMemory> imageMemory = allocateMemory(handle,
+    std::shared_ptr<IDeviceMemory> imageMemory = allocateMemory(handle,
         memoryRequirements, memoryFlags, extendedMemoryInfo,
         std::move(device), std::move(allocator));
     bindMemory(std::move(imageMemory));
@@ -367,7 +367,7 @@ std::vector<VkSparseImageMemoryRequirements2KHR> Image::getSparseMemoryRequireme
 }
 #endif // VK_KHR_get_memory_requirements2
 
-void Image::bindMemory(std::unique_ptr<IDeviceMemory> memory_,
+void Image::bindMemory(std::shared_ptr<IDeviceMemory> memory_,
     VkDeviceSize offset_ /* 0 */)
 {
     memory_->bind(handle, VK_OBJECT_TYPE_IMAGE, offset_);
@@ -377,7 +377,7 @@ void Image::bindMemory(std::unique_ptr<IDeviceMemory> memory_,
 }
 
 #ifdef VK_KHR_device_group
-void Image::bindMemoryDeviceGroup(std::unique_ptr<IDeviceMemory> memory_,
+void Image::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory_,
     const std::vector<uint32_t>& deviceIndices,
     const std::vector<VkRect2D>& splitInstanceBindRegions /* empty */,
     VkDeviceSize offset_ /* 0 */)

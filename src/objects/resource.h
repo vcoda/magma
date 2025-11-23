@@ -37,7 +37,7 @@ namespace magma
         VkDeviceSize getSize() const noexcept { return size; }
         VkDeviceSize getOffset() const noexcept { return offset; }
         const Sharing& getSharing() const noexcept { return sharing; }
-        const std::unique_ptr<IDeviceMemory>& getMemory() const noexcept override { return memory; }
+        const std::shared_ptr<IDeviceMemory>& getMemory() const noexcept override { return memory; }
         static Resource *get(NonDispatchableHandle handle) noexcept;
 
     protected:
@@ -45,7 +45,7 @@ namespace magma
             const Sharing& sharing) noexcept;
         void postCreate(NonDispatchableHandle handle);
         void preDestroy(NonDispatchableHandle handle);
-        std::unique_ptr<IDeviceMemory> allocateMemory(NonDispatchableHandle handle,
+        std::shared_ptr<IDeviceMemory> allocateMemory(NonDispatchableHandle handle,
             const VkMemoryRequirements& memoryRequirements,
             VkMemoryPropertyFlags flags,
             const StructureChain& extendedMemoryInfo,
@@ -55,7 +55,7 @@ namespace magma
         const Sharing sharing;
         VkDeviceSize size;
         VkDeviceSize offset;
-        std::unique_ptr<IDeviceMemory> memory;
+        std::shared_ptr<IDeviceMemory> memory;
 
     private:
         static std::unordered_map<NonDispatchableHandle, Resource*> resourceMap;

@@ -43,10 +43,10 @@ namespace magma
         ~SwapchainImage();
         int32_t getChainIndex() const noexcept { return chainIndex; }
         bool chained() const noexcept { return chainIndex >= 0; }
-        void bindMemory(std::unique_ptr<IDeviceMemory> memory,
+        void bindMemory(std::shared_ptr<IDeviceMemory> memory,
             VkDeviceSize offset = 0) override;
     #ifdef VK_KHR_device_group
-        void bindMemoryDeviceGroup(std::unique_ptr<IDeviceMemory> memory,
+        void bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> memory,
             const std::vector<uint32_t>& deviceIndices,
             const std::vector<VkRect2D>& splitInstanceBindRegions = {},
             VkDeviceSize offset = 0) override;

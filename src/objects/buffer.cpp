@@ -122,7 +122,7 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
             memoryFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     }
     // Allocate and bind buffer memory
-    std::unique_ptr<IDeviceMemory> bufferMemory = allocateMemory(handle,
+    std::shared_ptr<IDeviceMemory> bufferMemory = allocateMemory(handle,
         memoryRequirements, memoryFlags, extendedMemoryInfo,
         std::move(device), std::move(allocator));
     bindMemory(std::move(bufferMemory));
@@ -245,7 +245,7 @@ void Buffer::realloc(VkDeviceSize newSize)
     bindMemory(std::move(memory), offset);
 }
 
-void Buffer::bindMemory(std::unique_ptr<IDeviceMemory> deviceMemory,
+void Buffer::bindMemory(std::shared_ptr<IDeviceMemory> deviceMemory,
     VkDeviceSize offset_ /* 0 */)
 {
     MAGMA_ASSERT(deviceMemory->getSize() >= getSize());
@@ -255,7 +255,7 @@ void Buffer::bindMemory(std::unique_ptr<IDeviceMemory> deviceMemory,
 }
 
 #ifdef VK_KHR_device_group
-void Buffer::bindMemoryDeviceGroup(std::unique_ptr<IDeviceMemory> deviceMemory,
+void Buffer::bindMemoryDeviceGroup(std::shared_ptr<IDeviceMemory> deviceMemory,
     const std::vector<uint32_t>& deviceIndices,
     const std::vector<VkRect2D>& /* splitInstanceBindRegions */,
     VkDeviceSize offset_ /* 0 */)
