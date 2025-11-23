@@ -179,7 +179,10 @@ void Device::waitIdle() const
     if (VK_SUCCESS == result)
     {
         for (auto& [key, queue]: queues)
-            key, queue->onIdle();
+        {
+            queue->onIdle();
+            MAGMA_UNUSED(key);
+        }
     }
 }
 
