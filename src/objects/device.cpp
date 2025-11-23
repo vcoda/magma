@@ -92,6 +92,8 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
         break;
     case VK_ERROR_FEATURE_NOT_PRESENT:
         throw exception::FeatureNotPresent(enabledFeatures, physicalDevice->getFeatures());
+    default:
+        MAGMA_HANDLE_RESULT(result, "failed to create logical device");
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create logical device");
