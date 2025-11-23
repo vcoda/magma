@@ -274,7 +274,7 @@ std::ostream& operator<<(std::ostream& out, const ShaderReflection& reflection)
     for (uint32_t i = 0; i < module.output_variable_count; ++i)
     {
         const SpvReflectInterfaceVariable *var = module.output_variables[i];
-        if ((var->location != -1) && (var->format != SPV_REFLECT_FORMAT_UNDEFINED))
+        if ((var->location != 0xFFFFFFFF) && (var->format != SPV_REFLECT_FORMAT_UNDEFINED))
         {
             out << "\tSpvReflectInterfaceVariable [" << std::endl
                 << "\t\tname: " << var->name << std::endl
