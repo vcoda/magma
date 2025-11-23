@@ -463,23 +463,12 @@ defineReplace(compileShader) {
     return
 }
 
-compile_shaders.target = compile_shaders
-compile_shaders.commands += $$compileShader(blit.vert, blitv, vsBlit, "")
-compile_shaders.commands += $$compileShader(blit.vert, blitv_nv, vsBlitNV, "-DNV")
-compile_shaders.commands += $$compileShader(blit.frag, blitf, fsBlit, "")
-compile_shaders.commands += $$compileShader(font.frag, fontf, fsFont, "")
-compile_shaders.commands += $$compileShader(imm.vert, immv, vsImm, "")
-compile_shaders.commands += $$compileShader(imm.frag, immf, fsImm, "")
-
-QMAKE_EXTRA_TARGETS = make_spirv_dir compile_shaders
-PRE_TARGETDEPS = make_spirv_dir compile_shaders
-
 INCLUDEPATH += $(VULKAN_SDK)/include
 INCLUDEPATH += ../../src/third-party/pfr/include
 INCLUDEPATH += ../../src/core/
 
 QMAKE_CXXFLAGS += -std=c++17 -msse4 -ftemplate-depth=2048 -fconstexpr-depth=2048
-QMAKE_CXXFLAGS += -Wno-unknown-pragmas -Wno-deprecated-copy -Wno-missing-field-initializers
+QMAKE_CXXFLAGS += -Wno-unused-function -Wno-unknown-pragmas -Wno-deprecated-copy -Wno-missing-field-initializers
 
 win32 {
     QMAKE_CXXFLAGS += -DVK_USE_PLATFORM_WIN32_KHR
