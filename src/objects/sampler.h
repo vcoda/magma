@@ -36,7 +36,7 @@ namespace magma
             std::shared_ptr<IAllocator> allocator = nullptr,
             const BorderColor& borderColor = border::opaqueBlackFloat);
         ~Sampler();
-        float getMaxAnisotropy() const noexcept;
+        float getMaxAnisotropy() const;
 
     protected:
         Sampler(std::shared_ptr<Device> device,

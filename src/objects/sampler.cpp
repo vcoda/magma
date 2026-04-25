@@ -65,7 +65,7 @@ Sampler::~Sampler()
     vkDestroySampler(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
-float Sampler::getMaxAnisotropy() const noexcept
+float Sampler::getMaxAnisotropy() const
 {
     PhysicalDevice *physicalDevice = device->getPhysicalDevice().get();
     if (maxAnisotropies.find(physicalDevice) == maxAnisotropies.end())
