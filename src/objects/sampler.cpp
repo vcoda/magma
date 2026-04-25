@@ -72,7 +72,7 @@ float Sampler::getMaxAnisotropy() const
     {
         const VkPhysicalDeviceProperties properties = physicalDevice->getProperties();
         const VkPhysicalDeviceLimits& limits = properties.limits;
-        maxAnisotropies[physicalDevice] = limits.maxSamplerAnisotropy;
+        return maxAnisotropies[physicalDevice] = limits.maxSamplerAnisotropy;
     }
     return maxAnisotropies[physicalDevice];
 }
