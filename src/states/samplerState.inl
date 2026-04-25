@@ -47,40 +47,43 @@ constexpr SamplerState::SamplerState(const SamplerState& other) noexcept:
     }
 {}
 
-constexpr MagnificationFilter SamplerState::getMagFilter() const noexcept
+constexpr MagFilter SamplerState::getMagFilter() const noexcept
 {
     switch (magFilter)
     {
     case VK_FILTER_NEAREST:
-        return MagnificationFilter::Nearest;
+        return MagFilter::Nearest;
     case VK_FILTER_LINEAR:
-        return MagnificationFilter::Bilinear;
-#ifdef VK_EXT_filter_cubic
+        return MagFilter::Bilinear;
+#if defined(VK_EXT_filter_cubic)
     case VK_FILTER_CUBIC_EXT:
-        return MagnificationFilter::Cubic;
+        return MagFilter::Cubic;
+#elif defined(VK_IMG_filter_cubic)
+    case VK_FILTER_CUBIC_IMG:
+        return MagFilter::Cubic;
 #endif // VK_EXT_filter_cubic
     default:
-        return MagnificationFilter::Unknown;
+        return MagFilter::Unknown;
     }
 }
 
-constexpr MinificationFilter SamplerState::getMinFilter() const noexcept
+constexpr MinFilter SamplerState::getMinFilter() const noexcept
 {
     if (VK_SAMPLER_MIPMAP_MODE_NEAREST == mipmapMode)
     {
         if (VK_FILTER_NEAREST == minFilter)
-            return MinificationFilter::Nearest;
-        if (VK_FILTER_LINEAR == minFilter)
-            return MinificationFilter::Bilinear;
+            return MinFilter::Nearest;
+        else if (VK_FILTER_LINEAR == minFilter)
+            return MinFilter::Bilinear;
     }
     else if (VK_SAMPLER_MIPMAP_MODE_LINEAR == mipmapMode)
     {
         if (anisotropyEnable)
-            return MinificationFilter::Anisotropic;
+            return MinFilter::Anisotropic;
         if (VK_FILTER_LINEAR == minFilter)
-            return MinificationFilter::Trilinear;
+            return MinFilter::Trilinear;
     }
-    return MinificationFilter::Mixed;
+    return MinFilter::Mixed;
 }
 
 constexpr hash_t SamplerState::hash() const noexcept

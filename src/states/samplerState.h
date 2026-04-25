@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,12 +27,12 @@ namespace magma
        5. Cubic filtering is an hermite interpolation of four coefficients to
           reconstruct a signal. */
 
-    enum class MagnificationFilter : uint8_t
+    enum class MagFilter : uint8_t
     {
         Nearest, Bilinear, Cubic, Unknown
     };
 
-    enum class MinificationFilter : uint8_t
+    enum class MinFilter : uint8_t
     {
         Nearest, Bilinear, Trilinear, Anisotropic, Mixed
     };
@@ -49,8 +49,8 @@ namespace magma
             VkSamplerAddressMode addressMode) noexcept;
         constexpr SamplerState(const SamplerState&) noexcept;
         constexpr bool chained() const noexcept { return pNext != nullptr; }
-        constexpr MagnificationFilter getMagFilter() const noexcept;
-        constexpr MinificationFilter getMinFilter() const noexcept;
+        constexpr MagFilter getMagFilter() const noexcept;
+        constexpr MinFilter getMinFilter() const noexcept;
         constexpr hash_t hash() const noexcept;
         hash_t chainedHash() const noexcept;
         constexpr bool operator==(const SamplerState&) const noexcept;

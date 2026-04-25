@@ -97,25 +97,25 @@ namespace magma
     constexpr hash_t pushConstantHash = pushConstant.hash();
 
     // Magnification filter
-    static_assert(sampler::magMinMipNearestRepeat.getMagFilter() == MagnificationFilter::Nearest, "expected nearest filter");
-    static_assert(sampler::magLinearMinMipNearestRepeat.getMagFilter() == MagnificationFilter::Bilinear, "expected bilinear filter");
-    static_assert(sampler::magNearestMinLinearMipNearestRepeat.getMagFilter() == MagnificationFilter::Nearest, "expected nearest filter");
-    static_assert(sampler::magMinNearestMipLinearRepeat.getMagFilter() == MagnificationFilter::Nearest, "expected nearest filter");
-    static_assert(sampler::magMinLinearMipNearestRepeat.getMagFilter() == MagnificationFilter::Bilinear, "expected bilinear filter");
-    static_assert(sampler::magNearestMinMipLinearRepeat.getMagFilter() == MagnificationFilter::Nearest, "expected nearest filter");
-    static_assert(sampler::magLinearMinNearestMipLinearRepeat.getMagFilter() == MagnificationFilter::Bilinear, "expected bilinear filter");
-    static_assert(sampler::magMinMipLinearRepeat.getMagFilter() == MagnificationFilter::Bilinear, "expected bilinear filter");
+    static_assert(sampler::magMinMipNearestRepeat.getMagFilter() == MagFilter::Nearest, "expected nearest filter");
+    static_assert(sampler::magLinearMinMipNearestRepeat.getMagFilter() == MagFilter::Bilinear, "expected bilinear filter");
+    static_assert(sampler::magNearestMinLinearMipNearestRepeat.getMagFilter() == MagFilter::Nearest, "expected nearest filter");
+    static_assert(sampler::magMinNearestMipLinearRepeat.getMagFilter() == MagFilter::Nearest, "expected nearest filter");
+    static_assert(sampler::magMinLinearMipNearestRepeat.getMagFilter() == MagFilter::Bilinear, "expected bilinear filter");
+    static_assert(sampler::magNearestMinMipLinearRepeat.getMagFilter() == MagFilter::Nearest, "expected nearest filter");
+    static_assert(sampler::magLinearMinNearestMipLinearRepeat.getMagFilter() == MagFilter::Bilinear, "expected bilinear filter");
+    static_assert(sampler::magMinMipLinearRepeat.getMagFilter() == MagFilter::Bilinear, "expected bilinear filter");
 
     // Minification filter
-    static_assert(sampler::magMinMipNearestRepeat.getMinFilter() == MinificationFilter::Nearest, "expected nearest filter");
-    static_assert(sampler::magLinearMinMipNearestRepeat.getMinFilter() == MinificationFilter::Nearest, "expected nearest filter");
-    static_assert(sampler::magNearestMinLinearMipNearestRepeat.getMinFilter() == MinificationFilter::Bilinear, "expected bilinear filter");
-    static_assert(sampler::magMinNearestMipLinearRepeat.getMinFilter() == MinificationFilter::Mixed, "expected mixed filter");
-    static_assert(sampler::magMinLinearMipNearestRepeat.getMinFilter() == MinificationFilter::Bilinear, "expected bilinear filter");
-    static_assert(sampler::magNearestMinMipLinearRepeat.getMinFilter() == MinificationFilter::Trilinear, "expected trilinear filter");
-    static_assert(sampler::magLinearMinNearestMipLinearRepeat.getMinFilter() == MinificationFilter::Mixed, "exepected mixed filter");
-    static_assert(sampler::magMinMipLinearRepeat.getMinFilter() == MinificationFilter::Trilinear, "expected trilinear filter");
-    static_assert(sampler::magMinLinearMipAnisotropicRepeat1x.getMinFilter() == MinificationFilter::Anisotropic, "expected anisotropic filter");
+    static_assert(sampler::magMinMipNearestRepeat.getMinFilter() == MinFilter::Nearest, "expected nearest filter");
+    static_assert(sampler::magLinearMinMipNearestRepeat.getMinFilter() == MinFilter::Nearest, "expected nearest filter");
+    static_assert(sampler::magNearestMinLinearMipNearestRepeat.getMinFilter() == MinFilter::Bilinear, "expected bilinear filter");
+    static_assert(sampler::magMinNearestMipLinearRepeat.getMinFilter() == MinFilter::Mixed, "expected mixed filter");
+    static_assert(sampler::magMinLinearMipNearestRepeat.getMinFilter() == MinFilter::Bilinear, "expected bilinear filter");
+    static_assert(sampler::magNearestMinMipLinearRepeat.getMinFilter() == MinFilter::Trilinear, "expected trilinear filter");
+    static_assert(sampler::magLinearMinNearestMipLinearRepeat.getMinFilter() == MinFilter::Mixed, "exepected mixed filter");
+    static_assert(sampler::magMinMipLinearRepeat.getMinFilter() == MinFilter::Trilinear, "expected trilinear filter");
+    static_assert(sampler::magMinLinearMipAnisotropicRepeat1x.getMinFilter() == MinFilter::Anisotropic, "expected anisotropic filter");
 
     // Numeric formats
     static_assert(UByteNorm::numericFormat() == NumericFormat::UNorm, "expected UNORM format");
