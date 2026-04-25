@@ -1,6 +1,10 @@
 namespace magma
 {
-inline DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding) noexcept:
+inline DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType descriptorType, uint32_t descriptorCount, uint32_t binding
+#ifdef VK_EXT_descriptor_indexing
+    ,VkDescriptorBindingFlagsEXT bindingFlags /* 0 */
+#endif
+    ) noexcept:
     VkDescriptorSetLayoutBinding{
         binding,
         descriptorType,
@@ -10,7 +14,7 @@ inline DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(VkDescriptorType d
     },
     imageType(VK_IMAGE_TYPE_MAX_ENUM),
 #ifdef VK_EXT_descriptor_indexing
-    bindingFlags(0),
+    bindingFlags(bindingFlags),
 #endif
     dirty(false)
 {}

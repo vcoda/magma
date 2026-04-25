@@ -48,7 +48,11 @@ namespace magma
     protected:
         DescriptorSetLayoutBinding(VkDescriptorType descriptorType,
             uint32_t descriptorCount,
-            uint32_t binding) noexcept;
+            uint32_t binding
+        #ifdef VK_EXT_descriptor_indexing
+           ,VkDescriptorBindingFlagsEXT bindingFlags = 0
+        #endif
+        ) noexcept;
         void writeDescriptor(VkDescriptorSet dstSet,
             VkWriteDescriptorSet& writeDescriptorSet) const noexcept;
 

@@ -43,9 +43,6 @@ void VariableCountDescriptorSet::allocate(VkDescriptorSetLayoutCreateFlags flags
         }
         bindingFlags.push_back(descriptor->getBindingFlags());
     }
-    // If an element of pBindingFlags includes VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT,
-    // then it must be the element with the highest binding number.
-    bindingFlags.back() |= VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT_EXT;
     // Create descriptor set layout
     VkDescriptorSetLayoutBindingFlagsCreateInfoEXT descriptorSetLayoutBindingFlagsInfo;
     descriptorSetLayoutBindingFlagsInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO_EXT;
