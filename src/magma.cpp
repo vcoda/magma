@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -181,8 +181,8 @@ namespace magma
         descriptor::AccelerationStructure accelerationStructure = 1;
     #endif // VK_KHR_acceleration_structure
     #ifdef VK_EXT_descriptor_indexing
-        descriptor::CombinedImageSamplerVariableArray combinedImageSamplerVariableArray = 2;
-        descriptor::SampledImageVariableArray sampledImageVariableArray = 3;
+        descriptor::VariableCountCombinedImageSamplers variableCountCombinedImageSamplers = 2;
+        descriptor::VariableCountSampledImages variableCountSampledImages = 3;
     #endif // VK_EXT_descriptor_indexing
     };
 #endif // MAGMA_VERIFY_DESCRIPTORS

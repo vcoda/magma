@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "descriptorSetLayoutBinding.h"
+#include "descriptorArray.h"
 #include "../objects/sampler.h"
 #include "../objects/image.h"
 #include "../objects/imageView.h"
@@ -30,35 +31,33 @@ namespace magma::descriptor
 {
     /* Base class of variable count of image/sampler descriptors. */
 
-    class ImageDescriptorVariableArray : public magma::DescriptorSetLayoutBinding
+    class VariableCountImageDescriptors : public magma::DescriptorSetLayoutBinding
     {
     public:
-        uint32_t getSize() const noexcept { return core::countof(descriptors); }
-        void remove(uint32_t index);
+        void reserve(std::size_t capacity);
+        bool erase(BindlessHandle handle);
         void clear();
         bool resourceBinded() const noexcept override { return true; }
         void write(VkDescriptorSet dstSet,
             VkWriteDescriptorSet& writeDescriptorSet) const noexcept override;
 
     protected:
-        ImageDescriptorVariableArray(VkDescriptorType descriptorType,
+        VariableCountImageDescriptors(VkDescriptorType descriptorType,
             uint32_t binding) noexcept;
-        uint32_t insert(const VkDescriptorImageInfo& imageInfo);
 
-        std::vector<VkDescriptorImageInfo> descriptors;
-        std::set<uint32_t> invalidDescriptorIndices;
+        DescriptorArray<VkDescriptorImageInfo> descriptors;
     };
 
     /* A combined image sampler is a single descriptor type associated
        with both a sampler and an image resource, combining both
        a sampler and sampled image descriptor into a single descriptor. */
 
-    class CombinedImageSamplerVariableArray : public ImageDescriptorVariableArray
+    class VariableCountCombinedImageSamplers : public VariableCountImageDescriptors
     {
     public:
-        CombinedImageSamplerVariableArray(uint32_t binding) noexcept:
-            ImageDescriptorVariableArray(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
-        uint32_t add(lent_ptr<const ImageView> imageView,
+        VariableCountCombinedImageSamplers(uint32_t binding) noexcept:
+            VariableCountImageDescriptors(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding) {}
+        BindlessHandle insert(lent_ptr<const ImageView> imageView,
             lent_ptr<const magma::Sampler> sampler);
     };
 
@@ -66,13 +65,13 @@ namespace magma::descriptor
        an image resource via an image view that sampling
        operations can be performed on. */
 
-    class SampledImageVariableArray : public ImageDescriptorVariableArray
+    class VariableCountSampledImages : public VariableCountImageDescriptors
     {
     public:
-        SampledImageVariableArray(uint32_t binding) noexcept:
-            ImageDescriptorVariableArray(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
-        uint32_t add(lent_ptr<const ImageView> imageView);
+        VariableCountSampledImages(uint32_t binding) noexcept:
+            VariableCountImageDescriptors(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding) {}
+        BindlessHandle insert(lent_ptr<const ImageView> imageView);
     };
 } // namespace magma::descriptor
 
-#include "imageDescriptorVariableArray.inl"
+#include "variableCountImageDescriptors.inl"

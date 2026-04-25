@@ -206,7 +206,7 @@
     <ClInclude Include="..\..\src\descriptors\imageArrayElement.h" />
     <ClInclude Include="..\..\src\descriptors\imageDescriptor.h" />
     <ClInclude Include="..\..\src\descriptors\imageDescriptorArray.h" />
-    <ClInclude Include="..\..\src\descriptors\imageDescriptorVariableArray.h" />
+    <ClInclude Include="..\..\src\descriptors\variableCountImageDescriptors.h" />
     <ClInclude Include="..\..\src\descriptors\inlineUniformBlock.h" />
     <ClInclude Include="..\..\src\exceptions\compileError.h" />
     <ClInclude Include="..\..\src\exceptions\errorHandler.h" />
@@ -701,7 +701,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\descriptors\imageArrayElement.inl" />
     <None Include="..\..\src\descriptors\imageDescriptor.inl" />
     <None Include="..\..\src\descriptors\imageDescriptorArray.inl" />
-    <None Include="..\..\src\descriptors\imageDescriptorVariableArray.inl" />
+    <None Include="..\..\src\descriptors\variableCountImageDescriptors.inl" />
     <None Include="..\..\src\descriptors\inlineUniformBlock.inl" />
     <None Include="..\..\src\exceptions\exception.inl" />
     <None Include="..\..\src\extensions\extensionRegistry.inl" />

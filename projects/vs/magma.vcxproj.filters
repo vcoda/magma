@@ -795,9 +795,6 @@
     <ClInclude Include="..\..\src\objects\variableCountDescriptorSet.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\descriptors\imageDescriptorVariableArray.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\variantPtr.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -871,6 +868,9 @@
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\descriptors\descriptorArray.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\variableCountImageDescriptors.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1612,9 +1612,6 @@
     <None Include="..\..\src\packed\x11y11z10ufloat.inl">
       <Filter>Header Files\packed</Filter>
     </None>
-    <None Include="..\..\src\descriptors\imageDescriptorVariableArray.inl">
-      <Filter>Header Files\descriptors</Filter>
-    </None>
     <None Include="..\..\src\objects\imageView.inl">
       <Filter>Header Files\objects</Filter>
     </None>
@@ -1655,6 +1652,9 @@
       <Filter>Header Files\exceptions</Filter>
     </None>
     <None Include="..\..\src\descriptors\descriptorArray.inl">
+      <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\variableCountImageDescriptors.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
   </ItemGroup>

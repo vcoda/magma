@@ -171,7 +171,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/descriptors/descriptorSetLayoutBinding.h"
 #include "src/descriptors/imageDescriptor.h"
 #include "src/descriptors/imageDescriptorArray.h"
-#include "src/descriptors/imageDescriptorVariableArray.h"
+#include "src/descriptors/variableCountImageDescriptors.h"
 #include "src/descriptors/inlineUniformBlock.h"
 
 #include "src/barriers/bufferMemoryBarrier.h"
