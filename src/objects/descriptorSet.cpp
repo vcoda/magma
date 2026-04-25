@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include <sstream>
 #include "descriptorSet.h"
+#include "variableCountDescriptorSet.h"
 #include "descriptorSetLayout.h"
 #include "descriptorPool.h"
 #include "device.h"
@@ -125,10 +126,16 @@ void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflect
             }
         }
         if (descriptor->descriptorCount != reflectedBinding->count)
-        {   // Array size (or number of bytes) is different
-            out << "descriptor count mismatch:" << std::endl
-                << "binding #" << descriptor->binding << std::endl
-                << "expected: " << reflectedBinding->count << ", defined: " << descriptor->descriptorCount;
+        {
+        #ifdef VK_EXT_descriptor_indexing
+            const VariableCountDescriptorSet *variableCountDescriptorSet = dynamic_cast<const VariableCountDescriptorSet *>(this);
+            if (!variableCountDescriptorSet)
+        #endif
+            {   // Array size (or number of bytes) is different for non-indexed descriptor
+                out << "descriptor count mismatch:" << std::endl
+                    << "binding #" << descriptor->binding << std::endl
+                    << "expected: " << reflectedBinding->count << ", defined: " << descriptor->descriptorCount;
+            }
         }
         switch (descriptor->descriptorType)
         {
