@@ -870,6 +870,9 @@
     <ClInclude Include="..\..\src\core\hash.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\descriptorArray.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">
@@ -1650,6 +1653,9 @@
     </None>
     <None Include="..\..\src\exceptions\exception.inl">
       <Filter>Header Files\exceptions</Filter>
+    </None>
+    <None Include="..\..\src\descriptors\descriptorArray.inl">
+      <Filter>Header Files\descriptors</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
