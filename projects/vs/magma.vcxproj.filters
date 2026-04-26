@@ -441,9 +441,6 @@
     <ClInclude Include="..\..\src\descriptors\bufferDescriptorArray.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\descriptors\descriptorPool.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\descriptors\imageDescriptor.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
@@ -871,6 +868,9 @@
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\descriptors\variableCountImageDescriptors.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\descriptorPoolSize.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
   </ItemGroup>

@@ -24,6 +24,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/descriptorSet.h"
 #include "../shaders/shaderReflection.h"
 #include "../shaders/shaderReflectionFactory.h"
+#include "../descriptors/descriptorPoolSize.h"
 #include "../descriptors/imageDescriptor.h"
 #include "../exceptions/exception.h"
 
@@ -51,12 +52,12 @@ ImageDescriptorSet::ImageDescriptorSet(std::shared_ptr<Device> device,
     {
         if (SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER == binding->descriptor_type)
         {
-            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::CombinedImageSamplerPool(1), allocator);
+            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::CombinedImageSamplerPoolSize(1), allocator);
             descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, *imageTable, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         }
         else if (SPV_REFLECT_DESCRIPTOR_TYPE_STORAGE_IMAGE == binding->descriptor_type)
         {
-            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageImagePool(1), allocator);
+            descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageImagePoolSize(1), allocator);
             descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, *storageImageTable, VK_SHADER_STAGE_FRAGMENT_BIT, std::move(allocator));
         }
         if (descriptorSet)

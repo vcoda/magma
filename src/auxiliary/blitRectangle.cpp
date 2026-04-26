@@ -35,6 +35,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderReflection.h"
 #include "../shaders/shaderReflectionFactory.h"
 #include "../shaders/specialization.h"
+#include "../descriptors/descriptorPoolSize.h"
 #include "../descriptors/imageDescriptor.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
@@ -75,7 +76,7 @@ BlitRectangle::BlitRectangle(std::shared_ptr<RenderPass> renderPass_,
     std::shared_ptr<Device> device = renderPass->getDevice();
     constexpr uint32_t maxDescriptorSets = 10;
     descriptorPool = std::make_shared<DescriptorPool>(device, maxDescriptorSets,
-        descriptor::CombinedImageSamplerPool(maxDescriptorSets), allocator);
+        descriptor::CombinedImageSamplerPoolSize(maxDescriptorSets), allocator);
     descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, setTableTemplate, VK_SHADER_STAGE_FRAGMENT_BIT, allocator);
     // Create texture samplers
     nearestSampler = std::make_unique<Sampler>(device, sampler::magMinMipNearestClampToEdge, allocator);

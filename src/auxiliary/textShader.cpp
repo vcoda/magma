@@ -33,6 +33,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../shaders/shaderStages.h"
 #include "../shaders/shaderReflection.h"
 #include "../shaders/shaderReflectionFactory.h"
+#include "../descriptors/descriptorPoolSize.h"
 #include "../descriptors/bufferDescriptor.h"
 #include "../states/vertexInputStructure.h"
 #include "../states/inputAssemblyState.h"
@@ -86,7 +87,7 @@ TextShader::TextShader(lent_ptr<const RenderPass> renderPass,
     setTable->charBuffer = charBuffer;
     // Create descriptor set
     std::shared_ptr<IAllocator> hostAllocator = MAGMA_HOST_ALLOCATOR(allocator);
-    descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageBufferPool(2), hostAllocator);
+    descriptorPool = std::make_shared<DescriptorPool>(device, 1, descriptor::StorageBufferPoolSize(2), hostAllocator);
     descriptorSet = std::make_unique<DescriptorSet>(descriptorPool, *setTable, VK_SHADER_STAGE_FRAGMENT_BIT, hostAllocator);
     // Setup shader stages
     FillRectangleVertexShader vertexShaderStage(device, hostAllocator);
