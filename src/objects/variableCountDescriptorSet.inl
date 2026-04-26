@@ -38,7 +38,7 @@ inline VariableCountDescriptorSet::VariableCountDescriptorSet(std::shared_ptr<De
         MAGMA_ERROR("descriptor set may have only one variable-sized descriptor");
     // This must only be used for the last binding in the descriptor set layout (i.e. the binding with the largest value of binding).
     if (variableSizedDescriptorBinding != locations.back())
-        MAGMA_ERROR("variable-sized descriptor must be the member with the last binding number");
+        MAGMA_ERROR("variable-sized descriptor must be the member with the last binding");
     if (shaderReflectionFactory && !shaderFileName.empty())
     {   // Validate descriptors through shader reflection
         auto& shaderReflection = shaderReflectionFactory->getReflection(std::move(shaderFileName));
