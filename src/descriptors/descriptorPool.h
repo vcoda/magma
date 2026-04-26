@@ -23,13 +23,14 @@ namespace magma
 
     namespace descriptor
     {
-        /* Thread-safe array of variable-sized descriptors like
+        /* Thread-safe pool of variable-sized descriptors like
            images, buffers, samplers etc. */
 
         template<class Descriptor>
-        class DescriptorArray
+        class DescriptorPool
         {
         public:
+            DescriptorPool();
             void reserve(std::size_t capacity);
             BindlessHandle insert(const Descriptor& descriptor);
             bool erase(BindlessHandle handle);
@@ -42,9 +43,9 @@ namespace magma
             std::vector<Descriptor> descriptors;
             std::vector<bool> assigned;
             std::vector<BindlessHandle> unusedHandles;
-            std::shared_ptr<core::Spinlock> lock = std::make_shared<core::Spinlock>();
+            std::shared_ptr<core::Spinlock> lock;
         };
     } // namespace descriptor
 } // namespace magma
 
-#include "descriptorArray.inl"
+#include "descriptorPool.inl"

@@ -864,13 +864,13 @@
     <ClInclude Include="..\..\src\core\hash.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\descriptors\descriptorArray.h">
-      <Filter>Header Files\descriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\descriptors\variableCountImageDescriptors.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\descriptors\descriptorPoolSize.h">
+      <Filter>Header Files\descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\descriptors\descriptorPool.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1651,10 +1651,10 @@
     <None Include="..\..\src\exceptions\exception.inl">
       <Filter>Header Files\exceptions</Filter>
     </None>
-    <None Include="..\..\src\descriptors\descriptorArray.inl">
+    <None Include="..\..\src\descriptors\variableCountImageDescriptors.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
-    <None Include="..\..\src\descriptors\variableCountImageDescriptors.inl">
+    <None Include="..\..\src\descriptors\descriptorPool.inl">
       <Filter>Header Files\descriptors</Filter>
     </None>
   </ItemGroup>

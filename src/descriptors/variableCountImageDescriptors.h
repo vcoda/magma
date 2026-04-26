@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "descriptorSetLayoutBinding.h"
-#include "descriptorArray.h"
+#include "descriptorPool.h"
 #include "../objects/sampler.h"
 #include "../objects/image.h"
 #include "../objects/imageView.h"
@@ -45,7 +45,7 @@ namespace magma::descriptor
         VariableCountImageDescriptors(VkDescriptorType descriptorType,
             uint32_t binding) noexcept;
 
-        DescriptorArray<VkDescriptorImageInfo> descriptors;
+        DescriptorPool<VkDescriptorImageInfo> descriptors;
     };
 
     /* A combined image sampler is a single descriptor type associated

@@ -1,17 +1,25 @@
 namespace magma::descriptor
 {
 template<class Descriptor>
-inline void DescriptorArray<Descriptor>::reserve(std::size_t capacity)
+inline DescriptorPool<Descriptor>::DescriptorPool():
+    lock(std::make_shared<core::Spinlock>())
 {
-    std::lock_guard<core::Spinlock> quard(*lock);
+    descriptors.reserve(16);
+    assigned.reserve(16);
+}
+
+template<class Descriptor>
+inline void DescriptorPool<Descriptor>::reserve(std::size_t capacity)
+{
+    std::lock_guard<core::Spinlock> guard(*lock);
     descriptors.reserve(capacity);
     assigned.reserve(capacity);
 }
 
 template<class Descriptor>
-inline BindlessHandle DescriptorArray<Descriptor>::insert(const Descriptor& descriptor)
+inline BindlessHandle DescriptorPool<Descriptor>::insert(const Descriptor& descriptor)
 {
-    std::lock_guard<core::Spinlock> quard(*lock);
+    std::lock_guard<core::Spinlock> guard(*lock);
     BindlessHandle handle;
     if (unusedHandles.empty())
     {
@@ -30,9 +38,9 @@ inline BindlessHandle DescriptorArray<Descriptor>::insert(const Descriptor& desc
 }
 
 template<class Descriptor>
-inline bool DescriptorArray<Descriptor>::erase(BindlessHandle handle)
+inline bool DescriptorPool<Descriptor>::erase(BindlessHandle handle)
 {
-    std::lock_guard<core::Spinlock> quard(*lock);
+    std::lock_guard<core::Spinlock> guard(*lock);
     if (handle >= assigned.size() || !assigned[handle])
         return false;
     descriptors[handle] = Descriptor{};
@@ -42,25 +50,25 @@ inline bool DescriptorArray<Descriptor>::erase(BindlessHandle handle)
 }
 
 template<class Descriptor>
-inline void DescriptorArray<Descriptor>::clear() noexcept
+inline void DescriptorPool<Descriptor>::clear() noexcept
 {
-    std::lock_guard<core::Spinlock> quard(*lock);
+    std::lock_guard<core::Spinlock> guard(*lock);
     descriptors.clear();
     assigned.clear();
     unusedHandles.clear();
 }
 
 template<class Descriptor>
-inline size_t DescriptorArray<Descriptor>::size() const noexcept
+inline size_t DescriptorPool<Descriptor>::size() const noexcept
 {
-    std::lock_guard<core::Spinlock> quard(*lock);
+    std::lock_guard<core::Spinlock> guard(*lock);
     return descriptors.size();
 }
 
 template<class Descriptor>
-inline uint32_t DescriptorArray<Descriptor>::numDescriptors() const noexcept
+inline uint32_t DescriptorPool<Descriptor>::numDescriptors() const noexcept
 {
-    std::lock_guard<core::Spinlock> quard(*lock);
+    std::lock_guard<core::Spinlock> guard(*lock);
     return (uint32_t)(descriptors.size() - unusedHandles.size());
 }
 } // namespace magma::descriptor

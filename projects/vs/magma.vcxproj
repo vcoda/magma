@@ -198,7 +198,7 @@
     <ClInclude Include="..\..\src\descriptors\accelerationStructure.h" />
     <ClInclude Include="..\..\src\descriptors\arrayElement.h" />
     <ClInclude Include="..\..\src\descriptors\bufferArrayElement.h" />
-    <ClInclude Include="..\..\src\descriptors\descriptorArray.h" />
+    <ClInclude Include="..\..\src\descriptors\descriptorPool.h" />
     <ClInclude Include="..\..\src\descriptors\descriptorSetLayoutBinding.h" />
     <ClInclude Include="..\..\src\descriptors\bufferDescriptor.h" />
     <ClInclude Include="..\..\src\descriptors\bufferDescriptorArray.h" />
@@ -694,7 +694,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\core\spinlock.inl" />
     <None Include="..\..\src\core\variantPtr.inl" />
     <None Include="..\..\src\descriptors\bufferArrayElement.inl" />
-    <None Include="..\..\src\descriptors\descriptorArray.inl" />
+    <None Include="..\..\src\descriptors\descriptorPool.inl" />
     <None Include="..\..\src\descriptors\descriptorSetLayoutBinding.inl" />
     <None Include="..\..\src\descriptors\bufferDescriptor.inl" />
     <None Include="..\..\src\descriptors\bufferDescriptorArray.inl" />
