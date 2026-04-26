@@ -36,8 +36,8 @@ namespace magma
             bool erase(BindlessHandle handle);
             void clear() noexcept;
             const Descriptor *data() const noexcept { return descriptors.data(); }
-            size_t size() const noexcept;
-            uint32_t numDescriptors() const noexcept;
+            std::size_t size() const noexcept;
+            std::size_t numDescriptors() const noexcept;
 
         private:
             std::vector<Descriptor> descriptors;

@@ -59,14 +59,14 @@ inline void DescriptorPool<Descriptor>::clear() noexcept
 }
 
 template<class Descriptor>
-inline size_t DescriptorPool<Descriptor>::size() const noexcept
+inline std::size_t DescriptorPool<Descriptor>::size() const noexcept
 {
     std::lock_guard<core::Spinlock> guard(*lock);
     return descriptors.size();
 }
 
 template<class Descriptor>
-inline uint32_t DescriptorPool<Descriptor>::numDescriptors() const noexcept
+inline std::size_t DescriptorPool<Descriptor>::numDescriptors() const noexcept
 {
     std::lock_guard<core::Spinlock> guard(*lock);
     return (uint32_t)(descriptors.size() - unusedHandles.size());
