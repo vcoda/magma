@@ -22,11 +22,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/image.h"
 #include "../objects/imageView.h"
 
-namespace magma
-{
-    class ImageView;
-}
-
 namespace magma::descriptor
 {
     /* Base class of variable count of image/sampler descriptors. */
