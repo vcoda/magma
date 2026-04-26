@@ -54,10 +54,11 @@ void ImageDescriptor::update(const ImageView *imageView, const magma::Sampler *s
                 else
                     descriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
-            else if (usage & VK_IMAGE_USAGE_STORAGE_BIT)
-                descriptor.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
             else
-                descriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            {
+                if (usage & VK_IMAGE_USAGE_STORAGE_BIT)
+                    descriptor.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+            }
         }
         dirty = true;
     }
