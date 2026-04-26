@@ -23,15 +23,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const descriptor::DescriptorPool& descriptorPool,
+DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const VkDescriptorPoolSize& poolSize,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDescriptorPoolCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
-    DescriptorPool(std::move(device), maxSets, std::vector<descriptor::DescriptorPool>{descriptorPool},
-        std::move(allocator), flags, extendedInfo)
+    DescriptorPool(std::move(device), maxSets, {poolSize}, std::move(allocator), flags, extendedInfo)
 {}
 
-DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::vector<descriptor::DescriptorPool>& descriptorPools,
+DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets, const std::initializer_list<VkDescriptorPoolSize>& poolSizes,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDescriptorPoolCreateFlags flags /* 0 */,
     const StructureChain& extendedInfo /* default */):
@@ -43,8 +42,8 @@ DescriptorPool::DescriptorPool(std::shared_ptr<Device> device, uint32_t maxSets,
     descriptorPoolInfo.pNext = extendedInfo.headNode();
     descriptorPoolInfo.flags = flags;
     descriptorPoolInfo.maxSets = maxSets;
-    descriptorPoolInfo.poolSizeCount = core::countof(descriptorPools);
-    descriptorPoolInfo.pPoolSizes = descriptorPools.data();
+    descriptorPoolInfo.poolSizeCount = core::countof(poolSizes);
+    descriptorPoolInfo.pPoolSizes = poolSizes.begin();
     const VkResult result = vkCreateDescriptorPool(getNativeDevice(), &descriptorPoolInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
     MAGMA_HANDLE_RESULT(result, "failed to create descriptor pool");
 }

@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "model/nondispatchable.h"
-#include "../descriptors/descriptorPool.h"
 
 namespace magma
 {
@@ -35,13 +34,13 @@ namespace magma
     public:
         explicit DescriptorPool(std::shared_ptr<Device> device,
             uint32_t maxSets,
-            const descriptor::DescriptorPool& descriptorPool,
+            const VkDescriptorPoolSize& poolSize,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDescriptorPoolCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
         explicit DescriptorPool(std::shared_ptr<Device> device,
             uint32_t maxSets,
-            const std::vector<descriptor::DescriptorPool>& descriptorPools,
+            const std::initializer_list<VkDescriptorPoolSize>& poolSizes,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDescriptorPoolCreateFlags flags = 0,
             const StructureChain& extendedInfo = StructureChain());
