@@ -44,7 +44,7 @@ ImmediateRender::ImmediateRender(const uint32_t maxVertexCount, std::unique_ptr<
     maxVertexCount(maxVertexCount),
     wideLinesEnabled(renderPass->getDevice()->getEnabledFeatures().wideLines),
     largePointsEnabled(renderPass->getDevice()->getEnabledFeatures().largePoints),
-    stippledLinesEnabled(renderPass->getDevice()->checkFeatures()->stippledLinesEnabled()),
+    stippledLinesEnabled(renderPass->getDevice()->getFeatureQuery()->stippledLinesEnabled()),
     sharedLayout(std::move(layout)),
     pipelineCache(std::make_unique<GraphicsPipelineCache>(renderPass->getDevice(), true, false,
     #ifdef VK_KHR_pipeline_library

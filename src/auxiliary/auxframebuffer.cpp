@@ -275,7 +275,7 @@ VkImageLayout Framebuffer::optimalDepthStencilLayout(const std::shared_ptr<Devic
     VkFormat depthStencilFormat, bool sampled) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (device->checkFeatures()->separateDepthStencilLayoutsEnabled())
+    if (device->getFeatureQuery()->separateDepthStencilLayoutsEnabled())
     {
         const Format format(depthStencilFormat);
         if (format.depth())

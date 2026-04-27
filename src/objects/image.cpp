@@ -185,7 +185,7 @@ VkImageLayout Image::getOptimalReadOnlyLayout() const noexcept
     if (imageFormat.depth() || imageFormat.stencil())
     {
     #ifdef VK_KHR_separate_depth_stencil_layouts
-        if (device->checkFeatures()->separateDepthStencilLayoutsEnabled())
+        if (device->getFeatureQuery()->separateDepthStencilLayoutsEnabled())
         {   // Prefer separate depth or stencil layout
             if (imageFormat.depth())
                 return VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR;

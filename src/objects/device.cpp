@@ -119,7 +119,7 @@ Device::~Device()
     vkDestroyDevice(handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
-const std::unique_ptr<FeatureQuery>& Device::checkFeatures() const
+const std::unique_ptr<FeatureQuery>& Device::getFeatureQuery() const
 {
     if (!featureQuery)
         featureQuery = FeatureQuery::makeUnique(this);

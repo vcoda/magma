@@ -163,11 +163,11 @@ VkExtent2D RenderPass::getRenderAreaGranularity() const noexcept
 VkImageLayout RenderPass::optimalDepthStencilLayout(const Format& format) const
 {
 #ifdef VK_KHR_separate_depth_stencil_layouts
-    if (device->checkFeatures()->separateDepthStencilLayoutsEnabled())
+    if (device->getFeatureQuery()->separateDepthStencilLayoutsEnabled())
     {
         if (format.depth())
             return VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR;
-        if (format.stencil())
+        else if (format.stencil())
             return VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL_KHR;
     }
 #else
