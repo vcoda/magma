@@ -206,7 +206,7 @@ VkImageAspectFlags Image::getAspectMask() const noexcept
     {
         for (auto const& req: getSparseMemoryRequirements())
         {   // Metadata should not be combined with other aspects
-            if (req.formatProperties.aspectMask == VK_IMAGE_ASPECT_METADATA_BIT)
+            if (VK_IMAGE_ASPECT_METADATA_BIT == req.formatProperties.aspectMask)
                 return VK_IMAGE_ASPECT_METADATA_BIT;
         }
     }
