@@ -30,6 +30,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../barriers/imageMemoryBarrier.h"
 #include "../misc/format.h"
 #include "../misc/finish.h"
+#include "../misc/featureQuery.h"
 #include "../misc/mapBuffer.h"
 #include "../exceptions/errorResult.h"
 
@@ -174,6 +175,26 @@ Image::~Image()
 {
     preDestroy(handle);
     vkDestroyImage(getNativeDevice(), handle, MAGMA_OPTIONAL(hostAllocator));
+}
+
+VkImageLayout Image::getOptimalReadOnlyLayout() const noexcept
+{
+    const Format imageFormat(format);
+    if (imageFormat.depthStencil())
+        return VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+    if (imageFormat.depth() || imageFormat.stencil())
+    {
+    #ifdef VK_KHR_separate_depth_stencil_layouts
+        if (device->checkFeatures()->separateDepthStencilLayoutsEnabled())
+        {   // Prefer separate depth or stencil layout
+            if (imageFormat.depth())
+                return VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR;
+            return VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR;
+        }
+    #endif // VK_KHR_separate_depth_stencil_layouts
+        return VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+    }
+    return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 }
 
 VkImageAspectFlags Image::getAspectMask() const noexcept

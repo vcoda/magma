@@ -58,6 +58,7 @@ namespace magma
         uint32_t getSamples() const noexcept { return samples; }
         VkImageTiling getTiling() const noexcept { return tiling; }
         VkImageUsageFlags getUsage() const noexcept { return usage; }
+        VkImageLayout getOptimalReadOnlyLayout() const noexcept;
         VkImageAspectFlags getAspectMask() const noexcept;
         VkExtent3D getExtent() const noexcept { return extent; }
         VkExtent3D calculateMipExtent(uint32_t level) const noexcept;
