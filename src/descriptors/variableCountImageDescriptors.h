@@ -39,8 +39,8 @@ namespace magma::descriptor
     protected:
         VariableCountImageDescriptors(VkDescriptorType descriptorType,
             uint32_t binding) noexcept;
-        BindlessHandle insert(VkDescriptorImageInfo descriptor,
-            VkImageUsageFlags usage);
+        BindlessHandle insert(const ImageView *imageView,
+            const magma::Sampler *sampler);
 
         DescriptorPool<VkDescriptorImageInfo> descriptors;
     };

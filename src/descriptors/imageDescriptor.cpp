@@ -47,18 +47,9 @@ void ImageDescriptor::update(const ImageView *imageView, const magma::Sampler *s
         {   // Assume that later image layout will be changed,
             // e.g. when a render pass instance ends.
             if (usage & VK_IMAGE_USAGE_SAMPLED_BIT)
-            {
-                const Format format(image->getFormat());
-                if (format.depth() || format.stencil() || format.depthStencil())
-                    descriptor.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-                else
-                    descriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            }
-            else
-            {
-                if (usage & VK_IMAGE_USAGE_STORAGE_BIT)
-                    descriptor.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
-            }
+                descriptor.imageLayout = image->getOptimalReadOnlyLayout();
+            else if (usage & VK_IMAGE_USAGE_STORAGE_BIT)
+                descriptor.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
         }
         dirty = true;
     }

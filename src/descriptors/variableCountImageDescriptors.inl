@@ -36,13 +36,16 @@ inline void VariableCountImageDescriptors::write(VkDescriptorSet dstSet, VkWrite
     dirty = false;
 }
 
-inline BindlessHandle VariableCountImageDescriptors::insert(VkDescriptorImageInfo descriptor, VkImageUsageFlags usage)
+inline BindlessHandle VariableCountImageDescriptors::insert(const ImageView *imageView, const magma::Sampler *sampler)
 {
+    VkDescriptorImageInfo descriptor = imageView->getDescriptor(sampler);
     if (VK_IMAGE_LAYOUT_UNDEFINED == descriptor.imageLayout)
     {   // Assume that later image layout will be changed,
         // e.g. when a render pass instance ends.
+        auto image = imageView->getImage();
+        VkImageUsageFlags usage = image->getUsage();
         if (usage & VK_IMAGE_USAGE_SAMPLED_BIT)
-            descriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            descriptor.imageLayout = image->getOptimalReadOnlyLayout();
         else if (usage & VK_IMAGE_USAGE_STORAGE_BIT)
             descriptor.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
     }
@@ -54,11 +57,11 @@ inline BindlessHandle VariableCountImageDescriptors::insert(VkDescriptorImageInf
 
 inline BindlessHandle VariableCountCombinedImageSamplers::insert(lent_ptr<const ImageView> imageView, lent_ptr<const magma::Sampler> sampler)
 {
-    return VariableCountImageDescriptors::insert(imageView->getDescriptor(sampler.get()), imageView->getImage()->getUsage());
+    return VariableCountImageDescriptors::insert(imageView.get(), sampler.get());
 }
 
 inline BindlessHandle VariableCountSampledImages::insert(lent_ptr<const ImageView> imageView)
 {
-    return VariableCountImageDescriptors::insert(imageView->getDescriptor(), imageView->getImage()->getUsage());
+    return VariableCountImageDescriptors::insert(imageView.get(), nullptr);
 }
 } // namespace magma::descriptor
