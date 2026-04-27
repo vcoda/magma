@@ -27,7 +27,7 @@ namespace magma
            images, buffers, samplers etc. */
 
         template<class Descriptor>
-        class DescriptorPool
+        class DescriptorPool final
         {
         public:
             DescriptorPool();
