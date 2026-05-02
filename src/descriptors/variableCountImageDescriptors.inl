@@ -1,7 +1,11 @@
 namespace magma::descriptor
 {
 inline VariableCountImageDescriptors::VariableCountImageDescriptors(VkDescriptorType descriptorType, uint32_t binding) noexcept:
+#ifdef VK_EXT_descriptor_indexing
     DescriptorSetLayoutBinding(descriptorType, 0, binding, VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT_EXT)
+#else
+    DescriptorSetLayoutBinding(descriptorType, 0, binding)
+#endif
 {}
 
 inline void VariableCountImageDescriptors::reserve(std::size_t capacity)
