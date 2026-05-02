@@ -63,6 +63,46 @@ bool FeatureQuery::separateDepthStencilLayoutsEnabled() const noexcept
     return false;
 }
 
+bool FeatureQuery::dynamicDescriptorIndexingEnabled() const noexcept
+{
+#ifdef VK_EXT_descriptor_indexing
+    if (device->extensionEnabled(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
+    {
+        const VkPhysicalDeviceDescriptorIndexingFeaturesEXT *descriptorIndexingFeatures =
+            device->getEnabledExtendedFeatures<VkPhysicalDeviceDescriptorIndexingFeaturesEXT>();
+        if (descriptorIndexingFeatures)
+        {
+            return descriptorIndexingFeatures->shaderInputAttachmentArrayDynamicIndexing ||
+                descriptorIndexingFeatures->shaderUniformTexelBufferArrayDynamicIndexing ||
+                descriptorIndexingFeatures->shaderStorageTexelBufferArrayDynamicIndexing;
+        }
+    }
+#endif // VK_EXT_descriptor_indexing
+    return false;
+}
+
+bool FeatureQuery::nonUniformDescriptorIndexingEnabled() const noexcept
+{
+#ifdef VK_EXT_descriptor_indexing
+    if (device->extensionEnabled(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
+    {
+        const VkPhysicalDeviceDescriptorIndexingFeaturesEXT *descriptorIndexingFeatures =
+            device->getEnabledExtendedFeatures<VkPhysicalDeviceDescriptorIndexingFeaturesEXT>();
+        if (descriptorIndexingFeatures)
+        {
+            return descriptorIndexingFeatures->shaderUniformBufferArrayNonUniformIndexing ||
+                descriptorIndexingFeatures->shaderSampledImageArrayNonUniformIndexing ||
+                descriptorIndexingFeatures->shaderStorageBufferArrayNonUniformIndexing ||
+                descriptorIndexingFeatures->shaderStorageImageArrayNonUniformIndexing ||
+                descriptorIndexingFeatures->shaderInputAttachmentArrayNonUniformIndexing ||
+                descriptorIndexingFeatures->shaderUniformTexelBufferArrayNonUniformIndexing ||
+                descriptorIndexingFeatures->shaderStorageTexelBufferArrayNonUniformIndexing;
+        }
+    }
+#endif // VK_EXT_descriptor_indexing
+    return false;
+}
+
 bool FeatureQuery::extendedLinesEnabled() const noexcept
 {
 #ifdef VK_EXT_line_rasterization

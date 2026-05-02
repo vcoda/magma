@@ -30,6 +30,8 @@ namespace magma
         bool maintenanceEnabled(uint8_t versionIndex) const noexcept;
         bool negativeViewportHeightEnabled() const noexcept;
         bool separateDepthStencilLayoutsEnabled() const noexcept;
+        bool dynamicDescriptorIndexingEnabled() const noexcept;
+        bool nonUniformDescriptorIndexingEnabled() const noexcept;
         bool extendedLinesEnabled() const noexcept;
         bool stippledLinesEnabled() const noexcept;
 
