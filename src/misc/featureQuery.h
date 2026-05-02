@@ -21,8 +21,8 @@ namespace magma
 {
     class Device;
 
-    /* Allows to query whether feature has been enabled in one line.
-       Feel free to add new features if necessary. */
+    /* Allows querying in one line whether a Vulkan feature
+       has been enabled. */
 
     class FeatureQuery : NonCopyable
     {
