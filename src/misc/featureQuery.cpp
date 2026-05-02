@@ -45,7 +45,6 @@ bool FeatureQuery::negativeViewportHeightEnabled() const noexcept
     if (device->extensionEnabled(VK_AMD_NEGATIVE_VIEWPORT_HEIGHT_EXTENSION_NAME))
         return true;
 #endif // VK_AMD_negative_viewport_height
-    MAGMA_UNUSED(device);
     return false;
 }
 
