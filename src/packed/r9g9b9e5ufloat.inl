@@ -2,9 +2,8 @@ namespace magma::packed
 {
 inline int floorLog2(float x)
 {
-    Float32 f;
-    f.f = x;
-    return f.e - Float32::bias;
+    ieee754::float32 f{x};
+    return (int)f.exponent - (int)ieee754::float32::bias;
 }
 
 inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
@@ -27,7 +26,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     max = _mm_shuffle_ps(max, max, _MM_SHUFFLE(0, 0, 0, 0)); // splat to all
     // floorLog2(max(r, g, b))
     __m128i bits = _mm_castps_si128(max);
-    __m128i bias = _mm_set1_epi32(Float32::bias);
+    __m128i bias = _mm_set1_epi32((int)ieee754::float32::bias);
     __m128i fl2 = _mm_sub_epi32(_mm_srli_epi32(bits, 23), bias);
     // e = max(-EXP_BIAS - 1, floorLog2(max(r, g, b))) + 1 + EXP_BIAS;
     __m128i e = _mm_max_epi32(fl2, _mm_set1_epi32(-EXP_BIAS - 1));
@@ -63,7 +62,7 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     // floorLog2(max(r, g, b))
     uint32x2_t bits64 = vreinterpret_u32_f32(max);
     uint32x4_t bits = vcombine_u32(bits64, bits64); // splat to all
-    uint32x4_t bias = vdupq_n_u32(Float32::bias);
+    uint32x4_t bias = vdupq_n_u32(ieee754::float32::bias);
     uint32x4_t fl2 = vsubq_u32(vshrq_n_u32(bits, 23), bias);
     // e = max(-EXP_BIAS - 1, floorLog2(max(r, g, b))) + 1 + EXP_BIAS;
     uint32x4_t e = vmaxq_u32(fl2, vdupq_n_u32(-EXP_BIAS - 1));
@@ -93,7 +92,8 @@ inline R9g9b9e5Ufloat::R9g9b9e5Ufloat(float r, float g, float b) noexcept
     g = std::clamp(g, 0.f, MAX_RGB9E5);
     b = std::clamp(b, 0.f, MAX_RGB9E5);
     float maxRgb = std::max(std::max(r, g), b);
-    int exp = std::max(-EXP_BIAS - 1, floorLog2(maxRgb)) + 1 + EXP_BIAS;
+    int log2MaxRgb = floorLog2(maxRgb);
+    int exp = std::max(-EXP_BIAS - 1, log2MaxRgb) + 1 + EXP_BIAS;
     MAGMA_ASSERT(exp >= 0);
     MAGMA_ASSERT(exp <= MAX_VALID_BIASED_EXP);
     #include "rcpExpPow2.h"

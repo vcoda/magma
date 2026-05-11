@@ -2,7 +2,7 @@ namespace magma::packed
 {
 inline X11y11z10Ufloat::X11y11z10Ufloat(float x, float y, float z) noexcept
 {
-    const Float32 ivec[3] = {x, y, z};
+    const ieee754::float32 ivec[3] = {x, y, z};
     uint32_t res[3];
     // X & Y components (5-bit exponent, 6-bit mantissa)
     for (uint32_t j = 0; j < 2; ++j)
