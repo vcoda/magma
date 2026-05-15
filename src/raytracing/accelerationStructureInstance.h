@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -87,11 +87,39 @@ namespace magma
     struct AccelerationStructureMatrixMotionInstance : VkAccelerationStructureMatrixMotionInstanceNV
     {
         constexpr AccelerationStructureMatrixMotionInstance() noexcept;
+        constexpr void setTriangleFacingCull(bool enable) noexcept;
+        constexpr bool isTriangleFacingCullEnabled() const noexcept;
+        constexpr void setFrontTriangleCcw(bool counterclockwise) noexcept;
+        constexpr bool isFrontTriangleCcw() const noexcept;
+        constexpr void setForceOpaque(bool opaque) noexcept;
+        constexpr bool isForceOpaqueEnabled() const noexcept;
+        constexpr void setForceNoOpaque(bool noOpaque) noexcept;
+        constexpr bool isForceNoOpaqueEnabled() const noexcept;
+    #ifdef VK_KHR_opacity_micromap
+        constexpr void setOpacityMicromapTo2StateMode(bool enable) noexcept;
+        constexpr bool isOpacityMicromapIn2StateMode() const noexcept;
+        constexpr void setOpacityMicromaps(bool enable) noexcept;
+        constexpr bool isOpacityMicromapsEnabled() const noexcept;
+    #endif // VK_KHR_opacity_micromap
     };
 
     struct AccelerationStructureSRTMotionInstance : VkAccelerationStructureSRTMotionInstanceNV
     {
         constexpr AccelerationStructureSRTMotionInstance() noexcept;
+        constexpr void setTriangleFacingCull(bool enable) noexcept;
+        constexpr bool isTriangleFacingCullEnabled() const noexcept;
+        constexpr void setFrontTriangleCcw(bool counterclockwise) noexcept;
+        constexpr bool isFrontTriangleCcw() const noexcept;
+        constexpr void setForceOpaque(bool opaque) noexcept;
+        constexpr bool isForceOpaqueEnabled() const noexcept;
+        constexpr void setForceNoOpaque(bool noOpaque) noexcept;
+        constexpr bool isForceNoOpaqueEnabled() const noexcept;
+    #ifdef VK_KHR_opacity_micromap
+        constexpr void setOpacityMicromapTo2StateMode(bool enable) noexcept;
+        constexpr bool isOpacityMicromapIn2StateMode() const noexcept;
+        constexpr void setOpacityMicromaps(bool enable) noexcept;
+        constexpr bool isOpacityMicromapsEnabled() const noexcept;
+    #endif // VK_KHR_opacity_micromap
     };
 
     struct AccelerationStructureMotionInstance : VkAccelerationStructureMotionInstanceNV
