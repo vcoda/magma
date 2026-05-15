@@ -51,7 +51,7 @@ namespace magma
         constexpr bool isForceNoOpaqueEnabled() const noexcept;
     #ifdef VK_KHR_opacity_micromap
         constexpr void setOpacityMicromapTo2StateMode(bool enable) noexcept;
-        constexpr bool isOpacityMicromap2StateMode() const noexcept;
+        constexpr bool isOpacityMicromapIn2StateMode() const noexcept;
         constexpr void setOpacityMicromaps(bool enable) noexcept;
         constexpr bool isOpacityMicromapsEnabled() const noexcept;
     #endif // VK_KHR_opacity_micromap
