@@ -41,6 +41,20 @@ namespace magma
     struct AccelerationStructureInstance : VkAccelerationStructureInstanceKHR
     {
         constexpr AccelerationStructureInstance() noexcept;
+        constexpr void setTriangleFacingCull(bool enable) noexcept;
+        constexpr bool isTriangleFacingCullEnabled() const noexcept;
+        constexpr void setFrontTriangleCcw(bool counterclockwise) noexcept;
+        constexpr bool isFrontTriangleCcw() const noexcept;
+        constexpr void setForceOpaque(bool opaque) noexcept;
+        constexpr bool isForceOpaqueEnabled() const noexcept;
+        constexpr void setForceNoOpaque(bool noOpaque) noexcept;
+        constexpr bool isForceNoOpaqueEnabled() const noexcept;
+    #ifdef VK_KHR_opacity_micromap
+        constexpr void setOpacityMicromapTo2StateMode(bool enable) noexcept;
+        constexpr bool isOpacityMicromap2StateMode() const noexcept;
+        constexpr void setOpacityMicromaps(bool enable) noexcept;
+        constexpr bool isOpacityMicromapsEnabled() const noexcept;
+    #endif // VK_KHR_opacity_micromap
     };
 #endif // VK_KHR_acceleration_structure
 

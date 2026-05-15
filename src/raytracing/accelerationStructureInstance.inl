@@ -45,6 +45,86 @@ constexpr AccelerationStructureInstance::AccelerationStructureInstance() noexcep
         0ull // accelerationStructureReference
     }
 {}
+
+constexpr void AccelerationStructureInstance::setTriangleFacingCull(bool enable) noexcept
+{
+    if (!enable)
+        flags |= VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
+    else
+        flags &= ~VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
+}
+
+constexpr bool AccelerationStructureInstance::isTriangleFacingCullEnabled() const noexcept
+{
+    return !(flags & VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR);
+}
+
+constexpr void AccelerationStructureInstance::setFrontTriangleCcw(bool counterclockwise) noexcept
+{
+    if (counterclockwise)
+        flags |= VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
+    else
+        flags &= ~VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
+}
+
+constexpr bool AccelerationStructureInstance::isFrontTriangleCcw() const noexcept
+{
+    return flags & VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
+}
+
+constexpr void AccelerationStructureInstance::setForceOpaque(bool enable) noexcept
+{
+    if (enable)
+        flags |= VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_KHR;
+    else
+        flags &= ~VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_KHR;
+}
+
+constexpr bool AccelerationStructureInstance::isForceOpaqueEnabled() const noexcept
+{
+    return flags & VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_KHR;
+}
+
+constexpr void AccelerationStructureInstance::setForceNoOpaque(bool enable) noexcept
+{
+    if (enable)
+        flags |= VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_KHR;
+    else
+        flags &= ~VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_KHR;
+}
+
+constexpr bool AccelerationStructureInstance::isForceNoOpaqueEnabled() const noexcept
+{
+    return flags & VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_KHR;
+}
+
+#ifdef VK_KHR_opacity_micromap
+constexpr void AccelerationStructureInstance::setOpacityMicromapTo2StateMode(bool enable) noexcept
+{
+    if (enable)
+        flags |= VK_GEOMETRY_INSTANCE_FORCE_OPACITY_MICROMAP_2_STATE_BIT_KHR;
+    else
+        flags &= ~VK_GEOMETRY_INSTANCE_FORCE_OPACITY_MICROMAP_2_STATE_BIT_KHR;
+}
+
+constexpr bool AccelerationStructureInstance::isOpacityMicromapIn2StateMode() const noexcept
+{
+    return flags & VK_GEOMETRY_INSTANCE_FORCE_OPACITY_MICROMAP_2_STATE_BIT_KHR;
+}
+
+constexpr void AccelerationStructureInstance::setOpacityMicromaps(bool enable) noexcept
+{
+    if (!enable)
+        flags |= VK_GEOMETRY_INSTANCE_DISABLE_OPACITY_MICROMAPS_BIT_KHR;
+    else
+        flags &= ~VK_GEOMETRY_INSTANCE_DISABLE_OPACITY_MICROMAPS_BIT_KHR;
+}
+
+constexpr bool AccelerationStructureInstance::isOpacityMicromapsEnabled() const noexcept
+{
+    return !(flags & VK_GEOMETRY_INSTANCE_DISABLE_OPACITY_MICROMAPS_BIT_KHR);
+}
+#endif // VK_KHR_opacity_micromap
 #endif // VK_KHR_acceleration_structure
 
 #ifdef VK_NV_ray_tracing_motion_blur
