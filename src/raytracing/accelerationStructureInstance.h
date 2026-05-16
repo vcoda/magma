@@ -45,13 +45,13 @@ namespace magma
         constexpr bool isTriangleFacingCullEnabled() const noexcept;
         constexpr void setFrontTriangleCcw(bool counterclockwise) noexcept;
         constexpr bool isFrontTriangleCcw() const noexcept;
-        constexpr void setForceOpaque(bool opaque) noexcept;
+        constexpr void setForceOpaque(bool enable) noexcept;
         constexpr bool isForceOpaqueEnabled() const noexcept;
-        constexpr void setForceNoOpaque(bool noOpaque) noexcept;
+        constexpr void setForceNoOpaque(bool enable) noexcept;
         constexpr bool isForceNoOpaqueEnabled() const noexcept;
     #ifdef VK_KHR_opacity_micromap
-        constexpr void setOpacityMicromapTo2StateMode(bool enable) noexcept;
-        constexpr bool isOpacityMicromapIn2StateMode() const noexcept;
+        constexpr void setForceOpacityMicromap2State(bool enable) noexcept;
+        constexpr bool isForceOpacityMicromap2State() const noexcept;
         constexpr void setOpacityMicromaps(bool enable) noexcept;
         constexpr bool isOpacityMicromapsEnabled() const noexcept;
     #endif // VK_KHR_opacity_micromap
@@ -91,13 +91,13 @@ namespace magma
         constexpr bool isTriangleFacingCullEnabled() const noexcept;
         constexpr void setFrontTriangleCcw(bool counterclockwise) noexcept;
         constexpr bool isFrontTriangleCcw() const noexcept;
-        constexpr void setForceOpaque(bool opaque) noexcept;
+        constexpr void setForceOpaque(bool enable) noexcept;
         constexpr bool isForceOpaqueEnabled() const noexcept;
-        constexpr void setForceNoOpaque(bool noOpaque) noexcept;
+        constexpr void setForceNoOpaque(bool enable) noexcept;
         constexpr bool isForceNoOpaqueEnabled() const noexcept;
     #ifdef VK_KHR_opacity_micromap
-        constexpr void setOpacityMicromapTo2StateMode(bool enable) noexcept;
-        constexpr bool isOpacityMicromapIn2StateMode() const noexcept;
+        constexpr void setForceOpacityMicromap2State(bool enable) noexcept;
+        constexpr bool isForceOpacityMicromap2State() const noexcept;
         constexpr void setOpacityMicromaps(bool enable) noexcept;
         constexpr bool isOpacityMicromapsEnabled() const noexcept;
     #endif // VK_KHR_opacity_micromap
@@ -110,13 +110,13 @@ namespace magma
         constexpr bool isTriangleFacingCullEnabled() const noexcept;
         constexpr void setFrontTriangleCcw(bool counterclockwise) noexcept;
         constexpr bool isFrontTriangleCcw() const noexcept;
-        constexpr void setForceOpaque(bool opaque) noexcept;
+        constexpr void setForceOpaque(bool enable) noexcept;
         constexpr bool isForceOpaqueEnabled() const noexcept;
-        constexpr void setForceNoOpaque(bool noOpaque) noexcept;
+        constexpr void setForceNoOpaque(bool enable) noexcept;
         constexpr bool isForceNoOpaqueEnabled() const noexcept;
     #ifdef VK_KHR_opacity_micromap
-        constexpr void setOpacityMicromapTo2StateMode(bool enable) noexcept;
-        constexpr bool isOpacityMicromapIn2StateMode() const noexcept;
+        constexpr void setForceOpacityMicromap2State(bool enable) noexcept;
+        constexpr bool isForceOpacityMicromap2State() const noexcept;
         constexpr void setOpacityMicromaps(bool enable) noexcept;
         constexpr bool isOpacityMicromapsEnabled() const noexcept;
     #endif // VK_KHR_opacity_micromap
