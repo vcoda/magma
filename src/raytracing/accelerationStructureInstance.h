@@ -51,7 +51,7 @@ namespace magma
         constexpr bool isForceNoOpaqueEnabled() const noexcept;
     #ifdef VK_KHR_opacity_micromap
         constexpr void setForceOpacityMicromap2State(bool enable) noexcept;
-        constexpr bool isForceOpacityMicromap2State() const noexcept;
+        constexpr bool isForceOpacityMicromap2StateEnabled() const noexcept;
         constexpr void setOpacityMicromaps(bool enable) noexcept;
         constexpr bool isOpacityMicromapsEnabled() const noexcept;
     #endif // VK_KHR_opacity_micromap
@@ -97,7 +97,7 @@ namespace magma
         constexpr bool isForceNoOpaqueEnabled() const noexcept;
     #ifdef VK_KHR_opacity_micromap
         constexpr void setForceOpacityMicromap2State(bool enable) noexcept;
-        constexpr bool isForceOpacityMicromap2State() const noexcept;
+        constexpr bool isForceOpacityMicromap2StateEnabled() const noexcept;
         constexpr void setOpacityMicromaps(bool enable) noexcept;
         constexpr bool isOpacityMicromapsEnabled() const noexcept;
     #endif // VK_KHR_opacity_micromap
@@ -116,7 +116,7 @@ namespace magma
         constexpr bool isForceNoOpaqueEnabled() const noexcept;
     #ifdef VK_KHR_opacity_micromap
         constexpr void setForceOpacityMicromap2State(bool enable) noexcept;
-        constexpr bool isForceOpacityMicromap2State() const noexcept;
+        constexpr bool isForceOpacityMicromap2StateEnabled() const noexcept;
         constexpr void setOpacityMicromaps(bool enable) noexcept;
         constexpr bool isOpacityMicromapsEnabled() const noexcept;
     #endif // VK_KHR_opacity_micromap

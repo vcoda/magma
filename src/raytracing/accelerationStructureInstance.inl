@@ -99,7 +99,7 @@ constexpr bool AccelerationStructureInstance::isForceNoOpaqueEnabled() const noe
 }
 
 #ifdef VK_KHR_opacity_micromap
-constexpr void AccelerationStructureInstance::setForceOpacityMicromap2State(bool enable) noexcept
+constexpr void AccelerationStructureInstance::setForceOpacityMicromap2StateEnabled(bool enable) noexcept
 {
     if (enable)
         flags |= VK_GEOMETRY_INSTANCE_FORCE_OPACITY_MICROMAP_2_STATE_BIT_KHR;
@@ -222,7 +222,7 @@ constexpr void AccelerationStructureMatrixMotionInstance::setForceOpacityMicroma
         flags &= ~VK_GEOMETRY_INSTANCE_FORCE_OPACITY_MICROMAP_2_STATE_BIT_KHR;
 }
 
-constexpr bool AccelerationStructureMatrixMotionInstance::isForceOpacityMicromap2State() const noexcept
+constexpr bool AccelerationStructureMatrixMotionInstance::isForceOpacityMicromap2StateEnabled() const noexcept
 {
     return flags & VK_GEOMETRY_INSTANCE_FORCE_OPACITY_MICROMAP_2_STATE_BIT_KHR;
 }
@@ -314,7 +314,7 @@ constexpr void AccelerationStructureSRTMotionInstance::setForceOpacityMicromap2S
         flags &= ~VK_GEOMETRY_INSTANCE_FORCE_OPACITY_MICROMAP_2_STATE_BIT_KHR;
 }
 
-constexpr bool AccelerationStructureSRTMotionInstance::isForceOpacityMicromap2State() const noexcept
+constexpr bool AccelerationStructureSRTMotionInstance::isForceOpacityMicromap2StateEnabled() const noexcept
 {
     return flags & VK_GEOMETRY_INSTANCE_FORCE_OPACITY_MICROMAP_2_STATE_BIT_KHR;
 }
