@@ -20,21 +20,21 @@ constexpr AccelerationStructureGeometry::AccelerationStructureGeometry(const VkG
     }
 {}
 
-inline Aabb::Aabb(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) noexcept:
+constexpr Aabb::Aabb(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) noexcept:
     VkAabbPositionsKHR{
         minX, minY, minZ,
         maxX, maxY, maxZ
     }
 {}
 
-inline Aabb::Aabb(const float min[3], const float max[3]) noexcept:
+constexpr Aabb::Aabb(const float min[3], const float max[3]) noexcept:
     VkAabbPositionsKHR{
         min[0], min[1], min[2],
         max[0], max[1], max[2]
     }
 {}
 
-inline Aabb::Aabb(const float bounds[6]) noexcept:
+constexpr Aabb::Aabb(const float bounds[6]) noexcept:
     VkAabbPositionsKHR{
         bounds[0],
         bounds[1],
@@ -45,7 +45,15 @@ inline Aabb::Aabb(const float bounds[6]) noexcept:
     }
 {}
 
-inline void Aabb::translate(float x, float y, float z) noexcept
+template<class Vector>
+constexpr Aabb::Aabb(const Vector& min, const Vector& max) noexcept:
+    VkAabbPositionsKHR{
+        min.x, min.y, min.z,
+        max.x, max.y, max.z,
+    }
+{}
+
+constexpr void Aabb::translate(float x, float y, float z) noexcept
 {
     minX += x;
     minY += y;
@@ -54,14 +62,6 @@ inline void Aabb::translate(float x, float y, float z) noexcept
     maxY += y;
     maxZ += z;
 }
-
-template<class Vector>
-inline Aabb::Aabb(const Vector& min, const Vector& max) noexcept:
-    VkAabbPositionsKHR{
-        min.x, min.y, min.z,
-        max.x, max.y, max.z,
-    }
-{}
 
 inline AccelerationStructureAabbs::AccelerationStructureAabbs(const Aabb& aabb, VkGeometryFlagsKHR flags /* 0 */) noexcept:
     AccelerationStructureGeometry(VK_GEOMETRY_TYPE_AABBS_KHR, flags)

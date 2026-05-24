@@ -81,14 +81,14 @@ namespace magma
 
     struct Aabb : VkAabbPositionsKHR
     {
-        Aabb(): VkAabbPositionsKHR{} {}
-        Aabb(float minX, float minY, float minZ,
+        constexpr Aabb(): VkAabbPositionsKHR{} {}
+        constexpr Aabb(float minX, float minY, float minZ,
             float maxX, float maxY, float maxZ) noexcept;
-        Aabb(const float min[3], const float max[3]) noexcept;
-        Aabb(const float bounds[6]) noexcept;
+        constexpr Aabb(const float min[3], const float max[3]) noexcept;
+        constexpr Aabb(const float bounds[6]) noexcept;
         template<class Vector>
-        Aabb(const Vector& min, const Vector& max) noexcept;
-        void translate(float x, float y, float z) noexcept;
+        constexpr Aabb(const Vector& min, const Vector& max) noexcept;
+        constexpr void translate(float x, float y, float z) noexcept;
         // An inactive AABB is one for which the minimum X coordinate is NaN
         void deactivate() noexcept { minX = std::nanf(""); }
         bool inactive() const noexcept { return std::isnan(minX); }
