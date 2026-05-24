@@ -345,5 +345,29 @@ constexpr AccelerationStructureMotionInstance::AccelerationStructureMotionInstan
     static_assert(sizeof(AccelerationStructureMotionInstance) == 160,
         "VkAccelerationStructureMotionInstanceNV must have a stride of 160 bytes");
 }
+
+constexpr AccelerationStructureMotionInstance::AccelerationStructureMotionInstance(const VkAccelerationStructureInstanceKHR& instance,
+    VkAccelerationStructureMotionInstanceFlagsNV flags_ /* 0 */) noexcept
+{
+    type = VK_ACCELERATION_STRUCTURE_MOTION_INSTANCE_TYPE_STATIC_NV;
+    flags = flags_;
+    data.staticInstance = instance;
+}
+
+constexpr AccelerationStructureMotionInstance::AccelerationStructureMotionInstance(const VkAccelerationStructureMatrixMotionInstanceNV& instance,
+    VkAccelerationStructureMotionInstanceFlagsNV flags_ /* 0 */) noexcept
+{
+    type = VK_ACCELERATION_STRUCTURE_MOTION_INSTANCE_TYPE_MATRIX_MOTION_NV;
+    flags = flags_;
+    data.matrixMotionInstance = instance;
+}
+
+constexpr AccelerationStructureMotionInstance::AccelerationStructureMotionInstance(const VkAccelerationStructureSRTMotionInstanceNV& instance,
+    VkAccelerationStructureMotionInstanceFlagsNV flags_ /* 0 */) noexcept
+{
+    type = VK_ACCELERATION_STRUCTURE_MOTION_INSTANCE_TYPE_SRT_MOTION_NV;
+    flags = flags_;
+    data.srtMotionInstance = instance;
+}
 #endif // VK_NV_ray_tracing_motion_blur
 } // namespace magma

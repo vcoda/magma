@@ -125,6 +125,12 @@ namespace magma
     struct AccelerationStructureMotionInstance : VkAccelerationStructureMotionInstanceNV
     {
         constexpr AccelerationStructureMotionInstance() noexcept;
+        constexpr AccelerationStructureMotionInstance(const VkAccelerationStructureInstanceKHR& instance,
+            VkAccelerationStructureMotionInstanceFlagsNV flags = 0) noexcept;
+        constexpr AccelerationStructureMotionInstance(const VkAccelerationStructureMatrixMotionInstanceNV& instance,
+            VkAccelerationStructureMotionInstanceFlagsNV flags = 0) noexcept;
+        constexpr AccelerationStructureMotionInstance(const VkAccelerationStructureSRTMotionInstanceNV& instance,
+            VkAccelerationStructureMotionInstanceFlagsNV flags = 0) noexcept;
 
         const uint64_t padding = 0ull;
     };
