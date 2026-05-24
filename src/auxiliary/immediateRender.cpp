@@ -165,12 +165,7 @@ bool ImmediateRender::commitPrimitives(lent_ptr<CommandBuffer> cmdBuffer,
             cmdBuffer->beginDebugLabel(primitive.labelName, r, g, b, a);
         #elif defined(VK_EXT_debug_marker)
             cmdBuffer->beginDebugMarker(primitive.labelName, r, g, b, a);
-        #else
-            MAGMA_UNUSED(r);
-            MAGMA_UNUSED(g);
-            MAGMA_UNUSED(b);
-            MAGMA_UNUSED(a);
-        #endif // !defined(VK_EXT_debug_marker)
+        #endif
         }
         if (primitive.pipeline != prevPipeline)
         {
