@@ -25,7 +25,14 @@ namespace magma
 {
 #ifdef VK_EXT_descriptor_indexing
 void VariableCountDescriptorSet::allocate(VkDescriptorSetLayoutCreateFlags flags, const StructureChain& extendedInfo)
-{   // Sort descriptors by binding order
+{
+    const bool canUpdateAfterBind = descriptorPool->getFlags() & VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
+    if (flags & VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT_EXT)
+    {
+        if (!canUpdateAfterBind)
+            MAGMA_ERROR("descriptor pool must have been created with update-after-bind flag");
+    }
+    // Sort descriptors by binding order
     std::map<uint32_t, const DescriptorSetLayoutBinding *> sortedDescriptors;
     for (auto descriptor: descriptors)
         sortedDescriptors[descriptor->binding] = descriptor;
@@ -34,13 +41,12 @@ void VariableCountDescriptorSet::allocate(VkDescriptorSetLayoutCreateFlags flags
     for (auto const& [index, descriptor]: sortedDescriptors)
     {
         MAGMA_UNUSED(index);
-        bindings.push_back(*descriptor);
         if (descriptor->getBindingFlags() & VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT)
         {
-            bool canUpdateAfterBind = descriptorPool->getFlags() & VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT;
             if (!canUpdateAfterBind)
-                MAGMA_ERROR("descriptor with update-after-bind flag can't be allocated from this pool");
+                MAGMA_ERROR("descriptor pool must have been created with update-after-bind flag");
         }
+        bindings.push_back(*descriptor);
         bindingFlags.push_back(descriptor->getBindingFlags());
     }
     // Create descriptor set layout
