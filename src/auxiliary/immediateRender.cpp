@@ -35,6 +35,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../misc/deviceFeatures.h"
 #include "../misc/featureQuery.h"
 #include "../misc/pushConstantRange.h"
+#include "../packed/unpackColor.h"
 
 namespace magma::aux
 {
@@ -160,7 +161,7 @@ bool ImmediateRender::commitPrimitives(lent_ptr<CommandBuffer> cmdBuffer,
         if (primitive.labelName)
         {
             float r, g, b, a;
-            MAGMA_DWORD_TO_FLOAT_RGBA(primitive.labelColor, r, g, b, a);
+            packed::dwordToFloat4(primitive.labelColor, r, g, b, a);
         #if defined(VK_EXT_debug_utils)
             cmdBuffer->beginDebugLabel(primitive.labelName, r, g, b, a);
         #elif defined(VK_EXT_debug_marker)

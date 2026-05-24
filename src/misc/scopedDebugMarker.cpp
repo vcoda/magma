@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "scopedDebugMarker.h"
 #include "../objects/commandBuffer.h"
+#include "../packed/unpackColor.h"
 
 namespace magma
 {
@@ -39,7 +40,7 @@ ScopedDebugMarker::ScopedDebugMarker(const std::unique_ptr<CommandBuffer>& cmdBu
     cmdBuffer(cmdBuffer)
 {
     float r, g, b, a;
-    MAGMA_DWORD_TO_FLOAT_RGBA(color, r, g, b, a);
+    packed::dwordToFloat4(color, r, g, b, a);
 #ifdef VK_EXT_debug_utils
     cmdBuffer->beginDebugLabel(name, r, g, b, a);
 #else

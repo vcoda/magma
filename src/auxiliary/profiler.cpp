@@ -25,6 +25,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "../objects/queryPool.h"
 #include "../objects/buffer.h"
 #include "../allocator/allocator.h"
+#include "../packed/unpackColor.h"
 
 namespace magma::aux
 {
@@ -124,7 +125,7 @@ void Profiler::beginSection(lent_ptr<CommandBuffer> cmdBuffer, const char *name,
     if (useLabels)
     {
         float r, g, b, a;
-        MAGMA_DWORD_TO_FLOAT_RGBA(color, r, g, b, a);
+        packed::dwordToFloat4(color, r, g, b, a);
     #if defined(VK_EXT_debug_utils)
         cmdBuffer->beginDebugLabel(name, r, g, b, a);
     #elif defined(VK_EXT_debug_marker)

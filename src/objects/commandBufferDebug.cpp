@@ -19,6 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #ifdef MAGMA_DEBUG
 #include "commandBuffer.h"
+#include "../packed/unpackColor.h"
 
 namespace magma
 {
@@ -142,7 +143,7 @@ void CommandBuffer::setCheckpoint(const char *name) const noexcept
 void CommandBuffer::pushDebugMarker(const char* name, uint32_t color) noexcept
 {
     float r, g, b, a;
-    MAGMA_DWORD_TO_FLOAT_RGBA(color, r, g, b, a);
+    packed::dwordToFloat4(color, r, g, b, a);
 #ifdef VK_EXT_debug_utils
     if (extensions.EXT_debug_utils)
         return beginDebugLabel(name, r, g, b, a);

@@ -873,6 +873,9 @@
     <ClInclude Include="..\..\src\descriptors\descriptorPool.h">
       <Filter>Header Files\descriptors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\packed\unpackColor.h">
+      <Filter>Header Files\packed</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\magma.cpp">

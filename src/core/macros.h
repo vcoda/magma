@@ -51,12 +51,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     ((frontFace && backFace) ? VK_STENCIL_FRONT_AND_BACK :\
      (frontFace ? VK_STENCIL_FACE_FRONT_BIT : VK_STENCIL_FACE_BACK_BIT))
 
- #define MAGMA_DWORD_TO_FLOAT_RGBA(packed, r, g, b, a)\
-    r = ((packed >> 24) & 0xFF) / float(0xFF);\
-    g = ((packed >> 16) & 0xFF) / float(0xFF);\
-    b = ((packed >> 8) & 0xFF) / float(0xFF);\
-    a = (packed & 0xFF) / float(0xFF);
-
 #if defined(MAGMA_DIAGNOSTIC) && defined(MAGMA_DEBUG)
     #define MAGMA_CHECKPOINT(stage) magma::CommandBuffer::insertDebugCheckpoint(__FUNCTION__, (VkPipelineStageFlagBits)stage)
 #else
