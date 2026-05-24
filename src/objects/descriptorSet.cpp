@@ -109,7 +109,7 @@ void DescriptorSet::validateReflection(const std::unique_ptr<const ShaderReflect
         }
         if (!reflectedBinding)
         {
-            std::cout << "warning: binding #" << descriptor->binding << " not found in the descriptor set # " << setIndex << std::endl;
+            std::cout << "warning: binding #" << descriptor->binding << " not found in the descriptor set #" << setIndex << std::endl;
             continue;
         }
         std::ostringstream out;
