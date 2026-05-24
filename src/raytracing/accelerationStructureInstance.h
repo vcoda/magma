@@ -28,7 +28,7 @@ namespace magma
         template<int M, int N>
         constexpr TransformMatrix(const float (&mat)[M][N]) noexcept;
         template<class Matrix>
-        TransformMatrix(const Matrix& mat) noexcept;
+        constexpr TransformMatrix(const Matrix& mat) noexcept;
     };
 
     /* Acceleration structure instances can be built into top-level
