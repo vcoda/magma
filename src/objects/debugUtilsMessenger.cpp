@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_debug_utils
-DebugUtilsMessenger::DebugUtilsMessenger(Instance *instance,
+DebugUtilsMessenger::DebugUtilsMessenger(const std::unique_ptr<Instance>& vkInstance,
     PFN_vkDebugUtilsMessengerCallbackEXT userCallback,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDebugUtilsMessageSeverityFlagsEXT messageSeverity /* VERBOSE_BIT | INFO_BIT | WARNING_BIT ERROR_BIT */,
@@ -35,7 +35,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(Instance *instance,
     void *userData /* nullptr */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT, std::move(allocator)),
-    instance(instance)
+    instance(vkInstance->getHandle())
 {
     MAGMA_ASSERT(userCallback);
     MAGMA_INSTANCE_EXTENSION(vkCreateDebugUtilsMessengerEXT);
@@ -49,7 +49,7 @@ DebugUtilsMessenger::DebugUtilsMessenger(Instance *instance,
         debugUtilsMessengerInfo.messageType = messageType;
         debugUtilsMessengerInfo.pfnUserCallback = userCallback;
         debugUtilsMessengerInfo.pUserData = userData;
-        const VkResult result = vkCreateDebugUtilsMessengerEXT(*instance, &debugUtilsMessengerInfo,
+        const VkResult result = vkCreateDebugUtilsMessengerEXT(instance, &debugUtilsMessengerInfo,
             MAGMA_OPTIONAL(hostAllocator), &handle);
         MAGMA_HANDLE_RESULT(result, "failed to create debug messenger");
     }
@@ -59,7 +59,7 @@ DebugUtilsMessenger::~DebugUtilsMessenger()
 {
     MAGMA_INSTANCE_EXTENSION(vkDestroyDebugUtilsMessengerEXT);
     if (vkDestroyDebugUtilsMessengerEXT)
-        vkDestroyDebugUtilsMessengerEXT(*instance, handle, MAGMA_OPTIONAL(hostAllocator));
+        vkDestroyDebugUtilsMessengerEXT(instance, handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes,
@@ -81,7 +81,7 @@ void DebugUtilsMessenger::message(VkDebugUtilsMessageSeverityFlagBitsEXT message
         data.pCmdBufLabels = nullptr;
         data.objectCount = 0;
         data.pObjects = nullptr;
-        vkSubmitDebugUtilsMessageEXT(*instance, messageSeverity, messageTypes, &data);
+        vkSubmitDebugUtilsMessageEXT(instance, messageSeverity, messageTypes, &data);
     }
 }
 

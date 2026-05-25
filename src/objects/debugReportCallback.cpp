@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -28,14 +28,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_EXT_debug_report
-DebugReportCallback::DebugReportCallback(Instance *instance,
+DebugReportCallback::DebugReportCallback(const std::unique_ptr<Instance>& vkInstance,
     PFN_vkDebugReportCallbackEXT userCallback,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     VkDebugReportFlagsEXT flags /* INFORMATION_BIT | WARNING_BIT_EXT | PERFORMANCE_WARNING_BIT_EXT | ERROR_BIT DEBUG_BIT */,
     void *userData /* nullptr */,
     const StructureChain& extendedInfo /* default */):
     NonDispatchable(VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT, std::move(allocator)),
-    instance(instance)
+    instance(vkInstance->getHandle())
 {
     MAGMA_ASSERT(userCallback);
     MAGMA_INSTANCE_EXTENSION(vkCreateDebugReportCallbackEXT);
@@ -47,7 +47,7 @@ DebugReportCallback::DebugReportCallback(Instance *instance,
         debugReportCallbackInfo.flags = flags;
         debugReportCallbackInfo.pfnCallback = userCallback;
         debugReportCallbackInfo.pUserData = userData;
-        const VkResult result = vkCreateDebugReportCallbackEXT(*instance, &debugReportCallbackInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
+        const VkResult result = vkCreateDebugReportCallbackEXT(instance, &debugReportCallbackInfo, MAGMA_OPTIONAL(hostAllocator), &handle);
         MAGMA_HANDLE_RESULT(result, "failed to create debug report callback");
     }
 }
@@ -56,7 +56,7 @@ DebugReportCallback::~DebugReportCallback()
 {
     MAGMA_INSTANCE_EXTENSION(vkDestroyDebugReportCallbackEXT);
     if (vkDestroyDebugReportCallbackEXT)
-        vkDestroyDebugReportCallbackEXT(*instance, handle, MAGMA_OPTIONAL(hostAllocator));
+        vkDestroyDebugReportCallbackEXT(instance, handle, MAGMA_OPTIONAL(hostAllocator));
 }
 
 void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType objectType,
@@ -66,7 +66,7 @@ void DebugReportCallback::message(VkDebugReportFlagsEXT flags, VkObjectType obje
     if (vkDebugReportMessageEXT)
     {
         VkDebugReportObjectTypeEXT debugObjectType = helpers::objectToDebugReportType(objectType);
-        vkDebugReportMessageEXT(*instance, flags, debugObjectType, object, location, messageCode, layerPrefix, message);
+        vkDebugReportMessageEXT(instance, flags, debugObjectType, object, location, messageCode, layerPrefix, message);
     }
 }
 
