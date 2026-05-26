@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ namespace magma
     class DebugReportCallback : public NonDispatchable<VkDebugReportCallbackEXT>
     {
     public:
-        explicit DebugReportCallback(Instance *instance,
+        explicit DebugReportCallback(const std::unique_ptr<Instance>& vkInstance,
             PFN_vkDebugReportCallbackEXT userCallback,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkDebugReportFlagsEXT flags =
@@ -46,7 +46,7 @@ namespace magma
             void *userData = nullptr,
             const StructureChain& extendedInfo = StructureChain());
         ~DebugReportCallback();
-        Instance *getInstance() const noexcept { return instance; }
+        VkInstance getNativeInstance() const noexcept { return instance; }
         void message(VkDebugReportFlagsEXT flags,
             VkObjectType objectType,
             uint64_t object,
@@ -63,7 +63,7 @@ namespace magma
             const char *format, ...) const noexcept;
 
     private:
-        Instance *instance;
+        VkInstance instance;
     };
 #endif // VK_EXT_debug_report
 } // namespace magma
