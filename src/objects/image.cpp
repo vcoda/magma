@@ -157,7 +157,7 @@ Image::Image(std::shared_ptr<Device> device, VkImageType imageType, VkFormat for
     const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers, uint32_t samples,
     VkImageCreateFlags flags, VkImageUsageFlags usage, VkImageTiling tiling):
     NonDispatchable<VkImage>(VK_OBJECT_TYPE_IMAGE, std::move(device), nullptr),
-    Resource(0, sharing),
+    Resource(0, Sharing()),
     flags(flags),
     imageType(imageType),
     format(format),
