@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,26 +23,26 @@ namespace magma
     /* Holds a pointer to the Vulkan ICD proc address. */
 
     template<class Fn, bool Instance>
-    class Extension
+    class ProcAddress
     {
     public:
-        operator Fn() const noexcept { return procAddr; }
-        operator bool() const noexcept { return procAddr != nullptr; }
+        operator Fn() const noexcept { return addr; }
+        operator bool() const noexcept { return addr != nullptr; }
         bool instance() const noexcept { return Instance; }
 
     protected:
-        Extension(PFN_vkVoidFunction procAddr) noexcept:
-            procAddr(reinterpret_cast<Fn>(procAddr)) {}
-        void checkProcAddress(const char *extensionName) const;
+        ProcAddress(PFN_vkVoidFunction addr) noexcept:
+            addr(reinterpret_cast<Fn>(addr)) {}
+        void checkAddress(const char *extensionName) const;
 
     private:
-        const Fn procAddr;
+        const Fn addr;
     };
 
     /* Represents enabled instance extension dispatchable command. */
 
     template<class Fn>
-    class InstanceExtension final : public Extension<Fn, true>
+    class InstanceExtension final : public ProcAddress<Fn, true>
     {
     public:
         explicit InstanceExtension(VkInstance instance,
@@ -63,7 +63,7 @@ namespace magma
        or device-child object as their dispatchable object. */
 
     template<class Fn>
-    class DeviceExtension final : public Extension<Fn, false>
+    class DeviceExtension final : public ProcAddress<Fn, false>
     {
     public:
         explicit DeviceExtension(VkDevice device,
@@ -81,6 +81,7 @@ namespace magma
    in the scope of extension function call. */
 
 #define MAGMA_INSTANCE_EXTENSION(proc) static const magma::InstanceExtension<PFN_##proc> proc(getNativeInstance(), MAGMA_STRINGIZE(proc))
-#define MAGMA_REQUIRED_INSTANCE_EXTENSION(proc, extensionName) static const magma::InstanceExtension<PFN_##proc> proc(getNativeInstance(), MAGMA_STRINGIZE(proc), extensionName)
 #define MAGMA_DEVICE_EXTENSION(proc) static const magma::DeviceExtension<PFN_##proc> proc(getNativeDevice(), MAGMA_STRINGIZE(proc))
+
+#define MAGMA_REQUIRED_INSTANCE_EXTENSION(proc, extensionName) static const magma::InstanceExtension<PFN_##proc> proc(getNativeInstance(), MAGMA_STRINGIZE(proc), extensionName)
 #define MAGMA_REQUIRED_DEVICE_EXTENSION(proc, extensionName) static const magma::DeviceExtension<PFN_##proc> proc(getNativeDevice(), MAGMA_STRINGIZE(proc), extensionName)

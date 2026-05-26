@@ -1,9 +1,9 @@
 namespace magma
 {
 template<class Fn, bool Instance>
-inline void Extension<Fn, Instance>::checkProcAddress(const char *extensionName) const
+inline void ProcAddress<Fn, Instance>::checkAddress(const char *extensionName) const
 {
-    if (!procAddr)
+    if (!addr)
     {
     #ifndef MAGMA_NO_EXCEPTIONS
         throw exception::ExtensionNotPresent(extensionName);
@@ -15,25 +15,29 @@ inline void Extension<Fn, Instance>::checkProcAddress(const char *extensionName)
 
 template<class Fn>
 inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *procName) noexcept:
-    Extension<Fn, true>(vkGetInstanceProcAddr(instance, procName))
-{}
+    ProcAddress<Fn, true>(vkGetInstanceProcAddr(instance, procName))
+{
+    MAGMA_ASSERT(instance);
+}
 
 template<class Fn>
 inline InstanceExtension<Fn>::InstanceExtension(VkInstance instance, const char *procName, const char *extensionName):
     InstanceExtension(instance, procName)
 {
-    Extension<Fn, true>::checkProcAddress(extensionName);
+    ProcAddress<Fn, true>::checkAddress(extensionName);
 }
 
 template<class Fn>
 inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *procName) noexcept:
-    Extension<Fn, false>(vkGetDeviceProcAddr(device, procName))
-{}
+    ProcAddress<Fn, false>(vkGetDeviceProcAddr(device, procName))
+{
+    MAGMA_ASSERT(device);
+}
 
 template<class Fn>
 inline DeviceExtension<Fn>::DeviceExtension(VkDevice device, const char *procName, const char *extensionName):
     DeviceExtension(device, procName)
 {
-    Extension<Fn, false>::checkProcAddress(extensionName);
+    ProcAddress<Fn, false>::checkAddress(extensionName);
 }
 } // namespace magma
