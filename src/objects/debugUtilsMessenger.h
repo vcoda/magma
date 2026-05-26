@@ -62,7 +62,7 @@ namespace magma
             const char *format, ...) const noexcept;
 
     private:
-        VkInstance instance;
+        const VkInstance instance;
     };
 #endif // VK_EXT_debug_utils
 } // namespace magma
