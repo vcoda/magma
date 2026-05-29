@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,32 +21,32 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma::renderstate
 {
-const VertexInputStructure<int> nullVertexInput;
+const VertexInputStructure<int, 1> nullVertexInput;
 
 #ifndef MAGMA_NO_VERTEX_INPUTS
 using namespace vt;
-const VertexInputStructure<Pos2h> pos2h(0,
+const VertexInputStructure<Pos2h, 1> pos2h(0,
     {0, 0, VK_FORMAT_R16G16_SFLOAT, 0});
-const VertexInputStructure<Pos2f> pos2f(0,
+const VertexInputStructure<Pos2f, 1> pos2f(0,
     {0, 0, VK_FORMAT_R32G32_SFLOAT, 0});
-const VertexInputStructure<Pos2d> pos2d(0,
+const VertexInputStructure<Pos2d, 1> pos2d(0,
     {0, 0, VK_FORMAT_R64G64_SFLOAT, 0});
 // 6-byte format usually not supported
-//const VertexInputStructure<Pos3h> pos3h(0,
+//const VertexInputStructure<Pos3h, 1> pos3h(0,
 //    {0, 0, VK_FORMAT_R16G16B16_SFLOAT, 0});
-const VertexInputStructure<Pos3f> pos3f(0,
+const VertexInputStructure<Pos3f, 1> pos3f(0,
     {0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0});
-const VertexInputStructure<Pos3d> pos3d(0,
+const VertexInputStructure<Pos3d, 1> pos3d(0,
     {0, 0, VK_FORMAT_R64G64B64_SFLOAT, 0});
-const VertexInputStructure<Pos4h> pos4h(0,
+const VertexInputStructure<Pos4h, 1> pos4h(0,
     {0, 0, VK_FORMAT_R16G16B16A16_SFLOAT, 0});
-const VertexInputStructure<Pos4f> pos4f(0,
+const VertexInputStructure<Pos4f, 1> pos4f(0,
     {0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, 0});
-const VertexInputStructure<Pos4d> pos4d(0,
+const VertexInputStructure<Pos4d, 1> pos4d(0,
     {0, 0, VK_FORMAT_R64G64B64A64_SFLOAT, 0});
 
 #define MAGMA_COLOR_VERTEX(Vertex, name)\
-const VertexInputStructure<Vertex> name(0,\
+const VertexInputStructure<Vertex, 2> name(0,\
     {\
         {0, &Vertex::pos},\
         {1, &Vertex::color}\
@@ -60,7 +60,7 @@ MAGMA_COLOR_VERTEX(Pos3fColor4ub, pos3fColor4ub)
 MAGMA_COLOR_VERTEX(Pos3dColor4ub, pos3dColor4ub)
 
 #define MAGMA_TEX_VERTEX(Vertex, name)\
-const VertexInputStructure<Vertex> name(0,\
+const VertexInputStructure<Vertex, 2> name(0,\
     {\
         {0, &Vertex::pos},\
         {1, &Vertex::uv}\
@@ -86,7 +86,7 @@ MAGMA_TEX_VERTEX(Pos3dTex2h, pos3dTex2h)
 MAGMA_TEX_VERTEX(Pos3dTex2f, pos3dTex2f)
 
 #define MAGMA_LIT_VERTEX(Vertex, name)\
-const VertexInputStructure<Vertex> name(0,\
+const VertexInputStructure<Vertex, 2> name(0,\
     {\
         {0, &Vertex::pos},\
         {1, &Vertex::normal}\
@@ -112,7 +112,7 @@ MAGMA_LIT_VERTEX(Pos3dNormal4h, pos3dNormal4h)
 MAGMA_LIT_VERTEX(Pos3dNormal3f, pos3dNormal3f)
 
 #define MAGMA_LIT_TEX_VERTEX(Vertex, name)\
-const VertexInputStructure<Vertex> name(0,\
+const VertexInputStructure<Vertex, 3> name(0,\
     {\
         {0, &Vertex::pos},\
         {1, &Vertex::normal},\
@@ -177,7 +177,7 @@ MAGMA_LIT_TEX_VERTEX(Pos3dNormal3fTex2h, pos3dNormal3fTex2h)
 MAGMA_LIT_TEX_VERTEX(Pos3dNormal3fTex2f, pos3dNormal3fTex2f)
 
 #define MAGMA_BUMP_VERTEX(Vertex, name)\
-const VertexInputStructure<Vertex> name(0,\
+const VertexInputStructure<Vertex, 5> name(0,\
     {\
         {0, &Vertex::pos},\
         {1, &Vertex::normal},\
