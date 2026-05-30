@@ -1205,12 +1205,6 @@
     <ClCompile Include="..\..\src\states\rasterizationState.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\states\vertexInputState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\states\vertexInputStructure.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\states\viewportState.cpp">
       <Filter>Source Files\states</Filter>
     </ClCompile>

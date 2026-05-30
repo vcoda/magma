@@ -26,7 +26,7 @@ namespace magma
     class PipelineLibrary;
 #endif
 
-    class VertexInputState;
+    struct VertexInputState;
     struct InputAssemblyState;
     struct TesselationState;
     struct RasterizationState;

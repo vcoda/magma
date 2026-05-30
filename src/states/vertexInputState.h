@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,76 +19,61 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Structure specifying vertex input binding description. */
+    /* Structure specifying vertex input attribute description.
+       Usage example of non-constexpr attribute definition:
 
-    struct VertexInputBinding : VkVertexInputBindingDescription
-    {
-        constexpr VertexInputBinding(uint32_t binding,
-            uint32_t stride,
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
-        constexpr hash_t hash() const noexcept;
-    };
-
-    /* Allows to specify individual divisor value for binding.
-       Divisor is the number of successive instances that will
-       use the same value of the vertex attribute when instanced
-       rendering is enabled. For example, if the divisor is N,
-       the same vertex attribute will be applied to N successive
-       instances before moving on to the next vertex attribute. */
-
-    struct VertexInputBindingDivisor : VertexInputBinding
-    {
-        uint32_t divisor;
-        constexpr VertexInputBindingDivisor(uint32_t binding,
-            uint32_t stride,
-            uint32_t divisor,
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
-        constexpr hash_t hash() const noexcept;
-    };
-
-    /* Structure specifying vertex input attribute description. */
+        {0, &Vertex::position},
+        {1, &Vertex::normal},
+        {2, &Vertex::texCoord} */
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
-        VertexInputAttribute() = default;
         constexpr VertexInputAttribute(uint32_t location,
             uint32_t binding,
             VkFormat format,
             uint32_t offset) noexcept;
         template<class Vertex, class Type>
-        inline VertexInputAttribute(uint32_t location,
-            Type Vertex::*attrib) noexcept;
+        VertexInputAttribute(uint32_t location,
+            uint32_t binding,
+            Type Vertex::*attribute) noexcept;
         constexpr hash_t hash() const noexcept;
     };
 
     /* Applications specify vertex input attribute and vertex
        input binding descriptions as part of graphics pipeline. */
 
-    class VertexInputState : public VkPipelineVertexInputStateCreateInfo
+    struct VertexInputState : VkPipelineVertexInputStateCreateInfo
     {
-    public:
-        VertexInputState() noexcept;
-        explicit VertexInputState(const VertexInputBinding& binding,
-            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
-        explicit VertexInputState(const std::initializer_list<VertexInputBinding>& bindings,
-            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
+        constexpr VertexInputState() noexcept;
+        constexpr VertexInputState(uint32_t binding,
+            uint32_t stride,
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
     #ifdef VK_EXT_vertex_attribute_divisor
-        explicit VertexInputState(const VertexInputBindingDivisor& binding,
-            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
-        explicit VertexInputState(const std::initializer_list<VertexInputBindingDivisor>& bindings,
-            const std::initializer_list<VertexInputAttribute>& attributes) noexcept;
+        constexpr VertexInputState(uint32_t binding,
+            uint32_t stride,
+            uint32_t divisor) noexcept;
     #endif // VK_EXT_vertex_attribute_divisor
-        VertexInputState(const VertexInputState&) noexcept;
-        VertexInputState& operator=(const VertexInputState&) noexcept;
-        virtual ~VertexInputState();
-        virtual uint32_t stride(uint32_t binding) const noexcept;
-        hash_t hash() const noexcept;
-        bool operator==(const VertexInputState&) const noexcept;
+        constexpr VertexInputState(const VertexInputState&) noexcept;
+        constexpr hash_t hash() const noexcept;
 
+        const VkVertexInputBindingDescription vertexBinding;
+        // Allows to specify individual divisor value for binding.
+        // Divisor is the number of successive instances that will
+        // use the same value of the vertex attribute when instanced
+        // rendering is enabled. For example, if the divisor is N,
+        // the same vertex attribute will be applied to N successive
+        // instances before moving on to the next vertex attribute.
     #ifdef VK_EXT_vertex_attribute_divisor
-        VkPipelineVertexInputDivisorStateCreateInfoEXT vertexInputDivisorInfo;
-    #endif
+        const VkVertexInputBindingDivisorDescriptionEXT vertexBindingDivisor;
+        const VkPipelineVertexInputDivisorStateCreateInfoEXT vertexInputDivisorInfo;
+    #endif // VK_EXT_vertex_attribute_divisor
     };
 } // namespace magma
+
+#define MAGMA_VERTEX_ATTRIBUTE(Vertex, attribute, location)\
+magma::VertexInputAttribute{location, 0,\
+    magma::specialization::VertexAttribute<std::remove_cv_t<decltype(Vertex::attribute)>>::getFormat(),\
+    offsetof(Vertex, attribute)\
+}
 
 #include "vertexInputState.inl"

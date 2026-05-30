@@ -214,11 +214,12 @@ bool ImmediateRender::reset() noexcept
 std::shared_ptr<GraphicsPipeline> ImmediateRender::lookupPipeline(VkPrimitiveTopology topology, bool wideLineState, bool stippledLineState)
 {
     MAGMA_UNUSED(stippledLineState);
-    static VertexInputStructure<Vertex, 4> vertexInputState(0, {
-        {0, &Vertex::position},
-        {1, &Vertex::normalPSize},
-        {2, &Vertex::color},
-        {3, &Vertex::texCoord}});
+    constexpr VertexInputStructure<Vertex, 4> vertexInputState(0, {
+        MAGMA_VERTEX_ATTRIBUTE(Vertex, position, 0),
+        MAGMA_VERTEX_ATTRIBUTE(Vertex, normalPSize, 1),
+        MAGMA_VERTEX_ATTRIBUTE(Vertex, color, 2),
+        MAGMA_VERTEX_ATTRIBUTE(Vertex, texCoord, 3)
+    });
     constexpr const InputAssemblyState *inputAssemblyStates[] = {
         &renderstate::pointList,
         &renderstate::lineList,

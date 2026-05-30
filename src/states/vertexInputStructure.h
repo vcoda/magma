@@ -24,37 +24,34 @@ namespace magma
 {
     /* Template vertex input structure. */
 
-    template<class Vertex, std::size_t N>
+    template<class Vertex, std::size_t VertexAttributeCount>
     class VertexInputStructure : public VertexInputState
     {
         static_assert(sizeof(Vertex) >= sizeof(uint32_t),
-            "invalid vertex size");
+            "invalid size of vertex structure");
         static_assert(sizeof(Vertex) % sizeof(uint32_t) == 0,
-            "vertex size should be a multiple of 4 bytes");
-        static_assert(N > 0, "invalid count of vertex input attributes");
+            "size of vertex structure should be a multiple of 4 bytes");
+        static_assert(VertexAttributeCount > 0, "invalid count of vertex attributes");
 
     public:
-        VertexInputStructure() noexcept = default;
-        ~VertexInputStructure();
-        explicit VertexInputStructure(uint32_t binding,
+        constexpr VertexInputStructure() noexcept;
+        constexpr VertexInputStructure(uint32_t binding,
             const VertexInputAttribute& attribute,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
-        explicit VertexInputStructure(uint32_t binding,
-            const std::initializer_list<VertexInputAttribute>& attributes,
+        constexpr VertexInputStructure(uint32_t binding,
+            const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
-        explicit VertexInputStructure(uint32_t binding,
-            const VertexInputAttribute(&attributes)[N],
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
-        VertexInputStructure(const VertexInputStructure& other) noexcept;
-        VertexInputStructure& operator=(const VertexInputStructure& other) noexcept;
-        virtual uint32_t stride(uint32_t binding) const noexcept override;
+    #ifdef VK_EXT_vertex_attribute_divisor
+        constexpr VertexInputStructure(uint32_t binding,
+            const VertexInputAttribute& attribute,
+            uint32_t divisor) noexcept;
+        constexpr VertexInputStructure(uint32_t binding,
+            const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
+            uint32_t divisor) noexcept;
+    #endif // VK_EXT_vertex_attribute_divisor
 
     private:
-        VertexInputStructure(uint32_t binding,
-            VkVertexInputRate inputRate) noexcept;
-
-        VkVertexInputBindingDescription vertexInputBinding;
-        VkVertexInputAttributeDescription vertexInputAttributes[N];
+        VkVertexInputAttributeDescription vertexInputAttributes[VertexAttributeCount];
     };
 
     namespace specialization
@@ -69,6 +66,8 @@ namespace magma
         };
     } // namespace specialization
 } // namespace magma
+
+#include "vertexInputStructure.inl"
 
 /* GCC complains about extra qualification inside the same namespace
    and specialization of type in different namespace, so hence we
@@ -152,199 +151,233 @@ MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(magma::Double2, VK_FORMAT_R64G64_SFLOAT)
 MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(magma::Double3, VK_FORMAT_R64G64B64_SFLOAT)
 MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(magma::Double4, VK_FORMAT_R64G64B64A64_SFLOAT)
 
-/* Pre-defined vertex input structures.
-   Keep in mind that vertex input structures are not
-   a constexpr objects, so they are initialized by CRT
-   through dynamic initializer before entering main(),
-   thus requiring additional storage and boot time. */
+#define MAGMA_VERTEX(Vertex, format, name)\
+constexpr magma::VertexInputStructure<Vertex, 1> name(0,\
+    {0, 0, format, 0}\
+);
+
+#define MAGMA_COLOR_VERTEX(Vertex, name)\
+constexpr magma::VertexInputStructure<Vertex, 2> name(0,\
+{\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, color, 1)\
+});
+
+#define MAGMA_TEX_VERTEX(Vertex, name)\
+constexpr magma::VertexInputStructure<Vertex, 2> name(0,\
+{\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, uv, 1)\
+});
+
+#define MAGMA_LIT_VERTEX(Vertex, name)\
+constexpr magma::VertexInputStructure<Vertex, 2> name(0,\
+{\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, normal, 1)\
+});
+
+#define MAGMA_LIT_TEX_VERTEX(Vertex, name)\
+constexpr magma::VertexInputStructure<Vertex, 3> name(0,\
+{\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, normal, 1),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, uv, 2)\
+});
+
+#define MAGMA_BUMP_VERTEX(Vertex, name)\
+constexpr magma::VertexInputStructure<Vertex, 5> name(0,\
+{\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, normal, 1),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, tangent, 2),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, bitangent, 3),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, uv, 4)\
+});
 
 namespace magma::renderstate
 {
     /* No input vertex data. */
 
-    extern const VertexInputStructure<int, 1> nullVertexInput;
+    constexpr VertexInputStructure<int, 1> nullVertexInput;
 
     /* Vertex position only. */
 
-#ifndef MAGMA_NO_VERTEX_INPUTS
-    extern const VertexInputStructure<vt::Pos2h, 1> pos2h;
-    extern const VertexInputStructure<vt::Pos2f, 1> pos2f;
-    extern const VertexInputStructure<vt::Pos2d, 1> pos2d;
-    extern const VertexInputStructure<vt::Pos3f, 1> pos3f;
-    extern const VertexInputStructure<vt::Pos3d, 1> pos3d;
-    extern const VertexInputStructure<vt::Pos4h, 1> pos4h;
-    extern const VertexInputStructure<vt::Pos4f, 1> pos4f;
-    extern const VertexInputStructure<vt::Pos4d, 1> pos4d;
+    MAGMA_VERTEX(vt::Pos2h, VK_FORMAT_R16G16_SFLOAT, pos2h);
+    MAGMA_VERTEX(vt::Pos2f, VK_FORMAT_R32G32_SFLOAT, pos2f);
+    MAGMA_VERTEX(vt::Pos2d, VK_FORMAT_R64G64_SFLOAT, pos2d);
+    MAGMA_VERTEX(vt::Pos3f, VK_FORMAT_R32G32B32_SFLOAT, pos3f);
+    MAGMA_VERTEX(vt::Pos3d, VK_FORMAT_R64G64B64_SFLOAT, pos3d);
+    MAGMA_VERTEX(vt::Pos4h, VK_FORMAT_R16G16B16A16_SFLOAT, pos4h);
+    MAGMA_VERTEX(vt::Pos4f, VK_FORMAT_R32G32B32A32_SFLOAT, pos4f);
+    MAGMA_VERTEX(vt::Pos4d, VK_FORMAT_R64G64B64A64_SFLOAT, pos4d);
 
     /* Vertex position and 32-bit (r,g,b,a) color. */
 
-    extern const VertexInputStructure<vt::Pos2hColor4ub, 2> pos2hColor4ub;
-    extern const VertexInputStructure<vt::Pos2fColor4ub, 2> pos2fColor4ub;
-    extern const VertexInputStructure<vt::Pos2dColor4ub, 2> pos2dColor4ub;
-    extern const VertexInputStructure<vt::Pos4hColor4ub, 2> pos4hColor4ub;
-    extern const VertexInputStructure<vt::Pos3fColor4ub, 2> pos3fColor4ub;
-    extern const VertexInputStructure<vt::Pos3dColor4ub, 2> pos3dColor4ub;
+    MAGMA_COLOR_VERTEX(vt::Pos2hColor4ub, pos2hColor4ub)
+    MAGMA_COLOR_VERTEX(vt::Pos2fColor4ub, pos2fColor4ub)
+    MAGMA_COLOR_VERTEX(vt::Pos2dColor4ub, pos2dColor4ub)
+    MAGMA_COLOR_VERTEX(vt::Pos4hColor4ub, pos4hColor4ub)
+    MAGMA_COLOR_VERTEX(vt::Pos3fColor4ub, pos3fColor4ub)
+    MAGMA_COLOR_VERTEX(vt::Pos3dColor4ub, pos3dColor4ub)
 
     /* Vertex position and texture (u,v) coordinates. */
 
-    extern const VertexInputStructure<vt::Pos2hTex2us, 2> pos2hTex2us;
-    extern const VertexInputStructure<vt::Pos2hTex2h, 2> pos2hTex2h;
-    extern const VertexInputStructure<vt::Pos2hTex2f, 2> pos2hTex2f;
-    extern const VertexInputStructure<vt::Pos2fTex2us, 2> pos2fTex2us;
-    extern const VertexInputStructure<vt::Pos2fTex2h, 2> pos2fTex2h;
-    extern const VertexInputStructure<vt::Pos2fTex2f, 2> pos2fTex2f;
-    extern const VertexInputStructure<vt::Pos2dTex2us, 2> pos2dTex2us;
-    extern const VertexInputStructure<vt::Pos2dTex2h, 2> pos2dTex2h;
-    extern const VertexInputStructure<vt::Pos2dTex2f, 2> pos2dTex2f;
-    extern const VertexInputStructure<vt::Pos4hTex2us, 2> pos4hTex2us;
-    extern const VertexInputStructure<vt::Pos4hTex2h, 2> pos4hTex2h;
-    extern const VertexInputStructure<vt::Pos4hTex2f, 2> pos4hTex2f;
-    extern const VertexInputStructure<vt::Pos3fTex2us, 2> pos3fTex2us;
-    extern const VertexInputStructure<vt::Pos3fTex2h, 2> pos3fTex2h;
-    extern const VertexInputStructure<vt::Pos3fTex2f, 2> pos3fTex2f;
-    extern const VertexInputStructure<vt::Pos3dTex2us, 2> pos3dTex2us;
-    extern const VertexInputStructure<vt::Pos3dTex2h, 2> pos3dTex2h;
-    extern const VertexInputStructure<vt::Pos3dTex2f, 2> pos3dTex2f;
+    MAGMA_TEX_VERTEX(vt::Pos2hTex2us, pos2hTex2us)
+    MAGMA_TEX_VERTEX(vt::Pos2hTex2h, pos2hTex2h)
+    MAGMA_TEX_VERTEX(vt::Pos2hTex2f, pos2hTex2f)
+    MAGMA_TEX_VERTEX(vt::Pos2fTex2us, pos2fTex2us)
+    MAGMA_TEX_VERTEX(vt::Pos2fTex2h, pos2fTex2h)
+    MAGMA_TEX_VERTEX(vt::Pos2fTex2f, pos2fTex2f)
+    MAGMA_TEX_VERTEX(vt::Pos2dTex2us, pos2dTex2us)
+    MAGMA_TEX_VERTEX(vt::Pos2dTex2h, pos2dTex2h)
+    MAGMA_TEX_VERTEX(vt::Pos2dTex2f, pos2dTex2f)
+    MAGMA_TEX_VERTEX(vt::Pos4hTex2us, pos4hTex2us)
+    MAGMA_TEX_VERTEX(vt::Pos4hTex2h, pos4hTex2h)
+    MAGMA_TEX_VERTEX(vt::Pos4hTex2f, pos4hTex2f)
+    MAGMA_TEX_VERTEX(vt::Pos3fTex2us, pos3fTex2us)
+    MAGMA_TEX_VERTEX(vt::Pos3fTex2h, pos3fTex2h)
+    MAGMA_TEX_VERTEX(vt::Pos3fTex2f, pos3fTex2f)
+    MAGMA_TEX_VERTEX(vt::Pos3dTex2us, pos3dTex2us)
+    MAGMA_TEX_VERTEX(vt::Pos3dTex2h, pos3dTex2h)
+    MAGMA_TEX_VERTEX(vt::Pos3dTex2f, pos3dTex2f)
 
     /* Vertex position and normal. */
 
-    extern const VertexInputStructure<vt::Pos4hNormal4b, 2> pos4hNormal4b;
-    extern const VertexInputStructure<vt::Pos4hNormal4ub, 2> pos4hNormal4ub;
-    extern const VertexInputStructure<vt::Pos4hNormal4s, 2> pos4hNormal4s;
-    extern const VertexInputStructure<vt::Pos4hNormal4us, 2> pos4hNormal4us;
-    extern const VertexInputStructure<vt::Pos4hNormal4h, 2> pos4hNormal4h;
-    extern const VertexInputStructure<vt::Pos4hNormal3f, 2> pos4hNormal3f;
-    extern const VertexInputStructure<vt::Pos3fNormal4b, 2> pos3fNormal4b;
-    extern const VertexInputStructure<vt::Pos3fNormal4ub, 2> pos3fNormal4ub;
-    extern const VertexInputStructure<vt::Pos3fNormal4s, 2> pos3fNormal4s;
-    extern const VertexInputStructure<vt::Pos3fNormal4us, 2> pos3fNormal4us;
-    extern const VertexInputStructure<vt::Pos3fNormal4h, 2> pos3fNormal4h;
-    extern const VertexInputStructure<vt::Pos3fNormal3f, 2> pos3fNormal3f;
-    extern const VertexInputStructure<vt::Pos3dNormal4b, 2> pos3dNormal4b;
-    extern const VertexInputStructure<vt::Pos3dNormal4ub, 2> pos3dNormal4ub;
-    extern const VertexInputStructure<vt::Pos3dNormal4s, 2> pos3dNormal4s;
-    extern const VertexInputStructure<vt::Pos3dNormal4us, 2> pos3dNormal4us;
-    extern const VertexInputStructure<vt::Pos3dNormal4h, 2> pos3dNormal4h;
-    extern const VertexInputStructure<vt::Pos3dNormal3f, 2> pos3dNormal3f;
+    MAGMA_LIT_VERTEX(vt::Pos4hNormal4b, pos4hNormal4b)
+    MAGMA_LIT_VERTEX(vt::Pos4hNormal4ub, pos4hNormal4ub)
+    MAGMA_LIT_VERTEX(vt::Pos4hNormal4s, pos4hNormal4s)
+    MAGMA_LIT_VERTEX(vt::Pos4hNormal4us, pos4hNormal4us)
+    MAGMA_LIT_VERTEX(vt::Pos4hNormal4h, pos4hNormal4h)
+    MAGMA_LIT_VERTEX(vt::Pos4hNormal3f, pos4hNormal3f)
+    MAGMA_LIT_VERTEX(vt::Pos3fNormal4b, pos3fNormal4b)
+    MAGMA_LIT_VERTEX(vt::Pos3fNormal4ub, pos3fNormal4ub)
+    MAGMA_LIT_VERTEX(vt::Pos3fNormal4s, pos3fNormal4s)
+    MAGMA_LIT_VERTEX(vt::Pos3fNormal4us, pos3fNormal4us)
+    MAGMA_LIT_VERTEX(vt::Pos3fNormal4h, pos3fNormal4h)
+    MAGMA_LIT_VERTEX(vt::Pos3fNormal3f, pos3fNormal3f)
+    MAGMA_LIT_VERTEX(vt::Pos3dNormal4b, pos3dNormal4b)
+    MAGMA_LIT_VERTEX(vt::Pos3dNormal4ub, pos3dNormal4ub)
+    MAGMA_LIT_VERTEX(vt::Pos3dNormal4s, pos3dNormal4s)
+    MAGMA_LIT_VERTEX(vt::Pos3dNormal4us, pos3dNormal4us)
+    MAGMA_LIT_VERTEX(vt::Pos3dNormal4h, pos3dNormal4h)
+    MAGMA_LIT_VERTEX(vt::Pos3dNormal3f, pos3dNormal3f)
 
     /* Vertex position, normal and texture coordinates. */
 
-    extern const VertexInputStructure<vt::Pos4hNormal4bTex2us, 3> pos4hNormal4bTex2us;
-    extern const VertexInputStructure<vt::Pos4hNormal4bTex2h, 3> pos4hNormal4bTex2h;
-    extern const VertexInputStructure<vt::Pos4hNormal4bTex2f, 3> pos4hNormal4bTex2f;
-    extern const VertexInputStructure<vt::Pos4hNormal4ubTex2us, 3> pos4hNormal4ubTex2us;
-    extern const VertexInputStructure<vt::Pos4hNormal4ubTex2h, 3> pos4hNormal4ubTex2h;
-    extern const VertexInputStructure<vt::Pos4hNormal4ubTex2f, 3> pos4hNormal4ubTex2f;
-    extern const VertexInputStructure<vt::Pos4hNormal4sTex2us, 3> pos4hNormal4sTex2us;
-    extern const VertexInputStructure<vt::Pos4hNormal4sTex2h, 3> pos4hNormal4sTex2h;
-    extern const VertexInputStructure<vt::Pos4hNormal4sTex2f, 3> pos4hNormal4sTex2f;
-    extern const VertexInputStructure<vt::Pos4hNormal4usTex2us, 3> pos4hNormal4usTex2us;
-    extern const VertexInputStructure<vt::Pos4hNormal4usTex2h, 3> pos4hNormal4usTex2h;
-    extern const VertexInputStructure<vt::Pos4hNormal4usTex2f, 3> pos4hNormal4usTex2f;
-    extern const VertexInputStructure<vt::Pos4hNormal4hTex2us, 3> pos4hNormal4hTex2us;
-    extern const VertexInputStructure<vt::Pos4hNormal4hTex2h, 3> pos4hNormal4hTex2h;
-    extern const VertexInputStructure<vt::Pos4hNormal4hTex2f, 3> pos4hNormal4hTex2f;
-    extern const VertexInputStructure<vt::Pos4hNormal3fTex2us, 3> pos4hNormal3fTex2us;
-    extern const VertexInputStructure<vt::Pos4hNormal3fTex2h, 3> pos4hNormal3fTex2h;
-    extern const VertexInputStructure<vt::Pos4hNormal3fTex2f, 3> pos4hNormal3fTex2f;
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4bTex2us, pos4hNormal4bTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4bTex2h, pos4hNormal4bTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4bTex2f, pos4hNormal4bTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4ubTex2us, pos4hNormal4ubTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4ubTex2h, pos4hNormal4ubTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4ubTex2f, pos4hNormal4ubTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4sTex2us, pos4hNormal4sTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4sTex2h, pos4hNormal4sTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4sTex2f, pos4hNormal4sTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4usTex2us, pos4hNormal4usTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4usTex2h, pos4hNormal4usTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4usTex2f, pos4hNormal4usTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4hTex2us, pos4hNormal4hTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4hTex2h, pos4hNormal4hTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal4hTex2f, pos4hNormal4hTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal3fTex2us, pos4hNormal3fTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal3fTex2h, pos4hNormal3fTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos4hNormal3fTex2f, pos4hNormal3fTex2f)
 
-    extern const VertexInputStructure<vt::Pos3fNormal4bTex2us, 3> pos3fNormal4bTex2us;
-    extern const VertexInputStructure<vt::Pos3fNormal4bTex2h, 3> pos3fNormal4bTex2h;
-    extern const VertexInputStructure<vt::Pos3fNormal4bTex2f, 3> pos3fNormal4bTex2f;
-    extern const VertexInputStructure<vt::Pos3fNormal4ubTex2us, 3> pos3fNormal4ubTex2us;
-    extern const VertexInputStructure<vt::Pos3fNormal4ubTex2h, 3> pos3fNormal4ubTex2h;
-    extern const VertexInputStructure<vt::Pos3fNormal4ubTex2f, 3> pos3fNormal4ubTex2f;
-    extern const VertexInputStructure<vt::Pos3fNormal4sTex2us, 3> pos3fNormal4sTex2us;
-    extern const VertexInputStructure<vt::Pos3fNormal4sTex2h, 3> pos3fNormal4sTex2h;
-    extern const VertexInputStructure<vt::Pos3fNormal4sTex2f, 3> pos3fNormal4sTex2f;
-    extern const VertexInputStructure<vt::Pos3fNormal4usTex2us, 3> pos3fNormal4usTex2us;
-    extern const VertexInputStructure<vt::Pos3fNormal4usTex2h, 3> pos3fNormal4usTex2h;
-    extern const VertexInputStructure<vt::Pos3fNormal4usTex2f, 3> pos3fNormal4usTex2f;
-    extern const VertexInputStructure<vt::Pos3fNormal4hTex2us, 3> pos3fNormal4hTex2us;
-    extern const VertexInputStructure<vt::Pos3fNormal4hTex2h, 3> pos3fNormal4hTex2h;
-    extern const VertexInputStructure<vt::Pos3fNormal4hTex2f, 3> pos3fNormal4hTex2f;
-    extern const VertexInputStructure<vt::Pos3fNormal3fTex2us, 3> pos3fNormal3fTex2us;
-    extern const VertexInputStructure<vt::Pos3fNormal3fTex2h, 3> pos3fNormal3fTex2h;
-    extern const VertexInputStructure<vt::Pos3fNormal3fTex2f, 3> pos3fNormal3fTex2f;
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4bTex2us, pos3fNormal4bTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4bTex2h, pos3fNormal4bTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4bTex2f, pos3fNormal4bTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4ubTex2us, pos3fNormal4ubTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4ubTex2h, pos3fNormal4ubTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4ubTex2f, pos3fNormal4ubTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4sTex2us, pos3fNormal4sTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4sTex2h, pos3fNormal4sTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4sTex2f, pos3fNormal4sTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4usTex2us, pos3fNormal4usTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4usTex2h, pos3fNormal4usTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4usTex2f, pos3fNormal4usTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4hTex2us, pos3fNormal4hTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4hTex2h, pos3fNormal4hTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal4hTex2f, pos3fNormal4hTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal3fTex2us, pos3fNormal3fTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal3fTex2h, pos3fNormal3fTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3fNormal3fTex2f, pos3fNormal3fTex2f)
 
-    extern const VertexInputStructure<vt::Pos3dNormal4bTex2us, 3> pos3dNormal4bTex2us;
-    extern const VertexInputStructure<vt::Pos3dNormal4bTex2h, 3> pos3dNormal4bTex2h;
-    extern const VertexInputStructure<vt::Pos3dNormal4bTex2f, 3> pos3dNormal4bTex2f;
-    extern const VertexInputStructure<vt::Pos3dNormal4ubTex2us, 3> pos3dNormal4ubTex2us;
-    extern const VertexInputStructure<vt::Pos3dNormal4ubTex2h, 3> pos3dNormal4ubTex2h;
-    extern const VertexInputStructure<vt::Pos3dNormal4ubTex2f, 3> pos3dNormal4ubTex2f;
-    extern const VertexInputStructure<vt::Pos3dNormal4sTex2us, 3> pos3dNormal4sTex2us;
-    extern const VertexInputStructure<vt::Pos3dNormal4sTex2h, 3> pos3dNormal4sTex2h;
-    extern const VertexInputStructure<vt::Pos3dNormal4sTex2f, 3> pos3dNormal4sTex2f;
-    extern const VertexInputStructure<vt::Pos3dNormal4usTex2us, 3> pos3dNormal4usTex2us;
-    extern const VertexInputStructure<vt::Pos3dNormal4usTex2h, 3> pos3dNormal4usTex2h;
-    extern const VertexInputStructure<vt::Pos3dNormal4usTex2f, 3> pos3dNormal4usTex2f;
-    extern const VertexInputStructure<vt::Pos3dNormal4hTex2us, 3> pos3dNormal4hTex2us;
-    extern const VertexInputStructure<vt::Pos3dNormal4hTex2h, 3> pos3dNormal4hTex2h;
-    extern const VertexInputStructure<vt::Pos3dNormal4hTex2f, 3> pos3dNormal4hTex2f;
-    extern const VertexInputStructure<vt::Pos3dNormal3fTex2us, 3> pos3dNormal3fTex2us;
-    extern const VertexInputStructure<vt::Pos3dNormal3fTex2h, 3> pos3dNormal3fTex2h;
-    extern const VertexInputStructure<vt::Pos3dNormal3fTex2f, 3> pos3dNormal3fTex2f;
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4bTex2us, pos3dNormal4bTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4bTex2h, pos3dNormal4bTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4bTex2f, pos3dNormal4bTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4ubTex2us, pos3dNormal4ubTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4ubTex2h, pos3dNormal4ubTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4ubTex2f, pos3dNormal4ubTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4sTex2us, pos3dNormal4sTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4sTex2h, pos3dNormal4sTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4sTex2f, pos3dNormal4sTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4usTex2us, pos3dNormal4usTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4usTex2h, pos3dNormal4usTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4usTex2f, pos3dNormal4usTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4hTex2us, pos3dNormal4hTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4hTex2h, pos3dNormal4hTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal4hTex2f, pos3dNormal4hTex2f)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal3fTex2us, pos3dNormal3fTex2us)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal3fTex2h, pos3dNormal3fTex2h)
+    MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal3fTex2f, pos3dNormal3fTex2f)
 
-    /* Vertex position, TBN matrix and texture coordinates. */
+    /* Vertex position, TBN basis and texture coordinates. */
 
-    extern const VertexInputStructure<vt::Pos4hTbn4bTex2us, 5> pos4hTbn4bTex2us;
-    extern const VertexInputStructure<vt::Pos4hTbn4bTex2h, 5> pos4hTbn4bTex2h;
-    extern const VertexInputStructure<vt::Pos4hTbn4bTex2f, 5> pos4hTbn4bTex2f;
-    extern const VertexInputStructure<vt::Pos4hTbn4ubTex2us, 5> pos4hTbn4ubTex2us;
-    extern const VertexInputStructure<vt::Pos4hTbn4ubTex2h, 5> pos4hTbn4ubTex2h;
-    extern const VertexInputStructure<vt::Pos4hTbn4ubTex2f, 5> pos4hTbn4ubTex2f;
-    extern const VertexInputStructure<vt::Pos4hTbn4sTex2us, 5> pos4hTbn4sTex2us;
-    extern const VertexInputStructure<vt::Pos4hTbn4sTex2h, 5> pos4hTbn4sTex2h;
-    extern const VertexInputStructure<vt::Pos4hTbn4sTex2f, 5> pos4hTbn4sTex2f;
-    extern const VertexInputStructure<vt::Pos4hTbn4usTex2us, 5> pos4hTbn4usTex2us;
-    extern const VertexInputStructure<vt::Pos4hTbn4usTex2h, 5> pos4hTbn4usTex2h;
-    extern const VertexInputStructure<vt::Pos4hTbn4usTex2f, 5> pos4hTbn4usTex2f;
-    extern const VertexInputStructure<vt::Pos4hTbn4hTex2us, 5> pos4hTbn4hTex2us;
-    extern const VertexInputStructure<vt::Pos4hTbn4hTex2h, 5> pos4hTbn4hTex2h;
-    extern const VertexInputStructure<vt::Pos4hTbn4hTex2f, 5> pos4hTbn4hTex2f;
-    extern const VertexInputStructure<vt::Pos4hTbn3fTex2us, 5> pos4hTbn3fTex2us;
-    extern const VertexInputStructure<vt::Pos4hTbn3fTex2h, 5> pos4hTbn3fTex2h;
-    extern const VertexInputStructure<vt::Pos4hTbn3fTex2f, 5> pos4hTbn3fTex2f;
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4bTex2us, pos4hTbn4bTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4bTex2h, pos4hTbn4bTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4bTex2f, pos4hTbn4bTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4ubTex2us, pos4hTbn4ubTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4ubTex2h, pos4hTbn4ubTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4ubTex2f, pos4hTbn4ubTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4sTex2us, pos4hTbn4sTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4sTex2h, pos4hTbn4sTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4sTex2f, pos4hTbn4sTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4usTex2us, pos4hTbn4usTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4usTex2h, pos4hTbn4usTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4usTex2f, pos4hTbn4usTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4hTex2us, pos4hTbn4hTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4hTex2h, pos4hTbn4hTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn4hTex2f, pos4hTbn4hTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn3fTex2us, pos4hTbn3fTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn3fTex2h, pos4hTbn3fTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos4hTbn3fTex2f, pos4hTbn3fTex2f)
 
-    extern const VertexInputStructure<vt::Pos3fTbn4bTex2us, 5> pos3fTbn4bTex2us;
-    extern const VertexInputStructure<vt::Pos3fTbn4bTex2h, 5> pos3fTbn4bTex2h;
-    extern const VertexInputStructure<vt::Pos3fTbn4bTex2f, 5> pos3fTbn4bTex2f;
-    extern const VertexInputStructure<vt::Pos3fTbn4ubTex2us, 5> pos3fTbn4ubTex2us;
-    extern const VertexInputStructure<vt::Pos3fTbn4ubTex2h, 5> pos3fTbn4ubTex2h;
-    extern const VertexInputStructure<vt::Pos3fTbn4ubTex2f, 5> pos3fTbn4ubTex2f;
-    extern const VertexInputStructure<vt::Pos3fTbn4sTex2us, 5> pos3fTbn4sTex2us;
-    extern const VertexInputStructure<vt::Pos3fTbn4sTex2h, 5> pos3fTbn4sTex2h;
-    extern const VertexInputStructure<vt::Pos3fTbn4sTex2f, 5> pos3fTbn4sTex2f;
-    extern const VertexInputStructure<vt::Pos3fTbn4usTex2us, 5> pos3fTbn4usTex2us;
-    extern const VertexInputStructure<vt::Pos3fTbn4usTex2h, 5> pos3fTbn4usTex2h;
-    extern const VertexInputStructure<vt::Pos3fTbn4usTex2f, 5> pos3fTbn4usTex2f;
-    extern const VertexInputStructure<vt::Pos3fTbn4hTex2us, 5> pos3fTbn4hTex2us;
-    extern const VertexInputStructure<vt::Pos3fTbn4hTex2h, 5> pos3fTbn4hTex2h;
-    extern const VertexInputStructure<vt::Pos3fTbn4hTex2f, 5> pos3fTbn4hTex2f;
-    extern const VertexInputStructure<vt::Pos3fTbn3fTex2us, 5> pos3fTbn3fTex2us;
-    extern const VertexInputStructure<vt::Pos3fTbn3fTex2h, 5> pos3fTbn3fTex2h;
-    extern const VertexInputStructure<vt::Pos3fTbn3fTex2f, 5> pos3fTbn3fTex2f;
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4bTex2us, pos3fTbn4bTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4bTex2h, pos3fTbn4bTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4bTex2f, pos3fTbn4bTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4ubTex2us, pos3fTbn4ubTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4ubTex2h, pos3fTbn4ubTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4ubTex2f, pos3fTbn4ubTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4sTex2us, pos3fTbn4sTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4sTex2h, pos3fTbn4sTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4sTex2f, pos3fTbn4sTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4usTex2us, pos3fTbn4usTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4usTex2h, pos3fTbn4usTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4usTex2f, pos3fTbn4usTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4hTex2us, pos3fTbn4hTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4hTex2h, pos3fTbn4hTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn4hTex2f, pos3fTbn4hTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn3fTex2us, pos3fTbn3fTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn3fTex2h, pos3fTbn3fTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3fTbn3fTex2f, pos3fTbn3fTex2f)
 
-    extern const VertexInputStructure<vt::Pos3dTbn4bTex2us, 5> pos3dTbn4bTex2us;
-    extern const VertexInputStructure<vt::Pos3dTbn4bTex2h, 5> pos3dTbn4bTex2h;
-    extern const VertexInputStructure<vt::Pos3dTbn4bTex2f, 5> pos3dTbn4bTex2f;
-    extern const VertexInputStructure<vt::Pos3dTbn4ubTex2us, 5> pos3dTbn4ubTex2us;
-    extern const VertexInputStructure<vt::Pos3dTbn4ubTex2h, 5> pos3dTbn4ubTex2h;
-    extern const VertexInputStructure<vt::Pos3dTbn4ubTex2f, 5> pos3dTbn4ubTex2f;
-    extern const VertexInputStructure<vt::Pos3dTbn4sTex2us, 5> pos3dTbn4sTex2us;
-    extern const VertexInputStructure<vt::Pos3dTbn4sTex2h, 5> pos3dTbn4sTex2h;
-    extern const VertexInputStructure<vt::Pos3dTbn4sTex2f, 5> pos3dTbn4sTex2f;
-    extern const VertexInputStructure<vt::Pos3dTbn4usTex2us, 5> pos3dTbn4usTex2us;
-    extern const VertexInputStructure<vt::Pos3dTbn4usTex2h, 5> pos3dTbn4usTex2h;
-    extern const VertexInputStructure<vt::Pos3dTbn4usTex2f, 5> pos3dTbn4usTex2f;
-    extern const VertexInputStructure<vt::Pos3dTbn4hTex2us, 5> pos3dTbn4hTex2us;
-    extern const VertexInputStructure<vt::Pos3dTbn4hTex2h, 5> pos3dTbn4hTex2h;
-    extern const VertexInputStructure<vt::Pos3dTbn4hTex2f, 5> pos3dTbn4hTex2f;
-    extern const VertexInputStructure<vt::Pos3dTbn3fTex2us, 5> pos3dTbn3fTex2us;
-    extern const VertexInputStructure<vt::Pos3dTbn3fTex2h, 5> pos3dTbn3fTex2h;
-    extern const VertexInputStructure<vt::Pos3dTbn3fTex2f, 5> pos3dTbn3fTex2f;
-#endif // !MAGMA_NO_VERTEX_INPUTS
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4bTex2us, pos3dTbn4bTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4bTex2h, pos3dTbn4bTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4bTex2f, pos3dTbn4bTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4ubTex2us, pos3dTbn4ubTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4ubTex2h, pos3dTbn4ubTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4ubTex2f, pos3dTbn4ubTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4sTex2us, pos3dTbn4sTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4sTex2h, pos3dTbn4sTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4sTex2f, pos3dTbn4sTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4usTex2us, pos3dTbn4usTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4usTex2h, pos3dTbn4usTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4usTex2f, pos3dTbn4usTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4hTex2us, pos3dTbn4hTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4hTex2h, pos3dTbn4hTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn4hTex2f, pos3dTbn4hTex2f)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn3fTex2us, pos3dTbn3fTex2us)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn3fTex2h, pos3dTbn3fTex2h)
+    MAGMA_BUMP_VERTEX(vt::Pos3dTbn3fTex2f, pos3dTbn3fTex2f)
 } // namespace magma::renderstate
-
-#include "vertexInputStructure.inl"

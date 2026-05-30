@@ -586,8 +586,6 @@
     <ClCompile Include="..\..\src\states\multiViewportState.cpp" />
     <ClCompile Include="..\..\src\states\rasterizationState.cpp" />
     <ClCompile Include="..\..\src\states\formattedOutput.cpp" />
-    <ClCompile Include="..\..\src\states\vertexInputState.cpp" />
-    <ClCompile Include="..\..\src\states\vertexInputStructure.cpp" />
     <ClCompile Include="..\..\src\states\viewportState.cpp" />
     <ClCompile Include="..\..\src\third-party\SPIRV-Reflect\spirv_reflect.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

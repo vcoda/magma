@@ -24,7 +24,7 @@ namespace magma
     class PipelineShaderStage;
     class RenderPass;
 
-    class VertexInputState;
+    struct VertexInputState;
     struct InputAssemblyState;
     struct TesselationState;
     struct RasterizationState;

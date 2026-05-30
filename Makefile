@@ -192,8 +192,6 @@ SRC_OBJS= \
 	src/states/multisampleState.o \
 	src/states/multiViewportState.o \
 	src/states/rasterizationState.o \
-	src/states/vertexInputState.o \
-	src/states/vertexInputStructure.o \
 	src/states/viewportState.o \
 	\
 	src/third-party/SPIRV-Reflect/spirv_reflect.o

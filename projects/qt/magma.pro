@@ -177,8 +177,6 @@ SOURCES += \
     ../../src/states/multisampleState.cpp \
     ../../src/states/multiViewportState.cpp \
     ../../src/states/rasterizationState.cpp \
-    ../../src/states/vertexInputState.cpp \
-    ../../src/states/vertexInputStructure.cpp \
     ../../src/states/viewportState.cpp \
     ../../src/magma.cpp \
     ../../src/third-party/SPIRV-Reflect/spirv_reflect.cpp
