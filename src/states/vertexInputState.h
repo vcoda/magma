@@ -22,9 +22,9 @@ namespace magma
     /* Structure specifying vertex input attribute description.
        Usage example of non-constexpr attribute definition:
 
-        {0, &Vertex::position},
-        {1, &Vertex::normal},
-        {2, &Vertex::texCoord} */
+        {0, 0, &Vertex::position},
+        {1, 0, &Vertex::normal},
+        {2, 0, &Vertex::texCoord} */
 
     struct VertexInputAttribute : VkVertexInputAttributeDescription
     {
