@@ -77,4 +77,10 @@ magma::VertexInputAttribute{location, 0,\
     offsetof(Vertex, attribute)\
 }
 
+#define MAGMA_VERTEX_ATTRIBUTE_BINDING(Vertex, attribute, location, binding)\
+magma::VertexInputAttribute{location, binding,\
+    magma::specialization::VertexAttribute<std::remove_cv_t<decltype(Vertex::attribute)>>::getFormat(),\
+    0\
+}
+
 #include "vertexInputState.inl"
