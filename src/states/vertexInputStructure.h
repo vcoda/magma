@@ -38,9 +38,11 @@ namespace magma
         constexpr VertexInputStructure(uint32_t binding,
             const VertexInputAttribute& attribute,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
-        constexpr VertexInputStructure(uint32_t binding,
-            const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
+        constexpr VertexInputStructure(const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
+        template<std::size_t VertexInputBindingCount>
+        constexpr VertexInputStructure(const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
+            const std::array<VkVertexInputRate, VertexInputBindingCount>& inputRates) noexcept;
     #ifdef VK_EXT_vertex_attribute_divisor
         constexpr VertexInputStructure(uint32_t binding,
             const VertexInputAttribute& attribute,
@@ -51,6 +53,7 @@ namespace magma
     #endif // VK_EXT_vertex_attribute_divisor
 
     private:
+        VkVertexInputBindingDescription vertexBindings[VertexAttributeCount];
         VkVertexInputAttributeDescription vertexInputAttributes[VertexAttributeCount];
     };
 
@@ -157,28 +160,28 @@ constexpr magma::VertexInputStructure<Vertex, 1> name(0,\
 );
 
 #define MAGMA_COLOR_VERTEX(Vertex, name)\
-constexpr magma::VertexInputStructure<Vertex, 2> name(0,\
+constexpr magma::VertexInputStructure<Vertex, 2> name(\
 {\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, color, 1)\
 });
 
 #define MAGMA_TEX_VERTEX(Vertex, name)\
-constexpr magma::VertexInputStructure<Vertex, 2> name(0,\
+constexpr magma::VertexInputStructure<Vertex, 2> name(\
 {\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, uv, 1)\
 });
 
 #define MAGMA_LIT_VERTEX(Vertex, name)\
-constexpr magma::VertexInputStructure<Vertex, 2> name(0,\
+constexpr magma::VertexInputStructure<Vertex, 2> name(\
 {\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, normal, 1)\
 });
 
 #define MAGMA_LIT_TEX_VERTEX(Vertex, name)\
-constexpr magma::VertexInputStructure<Vertex, 3> name(0,\
+constexpr magma::VertexInputStructure<Vertex, 3> name(\
 {\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, normal, 1),\
@@ -186,7 +189,7 @@ constexpr magma::VertexInputStructure<Vertex, 3> name(0,\
 });
 
 #define MAGMA_BUMP_VERTEX(Vertex, name)\
-constexpr magma::VertexInputStructure<Vertex, 5> name(0,\
+constexpr magma::VertexInputStructure<Vertex, 5> name(\
 {\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, normal, 1),\
