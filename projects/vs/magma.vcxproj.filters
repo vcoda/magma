@@ -642,9 +642,6 @@
     <ClInclude Include="..\..\src\states\tesselationState.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\states\vertexAttributeType.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\states\vertexFormat.h">
       <Filter>Header Files\states</Filter>
     </ClInclude>
@@ -875,6 +872,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\packed\unpackColor.h">
       <Filter>Header Files\packed</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\states\vertexType.h">
+      <Filter>Header Files\states</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1531,9 +1531,6 @@
     <None Include="..\..\src\states\tesselationState.inl">
       <Filter>Header Files\states</Filter>
     </None>
-    <None Include="..\..\src\states\vertexAttributeType.inl">
-      <Filter>Header Files\states</Filter>
-    </None>
     <None Include="..\..\src\states\vertexInputState.inl">
       <Filter>Header Files\states</Filter>
     </None>
@@ -1653,6 +1650,9 @@
     </None>
     <None Include="..\..\src\descriptors\descriptorPool.inl">
       <Filter>Header Files\descriptors</Filter>
+    </None>
+    <None Include="..\..\src\states\vertexType.inl">
+      <Filter>Header Files\states</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

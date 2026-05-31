@@ -1,11 +1,11 @@
 namespace magma
 {
-template<class PodType, std::size_t Components, bool Normalized, bool Scaled>
-constexpr NumericFormat VertexAttributeType<PodType, Components, Normalized, Scaled>::numericFormat() noexcept
+template<class T, std::size_t N, bool Normalized /* false */, bool Scaled /* false */>
+constexpr NumericFormat AttributeType<T, N, Normalized, Scaled>::format() noexcept
 {
-    if constexpr (std::is_integral<PodType>::value)
+    if constexpr (std::is_integral<T>::value)
     {
-        if constexpr (std::is_unsigned<PodType>::value)
+        if constexpr (std::is_unsigned<T>::value)
         {
             if constexpr (Scaled)
                 return NumericFormat::UScaled;
@@ -28,7 +28,7 @@ constexpr NumericFormat VertexAttributeType<PodType, Components, Normalized, Sca
 }
 
 template<VkFormat Format>
-constexpr VkFormat VertexAttributeFormat<Format>::getFormat() noexcept
+constexpr VkFormat AttributeFormat<Format>::format() noexcept
 {
     constexpr magma::Format format(Format);
     static_assert(format.valid(), "vertex attribute type not specialized");

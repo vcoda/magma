@@ -16,13 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "vertexAttributeType.h"
 #include "vertexFormat.h"
 #include "vertexInputState.h"
 
 namespace magma
 {
-    /* Template vertex input structure. */
+    /* Vertex input structure template. */
 
     template<class Vertex, std::size_t VertexAttributeCount>
     class VertexInputStructure : public VertexInputState
@@ -62,10 +61,10 @@ namespace magma
         /* User have to specialize this template for concrete
            type and corresponding Vulkan format. */
 
-        template<class Type>
-        struct VertexAttribute : VertexAttributeFormat<VK_FORMAT_UNDEFINED>
+        template<class T>
+        struct VertexAttribute : AttributeFormat<VK_FORMAT_UNDEFINED>
         {
-            constexpr static std::size_t size() noexcept { return sizeof(Type); }
+            constexpr static std::size_t size() noexcept { return sizeof(T); }
         };
     } // namespace specialization
 } // namespace magma
@@ -80,13 +79,25 @@ namespace magma
 #if defined(__GNUC__)
 #define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Type, Format)\
 namespace magma { namespace specialization {\
-template<> struct VertexAttribute<Type> : VertexAttributeFormat<Format> {};\
+template<> struct VertexAttribute<Type> : AttributeFormat<Format> {};\
 }}
 #else
 #define MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(Type, Format)\
 template<> struct magma::specialization::VertexAttribute<Type> :\
-    magma::VertexAttributeFormat<Format> {};
+    magma::AttributeFormat<Format> {};
 #endif // __GNUC__
+
+#define MAGMA_VERTEX_ATTRIBUTE(Vertex, attribute, location)\
+magma::VertexInputAttribute{location, 0,\
+    magma::specialization::VertexAttribute<std::remove_cv_t<decltype(Vertex::attribute)>>::format(),\
+    offsetof(Vertex, attribute)\
+}
+
+#define MAGMA_VERTEX_ATTRIBUTE_BINDING(Vertex, attribute, location, binding)\
+magma::VertexInputAttribute{location, binding,\
+    magma::specialization::VertexAttribute<std::remove_cv_t<decltype(Vertex::attribute)>>::format(),\
+    0\
+}
 
 /* Built-in specializations for scalar vertex input types. */
 

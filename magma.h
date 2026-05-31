@@ -158,10 +158,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/states/samplerYcbcrConversionState.h"
 #include "src/states/streamRasterizationState.h"
 #include "src/states/tesselationState.h"
-#include "src/states/vertexAttributeType.h"
 #include "src/states/vertexFormat.h"
 #include "src/states/vertexInputState.h"
 #include "src/states/vertexInputStructure.h"
+#include "src/states/vertexType.h"
 #include "src/states/viewportState.h"
 
 #include "src/descriptors/accelerationStructure.h"

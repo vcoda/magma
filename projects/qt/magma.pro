@@ -432,8 +432,8 @@ HEADERS += \
     ../../src/states/samplerYcbcrConversionState.h \
     ../../src/states/streamRasterizationState.h \
     ../../src/states/tesselationState.h \
-    ../../src/states/vertexAttributeType.h \
     ../../src/states/vertexFormat.h \
+    ../../src/states/vertexType.h \
     ../../src/states/vertexInputState.h \
     ../../src/states/vertexInputStructure.h \
     ../../src/states/viewportState.h \

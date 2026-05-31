@@ -408,7 +408,7 @@
     <ClInclude Include="..\..\src\states\samplerYcbcrConversionState.h" />
     <ClInclude Include="..\..\src\states\streamRasterizationState.h" />
     <ClInclude Include="..\..\src\states\tesselationState.h" />
-    <ClInclude Include="..\..\src\states\vertexAttributeType.h" />
+    <ClInclude Include="..\..\src\states\vertexType.h" />
     <ClInclude Include="..\..\src\states\vertexFormat.h" />
     <ClInclude Include="..\..\src\states\vertexInputState.h" />
     <ClInclude Include="..\..\src\states\vertexInputStructure.h" />
@@ -776,7 +776,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\states\stencilOpState.inl" />
     <None Include="..\..\src\states\streamRasterizationState.inl" />
     <None Include="..\..\src\states\tesselationState.inl" />
-    <None Include="..\..\src\states\vertexAttributeType.inl" />
+    <None Include="..\..\src\states\vertexType.inl" />
     <None Include="..\..\src\states\vertexInputState.inl" />
     <None Include="..\..\src\states\vertexInputStructure.inl" />
   </ItemGroup>
