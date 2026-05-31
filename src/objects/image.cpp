@@ -199,10 +199,9 @@ VkImageLayout Image::getOptimalReadOnlyLayout() const noexcept
 
 VkImageAspectFlags Image::getAspectMask() const noexcept
 {
-    const Format imageFormat(format);
     if (flags & (VK_IMAGE_CREATE_SPARSE_BINDING_BIT |
-                 VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT |
-                 VK_IMAGE_CREATE_SPARSE_ALIASED_BIT)) try
+        VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT |
+        VK_IMAGE_CREATE_SPARSE_ALIASED_BIT)) try
     {
         for (auto const& req: getSparseMemoryRequirements())
         {   // Metadata should not be combined with other aspects
@@ -211,6 +210,7 @@ VkImageAspectFlags Image::getAspectMask() const noexcept
         }
     }
     catch (...) {}
+    const Format imageFormat(format);
 #ifdef VK_KHR_sampler_ycbcr_conversion
     if (imageFormat.multiPlanar())
     {
