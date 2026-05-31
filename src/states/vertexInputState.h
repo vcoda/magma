@@ -36,6 +36,7 @@ namespace magma
         VertexInputAttribute(uint32_t location,
             uint32_t binding,
             Type Vertex::*attribute) noexcept;
+        constexpr uint32_t size() const noexcept;
         constexpr hash_t hash() const noexcept;
     };
 
