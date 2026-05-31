@@ -30,7 +30,7 @@ namespace magma
 DebugUtilsMessenger::DebugUtilsMessenger(const std::unique_ptr<Instance>& vkInstance,
     PFN_vkDebugUtilsMessengerCallbackEXT userCallback,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
-    VkDebugUtilsMessageSeverityFlagsEXT messageSeverity /* VERBOSE_BIT | INFO_BIT | WARNING_BIT ERROR_BIT */,
+    VkDebugUtilsMessageSeverityFlagsEXT messageSeverity /* VERBOSE_BIT | INFO_BIT | WARNING_BIT | ERROR_BIT */,
     VkDebugUtilsMessageTypeFlagsEXT messageType /* GENERAL_BIT | VALIDATION_BIT | PERFORMANCE_BIT */,
     void *userData /* nullptr */,
     const StructureChain& extendedInfo /* default */):

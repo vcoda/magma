@@ -102,7 +102,7 @@ constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructu
             for (uint32_t j = 0; j < vertexBindingDescriptionCount; ++j)
             {
                 if (binding == vertexBindings[j].binding)
-                {   // Setup vertex input rate for per binding
+                {   // Define vertex input rate per binding
                     assert(binding < VertexInputBindingCount);
                     vertexBindings[j].inputRate = inputRates[binding];
                     break;
