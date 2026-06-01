@@ -216,6 +216,7 @@ constexpr VertexInputState::VertexInputState(const VertexInputAttribute& attribu
     vertexBindingDivisor.divisor = divisor;
     vertexInputDivisorInfo.vertexBindingDivisorCount = 1;
     vertexInputDivisorInfo.pVertexBindingDivisors = &vertexBindingDivisor;
+    pNext = &vertexInputDivisorInfo;
 }
 #endif // VK_EXT_vertex_attribute_divisor
 

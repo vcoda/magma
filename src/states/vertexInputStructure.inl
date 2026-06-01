@@ -120,6 +120,7 @@ constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructu
     }
     vertexInputDivisorInfo.vertexBindingDivisorCount = divisors.size();
     vertexInputDivisorInfo.pVertexBindingDivisors = vertexBindingDivisors;
+    pNext = &vertexInputDivisorInfo;
 }
 #endif // VK_EXT_vertex_attribute_divisor
 } // namespace magma
