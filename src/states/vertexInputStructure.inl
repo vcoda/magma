@@ -105,20 +105,22 @@ constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructu
 
 #ifdef VK_EXT_vertex_attribute_divisor
 template<class Vertex, std::size_t VertexAttributeCount>
-template<std::size_t VertexInputBindingCount>
+template<std::size_t VertexBindingDivisorCount>
 constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructure(
     const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
-    const std::array<uint32_t, VertexInputBindingCount>& divisors) noexcept:
+    const std::array<uint32_t, VertexBindingDivisorCount>& divisors) noexcept:
     VertexInputStructure(attributes)
 {
-    for (uint32_t i = 0; i < VertexInputBindingCount; ++i)
+    static_assert(VertexAttributeDivisorCount <= VertexAttributeCount,
+        "count of vertex binding divisors exceeds count of vertex attributes");
+    for (uint32_t i = 0; i < VertexAttributeDivisorCount; ++i)
     {
         if (divisors[i] != 0)
             vertexBindings[i].inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
         vertexBindingDivisors[i].binding = i;
         vertexBindingDivisors[i].divisor = divisors[i];
     }
-    vertexInputDivisorInfo.vertexBindingDivisorCount = divisors.size();
+    vertexInputDivisorInfo.vertexBindingDivisorCount = VertexBindingDivisorCount;
     vertexInputDivisorInfo.pVertexBindingDivisors = vertexBindingDivisors;
     pNext = &vertexInputDivisorInfo;
 }
