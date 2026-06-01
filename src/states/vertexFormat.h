@@ -73,6 +73,17 @@ namespace magma::vt
         T uv;
     };
 
+    /* Vertex with position and first (u,v) coordinate for
+       diffuse texture and second coordinate for light map. */
+
+    template<class V, class T>
+    struct LightmapVertex
+    {
+        V pos;
+        T uv;
+        T lightmapUv;
+    };
+
     /* Vertex with position, normal, tangent, bitangent
        vectors and texture coordinates to implement per-
        pixel bump mapping. */
@@ -85,6 +96,19 @@ namespace magma::vt
         N tangent;
         N bitangent;
         T uv;
+    };
+
+    /* Skinned lit vertex with weights and indices for
+       skeletal animation. */
+
+    template<class V, class N, class T, class W, class I>
+    struct SkinVertex
+    {
+        V pos;
+        N normal;
+        T uv;
+        W weights;
+        I indices;
     };
 
     typedef Vertex<Half2> Pos2h;
@@ -196,6 +220,25 @@ namespace magma::vt
     typedef LitTexVertex<Double3, Float3, Half2> Pos3dNormal3fTex2h;
     typedef LitTexVertex<Double3, Float3, Float2> Pos3dNormal3fTex2f;
 
+    typedef LightmapVertex<Half2, UShortNorm2> Pos2hTwoTex2us;
+    typedef LightmapVertex<Half2, Half2> Pos2hTwoTex2h;
+    typedef LightmapVertex<Half2, Float2> Pos2hTwoTex2f;
+    typedef LightmapVertex<Float2, UShortNorm2> Pos2fTwoTex2us;
+    typedef LightmapVertex<Float2, Half2> Pos2fTwoTex2h;
+    typedef LightmapVertex<Float2, Float2> Pos2fTwoTex2f;
+    typedef LightmapVertex<Double2, UShortNorm2> Pos2dTwoTex2us;
+    typedef LightmapVertex<Double2, Half2> Pos2dTwoTex2h;
+    typedef LightmapVertex<Double2, Float2> Pos2dTwoTex2f;
+    typedef LightmapVertex<Half4, UShortNorm2> Pos4hTwoTex2us;
+    typedef LightmapVertex<Half4, Half2> Pos4hTwoTex2h;
+    typedef LightmapVertex<Half4, Float2> Pos4hTwoTex2f;
+    typedef LightmapVertex<Float3, UShortNorm2> Pos3fTwoTex2us;
+    typedef LightmapVertex<Float3, Half2> Pos3fTwoTex2h;
+    typedef LightmapVertex<Float3, Float2> Pos3fTwoTex2f;
+    typedef LightmapVertex<Double3, UShortNorm2> Pos3dTwoTex2us;
+    typedef LightmapVertex<Double3, Half2> Pos3dTwoTex2h;
+    typedef LightmapVertex<Double3, Float2> Pos3dTwoTex2f;
+
     typedef BumpVertex<Half4, ByteNorm4, UShortNorm2> Pos4hTbn4bTex2us;
     typedef BumpVertex<Half4, ByteNorm4, Half2> Pos4hTbn4bTex2h;
     typedef BumpVertex<Half4, ByteNorm4, Float2> Pos4hTbn4bTex2f;
@@ -250,4 +293,59 @@ namespace magma::vt
     typedef BumpVertex<Double3, Float3, UShortNorm2> Pos3dTbn3fTex2us;
     typedef BumpVertex<Double3, Float3, Half2> Pos3dTbn3fTex2h;
     typedef BumpVertex<Double3, Float3, Float2> Pos3dTbn3fTex2f;
+
+    typedef SkinVertex<Half4, ByteNorm4, UShortNorm2, UByteNorm4, UByte4> Pos4hNormal4bTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Half4, ByteNorm4, Half2, UByteNorm4, UByte4> Pos4hNormal4bTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Half4, ByteNorm4, Float2, UByteNorm4, UByte4> Pos4hNormal4bTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Half4, UByteNorm4, UShortNorm2, UByteNorm4, UByte4> Pos4hNormal4ubTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Half4, UByteNorm4, Half2, UByteNorm4, UByte4> Pos4hNormal4ubTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Half4, UByteNorm4, Float2, UByteNorm4, UByte4> Pos4hNormal4ubTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Half4, ShortNorm4, UShortNorm2, UByteNorm4, UByte4> Pos4hNormal4sTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Half4, ShortNorm4, Half2, UByteNorm4, UByte4> Pos4hNormal4sTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Half4, ShortNorm4, Float2, UByteNorm4, UByte4> Pos4hNormal4sTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Half4, UShortNorm4, UShortNorm2, UByteNorm4, UByte4> Pos4hNormal4usTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Half4, UShortNorm4, Half2, UByteNorm4, UByte4> Pos4hNormal4usTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Half4, UShortNorm4, Float2, UByteNorm4, UByte4> Pos4hNormal4usTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Half4, Half4, UShortNorm2, UByteNorm4, UByte4> Pos4hNormal4hTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Half4, Half4, Half2, UByteNorm4, UByte4> Pos4hNormal4hTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Half4, Half4, Float2, UByteNorm4, UByte4> Pos4hNormal4hTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Half4, Float3, UShortNorm2, UByteNorm4, UByte4> Pos4hNormal3fTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Half4, Float3, Half2, UByteNorm4, UByte4> Pos4hNormal3fTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Half4, Float3, Float2, UByteNorm4, UByte4> Pos4hNormal3fTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Float3, ByteNorm4, UShortNorm2, UByteNorm4, UByte4> Pos3fNormal4bTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Float3, ByteNorm4, Half2, UByteNorm4, UByte4> Pos3fNormal4bTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Float3, ByteNorm4, Float2, UByteNorm4, UByte4> Pos3fNormal4bTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Float3, UByteNorm4, UShortNorm2, UByteNorm4, UByte4> Pos3fNormal4ubTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Float3, UByteNorm4, Half2, UByteNorm4, UByte4> Pos3fNormal4ubTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Float3, UByteNorm4, Float2, UByteNorm4, UByte4> Pos3fNormal4ubTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Float3, ShortNorm4, UShortNorm2, UByteNorm4, UByte4> Pos3fNormal4sTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Float3, ShortNorm4, Half2, UByteNorm4, UByte4> Pos3fNormal4sTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Float3, ShortNorm4, Float2, UByteNorm4, UByte4> Pos3fNormal4sTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Float3, UShortNorm4, UShortNorm2, UByteNorm4, UByte4> Pos3fNormal4usTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Float3, UShortNorm4, Half2, UByteNorm4, UByte4> Pos3fNormal4usTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Float3, UShortNorm4, Float2, UByteNorm4, UByte4> Pos3fNormal4usTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Float3, Half4, UShortNorm2, UByteNorm4, UByte4> Pos3fNormal4hTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Float3, Half4, Half2, UByteNorm4, UByte4> Pos3fNormal4hTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Float3, Half4, Float2, UByteNorm4, UByte4> Pos3fNormal4hTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Float3, Float3, UShortNorm2, UByteNorm4, UByte4> Pos3fNormal3fTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Float3, Float3, Half2, UByteNorm4, UByte4> Pos3fNormal3fTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Float3, Float3, Float2, UByteNorm4, UByte4> Pos3fNormal3fTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Double3, ByteNorm4, UShortNorm2, UByteNorm4, UByte4> Pos3dNormal4bTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Double3, ByteNorm4, Half2, UByteNorm4, UByte4> Pos3dNormal4bTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Double3, ByteNorm4, Float2, UByteNorm4, UByte4> Pos3dNormal4bTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Double3, UByteNorm4, UShortNorm2, UByteNorm4, UByte4> Pos3dNormal4ubTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Double3, UByteNorm4, Half2, UByteNorm4, UByte4> Pos3dNormal4ubTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Double3, UByteNorm4, Float2, UByteNorm4, UByte4> Pos3dNormal4ubTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Double3, ShortNorm4, UShortNorm2, UByteNorm4, UByte4> Pos3dNormal4sTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Double3, ShortNorm4, Half2, UByteNorm4, UByte4> Pos3dNormal4sTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Double3, ShortNorm4, Float2, UByteNorm4, UByte4> Pos3dNormal4sTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Double3, UShortNorm4, UShortNorm2, UByteNorm4, UByte4> Pos3dNormal4usTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Double3, UShortNorm4, Half2, UByteNorm4, UByte4> Pos3dNormal4usTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Double3, UShortNorm4, Float2, UByteNorm4, UByte4> Pos3dNormal4usTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Double3, Half4, UShortNorm2, UByteNorm4, UByte4> Pos3dNormal4hTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Double3, Half4, Half2, UByteNorm4, UByte4> Pos3dNormal4hTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Double3, Half4, Float2, UByteNorm4, UByte4> Pos3dNormal4hTex2fWght4ubIdx4ub;
+    typedef SkinVertex<Double3, Float3, UShortNorm2, UByteNorm4, UByte4> Pos3dNormal3fTex2usWght4ubIdx4ub;
+    typedef SkinVertex<Double3, Float3, Half2, UByteNorm4, UByte4> Pos3dNormal3fTex2hWght4ubIdx4ub;
+    typedef SkinVertex<Double3, Float3, Float2, UByteNorm4, UByte4> Pos3dNormal3fTex2fWght4ubIdx4ub;
 } // namespace magma::vt
