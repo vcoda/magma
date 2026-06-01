@@ -4,22 +4,10 @@ template<class Vertex, std::size_t VertexAttributeCount>
 constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructure() noexcept:
     vertexBindings{},
     vertexInputAttributes{}
+#ifdef VK_EXT_vertex_attribute_divisor
+   ,vertexBindingDivisors{}
+#endif
 {}
-
-template<class Vertex, std::size_t VertexAttributeCount>
-constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructure(uint32_t binding,
-    const VertexInputAttribute& attribute,
-    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept:
-    VertexInputState(binding, sizeof(Vertex), inputRate),
-    vertexBindings{},
-    vertexInputAttributes{}
-{
-    static_assert(VertexAttributeCount == 1, "vertex input attribute count must be 1");
-    vertexAttributeDescriptionCount = 1;
-    vertexInputAttributes[0] = attribute;
-    vertexInputAttributes[0].binding = binding;
-    pVertexAttributeDescriptions = vertexInputAttributes;
-}
 
 namespace detail
 {
@@ -38,9 +26,12 @@ template<class Vertex, std::size_t VertexAttributeCount>
 constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructure(
     const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
     VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept:
-    VertexInputState(0, sizeof(Vertex), inputRate),
+    VertexInputState(attributes[0], sizeof(Vertex), inputRate),
     vertexBindings{},
     vertexInputAttributes{}
+#ifdef VK_EXT_vertex_attribute_divisor
+   ,vertexBindingDivisors{}
+#endif
 {
     uint32_t offsets[VertexAttributeCount] = {};
     for (std::size_t i = 0; i < VertexAttributeCount; ++i)
@@ -114,31 +105,21 @@ constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructu
 
 #ifdef VK_EXT_vertex_attribute_divisor
 template<class Vertex, std::size_t VertexAttributeCount>
-constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructure(uint32_t binding,
-    const VertexInputAttribute& attribute, uint32_t divisor) noexcept:
-    VertexInputState(binding, sizeof(Vertex), divisor),
-    vertexInputAttributes{}
+template<std::size_t VertexInputBindingCount>
+constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructure(
+    const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
+    const std::array<uint32_t, VertexInputBindingCount>& divisors) noexcept:
+    VertexInputStructure(attributes)
 {
-    static_assert(VertexAttributeCount == 1, "vertex input attribute count must be 1");
-    vertexAttributeDescriptionCount = 1;
-    vertexInputAttributes[0] = attribute;
-    vertexInputAttributes[0].binding = binding;
-    pVertexAttributeDescriptions = vertexInputAttributes;
-}
-
-template<class Vertex, std::size_t VertexAttributeCount>
-constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructure(uint32_t binding,
-    const std::array<magma::VertexInputAttribute, VertexAttributeCount>& attributes, uint32_t divisor) noexcept:
-    VertexInputState(binding, sizeof(Vertex), divisor),
-    vertexInputAttributes{}
-{
-    vertexAttributeDescriptionCount = VertexAttributeCount;
-    for (std::size_t i = 0; i < VertexAttributeCount; ++i)
+    for (uint32_t i = 0; i < VertexInputBindingCount; ++i)
     {
-        vertexInputAttributes[i] = attributes[i];
-        vertexInputAttributes[i].binding = binding;
+        if (divisors[i] != 0)
+            vertexBindings[i].inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+        vertexBindingDivisors[i].binding = i;
+        vertexBindingDivisors[i].divisor = divisors[i];
     }
-    pVertexAttributeDescriptions = vertexInputAttributes;
+    vertexInputDivisorInfo.vertexBindingDivisorCount = divisors.size();
+    vertexInputDivisorInfo.pVertexBindingDivisors = vertexBindingDivisors;
 }
 #endif // VK_EXT_vertex_attribute_divisor
 } // namespace magma

@@ -155,6 +155,12 @@ constexpr VertexInputState::VertexInputState() noexcept:
         0, // binding,
         0, // stride
         VK_VERTEX_INPUT_RATE_VERTEX
+    },
+    vertexAttribute{
+        0, // location
+        0, // binding
+        VK_FORMAT_UNDEFINED, // format
+        0  // offset
     }
 #ifdef VK_EXT_vertex_attribute_divisor
    ,vertexBindingDivisor{
@@ -170,22 +176,23 @@ constexpr VertexInputState::VertexInputState() noexcept:
 #endif // VK_EXT_vertex_attribute_divisor
 {}
 
-constexpr VertexInputState::VertexInputState(uint32_t binding, uint32_t stride,
-    VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept:
+constexpr VertexInputState::VertexInputState(const VertexInputAttribute& attribute,
+    uint32_t stride, VkVertexInputRate inputRate /* VK_VERTEX_INPUT_RATE_VERTEX */) noexcept:
     VkPipelineVertexInputStateCreateInfo{
         VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
         nullptr,
         0, // flags
         1, // vertexBindingDescriptionCount
         &vertexBinding, // pVertexBindingDescriptions
-        0, // vertexAttributeDescriptionCount
-        nullptr // pVertexAttributeDescriptions
+        1, // vertexAttributeDescriptionCount
+        &vertexAttribute // pVertexAttributeDescriptions
     },
     vertexBinding{
-        binding,
+        attribute.binding,
         stride,
         inputRate
-    }
+    },
+    vertexAttribute{attribute}
 #ifdef VK_EXT_vertex_attribute_divisor
    ,vertexBindingDivisor{
         0, // binding
@@ -201,32 +208,15 @@ constexpr VertexInputState::VertexInputState(uint32_t binding, uint32_t stride,
 {}
 
 #ifdef VK_EXT_vertex_attribute_divisor
-constexpr VertexInputState::VertexInputState(uint32_t binding, uint32_t stride, uint32_t divisor) noexcept:
-    VkPipelineVertexInputStateCreateInfo{
-        VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-        &vertexInputDivisorInfo,
-        0, // flags
-        1, // vertexBindingDescriptionCount
-        &vertexBinding, // pVertexBindingDescriptions
-        0, // vertexAttributeDescriptionCount
-        nullptr // pVertexAttributeDescriptions
-    },
-    vertexBinding{
-        binding,
-        stride,
-        VK_VERTEX_INPUT_RATE_INSTANCE
-    },
-    vertexBindingDivisor{
-        binding,
-        divisor
-    },
-    vertexInputDivisorInfo{
-        VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT,
-        nullptr,
-        1, // vertexBindingDivisorCount
-        &vertexBindingDivisor // pVertexBindingDivisors
-    }
-{}
+constexpr VertexInputState::VertexInputState(const VertexInputAttribute& attribute,
+    uint32_t stride, uint32_t divisor) noexcept:
+    VertexInputState(attribute, stride, VK_VERTEX_INPUT_RATE_INSTANCE)
+{
+    vertexBindingDivisor.binding = attribute.binding;
+    vertexBindingDivisor.divisor = divisor;
+    vertexInputDivisorInfo.vertexBindingDivisorCount = 1;
+    vertexInputDivisorInfo.pVertexBindingDivisors = &vertexBindingDivisor;
+}
 #endif // VK_EXT_vertex_attribute_divisor
 
 constexpr VertexInputState::VertexInputState(const VertexInputState& other) noexcept:
@@ -253,7 +243,7 @@ constexpr VertexInputState::VertexInputState(const VertexInputState& other) noex
         other.vertexInputDivisorInfo.vertexBindingDivisorCount,
         &vertexBindingDivisor // pVertexBindingDivisors
     }
-#endif
+#endif // VK_EXT_vertex_attribute_divisor
 {}
 
 constexpr hash_t VertexInputState::hash() const noexcept

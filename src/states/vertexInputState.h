@@ -46,11 +46,11 @@ namespace magma
     struct VertexInputState : VkPipelineVertexInputStateCreateInfo
     {
         constexpr VertexInputState() noexcept;
-        constexpr VertexInputState(uint32_t binding,
+        constexpr VertexInputState(const VertexInputAttribute& attribute,
             uint32_t stride,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
     #ifdef VK_EXT_vertex_attribute_divisor
-        constexpr VertexInputState(uint32_t binding,
+        constexpr VertexInputState(const VertexInputAttribute& attribute,
             uint32_t stride,
             uint32_t divisor) noexcept;
     #endif // VK_EXT_vertex_attribute_divisor
@@ -58,6 +58,7 @@ namespace magma
         constexpr hash_t hash() const noexcept;
 
         const VkVertexInputBindingDescription vertexBinding;
+        const VkVertexInputAttributeDescription vertexAttribute;
         // Allows to specify individual divisor value for binding.
         // Divisor is the number of successive instances that will
         // use the same value of the vertex attribute when instanced
@@ -65,8 +66,8 @@ namespace magma
         // the same vertex attribute will be applied to N successive
         // instances before moving on to the next vertex attribute.
     #ifdef VK_EXT_vertex_attribute_divisor
-        const VkVertexInputBindingDivisorDescriptionEXT vertexBindingDivisor;
-        const VkPipelineVertexInputDivisorStateCreateInfoEXT vertexInputDivisorInfo;
+        VkVertexInputBindingDivisorDescriptionEXT vertexBindingDivisor;
+        VkPipelineVertexInputDivisorStateCreateInfoEXT vertexInputDivisorInfo;
     #endif // VK_EXT_vertex_attribute_divisor
     };
 } // namespace magma

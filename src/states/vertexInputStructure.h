@@ -34,26 +34,23 @@ namespace magma
 
     public:
         constexpr VertexInputStructure() noexcept;
-        constexpr VertexInputStructure(uint32_t binding,
-            const VertexInputAttribute& attribute,
-            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
         constexpr VertexInputStructure(const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
         template<std::size_t VertexInputBindingCount>
         constexpr VertexInputStructure(const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
             const std::array<VkVertexInputRate, VertexInputBindingCount>& inputRates) noexcept;
     #ifdef VK_EXT_vertex_attribute_divisor
-        constexpr VertexInputStructure(uint32_t binding,
-            const VertexInputAttribute& attribute,
-            uint32_t divisor) noexcept;
-        constexpr VertexInputStructure(uint32_t binding,
-            const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
-            uint32_t divisor) noexcept;
+        template<std::size_t VertexInputBindingCount>
+        constexpr VertexInputStructure(const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
+            const std::array<uint32_t, VertexInputBindingCount>& divisors) noexcept;
     #endif // VK_EXT_vertex_attribute_divisor
 
     private:
         VkVertexInputBindingDescription vertexBindings[VertexAttributeCount];
         VkVertexInputAttributeDescription vertexInputAttributes[VertexAttributeCount];
+    #ifdef VK_EXT_vertex_attribute_divisor
+        VkVertexInputBindingDivisorDescriptionEXT vertexBindingDivisors[VertexAttributeCount];
+    #endif
     };
 
     namespace specialization
@@ -166,8 +163,8 @@ MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(magma::Double3, VK_FORMAT_R64G64B64_SFLOAT)
 MAGMA_SPECIALIZE_VERTEX_ATTRIBUTE(magma::Double4, VK_FORMAT_R64G64B64A64_SFLOAT)
 
 #define MAGMA_VERTEX(Vertex, format, name)\
-constexpr magma::VertexInputStructure<Vertex, 1> name(0,\
-    {0, 0, format, 0}\
+constexpr magma::VertexInputState name(\
+    {0, 0, format, 0}, sizeof(Vertex)\
 );
 
 #define MAGMA_COLOR_VERTEX(Vertex, name)\
