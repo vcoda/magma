@@ -79,12 +79,14 @@ constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructu
 }
 
 template<class Vertex, std::size_t VertexAttributeCount>
-template<std::size_t VertexInputBindingCount>
+template<std::size_t VertexInputRateCount>
 constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructure(
     const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
-    const std::array<VkVertexInputRate, VertexInputBindingCount>& inputRates) noexcept:
+    const std::array<VkVertexInputRate, VertexInputRateCount>& inputRates) noexcept:
     VertexInputStructure(attributes)
 {
+    static_assert(VertexInputRateCount <= VertexAttributeCount,
+        "count of vertex input rates exceeds count of vertex attributes");
     for (std::size_t i = 0; i < VertexAttributeCount; ++i)
     {
         uint32_t binding = attributes[i].binding;
@@ -94,7 +96,7 @@ constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructu
             {
                 if (binding == vertexBindings[j].binding)
                 {   // Define vertex input rate per binding
-                    assert(binding < VertexInputBindingCount);
+                    assert(binding < VertexInputRateCount);
                     vertexBindings[j].inputRate = inputRates[binding];
                     break;
                 }

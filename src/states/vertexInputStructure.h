@@ -36,9 +36,9 @@ namespace magma
         constexpr VertexInputStructure() noexcept;
         constexpr VertexInputStructure(const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
             VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_VERTEX) noexcept;
-        template<std::size_t VertexInputBindingCount>
+        template<std::size_t VertexInputRateCount>
         constexpr VertexInputStructure(const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
-            const std::array<VkVertexInputRate, VertexInputBindingCount>& inputRates) noexcept;
+            const std::array<VkVertexInputRate, VertexInputRateCount>& inputRates) noexcept;
     #ifdef VK_EXT_vertex_attribute_divisor
         template<std::size_t VertexBindingDivisorCount>
         constexpr VertexInputStructure(const std::array<VertexInputAttribute, VertexAttributeCount>& attributes,
