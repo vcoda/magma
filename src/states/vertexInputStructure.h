@@ -196,6 +196,14 @@ constexpr magma::VertexInputStructure<Vertex, 3> name(\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, uv, 2)\
 });
 
+#define MAGMA_LIGHTMAP_VERTEX(Vertex, name)\
+constexpr magma::VertexInputStructure<Vertex, 3> name(\
+{\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, uv, 1),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, lightmapUv, 2)\
+});
+
 #define MAGMA_BUMP_VERTEX(Vertex, name)\
 constexpr magma::VertexInputStructure<Vertex, 5> name(\
 {\
@@ -204,6 +212,16 @@ constexpr magma::VertexInputStructure<Vertex, 5> name(\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, tangent, 2),\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, bitangent, 3),\
     MAGMA_VERTEX_ATTRIBUTE(Vertex, uv, 4)\
+});
+
+#define MAGMA_SKIN_VERTEX(Vertex, name)\
+constexpr magma::VertexInputStructure<Vertex, 5> name(\
+{\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, pos, 0),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, normal, 1),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, uv, 2),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, weights, 3),\
+    MAGMA_VERTEX_ATTRIBUTE(Vertex, indices, 4)\
 });
 
 namespace magma::renderstate
@@ -333,6 +351,18 @@ namespace magma::renderstate
     MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal3fTex2h, pos3dNormal3fTex2h)
     MAGMA_LIT_TEX_VERTEX(vt::Pos3dNormal3fTex2f, pos3dNormal3fTex2f)
 
+    /* Vertex position, diffuse and lightmap texture coordinates. */
+
+    MAGMA_LIGHTMAP_VERTEX(vt::Pos4hTwoTex2us, pos4hTwoTex2us)
+    MAGMA_LIGHTMAP_VERTEX(vt::Pos4hTwoTex2h, pos4hTwoTex2h)
+    MAGMA_LIGHTMAP_VERTEX(vt::Pos4hTwoTex2f, pos4hTwoTex2f)
+    MAGMA_LIGHTMAP_VERTEX(vt::Pos3fTwoTex2us, pos3fTwoTex2us)
+    MAGMA_LIGHTMAP_VERTEX(vt::Pos3fTwoTex2h, pos3fTwoTex2h)
+    MAGMA_LIGHTMAP_VERTEX(vt::Pos3fTwoTex2f, pos3fTwoTex2f)
+    MAGMA_LIGHTMAP_VERTEX(vt::Pos3dTwoTex2us, pos3dTwoTex2us)
+    MAGMA_LIGHTMAP_VERTEX(vt::Pos3dTwoTex2h, pos3dTwoTex2h)
+    MAGMA_LIGHTMAP_VERTEX(vt::Pos3dTwoTex2f, pos3dTwoTex2f)
+
     /* Vertex position, TBN basis and texture coordinates. */
 
     MAGMA_BUMP_VERTEX(vt::Pos4hTbn4bTex2us, pos4hTbn4bTex2us)
@@ -391,4 +421,63 @@ namespace magma::renderstate
     MAGMA_BUMP_VERTEX(vt::Pos3dTbn3fTex2us, pos3dTbn3fTex2us)
     MAGMA_BUMP_VERTEX(vt::Pos3dTbn3fTex2h, pos3dTbn3fTex2h)
     MAGMA_BUMP_VERTEX(vt::Pos3dTbn3fTex2f, pos3dTbn3fTex2f)
+
+    /* Vertex position, normal, texture coordinates, vertex weights and bone indices. */
+
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4bTex2usWght4ubIdx4ub, pos4hNormal4bTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4bTex2hWght4ubIdx4ub, pos4hNormal4bTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4bTex2fWght4ubIdx4ub, pos4hNormal4bTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4ubTex2usWght4ubIdx4ub, pos4hNormal4ubTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4ubTex2hWght4ubIdx4ub, pos4hNormal4ubTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4ubTex2fWght4ubIdx4ub, pos4hNormal4ubTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4sTex2usWght4ubIdx4ub, pos4hNormal4sTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4sTex2hWght4ubIdx4ub, pos4hNormal4sTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4sTex2fWght4ubIdx4ub, pos4hNormal4sTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4usTex2usWght4ubIdx4ub, pos4hNormal4usTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4usTex2hWght4ubIdx4ub, pos4hNormal4usTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4usTex2fWght4ubIdx4ub, pos4hNormal4usTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4hTex2usWght4ubIdx4ub, pos4hNormal4hTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4hTex2hWght4ubIdx4ub, pos4hNormal4hTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal4hTex2fWght4ubIdx4ub, pos4hNormal4hTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal3fTex2usWght4ubIdx4ub, pos4hNormal3fTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal3fTex2hWght4ubIdx4ub, pos4hNormal3fTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos4hNormal3fTex2fWght4ubIdx4ub, pos4hNormal3fTex2fWght4ubIdx4ub)
+
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4bTex2usWght4ubIdx4ub, pos3fNormal4bTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4bTex2hWght4ubIdx4ub, pos3fNormal4bTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4bTex2fWght4ubIdx4ub, pos3fNormal4bTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4ubTex2usWght4ubIdx4ub, pos3fNormal4ubTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4ubTex2hWght4ubIdx4ub, pos3fNormal4ubTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4ubTex2fWght4ubIdx4ub, pos3fNormal4ubTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4sTex2usWght4ubIdx4ub, pos3fNormal4sTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4sTex2hWght4ubIdx4ub, pos3fNormal4sTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4sTex2fWght4ubIdx4ub, pos3fNormal4sTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4usTex2usWght4ubIdx4ub, pos3fNormal4usTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4usTex2hWght4ubIdx4ub, pos3fNormal4usTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4usTex2fWght4ubIdx4ub, pos3fNormal4usTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4hTex2usWght4ubIdx4ub, pos3fNormal4hTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4hTex2hWght4ubIdx4ub, pos3fNormal4hTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal4hTex2fWght4ubIdx4ub, pos3fNormal4hTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal3fTex2usWght4ubIdx4ub, pos3fNormal3fTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal3fTex2hWght4ubIdx4ub, pos3fNormal3fTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3fNormal3fTex2fWght4ubIdx4ub, pos3fNormal3fTex2fWght4ubIdx4ub)
+
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4bTex2usWght4ubIdx4ub, pos3dNormal4bTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4bTex2hWght4ubIdx4ub, pos3dNormal4bTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4bTex2fWght4ubIdx4ub, pos3dNormal4bTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4ubTex2usWght4ubIdx4ub, pos3dNormal4ubTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4ubTex2hWght4ubIdx4ub, pos3dNormal4ubTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4ubTex2fWght4ubIdx4ub, pos3dNormal4ubTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4sTex2usWght4ubIdx4ub, pos3dNormal4sTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4sTex2hWght4ubIdx4ub, pos3dNormal4sTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4sTex2fWght4ubIdx4ub, pos3dNormal4sTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4usTex2usWght4ubIdx4ub, pos3dNormal4usTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4usTex2hWght4ubIdx4ub, pos3dNormal4usTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4usTex2fWght4ubIdx4ub, pos3dNormal4usTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4hTex2usWght4ubIdx4ub, pos3dNormal4hTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4hTex2hWght4ubIdx4ub, pos3dNormal4hTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal4hTex2fWght4ubIdx4ub, pos3dNormal4hTex2fWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal3fTex2usWght4ubIdx4ub, pos3dNormal3fTex2usWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal3fTex2hWght4ubIdx4ub, pos3dNormal3fTex2hWght4ubIdx4ub)
+    MAGMA_SKIN_VERTEX(vt::Pos3dNormal3fTex2fWght4ubIdx4ub, pos3dNormal3fTex2fWght4ubIdx4ub)
 } // namespace magma::renderstate
