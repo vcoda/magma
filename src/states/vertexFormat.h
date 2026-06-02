@@ -220,15 +220,6 @@ namespace magma::vt
     typedef LitTexVertex<Double3, Float3, Half2> Pos3dNormal3fTex2h;
     typedef LitTexVertex<Double3, Float3, Float2> Pos3dNormal3fTex2f;
 
-    typedef LightmapVertex<Half2, UShortNorm2> Pos2hTwoTex2us;
-    typedef LightmapVertex<Half2, Half2> Pos2hTwoTex2h;
-    typedef LightmapVertex<Half2, Float2> Pos2hTwoTex2f;
-    typedef LightmapVertex<Float2, UShortNorm2> Pos2fTwoTex2us;
-    typedef LightmapVertex<Float2, Half2> Pos2fTwoTex2h;
-    typedef LightmapVertex<Float2, Float2> Pos2fTwoTex2f;
-    typedef LightmapVertex<Double2, UShortNorm2> Pos2dTwoTex2us;
-    typedef LightmapVertex<Double2, Half2> Pos2dTwoTex2h;
-    typedef LightmapVertex<Double2, Float2> Pos2dTwoTex2f;
     typedef LightmapVertex<Half4, UShortNorm2> Pos4hTwoTex2us;
     typedef LightmapVertex<Half4, Half2> Pos4hTwoTex2h;
     typedef LightmapVertex<Half4, Float2> Pos4hTwoTex2f;
