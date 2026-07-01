@@ -9,19 +9,6 @@ constexpr VertexInputAttribute::VertexInputAttribute(uint32_t location, uint32_t
     }
 {}
 
-template<class Vertex, class Type>
-inline VertexInputAttribute::VertexInputAttribute(uint32_t location, uint32_t binding, Type Vertex::*attribute) noexcept:
-    VkVertexInputAttributeDescription{
-        location,
-        binding,
-        specialization::VertexAttribute<Type>::format(),
-        static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attribute)))
-    }
-{
-    static_assert(sizeof(Type) != sizeof(uint16_t) * 3,
-        "6-byte attribute types are not allowed");
-}
-
 constexpr uint32_t VertexInputAttribute::size() const noexcept
 {
     switch (format)
@@ -235,6 +222,7 @@ constexpr VertexInputState::VertexInputState(const VertexInputState& other) noex
         other.vertexAttributeDescriptionCount,
         other.pVertexAttributeDescriptions // Keep a reference until the derived class copies this array!
     },
+    vertexAttribute(other.vertexAttribute),
     vertexBinding(other.vertexBinding)
 #ifdef VK_EXT_vertex_attribute_divisor
    ,vertexBindingDivisor(other.vertexBindingDivisor),

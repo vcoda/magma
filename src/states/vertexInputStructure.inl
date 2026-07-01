@@ -9,6 +9,19 @@ constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructu
 #endif
 {}
 
+template<class Vertex, class Type>
+inline VertexInputAttribute::VertexInputAttribute(uint32_t location, uint32_t binding, Type Vertex::*attribute) noexcept:
+    VkVertexInputAttributeDescription{
+        location,
+        binding,
+        specialization::VertexAttribute<Type>::format(),
+        static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(&(((Vertex *)0)->*attribute)))
+    }
+{
+    static_assert(sizeof(Type) != sizeof(uint16_t) * 3,
+        "6-byte attribute types are not allowed");
+}
+
 namespace detail
 {
 template<std::size_t N>
@@ -113,9 +126,9 @@ constexpr VertexInputStructure<Vertex, VertexAttributeCount>::VertexInputStructu
     const std::array<uint32_t, VertexBindingDivisorCount>& divisors) noexcept:
     VertexInputStructure(attributes)
 {
-    static_assert(VertexAttributeDivisorCount <= VertexAttributeCount,
+    static_assert(VertexBindingDivisorCount <= VertexAttributeCount,
         "count of vertex binding divisors exceeds count of vertex attributes");
-    for (uint32_t i = 0; i < VertexAttributeDivisorCount; ++i)
+    for (uint32_t i = 0; i < VertexBindingDivisorCount; ++i)
     {
         if (divisors[i] != 0)
             vertexBindings[i].inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
