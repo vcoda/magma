@@ -61,13 +61,13 @@ inline VkObject reinterpret(NonDispatchableHandle handle) noexcept
 }
 
 template<class T1, class T2, class L>
-inline void foreach(T1& a, T2& b, L&& fn)
+inline void foreach(T1& container1, T2& container2, L&& f)
 {
-    auto i = a.begin(), ie = a.end();
-    auto j = b.begin(), je = b.end();
+    auto i = container1.begin(), ie = container1.end();
+    auto j = container2.begin(), je = container2.end();
     while ((i != ie) && (j != je))
     {
-        fn(*i, *j);
+        f(*i, *j);
         ++i; ++j;
     }
 }

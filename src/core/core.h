@@ -71,7 +71,7 @@ namespace magma
         template<class T> typename T::NativeHandle dereference(T *p) noexcept;
         template<class VkObject> VkObject reinterpret(NonDispatchableHandle handle) noexcept;
 
-        template<class T1, class T2, class L> void foreach(T1& container1, T2& container2, L&& fn);
+        template<class T1, class T2, class L> void foreach(T1& container1, T2& container2, L&& f);
 
         template<class T> T *copy(const T *src) noexcept;
         template<class T> T *copy(T *dst, const T *src) noexcept;
