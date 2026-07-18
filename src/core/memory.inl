@@ -33,60 +33,34 @@ inline T *copyArray(const T *src, std::size_t size) noexcept
     return nullptr;
 }
 
-template<class T>
-inline T *copyVector(const std::vector<T>& src) noexcept
-{
-    if (std::size_t size = src.size())
-    {
-        T *dst = MAGMA_NEW T[size];
-        if (dst)
-            return (T *)memcpy(dst, src.data(), sizeof(T) * size);
-    }
-    return nullptr;
-}
-
-template<class T1, class T2>
-inline T1 *copyVector(const std::vector<T2>& src) noexcept
+template<class T1, class T2 /* = T1 */>
+inline T2 *copyVector(const std::vector<T1>& src) noexcept
 {
     static_assert(sizeof(T1) == sizeof(T2), "type size mismatch");
     if (std::size_t size = src.size())
     {
-        T1 *dst = MAGMA_NEW T1[size];
-        if (dst)
-            return (T1 *)memcpy(dst, src.data(), sizeof(T2) * size);
-    }
-    return nullptr;
-}
-
-template<class T>
-inline T *copyInitializerList(const std::initializer_list<T>& src) noexcept
-{
-    if (std::size_t size = src.size())
-    {
-        T *dst = MAGMA_NEW T[size];
+        T2 *dst = MAGMA_NEW T2[size];
         if (dst)
         {
-            T *y = dst;
-            for (const T& x: src)
-                *y++ = x;
+            memcpy(dst, src.data(), sizeof(T1) * size);
             return dst;
         }
     }
     return nullptr;
 }
 
-template<class T1, class T2>
-inline T1 *copyInitializerList(const std::initializer_list<T2>& src) noexcept
+template<class T1, class T2 /* = T1 */>
+inline T2 *copyInitializerList(const std::initializer_list<T1>& src) noexcept
 {
     static_assert(sizeof(T1) == sizeof(T2), "type size mismatch");
     if (std::size_t size = src.size())
     {
-        T1 *dst = MAGMA_NEW T1[size];
+        T2 *dst = MAGMA_NEW T2[size];
         if (dst)
         {
-            T1 *y = dst;
-            for (const T2& x: src)
-                memcpy(y++, &x, sizeof(T2));
+            T2 *to = dst;
+            for (const T1& from: src)
+                memcpy(to++, &from, sizeof(T1));
             return dst;
         }
     }

@@ -76,10 +76,8 @@ namespace magma
         template<class T> T *copy(const T *src) noexcept;
         template<class T> T *copy(T *dst, const T *src) noexcept;
         template<class T> T *copyArray(const T *src, std::size_t size) noexcept;
-        template<class T> T *copyVector(const std::vector<T>& src) noexcept;
-        template<class T1, class T2> T1 *copyVector(const std::vector<T2>& src) noexcept;
-        template<class T> T *copyInitializerList(const std::initializer_list<T>& src) noexcept;
-        template<class T1, class T2> T1 *copyInitializerList(const std::initializer_list<T2>& src) noexcept;
+        template<class T1, class T2 = T1> T2 *copyVector(const std::vector<T1>& src) noexcept;
+        template<class T1, class T2 = T1> T2 *copyInitializerList(const std::initializer_list<T1>& src) noexcept;
         char *copyString(const char *src) noexcept;
         char *copyString(char *dst, std::size_t size, const char *src) noexcept;
         uint8_t *copyBinaryData(const void *src, std::size_t size) noexcept;
