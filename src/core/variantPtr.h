@@ -19,7 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-    /* Variant pointer that can hold either unique or shared pointer. */
+    /* Holds either unique or shared pointer. */
 
     template<class T>
     class variant_ptr final
