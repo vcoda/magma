@@ -32,41 +32,41 @@ namespace magma
 
         T *get() const noexcept;
 
-        variant_ptr& operator=(std::unique_ptr<T>&& p) noexcept;
-        variant_ptr& operator=(std::shared_ptr<T>&& p) noexcept;
-        variant_ptr& operator=(variant_ptr<T>&& other) noexcept;
+        variant_ptr& operator=(std::unique_ptr<T>&&) noexcept;
+        variant_ptr& operator=(std::shared_ptr<T>&&) noexcept;
+        variant_ptr& operator=(variant_ptr<T>&&) noexcept;
 
         T *operator->() const noexcept;
         T& operator*() const noexcept;
         explicit operator bool() const noexcept;
 
-        bool operator<(const variant_ptr<T>& p) noexcept;
-        bool operator>(const variant_ptr<T>& p) noexcept;
-        bool operator<=(const variant_ptr<T>& p) noexcept;
-        bool operator>=(const variant_ptr<T>& p) noexcept;
-        bool operator==(const variant_ptr<T>& p) noexcept;
-        bool operator!=(const variant_ptr<T>& p) noexcept;
+        bool operator<(const variant_ptr<T>&) noexcept;
+        bool operator>(const variant_ptr<T>&) noexcept;
+        bool operator<=(const variant_ptr<T>&) noexcept;
+        bool operator>=(const variant_ptr<T>&) noexcept;
+        bool operator==(const variant_ptr<T>&) noexcept;
+        bool operator!=(const variant_ptr<T>&) noexcept;
 
-        bool operator<(const T *p) noexcept;
-        bool operator>(const T *p) noexcept;
-        bool operator<=(const T *p) noexcept;
-        bool operator>=(const T *p) noexcept;
-        bool operator==(const T *p) noexcept;
-        bool operator!=(const T *p) noexcept;
+        bool operator<(const T*) noexcept;
+        bool operator>(const T*) noexcept;
+        bool operator<=(const T*) noexcept;
+        bool operator>=(const T*) noexcept;
+        bool operator==(const T*) noexcept;
+        bool operator!=(const T*) noexcept;
 
-        bool operator<(const std::unique_ptr<T>& p) noexcept;
-        bool operator>(const std::unique_ptr<T>& p) noexcept;
-        bool operator<=(const std::unique_ptr<T>& p) noexcept;
-        bool operator>=(const std::unique_ptr<T>& p) noexcept;
-        bool operator==(const std::unique_ptr<T>& p) noexcept;
-        bool operator!=(const std::unique_ptr<T>& p) noexcept;
+        bool operator<(const std::unique_ptr<T>&) noexcept;
+        bool operator>(const std::unique_ptr<T>&) noexcept;
+        bool operator<=(const std::unique_ptr<T>&) noexcept;
+        bool operator>=(const std::unique_ptr<T>&) noexcept;
+        bool operator==(const std::unique_ptr<T>&) noexcept;
+        bool operator!=(const std::unique_ptr<T>&) noexcept;
 
-        bool operator<(const std::shared_ptr<T>& p) noexcept;
-        bool operator>(const std::shared_ptr<T>& p) noexcept;
-        bool operator<=(const std::shared_ptr<T>& p) noexcept;
-        bool operator>=(const std::shared_ptr<T>& p) noexcept;
-        bool operator==(const std::shared_ptr<T>& p) noexcept;
-        bool operator!=(const std::shared_ptr<T>& p) noexcept;
+        bool operator<(const std::shared_ptr<T>&) noexcept;
+        bool operator>(const std::shared_ptr<T>&) noexcept;
+        bool operator<=(const std::shared_ptr<T>&) noexcept;
+        bool operator>=(const std::shared_ptr<T>&) noexcept;
+        bool operator==(const std::shared_ptr<T>&) noexcept;
+        bool operator!=(const std::shared_ptr<T>&) noexcept;
 
     private:
         std::variant<std::unique_ptr<T>, std::shared_ptr<T>> var;

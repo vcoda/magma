@@ -43,46 +43,46 @@ namespace magma
         void reset() noexcept;
 
         lent_ptr& operator=(const lent_ptr&) = delete;
-        template<class T2> lent_ptr& operator=(lent_ptr<T2>&& other) noexcept;
+        template<class T2> lent_ptr& operator=(lent_ptr<T2>&&) noexcept;
 
         T *operator->() const noexcept;
         T& operator*() const noexcept;
         explicit operator bool() const noexcept;
 
-        bool operator<(const lent_ptr<T>& p) noexcept;
-        bool operator>(const lent_ptr<T>& p) noexcept;
-        bool operator<=(const lent_ptr<T>& p) noexcept;
-        bool operator>=(const lent_ptr<T>& p) noexcept;
-        bool operator==(const lent_ptr<T>& p) noexcept;
-        bool operator!=(const lent_ptr<T>& p) noexcept;
+        bool operator<(const lent_ptr<T>&) noexcept;
+        bool operator>(const lent_ptr<T>&) noexcept;
+        bool operator<=(const lent_ptr<T>&) noexcept;
+        bool operator>=(const lent_ptr<T>&) noexcept;
+        bool operator==(const lent_ptr<T>&) noexcept;
+        bool operator!=(const lent_ptr<T>&) noexcept;
 
-        bool operator<(const T *p) noexcept;
-        bool operator>(const T *p) noexcept;
-        bool operator<=(const T *p) noexcept;
-        bool operator>=(const T *p) noexcept;
-        bool operator==(const T *p) noexcept;
-        bool operator!=(const T *p) noexcept;
+        bool operator<(const T*) noexcept;
+        bool operator>(const T*) noexcept;
+        bool operator<=(const T*) noexcept;
+        bool operator>=(const T*) noexcept;
+        bool operator==(const T*) noexcept;
+        bool operator!=(const T*) noexcept;
 
-        bool operator<(const std::unique_ptr<T>& p) noexcept;
-        bool operator>(const std::unique_ptr<T>& p) noexcept;
-        bool operator<=(const std::unique_ptr<T>& p) noexcept;
-        bool operator>=(const std::unique_ptr<T>& p) noexcept;
-        bool operator==(const std::unique_ptr<T>& p) noexcept;
-        bool operator!=(const std::unique_ptr<T>& p) noexcept;
+        bool operator<(const std::unique_ptr<T>&) noexcept;
+        bool operator>(const std::unique_ptr<T>&) noexcept;
+        bool operator<=(const std::unique_ptr<T>&) noexcept;
+        bool operator>=(const std::unique_ptr<T>&) noexcept;
+        bool operator==(const std::unique_ptr<T>&) noexcept;
+        bool operator!=(const std::unique_ptr<T>&) noexcept;
 
-        bool operator<(const std::shared_ptr<T>& p) noexcept;
-        bool operator>(const std::shared_ptr<T>& p) noexcept;
-        bool operator<=(const std::shared_ptr<T>& p) noexcept;
-        bool operator>=(const std::shared_ptr<T>& p) noexcept;
-        bool operator==(const std::shared_ptr<T>& p) noexcept;
-        bool operator!=(const std::shared_ptr<T>& p) noexcept;
+        bool operator<(const std::shared_ptr<T>&) noexcept;
+        bool operator>(const std::shared_ptr<T>&) noexcept;
+        bool operator<=(const std::shared_ptr<T>&) noexcept;
+        bool operator>=(const std::shared_ptr<T>&) noexcept;
+        bool operator==(const std::shared_ptr<T>&) noexcept;
+        bool operator!=(const std::shared_ptr<T>&) noexcept;
 
-        bool operator<(const variant_ptr<T>& p) noexcept;
-        bool operator>(const variant_ptr<T>& p) noexcept;
-        bool operator<=(const variant_ptr<T>& p) noexcept;
-        bool operator>=(const variant_ptr<T>& p) noexcept;
-        bool operator==(const variant_ptr<T>& p) noexcept;
-        bool operator!=(const variant_ptr<T>& p) noexcept;
+        bool operator<(const variant_ptr<T>&) noexcept;
+        bool operator>(const variant_ptr<T>&) noexcept;
+        bool operator<=(const variant_ptr<T>&) noexcept;
+        bool operator>=(const variant_ptr<T>&) noexcept;
+        bool operator==(const variant_ptr<T>&) noexcept;
+        bool operator!=(const variant_ptr<T>&) noexcept;
 
     private:
         template<class T2> friend class lent_ptr;
