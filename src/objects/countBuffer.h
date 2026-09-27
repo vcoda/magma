@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,41 +16,26 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "baseCountBuffer.h"
+#include "readbackBuffer.h"
 
 namespace magma
 {
     /* 32-bit unsigned integer atomic counter. */
 
-    class CountBuffer : public BaseCountBuffer
-    {
-    public:
-        explicit CountBuffer(std::shared_ptr<Device> device,
-            VkPipelineStageFlags stageMask,
-            std::shared_ptr<Allocator> allocator = nullptr,
-            const Sharing& sharing = Sharing());
-        void setValue(uint32_t value,
-            lent_ptr<CommandBuffer> cmdBuffer) noexcept;
-        uint32_t getValue() const noexcept;
-    };
+    typedef ReadbackBuffer<uint32_t> CountBuffer;
 
     /* Three 32-bit unsigned integer counters that can be used
        with vkCmdDispatchIndirect(X, Y, Z) call. */
 
-    class DispatchCountBuffer : public BaseCountBuffer
+    class DispatchCountBuffer : public ReadbackBuffer<VkDispatchIndirectCommand>
     {
     public:
         explicit DispatchCountBuffer(std::shared_ptr<Device> device,
             VkPipelineStageFlags stageMask,
             std::shared_ptr<Allocator> allocator = nullptr,
             const Sharing& sharing = Sharing());
-        void setValues(uint32_t x, uint32_t y, uint32_t z,
+        void setDispatch(uint32_t x, uint32_t y, uint32_t z,
             lent_ptr<CommandBuffer> cmdBuffer) noexcept;
-        void setValues(const uint32_t values[3],
-            lent_ptr<CommandBuffer> cmdBuffer) noexcept
-        {
-            setValues(values[0], values[1], values[2], std::move(cmdBuffer));
-        }
-        std::array<uint32_t, 3> getValues() const noexcept;
+        VkDispatchIndirectCommand getDispatch() const noexcept;
     };
 } // namespace magma

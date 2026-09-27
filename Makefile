@@ -78,7 +78,6 @@ SRC_OBJS= \
 	src/objects/model/deviceChild.o \
 	src/objects/accelerationStructure.o \
 	src/objects/accelerationStructureInputBuffer.o \
-	src/objects/baseCountBuffer.o \
 	src/objects/baseDeviceMemory.o \
 	src/objects/baseUniformBuffer.o \
 	src/objects/bottomLevelStructure.o \

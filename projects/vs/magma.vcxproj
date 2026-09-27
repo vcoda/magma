@@ -255,7 +255,7 @@
     <ClInclude Include="..\..\src\misc\structureChain.h" />
     <ClInclude Include="..\..\src\misc\viewport.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructure.h" />
-    <ClInclude Include="..\..\src\objects\baseCountBuffer.h" />
+    <ClInclude Include="..\..\src\objects\readbackBuffer.h" />
     <ClInclude Include="..\..\src\objects\bottomLevelStructure.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInputBuffer.h" />
     <ClInclude Include="..\..\src\objects\accelerationStructureInstanceBuffer.h" />
@@ -474,7 +474,6 @@
     <ClCompile Include="..\..\src\misc\structureChain.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructure.cpp" />
     <ClCompile Include="..\..\src\objects\accelerationStructureInputBuffer.cpp" />
-    <ClCompile Include="..\..\src\objects\baseCountBuffer.cpp" />
     <ClCompile Include="..\..\src\objects\bottomLevelStructure.cpp" />
     <ClCompile Include="..\..\src\objects\clusterAccelerationStructure.cpp" />
     <ClCompile Include="..\..\src\objects\countBuffer.cpp" />
@@ -735,6 +734,7 @@ $(VULKAN_SDK)\Bin\glslangValidator.exe -V -DNV --vn vsBlitNV %(FullPath) -o ../.
     <None Include="..\..\src\objects\pipelineBatch.inl" />
     <None Include="..\..\src\objects\pipelineLayout.inl" />
     <None Include="..\..\src\objects\queryPool.inl" />
+    <None Include="..\..\src\objects\readbackBuffer.inl" />
     <None Include="..\..\src\objects\renderPass.inl" />
     <None Include="..\..\src\objects\deviceResourcePool.inl" />
     <None Include="..\..\src\objects\shaderModule.inl" />

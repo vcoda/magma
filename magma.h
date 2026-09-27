@@ -95,6 +95,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "src/objects/queue.h"
 #include "src/objects/rayTracingPipeline.h"
 #include "src/objects/rayTracingPipelineBatch.h"
+#include "src/objects/readbackBuffer.h"
 #include "src/objects/renderPass.h"
 #include "src/objects/resource.h"
 #include "src/objects/sampler.h"
