@@ -1657,6 +1657,9 @@
     <None Include="..\..\src\objects\readbackBuffer.inl">
       <Filter>Header Files\objects</Filter>
     </None>
+    <None Include="..\..\src\barriers\imageMemoryBarrier.inl">
+      <Filter>Header Files\barriers</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\auxiliary\spirv\blit.frag">

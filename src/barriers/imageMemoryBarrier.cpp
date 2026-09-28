@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -171,8 +171,7 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, co
     }
 }
 
-ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
-    VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept:
+ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask) noexcept:
     VkImageMemoryBarrier{
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
         nullptr, // pNext
@@ -187,21 +186,25 @@ ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout,
     }
 {}
 
+ImageMemoryBarrier::ImageMemoryBarrier(Image *image, VkImageLayout newLayout, const ImageMemoryBarrier& barrier) noexcept:
+    ImageMemoryBarrier(image, newLayout, barrier.srcAccessMask, barrier.dstAccessMask)
+{}
+
 bool ImageMemoryBarrier::updateImageLayout() const noexcept
 {
-    Resource *resource = Resource::get(image);
-    Image *barrierImage = dynamic_cast<Image *>(resource);
-    MAGMA_ASSERT(barrierImage);
-    if (!barrierImage)
+    Resource *resource = Resource::get(VkImageMemoryBarrier::image);
+    Image *image = dynamic_cast<Image *>(resource);
+    MAGMA_ASSERT(image);
+    if (!image)
         return false;
     uint32_t levelCount = subresourceRange.levelCount;
     if (VK_REMAINING_MIP_LEVELS == levelCount)
-        levelCount = barrierImage->getMipLevels() - subresourceRange.baseMipLevel;
+        levelCount = image->getMipLevels() - subresourceRange.baseMipLevel;
     MAGMA_ASSERT(levelCount);
     if (!levelCount)
         return false;
     for (uint32_t level = 0; level < levelCount; ++level)
-        barrierImage->setLayout(subresourceRange.baseMipLevel + level, newLayout);
+        image->setLayout(subresourceRange.baseMipLevel + level, newLayout);
     return true;
 }
 } // namespace magma
