@@ -1358,6 +1358,9 @@
     <ClCompile Include="..\..\src\objects\clusterAccelerationStructure.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\barriers\bufferMemoryBarrier.cpp">
+      <Filter>Source Files\barriers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\objects\commandBuffer.inl">

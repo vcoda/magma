@@ -40,6 +40,7 @@ SRC_OBJS= \
 	src/auxiliary/sprite.o \
 	src/auxiliary/textShader.o \
 	\
+	src/barriers/bufferMemoryBarrier.o \
 	src/barriers/imageMemoryBarrier.o \
 	\
 	src/descriptors/accelerationStructureDescriptor.o \

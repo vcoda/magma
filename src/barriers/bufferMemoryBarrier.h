@@ -16,10 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "../objects/buffer.h"
 
 namespace magma
 {
+    class Buffer;
+
     /* Buffer memory barriers only apply to memory accesses
        involving a specific buffer range. That is, a memory
        dependency formed from an buffer memory barrier is scoped
@@ -37,11 +38,9 @@ namespace magma
             VkDeviceSize offset = 0,
             VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
         BufferMemoryBarrier(const Buffer *buffer,
-            const BufferMemoryBarrier& barrier) noexcept;
-        BufferMemoryBarrier(const Buffer *buffer,
             const BufferMemoryBarrier& barrier,
-            VkDeviceSize offset,
-            VkDeviceSize size) noexcept;
+            VkDeviceSize offset = 0,
+            VkDeviceSize size = VK_WHOLE_SIZE) noexcept;
     };
 } // namespace magma
 

@@ -432,6 +432,7 @@
     <ClCompile Include="..\..\src\auxiliary\sprite.cpp" />
     <ClCompile Include="..\..\src\auxiliary\textShader.cpp" />
     <ClCompile Include="..\..\src\auxiliary\auxframebuffer.cpp" />
+    <ClCompile Include="..\..\src\barriers\bufferMemoryBarrier.cpp" />
     <ClCompile Include="..\..\src\barriers\imageMemoryBarrier.cpp" />
     <ClCompile Include="..\..\src\core\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
