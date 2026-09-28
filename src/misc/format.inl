@@ -1097,6 +1097,7 @@ constexpr bool Format::tensor() const noexcept
     case VK_FORMAT_R8_BOOL_ARM:
         return true;
 #endif // VK_ARM_tensors
+    case VK_FORMAT_UNDEFINED:
     default:
         return false;
     }
