@@ -26,7 +26,6 @@ namespace magma
     MAGMA_TYPEDEF_MANAGED_PTR(CommandPool)
     MAGMA_TYPEDEF_MANAGED_PTR(ComputePipeline)
     MAGMA_TYPEDEF_MANAGED_PTR(ComputePipelineBatch)
-    MAGMA_TYPEDEF_MANAGED_PTR(CountBuffer)
     MAGMA_TYPEDEF_MANAGED_PTR(DeferredOperation)
     MAGMA_TYPEDEF_MANAGED_PTR(DepthStencilAttachment)
     MAGMA_TYPEDEF_MANAGED_PTR(DescriptorPool)
