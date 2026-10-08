@@ -1085,9 +1085,11 @@ constexpr bool Format::packed() const noexcept
 #ifdef VK_EXT_ycbcr_2plane_444_formats
     case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT:
     case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT:
+#endif // VK_EXT_ycbcr_2plane_444_formats
+#ifdef VK_EXT_4444_formats
     case VK_FORMAT_A4R4G4B4_UNORM_PACK16_EXT:
     case VK_FORMAT_A4B4G4R4_UNORM_PACK16_EXT:
-#endif // VK_EXT_ycbcr_2plane_444_formats
+#endif // VK_EXT_4444_formats
 #ifdef VK_ARM_format_pack
     case VK_FORMAT_R10X6_UINT_PACK16_ARM:
     case VK_FORMAT_R10X6G10X6_UINT_2PACK16_ARM:
