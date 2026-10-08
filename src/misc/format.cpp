@@ -222,8 +222,7 @@ uint8_t Format::planeCount() const noexcept
         return 3;
 #endif // VK_KHR_sampler_ycbcr_conversion
     default:
-        MAGMA_ASSERT(ycbcr());
-        return 0;
+        return 1;
     }
 }
 
