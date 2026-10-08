@@ -307,6 +307,7 @@ constexpr const char *Format::name() const noexcept
 #endif // VK_ARM_format_pack
 #ifdef VK_KHR_maintenance5
     MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_A8_UNORM_KHR);
+    MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_A1B5G5R5_UNORM_PACK16_KHR);
 #endif // VK_KHR_maintenance5
     MAGMA_STRINGIZE_ENUMERATOR(VK_FORMAT_MAX_ENUM);
     default:
@@ -421,6 +422,10 @@ constexpr bool Format::unorm() const noexcept
     case VK_FORMAT_A4R4G4B4_UNORM_PACK16_EXT:
     case VK_FORMAT_A4B4G4R4_UNORM_PACK16_EXT:
 #endif // VK_EXT_4444_formats
+#ifdef VK_KHR_maintenance5
+    case VK_FORMAT_A8_UNORM_KHR:
+    case VK_FORMAT_A1B5G5R5_UNORM_PACK16_KHR:
+#endif // VK_KHR_maintenance5
         return true;
     default:
         return false;
@@ -783,6 +788,10 @@ constexpr bool Format::alpha() const noexcept
     case VK_FORMAT_A4R4G4B4_UNORM_PACK16_EXT:
     case VK_FORMAT_A4B4G4R4_UNORM_PACK16_EXT:
 #endif // VK_EXT_4444_formats
+#ifdef VK_KHR_maintenance5
+    case VK_FORMAT_A8_UNORM_KHR:
+    case VK_FORMAT_A1B5G5R5_UNORM_PACK16_KHR:
+#endif // VK_KHR_maintenance5
         return true;
     default:
         return false;
