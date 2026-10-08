@@ -161,6 +161,11 @@ namespace magma
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
             VkFormat format,
             VkFormatFeatureFlags requiredFeature);
+        static VkDeviceSize calculateMemoryFootprint(VkImageType imageType,
+            VkFormat format,
+            const VkExtent3D& extent,
+            uint32_t mipLevels,
+            uint32_t arrayLayers = 1);
 
     protected:
         const VkImageCreateFlags flags;
