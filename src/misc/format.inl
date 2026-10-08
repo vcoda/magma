@@ -1031,6 +1031,7 @@ constexpr bool Format::packed() const noexcept
 {
     switch (format)
     {
+    case VK_FORMAT_R4G4_UNORM_PACK8:
     case VK_FORMAT_R4G4B4A4_UNORM_PACK16:
     case VK_FORMAT_B4G4R4A4_UNORM_PACK16:
     case VK_FORMAT_R5G6B5_UNORM_PACK16:
