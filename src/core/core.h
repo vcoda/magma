@@ -66,6 +66,7 @@ namespace magma
         template<class T> constexpr T alignUp(T value, T alignment) noexcept;
         template<class T> constexpr T alignDown(T value, T alignment) noexcept;
         template<class T> constexpr T roundUp(T value, T multiple) noexcept;
+        template<class T> constexpr T divideAndRoundUp(T value, T divisor) noexcept;
 
         template<class T> uint32_t countof(const T& container) noexcept;
         template<class T> typename T::NativeHandle dereference(T *p) noexcept;

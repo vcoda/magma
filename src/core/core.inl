@@ -37,6 +37,15 @@ constexpr T roundUp(T value, T multiple) noexcept
 }
 
 template<class T>
+constexpr T divideAndRoundUp(T value, T divisor) noexcept
+{
+    static_assert(std::is_integral<T>::value,
+        "divideAndRoundUp() requires an integral type");
+    MAGMA_ASSERT(divisor);
+    return value / divisor + (value % divisor != 0);
+}
+
+template<class T>
 inline uint32_t countof(const T& container) noexcept
 {
     return static_cast<uint32_t>(container.size());
