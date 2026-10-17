@@ -626,7 +626,7 @@ VkDeviceSize Image::estimateMemoryFootprint(VkImageType imageType, VkFormat form
     MAGMA_ASSERT(!imageFormat.ycbcr());
     const std::size_t bytesPerElement = imageFormat.size();
     const std::pair<uint32_t, uint32_t> blockFootprint = imageFormat.blockCompressed() ?
-        imageFormat.blockFootprint() : std::make_pair(1, 1);
+        imageFormat.blockFootprint() : std::make_pair(1u, 1u);
     uint32_t width = extent.width;
     uint32_t height = extent.height;
     uint32_t depth = std::max(1u, extent.depth);
