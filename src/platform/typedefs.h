@@ -41,10 +41,16 @@ namespace magma
 #ifdef VK_EXT_metal_surface
     MAGMA_TYPEDEF_MANAGED_PTR(MetalSurface)
 #endif
+#ifdef VK_OHOS_surface
+    MAGMA_TYPEDEF_MANAGED_PTR(OhosSurface)
+#endif
 #ifdef VK_QNX_screen_surface
     MAGMA_TYPEDEF_MANAGED_PTR(QnxSurface)
 #endif
- #ifdef VK_NN_vi_surface
+#ifdef VK_SEC_ubm_surface
+    MAGMA_TYPEDEF_MANAGED_PTR(UbmSurface)
+#endif
+#ifdef VK_NN_vi_surface
     MAGMA_TYPEDEF_MANAGED_PTR(ViSurface)
 #endif
 #ifdef VK_KHR_wayland_surface
