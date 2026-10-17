@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#define MAGMA_HAS_LAYER(name) available(name)
+#define MAGMA_HAS_LAYER(name) available(std::integral_constant<uint64_t, core::hashString(name)>::value)
 #define MAGMA_CHECK_LAYER_NOPREFIX(name) name(MAGMA_HAS_LAYER(#name))
 
 InstanceLayers::InstanceLayers():

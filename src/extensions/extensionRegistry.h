@@ -24,17 +24,16 @@ namespace magma
     template<class Properties>
     class ExtensionRegistry
     {
-    public:
-        explicit ExtensionRegistry(std::vector<Properties> properties);
-        bool available(const char *extensionName) noexcept;
+    protected:
+        ExtensionRegistry(const std::vector<Properties>& properties);
+        bool available(hash_t hash) const noexcept;
 
     private:
-        const std::vector<Properties> registry;
-        std::vector<const char *> names;
+        std::vector<hash_t> hashes;
     };
 } // namespace magma
 
 #include "extensionRegistry.inl"
 
-#define MAGMA_CHECK_LAYER(name) name(available(MAGMA_LAYER_PREFIX #name))
-#define MAGMA_CHECK_EXTENSION(name) name(available(MAGMA_EXTENSION_PREFIX #name))
+#define MAGMA_CHECK_EXTENSION(name) name(available(std::integral_constant<hash_t, core::hashString(MAGMA_EXTENSION_PREFIX #name)>::value))
+#define MAGMA_CHECK_LAYER(name)     name(available(std::integral_constant<hash_t, core::hashString(MAGMA_LAYER_PREFIX #name)>::value))
