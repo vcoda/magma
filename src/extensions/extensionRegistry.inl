@@ -1,26 +1,31 @@
 namespace magma
 {
 template<class Properties>
-inline ExtensionRegistry<Properties>::ExtensionRegistry(const std::vector<Properties>& properties):
-    count(0),
-    supportedCount(0)
+inline ExtensionRegistry<Properties>::ExtensionRegistry(std::vector<Properties> properties):
+    registry(std::move(properties))
 {
-    for (auto const& property: properties)
+    names.reserve(registry.size());
+    for (const auto& property: registry)
     {
-        if constexpr (std::is_same<Properties, VkExtensionProperties>::value)
-            registry.emplace(property.extensionName, property);
-        else if constexpr (std::is_same<Properties, VkLayerProperties>::value)
-            registry.emplace(property.layerName, property);
+        if constexpr (std::is_same_v<Properties, VkExtensionProperties>)
+            names.push_back(property.extensionName);
+        else if constexpr (std::is_same_v<Properties, VkLayerProperties>)
+            names.push_back(property.layerName);
     }
+    std::sort(names.begin(), names.end(),
+        [](const char *lhs, const char *rhs)
+        {
+            return std::strcmp(lhs, rhs) < 0;
+        });
 }
 
 template<class Properties>
-inline bool ExtensionRegistry<Properties>::supported(const char *name) noexcept
+inline bool ExtensionRegistry<Properties>::available(const char *extensionName) noexcept
 {
-    ++count;
-    if (registry.find(name) == registry.end())
-        return false;
-    ++supportedCount;
-    return true;
+    return std::binary_search(names.begin(), names.end(), extensionName,
+        [](const char *lhs, const char *rhs)
+        {
+            return std::strcmp(lhs, rhs) < 0;
+        });
 }
 } // namespace magma

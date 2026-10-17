@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-#define MAGMA_HAS_LAYER(name) supported(name)
+#define MAGMA_HAS_LAYER(name) available(name)
 #define MAGMA_CHECK_LAYER_NOPREFIX(name) name(MAGMA_HAS_LAYER(#name))
 
 InstanceLayers::InstanceLayers():

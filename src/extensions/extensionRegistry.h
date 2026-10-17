@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,21 +25,16 @@ namespace magma
     class ExtensionRegistry
     {
     public:
-        uint32_t getCount() const noexcept { return count; }
-        uint32_t getSupportedCount() const noexcept { return supportedCount; }
-
-    protected:
-        ExtensionRegistry(const std::vector<Properties>& properties);
-        bool supported(const char *name) noexcept;
+        explicit ExtensionRegistry(std::vector<Properties> properties);
+        bool available(const char *extensionName) noexcept;
 
     private:
-        std::map<std::string, Properties> registry;
-        uint32_t count;
-        uint32_t supportedCount;
+        const std::vector<Properties> registry;
+        std::vector<const char *> names;
     };
 } // namespace magma
 
 #include "extensionRegistry.inl"
 
-#define MAGMA_CHECK_LAYER(name) name(supported(MAGMA_LAYER_PREFIX #name))
-#define MAGMA_CHECK_EXTENSION(name) name(supported(MAGMA_EXTENSION_PREFIX #name))
+#define MAGMA_CHECK_LAYER(name) name(available(MAGMA_LAYER_PREFIX #name))
+#define MAGMA_CHECK_EXTENSION(name) name(available(MAGMA_EXTENSION_PREFIX #name))
