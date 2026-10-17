@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -118,6 +118,11 @@ namespace magma
             const VkOffset3D& imageOffset,
             VkImageLayout dstLayout,
             VkPipelineStageFlags dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+        static VkDeviceSize estimateMemoryFootprint(VkImageType imageType,
+            VkFormat format,
+            const VkExtent3D& extent,
+            uint32_t mipLevels,
+            uint32_t arrayLayers = 1);
 
     protected:
         Image(std::shared_ptr<Device> device,
@@ -161,11 +166,6 @@ namespace magma
         static VkFormat checkFormatFeature(std::shared_ptr<Device> device,
             VkFormat format,
             VkFormatFeatureFlags requiredFeature);
-        static VkDeviceSize calculateMemoryFootprint(VkImageType imageType,
-            VkFormat format,
-            const VkExtent3D& extent,
-            uint32_t mipLevels,
-            uint32_t arrayLayers = 1);
 
     protected:
         const VkImageCreateFlags flags;

@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -613,6 +613,40 @@ void Image::copyMipWithTransition(lent_ptr<CommandBuffer> cmdBuffer, uint32_t mi
         ImageMemoryBarrier(this, dstLayout, subresourceRange));
 }
 
+VkDeviceSize Image::estimateMemoryFootprint(VkImageType imageType, VkFormat format,
+    const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers /* 1 */)
+{
+    MAGMA_ASSERT(imageType < VK_IMAGE_TYPE_MAX_ENUM);
+    MAGMA_ASSERT(format != VK_FORMAT_UNDEFINED);
+    MAGMA_ASSERT(extent.width);
+    MAGMA_ASSERT(extent.height);
+    MAGMA_ASSERT(mipLevels);
+    MAGMA_ASSERT(arrayLayers);
+    const Format imageFormat(format);
+    MAGMA_ASSERT(!imageFormat.ycbcr());
+    const std::size_t bytesPerElement = imageFormat.size();
+    const std::pair<uint32_t, uint32_t> blockFootprint = imageFormat.blockCompressed() ?
+        imageFormat.blockFootprint() : std::make_pair(1, 1);
+    uint32_t width = extent.width;
+    uint32_t height = extent.height;
+    uint32_t depth = std::max(1u, extent.depth);
+    VkDeviceSize footprint = 0;
+    for (uint32_t level = 0; level < mipLevels; ++level)
+    {
+        const VkDeviceSize horzBlocks = core::divideAndRoundUp(width, blockFootprint.first);
+        const VkDeviceSize vertBlocks = core::divideAndRoundUp(height, blockFootprint.second);
+        const VkDeviceSize rowPitch = horzBlocks * bytesPerElement;
+        const VkDeviceSize depthPitch = rowPitch * vertBlocks;
+        footprint += depthPitch * depth;
+        if ((1 == width) && (1 == height) && (1 == depth))
+            break;
+        width = std::max(1u, width >> 1);
+        height = std::max(1u, height >> 1);
+        depth = std::max(1u, depth >> 1);
+    }
+    return footprint * arrayLayers;
+}
+
 void Image::copyMipmap(lent_ptr<CommandBuffer> cmdBuffer,
     lent_ptr<const SrcTransferBuffer> srcBuffer,
     const Mipmap& mipMap, const CopyLayout& bufferLayout,
@@ -759,39 +793,5 @@ VkFormat Image::checkFormatFeature(std::shared_ptr<Device> device, VkFormat form
     if (!hasFeature)
         MAGMA_ERROR("format doesn't suport required feature");
     return format;
-}
-
-VkDeviceSize Image::calculateMemoryFootprint(VkImageType imageType, VkFormat format,
-    const VkExtent3D& extent, uint32_t mipLevels, uint32_t arrayLayers /* 1 */)
-{
-    MAGMA_ASSERT(imageType < VK_IMAGE_TYPE_MAX_ENUM);
-    MAGMA_ASSERT(format != VK_FORMAT_UNDEFINED);
-    MAGMA_ASSERT(extent.width);
-    MAGMA_ASSERT(extent.height);
-    MAGMA_ASSERT(mipLevels);
-    MAGMA_ASSERT(arrayLayers);
-    const Format imageFormat(format);
-    MAGMA_ASSERT(!imageFormat.ycbcr());
-    const std::size_t bytesPerElement = imageFormat.size();
-    const std::pair<uint32_t, uint32_t> blockFootprint = imageFormat.blockCompressed() ?
-        imageFormat.blockFootprint() : std::make_pair(1, 1);
-    uint32_t width = extent.width;
-    uint32_t height = extent.height;
-    uint32_t depth = std::max(1u, extent.depth);
-    VkDeviceSize footprint = 0;
-    for (uint32_t level = 0; level < mipLevels; ++level)
-    {
-        const VkDeviceSize horzBlocks = core::divideAndRoundUp(width, blockFootprint.first);
-        const VkDeviceSize vertBlocks = core::divideAndRoundUp(height, blockFootprint.second);
-        const VkDeviceSize rowPitch = horzBlocks * bytesPerElement;
-        const VkDeviceSize depthPitch = rowPitch * vertBlocks;
-        footprint += depthPitch * depth;
-        if ((1 == width) && (1 == height) && (1 == depth))
-            break;
-        width = std::max(1u, width >> 1);
-        height = std::max(1u, height >> 1);
-        depth = std::max(1u, depth >> 1);
-    }
-    return footprint * arrayLayers;
 }
 } // namespace magma
