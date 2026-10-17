@@ -31,13 +31,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 namespace magma
 {
-PhysicalDevice::PhysicalDevice(Instance *instance, VkPhysicalDevice handle_, std::shared_ptr<IAllocator> allocator) noexcept:
+PhysicalDevice::PhysicalDevice(Instance *instance, VkPhysicalDevice handle_, std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkPhysicalDevice>(VK_OBJECT_TYPE_PHYSICAL_DEVICE, std::move(allocator)),
-    instance(instance)
+    instance(instance),
+    extensionProperties(enumerateExtensions())
 {
     handle = handle_;
-    for (auto const& properties: enumerateExtensions())
-        extensions.emplace(properties.extensionName);
+    extensions.reserve(extensionProperties.size());
+    for (auto& property: extensionProperties)
+        extensions.push_back(property.extensionName);
+    std::sort(extensions.begin(), extensions.end(),
+        [](const char *lhs, const char *rhs)
+        {
+            return std::strcmp(lhs, rhs) < 0;
+        });
 }
 
 PhysicalDevice::~PhysicalDevice() {}
@@ -616,10 +623,13 @@ bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcep
 {
     MAGMA_ASSERT(extensionName);
     MAGMA_ASSERT(strlen(extensionName));
-    if (!extensionName || !strlen(extensionName))
+    if (!extensionName || !*extensionName)
         return false;
-    const auto it = extensions.find(extensionName);
-    return it != extensions.end();
+    return std::binary_search(extensions.begin(), extensions.end(), extensionName,
+        [](const char *lhs, const char *rhs)
+        {
+            return std::strcmp(lhs, rhs) < 0;
+        });
 }
 
 VkDeviceSize PhysicalDevice::getDeviceLocalHeapSize() const noexcept

@@ -64,7 +64,8 @@ namespace magma
 
     private:
         const uint32_t apiVersion;
-        std::set<std::string> extensions;
+        std::vector<VkExtensionProperties> extensionProperties;
+        std::vector<const char *> extensions;
         std::set<std::string> enabledLayers;
         std::set<std::string> enabledExtensions;
     };

@@ -115,8 +115,15 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create instance");
-    for (auto const& properties: enumerateExtensions())
-        extensions.emplace(properties.extensionName);
+    extensionProperties = enumerateExtensions();
+    extensions.reserve(extensionProperties.size());
+    for (auto& property: extensionProperties)
+        extensions.push_back(property.extensionName);
+    std::sort(extensions.begin(), extensions.end(),
+        [](const char *lhs, const char *rhs)
+        {
+            return std::strcmp(lhs, rhs) < 0;
+        });
     // Store enabled layers and extensions
     for (auto const& layer: enabledLayers)
         this->enabledLayers.emplace(layer);
@@ -240,11 +247,14 @@ std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *lay
 bool Instance::extensionSupported(const char *extensionName) const noexcept
 {
     MAGMA_ASSERT(extensionName);
-    MAGMA_ASSERT(strlen(extensionName));
-    if (!extensionName || !strlen(extensionName))
+    MAGMA_ASSERT(extensionName && *extensionName);
+    if (!extensionName || !*extensionName)
         return false;
-    const auto it = extensions.find(extensionName);
-    return it != extensions.end();
+    return std::binary_search(extensions.begin(), extensions.end(), extensionName,
+        [](const char *lhs, const char *rhs)
+        {
+            return std::strcmp(lhs, rhs) < 0;
+        });
 }
 
 bool Instance::extensionEnabled(const char *extensionName) const noexcept
