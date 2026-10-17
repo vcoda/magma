@@ -35,5 +35,8 @@ namespace magma
 
 #include "extensionRegistry.inl"
 
-#define MAGMA_CHECK_EXTENSION(name) name(available(std::integral_constant<hash_t, core::hashString(MAGMA_EXTENSION_PREFIX #name)>::value))
-#define MAGMA_CHECK_LAYER(name)     name(available(std::integral_constant<hash_t, core::hashString(MAGMA_LAYER_PREFIX #name)>::value))
+#define MAGMA_QUERY_AVAILABILITY(name) available(std::integral_constant<hash_t, core::hashString(name)>::value)
+
+#define MAGMA_EXTENSION(name) name(MAGMA_QUERY_AVAILABILITY(MAGMA_EXTENSION_PREFIX #name))
+#define MAGMA_LAYER(name) name(MAGMA_QUERY_AVAILABILITY(MAGMA_LAYER_PREFIX #name))
+#define MAGMA_LAYER_UNPREFIXED(name) name(MAGMA_QUERY_AVAILABILITY(#name))

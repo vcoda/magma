@@ -25,8 +25,8 @@ namespace magma
 DeviceLayers::DeviceLayers(const std::shared_ptr<PhysicalDevice>& device):
     ExtensionRegistry<VkLayerProperties>(device->enumerateLayers()),
 
-    MAGMA_CHECK_LAYER(AMD_switchable_graphics),
+    MAGMA_LAYER(AMD_switchable_graphics),
 
-    MAGMA_CHECK_LAYER(KHRONOS_validation)
+    MAGMA_LAYER(KHRONOS_validation)
 {}
 } // namespace magma
