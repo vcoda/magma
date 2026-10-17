@@ -19,9 +19,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma hdrstop
 #include "macosSurface.h"
 #include "../objects/instance.h"
-#include "../objects/device.h"
 #include "../allocator/allocator.h"
-#include "../misc/extension.h"
 #include "../exceptions/errorResult.h"
 
 namespace magma
