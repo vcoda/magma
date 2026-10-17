@@ -47,6 +47,6 @@ namespace magma
         template<class T, typename... Args> constexpr hash_t hashArgs(const T& arg, Args... args) noexcept;
         template<class T, std::size_t N> constexpr hash_t hashArray(const T (&arr)[N]) noexcept;
         template<class T> hash_t hashArray(const T arr[], std::size_t count) noexcept;
-        inline hash_t hashString(const char *str) noexcept;
+        constexpr hash_t hashString(const char *str) noexcept;
     } // namespace core
 } // namespace magma

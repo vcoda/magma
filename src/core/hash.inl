@@ -133,12 +133,11 @@ inline hash_t hashArray(const T arr[], std::size_t count) noexcept
     return hash;
 }
 
-inline hash_t hashString(const char *str) noexcept
+constexpr hash_t hashString(const char *str) noexcept
 {
-    assert(str);
-    hash_t hash = fnv::Basis;
-    for (size_t i = 0, n = strlen(str); i < n; ++i)
-        hash = (hash ^ str[i]) * fnv::Prime;
+    auto hash = fnv::Basis;
+    for (; *str; ++str)
+        hash = (hash ^ (uint8_t)*str) * fnv::Prime;
     return hash;
 }
 } // namespace magma::core
