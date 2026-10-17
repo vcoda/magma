@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -58,18 +58,29 @@ namespace magma
         const VkBool32 AMD_shader_trinary_minmax: 1;
         const VkBool32 AMD_texture_gather_bias_lod: 1;
         const VkBool32 AMD_wave_limits: 1;
-        // AMD experimental extensions
+        // AMD (experimental)
+        const VkBool32 AMDX_dense_geometry_format: 1;
         const VkBool32 AMDX_shader_enqueue: 1;
         // ANDROID (Google LLC)
         const VkBool32 ANDROID_external_format_resolve: 1;
         const VkBool32 ANDROID_external_memory_android_hardware_buffer: 1;
-        // ARM Limited
+        const VkBool32 ANDROID_native_buffer: 1;
+        // ARM
+        const VkBool32 ARM_data_graph: 1;
+        const VkBool32 ARM_data_graph_instruction_set_tosa: 1;
+        const VkBool32 ARM_data_graph_neural_accelerator_statistics: 1;
+        const VkBool32 ARM_data_graph_optical_flow: 1;
+        const VkBool32 ARM_format_pack: 1;
+        const VkBool32 ARM_performance_counters_by_region: 1;
         const VkBool32 ARM_pipeline_opacity_micromap: 1;
         const VkBool32 ARM_rasterization_order_attachment_access: 1;
         const VkBool32 ARM_render_pass_striped: 1;
         const VkBool32 ARM_scheduling_controls: 1;
         const VkBool32 ARM_shader_core_builtins: 1;
         const VkBool32 ARM_shader_core_properties: 1;
+        const VkBool32 ARM_shader_instrumentation: 1;
+        const VkBool32 ARM_tensor_controls: 1;
+        const VkBool32 ARM_tensors: 1;
         // Multivendor
         const VkBool32 EXT_4444_formats: 1;
         const VkBool32 EXT_astc_decode_mode: 1;
@@ -82,7 +93,9 @@ namespace magma
         const VkBool32 EXT_color_write_enable: 1;
         const VkBool32 EXT_conditional_rendering: 1;
         const VkBool32 EXT_conservative_rasterization: 1;
+        const VkBool32 EXT_cooperative_matrix_maintenance1: 1;
         const VkBool32 EXT_custom_border_color: 1;
+        const VkBool32 EXT_custom_resolve: 1;
         const VkBool32 EXT_debug_marker: 1;
         const VkBool32 EXT_depth_bias_control: 1;
         const VkBool32 EXT_depth_clamp_control: 1;
@@ -91,6 +104,7 @@ namespace magma
         const VkBool32 EXT_depth_clip_enable: 1;
         const VkBool32 EXT_depth_range_unrestricted: 1;
         const VkBool32 EXT_descriptor_buffer: 1;
+        const VkBool32 EXT_descriptor_heap: 1;
         const VkBool32 EXT_descriptor_indexing: 1;
         const VkBool32 EXT_device_address_binding_report: 1;
         const VkBool32 EXT_device_fault: 1;
@@ -98,7 +112,6 @@ namespace magma
         const VkBool32 EXT_device_memory_report: 1;
         const VkBool32 EXT_discard_rectangles: 1;
         const VkBool32 EXT_display_control: 1;
-        const VkBool32 EXT_display_surface_counter: 1;
         const VkBool32 EXT_dynamic_rendering_unused_attachments: 1;
         const VkBool32 EXT_extended_dynamic_state: 1;
         const VkBool32 EXT_extended_dynamic_state2: 1;
@@ -110,6 +123,7 @@ namespace magma
         const VkBool32 EXT_filter_cubic: 1;
         const VkBool32 EXT_fragment_density_map: 1;
         const VkBool32 EXT_fragment_density_map2: 1;
+        const VkBool32 EXT_fragment_density_map_offset: 1;
         const VkBool32 EXT_fragment_shader_interlock: 1;
         const VkBool32 EXT_frame_boundary: 1;
         const VkBool32 EXT_full_screen_exclusive: 1;
@@ -117,7 +131,6 @@ namespace magma
         const VkBool32 EXT_global_priority_query: 1;
         const VkBool32 EXT_graphics_pipeline_library: 1;
         const VkBool32 EXT_hdr_metadata: 1;
-        const VkBool32 EXT_headless_surface: 1;
         const VkBool32 EXT_host_image_copy: 1;
         const VkBool32 EXT_host_query_reset: 1;
         const VkBool32 EXT_image_2d_view_of_3d: 1;
@@ -126,6 +139,7 @@ namespace magma
         const VkBool32 EXT_image_drm_format_modifier: 1;
         const VkBool32 EXT_image_robustness: 1;
         const VkBool32 EXT_image_sliced_view_of_3d: 1;
+        const VkBool32 EXT_image_tiling_control: 1;
         const VkBool32 EXT_image_view_min_lod: 1;
         const VkBool32 EXT_index_type_uint8: 1;
         const VkBool32 EXT_inline_uniform_block: 1;
@@ -135,11 +149,13 @@ namespace magma
         const VkBool32 EXT_load_store_op_none: 1;
         const VkBool32 EXT_map_memory_placed: 1;
         const VkBool32 EXT_memory_budget: 1;
+        const VkBool32 EXT_memory_decompression: 1;
         const VkBool32 EXT_memory_priority: 1;
         const VkBool32 EXT_mesh_shader: 1;
         const VkBool32 EXT_metal_objects: 1;
         const VkBool32 EXT_multi_draw: 1;
         const VkBool32 EXT_multisampled_render_to_single_sampled: 1;
+        const VkBool32 EXT_multisampled_render_to_swapchain: 1;
         const VkBool32 EXT_mutable_descriptor_type: 1;
         const VkBool32 EXT_nested_command_buffer: 1;
         const VkBool32 EXT_non_seamless_cube_map: 1;
@@ -155,40 +171,48 @@ namespace magma
         const VkBool32 EXT_pipeline_robustness: 1;
         const VkBool32 EXT_post_depth_coverage: 1;
         const VkBool32 EXT_present_mode_fifo_latest_ready: 1;
+        const VkBool32 EXT_present_timing: 1;
+        const VkBool32 EXT_primitive_restart_index: 1;
         const VkBool32 EXT_primitive_topology_list_restart: 1;
         const VkBool32 EXT_primitives_generated_query: 1;
         const VkBool32 EXT_private_data: 1;
         const VkBool32 EXT_provoking_vertex: 1;
         const VkBool32 EXT_queue_family_foreign: 1;
         const VkBool32 EXT_rasterization_order_attachment_access: 1;
+        const VkBool32 EXT_ray_tracing_invocation_reorder: 1;
         const VkBool32 EXT_rgba10x6_formats: 1;
         const VkBool32 EXT_robustness2: 1;
         const VkBool32 EXT_sample_locations: 1;
         const VkBool32 EXT_sampler_filter_minmax: 1;
         const VkBool32 EXT_scalar_block_layout: 1;
         const VkBool32 EXT_separate_stencil_usage: 1;
+        const VkBool32 EXT_shader_64bit_indexing: 1;
         const VkBool32 EXT_shader_atomic_float: 1;
         const VkBool32 EXT_shader_atomic_float2: 1;
         const VkBool32 EXT_shader_demote_to_helper_invocation: 1;
+        const VkBool32 EXT_shader_float8: 1;
         const VkBool32 EXT_shader_image_atomic_int64: 1;
+        const VkBool32 EXT_shader_long_vector: 1;
         const VkBool32 EXT_shader_module_identifier: 1;
         const VkBool32 EXT_shader_object: 1;
+        const VkBool32 EXT_shader_ocp_microscaling_types: 1;
         const VkBool32 EXT_shader_replicated_composites: 1;
+        const VkBool32 EXT_shader_split_barrier: 1;
         const VkBool32 EXT_shader_stencil_export: 1;
         const VkBool32 EXT_shader_subgroup_ballot: 1;
         const VkBool32 EXT_shader_subgroup_vote: 1;
         const VkBool32 EXT_shader_tile_image: 1;
+        const VkBool32 EXT_shader_uniform_buffer_unsized_array: 1;
         const VkBool32 EXT_shader_viewport_index_layer: 1;
         const VkBool32 EXT_subgroup_size_control: 1;
         const VkBool32 EXT_subpass_merge_feedback: 1;
         const VkBool32 EXT_swapchain_maintenance1: 1;
         const VkBool32 EXT_texel_buffer_alignment: 1;
+        const VkBool32 EXT_texture_compression_astc_3d: 1;
         const VkBool32 EXT_texture_compression_astc_hdr: 1;
         const VkBool32 EXT_tooling_info: 1;
         const VkBool32 EXT_transform_feedback: 1;
         const VkBool32 EXT_validation_cache: 1;
-        const VkBool32 EXT_validation_features: 1;
-        const VkBool32 EXT_validation_flags: 1;
         const VkBool32 EXT_vertex_attribute_divisor: 1;
         const VkBool32 EXT_vertex_attribute_robustness: 1;
         const VkBool32 EXT_vertex_input_dynamic_state: 1;
@@ -198,6 +222,7 @@ namespace magma
         const VkBool32 EXT_video_encode_h265: 1;
         const VkBool32 EXT_ycbcr_2plane_444_formats: 1;
         const VkBool32 EXT_ycbcr_image_arrays: 1;
+        const VkBool32 EXT_zero_initialize_device_memory: 1;
         // FUCHSIA (Google LLC)
         const VkBool32 FUCHSIA_buffer_collection: 1;
         const VkBool32 FUCHSIA_external_memory: 1;
@@ -216,9 +241,11 @@ namespace magma
         const VkBool32 HUAWEI_subpass_shading: 1;
         // Imagination Technologies
         const VkBool32 IMG_filter_cubic: 1;
+        const VkBool32 IMG_filter_linear_2d: 1;
         const VkBool32 IMG_format_pvrtc: 1;
         const VkBool32 IMG_relaxed_line_rasterization: 1;
         // Intel Corporation
+        const VkBool32 INTEL_device_info: 1;
         const VkBool32 INTEL_performance_query: 1;
         const VkBool32 INTEL_shader_integer_functions2: 1;
         // Khronos Group
@@ -231,18 +258,22 @@ namespace magma
         const VkBool32 KHR_compute_shader_derivatives: 1;
         const VkBool32 KHR_cooperative_matrix: 1;
         const VkBool32 KHR_copy_commands2: 1;
+        const VkBool32 KHR_copy_memory_indirect: 1;
         const VkBool32 KHR_create_renderpass2: 1;
         const VkBool32 KHR_dedicated_allocation: 1;
         const VkBool32 KHR_deferred_host_operations: 1;
         const VkBool32 KHR_depth_clamp_zero_one: 1;
         const VkBool32 KHR_depth_stencil_resolve: 1;
         const VkBool32 KHR_descriptor_update_template: 1;
+        const VkBool32 KHR_device_address_commands: 1;
+        const VkBool32 KHR_device_fault: 1;
         const VkBool32 KHR_device_group: 1;
         const VkBool32 KHR_display_swapchain: 1;
         const VkBool32 KHR_draw_indirect_count: 1;
         const VkBool32 KHR_driver_properties: 1;
         const VkBool32 KHR_dynamic_rendering: 1;
         const VkBool32 KHR_dynamic_rendering_local_read: 1;
+        const VkBool32 KHR_extended_flags: 1;
         const VkBool32 KHR_external_fence: 1;
         const VkBool32 KHR_external_fence_fd: 1;
         const VkBool32 KHR_external_fence_win32: 1;
@@ -261,9 +292,12 @@ namespace magma
         const VkBool32 KHR_imageless_framebuffer: 1;
         const VkBool32 KHR_incremental_present: 1;
         const VkBool32 KHR_index_type_uint8: 1;
+        const VkBool32 KHR_internally_synchronized_queues: 1;
         const VkBool32 KHR_line_rasterization: 1;
         const VkBool32 KHR_load_store_op_none: 1;
         const VkBool32 KHR_maintenance1: 1;
+        const VkBool32 KHR_maintenance10: 1;
+        const VkBool32 KHR_maintenance11: 1;
         const VkBool32 KHR_maintenance2: 1;
         const VkBool32 KHR_maintenance3: 1;
         const VkBool32 KHR_maintenance4: 1;
@@ -271,32 +305,43 @@ namespace magma
         const VkBool32 KHR_maintenance6: 1;
         const VkBool32 KHR_maintenance7: 1;
         const VkBool32 KHR_maintenance8: 1;
+        const VkBool32 KHR_maintenance9: 1;
         const VkBool32 KHR_map_memory2: 1;
         const VkBool32 KHR_multiview: 1;
+        const VkBool32 KHR_opacity_micromap: 1;
         const VkBool32 KHR_performance_query: 1;
         const VkBool32 KHR_pipeline_binary: 1;
         const VkBool32 KHR_pipeline_executable_properties: 1;
         const VkBool32 KHR_pipeline_library: 1;
-        const VkBool32 KHR_portability_enumeration: 1;
+        const VkBool32 KHR_pipeline_library_group_handles: 1;
         const VkBool32 KHR_portability_subset: 1;
         const VkBool32 KHR_present_id: 1;
+        const VkBool32 KHR_present_id2: 1;
+        const VkBool32 KHR_present_mode_fifo_latest_ready: 1;
         const VkBool32 KHR_present_wait: 1;
+        const VkBool32 KHR_present_wait2: 1;
         const VkBool32 KHR_push_descriptor: 1;
         const VkBool32 KHR_ray_query: 1;
+        const VkBool32 KHR_ray_tracing: 1;
         const VkBool32 KHR_ray_tracing_maintenance1: 1;
         const VkBool32 KHR_ray_tracing_pipeline: 1;
         const VkBool32 KHR_ray_tracing_position_fetch: 1;
         const VkBool32 KHR_relaxed_block_layout: 1;
+        const VkBool32 KHR_robustness2: 1;
         const VkBool32 KHR_sampler_mirror_clamp_to_edge: 1;
         const VkBool32 KHR_sampler_ycbcr_conversion: 1;
         const VkBool32 KHR_separate_depth_stencil_layouts: 1;
+        const VkBool32 KHR_shader_abort: 1;
         const VkBool32 KHR_shader_atomic_int64: 1;
+        const VkBool32 KHR_shader_bfloat16: 1;
         const VkBool32 KHR_shader_clock: 1;
+        const VkBool32 KHR_shader_constant_data: 1;
         const VkBool32 KHR_shader_draw_parameters: 1;
         const VkBool32 KHR_shader_expect_assume: 1;
         const VkBool32 KHR_shader_float16_int8: 1;
         const VkBool32 KHR_shader_float_controls: 1;
         const VkBool32 KHR_shader_float_controls2: 1;
+        const VkBool32 KHR_shader_fma: 1;
         const VkBool32 KHR_shader_integer_dot_product: 1;
         const VkBool32 KHR_shader_maximal_reconvergence: 1;
         const VkBool32 KHR_shader_non_semantic_info: 1;
@@ -306,13 +351,16 @@ namespace magma
         const VkBool32 KHR_shader_subgroup_rotate: 1;
         const VkBool32 KHR_shader_subgroup_uniform_control_flow: 1;
         const VkBool32 KHR_shader_terminate_invocation: 1;
+        const VkBool32 KHR_shader_untyped_pointers: 1;
         const VkBool32 KHR_shared_presentable_image: 1;
         const VkBool32 KHR_spirv_1_4: 1;
         const VkBool32 KHR_storage_buffer_storage_class: 1;
         const VkBool32 KHR_swapchain: 1;
+        const VkBool32 KHR_swapchain_maintenance1: 1;
         const VkBool32 KHR_swapchain_mutable_format: 1;
         const VkBool32 KHR_synchronization2: 1;
         const VkBool32 KHR_timeline_semaphore: 1;
+        const VkBool32 KHR_unified_image_layouts: 1;
         const VkBool32 KHR_uniform_buffer_standard_layout: 1;
         const VkBool32 KHR_variable_pointers: 1;
         const VkBool32 KHR_vertex_attribute_divisor: 1;
@@ -320,9 +368,12 @@ namespace magma
         const VkBool32 KHR_video_decode_h264: 1;
         const VkBool32 KHR_video_decode_h265: 1;
         const VkBool32 KHR_video_decode_queue: 1;
+        const VkBool32 KHR_video_decode_vp9: 1;
         const VkBool32 KHR_video_encode_av1: 1;
+        const VkBool32 KHR_video_encode_feedback2: 1;
         const VkBool32 KHR_video_encode_h264: 1;
         const VkBool32 KHR_video_encode_h265: 1;
+        const VkBool32 KHR_video_encode_intra_refresh: 1;
         const VkBool32 KHR_video_encode_quantization_map: 1;
         const VkBool32 KHR_video_encode_queue: 1;
         const VkBool32 KHR_video_maintenance1: 1;
@@ -332,6 +383,18 @@ namespace magma
         const VkBool32 KHR_win32_keyed_mutex: 1;
         const VkBool32 KHR_workgroup_memory_explicit_layout: 1;
         const VkBool32 KHR_zero_initialize_workgroup_memory: 1;
+        // Khronos (experimental)
+        const VkBool32 KHX_device_group: 1;
+        const VkBool32 KHX_external_memory: 1;
+        const VkBool32 KHX_external_memory_fd: 1;
+        const VkBool32 KHX_external_memory_win32: 1;
+        const VkBool32 KHX_external_semaphore: 1;
+        const VkBool32 KHX_external_semaphore_fd: 1;
+        const VkBool32 KHX_external_semaphore_win32: 1;
+        const VkBool32 KHX_multiview: 1;
+        const VkBool32 KHX_win32_keyed_mutex: 1;
+        // Mesa
+        const VkBool32 MESA_image_alignment_control: 1;
         // Microsoft Corporation
         const VkBool32 MSFT_layered_driver: 1;
         // NVIDIA Corporation
@@ -339,9 +402,11 @@ namespace magma
         const VkBool32 NV_clip_space_w_scaling: 1;
         const VkBool32 NV_cluster_acceleration_structure: 1;
         const VkBool32 NV_command_buffer_inheritance: 1;
+        const VkBool32 NV_compute_occupancy_priority: 1;
         const VkBool32 NV_compute_shader_derivatives: 1;
         const VkBool32 NV_cooperative_matrix: 1;
         const VkBool32 NV_cooperative_matrix2: 1;
+        const VkBool32 NV_cooperative_matrix_decode_vector: 1;
         const VkBool32 NV_cooperative_vector: 1;
         const VkBool32 NV_copy_memory_indirect: 1;
         const VkBool32 NV_corner_sampled_image: 1;
@@ -355,12 +420,14 @@ namespace magma
         const VkBool32 NV_device_generated_commands: 1;
         const VkBool32 NV_device_generated_commands_compute: 1;
         const VkBool32 NV_displacement_micromap: 1;
-        const VkBool32 NV_display_stereo: 1;
         const VkBool32 NV_extended_sparse_address_space: 1;
+        const VkBool32 NV_external_compute_queue: 1;
         const VkBool32 NV_external_memory: 1;
-        const VkBool32 NV_external_memory_capabilities: 1;
         const VkBool32 NV_external_memory_rdma: 1;
+        const VkBool32 NV_external_memory_sci_buf: 1;
         const VkBool32 NV_external_memory_win32: 1;
+        const VkBool32 NV_external_sci_sync: 1;
+        const VkBool32 NV_external_sci_sync2: 1;
         const VkBool32 NV_fill_rectangle: 1;
         const VkBool32 NV_fragment_coverage_to_color: 1;
         const VkBool32 NV_fragment_shader_barycentric: 1;
@@ -379,6 +446,8 @@ namespace magma
         const VkBool32 NV_per_stage_descriptor_set: 1;
         const VkBool32 NV_present_barrier: 1;
         const VkBool32 NV_present_metering: 1;
+        const VkBool32 NV_private_data_base_handle: 1;
+        const VkBool32 NV_push_constant_bank: 1;
         const VkBool32 NV_raw_access_chains: 1;
         const VkBool32 NV_ray_tracing: 1;
         const VkBool32 NV_ray_tracing_invocation_reorder: 1;
@@ -396,7 +465,7 @@ namespace magma
         const VkBool32 NV_viewport_array2: 1;
         const VkBool32 NV_viewport_swizzle: 1;
         const VkBool32 NV_win32_keyed_mutex: 1;
-        // NVIDIA experimental extensions
+        // NVIDIA (experimental)
         const VkBool32 NVX_binary_import: 1;
         const VkBool32 NVX_device_generated_commands: 1;
         const VkBool32 NVX_display_timing: 1;
@@ -404,28 +473,44 @@ namespace magma
         const VkBool32 NVX_image_view_handle: 1;
         const VkBool32 NVX_multiview_per_view_attributes: 1;
         const VkBool32 NVX_raytracing: 1;
-        // Samsung Electronics Co., Ltd.
-        const VkBool32 SEC_amigo_profiling: 1;
+        // OpenHarmony
+        const VkBool32 OHOS_external_memory: 1;
+        const VkBool32 OHOS_native_buffer: 1;
         // Qualcomm Technologies, Inc.
+        const VkBool32 QCOM_cooperative_matrix_conversion: 1;
+        const VkBool32 QCOM_data_graph_model: 1;
+        const VkBool32 QCOM_elapsed_timer_query: 1;
         const VkBool32 QCOM_filter_cubic_clamp: 1;
         const VkBool32 QCOM_filter_cubic_weights: 1;
         const VkBool32 QCOM_fragment_density_map_offset: 1;
         const VkBool32 QCOM_image_processing: 1;
         const VkBool32 QCOM_image_processing2: 1;
+        const VkBool32 QCOM_image_processing3: 1;
         const VkBool32 QCOM_multiview_per_view_render_areas: 1;
         const VkBool32 QCOM_multiview_per_view_viewports: 1;
+        const VkBool32 QCOM_queue_perf_hint: 1;
         const VkBool32 QCOM_render_pass_shader_resolve: 1;
         const VkBool32 QCOM_render_pass_store_ops: 1;
         const VkBool32 QCOM_render_pass_transform: 1;
         const VkBool32 QCOM_rotated_copy_commands: 1;
+        const VkBool32 QCOM_shader_multiple_wait_queues: 1;
+        const VkBool32 QCOM_tile_memory_heap: 1;
         const VkBool32 QCOM_tile_properties: 1;
+        const VkBool32 QCOM_tile_shading: 1;
         const VkBool32 QCOM_ycbcr_degamma: 1;
         // BlackBerry Limited
         const VkBool32 QNX_external_memory_screen_buffer: 1;
+        // Samsung Electronics Co., Ltd.
+        const VkBool32 SEC_amigo_profiling: 1;
+        const VkBool32 SEC_pipeline_cache_incremental_mode: 1;
+        const VkBool32 SEC_throttle_hint: 1;
         // Valve Corporation
+        const VkBool32 VALVE_buffer_device_address_allocation_alignment: 1;
         const VkBool32 VALVE_descriptor_set_host_mapping: 1;
         const VkBool32 VALVE_fragment_density_map_layered: 1;
         const VkBool32 VALVE_mutable_descriptor_type: 1;
+        const VkBool32 VALVE_shader_mixed_float_dot_product: 1;
+        const VkBool32 VALVE_video_encode_rgb_conversion: 1;
 
         explicit DeviceExtensions(const std::shared_ptr<PhysicalDevice>&);
     };
