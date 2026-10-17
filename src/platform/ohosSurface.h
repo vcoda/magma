@@ -27,10 +27,10 @@ namespace magma
        video encoders, and application-specific compositors. */
 
 #ifdef VK_OHOS_surface
-    class OhOsSurface : public Surface
+    class OhOSSurface : public Surface
     {
     public:
-        explicit OhOsSurface(Instance *instance,
+        explicit OhOSSurface(Instance *instance,
             OHNativeWindow *window,
             std::shared_ptr<IAllocator> allocator = nullptr,
             VkSurfaceCreateFlagsOHOS flags = 0);
