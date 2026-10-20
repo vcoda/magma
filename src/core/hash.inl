@@ -133,11 +133,85 @@ inline hash_t hashArray(const T arr[], std::size_t count) noexcept
     return hash;
 }
 
-constexpr hash_t hashString(const char *str) noexcept
+constexpr uint32_t hashString(const char *str) noexcept
 {
-    auto hash = fnv::Basis;
-    for (; *str; ++str)
-        hash = (hash ^ (uint8_t)*str) * fnv::Prime;
-    return hash;
+    uint32_t crc = 0xFFFFFFFF;
+    while (*str)
+    {
+        crc ^= (uint8_t)*str++;
+        for (int i = 0; i < 8; ++i)
+        {
+            if (crc & 1)
+                crc = (crc >> 1) ^ 0x82f63b78;
+            else
+                crc = (crc >> 1);
+        }
+    }
+    return crc ^ 0xFFFFFFFF;
+}
+
+inline uint32_t hashStringSIMD(const char *str) noexcept
+{
+    uint32_t crc = 0xFFFFFFFF;
+#ifdef MAGMA_SSE
+    __m128i zero = _mm_setzero_si128();
+    while (1)
+    {
+        __m128i reg = _mm_loadu_si128((const __m128i *)str);
+        int n = _mm_cmpistri(zero, reg, _SIDD_UBYTE_OPS | _SIDD_CMP_EQUAL_EACH);
+        if (n < 16)
+        {
+            for (int i = 0; i < n; ++i)
+                crc = _mm_crc32_u8((unsigned)crc, (unsigned char)str[i]);
+            break;
+        }
+     #if (defined(_M_X64) || defined(__x86_64__))
+        crc = _mm_crc32_u64(crc, _mm_cvtsi128_si64(reg));
+        crc = _mm_crc32_u64(crc, _mm_extract_epi64(reg, 1));
+    #else
+        crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(reg));
+        crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(_mm_srli_si128(reg, 4)));
+        crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(_mm_srli_si128(reg, 8)));
+        crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(_mm_srli_si128(reg, 12)));
+    #endif // _M_X64 || __x86_64__
+        str += 16;
+    }
+    return crc ^ 0xFFFFFFFF;
+#elif defined(MAGMA_NEON) && defined(__ARM_FEATURE_CRC32)
+    uint8x16_t zero = vdupq_n_u8(0);
+    while (1)
+    {
+        uint8x16_t reg = vld1q_u8((const uint8_t *)str);
+        uint8x16_t mask = vceqq_u8(reg, zero);
+    #if defined(__aarch64__) || defined(_M_ARM64)
+        if (vmaxvq_u8(mask))
+    #else
+        uint32x2_t m = vorr_u32(
+            vget_low_u32(vreinterpretq_u32_u8(mask)),
+            vget_high_u32(vreinterpretq_u32_u8(mask)));
+        if (vget_lane_u32(m, 0) | vget_lane_u32(m, 1))
+    #endif
+        {
+            for (int i = 0; i < 16 && str[i]; ++i)
+                crc = __crc32cb(crc, (unsigned char)str[i]);
+            break;
+        }
+    #if defined(__aarch64__) || defined(_M_ARM64)
+        uint64x2_t v = vreinterpretq_u64_u8(reg);
+        crc = __crc32cd(crc, vgetq_lane_u64(v, 0));
+        crc = __crc32cd(crc, vgetq_lane_u64(v, 1));
+    #else
+        uint32x4_t v = vreinterpretq_u32_u8(reg);
+        crc = __crc32cw(crc, vgetq_lane_u32(v, 0));
+        crc = __crc32cw(crc, vgetq_lane_u32(v, 1));
+        crc = __crc32cw(crc, vgetq_lane_u32(v, 2));
+        crc = __crc32cw(crc, vgetq_lane_u32(v, 3));
+    #endif // __aarch64__ || _M_ARM64
+        str += 16;
+    }
+    return crc ^ 0xFFFFFFFF;
+#else
+    return hashString(str);
+#endif // MAGMA_SSE
 }
 } // namespace magma::core

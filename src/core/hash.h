@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -47,6 +47,9 @@ namespace magma
         template<class T, typename... Args> constexpr hash_t hashArgs(const T& arg, Args... args) noexcept;
         template<class T, std::size_t N> constexpr hash_t hashArray(const T (&arr)[N]) noexcept;
         template<class T> hash_t hashArray(const T arr[], std::size_t count) noexcept;
-        constexpr hash_t hashString(const char *str) noexcept;
+        constexpr uint32_t hashString(const char *str) noexcept;
+        uint32_t hashStringSIMD(const char *str) noexcept;
     } // namespace core
 } // namespace magma
+
+#define MAGMA_COMPILE_TIME_STRING_HASH(str) std::integral_constant<uint32_t, magma::core::hashString(str)>::value

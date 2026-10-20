@@ -96,6 +96,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 /*
+ * CRC32
+ */
+
+#ifdef __ARM_FEATURE_CRC32
+    #include <arm_acle.h>
+#endif
+
+/*
  * Magma Library
  */
 
