@@ -150,6 +150,37 @@ constexpr uint32_t hashString(const char *str) noexcept
     return crc ^ 0xFFFFFFFF;
 }
 
+#ifdef MAGMA_NEON
+inline int neon_pos(uint8x16_t reg, uint8x16_t val)
+{
+#if defined(_M_ARM64) || defined(__aarch64__)
+    uint8x16_t eq = vceqq_u8(reg, val);
+    uint8x8_t narrowed = vshrn_n_u16(vreinterpretq_u16_u8(eq), 4);
+    uint64_t mask = vget_lane_u64(vreinterpret_u64_u8(narrowed), 0);
+    if (0 == mask) return 16;
+    #ifdef _MSC_VER
+    return (int)_CountTrailingZeros64(mask) >> 2;
+    #else
+    return __builtin_ctzll(mask) >> 2;
+    #endif
+#else
+    const uint8x16_t indices = {
+        0, 1, 2, 3, 4, 5, 6, 7,
+        8, 9, 10, 11, 12, 13, 14, 15
+    };
+    uint8x16_t mask = vceqq_u8(reg, val);
+    uint8x16_t positions = vbslq_u8(mask, indices, vdupq_n_u8(16));
+    uint8x8_t min = vpmin_u8(
+        vget_low_u8(positions),
+        vget_high_u8(positions));
+    min = vpmin_u8(min, min);
+    min = vpmin_u8(min, min);
+    min = vpmin_u8(min, min);
+    return vget_lane_u8(min, 0);
+#endif // __aarch64__ || _M_ARM64
+}
+#endif // MAGMA_NEON
+
 inline uint32_t hashStringSIMD(const char *str) noexcept
 {
     uint32_t crc = 0xFFFFFFFF;
@@ -165,7 +196,7 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
                 crc = _mm_crc32_u8((unsigned)crc, (unsigned char)str[i]);
             break;
         }
-     #if (defined(_M_X64) || defined(__x86_64__))
+     #if defined(_M_X64) || defined(__x86_64__)
         crc = _mm_crc32_u64(crc, _mm_cvtsi128_si64(reg));
         crc = _mm_crc32_u64(crc, _mm_extract_epi64(reg, 1));
     #else
@@ -182,17 +213,10 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
     while (1)
     {
         uint8x16_t reg = vld1q_u8((const uint8_t *)str);
-        uint8x16_t mask = vceqq_u8(reg, zero);
-    #if defined(__aarch64__) || defined(_M_ARM64)
-        if (vmaxvq_u8(mask))
-    #else
-        uint32x2_t m = vorr_u32(
-            vget_low_u32(vreinterpretq_u32_u8(mask)),
-            vget_high_u32(vreinterpretq_u32_u8(mask)));
-        if (vget_lane_u32(m, 0) | vget_lane_u32(m, 1))
-    #endif
+        int n = neon_pos(reg, zero);
+        if (n < 16)
         {
-            for (int i = 0; i < 16 && str[i]; ++i)
+            for (int i = 0; i < n; ++i)
                 crc = __crc32cb(crc, (unsigned char)str[i]);
             break;
         }
