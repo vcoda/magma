@@ -192,7 +192,7 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
         if (n < 16)
         {
             for (int i = 0; i < n; ++i)
-                crc = _mm_crc32_u8((unsigned)crc, (unsigned char)str[i]);
+                crc = _mm_crc32_u8(crc, (unsigned char)str[i]);
             break;
         }
     #ifdef MAGMA_X64
