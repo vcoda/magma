@@ -26,16 +26,16 @@ namespace magma
     {
     protected:
         ExtensionRegistry(const std::vector<Properties>& properties);
-        bool available(hash_t hash) const noexcept;
+        bool available(uint32_t hash) const noexcept;
 
     private:
-        std::vector<hash_t> hashes;
+        std::vector<uint32_t> hashes;
     };
 } // namespace magma
 
 #include "extensionRegistry.inl"
 
-#define MAGMA_QUERY_AVAILABILITY(name) available(std::integral_constant<hash_t, core::hashString(name)>::value)
+#define MAGMA_QUERY_AVAILABILITY(name) available(MAGMA_COMPILE_TIME_STRING_HASH(name))
 
 #define MAGMA_EXTENSION(name) name(MAGMA_QUERY_AVAILABILITY(MAGMA_EXTENSION_PREFIX #name))
 #define MAGMA_LAYER(name) name(MAGMA_QUERY_AVAILABILITY(MAGMA_LAYER_PREFIX #name))

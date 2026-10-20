@@ -7,15 +7,15 @@ inline ExtensionRegistry<Properties>::ExtensionRegistry(const std::vector<Proper
     for (auto& property: properties)
     {
         if constexpr (std::is_same_v<Properties, VkExtensionProperties>)
-            hashes.push_back(core::hashString(property.extensionName));
+            hashes.push_back(core::hashStringSIMD(property.extensionName));
         else if constexpr (std::is_same_v<Properties, VkLayerProperties>)
-            hashes.push_back(core::hashString(property.layerName));
+            hashes.push_back(core::hashStringSIMD(property.layerName));
     }
     std::sort(hashes.begin(), hashes.end());
 }
 
 template<class Properties>
-inline bool ExtensionRegistry<Properties>::available(hash_t hash) const noexcept
+inline bool ExtensionRegistry<Properties>::available(uint32_t hash) const noexcept
 {
     return std::binary_search(hashes.begin(), hashes.end(), hash);
 }
