@@ -153,8 +153,8 @@ constexpr uint32_t hashString(const char *str) noexcept
 #ifdef MAGMA_NEON
 inline int neon_pos(uint8x16_t reg, uint8x16_t val)
 {
-#if defined(_M_ARM64) || defined(__aarch64__)
     uint8x16_t eq = vceqq_u8(reg, val);
+#ifdef MAGMA_X64
     uint8x8_t narrowed = vshrn_n_u16(vreinterpretq_u16_u8(eq), 4);
     uint64_t mask = vget_lane_u64(vreinterpret_u64_u8(narrowed), 0);
     if (0 == mask) return 16;
@@ -168,8 +168,7 @@ inline int neon_pos(uint8x16_t reg, uint8x16_t val)
         0, 1, 2, 3, 4, 5, 6, 7,
         8, 9, 10, 11, 12, 13, 14, 15
     };
-    uint8x16_t mask = vceqq_u8(reg, val);
-    uint8x16_t positions = vbslq_u8(mask, indices, vdupq_n_u8(16));
+    uint8x16_t positions = vbslq_u8(eq, indices, vdupq_n_u8(16));
     uint8x8_t min = vpmin_u8(
         vget_low_u8(positions),
         vget_high_u8(positions));
@@ -177,7 +176,7 @@ inline int neon_pos(uint8x16_t reg, uint8x16_t val)
     min = vpmin_u8(min, min);
     min = vpmin_u8(min, min);
     return vget_lane_u8(min, 0);
-#endif // __aarch64__ || _M_ARM64
+#endif // MAGMA_X64
 }
 #endif // MAGMA_NEON
 
@@ -196,7 +195,7 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
                 crc = _mm_crc32_u8((unsigned)crc, (unsigned char)str[i]);
             break;
         }
-     #if defined(_M_X64) || defined(__x86_64__)
+    #ifdef MAGMA_X64
         crc = _mm_crc32_u64(crc, _mm_cvtsi128_si64(reg));
         crc = _mm_crc32_u64(crc, _mm_extract_epi64(reg, 1));
     #else
@@ -204,7 +203,7 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
         crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(_mm_srli_si128(reg, 4)));
         crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(_mm_srli_si128(reg, 8)));
         crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(_mm_srli_si128(reg, 12)));
-    #endif // _M_X64 || __x86_64__
+    #endif // MAGMA_X64
         str += 16;
     }
     return crc ^ 0xFFFFFFFF;
@@ -220,7 +219,7 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
                 crc = __crc32cb(crc, (unsigned char)str[i]);
             break;
         }
-    #if defined(__aarch64__) || defined(_M_ARM64)
+    #ifdef MAGMA_X64
         uint64x2_t v = vreinterpretq_u64_u8(reg);
         crc = __crc32cd(crc, vgetq_lane_u64(v, 0));
         crc = __crc32cd(crc, vgetq_lane_u64(v, 1));
@@ -230,7 +229,7 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
         crc = __crc32cw(crc, vgetq_lane_u32(v, 1));
         crc = __crc32cw(crc, vgetq_lane_u32(v, 2));
         crc = __crc32cw(crc, vgetq_lane_u32(v, 3));
-    #endif // __aarch64__ || _M_ARM64
+    #endif // MAGMA_X64
         str += 16;
     }
     return crc ^ 0xFFFFFFFF;
