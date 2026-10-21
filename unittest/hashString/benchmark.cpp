@@ -64,9 +64,9 @@ uint64_t timestamp()
 
 std::string randomString(std::mt19937_64& rng)
 {
-    std::uniform_int_distribution<int> lenDist(1, 16);
+    std::uniform_int_distribution<int> lenDist(16, 128);
     std::uniform_int_distribution<int> charDist(1, 127);
-    int len = lenDist(rng) * 16;
+    int len = lenDist(rng);
     std::string str(len + 16, '\0');
     for (int i = 0; i < len; ++i)
         str[i] = (char)charDist(rng);
