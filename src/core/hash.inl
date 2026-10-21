@@ -189,22 +189,44 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
     {
         __m128i reg = _mm_loadu_si128((const __m128i *)str);
         int n = _mm_cmpistri(zero, reg, _SIDD_UBYTE_OPS | _SIDD_CMP_EQUAL_EACH);
-        if (n < 16)
+        if (16 == n)
         {
-            for (int i = 0; i < n; ++i)
-                crc = _mm_crc32_u8(crc, (unsigned char)str[i]);
+        #ifdef MAGMA_X64
+            crc = (uint32_t)_mm_crc32_u64(crc, _mm_cvtsi128_si64(reg));
+            crc = (uint32_t)_mm_crc32_u64(crc, _mm_extract_epi64(reg, 1));
+        #else
+            crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(reg));
+            crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(_mm_srli_si128(reg, 4)));
+            crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(_mm_srli_si128(reg, 8)));
+            crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(_mm_srli_si128(reg, 12)));
+        #endif // MAGMA_X64
+            str += 16;
+        }
+        else
+        {
+            if (n >= 8)
+            {
+            #ifdef MAGMA_X64
+                crc = (uint32_t)_mm_crc32_u64(crc, *(const uint64_t *)str);
+            #else
+                crc = _mm_crc32_u32(crc, *(const uint32_t *)str);
+                crc = _mm_crc32_u32(crc, *(const uint32_t *)(str + 4));
+            #endif // MAGMA_X64
+                str += 8; n -= 8;
+            }
+            if (n >= 4)
+            {
+                crc = _mm_crc32_u32(crc, *(const uint32_t *)str);
+                str += 4; n -= 4;
+            }
+            if (n >= 2)
+            {
+                crc = _mm_crc32_u16(crc, *(const uint16_t *)str);
+                str += 2; n -= 2;
+            }
+            if (n) crc = _mm_crc32_u8(crc, *(const uint8_t *)str);
             break;
         }
-    #ifdef MAGMA_X64
-        crc = _mm_crc32_u64(crc, _mm_cvtsi128_si64(reg));
-        crc = _mm_crc32_u64(crc, _mm_extract_epi64(reg, 1));
-    #else
-        crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(reg));
-        crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(_mm_srli_si128(reg, 4)));
-        crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(_mm_srli_si128(reg, 8)));
-        crc = _mm_crc32_u32(crc, (unsigned)_mm_cvtsi128_si32(_mm_srli_si128(reg, 12)));
-    #endif // MAGMA_X64
-        str += 16;
     }
     return crc ^ 0xFFFFFFFF;
 #elif defined(MAGMA_NEON) && defined(__ARM_FEATURE_CRC32)
@@ -213,24 +235,46 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
     {
         uint8x16_t reg = vld1q_u8((const uint8_t *)str);
         int n = neon_pos(reg, zero);
-        if (n < 16)
+        if (16 == n)
         {
-            for (int i = 0; i < n; ++i)
-                crc = __crc32cb(crc, (unsigned char)str[i]);
+        #ifdef MAGMA_X64
+            uint64x2_t v = vreinterpretq_u64_u8(reg);
+            crc = __crc32cd(crc, vgetq_lane_u64(v, 0));
+            crc = __crc32cd(crc, vgetq_lane_u64(v, 1));
+        #else
+            uint32x4_t v = vreinterpretq_u32_u8(reg);
+            crc = __crc32cw(crc, vgetq_lane_u32(v, 0));
+            crc = __crc32cw(crc, vgetq_lane_u32(v, 1));
+            crc = __crc32cw(crc, vgetq_lane_u32(v, 2));
+            crc = __crc32cw(crc, vgetq_lane_u32(v, 3));
+        #endif // MAGMA_X64
+            str += 16;
+        }
+        else
+        {
+            if (n >= 8)
+            {
+            #ifdef MAGMA_X64
+                crc = __crc32cd(crc, *(const uint64_t *)str);
+            #else
+                crc = __crc32cw(crc, *(const uint32_t *)str);
+                crc = __crc32cw(crc, *(const uint32_t *)(str + 4));
+            #endif // MAGMA_X64
+                str += 8; n -= 8;
+            }
+            if (n >= 4)
+            {
+                crc = __crc32cw(crc, *(const uint32_t *)str);
+                str += 4; n -= 4;
+            }
+            if (n >= 2)
+            {
+                crc = __crc32ch(crc, *(const uint16_t *)str);
+                str += 2; n -= 2;
+            }
+            if (n) crc = __crc32cb(crc, *(const uint8_t *)str);
             break;
         }
-    #ifdef MAGMA_X64
-        uint64x2_t v = vreinterpretq_u64_u8(reg);
-        crc = __crc32cd(crc, vgetq_lane_u64(v, 0));
-        crc = __crc32cd(crc, vgetq_lane_u64(v, 1));
-    #else
-        uint32x4_t v = vreinterpretq_u32_u8(reg);
-        crc = __crc32cw(crc, vgetq_lane_u32(v, 0));
-        crc = __crc32cw(crc, vgetq_lane_u32(v, 1));
-        crc = __crc32cw(crc, vgetq_lane_u32(v, 2));
-        crc = __crc32cw(crc, vgetq_lane_u32(v, 3));
-    #endif // MAGMA_X64
-        str += 16;
     }
     return crc ^ 0xFFFFFFFF;
 #else
