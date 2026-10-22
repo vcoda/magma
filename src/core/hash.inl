@@ -204,27 +204,27 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
         }
         else
         {
-            if (n >= 8)
+            if (n & 8)
             {
             #ifdef MAGMA_X64
-                crc = (uint32_t)_mm_crc32_u64(crc, *(const uint64_t *)str);
+                crc = (uint32_t)_mm_crc32_u64(crc, _mm_cvtsi128_si64(reg));
             #else
-                crc = _mm_crc32_u32(crc, *(const uint32_t *)str);
-                crc = _mm_crc32_u32(crc, *(const uint32_t *)(str + 4));
+                crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(reg));
+                crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(_mm_srli_si128(reg, 4)));
             #endif // MAGMA_X64
-                str += 8; n -= 8;
+                str += 8;
             }
-            if (n >= 4)
+            if (n & 4)
             {
                 crc = _mm_crc32_u32(crc, *(const uint32_t *)str);
-                str += 4; n -= 4;
+                str += 4;
             }
-            if (n >= 2)
+            if (n & 2)
             {
                 crc = _mm_crc32_u16(crc, *(const uint16_t *)str);
-                str += 2; n -= 2;
+                str += 2;
             }
-            if (n) crc = _mm_crc32_u8(crc, *(const uint8_t *)str);
+            if (n & 1) crc = _mm_crc32_u8(crc, *(const uint8_t *)str);
             break;
         }
     }
@@ -252,27 +252,29 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
         }
         else
         {
-            if (n >= 8)
+            if (n & 8)
             {
             #ifdef MAGMA_X64
-                crc = __crc32cd(crc, *(const uint64_t *)str);
+                uint64x2_t v = vreinterpretq_u64_u8(reg);
+                crc = __crc32cd(crc, vgetq_lane_u64(v, 0));
             #else
-                crc = __crc32cw(crc, *(const uint32_t *)str);
-                crc = __crc32cw(crc, *(const uint32_t *)(str + 4));
+                uint32x4_t v = vreinterpretq_u32_u8(reg);
+                crc = __crc32cw(crc, vgetq_lane_u32(v, 0));
+                crc = __crc32cw(crc, vgetq_lane_u32(v, 1));
             #endif // MAGMA_X64
-                str += 8; n -= 8;
+                str += 8;
             }
-            if (n >= 4)
+            if (n & 4)
             {
                 crc = __crc32cw(crc, *(const uint32_t *)str);
-                str += 4; n -= 4;
+                str += 4;
             }
-            if (n >= 2)
+            if (n & 2)
             {
                 crc = __crc32ch(crc, *(const uint16_t *)str);
-                str += 2; n -= 2;
+                str += 2;
             }
-            if (n) crc = __crc32cb(crc, *(const uint8_t *)str);
+            if (n & 1) crc = __crc32cb(crc, *(const uint8_t *)str);
             break;
         }
     }
