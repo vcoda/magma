@@ -284,4 +284,11 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
     return crc;
 #endif // MAGMA_SSE
 }
+
+inline uint32_t hashExtension(const char *name) noexcept
+{
+    alignas(16) char ext[VK_MAX_EXTENSION_NAME_SIZE];
+    core::copyString(ext, VK_MAX_EXTENSION_NAME_SIZE, name);
+    return core::hashStringSIMD(ext);
+}
 } // namespace magma::core

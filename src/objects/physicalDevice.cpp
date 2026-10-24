@@ -627,9 +627,7 @@ bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcep
 {
     MAGMA_ASSERT(extensionName);
     MAGMA_ASSERT(strlen(extensionName));
-    alignas(16) char extension[VK_MAX_EXTENSION_NAME_SIZE];
-    core::copyString(extension, VK_MAX_EXTENSION_NAME_SIZE, extensionName);
-    uint32_t hash = core::hashStringSIMD(extension);
+    uint32_t hash = core::hashExtension(extensionName);
     return std::binary_search(extensions.begin(), extensions.end(), hash);
 }
 

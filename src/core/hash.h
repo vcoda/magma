@@ -49,6 +49,7 @@ namespace magma
         template<class T> hash_t hashArray(const T arr[], std::size_t count) noexcept;
         constexpr uint32_t hashString(const char *str) noexcept;
         uint32_t hashStringSIMD(const char *str) noexcept;
+        uint32_t hashExtension(const char *name) noexcept;
     } // namespace core
 } // namespace magma
 

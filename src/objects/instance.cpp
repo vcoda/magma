@@ -258,9 +258,7 @@ bool Instance::layerSupported(const char *layerName) const noexcept
 {
     MAGMA_ASSERT(layerName);
     MAGMA_ASSERT(strlen(layerName));
-    alignas(16) char layer[VK_MAX_EXTENSION_NAME_SIZE];
-    core::copyString(layer, VK_MAX_EXTENSION_NAME_SIZE, layerName);
-    uint32_t hash = core::hashStringSIMD(layer);
+    uint32_t hash = core::hashExtension(layerName);
     return std::binary_search(layers.begin(), layers.end(), hash);
 }
 
@@ -268,9 +266,7 @@ bool Instance::layerEnabled(const char *layerName) const noexcept
 {
     MAGMA_ASSERT(layerName);
     MAGMA_ASSERT(strlen(layerName));
-    alignas(16) char layer[VK_MAX_EXTENSION_NAME_SIZE];
-    core::copyString(layer, VK_MAX_EXTENSION_NAME_SIZE, layerName);
-    uint32_t hash = core::hashStringSIMD(layer);
+    uint32_t hash = core::hashExtension(layerName);
     return std::binary_search(enabledLayers.begin(), enabledLayers.end(), hash);
 }
 
@@ -278,9 +274,7 @@ bool Instance::extensionSupported(const char *extensionName) const noexcept
 {
     MAGMA_ASSERT(extensionName);
     MAGMA_ASSERT(strlen(extensionName));
-    alignas(16) char extension[VK_MAX_EXTENSION_NAME_SIZE];
-    core::copyString(extension, VK_MAX_EXTENSION_NAME_SIZE, extensionName);
-    uint32_t hash = core::hashStringSIMD(extension);
+    uint32_t hash = core::hashExtension(extensionName);
     return std::binary_search(extensions.begin(), extensions.end(), hash);
 }
 
@@ -288,9 +282,7 @@ bool Instance::extensionEnabled(const char *extensionName) const noexcept
 {
     MAGMA_ASSERT(extensionName);
     MAGMA_ASSERT(strlen(extensionName));
-    alignas(16) char extension[VK_MAX_EXTENSION_NAME_SIZE];
-    core::copyString(extension, VK_MAX_EXTENSION_NAME_SIZE, extensionName);
-    uint32_t hash = core::hashStringSIMD(extension);
+    uint32_t hash = core::hashExtension(extensionName);
     return std::binary_search(enabledExtensions.begin(), enabledExtensions.end(), hash);
 }
 } // namespace magma
