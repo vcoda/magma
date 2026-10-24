@@ -36,9 +36,11 @@ PhysicalDevice::PhysicalDevice(Instance *instance, VkPhysicalDevice handle_, std
     instance(instance)
 {
     handle = handle_;
-    enumerateExtensions();
-    extensions.reserve(extensionProperties.size());
-    for (auto& property: extensionProperties)
+    for (auto& property: enumerateLayers())
+        layers.push_back(core::hashStringSIMD(property.layerName));
+    std::sort(layers.begin(), layers.end());
+    extensions.reserve(200);
+    for (auto& property: enumerateExtensions())
         extensions.push_back(core::hashStringSIMD(property.extensionName));
     std::sort(extensions.begin(), extensions.end());
 }
@@ -621,6 +623,14 @@ const std::unique_ptr<DeviceFeatures>& PhysicalDevice::features() const
     if (!deviceFeatures)
         deviceFeatures = DeviceFeatures::makeUnique(this);
     return deviceFeatures;
+}
+
+bool PhysicalDevice::layerSupported(const char *layerName) const noexcept
+{
+    MAGMA_ASSERT(layerName);
+    MAGMA_ASSERT(strlen(layerName));
+    uint32_t hash = core::hashExtension(layerName);
+    return std::binary_search(layers.begin(), layers.end(), hash);
 }
 
 bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcept
