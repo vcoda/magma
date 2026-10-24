@@ -35,7 +35,8 @@ namespace magma
 std::vector<VkLayerProperties> Instance::layerProperties;
 std::vector<VkExtensionProperties> Instance::extensionProperties;
 
-Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTerminatedStringArray& enabledExtensions,
+Instance::Instance(const NullTerminatedStringArray& enabledLayers_,
+    const NullTerminatedStringArray& enabledExtensions_,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const Application *applicationInfo /* nullptr */,
     VkInstanceCreateFlags flags /* 0 */,
@@ -55,10 +56,10 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
     instanceInfo.pNext = extendedInfo.headNode();
     instanceInfo.flags = flags;
     instanceInfo.pApplicationInfo = applicationInfo;
-    instanceInfo.enabledLayerCount = core::countof(enabledLayers);
-    instanceInfo.ppEnabledLayerNames = enabledLayers.data();
-    instanceInfo.enabledExtensionCount = core::countof(enabledExtensions);
-    instanceInfo.ppEnabledExtensionNames = enabledExtensions.data();
+    instanceInfo.enabledLayerCount = core::countof(enabledLayers_);
+    instanceInfo.ppEnabledLayerNames = enabledLayers_.data();
+    instanceInfo.enabledExtensionCount = core::countof(enabledExtensions_);
+    instanceInfo.ppEnabledExtensionNames = enabledExtensions_.data();
 #ifdef VK_EXT_debug_report
     VkDebugReportCallbackCreateInfoEXT debugReportCallbackInfo;
     if (debugReportCallback && !instanceInfo.pNext)
@@ -118,20 +119,17 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create instance");
-    extensionProperties = enumerateExtensions();
-    extensions.reserve(extensionProperties.size());
-    for (auto& property: extensionProperties)
-        extensions.push_back(property.extensionName);
-    std::sort(extensions.begin(), extensions.end(),
-        [](const char *lhs, const char *rhs)
-        {
-            return std::strcmp(lhs, rhs) < 0;
-        });
-    // Store enabled layers and extensions
-    for (auto const& layer: enabledLayers)
-        this->enabledLayers.emplace(layer);
-    for (auto const& extension: enabledExtensions)
-        this->enabledExtensions.emplace(extension);
+    extensions.reserve(32);
+    for (auto& property: enumerateExtensions())
+        extensions.push_back(core::hashStringSIMD(property.extensionName));
+    std::sort(extensions.begin(), extensions.end());
+    // Store hashes of enabled layers and extensions
+    for (auto& layer: enabledLayers_)
+        enabledLayers.push_back(core::hashString(layer));
+    std::sort(enabledLayers.begin(), enabledLayers.end());
+    for (auto& extension: enabledExtensions_)
+        enabledExtensions.push_back(core::hashString(extension));
+    std::sort(enabledExtensions.begin(), enabledExtensions.end());
 #ifdef MAGMA_DEBUG
     _refCountChecker.addRef();
 #endif
@@ -256,21 +254,20 @@ const std::vector<VkExtensionProperties>& Instance::enumerateExtensions(const ch
 bool Instance::extensionSupported(const char *extensionName) const noexcept
 {
     MAGMA_ASSERT(extensionName);
-    MAGMA_ASSERT(extensionName && *extensionName);
-    if (!extensionName || !*extensionName)
-        return false;
-    return std::binary_search(extensions.begin(), extensions.end(), extensionName,
-        [](const char *lhs, const char *rhs)
-        {
-            return std::strcmp(lhs, rhs) < 0;
-        });
+    MAGMA_ASSERT(strlen(extensionName));
+    alignas(16) char extension[VK_MAX_EXTENSION_NAME_SIZE];
+    core::copyString(extension, VK_MAX_EXTENSION_NAME_SIZE, extensionName);
+    uint32_t hash = core::hashStringSIMD(extension);
+    return std::binary_search(extensions.begin(), extensions.end(), hash);
 }
 
 bool Instance::extensionEnabled(const char *extensionName) const noexcept
 {
-    if (!extensionSupported(extensionName))
-        return false;
-    const auto it = enabledExtensions.find(extensionName);
-    return it != enabledExtensions.end();
+    MAGMA_ASSERT(extensionName);
+    MAGMA_ASSERT(strlen(extensionName));
+    alignas(16) char extension[VK_MAX_EXTENSION_NAME_SIZE];
+    core::copyString(extension, VK_MAX_EXTENSION_NAME_SIZE, extensionName);
+    uint32_t hash = core::hashStringSIMD(extension);
+    return std::binary_search(enabledExtensions.begin(), enabledExtensions.end(), hash);
 }
 } // namespace magma

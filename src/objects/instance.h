@@ -48,8 +48,6 @@ namespace magma
         ~Instance();
         VkInstance getNativeInstance() const noexcept { return handle; }
         uint32_t getApiVersion() const noexcept { return apiVersion; }
-        const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
-        const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         uint32_t enumeratePhysicalDevices() const;
         std::shared_ptr<PhysicalDevice> getPhysicalDevice(uint32_t deviceId) const;
     #ifdef VK_KHR_device_group
@@ -66,8 +64,8 @@ namespace magma
         const uint32_t apiVersion;
         static std::vector<VkLayerProperties> layerProperties;
         static std::vector<VkExtensionProperties> extensionProperties;
-        std::vector<const char *> extensions;
-        std::set<std::string> enabledLayers;
-        std::set<std::string> enabledExtensions;
+        std::vector<uint32_t> extensions;
+        std::vector<uint32_t> enabledLayers;
+        std::vector<uint32_t> enabledExtensions;
     };
 } // namespace magma
