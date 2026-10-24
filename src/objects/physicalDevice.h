@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ namespace magma
         VkPhysicalDeviceProperties getProperties() const noexcept;
         std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() const;
         VkPhysicalDeviceMemoryProperties getMemoryProperties() const noexcept;
-        std::vector<VkLayerProperties> enumerateLayers() const;
+        const std::vector<VkLayerProperties>& enumerateLayers() const;
         std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr) const;
     #ifdef VK_KHR_surface
         bool getSurfaceSupport(lent_ptr<const Surface> surface,
@@ -617,8 +617,9 @@ namespace magma
     #endif // VK_KHR_surface
 
         Instance *instance;
-        const std::vector<VkExtensionProperties> extensionProperties;
         std::vector<const char *> extensions;
+        mutable std::vector<VkLayerProperties> layerProperties;
+        mutable std::vector<VkExtensionProperties> extensionProperties;
         mutable std::unique_ptr<DeviceFeatures> deviceFeatures;
         friend Instance;
     };

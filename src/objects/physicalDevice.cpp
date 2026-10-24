@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,10 +33,10 @@ namespace magma
 {
 PhysicalDevice::PhysicalDevice(Instance *instance, VkPhysicalDevice handle_, std::shared_ptr<IAllocator> allocator):
     Dispatchable<VkPhysicalDevice>(VK_OBJECT_TYPE_PHYSICAL_DEVICE, std::move(allocator)),
-    instance(instance),
-    extensionProperties(enumerateExtensions())
+    instance(instance)
 {
     handle = handle_;
+    enumerateExtensions();
     extensions.reserve(extensionProperties.size());
     for (auto& property: extensionProperties)
         extensions.push_back(property.extensionName);
@@ -143,22 +143,26 @@ VkPhysicalDeviceMemoryProperties PhysicalDevice::getMemoryProperties() const noe
     return memoryProperties;
 }
 
-std::vector<VkLayerProperties> PhysicalDevice::enumerateLayers() const
+const std::vector<VkLayerProperties>& PhysicalDevice::enumerateLayers() const
 {
-    uint32_t propertyCount = 0;
-    VkResult result = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
-    std::vector<VkLayerProperties> properties;
-    if (propertyCount)
+    if (layerProperties.empty())
     {
-        properties.resize(propertyCount);
-        result = vkEnumerateDeviceLayerProperties(handle, &propertyCount, properties.data());
+        uint32_t propertyCount = 0;
+        VkResult result = vkEnumerateDeviceLayerProperties(handle, &propertyCount, nullptr);
+        if (propertyCount)
+        {
+            layerProperties.resize(propertyCount);
+            result = vkEnumerateDeviceLayerProperties(handle, &propertyCount, layerProperties.data());
+        }
+        MAGMA_HANDLE_RESULT(result, "failed to enumerate physical device layers");
     }
-    MAGMA_HANDLE_RESULT(result, "failed to enumerate physical device layers");
-    return properties;
+    return layerProperties;
 }
 
 std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const char *layerName /* nullptr */) const
 {
+    if (!layerName && !extensionProperties.empty())
+        return extensionProperties;
     uint32_t propertyCount = 0;
     VkResult result = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, nullptr);
     std::vector<VkExtensionProperties> properties;
@@ -168,7 +172,11 @@ std::vector<VkExtensionProperties> PhysicalDevice::enumerateExtensions(const cha
         result = vkEnumerateDeviceExtensionProperties(handle, layerName, &propertyCount, properties.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to enumerate physical device extensions");
-    return properties;
+    if (layerName)
+        return properties;
+    // Cache enumerated extensions for null layer
+    extensionProperties = std::move(properties);
+    return extensionProperties;
 }
 
 #ifdef VK_KHR_surface
