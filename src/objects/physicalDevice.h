@@ -617,9 +617,9 @@ namespace magma
     #endif // VK_KHR_surface
 
         Instance *instance;
-        std::vector<const char *> extensions;
         mutable std::vector<VkLayerProperties> layerProperties;
         mutable std::vector<VkExtensionProperties> extensionProperties;
+        std::vector<uint32_t> extensions;
         mutable std::unique_ptr<DeviceFeatures> deviceFeatures;
         friend Instance;
     };

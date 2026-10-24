@@ -39,12 +39,8 @@ PhysicalDevice::PhysicalDevice(Instance *instance, VkPhysicalDevice handle_, std
     enumerateExtensions();
     extensions.reserve(extensionProperties.size());
     for (auto& property: extensionProperties)
-        extensions.push_back(property.extensionName);
-    std::sort(extensions.begin(), extensions.end(),
-        [](const char *lhs, const char *rhs)
-        {
-            return std::strcmp(lhs, rhs) < 0;
-        });
+        extensions.push_back(core::hashStringSIMD(property.extensionName));
+    std::sort(extensions.begin(), extensions.end());
 }
 
 PhysicalDevice::~PhysicalDevice() {}
@@ -631,13 +627,10 @@ bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcep
 {
     MAGMA_ASSERT(extensionName);
     MAGMA_ASSERT(strlen(extensionName));
-    if (!extensionName || !*extensionName)
-        return false;
-    return std::binary_search(extensions.begin(), extensions.end(), extensionName,
-        [](const char *lhs, const char *rhs)
-        {
-            return std::strcmp(lhs, rhs) < 0;
-        });
+    alignas(16) char extension[VK_MAX_EXTENSION_NAME_SIZE];
+    core::copyString(extension, VK_MAX_EXTENSION_NAME_SIZE, extensionName);
+    uint32_t hash = core::hashStringSIMD(extension);
+    return std::binary_search(extensions.begin(), extensions.end(), hash);
 }
 
 VkDeviceSize PhysicalDevice::getDeviceLocalHeapSize() const noexcept
