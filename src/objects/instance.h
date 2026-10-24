@@ -57,14 +57,15 @@ namespace magma
         std::unique_ptr<PhysicalDeviceGroup> getPhysicalDeviceGroup(uint32_t groupId) const;
     #endif // VK_KHR_device_group
         static uint32_t enumerateVersion() noexcept;
-        static std::vector<VkLayerProperties> enumerateLayers();
-        static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);
+        static const std::vector<VkLayerProperties>& enumerateLayers();
+        static const std::vector<VkExtensionProperties>& enumerateExtensions(const char *layerName = nullptr);
         bool extensionSupported(const char *extensionName) const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
 
     private:
         const uint32_t apiVersion;
-        std::vector<VkExtensionProperties> extensionProperties;
+        static std::vector<VkLayerProperties> layerProperties;
+        static std::vector<VkExtensionProperties> extensionProperties;
         std::vector<const char *> extensions;
         std::set<std::string> enabledLayers;
         std::set<std::string> enabledExtensions;

@@ -32,6 +32,9 @@ static magma::core::RefCountChecker _refCountChecker;
 
 namespace magma
 {
+std::vector<VkLayerProperties> Instance::layerProperties;
+std::vector<VkExtensionProperties> Instance::extensionProperties;
+
 Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTerminatedStringArray& enabledExtensions,
     std::shared_ptr<IAllocator> allocator /* nullptr */,
     const Application *applicationInfo /* nullptr */,
@@ -137,6 +140,8 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers, const NullTer
 Instance::~Instance()
 {
     vkDestroyInstance(handle, MAGMA_OPTIONAL(hostAllocator));
+    layerProperties.clear();
+    extensionProperties.clear();
 #ifdef MAGMA_DEBUG
     _refCountChecker.release();
 #endif
@@ -216,32 +221,36 @@ uint32_t Instance::enumerateVersion() noexcept
     return apiVersion;
 }
 
-std::vector<VkLayerProperties> Instance::enumerateLayers()
+const std::vector<VkLayerProperties>& Instance::enumerateLayers()
 {
-    uint32_t propertyCount = 0;
-    VkResult result = vkEnumerateInstanceLayerProperties(&propertyCount, nullptr);
-    std::vector<VkLayerProperties> properties;
-    if (propertyCount)
+    if (layerProperties.empty())
     {
-        properties.resize(propertyCount);
-        result = vkEnumerateInstanceLayerProperties(&propertyCount, properties.data());
+        uint32_t propertyCount = 0;
+        VkResult result = vkEnumerateInstanceLayerProperties(&propertyCount, nullptr);
+        if (propertyCount)
+        {
+            layerProperties.resize(propertyCount);
+            result = vkEnumerateInstanceLayerProperties(&propertyCount, layerProperties.data());
+        }
+        MAGMA_HANDLE_RESULT(result, "failed to enumerate instance layers");
     }
-    MAGMA_HANDLE_RESULT(result, "failed to enumerate instance layers");
-    return properties;
+    return layerProperties;
 }
 
-std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *layerName /* nullptr */)
+const std::vector<VkExtensionProperties>& Instance::enumerateExtensions(const char *layerName /* nullptr */)
 {
-    uint32_t propertyCount = 0;
-    VkResult result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
-    std::vector<VkExtensionProperties> properties;
-    if (propertyCount)
+    if (extensionProperties.empty())
     {
-        properties.resize(propertyCount);
-        result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
+        uint32_t propertyCount = 0;
+        VkResult result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
+        if (propertyCount)
+        {
+            extensionProperties.resize(propertyCount);
+            result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, extensionProperties.data());
+        }
+        MAGMA_HANDLE_RESULT(result, "failed to enumerate instance extensions");
     }
-    MAGMA_HANDLE_RESULT(result, "failed to enumerate instance extensions");
-    return properties;
+    return extensionProperties;
 }
 
 bool Instance::extensionSupported(const char *extensionName) const noexcept
