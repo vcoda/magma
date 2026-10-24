@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -57,6 +57,8 @@ namespace magma
         static uint32_t enumerateVersion() noexcept;
         static const std::vector<VkLayerProperties>& enumerateLayers();
         static const std::vector<VkExtensionProperties>& enumerateExtensions(const char *layerName = nullptr);
+        bool layerSupported(const char *layerName) const noexcept;
+        bool layerEnabled(const char *layerName) const noexcept;
         bool extensionSupported(const char *extensionName) const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
 
@@ -64,6 +66,7 @@ namespace magma
         const uint32_t apiVersion;
         static std::vector<VkLayerProperties> layerProperties;
         static std::vector<VkExtensionProperties> extensionProperties;
+        std::vector<uint32_t> layers;
         std::vector<uint32_t> extensions;
         std::vector<uint32_t> enabledLayers;
         std::vector<uint32_t> enabledExtensions;

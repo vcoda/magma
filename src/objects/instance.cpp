@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -119,6 +119,9 @@ Instance::Instance(const NullTerminatedStringArray& enabledLayers_,
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create instance");
+    layers.reserve(32);
+    for (auto& property: enumerateLayers())
+        layers.push_back(core::hashStringSIMD(property.layerName));
     extensions.reserve(32);
     for (auto& property: enumerateExtensions())
         extensions.push_back(core::hashStringSIMD(property.extensionName));
@@ -249,6 +252,26 @@ const std::vector<VkExtensionProperties>& Instance::enumerateExtensions(const ch
         MAGMA_HANDLE_RESULT(result, "failed to enumerate instance extensions");
     }
     return extensionProperties;
+}
+
+bool Instance::layerSupported(const char *layerName) const noexcept
+{
+    MAGMA_ASSERT(layerName);
+    MAGMA_ASSERT(strlen(layerName));
+    alignas(16) char layer[VK_MAX_EXTENSION_NAME_SIZE];
+    core::copyString(layer, VK_MAX_EXTENSION_NAME_SIZE, layerName);
+    uint32_t hash = core::hashStringSIMD(layer);
+    return std::binary_search(layers.begin(), layers.end(), hash);
+}
+
+bool Instance::layerEnabled(const char *layerName) const noexcept
+{
+    MAGMA_ASSERT(layerName);
+    MAGMA_ASSERT(strlen(layerName));
+    alignas(16) char layer[VK_MAX_EXTENSION_NAME_SIZE];
+    core::copyString(layer, VK_MAX_EXTENSION_NAME_SIZE, layerName);
+    uint32_t hash = core::hashStringSIMD(layer);
+    return std::binary_search(enabledLayers.begin(), enabledLayers.end(), hash);
 }
 
 bool Instance::extensionSupported(const char *extensionName) const noexcept
