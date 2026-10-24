@@ -247,7 +247,7 @@ std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *lay
     std::vector<VkExtensionProperties> properties;
     if (propertyCount)
     {
-        extensionProperties.resize(propertyCount);
+        properties.resize(propertyCount);
         result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
     }
     MAGMA_HANDLE_RESULT(result, "failed to enumerate instance extensions");
