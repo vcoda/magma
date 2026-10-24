@@ -56,7 +56,7 @@ namespace magma
     #endif // VK_KHR_device_group
         static uint32_t enumerateVersion() noexcept;
         static const std::vector<VkLayerProperties>& enumerateLayers();
-        static const std::vector<VkExtensionProperties>& enumerateExtensions(const char *layerName = nullptr);
+        static std::vector<VkExtensionProperties> enumerateExtensions(const char *layerName = nullptr);
         bool layerSupported(const char *layerName) const noexcept;
         bool layerEnabled(const char *layerName) const noexcept;
         bool extensionSupported(const char *extensionName) const noexcept;

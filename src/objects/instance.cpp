@@ -238,19 +238,23 @@ const std::vector<VkLayerProperties>& Instance::enumerateLayers()
     return layerProperties;
 }
 
-const std::vector<VkExtensionProperties>& Instance::enumerateExtensions(const char *layerName /* nullptr */)
+std::vector<VkExtensionProperties> Instance::enumerateExtensions(const char *layerName /* nullptr */)
 {
-    if (extensionProperties.empty())
+    if (!layerName && !extensionProperties.empty())
+        return extensionProperties;
+    uint32_t propertyCount = 0;
+    VkResult result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
+    std::vector<VkExtensionProperties> properties;
+    if (propertyCount)
     {
-        uint32_t propertyCount = 0;
-        VkResult result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
-        if (propertyCount)
-        {
-            extensionProperties.resize(propertyCount);
-            result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, extensionProperties.data());
-        }
-        MAGMA_HANDLE_RESULT(result, "failed to enumerate instance extensions");
+        extensionProperties.resize(propertyCount);
+        result = vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
     }
+    MAGMA_HANDLE_RESULT(result, "failed to enumerate instance extensions");
+    if (layerName)
+        return properties;
+    // Cache enumerated extensions for null layer
+    extensionProperties = std::move(properties);
     return extensionProperties;
 }
 
