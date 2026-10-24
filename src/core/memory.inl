@@ -94,13 +94,18 @@ inline char *copyString(char *dst, std::size_t size, const char *src) noexcept
     MAGMA_ASSERT(0 == err);
     MAGMA_UNUSED(err);
 #else
-    if (dst && src)
+    if (dst && size > 0)
     {
-        const size_t len = strlen(src);
-        if (len + 1 > size)
+        if (!src)
             *dst = '\0';
         else
-            memcpy(dst, src, len + 1);
+        {
+            char *c = dst;
+            std::size_t available = size;
+            while (((*c++ = *src++) != '\0') && (--available > 0)) {}
+            if (0 == available)
+                *dst = '\0';
+        }
     }
 #endif // _MSC_VER || __MINGW32__
     return dst;
