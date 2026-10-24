@@ -280,7 +280,8 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
     }
     return crc ^ 0xFFFFFFFF;
 #else
-    return hashString(str);
+    crc = hashString(str);
+    return crc;
 #endif // MAGMA_SSE
 }
 } // namespace magma::core
