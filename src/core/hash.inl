@@ -287,6 +287,8 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
 
 inline uint32_t hashExtension(const char *name) noexcept
 {
+    MAGMA_ASSERT(name);
+    MAGMA_ASSERT(strlen(name));
     alignas(16) char ext[VK_MAX_EXTENSION_NAME_SIZE];
     core::copyString(ext, VK_MAX_EXTENSION_NAME_SIZE, name);
     return core::hashStringSIMD(ext);
