@@ -627,17 +627,13 @@ const std::unique_ptr<DeviceFeatures>& PhysicalDevice::features() const
 
 bool PhysicalDevice::layerSupported(const char *layerName) const noexcept
 {
-    MAGMA_ASSERT(layerName);
-    MAGMA_ASSERT(strlen(layerName));
-    uint32_t hash = core::hashExtension(layerName);
+    const uint32_t hash = core::hashExtension(layerName);
     return std::binary_search(layers.begin(), layers.end(), hash);
 }
 
 bool PhysicalDevice::extensionSupported(const char *extensionName) const noexcept
 {
-    MAGMA_ASSERT(extensionName);
-    MAGMA_ASSERT(strlen(extensionName));
-    uint32_t hash = core::hashExtension(extensionName);
+    const uint32_t hash = core::hashExtension(extensionName);
     return std::binary_search(extensions.begin(), extensions.end(), hash);
 }
 
