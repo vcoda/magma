@@ -15,25 +15,21 @@ template<class T>
 constexpr VkIndexType getIndexType() noexcept
 {
     static_assert(
-    #if defined(VK_KHR_index_type_uint8) || defined(VK_EXT_index_type_uint8)
-        std::is_same<T, uint8_t>::value ||
-    #endif
-        std::is_same<T, uint16_t>::value || std::is_same<T, uint32_t>::value,
-    #if defined(VK_KHR_index_type_uint8) || defined(VK_EXT_index_type_uint8)
-        "index should be of unsigned char, short or int type");
-    #else
-        "index should be of unsigned short or int type");
-    #endif
 #if defined(VK_KHR_index_type_uint8) || defined(VK_EXT_index_type_uint8)
-    if constexpr (std::is_same<T, uint8_t>::value)
-    #ifdef VK_KHR_index_type_uint8
-        return VK_INDEX_TYPE_UINT8_KHR;
-    #else
-        return VK_INDEX_TYPE_UINT8_EXT;
-    #endif
-#endif // VK_KHR_index_type_uint8 || VK_EXT_index_type_uint8
-    if constexpr (std::is_same<T, uint16_t>::value)
-        return VK_INDEX_TYPE_UINT16;
+    std::is_same_v<T, uint8_t> ||
+#endif
+    std::is_same_v<T, uint16_t> || std::is_same_v<T, uint32_t>,
+#if defined(VK_KHR_index_type_uint8) || defined(VK_EXT_index_type_uint8)
+    "index should be of unsigned char, short or int type");
+#else
+    "index should be of unsigned short or int type");
+#endif
+    if constexpr (std::is_same_v<T, uint16_t>) return VK_INDEX_TYPE_UINT16;
+#if defined(VK_KHR_index_type_uint8)
+    if constexpr (std::is_same_v<T, uint8_t>) return VK_INDEX_TYPE_UINT8_KHR;
+#elif defined(VK_EXT_index_type_uint8)
+    if constexpr (std::is_same_v<T, uint8_t>) return VK_INDEX_TYPE_UINT8_EXT;
+#endif
     return VK_INDEX_TYPE_UINT32;
 }
 } // namespace magma
