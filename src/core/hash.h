@@ -25,13 +25,13 @@ namespace magma
     {
         namespace fnv
         {
-        #ifdef MAGMA_X64
+        #ifdef MAGMA_64
             constexpr uint64_t Prime = 1099511628211ull;
             constexpr uint64_t Basis = 14695981039346656037ull;
         #else
             constexpr uint32_t Prime = 16777619u;
             constexpr uint32_t Basis = 2166136261u;
-        #endif // MAGMA_X64
+        #endif // MAGMA_64
         } // namespace fnv
 
         template<class T>

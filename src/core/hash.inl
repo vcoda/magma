@@ -154,7 +154,7 @@ constexpr uint32_t hashString(const char *str) noexcept
 inline int neon_pos(uint8x16_t reg, uint8x16_t val)
 {
     uint8x16_t eq = vceqq_u8(reg, val);
-#ifdef MAGMA_X64
+#ifdef MAGMA_64
     uint8x8_t narrowed = vshrn_n_u16(vreinterpretq_u16_u8(eq), 4);
     uint64_t mask = vget_lane_u64(vreinterpret_u64_u8(narrowed), 0);
     if (0 == mask) return 16;
@@ -176,7 +176,7 @@ inline int neon_pos(uint8x16_t reg, uint8x16_t val)
     min = vpmin_u8(min, min);
     min = vpmin_u8(min, min);
     return vget_lane_u8(min, 0);
-#endif // MAGMA_X64
+#endif // MAGMA_64
 }
 #endif // MAGMA_NEON
 
@@ -191,7 +191,7 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
         int n = _mm_cmpistri(zero, reg, _SIDD_UBYTE_OPS | _SIDD_CMP_EQUAL_EACH);
         if (16 == n)
         {
-        #ifdef MAGMA_X64
+        #ifdef MAGMA_64
             crc = (uint32_t)_mm_crc32_u64(crc, _mm_cvtsi128_si64(reg));
             crc = (uint32_t)_mm_crc32_u64(crc, _mm_extract_epi64(reg, 1));
         #else
@@ -199,19 +199,19 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
             crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(_mm_srli_si128(reg, 4)));
             crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(_mm_srli_si128(reg, 8)));
             crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(_mm_srli_si128(reg, 12)));
-        #endif // MAGMA_X64
+        #endif // MAGMA_64
             str += 16;
         }
         else
         {
             if (n & 8)
             {
-            #ifdef MAGMA_X64
+            #ifdef MAGMA_64
                 crc = (uint32_t)_mm_crc32_u64(crc, _mm_cvtsi128_si64(reg));
             #else
                 crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(reg));
                 crc = _mm_crc32_u32(crc, (uint32_t)_mm_cvtsi128_si32(_mm_srli_si128(reg, 4)));
-            #endif // MAGMA_X64
+            #endif // MAGMA_64
                 str += 8;
             }
             if (n & 4)
@@ -237,7 +237,7 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
         int n = neon_pos(reg, zero);
         if (16 == n)
         {
-        #ifdef MAGMA_X64
+        #ifdef MAGMA_64
             uint64x2_t v = vreinterpretq_u64_u8(reg);
             crc = __crc32cd(crc, vgetq_lane_u64(v, 0));
             crc = __crc32cd(crc, vgetq_lane_u64(v, 1));
@@ -247,21 +247,21 @@ inline uint32_t hashStringSIMD(const char *str) noexcept
             crc = __crc32cw(crc, vgetq_lane_u32(v, 1));
             crc = __crc32cw(crc, vgetq_lane_u32(v, 2));
             crc = __crc32cw(crc, vgetq_lane_u32(v, 3));
-        #endif // MAGMA_X64
+        #endif // MAGMA_64
             str += 16;
         }
         else
         {
             if (n & 8)
             {
-            #ifdef MAGMA_X64
+            #ifdef MAGMA_64
                 uint64x2_t v = vreinterpretq_u64_u8(reg);
                 crc = __crc32cd(crc, vgetq_lane_u64(v, 0));
             #else
                 uint32x4_t v = vreinterpretq_u32_u8(reg);
                 crc = __crc32cw(crc, vgetq_lane_u32(v, 0));
                 crc = __crc32cw(crc, vgetq_lane_u32(v, 1));
-            #endif // MAGMA_X64
+            #endif // MAGMA_64
                 str += 8;
             }
             if (n & 4)
