@@ -97,11 +97,13 @@ Device::Device(std::shared_ptr<PhysicalDevice> physicalDevice_,
     }
 #endif // !MAGMA_NO_EXCEPTIONS
     MAGMA_HANDLE_RESULT(result, "failed to create logical device");
-    // Store enabled layers and extensions
-    for (auto const& layer: enabledLayers_)
-        enabledLayers.emplace(layer);
-    for (auto const& extension: enabledExtensions_)
-        enabledExtensions.emplace(extension);
+    // Hash enabled layers and extensions
+    for (const char *layerName: enabledLayers_)
+        enabledLayers.push_back(core::hashExtension(layerName));
+    std::sort(enabledLayers.begin(),  enabledLayers.end());
+    for (const char *extensionName: enabledExtensions_)
+        enabledExtensions.push_back(core::hashExtension(extensionName));
+    std::sort(enabledExtensions.begin(), enabledExtensions.end());
     // Store feature nodes for fast search in getEnabledExtendedFeatures()
     const VkBaseInStructure *featureNode = enabledExtendedFeatures.headNode();
     while (featureNode)
@@ -432,12 +434,16 @@ DeviceFaultInfo Device::getFaultInfo() const
 }
 #endif // VK_EXT_device_fault
 
+bool Device::layerEnabled(const char *layerName) const noexcept
+{
+    const uint32_t hash = core::hashExtension(layerName);
+    return std::binary_search(enabledLayers.begin(), enabledLayers.end(), hash);
+}
+
 bool Device::extensionEnabled(const char *extensionName) const noexcept
 {
-    if (!physicalDevice->extensionSupported(extensionName))
-        return false;
-    const auto it = enabledExtensions.find(extensionName);
-    return it != enabledExtensions.end();
+    const uint32_t hash = core::hashExtension(extensionName);
+    return std::binary_search(enabledExtensions.begin(), enabledExtensions.end(), hash);
 }
 
 VkInstance Device::getNativeInstance() const noexcept

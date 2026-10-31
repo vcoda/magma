@@ -52,8 +52,6 @@ namespace magma
     public:
         ~Device();
         const std::shared_ptr<PhysicalDevice>& getPhysicalDevice() const noexcept { return physicalDevice; }
-        const std::set<std::string>& getEnabledLayers() const noexcept { return enabledLayers; }
-        const std::set<std::string>& getEnabledExtensions() const noexcept { return enabledExtensions; }
         const VkPhysicalDeviceFeatures& getEnabledFeatures() const noexcept { return enabledFeatures; }
         const std::unique_ptr<FeatureQuery>& getFeatureQuery() const;
         std::shared_ptr<Queue> getQueue(VkQueueFlagBits capability,
@@ -124,6 +122,7 @@ namespace magma
     #endif // VK_EXT_private_data
         template<class PhysicalDeviceFeatures>
         const PhysicalDeviceFeatures *getEnabledExtendedFeatures() const noexcept;
+        bool layerEnabled(const char *layerName) const noexcept;
         bool extensionEnabled(const char *extensionName) const noexcept;
     #if (VK_USE_64_BIT_PTR_DEFINES == 1)
         const std::unique_ptr<DeviceResourcePool>& getResourcePool() const noexcept { return resourcePool; }
@@ -146,8 +145,8 @@ namespace magma
 
         std::shared_ptr<PhysicalDevice> physicalDevice;
         const std::vector<DeviceQueueDescriptor> queueDescriptors;
-        std::set<std::string> enabledLayers;
-        std::set<std::string> enabledExtensions;
+        std::vector<uint32_t> enabledLayers;
+        std::vector<uint32_t> enabledExtensions;
         const VkPhysicalDeviceFeatures enabledFeatures;
         const StructureChain enabledExtendedFeatures;
         std::map<VkStructureType, const VkBaseInStructure *> extendedFeatures;
