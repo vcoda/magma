@@ -27,9 +27,8 @@ namespace magma
        of extensions see: https://registry.khronos.org/vulkan/
        Keep list of extensions in alphabetical order! */
 
-    class DeviceExtensions : public ExtensionRegistry<VkExtensionProperties>
+    struct DeviceExtensions : ExtensionRegistry<VkExtensionProperties>
     {
-    public:
         // Advanced Micro Devices, Inc.
         const VkBool32 AMD_anti_lag: 1;
         const VkBool32 AMD_buffer_marker: 1;
@@ -515,5 +514,5 @@ namespace magma
         explicit DeviceExtensions(const std::shared_ptr<PhysicalDevice>&);
     };
 
-    MAGMA_TYPEDEF_MANAGED_PTR(DeviceExtensions)
+    typedef std::unique_ptr<DeviceExtensions> DeviceExtensionsUPtr;
 } // namespace magma

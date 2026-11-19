@@ -25,9 +25,8 @@ namespace magma
        objects and commands, should be an instance extension.
        Keep list of extensions in alphabetical order! */
 
-    class InstanceExtensions : public ExtensionRegistry<VkExtensionProperties>
+    struct InstanceExtensions : ExtensionRegistry<VkExtensionProperties>
     {
-    public:
         // Multivendor
         const VkBool32 EXT_acquire_drm_display: 1;
         const VkBool32 EXT_acquire_xlib_display: 1;
@@ -92,5 +91,5 @@ namespace magma
         InstanceExtensions(const char *layerName = nullptr);
     };
 
-    MAGMA_TYPEDEF_MANAGED_PTR(InstanceExtensions)
+    typedef std::unique_ptr<InstanceExtensions> InstanceExtensionsUPtr;
 } // namespace magma

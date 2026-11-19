@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,9 +23,8 @@ namespace magma
     /* https://vulkan.gpuinfo.org/listinstancelayers.php
        Keep list of layers in alphabetical order! */
 
-    class InstanceLayers : public ExtensionRegistry<VkLayerProperties>
+    struct InstanceLayers : ExtensionRegistry<VkLayerProperties>
     {
-    public:
         // github.com/aejsmith/vkdevicechooser
         const VkBool32 AEJS_DeviceChooserLayer: 1;
         // Advanced Micro Devices, Inc.
@@ -164,5 +163,5 @@ namespace magma
         InstanceLayers();
     };
 
-    MAGMA_TYPEDEF_MANAGED_PTR(InstanceLayers)
+    typedef std::unique_ptr<InstanceLayers> InstanceLayersUPtr;
 } // namespace magma
