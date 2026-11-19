@@ -85,6 +85,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <vulkan/vulkan.h>
 
 /*
+ * SPIR-V
+ */
+
+#include <spirv-tools/libspirv.h>
+
+/*
  * SIMD
  */
 

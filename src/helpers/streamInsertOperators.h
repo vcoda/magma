@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -131,6 +131,8 @@ MAGMA_STREAM_INSERT_OPERATOR(VkBuildAccelerationStructureFlagBitsKHR);
 #ifdef VK_NV_ray_tracing
 MAGMA_STREAM_INSERT_OPERATOR(VkAccelerationStructureMemoryRequirementsTypeNV);
 #endif
+
+MAGMA_STREAM_INSERT_OPERATOR(spv_result_t);
 
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
 

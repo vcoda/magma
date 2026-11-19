@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include "../third-party/SPIRV-Reflect/spirv_reflect.h"
-#include <spirv-tools/libspirv.h>
 #include "sourcelocation.h"
 
 namespace magma::exception
