@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ namespace magma
         explicit ShaderBindingTable(lent_ptr<const RayTracingPipeline> pipeline,
             lent_ptr<CommandBuffer> cmdBuffer,
             std::shared_ptr<Allocator> allocator = nullptr);
-        uint32_t getShaderGroupCount() const noexcept { return core::countof(groups); }
+        uint32_t getShaderGroupCount() const noexcept;
         template<class Block>
         void addShaderRecord(VkShaderStageFlagBits stage,
             uint32_t groupIndex,
@@ -60,10 +60,14 @@ namespace magma
             const std::vector<VkRayTracingPipelineCreateInfoKHR>& librariesInfo = {});
         VkStridedDeviceAddressRegionKHR getDeviceAddressRegion(VkShaderStageFlagBits stage,
             uint32_t indexOffset = 0) const noexcept;
+        std::array<VkStridedDeviceAddressRegionKHR, 4> getDeviceAddressRegions(uint32_t rayGenIndexOffset = 0) const noexcept;
 
     private:
         void setupIndices(const std::vector<PipelineShaderStage>& shaderStages,
-            const std::vector<RayTracingShaderGroup>& shaderGroups);
+            const std::vector<RayTracingShaderGroup>& shaderGroups,
+            uint32_t groupOffset);
+        void setupIndices(const VkRayTracingPipelineCreateInfoKHR& pipelineInfo,
+            uint32_t groupOffset);
 
         std::unordered_map<VkShaderStageFlagBits, ShaderGroup> groups;
     };
