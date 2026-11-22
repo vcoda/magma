@@ -83,9 +83,11 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
     {
         memoryRequirements = getMemoryRequirements();
     }
-#ifdef VK_KHR_device_group
+#if defined(VK_KHR_device_group) || defined(VK_KHR_buffer_device_address)
     VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo = {};
     memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
+#endif // VK_KHR_device_group || VK_KHR_buffer_device_address
+#ifdef VK_KHR_device_group
     if (extensionEnabled(VK_KHR_DEVICE_GROUP_EXTENSION_NAME))
     {
         memoryAllocateFlagsInfo.flags |= VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR;
@@ -101,10 +103,10 @@ Buffer::Buffer(std::shared_ptr<Device> device, VkDeviceSize size,
             memoryAllocateFlagsInfo.flags |= VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_KHR;
     }
 #endif // VK_KHR_buffer_device_address
-#ifdef VK_KHR_device_group
+#if defined(VK_KHR_device_group) || defined(VK_KHR_buffer_device_address)
     if (memoryAllocateFlagsInfo.flags)
         extendedMemoryInfo.linkNode(memoryAllocateFlagsInfo);
-#endif // VK_KHR_device_group
+#endif // VK_KHR_device_group || VK_KHR_buffer_device_address
 #ifdef VK_EXT_memory_priority
     if (extensionEnabled(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
     {
