@@ -82,5 +82,13 @@ VkStridedDeviceAddressRegionKHR ShaderGroup::getRegion(uint32_t indexOffset) con
     region.size = raygen ? stride : stride * indices.size();
     return region;
 }
+
+void ShaderGroup::clear() noexcept
+{
+    indices.clear();
+    shaderBindingTable.reset();
+    stride = 0;
+    raygen = false;
+}
 #endif // VK_KHR_ray_tracing_pipeline
 } // namespace magma

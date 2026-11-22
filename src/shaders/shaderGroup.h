@@ -75,6 +75,7 @@ namespace magma
         std::vector<uint8_t> getBindingTableData(const std::vector<uint8_t>& shaderGroupHandles,
             const VkPhysicalDeviceRayTracingPipelinePropertiesKHR properties);
         VkStridedDeviceAddressRegionKHR getRegion(uint32_t indexOffset) const noexcept;
+        void clear() noexcept;
 
     private:
         std::vector<uint32_t> indices;
