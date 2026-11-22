@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,17 +23,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_ray_tracing_pipeline
-ShaderGroup::ShaderGroup() noexcept:
-    stride(0),
-    raygen(false)
-{}
-
 void ShaderGroup::calculateStride(const VkPhysicalDeviceRayTracingPipelinePropertiesKHR properties) noexcept
 {   // Minimal stride
     stride = core::alignUp(properties.shaderGroupHandleSize, properties.shaderGroupHandleAlignment);
     for (auto const& [groupIndex, shaderRecord]: shaderRecords)
     {   // Find the largest aligned size of group handle + embedded data
         MAGMA_UNUSED(groupIndex);
+        MAGMA_ASSERT(groupIndex < indices.size());
         uint32_t dataSize = core::alignUp(
             properties.shaderGroupHandleSize + (uint32_t)shaderRecord.embedded.size(),
             properties.shaderGroupHandleAlignment);
@@ -43,7 +39,7 @@ void ShaderGroup::calculateStride(const VkPhysicalDeviceRayTracingPipelineProper
     {   // Raygen group must be aligned on shader group base alignment
         stride = core::alignUp(stride, properties.shaderGroupBaseAlignment);
     }
-    MAGMA_ASSERT(stride < properties.maxShaderGroupStride);
+    MAGMA_ASSERT(stride <= properties.maxShaderGroupStride);
 }
 
 std::vector<uint8_t> ShaderGroup::getBindingTableData(const std::vector<uint8_t>& shaderGroupHandles,
@@ -51,33 +47,39 @@ std::vector<uint8_t> ShaderGroup::getBindingTableData(const std::vector<uint8_t>
 {
     std::vector<uint8_t> tableData(indices.size() * stride);
     uint8_t *data = tableData.data();
+    uint32_t recordIndex = 0;
     for (uint32_t groupIndex: indices)
     {   // Copy shader group handle
         const uint32_t offset = groupIndex * properties.shaderGroupHandleSize;
-        memcpy(data, &shaderGroupHandles[offset], properties.shaderGroupHandleSize);
-        // Do we have embedded parameters?
-        auto it = shaderRecords.find(groupIndex);
+        MAGMA_ASSERT(offset <= shaderGroupHandles.size());
+        MAGMA_ASSERT(offset + properties.shaderGroupHandleSize <= shaderGroupHandles.size());
+        memcpy(data, shaderGroupHandles.data() + offset, properties.shaderGroupHandleSize);
+        // Embedded data is indexed by SBT record index
+        auto it = shaderRecords.find(recordIndex);
         if (it != shaderRecords.end())
         {   // Copy embedded data
             const ShaderRecord& shaderRecord = it->second;
+            MAGMA_ASSERT(properties.shaderGroupHandleSize + shaderRecord.embedded.size() <= stride);
             memcpy(data + properties.shaderGroupHandleSize,
                 shaderRecord.embedded.data(),
                 shaderRecord.embedded.size());
         }
         data += stride; // Next group
+        ++recordIndex;
     }
     return tableData;
 }
 
 VkStridedDeviceAddressRegionKHR ShaderGroup::getRegion(uint32_t indexOffset) const noexcept
 {
+    if (indices.empty() || !shaderBindingTable)
+        return {};
+    MAGMA_ASSERT(!raygen || indexOffset < indices.size());
+    MAGMA_ASSERT(raygen || (0 == indexOffset));
     VkStridedDeviceAddressRegionKHR region = {};
-    if (shaderBindingTable)
-    {
-        region.deviceAddress = shaderBindingTable->getDeviceAddress() + indexOffset * stride;
-        region.stride = stride;
-        region.size = raygen ? stride : stride * core::countof(indices);
-    }
+    region.deviceAddress = shaderBindingTable->getDeviceAddress() + indexOffset * stride;
+    region.stride = stride;
+    region.size = raygen ? stride : stride * indices.size();
     return region;
 }
 #endif // VK_KHR_ray_tracing_pipeline

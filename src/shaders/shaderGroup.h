@@ -1,6 +1,6 @@
 /*
 Magma - Abstraction layer over Khronos Vulkan API.
-Copyright (C) 2018-2025 Victor Coda.
+Copyright (C) 2018-2026 Victor Coda.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -69,7 +69,6 @@ namespace magma
     class ShaderGroup
     {
     public:
-        ShaderGroup() noexcept;
         void addGroupIndex(uint32_t index) { indices.push_back(index); }
         void calculateStride(const VkPhysicalDeviceRayTracingPipelinePropertiesKHR properties) noexcept;
         std::vector<uint8_t> getBindingTableData(const std::vector<uint8_t>& shaderGroupHandles,
@@ -80,8 +79,8 @@ namespace magma
         std::vector<uint32_t> indices;
         std::unordered_map<uint32_t, ShaderRecord> shaderRecords;
         std::unique_ptr<Buffer> shaderBindingTable;
-        uint32_t stride;
-        bool raygen;
+        uint32_t stride = 0;
+        bool raygen = false;
         friend ShaderBindingTable;
     };
 #endif // VK_KHR_ray_tracing_pipeline
