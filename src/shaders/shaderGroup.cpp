@@ -84,7 +84,7 @@ VkStridedDeviceAddressRegionKHR ShaderGroup::getRegion(uint32_t indexOffset) con
 }
 
 void ShaderGroup::clear() noexcept
-{
+{   // Shader records should be preserved
     indices.clear();
     shaderBindingTable.reset();
     stride = 0;
