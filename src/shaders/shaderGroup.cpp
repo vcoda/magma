@@ -23,7 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 namespace magma
 {
 #ifdef VK_KHR_ray_tracing_pipeline
-void ShaderGroup::calculateStride(const VkPhysicalDeviceRayTracingPipelinePropertiesKHR properties) noexcept
+void ShaderGroup::calculateStride(const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& properties) noexcept
 {   // Minimal stride
     stride = core::alignUp(properties.shaderGroupHandleSize, properties.shaderGroupHandleAlignment);
     for (auto const& [groupIndex, shaderRecord]: shaderRecords)
@@ -43,7 +43,7 @@ void ShaderGroup::calculateStride(const VkPhysicalDeviceRayTracingPipelineProper
 }
 
 std::vector<uint8_t> ShaderGroup::getBindingTableData(const std::vector<uint8_t>& shaderGroupHandles,
-    const VkPhysicalDeviceRayTracingPipelinePropertiesKHR properties)
+    const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& properties)
 {
     std::vector<uint8_t> tableData(indices.size() * stride);
     uint8_t *data = tableData.data();

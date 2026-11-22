@@ -71,9 +71,9 @@ namespace magma
     public:
         uint32_t getGroupCount() const noexcept { return core::countof(indices); }
         void addGroupIndex(uint32_t index) { indices.push_back(index); }
-        void calculateStride(const VkPhysicalDeviceRayTracingPipelinePropertiesKHR properties) noexcept;
+        void calculateStride(const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& properties) noexcept;
         std::vector<uint8_t> getBindingTableData(const std::vector<uint8_t>& shaderGroupHandles,
-            const VkPhysicalDeviceRayTracingPipelinePropertiesKHR properties);
+            const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& properties);
         VkStridedDeviceAddressRegionKHR getRegion(uint32_t indexOffset) const noexcept;
         void clear() noexcept;
 
