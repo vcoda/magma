@@ -182,14 +182,17 @@ VkDeviceSize RayTracingPipeline::getIntersectionShaderStackSize(uint32_t group) 
     return getShaderGroupStackSize(group, VK_SHADER_GROUP_SHADER_INTERSECTION_KHR);
 }
 
-std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles() const
+std::vector<uint8_t> RayTracingPipeline::getShaderGroupHandles(uint32_t groupCount /* 0 */) const
 {
+    if (0 == groupCount)
+        groupCount = core::countof(shaderGroups);
     const auto rayTracingPipelineProperties = device->getPhysicalDevice()->getRayTracingPipelineProperties();
-    const uint32_t shaderGroupCount = core::countof(shaderGroups);
-    std::vector<uint8_t> shaderGroupHandles(shaderGroupCount * rayTracingPipelineProperties.shaderGroupHandleSize);
+    std::vector<uint8_t> shaderGroupHandles(groupCount * rayTracingPipelineProperties.shaderGroupHandleSize);
+    if (shaderGroupHandles.empty())
+        return shaderGroupHandles;
     MAGMA_DEVICE_EXTENSION(vkGetRayTracingShaderGroupHandlesKHR);
-    const VkResult result = vkGetRayTracingShaderGroupHandlesKHR(getNativeDevice(),
-        handle, 0, shaderGroupCount, shaderGroupHandles.size(), shaderGroupHandles.data());
+    const VkResult result = vkGetRayTracingShaderGroupHandlesKHR(getNativeDevice(), handle, 0,
+        groupCount, shaderGroupHandles.size(), shaderGroupHandles.data());
     MAGMA_HANDLE_RESULT(result, "failed to get shader group handles");
     return shaderGroupHandles;
 }

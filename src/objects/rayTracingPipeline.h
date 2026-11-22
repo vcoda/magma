@@ -64,7 +64,7 @@ namespace magma
         VkDeviceSize getClosestHitShaderStackSize(uint32_t group) const noexcept;
         VkDeviceSize getAnyHitShaderStackSize(uint32_t group) const noexcept;
         VkDeviceSize getIntersectionShaderStackSize(uint32_t group) const noexcept;
-        std::vector<uint8_t> getShaderGroupHandles() const;
+        std::vector<uint8_t> getShaderGroupHandles(uint32_t groupCount = 0) const;
         std::vector<uint8_t> getCaptureReplayShaderGroupHandles() const;
 
     private:
